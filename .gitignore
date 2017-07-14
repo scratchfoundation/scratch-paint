@@ -4,3 +4,7 @@
 # NPM
 /node_modules
 npm-*
+
+# Build
+playground/*
+build/*
