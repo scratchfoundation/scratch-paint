@@ -1,5 +1,6 @@
-var path = require('path');
-var webpack = require('webpack');
+const defaultsDeep = require('lodash.defaultsdeep');
+const path = require('path');
+const webpack = require('webpack');
 
 // Plugins
 var HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -9,21 +10,8 @@ var autoprefixer = require('autoprefixer');
 var postcssVars = require('postcss-simple-vars');
 var postcssImport = require('postcss-import');
 
-module.exports = {
-    devServer: {
-        contentBase: path.resolve(__dirname, 'build'),
-        host: '0.0.0.0',
-        port: process.env.PORT || 8078
-    },
+const base = {
     devtool: 'cheap-module-source-map',
-    entry: {
-        lib: ['react', 'react-dom'],
-        playground: './src/playground/playground.jsx'
-    },
-    output: {
-        path: path.resolve(__dirname, 'playground'),
-        filename: '[name].js'
-    },
     externals: {
         React: 'react',
         ReactDOM: 'react-dom'
@@ -71,10 +59,6 @@ module.exports = {
         new webpack.optimize.CommonsChunkPlugin({
             name: 'lib',
             filename: 'lib.min.js'
-        }),
-        new HtmlWebpackPlugin({
-            template: 'src/playground/index.ejs',
-            title: 'Scratch 3.0 Paint Editor'
         })
     ].concat(process.env.NODE_ENV === 'production' ? [
         new webpack.optimize.UglifyJsPlugin({
@@ -83,3 +67,39 @@ module.exports = {
         })
     ] : [])
 };
+
+module.exports = [
+    // For the playground
+    defaultsDeep({}, base, {
+        devServer: {
+            contentBase: path.resolve(__dirname, 'playground'),
+            host: '0.0.0.0',
+            port: process.env.PORT || 8078
+        },
+        entry: {
+            lib: ['react', 'react-dom'],
+            playground: './src/playground/playground.jsx'
+        },
+        output: {
+            path: path.resolve(__dirname, 'playground'),
+            filename: '[name].js'
+        },
+        plugins: base.plugins.concat([
+            new HtmlWebpackPlugin({
+                template: 'src/playground/index.ejs',
+                title: 'Scratch 3.0 Paint Editor Playground'
+            })
+        ])
+    }),
+    // For use as a library
+    defaultsDeep({}, base, {
+        entry: {
+            'lib': ['react', 'react-dom'],
+            'scratch-paint': './src/index.js'
+        },
+        output: {
+            path: path.resolve(__dirname, 'dist'),
+            filename: '[name].js'
+        }
+    })
+];

@@ -4,3 +4,7 @@
 # NPM
 /node_modules
 npm-*
+
+# Buid
+playground/*
+dist/*
