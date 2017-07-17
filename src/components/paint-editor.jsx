@@ -1,13 +1,18 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-import PaperCanvas from './paper-canvas.jsx';
+import PaperCanvas from '../containers/paper-canvas.jsx';
 
-export default class PaintEditorComponent extends React.Component {
-    render () {
-        return (
-            <PaperCanvas />
-        );
-    }
-}
+const PaintEditorComponent = props => (
+    <PaperCanvas
+        tool={props.tool}
+    />
+);
 
-PaintEditorComponent.defaultProps = {
+PaintEditorComponent.propTypes = {
+    tool: PropTypes.shape({
+        name: PropTypes.string.isRequired
+    })
 };
+
+
+module.exports = PaintEditorComponent;

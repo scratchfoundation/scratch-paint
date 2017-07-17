@@ -1,5 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import paper from 'paper';
+import ToolTypes from '../tools/tool-types.js';
 
 class PaperCanvas extends React.Component {
     constructor (props) {
@@ -22,6 +24,11 @@ class PaperCanvas extends React.Component {
         // Draw the view now:
         paper.view.draw();
     }
+    componentWillReceiveProps (nextProps) {
+        if (nextProps.tool !== this.props.tool && nextProps.tool instanceof ToolTypes) {
+            // TODO switch tool
+        }
+    }
     componentWillUnmount () {
     }
     render () {
@@ -31,6 +38,10 @@ class PaperCanvas extends React.Component {
     }
 }
 
-PaperCanvas.propTypes = {};
+PaperCanvas.propTypes = {
+    tool: PropTypes.shape({
+        name: PropTypes.string.isRequired
+    })
+};
 
 module.exports = PaperCanvas;
