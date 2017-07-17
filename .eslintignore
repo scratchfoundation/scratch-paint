@@ -1,3 +1,4 @@
 node_modules/*
 dist/*
 playground/
+webpack.config.js
