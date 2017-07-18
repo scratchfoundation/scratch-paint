@@ -1,4 +1,5 @@
-import ToolTypes from '../tools/tool-types.js';
+const ToolTypes = require('../tools/tool-types');
+const log = require('../log/log');
 
 const CHANGE_TOOL = 'scratch-paint/tools/CHANGE_TOOL';
 const initialState = ToolTypes.BRUSH;
@@ -10,8 +11,7 @@ const reducer = function (state, action) {
         if (action.tool instanceof ToolTypes) {
             return action.tool;
         }
-        // TODO switch to minilog
-        console.warn('Warning: Tool type does not exist: ${action.tool}');
+        log.warn(`Warning: Tool type does not exist: ${action.tool}`);
         /* falls through */
     default:
         return state;

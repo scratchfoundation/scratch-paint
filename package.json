@@ -9,7 +9,8 @@
     "deploy": "touch playground/.nojekyll && gh-pages -t -d playground -m \"Build for $(git log --pretty=format:%H -n1)\"",
     "lint": "eslint . --ext .js,.jsx",
     "start": "webpack-dev-server",
-    "test": "npm run lint && npm run build",
+    "tap": "./node_modules/.bin/tap ./test/*.js",
+    "test": "npm run lint && npm run build && npm run tap",
     "watch": "webpack --progress --colors --watch"
   },
   "author": "Massachusetts Institute of Technology",
@@ -54,6 +55,7 @@
     "redux-throttle": "0.1.1",
     "rimraf": "^2.6.1",
     "style-loader": "^0.18.0",
+    "tap": "^10.2.0",
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.1"
   }
