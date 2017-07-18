@@ -1,11 +1,12 @@
 {
   "name": "scratch-blobs",
   "version": "0.1.0",
-  "description": "GraphicaL User Interface for the Scratch 3.0 paint editor, which is used to make and edit sprites for use in projects.",
+  "description": "Graphical User Interface for the Scratch 3.0 paint editor, which is used to make and edit sprites for use in projects.",
   "main": "./src/index.js",
   "scripts": {
     "build": "npm run clean && webpack --progress --colors --bail",
     "clean": "rimraf ./build && mkdirp build",
+    "deploy": "touch playground/.nojekyll && gh-pages -t -d playground -m \"Build for $(git log --pretty=format:%H -n1)\"",
     "lint": "eslint . --ext .js,.jsx",
     "start": "webpack-dev-server",
     "test": "npm run lint && npm run build",
@@ -13,10 +14,10 @@
   },
   "author": "Massachusetts Institute of Technology",
   "license": "BSD-3-Clause",
-  "homepage": "https://github.com/fsih/scratch-blobs#readme",
+  "homepage": "https://github.com/LLK/scratch-paint#readme",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/fsih/scratch-blobs.git"
+    "url": "git+ssh://git@github.com/LLK/scratch-paint.git"
   },
   "peerDependencies": {
     "react": "^15",

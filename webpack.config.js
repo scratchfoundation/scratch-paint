@@ -76,5 +76,10 @@ module.exports = {
             template: 'src/playground/index.ejs',
             title: 'Scratch 3.0 Paint Editor'
         })
-    ]
+    ].concat(process.env.NODE_ENV === 'production' ? [
+        new webpack.optimize.UglifyJsPlugin({
+            include: /\.min\.js$/,
+            minimize: true
+        })
+    ] : [])
 };
