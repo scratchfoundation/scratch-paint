@@ -43,24 +43,12 @@ class EraserTool extends React.Component {
 
         this.tool = new paper.Tool();
         this.blob.activateTool(true /* isEraser */, this.tool, this.props.eraserToolState);
-
-        // // Make sure a fill color is set on the brush
-        // if(!pg.stylebar.getFillColor()) {
-        //     pg.stylebar.setFillColor(pg.stylebar.getStrokeColor());
-        //     pg.stylebar.setStrokeColor(null);
-        // }
-
-        // // setup floating tool options panel in the editor
-        // pg.toolOptionPanel.setup(options, components, function() {});
-        // get options from local storage if presentz
-        
         this.tool.activate();
     }
     deactivateTool () {
         document.getElementById(this.props.canvasId)
             .removeEventListener('mousewheel', this.onScroll);
         this.blob.deactivateTool();
-        this.tool.remove();
     }
     onScroll (event) {
         if (event.deltaY < 0) {
@@ -89,7 +77,7 @@ EraserTool.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    eraserToolState: state.brushTool,
+    eraserToolState: state.eraserTool,
     tool: state.tool
 });
 const mapDispatchToProps = dispatch => ({

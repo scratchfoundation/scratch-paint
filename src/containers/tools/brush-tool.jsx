@@ -44,13 +44,13 @@ class BrushTool extends React.Component {
         this.tool = new paper.Tool();
         this.blob.activateTool(false /* isEraser */, this.tool, this.props.brushToolState);
 
-        // // Make sure a fill color is set on the brush
+        // TODO Make sure a fill color is set on the brush
         // if(!pg.stylebar.getFillColor()) {
         //     pg.stylebar.setFillColor(pg.stylebar.getStrokeColor());
         //     pg.stylebar.setStrokeColor(null);
         // }
 
-        // // setup floating tool options panel in the editor
+        // TODO setup floating tool options panel in the editor
         // pg.toolOptionPanel.setup(options, components, function() {});
         
         this.tool.activate();
@@ -58,7 +58,6 @@ class BrushTool extends React.Component {
     deactivateTool () {
         document.getElementById(this.props.canvasId)
             .removeEventListener('mousewheel', this.onScroll);
-        this.blob.deactivateTool();
     }
     onScroll (event) {
         if (event.deltaY < 0) {

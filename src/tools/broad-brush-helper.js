@@ -4,17 +4,15 @@ const paper = require('paper');
 /**
  * Applies segment brush functions to the tool.
  * @param {!Tool} tool paper.js mouse object
- * @param {!options} options brush tool state object
- * @param {!options.brushSize} brush tool diameter
  */
-const broadBrushHelper = function (tool, options) {
+const broadBrushHelper = function (tool) {
     let lastPoint;
     let secondLastPoint;
     let finalPath;
 
     tool.onBroadMouseDown = function (event) {
-        tool.minDistance = options.brushSize / 4;
-        tool.maxDistance = options.brushSize;
+        tool.minDistance = this.options.brushSize / 4;
+        tool.maxDistance = this.options.brushSize;
         if (event.event.button > 0) return;  // only first mouse button
         
         finalPath = new paper.Path();
@@ -24,14 +22,14 @@ const broadBrushHelper = function (tool, options) {
     };
     
     tool.onBroadMouseDrag = function (event) {
-        const step = (event.delta).normalize(options.brushSize / 2);
+        const step = (event.delta).normalize(this.options.brushSize / 2);
 
         // Move the first point out away from the drag so that the end of the path is rounded
         if (finalPath.segments && finalPath.segments.length === 1) {
             const removedPoint = finalPath.removeSegment(0).point;
             // Add handles to round the end caps
             const handleVec = step.clone();
-            handleVec.length = options.brushSize / 2;
+            handleVec.length = this.options.brushSize / 2;
             handleVec.angle += 90;
             finalPath.add(new paper.Segment(removedPoint.subtract(step), -handleVec, handleVec));
         }
@@ -50,7 +48,7 @@ const broadBrushHelper = function (tool, options) {
         if (finalPath.segments.length === 5) {
             // Flatten is necessary to prevent smooth from getting rid of the effect
             // of the handles on the first point.
-            finalPath.flatten(options.brushSize / 5);
+            finalPath.flatten(this.options.brushSize / 5);
         }
         finalPath.smooth();
         lastPoint = event.point;
@@ -68,14 +66,14 @@ const broadBrushHelper = function (tool, options) {
             finalPath.remove();
             finalPath = new paper.Path.Circle({
                 center: event.point,
-                radius: options.brushSize / 2
+                radius: this.options.brushSize / 2
             });
             tool.stylePath(finalPath);
         } else {
-            const step = (event.point.subtract(lastPoint)).normalize(options.brushSize / 2);
+            const step = (event.point.subtract(lastPoint)).normalize(this.options.brushSize / 2);
             step.angle += 90;
             const handleVec = step.clone();
-            handleVec.length = options.brushSize / 2;
+            handleVec.length = this.options.brushSize / 2;
 
             const top = event.point.add(step);
             const bottom = event.point.subtract(step);

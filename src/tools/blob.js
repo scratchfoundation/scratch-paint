@@ -19,31 +19,45 @@ class BlobTool {
     }
     
     setOptions (options) {
-        console.log('setOptions');
-        this.options = options;
-        if (this.cursorPreview) {
-            this.cursorPreview = new paper.Path.Circle({
-                center: [this.cursorPreview.center.x, this.cursorPreview.center.y],
-                radius: options.brushSize / 2
-            });
+        if (this.tool) {
+            this.tool.options = options;
+            this.tool.resizeCursorIfNeeded();
         }
     }
 
     activateTool (isEraser, tool, options) {
-        console.log('activateTool isEraser?'+isEraser);
         this.tool = tool;
-        this.options = options;
-        
-        let cursorPreview = this.cursorPreview = new paper.Path.Circle({
-            center: [-10000, -10000],
-            radius: options.brushSize / 2
-        });
-        this.brushSize = options.brushSize;
+
+        tool.cursorPreviewLastPoint = new paper.Point(-10000, -10000);
+        tool.resizeCursorIfNeeded = function (point) {
+            if (typeof point === 'undefined') {
+                point = this.cursorPreviewLastPoint;
+            } else {
+                this.cursorPreviewLastPoint = point;
+            }
+
+            if (this.brushSize === this.options.brushSize) {
+                return;
+            }
+            const newPreview = new paper.Path.Circle({
+                center: point,
+                radius: this.options.brushSize / 2
+            });
+            if (this.cursorPreview) {
+                this.cursorPreview.segments = newPreview.segments;
+                newPreview.remove();
+            } else {
+                this.cursorPreview = newPreview;
+            }
+            this.brushSize = this.options.brushSize;
+        };
+
+        this.setOptions(options);
 
         tool.stylePath = function (path) {
             if (isEraser) {
                 path.fillColor = 'white';
-                if (path === cursorPreview) {
+                if (path === this.cursorPreview) {
                     path.strokeColor = 'cornflowerblue';
                     path.strokeWidth = 1;
                 }
@@ -54,50 +68,46 @@ class BlobTool {
                 //TODO FIX
 
                 path.fillColor = 'black';
-                if (path === cursorPreview) {
+                if (path === this.cursorPreview) {
                     path.strokeColor = 'cornflowerblue';
                     path.strokeWidth = 1;
                 }
             }
         };
 
-        tool.stylePath(cursorPreview);
+        tool.stylePath(this.tool.cursorPreview);
 
         tool.fixedDistance = 1;
 
-        broadBrushHelper(tool, options);
+        broadBrushHelper(tool);
         // TODO add
         //pg.segmentbrushhelper(tool, options);
+
         tool.onMouseMove = function (event) {
-            if (this.brushSize !== options.brushSize) {
-                cursorPreview.remove();
-                cursorPreview = new paper.Path.Circle({
-                    center: event.point,
-                    radius: options.brushSize / 2
-                });
-                this.brushSize = options.brushSize;
-            }
-            tool.stylePath(cursorPreview);
-            cursorPreview.bringToFront();
-            cursorPreview.position = event.point;
+            tool.resizeCursorIfNeeded(event.point);
+            tool.stylePath(this.cursorPreview);
+            this.cursorPreview.bringToFront();
+            this.cursorPreview.position = event.point;
         };
         
         tool.onMouseDown = function (event) {
+            tool.resizeCursorIfNeeded(event.point);
             if (event.event.button > 0) return;  // only first mouse button
 
-            if (options.brushSize < BlobTool.THRESHOLD) {
+            if (this.options.brushSize < BlobTool.THRESHOLD) {
                 this.brush = BlobTool.BROAD;
                 this.onBroadMouseDown(event);
             } else {
                 this.brush = BlobTool.SEGMENT;
                 this.onSegmentMouseDown(event);
             }
-            cursorPreview.bringToFront();
-            cursorPreview.position = event.point;
+            this.cursorPreview.bringToFront();
+            this.cursorPreview.position = event.point;
             paper.view.draw();
         };
 
         tool.onMouseDrag = function (event) {
+            tool.resizeCursorIfNeeded(event.point);
             if (event.event.button > 0) return;  // only first mouse button
             if (this.brush === BlobTool.BROAD) {
                 this.onBroadMouseDrag(event);
@@ -107,12 +117,13 @@ class BlobTool {
                 log.warning(`Brush type does not exist: ${this.brush}`);
             }
 
-            cursorPreview.bringToFront();
-            cursorPreview.position = event.point;
+            this.cursorPreview.bringToFront();
+            this.cursorPreview.position = event.point;
             paper.view.draw();
         };
 
         tool.onMouseUp = function (event) {
+            tool.resizeCursorIfNeeded(event.point);
             if (event.event.button > 0) return;  // only first mouse button
             
             let lastPath;
@@ -130,8 +141,8 @@ class BlobTool {
                 tool.mergeBrush(lastPath);
             }
 
-            cursorPreview.bringToFront();
-            cursorPreview.position = event.point;
+            this.cursorPreview.bringToFront();
+            this.cursorPreview.position = event.point;
 
             // Reset
             this.brush = null;
@@ -214,7 +225,8 @@ class BlobTool {
 
                 // Gather path segments
                 const subpaths = [];
-                if (items[i] instanceof paper.PathItem && !items[i].closed) {
+                // TODO handle compound path
+                if (items[i] instanceof paper.Path && !items[i].closed) {
                     const firstSeg = items[i].clone();
                     const intersections = firstSeg.getIntersections(lastPath);
                     // keep first and last segments
@@ -312,15 +324,17 @@ class BlobTool {
 
         tool.isMergeable = function (newPath, existingPath) {
             return existingPath instanceof paper.PathItem && // path or compound path
-                existingPath !== cursorPreview && // don't merge with the mouse preview
+                existingPath !== this.cursorPreview && // don't merge with the mouse preview
                 existingPath !== newPath && // don't merge with self
                 existingPath.parent instanceof paper.Layer; // don't merge with nested in group
         };
     }
 
     deactivateTool () {
-        console.log('deactivateTool');
-        this.cursorPreview.remove();
+        if (this.tool) {
+            this.tool.cursorPreview.remove();
+            this.tool.remove();
+        }
     }
 }
 
