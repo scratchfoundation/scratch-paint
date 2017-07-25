@@ -53,7 +53,7 @@ pg.segmentbrushhelper = function(tool, options) {
 
 		// Smooth the path.
 		finalPath.simplify(2);
-		//console.log(finalPath.segments);
+		// console.log(finalPath.segments);
 		return finalPath;
 	};
 }
