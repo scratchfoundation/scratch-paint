@@ -3,24 +3,27 @@ import React from 'react';
 import PaperCanvas from '../containers/paper-canvas.jsx';
 import BrushTool from '../containers/tools/brush-tool.jsx';
 import EraserTool from '../containers/tools/eraser-tool.jsx';
+import ToolTypes from '../tools/tool-types.js';
 
-const PaintEditorComponent = props => (
-    <div>
-        <PaperCanvas
-            canvasId={props.canvasId}
-            tool={props.tool}
-        />
-        <BrushTool canvasId={props.canvasId} />
-        <EraserTool canvasId={props.canvasId} />
-    </div>
-);
+class PaintEditorComponent extends React.Component {
+    render () {
+        return (
+            <div>
+                <PaperCanvas
+                    ref={canvas => {
+                        this.canvas = canvas;
+                    }}
+                    tool={this.props.tool}
+                />
+                <BrushTool canvas={this.canvas} />
+                <EraserTool canvas={this.canvas} />
+            </div>
+        );
+    }
+}
 
 PaintEditorComponent.propTypes = {
-    canvasId: PropTypes.string.isRequired,
-    tool: PropTypes.shape({
-        name: PropTypes.string.isRequired
-    })
+    tool: PropTypes.oneOf(Object.keys(ToolTypes)).isRequired
 };
 
-
-module.exports = PaintEditorComponent;
+export default PaintEditorComponent;

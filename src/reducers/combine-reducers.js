@@ -1,7 +1,10 @@
 import {combineReducers} from 'redux';
+import toolReducer from './tools';
+import brushToolReducer from './brush-tool';
+import eraserToolReducer from './eraser-tool';
 
-module.exports = combineReducers({
-    tool: require('./tools'),
-    brushTool: require('./brush-tool'),
-    eraserTool: require('./eraser-tool')
+export default combineReducers({
+    tool: toolReducer,
+    brushTool: brushToolReducer,
+    eraserTool: eraserToolReducer
 });

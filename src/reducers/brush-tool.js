@@ -22,4 +22,4 @@ reducer.changeBrushSize = function (brushSize) {
     };
 };
 
-module.exports = reducer;
+export default reducer;

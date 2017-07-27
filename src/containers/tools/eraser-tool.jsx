@@ -38,16 +38,14 @@ class EraserTool extends React.Component {
         return false; // Logic only component
     }
     activateTool () {
-        document.getElementById(this.props.canvasId)
-            .addEventListener('mousewheel', this.onScroll);
+        this.props.canvas.addEventListener('mousewheel', this.onScroll);
 
         this.tool = new paper.Tool();
         this.blob.activateTool(true /* isEraser */, this.tool, this.props.eraserToolState);
         this.tool.activate();
     }
     deactivateTool () {
-        document.getElementById(this.props.canvasId)
-            .removeEventListener('mousewheel', this.onScroll);
+        this.props.canvas.removeEventListener('mousewheel', this.onScroll);
         this.blob.deactivateTool();
     }
     onScroll (event) {
@@ -60,13 +58,13 @@ class EraserTool extends React.Component {
     }
     render () {
         return (
-            <div />
+            <div>Eraser Tool </div>
         );
     }
 }
 
 EraserTool.propTypes = {
-    canvasId: PropTypes.string.isRequired,
+    canvas: PropTypes.element,
     changeBrushSize: PropTypes.func.isRequired,
     eraserToolState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
@@ -86,7 +84,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-module.exports = connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(EraserTool);

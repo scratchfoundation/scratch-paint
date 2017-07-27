@@ -22,6 +22,7 @@ class BrushTool extends React.Component {
     }
     componentDidMount () {
         if (this.props.tool === BrushTool.TOOL_TYPE) {
+            debugger;
             this.activateTool();
         }
     }
@@ -38,8 +39,7 @@ class BrushTool extends React.Component {
         return false; // Logic only component
     }
     activateTool () {
-        document.getElementById(this.props.canvasId)
-            .addEventListener('mousewheel', this.onScroll);
+        this.props.canvas.addEventListener('mousewheel', this.onScroll);
 
         this.tool = new paper.Tool();
         this.blob.activateTool(false /* isEraser */, this.tool, this.props.brushToolState);
@@ -56,8 +56,7 @@ class BrushTool extends React.Component {
         this.tool.activate();
     }
     deactivateTool () {
-        document.getElementById(this.props.canvasId)
-            .removeEventListener('mousewheel', this.onScroll);
+        this.props.canvas.removeEventListener('mousewheel', this.onScroll);
     }
     onScroll (event) {
         if (event.deltaY < 0) {
@@ -69,7 +68,7 @@ class BrushTool extends React.Component {
     }
     render () {
         return (
-            <div />
+            <div>Brush Tool </div>
         );
     }
 }
@@ -78,7 +77,7 @@ BrushTool.propTypes = {
     brushToolState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
     }),
-    canvasId: PropTypes.string.isRequired,
+    canvas: PropTypes.element,
     changeBrushSize: PropTypes.func.isRequired,
     tool: PropTypes.shape({
         name: PropTypes.string.isRequired
@@ -95,7 +94,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-module.exports = connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(BrushTool);
