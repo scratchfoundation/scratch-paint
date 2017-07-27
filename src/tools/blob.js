@@ -1,6 +1,6 @@
-const paper = require('paper');
-const log = require('../log/log');
-const broadBrushHelper = require('./broad-brush-helper');
+import paper from 'paper';
+import log from '../log/log';
+import broadBrushHelper from './broad-brush-helper';
 
 class BlobTool {
 
@@ -11,9 +11,9 @@ class BlobTool {
         return 'segmentbrush';
     }
 
-    // brush size >= threshold use segment brush, else use broadbrush
+    // If brush size >= threshold use segment brush, else use broadbrush
     // Segment brush has performance issues at low threshold, but broad brush has weird corners
-    // which are more obvious the bigger it is
+    // which get more obvious the bigger it is
     static get THRESHOLD () {
         return 100000;
     }

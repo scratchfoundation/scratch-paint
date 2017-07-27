@@ -29,7 +29,6 @@ class PaperCanvas extends React.Component {
         paper.remove();
     }
     setCanvas (canvas) {
-        debugger;
         this.canvas = canvas;
         if (this.props.canvasRef) {
             this.props.canvasRef(canvas);

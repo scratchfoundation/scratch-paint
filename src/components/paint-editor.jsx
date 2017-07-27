@@ -16,7 +16,7 @@ class PaintEditorComponent extends React.Component {
         this.setState({canvas: canvas});
     }
     render () {
-        // Tools can't work without a canvas, so we might as well not render them until we have it
+        // Tools can't work without a canvas, so we don't render them until we have it
         if (this.state.canvas) {
             return (
                 <div>
