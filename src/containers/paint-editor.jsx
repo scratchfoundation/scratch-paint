@@ -7,26 +7,25 @@ import {connect} from 'react-redux';
 
 class PaintEditor extends React.Component {
     componentDidMount () {
-        const onKeyPress = this.props.onKeyPress;
-        document.onkeydown = function (e) {
-            e = e || window.event;
-            onKeyPress(e);
-        };
+        document.addEventListener('keydown', this.props.onKeyPress);
+    }
+    componentWillUnmount () {
+        document.removeEventListener('keydown', this.props.onKeyPress);
     }
     render () {
+        const {
+            onKeyPress, // eslint-disable-line no-unused-vars
+            ...props
+        } = this.props;
         return (
-            <PaintEditorComponent
-                tool={this.props.tool}
-            />
+            <PaintEditorComponent {...props} />
         );
     }
 }
 
 PaintEditor.propTypes = {
     onKeyPress: PropTypes.func.isRequired,
-    tool: PropTypes.shape({
-        name: PropTypes.string.isRequired
-    })
+    tool: PropTypes.oneOf(Object.keys(ToolTypes)).isRequired
 };
 
 const mapStateToProps = state => ({

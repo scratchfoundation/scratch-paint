@@ -4,7 +4,7 @@ import reducer from '../../src/reducers/tools';
 
 test('initialState', () => {
     let defaultState;
-    expect(reducer(defaultState /* state */, {type: 'anything'} /* action */) instanceof ToolTypes).toBeTruthy();
+    expect(reducer(defaultState /* state */, {type: 'anything'} /* action */) in ToolTypes).toBeTruthy();
 });
 
 test('changeTool', () => {

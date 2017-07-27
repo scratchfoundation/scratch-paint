@@ -8,10 +8,10 @@ const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
     case CHANGE_TOOL:
-        if (action.tool instanceof ToolTypes) {
+        if (action.tool in ToolTypes) {
             return action.tool;
         }
-        log.warn(`Warning: Tool type does not exist: ${action.tool}`);
+        log.warn(`Tool type does not exist: ${action.tool}`);
         /* falls through */
     default:
         return state;
@@ -22,10 +22,7 @@ const reducer = function (state, action) {
 reducer.changeTool = function (tool) {
     return {
         type: CHANGE_TOOL,
-        tool: tool,
-        meta: {
-            throttle: 30
-        }
+        tool: tool
     };
 };
 

@@ -1,12 +1,8 @@
-class ToolTypes {
-    constructor (name) {
-        this.name = name;
-    }
-    toString () {
-        return `ToolTypes.${this.name}`;
-    }
-}
-ToolTypes.BRUSH = new ToolTypes('BRUSH');
-ToolTypes.ERASER = new ToolTypes('ERASER');
+import keyMirror from 'keymirror';
+
+const ToolTypes = keyMirror({
+    BRUSH: null,
+    ERASER: null
+});
 
 export default ToolTypes;
