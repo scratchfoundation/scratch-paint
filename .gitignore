@@ -7,4 +7,8 @@ npm-*
 
 # Build
 playground/*
-build/*
+dist/*
+
+# Editors
+/#*
+*~
