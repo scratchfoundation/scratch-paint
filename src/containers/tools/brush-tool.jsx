@@ -22,8 +22,7 @@ class BrushTool extends React.Component {
     }
     componentDidMount () {
         if (this.props.tool === BrushTool.TOOL_TYPE) {
-            debugger;
-            this.activateTool();
+            this.activateTool(this.props);
         }
     }
     componentWillReceiveProps (nextProps) {
@@ -39,6 +38,7 @@ class BrushTool extends React.Component {
         return false; // Logic only component
     }
     activateTool () {
+        // TODO: This is temporary until a component that provides the brush size is hooked up
         this.props.canvas.addEventListener('mousewheel', this.onScroll);
 
         this.tool = new paper.Tool();
@@ -57,6 +57,7 @@ class BrushTool extends React.Component {
     }
     deactivateTool () {
         this.props.canvas.removeEventListener('mousewheel', this.onScroll);
+        this.blob.deactivateTool();
     }
     onScroll (event) {
         if (event.deltaY < 0) {
@@ -64,11 +65,11 @@ class BrushTool extends React.Component {
         } else if (event.deltaY > 0 && this.props.brushToolState.brushSize > 1) {
             this.props.changeBrushSize(this.props.brushToolState.brushSize - 1);
         }
-        return false;
+        return true;
     }
     render () {
         return (
-            <div>Brush Tool </div>
+            <div>Brush Tool</div>
         );
     }
 }
@@ -77,11 +78,9 @@ BrushTool.propTypes = {
     brushToolState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
     }),
-    canvas: PropTypes.element,
+    canvas: PropTypes.instanceOf(Element).isRequired,
     changeBrushSize: PropTypes.func.isRequired,
-    tool: PropTypes.shape({
-        name: PropTypes.string.isRequired
-    })
+    tool: PropTypes.oneOf(Object.keys(ToolTypes)).isRequired
 };
 
 const mapStateToProps = state => ({

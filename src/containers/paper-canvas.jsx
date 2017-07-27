@@ -1,9 +1,15 @@
+import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import paper from 'paper';
-import ToolTypes from '../tools/tool-types.js';
 
 class PaperCanvas extends React.Component {
+    constructor (props) {
+        super(props);
+        bindAll(this, [
+            'setCanvas'
+        ]);
+    }
     componentDidMount () {
         paper.setup(this.canvas);
         // Create a Paper.js Path to draw a line into it:
@@ -22,19 +28,24 @@ class PaperCanvas extends React.Component {
     componentWillUnmount () {
         paper.remove();
     }
+    setCanvas (canvas) {
+        debugger;
+        this.canvas = canvas;
+        if (this.props.canvasRef) {
+            this.props.canvasRef(canvas);
+        }
+    }
     render () {
         return (
             <canvas
-                ref={canvas => {
-                    this.canvas = canvas;
-                }}
+                ref={this.setCanvas}
             />
         );
     }
 }
 
 PaperCanvas.propTypes = {
-    tool: PropTypes.oneOf(Object.keys(ToolTypes)).isRequired
+    canvasRef: PropTypes.func
 };
 
 export default PaperCanvas;

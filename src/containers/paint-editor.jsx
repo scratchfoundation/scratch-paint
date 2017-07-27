@@ -13,35 +13,27 @@ class PaintEditor extends React.Component {
         document.removeEventListener('keydown', this.props.onKeyPress);
     }
     render () {
-        const {
-            onKeyPress, // eslint-disable-line no-unused-vars
-            ...props
-        } = this.props;
         return (
-            <PaintEditorComponent {...props} />
+            <PaintEditorComponent />
         );
     }
 }
 
 PaintEditor.propTypes = {
-    onKeyPress: PropTypes.func.isRequired,
-    tool: PropTypes.oneOf(Object.keys(ToolTypes)).isRequired
+    onKeyPress: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-    tool: state.tool
-});
 const mapDispatchToProps = dispatch => ({
-    onKeyPress: e => {
-        if (e.key === 'e') {
+    onKeyPress: event => {
+        if (event.key === 'e') {
             dispatch(ToolsReducer.changeTool(ToolTypes.ERASER));
-        } else if (e.key === 'b') {
+        } else if (event.key === 'b') {
             dispatch(ToolsReducer.changeTool(ToolTypes.BRUSH));
         }
     }
 });
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(PaintEditor);

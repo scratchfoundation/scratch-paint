@@ -1,29 +1,37 @@
-import PropTypes from 'prop-types';
+import bindAll from 'lodash.bindall';
 import React from 'react';
 import PaperCanvas from '../containers/paper-canvas.jsx';
 import BrushTool from '../containers/tools/brush-tool.jsx';
 import EraserTool from '../containers/tools/eraser-tool.jsx';
-import ToolTypes from '../tools/tool-types.js';
 
 class PaintEditorComponent extends React.Component {
+    constructor (props) {
+        super(props);
+        bindAll(this, [
+            'setCanvas'
+        ]);
+        this.state = {};
+    }
+    setCanvas (canvas) {
+        this.setState({canvas: canvas});
+    }
     render () {
+        // Tools can't work without a canvas, so we might as well not render them until we have it
+        if (this.state.canvas) {
+            return (
+                <div>
+                    <PaperCanvas canvasRef={this.setCanvas} />
+                    <BrushTool canvas={this.state.canvas} />
+                    <EraserTool canvas={this.state.canvas} />
+                </div>
+            );
+        }
         return (
             <div>
-                <PaperCanvas
-                    ref={canvas => {
-                        this.canvas = canvas;
-                    }}
-                    tool={this.props.tool}
-                />
-                <BrushTool canvas={this.canvas} />
-                <EraserTool canvas={this.canvas} />
+                <PaperCanvas canvasRef={this.setCanvas} />
             </div>
         );
     }
 }
-
-PaintEditorComponent.propTypes = {
-    tool: PropTypes.oneOf(Object.keys(ToolTypes)).isRequired
-};
 
 export default PaintEditorComponent;

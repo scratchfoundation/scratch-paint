@@ -49,29 +49,27 @@ class EraserTool extends React.Component {
         this.blob.deactivateTool();
     }
     onScroll (event) {
+        event.preventDefault();
         if (event.deltaY < 0) {
             this.props.changeBrushSize(this.props.eraserToolState.brushSize + 1);
         } else if (event.deltaY > 0 && this.props.eraserToolState.brushSize > 1) {
             this.props.changeBrushSize(this.props.eraserToolState.brushSize - 1);
         }
-        return false;
     }
     render () {
         return (
-            <div>Eraser Tool </div>
+            <div>Eraser Tool</div>
         );
     }
 }
 
 EraserTool.propTypes = {
-    canvas: PropTypes.element,
+    canvas: PropTypes.instanceOf(Element).isRequired,
     changeBrushSize: PropTypes.func.isRequired,
     eraserToolState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
     }),
-    tool: PropTypes.shape({
-        name: PropTypes.string.isRequired
-    })
+    tool: PropTypes.oneOf(Object.keys(ToolTypes)).isRequired
 };
 
 const mapStateToProps = state => ({
