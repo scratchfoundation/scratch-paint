@@ -21,10 +21,7 @@ const reducer = function (state, action) {
 reducer.changeBrushSize = function (brushSize) {
     return {
         type: CHANGE_BRUSH_SIZE,
-        brushSize: brushSize,
-        meta: {
-            throttle: 30
-        }
+        brushSize: brushSize
     };
 };
 
