@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux';
-import toolReducer from './tools';
-import brushToolReducer from './brush-tool';
-import eraserToolReducer from './eraser-tool';
+import modeReducer from './modes';
+import brushModeReducer from './brush-mode';
+import eraserModeReducer from './eraser-mode';
 
 export default combineReducers({
-    tool: toolReducer,
-    brushTool: brushToolReducer,
-    eraserTool: eraserToolReducer
+    mode: modeReducer,
+    brushMode: brushModeReducer,
+    eraserMode: eraserModeReducer
 });

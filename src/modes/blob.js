@@ -4,11 +4,11 @@ import broadBrushHelper from './broad-brush-helper';
 import segmentBrushHelper from './segment-brush-helper';
 
 /**
- * Shared code for the brush and eraser tool. Adds functions on the paper tool object
+ * Shared code for the brush and eraser mode. Adds functions on the paper tool object
  * to handle mouse events, which are delegated to broad-brush-helper and segment-brush-helper
  * based on the brushSize in the state.
  */
-class BlobTool {
+class Blobbiness {
 
     static get BROAD () {
         return 'broadbrush';
@@ -97,11 +97,11 @@ class BlobTool {
             tool.resizeCursorIfNeeded(event.point);
             if (event.event.button > 0) return;  // only first mouse button
 
-            if (this.options.brushSize < BlobTool.THRESHOLD) {
-                this.brush = BlobTool.BROAD;
+            if (this.options.brushSize < Blobbiness.THRESHOLD) {
+                this.brush = Blobbiness.BROAD;
                 this.onBroadMouseDown(event);
             } else {
-                this.brush = BlobTool.SEGMENT;
+                this.brush = Blobbiness.SEGMENT;
                 this.onSegmentMouseDown(event);
             }
             this.cursorPreview.bringToFront();
@@ -112,9 +112,9 @@ class BlobTool {
         tool.onMouseDrag = function (event) {
             tool.resizeCursorIfNeeded(event.point);
             if (event.event.button > 0) return;  // only first mouse button
-            if (this.brush === BlobTool.BROAD) {
+            if (this.brush === Blobbiness.BROAD) {
                 this.onBroadMouseDrag(event);
-            } else if (this.brush === BlobTool.SEGMENT) {
+            } else if (this.brush === Blobbiness.SEGMENT) {
                 this.onSegmentMouseDrag(event);
             } else {
                 log.warn(`Brush type does not exist: ${this.brush}`);
@@ -130,9 +130,9 @@ class BlobTool {
             if (event.event.button > 0) return;  // only first mouse button
             
             let lastPath;
-            if (this.brush === BlobTool.BROAD) {
+            if (this.brush === Blobbiness.BROAD) {
                 lastPath = this.onBroadMouseUp(event);
-            } else if (this.brush === BlobTool.SEGMENT) {
+            } else if (this.brush === Blobbiness.SEGMENT) {
                 lastPath = this.onSegmentMouseUp(event);
             } else {
                 log.warn(`Brush type does not exist: ${this.brush}`);
@@ -341,4 +341,4 @@ class BlobTool {
     }
 }
 
-export default BlobTool;
+export default Blobbiness;

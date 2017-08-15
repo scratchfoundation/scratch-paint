@@ -2,14 +2,15 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
-import ToolTypes from '../../tools/tool-types.js';
-import BlobTool from '../../tools/blob.js';
-import BrushToolReducer from '../../reducers/brush-tool';
+import Modes from '../modes/modes';
+import Blobbiness from '../modes/blob';
+import BrushModeReducer from '../reducers/brush-mode';
+import {changeBrushSize} from '../reducers/brush-mode';
 import paper from 'paper';
 
-class BrushTool extends React.Component {
-    static get TOOL_TYPE () {
-        return ToolTypes.BRUSH;
+class BrushMode extends React.Component {
+    static get MODE () {
+        return Modes.BRUSH;
     }
     constructor (props) {
         super(props);
@@ -18,20 +19,20 @@ class BrushTool extends React.Component {
             'deactivateTool',
             'onScroll'
         ]);
-        this.blob = new BlobTool();
+        this.blob = new Blobbiness();
     }
     componentDidMount () {
-        if (this.props.tool === BrushTool.TOOL_TYPE) {
+        if (this.props.isBrushModeActive) {
             this.activateTool(this.props);
         }
     }
     componentWillReceiveProps (nextProps) {
-        if (nextProps.tool === BrushTool.TOOL_TYPE && this.props.tool !== BrushTool.TOOL_TYPE) {
+        if (nextProps.isBrushModeActive && !this.props.isBrushModeActive) {
             this.activateTool();
-        } else if (nextProps.tool !== BrushTool.TOOL_TYPE && this.props.tool === BrushTool.TOOL_TYPE) {
+        } else if (!nextProps.isBrushModeActive && this.props.isBrushModeActive) {
             this.deactivateTool();
-        } else if (nextProps.tool === BrushTool.TOOL_TYPE && this.props.tool === BrushTool.TOOL_TYPE) {
-            this.blob.setOptions(nextProps.brushToolState);
+        } else if (nextProps.isBrushModeActive && this.props.isBrushModeActive) {
+            this.blob.setOptions(nextProps.brushModeState);
         }
     }
     shouldComponentUpdate () {
@@ -42,7 +43,7 @@ class BrushTool extends React.Component {
         this.props.canvas.addEventListener('mousewheel', this.onScroll);
 
         this.tool = new paper.Tool();
-        this.blob.activateTool(false /* isEraser */, this.tool, this.props.brushToolState);
+        this.blob.activateTool(false /* isEraser */, this.tool, this.props.brushModeState);
 
         // TODO Make sure a fill color is set on the brush
         // if(!pg.stylebar.getFillColor()) {
@@ -61,39 +62,39 @@ class BrushTool extends React.Component {
     }
     onScroll (event) {
         if (event.deltaY < 0) {
-            this.props.changeBrushSize(this.props.brushToolState.brushSize + 1);
-        } else if (event.deltaY > 0 && this.props.brushToolState.brushSize > 1) {
-            this.props.changeBrushSize(this.props.brushToolState.brushSize - 1);
+            this.props.changeBrushSize(this.props.brushModeState.brushSize + 1);
+        } else if (event.deltaY > 0 && this.props.brushModeState.brushSize > 1) {
+            this.props.changeBrushSize(this.props.brushModeState.brushSize - 1);
         }
         return true;
     }
     render () {
         return (
-            <div>Brush Tool</div>
+            <div>Brush Mode</div>
         );
     }
 }
 
-BrushTool.propTypes = {
-    brushToolState: PropTypes.shape({
+BrushMode.propTypes = {
+    brushModeState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
     }),
     canvas: PropTypes.instanceOf(Element).isRequired,
     changeBrushSize: PropTypes.func.isRequired,
-    tool: PropTypes.oneOf(Object.keys(ToolTypes)).isRequired
+    isBrushModeActive: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-    brushToolState: state.brushTool,
-    tool: state.tool
+    brushModeState: state.brushMode,
+    isBrushModeActive: state.mode === BrushMode.MODE
 });
 const mapDispatchToProps = dispatch => ({
     changeBrushSize: brushSize => {
-        dispatch(BrushToolReducer.changeBrushSize(brushSize));
+        dispatch(changeBrushSize(brushSize));
     }
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(BrushTool);
+)(BrushMode);

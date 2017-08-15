@@ -1,12 +1,12 @@
 import log from '../log/log';
 
-const CHANGE_ERASER_SIZE = 'scratch-paint/tools/CHANGE_ERASER_SIZE';
-const initialState = {brushSize: 20};
+const CHANGE_BRUSH_SIZE = 'scratch-paint/brush-mode/CHANGE_BRUSH_SIZE';
+const initialState = {brushSize: 5};
 
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
-    case CHANGE_ERASER_SIZE:
+    case CHANGE_BRUSH_SIZE:
         if (isNaN(action.brushSize)) {
             log.warn(`Invalid brush size: ${action.brushSize}`);
             return state;
@@ -18,11 +18,14 @@ const reducer = function (state, action) {
 };
 
 // Action creators ==================================
-reducer.changeBrushSize = function (brushSize) {
+const changeBrushSize = function (brushSize) {
     return {
-        type: CHANGE_ERASER_SIZE,
+        type: CHANGE_BRUSH_SIZE,
         brushSize: brushSize
     };
 };
 
-export default reducer;
+export {
+    reducer as default,
+    changeBrushSize
+};

@@ -1,8 +1,8 @@
 import bindAll from 'lodash.bindall';
 import React from 'react';
 import PaperCanvas from '../containers/paper-canvas.jsx';
-import BrushTool from '../containers/tools/brush-tool.jsx';
-import EraserTool from '../containers/tools/eraser-tool.jsx';
+import BrushMode from '../containers/brush-mode.jsx';
+import EraserMode from '../containers/eraser-mode.jsx';
 
 class PaintEditorComponent extends React.Component {
     constructor (props) {
@@ -16,13 +16,13 @@ class PaintEditorComponent extends React.Component {
         this.setState({canvas: canvas});
     }
     render () {
-        // Tools can't work without a canvas, so we don't render them until we have it
+        // Modes can't work without a canvas, so we don't render them until we have it
         if (this.state.canvas) {
             return (
                 <div>
                     <PaperCanvas canvasRef={this.setCanvas} />
-                    <BrushTool canvas={this.state.canvas} />
-                    <EraserTool canvas={this.state.canvas} />
+                    <BrushMode canvas={this.state.canvas} />
+                    <EraserMode canvas={this.state.canvas} />
                 </div>
             );
         }
