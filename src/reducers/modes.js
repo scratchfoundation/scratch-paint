@@ -19,11 +19,14 @@ const reducer = function (state, action) {
 };
 
 // Action creators ==================================
-reducer.changeMode = function (mode) {
+const changeMode = function (mode) {
     return {
         type: CHANGE_MODE,
         mode: mode
     };
 };
 
-export default reducer;
+export {
+    reducer as default,
+    changeMode
+};

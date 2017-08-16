@@ -41,9 +41,7 @@ class BrushMode extends React.Component {
     activateTool () {
         // TODO: This is temporary until a component that provides the brush size is hooked up
         this.props.canvas.addEventListener('mousewheel', this.onScroll);
-
-        this.tool = new paper.Tool();
-        this.blob.activateTool(false /* isEraser */, this.tool, this.props.brushModeState);
+        this.blob.activateTool(false /* isEraser */, this.props.brushModeState);
 
         // TODO Make sure a fill color is set on the brush
         // if(!pg.stylebar.getFillColor()) {
@@ -53,8 +51,6 @@ class BrushMode extends React.Component {
 
         // TODO setup floating tool options panel in the editor
         // pg.toolOptionPanel.setup(options, components, function() {});
-        
-        this.tool.activate();
     }
     deactivateTool () {
         this.props.canvas.removeEventListener('mousewheel', this.onScroll);

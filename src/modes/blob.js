@@ -31,8 +31,8 @@ class Blobbiness {
         }
     }
 
-    activateTool (isEraser, tool, options) {
-        this.tool = tool;
+    activateTool (isEraser, options) {
+        this.tool = new paper.Tool();
 
         tool.cursorPreviewLastPoint = new paper.Point(-10000, -10000);
         tool.resizeCursorIfNeeded = function (point) {

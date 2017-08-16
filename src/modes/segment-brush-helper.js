@@ -77,7 +77,6 @@ const segmentBrushHelper = function (tool) {
 
         // Smooth the path.
         finalPath.simplify(2);
-        // console.log(finalPath.segments);
         return finalPath;
     };
 };

@@ -18,11 +18,14 @@ const reducer = function (state, action) {
 };
 
 // Action creators ==================================
-reducer.changeBrushSize = function (brushSize) {
+const changeBrushSize = function (brushSize) {
     return {
         type: CHANGE_ERASER_SIZE,
         brushSize: brushSize
     };
 };
 
-export default reducer;
+export {
+    reducer as default,
+    changeBrushSize
+};

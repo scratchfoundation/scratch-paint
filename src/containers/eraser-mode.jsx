@@ -40,9 +40,7 @@ class EraserMode extends React.Component {
     activateTool () {
         this.props.canvas.addEventListener('mousewheel', this.onScroll);
 
-        this.tool = new paper.Tool();
-        this.blob.activateTool(true /* isEraser */, this.tool, this.props.eraserModeState);
-        this.tool.activate();
+        this.blob.activateTool(true /* isEraser */, this.props.eraserModeState);
     }
     deactivateTool () {
         this.props.canvas.removeEventListener('mousewheel', this.onScroll);
