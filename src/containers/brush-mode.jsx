@@ -3,7 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
-import Blobbiness from '../modes/blob';
+import Blobbiness from './blob/blob';
 import {changeBrushSize} from '../reducers/brush-mode';
 
 class BrushMode extends React.Component {

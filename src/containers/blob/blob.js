@@ -1,5 +1,5 @@
 import paper from 'paper';
-import log from '../log/log';
+import log from '../../log/log';
 import BroadBrushHelper from './broad-brush-helper';
 import SegmentBrushHelper from './segment-brush-helper';
 import {styleCursorPreview} from './style-path';
