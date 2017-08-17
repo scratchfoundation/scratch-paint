@@ -5,11 +5,10 @@ import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
 import Blobbiness from './blob/blob';
 import {changeBrushSize} from '../reducers/brush-mode';
+import {changeMode} from '../reducers/modes';
+import BrushModeComponent from '../components/brush-mode.jsx';
 
 class BrushMode extends React.Component {
-    static get MODE () {
-        return Modes.BRUSH;
-    }
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -59,7 +58,7 @@ class BrushMode extends React.Component {
     }
     render () {
         return (
-            <div>Brush Mode</div>
+            <BrushModeComponent onMouseDown={this.props.handleMouseDown} />
         );
     }
 }
@@ -70,16 +69,20 @@ BrushMode.propTypes = {
     }),
     canvas: PropTypes.instanceOf(Element).isRequired,
     changeBrushSize: PropTypes.func.isRequired,
+    handleMouseDown: PropTypes.func.isRequired,
     isBrushModeActive: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
     brushModeState: state.brushMode,
-    isBrushModeActive: state.mode === BrushMode.MODE
+    isBrushModeActive: state.mode === Modes.BRUSH
 });
 const mapDispatchToProps = dispatch => ({
     changeBrushSize: brushSize => {
         dispatch(changeBrushSize(brushSize));
+    },
+    handleMouseDown: () => {
+        dispatch(changeMode(Modes.BRUSH));
     }
 });
 

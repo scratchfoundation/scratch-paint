@@ -5,11 +5,10 @@ import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
 import Blobbiness from './blob/blob';
 import {changeBrushSize} from '../reducers/eraser-mode';
+import EraserModeComponent from '../components/eraser-mode.jsx';
+import {changeMode} from '../reducers/modes';
 
 class EraserMode extends React.Component {
-    static get MODE () {
-        return Modes.ERASER;
-    }
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -55,7 +54,7 @@ class EraserMode extends React.Component {
     }
     render () {
         return (
-            <div>Eraser Mode</div>
+            <EraserModeComponent onMouseDown={this.props.handleMouseDown} />
         );
     }
 }
@@ -66,16 +65,20 @@ EraserMode.propTypes = {
     eraserModeState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
     }),
+    handleMouseDown: PropTypes.func.isRequired,
     isEraserModeActive: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
     eraserModeState: state.eraserMode,
-    isEraserModeActive: state.mode === EraserMode.MODE
+    isEraserModeActive: state.mode === Modes.ERASER
 });
 const mapDispatchToProps = dispatch => ({
     changeBrushSize: brushSize => {
         dispatch(changeBrushSize(brushSize));
+    },
+    handleMouseDown: () => {
+        dispatch(changeMode(Modes.ERASER));
     }
 });
 
