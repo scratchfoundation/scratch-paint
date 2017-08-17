@@ -18,6 +18,7 @@ class SegmentBrushHelper {
     constructor () {
         this.lastPoint = null;
         this.finalPath = null;
+        this.firstCircle = null;
     }
 
     onSegmentMouseDown (event, tool, options) {
@@ -26,10 +27,11 @@ class SegmentBrushHelper {
         tool.minDistance = 1;
         tool.maxDistance = options.brushSize;
         
-        this.finalPath = new paper.Path.Circle({
+        this.firstCircle = new paper.Path.Circle({
             center: event.point,
             radius: options.brushSize / 2
         });
+        this.finalPath = this.firstCircle;
         stylePath(this.finalPath, options.isEraser);
         this.lastPoint = event.point;
     }
@@ -78,8 +80,17 @@ class SegmentBrushHelper {
         // TODO: This smoothing tends to cut off large portions of the path! Would like to eventually
         // add back smoothing, maybe a custom implementation that only applies to a subset of the line?
 
-        // Smooth the path.
-        this.finalPath.simplify(2);
+        // Smooth the path. Make it unclosed first because smoothing of closed
+        // paths tends to cut off the path.
+        if (this.finalPath.segments && this.finalPath.segments.length > 4) {
+            this.finalPath.closed = false;
+            this.finalPath.simplify(2);
+            this.finalPath.closed = true;
+            // Merge again with the first point, since it gets distorted when we unclose the path.
+            const temp = this.finalPath.unite(this.firstCircle);
+            this.finalPath.remove();
+            this.finalPath = temp;
+        }
         return this.finalPath;
     }
 }

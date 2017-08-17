@@ -20,7 +20,7 @@ class BroadBrushHelper {
     }
 
     onBroadMouseDown (event, tool, options) {
-        tool.minDistance = 1;
+        tool.minDistance = options.brushSize / 2;
         tool.maxDistance = options.brushSize;
         if (event.event.button > 0) return;  // only first mouse button
         

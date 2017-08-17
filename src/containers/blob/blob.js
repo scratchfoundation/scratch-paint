@@ -226,8 +226,37 @@ class Blobbiness {
         }
         
         for (let i = items.length - 1; i >= 0; i--) {
+            // TODO handle compound paths
+            if (items[i] instanceof paper.Path && (!items[i].fillColor || items[i].fillColor._alpha === 0)) {
+                // Gather path segments
+                const subpaths = [];
+                const firstSeg = items[i];
+                const intersections = firstSeg.getIntersections(lastPath);
+                for (let j = intersections.length - 1; j >= 0; j--) {
+                    const split = firstSeg.splitAt(intersections[j]);
+                    if (split) {
+                        split.insertAbove(firstSeg);
+                        subpaths.push(split);
+                    }
+                }
+                subpaths.push(firstSeg);
+
+                // Remove the ones that are within the eraser stroke boundary
+                for (let k = subpaths.length - 1; k >= 0; k--) {
+                    const segMidpoint = subpaths[k].getLocationAt(subpaths[k].length / 2).point;
+                    if (lastPath.contains(segMidpoint)) {
+                        subpaths[k].remove();
+                        subpaths.splice(k, 1);
+                    }
+                }
+                lastPath.remove();
+                // TODO add back undo
+                // pg.undo.snapshot('eraser');
+                continue;
+            }
             // Erase
             const newPath = items[i].subtract(lastPath);
+            newPath.insertBelow(items[i]);
 
             // Gather path segments
             const subpaths = [];
@@ -236,11 +265,10 @@ class Blobbiness {
                 const firstSeg = items[i].clone();
                 const intersections = firstSeg.getIntersections(lastPath);
                 // keep first and last segments
-                if (intersections.length === 0) {
-                    continue;
-                }
                 for (let j = intersections.length - 1; j >= 0; j--) {
-                    subpaths.push(firstSeg.splitAt(intersections[j]));
+                    const split = firstSeg.splitAt(intersections[j]);
+                    split.insertAbove(firstSeg);
+                    subpaths.push(split);
                 }
                 subpaths.push(firstSeg);
             }

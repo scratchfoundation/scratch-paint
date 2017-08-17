@@ -37,18 +37,13 @@ class BrushMode extends React.Component {
         return false; // Logic only component
     }
     activateTool () {
+        // TODO: Instead of clearing selection, consider a kind of "draw inside"
+        // analogous to how selection works with eraser
+        // pg.selection.clearSelection();
+
         // TODO: This is temporary until a component that provides the brush size is hooked up
         this.props.canvas.addEventListener('mousewheel', this.onScroll);
         this.blob.activateTool({isEraser: false, ...this.props.brushModeState});
-
-        // TODO Make sure a fill color is set on the brush
-        // if(!pg.stylebar.getFillColor()) {
-        //     pg.stylebar.setFillColor(pg.stylebar.getStrokeColor());
-        //     pg.stylebar.setStrokeColor(null);
-        // }
-
-        // TODO setup floating tool options panel in the editor
-        // pg.toolOptionPanel.setup(options, components, function() {});
     }
     deactivateTool () {
         this.props.canvas.removeEventListener('mousewheel', this.onScroll);
