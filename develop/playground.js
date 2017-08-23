@@ -16,7 +16,7 @@ webpackJsonp([0],[
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var microee = __webpack_require__(135);
+var microee = __webpack_require__(145);
 
 // Implements a subset of Node's stream.Transform - in a cross-platform manner.
 function Transform() {}
@@ -94,11 +94,7 @@ module.exports = Transform;
 /* 15 */,
 /* 16 */,
 /* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -125,216 +121,32 @@ if (process.env.NODE_ENV !== 'production') {
   // By explicitly using `prop-types` you are opting into new development behavior.
   // http://fb.me/prop-types-in-prod
   var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(66)(isValidElement, throwOnDirectAccess);
+  module.exports = __webpack_require__(74)(isValidElement, throwOnDirectAccess);
 } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(147)();
+  module.exports = __webpack_require__(156)();
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
 /* 23 */,
 /* 24 */,
 /* 25 */,
 /* 26 */,
 /* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _keymirror = __webpack_require__(126);
-
-var _keymirror2 = _interopRequireDefault(_keymirror);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ToolTypes = (0, _keymirror2.default)({
-    BRUSH: null,
-    ERASER: null
-});
-
-exports.default = ToolTypes;
-
-/***/ }),
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(98);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(242);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(241);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(240);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(97);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(99);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "applyMiddleware", function() { return __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "compose", function() { return __WEBPACK_IMPORTED_MODULE_4__compose__["a"]; });
-
-
-
-
-
-
-
-/*
-* This is a dummy function to check if the function name has been altered by minification.
-* If the function has been minified and NODE_ENV !== 'production', warn the user.
-*/
-function isCrushed() {}
-
-if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
-  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_warning__["a" /* default */])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
-}
-
-
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 37 */,
-/* 38 */,
-/* 39 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(127);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(129);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(134);
-
-
-
-
-/** `Object#toString` result references. */
-var objectTag = '[object Object]';
-
-/** Used for built-in method references. */
-var funcProto = Function.prototype,
-    objectProto = Object.prototype;
-
-/** Used to resolve the decompiled source of functions. */
-var funcToString = funcProto.toString;
-
-/** Used to check objects for own properties. */
-var hasOwnProperty = objectProto.hasOwnProperty;
-
-/** Used to infer the `Object` constructor. */
-var objectCtorString = funcToString.call(Object);
-
-/**
- * Checks if `value` is a plain object, that is, an object created by the
- * `Object` constructor or one with a `[[Prototype]]` of `null`.
- *
- * @static
- * @memberOf _
- * @since 0.8.0
- * @category Lang
- * @param {*} value The value to check.
- * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
- * @example
- *
- * function Foo() {
- *   this.a = 1;
- * }
- *
- * _.isPlainObject(new Foo);
- * // => false
- *
- * _.isPlainObject([1, 2, 3]);
- * // => false
- *
- * _.isPlainObject({ 'x': 0, 'y': 0 });
- * // => true
- *
- * _.isPlainObject(Object.create(null));
- * // => true
- */
-function isPlainObject(value) {
-  if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__["a" /* default */])(value) || __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__["a" /* default */])(value) != objectTag) {
-    return false;
-  }
-  var proto = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__getPrototype_js__["a" /* default */])(value);
-  if (proto === null) {
-    return true;
-  }
-  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
-  return typeof Ctor == 'function' && Ctor instanceof Ctor &&
-    funcToString.call(Ctor) == objectCtorString;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (isPlainObject);
-
-
-/***/ }),
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = warning;
-/**
- * Prints a warning in the console if it exists.
- *
- * @param {String} message The warning message.
- * @returns {void}
- */
-function warning(message) {
-  /* eslint-disable no-console */
-  if (typeof console !== 'undefined' && typeof console.error === 'function') {
-    console.error(message);
-  }
-  /* eslint-enable no-console */
-  try {
-    // This error was thrown as a convenience so that if you enable
-    // "break on all exceptions" in your console,
-    // it would pause the execution at this line.
-    throw new Error(message);
-    /* eslint-disable no-empty */
-  } catch (e) {}
-  /* eslint-enable no-empty */
-}
-
-/***/ }),
-/* 57 */,
-/* 58 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Provider__ = __webpack_require__(218);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_connectAdvanced__ = __webpack_require__(88);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__connect_connect__ = __webpack_require__(219);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Provider__ = __webpack_require__(227);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_connectAdvanced__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__connect_connect__ = __webpack_require__(228);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Provider", function() { return __WEBPACK_IMPORTED_MODULE_0__components_Provider__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createProvider", function() { return __WEBPACK_IMPORTED_MODULE_0__components_Provider__["b"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "connectAdvanced", function() { return __WEBPACK_IMPORTED_MODULE_1__components_connectAdvanced__["a"]; });
@@ -346,888 +158,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 59 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _toolTypes = __webpack_require__(27);
-
-var _toolTypes2 = _interopRequireDefault(_toolTypes);
-
-var _log = __webpack_require__(107);
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_TOOL = 'scratch-paint/tools/CHANGE_TOOL';
-var initialState = _toolTypes2.default.BRUSH;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_TOOL:
-            if (action.tool in _toolTypes2.default) {
-                return action.tool;
-            }
-            _log2.default.warn('Tool type does not exist: ' + action.tool);
-        /* falls through */
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-reducer.changeTool = function (tool) {
-    return {
-        type: CHANGE_TOOL,
-        tool: tool
-    };
-};
-
-exports.default = reducer;
-
-/***/ }),
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(133);
-
-
-/** Built-in value references. */
-var Symbol = __WEBPACK_IMPORTED_MODULE_0__root_js__["a" /* default */].Symbol;
-
-/* harmony default export */ __webpack_exports__["a"] = (Symbol);
-
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports) {
-
-var hex = {
-  black: '#000',
-  red: '#c23621',
-  green: '#25bc26',
-  yellow: '#bbbb00',
-  blue:  '#492ee1',
-  magenta: '#d338d3',
-  cyan: '#33bbc8',
-  gray: '#808080',
-  purple: '#708'
-};
-function color(fg, isInverse) {
-  if(isInverse) {
-    return 'color: #fff; background: '+hex[fg]+';';
-  } else {
-    return 'color: '+hex[fg]+';';
-  }
-}
-
-module.exports = color;
-
-
-/***/ }),
-/* 65 */,
-/* 66 */,
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */,
-/* 71 */,
-/* 72 */,
-/* 73 */,
-/* 74 */,
-/* 75 */,
-/* 76 */,
-/* 77 */,
-/* 78 */,
-/* 79 */,
-/* 80 */,
-/* 81 */,
-/* 82 */,
-/* 83 */,
-/* 84 */,
-/* 85 */,
-/* 86 */,
-/* 87 */,
-/* 88 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = connectAdvanced;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics__ = __webpack_require__(124);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant__ = __webpack_require__(125);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_invariant__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_Subscription__ = __webpack_require__(225);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_PropTypes__ = __webpack_require__(90);
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-
-
-
-
-
-
-
-var hotReloadingVersion = 0;
-var dummyState = {};
-function noop() {}
-function makeSelectorStateful(sourceSelector, store) {
-  // wrap the selector in an object that tracks its results between runs.
-  var selector = {
-    run: function runComponentSelector(props) {
-      try {
-        var nextProps = sourceSelector(store.getState(), props);
-        if (nextProps !== selector.props || selector.error) {
-          selector.shouldComponentUpdate = true;
-          selector.props = nextProps;
-          selector.error = null;
-        }
-      } catch (error) {
-        selector.shouldComponentUpdate = true;
-        selector.error = error;
-      }
-    }
-  };
-
-  return selector;
-}
-
-function connectAdvanced(
-/*
-  selectorFactory is a func that is responsible for returning the selector function used to
-  compute new props from state, props, and dispatch. For example:
-     export default connectAdvanced((dispatch, options) => (state, props) => ({
-      thing: state.things[props.thingId],
-      saveThing: fields => dispatch(actionCreators.saveThing(props.thingId, fields)),
-    }))(YourComponent)
-   Access to dispatch is provided to the factory so selectorFactories can bind actionCreators
-  outside of their selector as an optimization. Options passed to connectAdvanced are passed to
-  the selectorFactory, along with displayName and WrappedComponent, as the second argument.
-   Note that selectorFactory is responsible for all caching/memoization of inbound and outbound
-  props. Do not use connectAdvanced directly without memoizing results between calls to your
-  selector, otherwise the Connect component will re-render on every state or props change.
-*/
-selectorFactory) {
-  var _contextTypes, _childContextTypes;
-
-  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-      _ref$getDisplayName = _ref.getDisplayName,
-      getDisplayName = _ref$getDisplayName === undefined ? function (name) {
-    return 'ConnectAdvanced(' + name + ')';
-  } : _ref$getDisplayName,
-      _ref$methodName = _ref.methodName,
-      methodName = _ref$methodName === undefined ? 'connectAdvanced' : _ref$methodName,
-      _ref$renderCountProp = _ref.renderCountProp,
-      renderCountProp = _ref$renderCountProp === undefined ? undefined : _ref$renderCountProp,
-      _ref$shouldHandleStat = _ref.shouldHandleStateChanges,
-      shouldHandleStateChanges = _ref$shouldHandleStat === undefined ? true : _ref$shouldHandleStat,
-      _ref$storeKey = _ref.storeKey,
-      storeKey = _ref$storeKey === undefined ? 'store' : _ref$storeKey,
-      _ref$withRef = _ref.withRef,
-      withRef = _ref$withRef === undefined ? false : _ref$withRef,
-      connectOptions = _objectWithoutProperties(_ref, ['getDisplayName', 'methodName', 'renderCountProp', 'shouldHandleStateChanges', 'storeKey', 'withRef']);
-
-  var subscriptionKey = storeKey + 'Subscription';
-  var version = hotReloadingVersion++;
-
-  var contextTypes = (_contextTypes = {}, _contextTypes[storeKey] = __WEBPACK_IMPORTED_MODULE_4__utils_PropTypes__["a" /* storeShape */], _contextTypes[subscriptionKey] = __WEBPACK_IMPORTED_MODULE_4__utils_PropTypes__["b" /* subscriptionShape */], _contextTypes);
-  var childContextTypes = (_childContextTypes = {}, _childContextTypes[subscriptionKey] = __WEBPACK_IMPORTED_MODULE_4__utils_PropTypes__["b" /* subscriptionShape */], _childContextTypes);
-
-  return function wrapWithConnect(WrappedComponent) {
-    __WEBPACK_IMPORTED_MODULE_1_invariant___default()(typeof WrappedComponent == 'function', 'You must pass a component to the function returned by ' + ('connect. Instead received ' + JSON.stringify(WrappedComponent)));
-
-    var wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
-
-    var displayName = getDisplayName(wrappedComponentName);
-
-    var selectorFactoryOptions = _extends({}, connectOptions, {
-      getDisplayName: getDisplayName,
-      methodName: methodName,
-      renderCountProp: renderCountProp,
-      shouldHandleStateChanges: shouldHandleStateChanges,
-      storeKey: storeKey,
-      withRef: withRef,
-      displayName: displayName,
-      wrappedComponentName: wrappedComponentName,
-      WrappedComponent: WrappedComponent
-    });
-
-    var Connect = function (_Component) {
-      _inherits(Connect, _Component);
-
-      function Connect(props, context) {
-        _classCallCheck(this, Connect);
-
-        var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
-
-        _this.version = version;
-        _this.state = {};
-        _this.renderCount = 0;
-        _this.store = props[storeKey] || context[storeKey];
-        _this.propsMode = Boolean(props[storeKey]);
-        _this.setWrappedInstance = _this.setWrappedInstance.bind(_this);
-
-        __WEBPACK_IMPORTED_MODULE_1_invariant___default()(_this.store, 'Could not find "' + storeKey + '" in either the context or props of ' + ('"' + displayName + '". Either wrap the root component in a <Provider>, ') + ('or explicitly pass "' + storeKey + '" as a prop to "' + displayName + '".'));
-
-        _this.initSelector();
-        _this.initSubscription();
-        return _this;
-      }
-
-      Connect.prototype.getChildContext = function getChildContext() {
-        var _ref2;
-
-        // If this component received store from props, its subscription should be transparent
-        // to any descendants receiving store+subscription from context; it passes along
-        // subscription passed to it. Otherwise, it shadows the parent subscription, which allows
-        // Connect to control ordering of notifications to flow top-down.
-        var subscription = this.propsMode ? null : this.subscription;
-        return _ref2 = {}, _ref2[subscriptionKey] = subscription || this.context[subscriptionKey], _ref2;
-      };
-
-      Connect.prototype.componentDidMount = function componentDidMount() {
-        if (!shouldHandleStateChanges) return;
-
-        // componentWillMount fires during server side rendering, but componentDidMount and
-        // componentWillUnmount do not. Because of this, trySubscribe happens during ...didMount.
-        // Otherwise, unsubscription would never take place during SSR, causing a memory leak.
-        // To handle the case where a child component may have triggered a state change by
-        // dispatching an action in its componentWillMount, we have to re-run the select and maybe
-        // re-render.
-        this.subscription.trySubscribe();
-        this.selector.run(this.props);
-        if (this.selector.shouldComponentUpdate) this.forceUpdate();
-      };
-
-      Connect.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-        this.selector.run(nextProps);
-      };
-
-      Connect.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
-        return this.selector.shouldComponentUpdate;
-      };
-
-      Connect.prototype.componentWillUnmount = function componentWillUnmount() {
-        if (this.subscription) this.subscription.tryUnsubscribe();
-        this.subscription = null;
-        this.notifyNestedSubs = noop;
-        this.store = null;
-        this.selector.run = noop;
-        this.selector.shouldComponentUpdate = false;
-      };
-
-      Connect.prototype.getWrappedInstance = function getWrappedInstance() {
-        __WEBPACK_IMPORTED_MODULE_1_invariant___default()(withRef, 'To access the wrapped instance, you need to specify ' + ('{ withRef: true } in the options argument of the ' + methodName + '() call.'));
-        return this.wrappedInstance;
-      };
-
-      Connect.prototype.setWrappedInstance = function setWrappedInstance(ref) {
-        this.wrappedInstance = ref;
-      };
-
-      Connect.prototype.initSelector = function initSelector() {
-        var sourceSelector = selectorFactory(this.store.dispatch, selectorFactoryOptions);
-        this.selector = makeSelectorStateful(sourceSelector, this.store);
-        this.selector.run(this.props);
-      };
-
-      Connect.prototype.initSubscription = function initSubscription() {
-        if (!shouldHandleStateChanges) return;
-
-        // parentSub's source should match where store came from: props vs. context. A component
-        // connected to the store via props shouldn't use subscription from context, or vice versa.
-        var parentSub = (this.propsMode ? this.props : this.context)[subscriptionKey];
-        this.subscription = new __WEBPACK_IMPORTED_MODULE_3__utils_Subscription__["a" /* default */](this.store, parentSub, this.onStateChange.bind(this));
-
-        // `notifyNestedSubs` is duplicated to handle the case where the component is  unmounted in
-        // the middle of the notification loop, where `this.subscription` will then be null. An
-        // extra null check every change can be avoided by copying the method onto `this` and then
-        // replacing it with a no-op on unmount. This can probably be avoided if Subscription's
-        // listeners logic is changed to not call listeners that have been unsubscribed in the
-        // middle of the notification loop.
-        this.notifyNestedSubs = this.subscription.notifyNestedSubs.bind(this.subscription);
-      };
-
-      Connect.prototype.onStateChange = function onStateChange() {
-        this.selector.run(this.props);
-
-        if (!this.selector.shouldComponentUpdate) {
-          this.notifyNestedSubs();
-        } else {
-          this.componentDidUpdate = this.notifyNestedSubsOnComponentDidUpdate;
-          this.setState(dummyState);
-        }
-      };
-
-      Connect.prototype.notifyNestedSubsOnComponentDidUpdate = function notifyNestedSubsOnComponentDidUpdate() {
-        // `componentDidUpdate` is conditionally implemented when `onStateChange` determines it
-        // needs to notify nested subs. Once called, it unimplements itself until further state
-        // changes occur. Doing it this way vs having a permanent `componentDidMount` that does
-        // a boolean check every time avoids an extra method call most of the time, resulting
-        // in some perf boost.
-        this.componentDidUpdate = undefined;
-        this.notifyNestedSubs();
-      };
-
-      Connect.prototype.isSubscribed = function isSubscribed() {
-        return Boolean(this.subscription) && this.subscription.isSubscribed();
-      };
-
-      Connect.prototype.addExtraProps = function addExtraProps(props) {
-        if (!withRef && !renderCountProp && !(this.propsMode && this.subscription)) return props;
-        // make a shallow copy so that fields added don't leak to the original selector.
-        // this is especially important for 'ref' since that's a reference back to the component
-        // instance. a singleton memoized selector would then be holding a reference to the
-        // instance, preventing the instance from being garbage collected, and that would be bad
-        var withExtras = _extends({}, props);
-        if (withRef) withExtras.ref = this.setWrappedInstance;
-        if (renderCountProp) withExtras[renderCountProp] = this.renderCount++;
-        if (this.propsMode && this.subscription) withExtras[subscriptionKey] = this.subscription;
-        return withExtras;
-      };
-
-      Connect.prototype.render = function render() {
-        var selector = this.selector;
-        selector.shouldComponentUpdate = false;
-
-        if (selector.error) {
-          throw selector.error;
-        } else {
-          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react__["createElement"])(WrappedComponent, this.addExtraProps(selector.props));
-        }
-      };
-
-      return Connect;
-    }(__WEBPACK_IMPORTED_MODULE_2_react__["Component"]);
-
-    Connect.WrappedComponent = WrappedComponent;
-    Connect.displayName = displayName;
-    Connect.childContextTypes = childContextTypes;
-    Connect.contextTypes = contextTypes;
-    Connect.propTypes = contextTypes;
-
-    if (process.env.NODE_ENV !== 'production') {
-      Connect.prototype.componentWillUpdate = function componentWillUpdate() {
-        // We are hot reloading!
-        if (this.version !== version) {
-          this.version = version;
-          this.initSelector();
-
-          if (this.subscription) this.subscription.tryUnsubscribe();
-          this.initSubscription();
-          if (shouldHandleStateChanges) this.subscription.trySubscribe();
-        }
-      };
-    }
-
-    return __WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics___default()(Connect, WrappedComponent);
-  };
-}
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 89 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["b"] = wrapMapToPropsConstant;
-/* unused harmony export getDependsOnOwnProps */
-/* harmony export (immutable) */ __webpack_exports__["a"] = wrapMapToPropsFunc;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_verifyPlainObject__ = __webpack_require__(91);
-
-
-function wrapMapToPropsConstant(getConstant) {
-  return function initConstantSelector(dispatch, options) {
-    var constant = getConstant(dispatch, options);
-
-    function constantSelector() {
-      return constant;
-    }
-    constantSelector.dependsOnOwnProps = false;
-    return constantSelector;
-  };
-}
-
-// dependsOnOwnProps is used by createMapToPropsProxy to determine whether to pass props as args
-// to the mapToProps function being wrapped. It is also used by makePurePropsSelector to determine
-// whether mapToProps needs to be invoked when props have changed.
-// 
-// A length of one signals that mapToProps does not depend on props from the parent component.
-// A length of zero is assumed to mean mapToProps is getting args via arguments or ...args and
-// therefore not reporting its length accurately..
-function getDependsOnOwnProps(mapToProps) {
-  return mapToProps.dependsOnOwnProps !== null && mapToProps.dependsOnOwnProps !== undefined ? Boolean(mapToProps.dependsOnOwnProps) : mapToProps.length !== 1;
-}
-
-// Used by whenMapStateToPropsIsFunction and whenMapDispatchToPropsIsFunction,
-// this function wraps mapToProps in a proxy function which does several things:
-// 
-//  * Detects whether the mapToProps function being called depends on props, which
-//    is used by selectorFactory to decide if it should reinvoke on props changes.
-//    
-//  * On first call, handles mapToProps if returns another function, and treats that
-//    new function as the true mapToProps for subsequent calls.
-//    
-//  * On first call, verifies the first result is a plain object, in order to warn
-//    the developer that their mapToProps function is not returning a valid result.
-//    
-function wrapMapToPropsFunc(mapToProps, methodName) {
-  return function initProxySelector(dispatch, _ref) {
-    var displayName = _ref.displayName;
-
-    var proxy = function mapToPropsProxy(stateOrDispatch, ownProps) {
-      return proxy.dependsOnOwnProps ? proxy.mapToProps(stateOrDispatch, ownProps) : proxy.mapToProps(stateOrDispatch);
-    };
-
-    // allow detectFactoryAndVerify to get ownProps
-    proxy.dependsOnOwnProps = true;
-
-    proxy.mapToProps = function detectFactoryAndVerify(stateOrDispatch, ownProps) {
-      proxy.mapToProps = mapToProps;
-      proxy.dependsOnOwnProps = getDependsOnOwnProps(mapToProps);
-      var props = proxy(stateOrDispatch, ownProps);
-
-      if (typeof props === 'function') {
-        proxy.mapToProps = props;
-        proxy.dependsOnOwnProps = getDependsOnOwnProps(props);
-        props = proxy(stateOrDispatch, ownProps);
-      }
-
-      if (process.env.NODE_ENV !== 'production') __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__utils_verifyPlainObject__["a" /* default */])(props, displayName, methodName);
-
-      return props;
-    };
-
-    return proxy;
-  };
-}
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
-
-/***/ }),
-/* 90 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return subscriptionShape; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return storeShape; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_prop_types__);
-
-
-var subscriptionShape = __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.shape({
-  trySubscribe: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
-  tryUnsubscribe: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
-  notifyNestedSubs: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
-  isSubscribed: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired
-});
-
-var storeShape = __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.shape({
-  subscribe: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
-  dispatch: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
-  getState: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired
-});
-
-/***/ }),
-/* 91 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = verifyPlainObject;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warning__ = __webpack_require__(56);
-
-
-
-function verifyPlainObject(value, displayName, methodName) {
-  if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__["a" /* default */])(value)) {
-    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__warning__["a" /* default */])(methodName + '() in ' + displayName + ' must return a plain object. Instead received ' + value + '.');
-  }
-}
-
-/***/ }),
-/* 92 */,
-/* 93 */,
-/* 94 */,
-/* 95 */,
-/* 96 */,
-/* 97 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = compose;
-/**
- * Composes single-argument functions from right to left. The rightmost
- * function can take multiple arguments as it provides the signature for
- * the resulting composite function.
- *
- * @param {...Function} funcs The functions to compose.
- * @returns {Function} A function obtained by composing the argument functions
- * from right to left. For example, compose(f, g, h) is identical to doing
- * (...args) => f(g(h(...args))).
- */
-
-function compose() {
-  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
-    funcs[_key] = arguments[_key];
-  }
-
-  if (funcs.length === 0) {
-    return function (arg) {
-      return arg;
-    };
-  }
-
-  if (funcs.length === 1) {
-    return funcs[0];
-  }
-
-  var last = funcs[funcs.length - 1];
-  var rest = funcs.slice(0, -1);
-  return function () {
-    return rest.reduceRight(function (composed, f) {
-      return f(composed);
-    }, last.apply(undefined, arguments));
-  };
-}
-
-/***/ }),
-/* 98 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ActionTypes; });
-/* harmony export (immutable) */ __webpack_exports__["a"] = createStore;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(243);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
-
-
-
-/**
- * These are private action types reserved by Redux.
- * For any unknown actions, you must return the current state.
- * If the current state is undefined, you must return the initial state.
- * Do not reference these action types directly in your code.
- */
-var ActionTypes = {
-  INIT: '@@redux/INIT'
-};
-
-/**
- * Creates a Redux store that holds the state tree.
- * The only way to change the data in the store is to call `dispatch()` on it.
- *
- * There should only be a single store in your app. To specify how different
- * parts of the state tree respond to actions, you may combine several reducers
- * into a single reducer function by using `combineReducers`.
- *
- * @param {Function} reducer A function that returns the next state tree, given
- * the current state tree and the action to handle.
- *
- * @param {any} [preloadedState] The initial state. You may optionally specify it
- * to hydrate the state from the server in universal apps, or to restore a
- * previously serialized user session.
- * If you use `combineReducers` to produce the root reducer function, this must be
- * an object with the same shape as `combineReducers` keys.
- *
- * @param {Function} enhancer The store enhancer. You may optionally specify it
- * to enhance the store with third-party capabilities such as middleware,
- * time travel, persistence, etc. The only store enhancer that ships with Redux
- * is `applyMiddleware()`.
- *
- * @returns {Store} A Redux store that lets you read the state, dispatch actions
- * and subscribe to changes.
- */
-function createStore(reducer, preloadedState, enhancer) {
-  var _ref2;
-
-  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
-    enhancer = preloadedState;
-    preloadedState = undefined;
-  }
-
-  if (typeof enhancer !== 'undefined') {
-    if (typeof enhancer !== 'function') {
-      throw new Error('Expected the enhancer to be a function.');
-    }
-
-    return enhancer(createStore)(reducer, preloadedState);
-  }
-
-  if (typeof reducer !== 'function') {
-    throw new Error('Expected the reducer to be a function.');
-  }
-
-  var currentReducer = reducer;
-  var currentState = preloadedState;
-  var currentListeners = [];
-  var nextListeners = currentListeners;
-  var isDispatching = false;
-
-  function ensureCanMutateNextListeners() {
-    if (nextListeners === currentListeners) {
-      nextListeners = currentListeners.slice();
-    }
-  }
-
-  /**
-   * Reads the state tree managed by the store.
-   *
-   * @returns {any} The current state tree of your application.
-   */
-  function getState() {
-    return currentState;
-  }
-
-  /**
-   * Adds a change listener. It will be called any time an action is dispatched,
-   * and some part of the state tree may potentially have changed. You may then
-   * call `getState()` to read the current state tree inside the callback.
-   *
-   * You may call `dispatch()` from a change listener, with the following
-   * caveats:
-   *
-   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
-   * If you subscribe or unsubscribe while the listeners are being invoked, this
-   * will not have any effect on the `dispatch()` that is currently in progress.
-   * However, the next `dispatch()` call, whether nested or not, will use a more
-   * recent snapshot of the subscription list.
-   *
-   * 2. The listener should not expect to see all state changes, as the state
-   * might have been updated multiple times during a nested `dispatch()` before
-   * the listener is called. It is, however, guaranteed that all subscribers
-   * registered before the `dispatch()` started will be called with the latest
-   * state by the time it exits.
-   *
-   * @param {Function} listener A callback to be invoked on every dispatch.
-   * @returns {Function} A function to remove this change listener.
-   */
-  function subscribe(listener) {
-    if (typeof listener !== 'function') {
-      throw new Error('Expected listener to be a function.');
-    }
-
-    var isSubscribed = true;
-
-    ensureCanMutateNextListeners();
-    nextListeners.push(listener);
-
-    return function unsubscribe() {
-      if (!isSubscribed) {
-        return;
-      }
-
-      isSubscribed = false;
-
-      ensureCanMutateNextListeners();
-      var index = nextListeners.indexOf(listener);
-      nextListeners.splice(index, 1);
-    };
-  }
-
-  /**
-   * Dispatches an action. It is the only way to trigger a state change.
-   *
-   * The `reducer` function, used to create the store, will be called with the
-   * current state tree and the given `action`. Its return value will
-   * be considered the **next** state of the tree, and the change listeners
-   * will be notified.
-   *
-   * The base implementation only supports plain object actions. If you want to
-   * dispatch a Promise, an Observable, a thunk, or something else, you need to
-   * wrap your store creating function into the corresponding middleware. For
-   * example, see the documentation for the `redux-thunk` package. Even the
-   * middleware will eventually dispatch plain object actions using this method.
-   *
-   * @param {Object} action A plain object representing “what changed”. It is
-   * a good idea to keep actions serializable so you can record and replay user
-   * sessions, or use the time travelling `redux-devtools`. An action must have
-   * a `type` property which may not be `undefined`. It is a good idea to use
-   * string constants for action types.
-   *
-   * @returns {Object} For convenience, the same action object you dispatched.
-   *
-   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
-   * return something else (for example, a Promise you can await).
-   */
-  function dispatch(action) {
-    if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__["a" /* default */])(action)) {
-      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
-    }
-
-    if (typeof action.type === 'undefined') {
-      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
-    }
-
-    if (isDispatching) {
-      throw new Error('Reducers may not dispatch actions.');
-    }
-
-    try {
-      isDispatching = true;
-      currentState = currentReducer(currentState, action);
-    } finally {
-      isDispatching = false;
-    }
-
-    var listeners = currentListeners = nextListeners;
-    for (var i = 0; i < listeners.length; i++) {
-      listeners[i]();
-    }
-
-    return action;
-  }
-
-  /**
-   * Replaces the reducer currently used by the store to calculate the state.
-   *
-   * You might need this if your app implements code splitting and you want to
-   * load some of the reducers dynamically. You might also need this if you
-   * implement a hot reloading mechanism for Redux.
-   *
-   * @param {Function} nextReducer The reducer for the store to use instead.
-   * @returns {void}
-   */
-  function replaceReducer(nextReducer) {
-    if (typeof nextReducer !== 'function') {
-      throw new Error('Expected the nextReducer to be a function.');
-    }
-
-    currentReducer = nextReducer;
-    dispatch({ type: ActionTypes.INIT });
-  }
-
-  /**
-   * Interoperability point for observable/reactive libraries.
-   * @returns {observable} A minimal observable of state changes.
-   * For more information, see the observable proposal:
-   * https://github.com/zenparsing/es-observable
-   */
-  function observable() {
-    var _ref;
-
-    var outerSubscribe = subscribe;
-    return _ref = {
-      /**
-       * The minimal observable subscription method.
-       * @param {Object} observer Any object that can be used as an observer.
-       * The observer object should have a `next` method.
-       * @returns {subscription} An object with an `unsubscribe` method that can
-       * be used to unsubscribe the observable from the store, and prevent further
-       * emission of values from the observable.
-       */
-      subscribe: function subscribe(observer) {
-        if (typeof observer !== 'object') {
-          throw new TypeError('Expected the observer to be an object.');
-        }
-
-        function observeState() {
-          if (observer.next) {
-            observer.next(getState());
-          }
-        }
-
-        observeState();
-        var unsubscribe = outerSubscribe(observeState);
-        return { unsubscribe: unsubscribe };
-      }
-    }, _ref[__WEBPACK_IMPORTED_MODULE_1_symbol_observable___default.a] = function () {
-      return this;
-    }, _ref;
-  }
-
-  // When a store is created, an "INIT" action is dispatched so that every
-  // reducer returns their initial state. This effectively populates
-  // the initial state tree.
-  dispatch({ type: ActionTypes.INIT });
-
-  return _ref2 = {
-    dispatch: dispatch,
-    subscribe: subscribe,
-    getState: getState,
-    replaceReducer: replaceReducer
-  }, _ref2[__WEBPACK_IMPORTED_MODULE_1_symbol_observable___default.a] = observable, _ref2;
-}
-
-/***/ }),
-/* 99 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = warning;
-/**
- * Prints a warning in the console if it exists.
- *
- * @param {String} message The warning message.
- * @returns {void}
- */
-function warning(message) {
-  /* eslint-disable no-console */
-  if (typeof console !== 'undefined' && typeof console.error === 'function') {
-    console.error(message);
-  }
-  /* eslint-enable no-console */
-  try {
-    // This error was thrown as a convenience so that if you enable
-    // "break on all exceptions" in your console,
-    // it would pause the execution at this line.
-    throw new Error(message);
-    /* eslint-disable no-empty */
-  } catch (e) {}
-  /* eslint-enable no-empty */
-}
-
-/***/ }),
-/* 100 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 101 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1237,4020 +168,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _paintEditor = __webpack_require__(105);
-
-var _paintEditor2 = _interopRequireDefault(_paintEditor);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _paintEditor2.default;
-
-/***/ }),
-/* 102 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _redux = __webpack_require__(36);
-
-var _tools = __webpack_require__(59);
-
-var _tools2 = _interopRequireDefault(_tools);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = (0, _redux.combineReducers)({
-    tool: _tools2.default
-});
-
-/***/ }),
-/* 103 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "version", function() { return version; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parse", function() { return parse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseExpressionAt", function() { return parseExpressionAt; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tokenizer", function() { return tokenizer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parse_dammit", function() { return parse_dammit; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LooseParser", function() { return LooseParser; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pluginsLoose", function() { return pluginsLoose; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addLooseExports", function() { return addLooseExports; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Parser", function() { return Parser; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "plugins", function() { return plugins; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultOptions", function() { return defaultOptions; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Position", function() { return Position; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SourceLocation", function() { return SourceLocation; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLineInfo", function() { return getLineInfo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return Node; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TokenType", function() { return TokenType; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tokTypes", function() { return types; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "keywordTypes", function() { return keywords$1; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TokContext", function() { return TokContext; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tokContexts", function() { return types$1; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isIdentifierChar", function() { return isIdentifierChar; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isIdentifierStart", function() { return isIdentifierStart; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Token", function() { return Token; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNewLine", function() { return isNewLine; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lineBreak", function() { return lineBreak; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lineBreakG", function() { return lineBreakG; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "nonASCIIwhitespace", function() { return nonASCIIwhitespace; });
-// Reserved word lists for various dialects of the language
-
-var reservedWords = {
-  3: "abstract boolean byte char class double enum export extends final float goto implements import int interface long native package private protected public short static super synchronized throws transient volatile",
-  5: "class enum extends super const export import",
-  6: "enum",
-  strict: "implements interface let package private protected public static yield",
-  strictBind: "eval arguments"
-};
-
-// And the keywords
-
-var ecma5AndLessKeywords = "break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this";
-
-var keywords = {
-  5: ecma5AndLessKeywords,
-  6: ecma5AndLessKeywords + " const class extends export import super"
-};
-
-// ## Character categories
-
-// Big ugly regular expressions that match characters in the
-// whitespace, identifier, and identifier-start categories. These
-// are only applied when a character is found to actually have a
-// code point above 128.
-// Generated by `bin/generate-identifier-regex.js`.
-
-var nonASCIIidentifierStartChars = "\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec\u02ee\u0370-\u0374\u0376\u0377\u037a-\u037d\u037f\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03f5\u03f7-\u0481\u048a-\u052f\u0531-\u0556\u0559\u0561-\u0587\u05d0-\u05ea\u05f0-\u05f2\u0620-\u064a\u066e\u066f\u0671-\u06d3\u06d5\u06e5\u06e6\u06ee\u06ef\u06fa-\u06fc\u06ff\u0710\u0712-\u072f\u074d-\u07a5\u07b1\u07ca-\u07ea\u07f4\u07f5\u07fa\u0800-\u0815\u081a\u0824\u0828\u0840-\u0858\u08a0-\u08b4\u08b6-\u08bd\u0904-\u0939\u093d\u0950\u0958-\u0961\u0971-\u0980\u0985-\u098c\u098f\u0990\u0993-\u09a8\u09aa-\u09b0\u09b2\u09b6-\u09b9\u09bd\u09ce\u09dc\u09dd\u09df-\u09e1\u09f0\u09f1\u0a05-\u0a0a\u0a0f\u0a10\u0a13-\u0a28\u0a2a-\u0a30\u0a32\u0a33\u0a35\u0a36\u0a38\u0a39\u0a59-\u0a5c\u0a5e\u0a72-\u0a74\u0a85-\u0a8d\u0a8f-\u0a91\u0a93-\u0aa8\u0aaa-\u0ab0\u0ab2\u0ab3\u0ab5-\u0ab9\u0abd\u0ad0\u0ae0\u0ae1\u0af9\u0b05-\u0b0c\u0b0f\u0b10\u0b13-\u0b28\u0b2a-\u0b30\u0b32\u0b33\u0b35-\u0b39\u0b3d\u0b5c\u0b5d\u0b5f-\u0b61\u0b71\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bd0\u0c05-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c39\u0c3d\u0c58-\u0c5a\u0c60\u0c61\u0c80\u0c85-\u0c8c\u0c8e-\u0c90\u0c92-\u0ca8\u0caa-\u0cb3\u0cb5-\u0cb9\u0cbd\u0cde\u0ce0\u0ce1\u0cf1\u0cf2\u0d05-\u0d0c\u0d0e-\u0d10\u0d12-\u0d3a\u0d3d\u0d4e\u0d54-\u0d56\u0d5f-\u0d61\u0d7a-\u0d7f\u0d85-\u0d96\u0d9a-\u0db1\u0db3-\u0dbb\u0dbd\u0dc0-\u0dc6\u0e01-\u0e30\u0e32\u0e33\u0e40-\u0e46\u0e81\u0e82\u0e84\u0e87\u0e88\u0e8a\u0e8d\u0e94-\u0e97\u0e99-\u0e9f\u0ea1-\u0ea3\u0ea5\u0ea7\u0eaa\u0eab\u0ead-\u0eb0\u0eb2\u0eb3\u0ebd\u0ec0-\u0ec4\u0ec6\u0edc-\u0edf\u0f00\u0f40-\u0f47\u0f49-\u0f6c\u0f88-\u0f8c\u1000-\u102a\u103f\u1050-\u1055\u105a-\u105d\u1061\u1065\u1066\u106e-\u1070\u1075-\u1081\u108e\u10a0-\u10c5\u10c7\u10cd\u10d0-\u10fa\u10fc-\u1248\u124a-\u124d\u1250-\u1256\u1258\u125a-\u125d\u1260-\u1288\u128a-\u128d\u1290-\u12b0\u12b2-\u12b5\u12b8-\u12be\u12c0\u12c2-\u12c5\u12c8-\u12d6\u12d8-\u1310\u1312-\u1315\u1318-\u135a\u1380-\u138f\u13a0-\u13f5\u13f8-\u13fd\u1401-\u166c\u166f-\u167f\u1681-\u169a\u16a0-\u16ea\u16ee-\u16f8\u1700-\u170c\u170e-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176c\u176e-\u1770\u1780-\u17b3\u17d7\u17dc\u1820-\u1877\u1880-\u18a8\u18aa\u18b0-\u18f5\u1900-\u191e\u1950-\u196d\u1970-\u1974\u1980-\u19ab\u19b0-\u19c9\u1a00-\u1a16\u1a20-\u1a54\u1aa7\u1b05-\u1b33\u1b45-\u1b4b\u1b83-\u1ba0\u1bae\u1baf\u1bba-\u1be5\u1c00-\u1c23\u1c4d-\u1c4f\u1c5a-\u1c7d\u1c80-\u1c88\u1ce9-\u1cec\u1cee-\u1cf1\u1cf5\u1cf6\u1d00-\u1dbf\u1e00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2090-\u209c\u2102\u2107\u210a-\u2113\u2115\u2118-\u211d\u2124\u2126\u2128\u212a-\u2139\u213c-\u213f\u2145-\u2149\u214e\u2160-\u2188\u2c00-\u2c2e\u2c30-\u2c5e\u2c60-\u2ce4\u2ceb-\u2cee\u2cf2\u2cf3\u2d00-\u2d25\u2d27\u2d2d\u2d30-\u2d67\u2d6f\u2d80-\u2d96\u2da0-\u2da6\u2da8-\u2dae\u2db0-\u2db6\u2db8-\u2dbe\u2dc0-\u2dc6\u2dc8-\u2dce\u2dd0-\u2dd6\u2dd8-\u2dde\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303c\u3041-\u3096\u309b-\u309f\u30a1-\u30fa\u30fc-\u30ff\u3105-\u312d\u3131-\u318e\u31a0-\u31ba\u31f0-\u31ff\u3400-\u4db5\u4e00-\u9fd5\ua000-\ua48c\ua4d0-\ua4fd\ua500-\ua60c\ua610-\ua61f\ua62a\ua62b\ua640-\ua66e\ua67f-\ua69d\ua6a0-\ua6ef\ua717-\ua71f\ua722-\ua788\ua78b-\ua7ae\ua7b0-\ua7b7\ua7f7-\ua801\ua803-\ua805\ua807-\ua80a\ua80c-\ua822\ua840-\ua873\ua882-\ua8b3\ua8f2-\ua8f7\ua8fb\ua8fd\ua90a-\ua925\ua930-\ua946\ua960-\ua97c\ua984-\ua9b2\ua9cf\ua9e0-\ua9e4\ua9e6-\ua9ef\ua9fa-\ua9fe\uaa00-\uaa28\uaa40-\uaa42\uaa44-\uaa4b\uaa60-\uaa76\uaa7a\uaa7e-\uaaaf\uaab1\uaab5\uaab6\uaab9-\uaabd\uaac0\uaac2\uaadb-\uaadd\uaae0-\uaaea\uaaf2-\uaaf4\uab01-\uab06\uab09-\uab0e\uab11-\uab16\uab20-\uab26\uab28-\uab2e\uab30-\uab5a\uab5c-\uab65\uab70-\uabe2\uac00-\ud7a3\ud7b0-\ud7c6\ud7cb-\ud7fb\uf900-\ufa6d\ufa70-\ufad9\ufb00-\ufb06\ufb13-\ufb17\ufb1d\ufb1f-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40\ufb41\ufb43\ufb44\ufb46-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb\ufe70-\ufe74\ufe76-\ufefc\uff21-\uff3a\uff41-\uff5a\uff66-\uffbe\uffc2-\uffc7\uffca-\uffcf\uffd2-\uffd7\uffda-\uffdc";
-var nonASCIIidentifierChars = "\u200c\u200d\xb7\u0300-\u036f\u0387\u0483-\u0487\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7\u0610-\u061a\u064b-\u0669\u0670\u06d6-\u06dc\u06df-\u06e4\u06e7\u06e8\u06ea-\u06ed\u06f0-\u06f9\u0711\u0730-\u074a\u07a6-\u07b0\u07c0-\u07c9\u07eb-\u07f3\u0816-\u0819\u081b-\u0823\u0825-\u0827\u0829-\u082d\u0859-\u085b\u08d4-\u08e1\u08e3-\u0903\u093a-\u093c\u093e-\u094f\u0951-\u0957\u0962\u0963\u0966-\u096f\u0981-\u0983\u09bc\u09be-\u09c4\u09c7\u09c8\u09cb-\u09cd\u09d7\u09e2\u09e3\u09e6-\u09ef\u0a01-\u0a03\u0a3c\u0a3e-\u0a42\u0a47\u0a48\u0a4b-\u0a4d\u0a51\u0a66-\u0a71\u0a75\u0a81-\u0a83\u0abc\u0abe-\u0ac5\u0ac7-\u0ac9\u0acb-\u0acd\u0ae2\u0ae3\u0ae6-\u0aef\u0b01-\u0b03\u0b3c\u0b3e-\u0b44\u0b47\u0b48\u0b4b-\u0b4d\u0b56\u0b57\u0b62\u0b63\u0b66-\u0b6f\u0b82\u0bbe-\u0bc2\u0bc6-\u0bc8\u0bca-\u0bcd\u0bd7\u0be6-\u0bef\u0c00-\u0c03\u0c3e-\u0c44\u0c46-\u0c48\u0c4a-\u0c4d\u0c55\u0c56\u0c62\u0c63\u0c66-\u0c6f\u0c81-\u0c83\u0cbc\u0cbe-\u0cc4\u0cc6-\u0cc8\u0cca-\u0ccd\u0cd5\u0cd6\u0ce2\u0ce3\u0ce6-\u0cef\u0d01-\u0d03\u0d3e-\u0d44\u0d46-\u0d48\u0d4a-\u0d4d\u0d57\u0d62\u0d63\u0d66-\u0d6f\u0d82\u0d83\u0dca\u0dcf-\u0dd4\u0dd6\u0dd8-\u0ddf\u0de6-\u0def\u0df2\u0df3\u0e31\u0e34-\u0e3a\u0e47-\u0e4e\u0e50-\u0e59\u0eb1\u0eb4-\u0eb9\u0ebb\u0ebc\u0ec8-\u0ecd\u0ed0-\u0ed9\u0f18\u0f19\u0f20-\u0f29\u0f35\u0f37\u0f39\u0f3e\u0f3f\u0f71-\u0f84\u0f86\u0f87\u0f8d-\u0f97\u0f99-\u0fbc\u0fc6\u102b-\u103e\u1040-\u1049\u1056-\u1059\u105e-\u1060\u1062-\u1064\u1067-\u106d\u1071-\u1074\u1082-\u108d\u108f-\u109d\u135d-\u135f\u1369-\u1371\u1712-\u1714\u1732-\u1734\u1752\u1753\u1772\u1773\u17b4-\u17d3\u17dd\u17e0-\u17e9\u180b-\u180d\u1810-\u1819\u18a9\u1920-\u192b\u1930-\u193b\u1946-\u194f\u19d0-\u19da\u1a17-\u1a1b\u1a55-\u1a5e\u1a60-\u1a7c\u1a7f-\u1a89\u1a90-\u1a99\u1ab0-\u1abd\u1b00-\u1b04\u1b34-\u1b44\u1b50-\u1b59\u1b6b-\u1b73\u1b80-\u1b82\u1ba1-\u1bad\u1bb0-\u1bb9\u1be6-\u1bf3\u1c24-\u1c37\u1c40-\u1c49\u1c50-\u1c59\u1cd0-\u1cd2\u1cd4-\u1ce8\u1ced\u1cf2-\u1cf4\u1cf8\u1cf9\u1dc0-\u1df5\u1dfb-\u1dff\u203f\u2040\u2054\u20d0-\u20dc\u20e1\u20e5-\u20f0\u2cef-\u2cf1\u2d7f\u2de0-\u2dff\u302a-\u302f\u3099\u309a\ua620-\ua629\ua66f\ua674-\ua67d\ua69e\ua69f\ua6f0\ua6f1\ua802\ua806\ua80b\ua823-\ua827\ua880\ua881\ua8b4-\ua8c5\ua8d0-\ua8d9\ua8e0-\ua8f1\ua900-\ua909\ua926-\ua92d\ua947-\ua953\ua980-\ua983\ua9b3-\ua9c0\ua9d0-\ua9d9\ua9e5\ua9f0-\ua9f9\uaa29-\uaa36\uaa43\uaa4c\uaa4d\uaa50-\uaa59\uaa7b-\uaa7d\uaab0\uaab2-\uaab4\uaab7\uaab8\uaabe\uaabf\uaac1\uaaeb-\uaaef\uaaf5\uaaf6\uabe3-\uabea\uabec\uabed\uabf0-\uabf9\ufb1e\ufe00-\ufe0f\ufe20-\ufe2f\ufe33\ufe34\ufe4d-\ufe4f\uff10-\uff19\uff3f";
-
-var nonASCIIidentifierStart = new RegExp("[" + nonASCIIidentifierStartChars + "]");
-var nonASCIIidentifier = new RegExp("[" + nonASCIIidentifierStartChars + nonASCIIidentifierChars + "]");
-
-nonASCIIidentifierStartChars = nonASCIIidentifierChars = null;
-
-// These are a run-length and offset encoded representation of the
-// >0xffff code points that are a valid part of identifiers. The
-// offset starts at 0x10000, and each pair of numbers represents an
-// offset to the next range, and then a size of the range. They were
-// generated by bin/generate-identifier-regex.js
-
-// eslint-disable-next-line comma-spacing
-var astralIdentifierStartCodes = [0,11,2,25,2,18,2,1,2,14,3,13,35,122,70,52,268,28,4,48,48,31,17,26,6,37,11,29,3,35,5,7,2,4,43,157,19,35,5,35,5,39,9,51,157,310,10,21,11,7,153,5,3,0,2,43,2,1,4,0,3,22,11,22,10,30,66,18,2,1,11,21,11,25,71,55,7,1,65,0,16,3,2,2,2,26,45,28,4,28,36,7,2,27,28,53,11,21,11,18,14,17,111,72,56,50,14,50,785,52,76,44,33,24,27,35,42,34,4,0,13,47,15,3,22,0,2,0,36,17,2,24,85,6,2,0,2,3,2,14,2,9,8,46,39,7,3,1,3,21,2,6,2,1,2,4,4,0,19,0,13,4,159,52,19,3,54,47,21,1,2,0,185,46,42,3,37,47,21,0,60,42,86,25,391,63,32,0,449,56,264,8,2,36,18,0,50,29,881,921,103,110,18,195,2749,1070,4050,582,8634,568,8,30,114,29,19,47,17,3,32,20,6,18,881,68,12,0,67,12,65,0,32,6124,20,754,9486,1,3071,106,6,12,4,8,8,9,5991,84,2,70,2,1,3,0,3,1,3,3,2,11,2,0,2,6,2,64,2,3,3,7,2,6,2,27,2,3,2,4,2,0,4,6,2,339,3,24,2,24,2,30,2,24,2,30,2,24,2,30,2,24,2,30,2,24,2,7,4149,196,60,67,1213,3,2,26,2,1,2,0,3,0,2,9,2,3,2,0,2,0,7,0,5,0,2,0,2,0,2,2,2,1,2,0,3,0,2,0,2,0,2,0,2,0,2,1,2,0,3,3,2,6,2,3,2,3,2,0,2,9,2,16,6,2,2,4,2,16,4421,42710,42,4148,12,221,3,5761,10591,541];
-
-// eslint-disable-next-line comma-spacing
-var astralIdentifierCodes = [509,0,227,0,150,4,294,9,1368,2,2,1,6,3,41,2,5,0,166,1,1306,2,54,14,32,9,16,3,46,10,54,9,7,2,37,13,2,9,52,0,13,2,49,13,10,2,4,9,83,11,7,0,161,11,6,9,7,3,57,0,2,6,3,1,3,2,10,0,11,1,3,6,4,4,193,17,10,9,87,19,13,9,214,6,3,8,28,1,83,16,16,9,82,12,9,9,84,14,5,9,423,9,838,7,2,7,17,9,57,21,2,13,19882,9,135,4,60,6,26,9,1016,45,17,3,19723,1,5319,4,4,5,9,7,3,6,31,3,149,2,1418,49,513,54,5,49,9,0,15,0,23,4,2,14,1361,6,2,16,3,6,2,1,2,4,2214,6,110,6,6,9,792487,239];
-
-// This has a complexity linear to the value of the code. The
-// assumption is that looking up astral identifier characters is
-// rare.
-function isInAstralSet(code, set) {
-  var pos = 0x10000;
-  for (var i = 0; i < set.length; i += 2) {
-    pos += set[i];
-    if (pos > code) { return false }
-    pos += set[i + 1];
-    if (pos >= code) { return true }
-  }
-}
-
-// Test whether a given character code starts an identifier.
-
-function isIdentifierStart(code, astral) {
-  if (code < 65) { return code === 36 }
-  if (code < 91) { return true }
-  if (code < 97) { return code === 95 }
-  if (code < 123) { return true }
-  if (code <= 0xffff) { return code >= 0xaa && nonASCIIidentifierStart.test(String.fromCharCode(code)) }
-  if (astral === false) { return false }
-  return isInAstralSet(code, astralIdentifierStartCodes)
-}
-
-// Test whether a given character is part of an identifier.
-
-function isIdentifierChar(code, astral) {
-  if (code < 48) { return code === 36 }
-  if (code < 58) { return true }
-  if (code < 65) { return false }
-  if (code < 91) { return true }
-  if (code < 97) { return code === 95 }
-  if (code < 123) { return true }
-  if (code <= 0xffff) { return code >= 0xaa && nonASCIIidentifier.test(String.fromCharCode(code)) }
-  if (astral === false) { return false }
-  return isInAstralSet(code, astralIdentifierStartCodes) || isInAstralSet(code, astralIdentifierCodes)
-}
-
-// ## Token types
-
-// The assignment of fine-grained, information-carrying type objects
-// allows the tokenizer to store the information it has about a
-// token in a way that is very cheap for the parser to look up.
-
-// All token type variables start with an underscore, to make them
-// easy to recognize.
-
-// The `beforeExpr` property is used to disambiguate between regular
-// expressions and divisions. It is set on all token types that can
-// be followed by an expression (thus, a slash after them would be a
-// regular expression).
-//
-// The `startsExpr` property is used to check if the token ends a
-// `yield` expression. It is set on all token types that either can
-// directly start an expression (like a quotation mark) or can
-// continue an expression (like the body of a string).
-//
-// `isLoop` marks a keyword as starting a loop, which is important
-// to know when parsing a label, in order to allow or disallow
-// continue jumps to that label.
-
-var TokenType = function TokenType(label, conf) {
-  if ( conf === void 0 ) conf = {};
-
-  this.label = label;
-  this.keyword = conf.keyword;
-  this.beforeExpr = !!conf.beforeExpr;
-  this.startsExpr = !!conf.startsExpr;
-  this.isLoop = !!conf.isLoop;
-  this.isAssign = !!conf.isAssign;
-  this.prefix = !!conf.prefix;
-  this.postfix = !!conf.postfix;
-  this.binop = conf.binop || null;
-  this.updateContext = null;
-};
-
-function binop(name, prec) {
-  return new TokenType(name, {beforeExpr: true, binop: prec})
-}
-var beforeExpr = {beforeExpr: true};
-var startsExpr = {startsExpr: true};
-
-// Map keyword names to token types.
-
-var keywords$1 = {};
-
-// Succinct definitions of keyword token types
-function kw(name, options) {
-  if ( options === void 0 ) options = {};
-
-  options.keyword = name;
-  return keywords$1[name] = new TokenType(name, options)
-}
-
-var types = {
-  num: new TokenType("num", startsExpr),
-  regexp: new TokenType("regexp", startsExpr),
-  string: new TokenType("string", startsExpr),
-  name: new TokenType("name", startsExpr),
-  eof: new TokenType("eof"),
-
-  // Punctuation token types.
-  bracketL: new TokenType("[", {beforeExpr: true, startsExpr: true}),
-  bracketR: new TokenType("]"),
-  braceL: new TokenType("{", {beforeExpr: true, startsExpr: true}),
-  braceR: new TokenType("}"),
-  parenL: new TokenType("(", {beforeExpr: true, startsExpr: true}),
-  parenR: new TokenType(")"),
-  comma: new TokenType(",", beforeExpr),
-  semi: new TokenType(";", beforeExpr),
-  colon: new TokenType(":", beforeExpr),
-  dot: new TokenType("."),
-  question: new TokenType("?", beforeExpr),
-  arrow: new TokenType("=>", beforeExpr),
-  template: new TokenType("template"),
-  invalidTemplate: new TokenType("invalidTemplate"),
-  ellipsis: new TokenType("...", beforeExpr),
-  backQuote: new TokenType("`", startsExpr),
-  dollarBraceL: new TokenType("${", {beforeExpr: true, startsExpr: true}),
-
-  // Operators. These carry several kinds of properties to help the
-  // parser use them properly (the presence of these properties is
-  // what categorizes them as operators).
-  //
-  // `binop`, when present, specifies that this operator is a binary
-  // operator, and will refer to its precedence.
-  //
-  // `prefix` and `postfix` mark the operator as a prefix or postfix
-  // unary operator.
-  //
-  // `isAssign` marks all of `=`, `+=`, `-=` etcetera, which act as
-  // binary operators with a very low precedence, that should result
-  // in AssignmentExpression nodes.
-
-  eq: new TokenType("=", {beforeExpr: true, isAssign: true}),
-  assign: new TokenType("_=", {beforeExpr: true, isAssign: true}),
-  incDec: new TokenType("++/--", {prefix: true, postfix: true, startsExpr: true}),
-  prefix: new TokenType("prefix", {beforeExpr: true, prefix: true, startsExpr: true}),
-  logicalOR: binop("||", 1),
-  logicalAND: binop("&&", 2),
-  bitwiseOR: binop("|", 3),
-  bitwiseXOR: binop("^", 4),
-  bitwiseAND: binop("&", 5),
-  equality: binop("==/!=", 6),
-  relational: binop("</>", 7),
-  bitShift: binop("<</>>", 8),
-  plusMin: new TokenType("+/-", {beforeExpr: true, binop: 9, prefix: true, startsExpr: true}),
-  modulo: binop("%", 10),
-  star: binop("*", 10),
-  slash: binop("/", 10),
-  starstar: new TokenType("**", {beforeExpr: true}),
-
-  // Keyword token types.
-  _break: kw("break"),
-  _case: kw("case", beforeExpr),
-  _catch: kw("catch"),
-  _continue: kw("continue"),
-  _debugger: kw("debugger"),
-  _default: kw("default", beforeExpr),
-  _do: kw("do", {isLoop: true, beforeExpr: true}),
-  _else: kw("else", beforeExpr),
-  _finally: kw("finally"),
-  _for: kw("for", {isLoop: true}),
-  _function: kw("function", startsExpr),
-  _if: kw("if"),
-  _return: kw("return", beforeExpr),
-  _switch: kw("switch"),
-  _throw: kw("throw", beforeExpr),
-  _try: kw("try"),
-  _var: kw("var"),
-  _const: kw("const"),
-  _while: kw("while", {isLoop: true}),
-  _with: kw("with"),
-  _new: kw("new", {beforeExpr: true, startsExpr: true}),
-  _this: kw("this", startsExpr),
-  _super: kw("super", startsExpr),
-  _class: kw("class", startsExpr),
-  _extends: kw("extends", beforeExpr),
-  _export: kw("export"),
-  _import: kw("import"),
-  _null: kw("null", startsExpr),
-  _true: kw("true", startsExpr),
-  _false: kw("false", startsExpr),
-  _in: kw("in", {beforeExpr: true, binop: 7}),
-  _instanceof: kw("instanceof", {beforeExpr: true, binop: 7}),
-  _typeof: kw("typeof", {beforeExpr: true, prefix: true, startsExpr: true}),
-  _void: kw("void", {beforeExpr: true, prefix: true, startsExpr: true}),
-  _delete: kw("delete", {beforeExpr: true, prefix: true, startsExpr: true})
-};
-
-// Matches a whole line break (where CRLF is considered a single
-// line break). Used to count lines.
-
-var lineBreak = /\r\n?|\n|\u2028|\u2029/;
-var lineBreakG = new RegExp(lineBreak.source, "g");
-
-function isNewLine(code) {
-  return code === 10 || code === 13 || code === 0x2028 || code === 0x2029
-}
-
-var nonASCIIwhitespace = /[\u1680\u180e\u2000-\u200a\u202f\u205f\u3000\ufeff]/;
-
-var skipWhiteSpace = /(?:\s|\/\/.*|\/\*[^]*?\*\/)*/g;
-
-var ref = Object.prototype;
-var hasOwnProperty = ref.hasOwnProperty;
-var toString = ref.toString;
-
-// Checks if an object has a property.
-
-function has(obj, propName) {
-  return hasOwnProperty.call(obj, propName)
-}
-
-var isArray = Array.isArray || (function (obj) { return (
-  toString.call(obj) === "[object Array]"
-); });
-
-// These are used when `options.locations` is on, for the
-// `startLoc` and `endLoc` properties.
-
-var Position = function Position(line, col) {
-  this.line = line;
-  this.column = col;
-};
-
-Position.prototype.offset = function offset (n) {
-  return new Position(this.line, this.column + n)
-};
-
-var SourceLocation = function SourceLocation(p, start, end) {
-  this.start = start;
-  this.end = end;
-  if (p.sourceFile !== null) { this.source = p.sourceFile; }
-};
-
-// The `getLineInfo` function is mostly useful when the
-// `locations` option is off (for performance reasons) and you
-// want to find the line/column position for a given character
-// offset. `input` should be the code string that the offset refers
-// into.
-
-function getLineInfo(input, offset) {
-  for (var line = 1, cur = 0;;) {
-    lineBreakG.lastIndex = cur;
-    var match = lineBreakG.exec(input);
-    if (match && match.index < offset) {
-      ++line;
-      cur = match.index + match[0].length;
-    } else {
-      return new Position(line, offset - cur)
-    }
-  }
-}
-
-// A second optional argument can be given to further configure
-// the parser process. These options are recognized:
-
-var defaultOptions = {
-  // `ecmaVersion` indicates the ECMAScript version to parse. Must
-  // be either 3, 5, 6 (2015), 7 (2016), or 8 (2017). This influences support
-  // for strict mode, the set of reserved words, and support for
-  // new syntax features. The default is 7.
-  ecmaVersion: 7,
-  // `sourceType` indicates the mode the code should be parsed in.
-  // Can be either `"script"` or `"module"`. This influences global
-  // strict mode and parsing of `import` and `export` declarations.
-  sourceType: "script",
-  // `onInsertedSemicolon` can be a callback that will be called
-  // when a semicolon is automatically inserted. It will be passed
-  // th position of the comma as an offset, and if `locations` is
-  // enabled, it is given the location as a `{line, column}` object
-  // as second argument.
-  onInsertedSemicolon: null,
-  // `onTrailingComma` is similar to `onInsertedSemicolon`, but for
-  // trailing commas.
-  onTrailingComma: null,
-  // By default, reserved words are only enforced if ecmaVersion >= 5.
-  // Set `allowReserved` to a boolean value to explicitly turn this on
-  // an off. When this option has the value "never", reserved words
-  // and keywords can also not be used as property names.
-  allowReserved: null,
-  // When enabled, a return at the top level is not considered an
-  // error.
-  allowReturnOutsideFunction: false,
-  // When enabled, import/export statements are not constrained to
-  // appearing at the top of the program.
-  allowImportExportEverywhere: false,
-  // When enabled, hashbang directive in the beginning of file
-  // is allowed and treated as a line comment.
-  allowHashBang: false,
-  // When `locations` is on, `loc` properties holding objects with
-  // `start` and `end` properties in `{line, column}` form (with
-  // line being 1-based and column 0-based) will be attached to the
-  // nodes.
-  locations: false,
-  // A function can be passed as `onToken` option, which will
-  // cause Acorn to call that function with object in the same
-  // format as tokens returned from `tokenizer().getToken()`. Note
-  // that you are not allowed to call the parser from the
-  // callback—that will corrupt its internal state.
-  onToken: null,
-  // A function can be passed as `onComment` option, which will
-  // cause Acorn to call that function with `(block, text, start,
-  // end)` parameters whenever a comment is skipped. `block` is a
-  // boolean indicating whether this is a block (`/* */`) comment,
-  // `text` is the content of the comment, and `start` and `end` are
-  // character offsets that denote the start and end of the comment.
-  // When the `locations` option is on, two more parameters are
-  // passed, the full `{line, column}` locations of the start and
-  // end of the comments. Note that you are not allowed to call the
-  // parser from the callback—that will corrupt its internal state.
-  onComment: null,
-  // Nodes have their start and end characters offsets recorded in
-  // `start` and `end` properties (directly on the node, rather than
-  // the `loc` object, which holds line/column data. To also add a
-  // [semi-standardized][range] `range` property holding a `[start,
-  // end]` array with the same numbers, set the `ranges` option to
-  // `true`.
-  //
-  // [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
-  ranges: false,
-  // It is possible to parse multiple files into a single AST by
-  // passing the tree produced by parsing the first file as
-  // `program` option in subsequent parses. This will add the
-  // toplevel forms of the parsed file to the `Program` (top) node
-  // of an existing parse tree.
-  program: null,
-  // When `locations` is on, you can pass this to record the source
-  // file in every node's `loc` object.
-  sourceFile: null,
-  // This value, if given, is stored in every node, whether
-  // `locations` is on or off.
-  directSourceFile: null,
-  // When enabled, parenthesized expressions are represented by
-  // (non-standard) ParenthesizedExpression nodes
-  preserveParens: false,
-  plugins: {}
-};
-
-// Interpret and default an options object
-
-function getOptions(opts) {
-  var options = {};
-
-  for (var opt in defaultOptions)
-    { options[opt] = opts && has(opts, opt) ? opts[opt] : defaultOptions[opt]; }
-
-  if (options.ecmaVersion >= 2015)
-    { options.ecmaVersion -= 2009; }
-
-  if (options.allowReserved == null)
-    { options.allowReserved = options.ecmaVersion < 5; }
-
-  if (isArray(options.onToken)) {
-    var tokens = options.onToken;
-    options.onToken = function (token) { return tokens.push(token); };
-  }
-  if (isArray(options.onComment))
-    { options.onComment = pushComment(options, options.onComment); }
-
-  return options
-}
-
-function pushComment(options, array) {
-  return function(block, text, start, end, startLoc, endLoc) {
-    var comment = {
-      type: block ? "Block" : "Line",
-      value: text,
-      start: start,
-      end: end
-    };
-    if (options.locations)
-      { comment.loc = new SourceLocation(this, startLoc, endLoc); }
-    if (options.ranges)
-      { comment.range = [start, end]; }
-    array.push(comment);
-  }
-}
-
-// Registered plugins
-var plugins = {};
-
-function keywordRegexp(words) {
-  return new RegExp("^(?:" + words.replace(/ /g, "|") + ")$")
-}
-
-var Parser = function Parser(options, input, startPos) {
-  this.options = options = getOptions(options);
-  this.sourceFile = options.sourceFile;
-  this.keywords = keywordRegexp(keywords[options.ecmaVersion >= 6 ? 6 : 5]);
-  var reserved = "";
-  if (!options.allowReserved) {
-    for (var v = options.ecmaVersion;; v--)
-      { if (reserved = reservedWords[v]) { break } }
-    if (options.sourceType == "module") { reserved += " await"; }
-  }
-  this.reservedWords = keywordRegexp(reserved);
-  var reservedStrict = (reserved ? reserved + " " : "") + reservedWords.strict;
-  this.reservedWordsStrict = keywordRegexp(reservedStrict);
-  this.reservedWordsStrictBind = keywordRegexp(reservedStrict + " " + reservedWords.strictBind);
-  this.input = String(input);
-
-  // Used to signal to callers of `readWord1` whether the word
-  // contained any escape sequences. This is needed because words with
-  // escape sequences must not be interpreted as keywords.
-  this.containsEsc = false;
-
-  // Load plugins
-  this.loadPlugins(options.plugins);
-
-  // Set up token state
-
-  // The current position of the tokenizer in the input.
-  if (startPos) {
-    this.pos = startPos;
-    this.lineStart = this.input.lastIndexOf("\n", startPos - 1) + 1;
-    this.curLine = this.input.slice(0, this.lineStart).split(lineBreak).length;
-  } else {
-    this.pos = this.lineStart = 0;
-    this.curLine = 1;
-  }
-
-  // Properties of the current token:
-  // Its type
-  this.type = types.eof;
-  // For tokens that include more information than their type, the value
-  this.value = null;
-  // Its start and end offset
-  this.start = this.end = this.pos;
-  // And, if locations are used, the {line, column} object
-  // corresponding to those offsets
-  this.startLoc = this.endLoc = this.curPosition();
-
-  // Position information for the previous token
-  this.lastTokEndLoc = this.lastTokStartLoc = null;
-  this.lastTokStart = this.lastTokEnd = this.pos;
-
-  // The context stack is used to superficially track syntactic
-  // context to predict whether a regular expression is allowed in a
-  // given position.
-  this.context = this.initialContext();
-  this.exprAllowed = true;
-
-  // Figure out if it's a module code.
-  this.inModule = options.sourceType === "module";
-  this.strict = this.inModule || this.strictDirective(this.pos);
-
-  // Used to signify the start of a potential arrow function
-  this.potentialArrowAt = -1;
-
-  // Flags to track whether we are in a function, a generator, an async function.
-  this.inFunction = this.inGenerator = this.inAsync = false;
-  // Positions to delayed-check that yield/await does not exist in default parameters.
-  this.yieldPos = this.awaitPos = 0;
-  // Labels in scope.
-  this.labels = [];
-
-  // If enabled, skip leading hashbang line.
-  if (this.pos === 0 && options.allowHashBang && this.input.slice(0, 2) === "#!")
-    { this.skipLineComment(2); }
-
-  // Scope tracking for duplicate variable names (see scope.js)
-  this.scopeStack = [];
-  this.enterFunctionScope();
-};
-
-// DEPRECATED Kept for backwards compatibility until 3.0 in case a plugin uses them
-Parser.prototype.isKeyword = function isKeyword (word) { return this.keywords.test(word) };
-Parser.prototype.isReservedWord = function isReservedWord (word) { return this.reservedWords.test(word) };
-
-Parser.prototype.extend = function extend (name, f) {
-  this[name] = f(this[name]);
-};
-
-Parser.prototype.loadPlugins = function loadPlugins (pluginConfigs) {
-    var this$1 = this;
-
-  for (var name in pluginConfigs) {
-    var plugin = plugins[name];
-    if (!plugin) { throw new Error("Plugin '" + name + "' not found") }
-    plugin(this$1, pluginConfigs[name]);
-  }
-};
-
-Parser.prototype.parse = function parse () {
-  var node = this.options.program || this.startNode();
-  this.nextToken();
-  return this.parseTopLevel(node)
-};
-
-var pp = Parser.prototype;
-
-// ## Parser utilities
-
-var literal = /^(?:'((?:[^']|\.)*)'|"((?:[^"]|\.)*)"|;)/;
-pp.strictDirective = function(start) {
-  var this$1 = this;
-
-  for (;;) {
-    skipWhiteSpace.lastIndex = start;
-    start += skipWhiteSpace.exec(this$1.input)[0].length;
-    var match = literal.exec(this$1.input.slice(start));
-    if (!match) { return false }
-    if ((match[1] || match[2]) == "use strict") { return true }
-    start += match[0].length;
-  }
-};
-
-// Predicate that tests whether the next token is of the given
-// type, and if yes, consumes it as a side effect.
-
-pp.eat = function(type) {
-  if (this.type === type) {
-    this.next();
-    return true
-  } else {
-    return false
-  }
-};
-
-// Tests whether parsed token is a contextual keyword.
-
-pp.isContextual = function(name) {
-  return this.type === types.name && this.value === name
-};
-
-// Consumes contextual keyword if possible.
-
-pp.eatContextual = function(name) {
-  return this.value === name && this.eat(types.name)
-};
-
-// Asserts that following token is given contextual keyword.
-
-pp.expectContextual = function(name) {
-  if (!this.eatContextual(name)) { this.unexpected(); }
-};
-
-// Test whether a semicolon can be inserted at the current position.
-
-pp.canInsertSemicolon = function() {
-  return this.type === types.eof ||
-    this.type === types.braceR ||
-    lineBreak.test(this.input.slice(this.lastTokEnd, this.start))
-};
-
-pp.insertSemicolon = function() {
-  if (this.canInsertSemicolon()) {
-    if (this.options.onInsertedSemicolon)
-      { this.options.onInsertedSemicolon(this.lastTokEnd, this.lastTokEndLoc); }
-    return true
-  }
-};
-
-// Consume a semicolon, or, failing that, see if we are allowed to
-// pretend that there is a semicolon at this position.
-
-pp.semicolon = function() {
-  if (!this.eat(types.semi) && !this.insertSemicolon()) { this.unexpected(); }
-};
-
-pp.afterTrailingComma = function(tokType, notNext) {
-  if (this.type == tokType) {
-    if (this.options.onTrailingComma)
-      { this.options.onTrailingComma(this.lastTokStart, this.lastTokStartLoc); }
-    if (!notNext)
-      { this.next(); }
-    return true
-  }
-};
-
-// Expect a token of a given type. If found, consume it, otherwise,
-// raise an unexpected token error.
-
-pp.expect = function(type) {
-  this.eat(type) || this.unexpected();
-};
-
-// Raise an unexpected token error.
-
-pp.unexpected = function(pos) {
-  this.raise(pos != null ? pos : this.start, "Unexpected token");
-};
-
-function DestructuringErrors() {
-  this.shorthandAssign =
-  this.trailingComma =
-  this.parenthesizedAssign =
-  this.parenthesizedBind =
-    -1;
-}
-
-pp.checkPatternErrors = function(refDestructuringErrors, isAssign) {
-  if (!refDestructuringErrors) { return }
-  if (refDestructuringErrors.trailingComma > -1)
-    { this.raiseRecoverable(refDestructuringErrors.trailingComma, "Comma is not permitted after the rest element"); }
-  var parens = isAssign ? refDestructuringErrors.parenthesizedAssign : refDestructuringErrors.parenthesizedBind;
-  if (parens > -1) { this.raiseRecoverable(parens, "Parenthesized pattern"); }
-};
-
-pp.checkExpressionErrors = function(refDestructuringErrors, andThrow) {
-  var pos = refDestructuringErrors ? refDestructuringErrors.shorthandAssign : -1;
-  if (!andThrow) { return pos >= 0 }
-  if (pos > -1) { this.raise(pos, "Shorthand property assignments are valid only in destructuring patterns"); }
-};
-
-pp.checkYieldAwaitInDefaultParams = function() {
-  if (this.yieldPos && (!this.awaitPos || this.yieldPos < this.awaitPos))
-    { this.raise(this.yieldPos, "Yield expression cannot be a default value"); }
-  if (this.awaitPos)
-    { this.raise(this.awaitPos, "Await expression cannot be a default value"); }
-};
-
-pp.isSimpleAssignTarget = function(expr) {
-  if (expr.type === "ParenthesizedExpression")
-    { return this.isSimpleAssignTarget(expr.expression) }
-  return expr.type === "Identifier" || expr.type === "MemberExpression"
-};
-
-var pp$1 = Parser.prototype;
-
-// ### Statement parsing
-
-// Parse a program. Initializes the parser, reads any number of
-// statements, and wraps them in a Program node.  Optionally takes a
-// `program` argument.  If present, the statements will be appended
-// to its body instead of creating a new node.
-
-pp$1.parseTopLevel = function(node) {
-  var this$1 = this;
-
-  var exports = {};
-  if (!node.body) { node.body = []; }
-  while (this.type !== types.eof) {
-    var stmt = this$1.parseStatement(true, true, exports);
-    node.body.push(stmt);
-  }
-  this.next();
-  if (this.options.ecmaVersion >= 6) {
-    node.sourceType = this.options.sourceType;
-  }
-  return this.finishNode(node, "Program")
-};
-
-var loopLabel = {kind: "loop"};
-var switchLabel = {kind: "switch"};
-
-pp$1.isLet = function() {
-  if (this.type !== types.name || this.options.ecmaVersion < 6 || this.value != "let") { return false }
-  skipWhiteSpace.lastIndex = this.pos;
-  var skip = skipWhiteSpace.exec(this.input);
-  var next = this.pos + skip[0].length, nextCh = this.input.charCodeAt(next);
-  if (nextCh === 91 || nextCh == 123) { return true } // '{' and '['
-  if (isIdentifierStart(nextCh, true)) {
-    var pos = next + 1;
-    while (isIdentifierChar(this.input.charCodeAt(pos), true)) { ++pos; }
-    var ident = this.input.slice(next, pos);
-    if (!this.isKeyword(ident)) { return true }
-  }
-  return false
-};
-
-// check 'async [no LineTerminator here] function'
-// - 'async /*foo*/ function' is OK.
-// - 'async /*\n*/ function' is invalid.
-pp$1.isAsyncFunction = function() {
-  if (this.type !== types.name || this.options.ecmaVersion < 8 || this.value != "async")
-    { return false }
-
-  skipWhiteSpace.lastIndex = this.pos;
-  var skip = skipWhiteSpace.exec(this.input);
-  var next = this.pos + skip[0].length;
-  return !lineBreak.test(this.input.slice(this.pos, next)) &&
-    this.input.slice(next, next + 8) === "function" &&
-    (next + 8 == this.input.length || !isIdentifierChar(this.input.charAt(next + 8)))
-};
-
-// Parse a single statement.
-//
-// If expecting a statement and finding a slash operator, parse a
-// regular expression literal. This is to handle cases like
-// `if (foo) /blah/.exec(foo)`, where looking at the previous token
-// does not help.
-
-pp$1.parseStatement = function(declaration, topLevel, exports) {
-  var starttype = this.type, node = this.startNode(), kind;
-
-  if (this.isLet()) {
-    starttype = types._var;
-    kind = "let";
-  }
-
-  // Most types of statements are recognized by the keyword they
-  // start with. Many are trivial to parse, some require a bit of
-  // complexity.
-
-  switch (starttype) {
-  case types._break: case types._continue: return this.parseBreakContinueStatement(node, starttype.keyword)
-  case types._debugger: return this.parseDebuggerStatement(node)
-  case types._do: return this.parseDoStatement(node)
-  case types._for: return this.parseForStatement(node)
-  case types._function:
-    if (!declaration && this.options.ecmaVersion >= 6) { this.unexpected(); }
-    return this.parseFunctionStatement(node, false)
-  case types._class:
-    if (!declaration) { this.unexpected(); }
-    return this.parseClass(node, true)
-  case types._if: return this.parseIfStatement(node)
-  case types._return: return this.parseReturnStatement(node)
-  case types._switch: return this.parseSwitchStatement(node)
-  case types._throw: return this.parseThrowStatement(node)
-  case types._try: return this.parseTryStatement(node)
-  case types._const: case types._var:
-    kind = kind || this.value;
-    if (!declaration && kind != "var") { this.unexpected(); }
-    return this.parseVarStatement(node, kind)
-  case types._while: return this.parseWhileStatement(node)
-  case types._with: return this.parseWithStatement(node)
-  case types.braceL: return this.parseBlock()
-  case types.semi: return this.parseEmptyStatement(node)
-  case types._export:
-  case types._import:
-    if (!this.options.allowImportExportEverywhere) {
-      if (!topLevel)
-        { this.raise(this.start, "'import' and 'export' may only appear at the top level"); }
-      if (!this.inModule)
-        { this.raise(this.start, "'import' and 'export' may appear only with 'sourceType: module'"); }
-    }
-    return starttype === types._import ? this.parseImport(node) : this.parseExport(node, exports)
-
-    // If the statement does not start with a statement keyword or a
-    // brace, it's an ExpressionStatement or LabeledStatement. We
-    // simply start parsing an expression, and afterwards, if the
-    // next token is a colon and the expression was a simple
-    // Identifier node, we switch to interpreting it as a label.
-  default:
-    if (this.isAsyncFunction() && declaration) {
-      this.next();
-      return this.parseFunctionStatement(node, true)
-    }
-
-    var maybeName = this.value, expr = this.parseExpression();
-    if (starttype === types.name && expr.type === "Identifier" && this.eat(types.colon))
-      { return this.parseLabeledStatement(node, maybeName, expr) }
-    else { return this.parseExpressionStatement(node, expr) }
-  }
-};
-
-pp$1.parseBreakContinueStatement = function(node, keyword) {
-  var this$1 = this;
-
-  var isBreak = keyword == "break";
-  this.next();
-  if (this.eat(types.semi) || this.insertSemicolon()) { node.label = null; }
-  else if (this.type !== types.name) { this.unexpected(); }
-  else {
-    node.label = this.parseIdent();
-    this.semicolon();
-  }
-
-  // Verify that there is an actual destination to break or
-  // continue to.
-  var i = 0;
-  for (; i < this.labels.length; ++i) {
-    var lab = this$1.labels[i];
-    if (node.label == null || lab.name === node.label.name) {
-      if (lab.kind != null && (isBreak || lab.kind === "loop")) { break }
-      if (node.label && isBreak) { break }
-    }
-  }
-  if (i === this.labels.length) { this.raise(node.start, "Unsyntactic " + keyword); }
-  return this.finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement")
-};
-
-pp$1.parseDebuggerStatement = function(node) {
-  this.next();
-  this.semicolon();
-  return this.finishNode(node, "DebuggerStatement")
-};
-
-pp$1.parseDoStatement = function(node) {
-  this.next();
-  this.labels.push(loopLabel);
-  node.body = this.parseStatement(false);
-  this.labels.pop();
-  this.expect(types._while);
-  node.test = this.parseParenExpression();
-  if (this.options.ecmaVersion >= 6)
-    { this.eat(types.semi); }
-  else
-    { this.semicolon(); }
-  return this.finishNode(node, "DoWhileStatement")
-};
-
-// Disambiguating between a `for` and a `for`/`in` or `for`/`of`
-// loop is non-trivial. Basically, we have to parse the init `var`
-// statement or expression, disallowing the `in` operator (see
-// the second parameter to `parseExpression`), and then check
-// whether the next token is `in` or `of`. When there is no init
-// part (semicolon immediately after the opening parenthesis), it
-// is a regular `for` loop.
-
-pp$1.parseForStatement = function(node) {
-  this.next();
-  this.labels.push(loopLabel);
-  this.enterLexicalScope();
-  this.expect(types.parenL);
-  if (this.type === types.semi) { return this.parseFor(node, null) }
-  var isLet = this.isLet();
-  if (this.type === types._var || this.type === types._const || isLet) {
-    var init$1 = this.startNode(), kind = isLet ? "let" : this.value;
-    this.next();
-    this.parseVar(init$1, true, kind);
-    this.finishNode(init$1, "VariableDeclaration");
-    if ((this.type === types._in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) && init$1.declarations.length === 1 &&
-        !(kind !== "var" && init$1.declarations[0].init))
-      { return this.parseForIn(node, init$1) }
-    return this.parseFor(node, init$1)
-  }
-  var refDestructuringErrors = new DestructuringErrors;
-  var init = this.parseExpression(true, refDestructuringErrors);
-  if (this.type === types._in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) {
-    this.toAssignable(init);
-    this.checkLVal(init);
-    this.checkPatternErrors(refDestructuringErrors, true);
-    return this.parseForIn(node, init)
-  } else {
-    this.checkExpressionErrors(refDestructuringErrors, true);
-  }
-  return this.parseFor(node, init)
-};
-
-pp$1.parseFunctionStatement = function(node, isAsync) {
-  this.next();
-  return this.parseFunction(node, true, false, isAsync)
-};
-
-pp$1.isFunction = function() {
-  return this.type === types._function || this.isAsyncFunction()
-};
-
-pp$1.parseIfStatement = function(node) {
-  this.next();
-  node.test = this.parseParenExpression();
-  // allow function declarations in branches, but only in non-strict mode
-  node.consequent = this.parseStatement(!this.strict && this.isFunction());
-  node.alternate = this.eat(types._else) ? this.parseStatement(!this.strict && this.isFunction()) : null;
-  return this.finishNode(node, "IfStatement")
-};
-
-pp$1.parseReturnStatement = function(node) {
-  if (!this.inFunction && !this.options.allowReturnOutsideFunction)
-    { this.raise(this.start, "'return' outside of function"); }
-  this.next();
-
-  // In `return` (and `break`/`continue`), the keywords with
-  // optional arguments, we eagerly look for a semicolon or the
-  // possibility to insert one.
-
-  if (this.eat(types.semi) || this.insertSemicolon()) { node.argument = null; }
-  else { node.argument = this.parseExpression(); this.semicolon(); }
-  return this.finishNode(node, "ReturnStatement")
-};
-
-pp$1.parseSwitchStatement = function(node) {
-  var this$1 = this;
-
-  this.next();
-  node.discriminant = this.parseParenExpression();
-  node.cases = [];
-  this.expect(types.braceL);
-  this.labels.push(switchLabel);
-  this.enterLexicalScope();
-
-  // Statements under must be grouped (by label) in SwitchCase
-  // nodes. `cur` is used to keep the node that we are currently
-  // adding statements to.
-
-  var cur;
-  for (var sawDefault = false; this.type != types.braceR;) {
-    if (this$1.type === types._case || this$1.type === types._default) {
-      var isCase = this$1.type === types._case;
-      if (cur) { this$1.finishNode(cur, "SwitchCase"); }
-      node.cases.push(cur = this$1.startNode());
-      cur.consequent = [];
-      this$1.next();
-      if (isCase) {
-        cur.test = this$1.parseExpression();
-      } else {
-        if (sawDefault) { this$1.raiseRecoverable(this$1.lastTokStart, "Multiple default clauses"); }
-        sawDefault = true;
-        cur.test = null;
-      }
-      this$1.expect(types.colon);
-    } else {
-      if (!cur) { this$1.unexpected(); }
-      cur.consequent.push(this$1.parseStatement(true));
-    }
-  }
-  this.exitLexicalScope();
-  if (cur) { this.finishNode(cur, "SwitchCase"); }
-  this.next(); // Closing brace
-  this.labels.pop();
-  return this.finishNode(node, "SwitchStatement")
-};
-
-pp$1.parseThrowStatement = function(node) {
-  this.next();
-  if (lineBreak.test(this.input.slice(this.lastTokEnd, this.start)))
-    { this.raise(this.lastTokEnd, "Illegal newline after throw"); }
-  node.argument = this.parseExpression();
-  this.semicolon();
-  return this.finishNode(node, "ThrowStatement")
-};
-
-// Reused empty array added for node fields that are always empty.
-
-var empty = [];
-
-pp$1.parseTryStatement = function(node) {
-  this.next();
-  node.block = this.parseBlock();
-  node.handler = null;
-  if (this.type === types._catch) {
-    var clause = this.startNode();
-    this.next();
-    this.expect(types.parenL);
-    clause.param = this.parseBindingAtom();
-    this.enterLexicalScope();
-    this.checkLVal(clause.param, "let");
-    this.expect(types.parenR);
-    clause.body = this.parseBlock(false);
-    this.exitLexicalScope();
-    node.handler = this.finishNode(clause, "CatchClause");
-  }
-  node.finalizer = this.eat(types._finally) ? this.parseBlock() : null;
-  if (!node.handler && !node.finalizer)
-    { this.raise(node.start, "Missing catch or finally clause"); }
-  return this.finishNode(node, "TryStatement")
-};
-
-pp$1.parseVarStatement = function(node, kind) {
-  this.next();
-  this.parseVar(node, false, kind);
-  this.semicolon();
-  return this.finishNode(node, "VariableDeclaration")
-};
-
-pp$1.parseWhileStatement = function(node) {
-  this.next();
-  node.test = this.parseParenExpression();
-  this.labels.push(loopLabel);
-  node.body = this.parseStatement(false);
-  this.labels.pop();
-  return this.finishNode(node, "WhileStatement")
-};
-
-pp$1.parseWithStatement = function(node) {
-  if (this.strict) { this.raise(this.start, "'with' in strict mode"); }
-  this.next();
-  node.object = this.parseParenExpression();
-  node.body = this.parseStatement(false);
-  return this.finishNode(node, "WithStatement")
-};
-
-pp$1.parseEmptyStatement = function(node) {
-  this.next();
-  return this.finishNode(node, "EmptyStatement")
-};
-
-pp$1.parseLabeledStatement = function(node, maybeName, expr) {
-  var this$1 = this;
-
-  for (var i$1 = 0, list = this$1.labels; i$1 < list.length; i$1 += 1)
-    {
-    var label = list[i$1];
-
-    if (label.name === maybeName)
-      { this$1.raise(expr.start, "Label '" + maybeName + "' is already declared");
-  } }
-  var kind = this.type.isLoop ? "loop" : this.type === types._switch ? "switch" : null;
-  for (var i = this.labels.length - 1; i >= 0; i--) {
-    var label$1 = this$1.labels[i];
-    if (label$1.statementStart == node.start) {
-      label$1.statementStart = this$1.start;
-      label$1.kind = kind;
-    } else { break }
-  }
-  this.labels.push({name: maybeName, kind: kind, statementStart: this.start});
-  node.body = this.parseStatement(true);
-  if (node.body.type == "ClassDeclaration" ||
-      node.body.type == "VariableDeclaration" && node.body.kind != "var" ||
-      node.body.type == "FunctionDeclaration" && (this.strict || node.body.generator))
-    { this.raiseRecoverable(node.body.start, "Invalid labeled declaration"); }
-  this.labels.pop();
-  node.label = expr;
-  return this.finishNode(node, "LabeledStatement")
-};
-
-pp$1.parseExpressionStatement = function(node, expr) {
-  node.expression = expr;
-  this.semicolon();
-  return this.finishNode(node, "ExpressionStatement")
-};
-
-// Parse a semicolon-enclosed block of statements, handling `"use
-// strict"` declarations when `allowStrict` is true (used for
-// function bodies).
-
-pp$1.parseBlock = function(createNewLexicalScope) {
-  var this$1 = this;
-  if ( createNewLexicalScope === void 0 ) createNewLexicalScope = true;
-
-  var node = this.startNode();
-  node.body = [];
-  this.expect(types.braceL);
-  if (createNewLexicalScope) {
-    this.enterLexicalScope();
-  }
-  while (!this.eat(types.braceR)) {
-    var stmt = this$1.parseStatement(true);
-    node.body.push(stmt);
-  }
-  if (createNewLexicalScope) {
-    this.exitLexicalScope();
-  }
-  return this.finishNode(node, "BlockStatement")
-};
-
-// Parse a regular `for` loop. The disambiguation code in
-// `parseStatement` will already have parsed the init statement or
-// expression.
-
-pp$1.parseFor = function(node, init) {
-  node.init = init;
-  this.expect(types.semi);
-  node.test = this.type === types.semi ? null : this.parseExpression();
-  this.expect(types.semi);
-  node.update = this.type === types.parenR ? null : this.parseExpression();
-  this.expect(types.parenR);
-  this.exitLexicalScope();
-  node.body = this.parseStatement(false);
-  this.labels.pop();
-  return this.finishNode(node, "ForStatement")
-};
-
-// Parse a `for`/`in` and `for`/`of` loop, which are almost
-// same from parser's perspective.
-
-pp$1.parseForIn = function(node, init) {
-  var type = this.type === types._in ? "ForInStatement" : "ForOfStatement";
-  this.next();
-  node.left = init;
-  node.right = this.parseExpression();
-  this.expect(types.parenR);
-  this.exitLexicalScope();
-  node.body = this.parseStatement(false);
-  this.labels.pop();
-  return this.finishNode(node, type)
-};
-
-// Parse a list of variable declarations.
-
-pp$1.parseVar = function(node, isFor, kind) {
-  var this$1 = this;
-
-  node.declarations = [];
-  node.kind = kind;
-  for (;;) {
-    var decl = this$1.startNode();
-    this$1.parseVarId(decl, kind);
-    if (this$1.eat(types.eq)) {
-      decl.init = this$1.parseMaybeAssign(isFor);
-    } else if (kind === "const" && !(this$1.type === types._in || (this$1.options.ecmaVersion >= 6 && this$1.isContextual("of")))) {
-      this$1.unexpected();
-    } else if (decl.id.type != "Identifier" && !(isFor && (this$1.type === types._in || this$1.isContextual("of")))) {
-      this$1.raise(this$1.lastTokEnd, "Complex binding patterns require an initialization value");
-    } else {
-      decl.init = null;
-    }
-    node.declarations.push(this$1.finishNode(decl, "VariableDeclarator"));
-    if (!this$1.eat(types.comma)) { break }
-  }
-  return node
-};
-
-pp$1.parseVarId = function(decl, kind) {
-  decl.id = this.parseBindingAtom(kind);
-  this.checkLVal(decl.id, kind, false);
-};
-
-// Parse a function declaration or literal (depending on the
-// `isStatement` parameter).
-
-pp$1.parseFunction = function(node, isStatement, allowExpressionBody, isAsync) {
-  this.initFunction(node);
-  if (this.options.ecmaVersion >= 6 && !isAsync)
-    { node.generator = this.eat(types.star); }
-  if (this.options.ecmaVersion >= 8)
-    { node.async = !!isAsync; }
-
-  if (isStatement) {
-    node.id = isStatement === "nullableID" && this.type != types.name ? null : this.parseIdent();
-    if (node.id) {
-      this.checkLVal(node.id, "var");
-    }
-  }
-
-  var oldInGen = this.inGenerator, oldInAsync = this.inAsync,
-      oldYieldPos = this.yieldPos, oldAwaitPos = this.awaitPos, oldInFunc = this.inFunction;
-  this.inGenerator = node.generator;
-  this.inAsync = node.async;
-  this.yieldPos = 0;
-  this.awaitPos = 0;
-  this.inFunction = true;
-  this.enterFunctionScope();
-
-  if (!isStatement)
-    { node.id = this.type == types.name ? this.parseIdent() : null; }
-
-  this.parseFunctionParams(node);
-  this.parseFunctionBody(node, allowExpressionBody);
-
-  this.inGenerator = oldInGen;
-  this.inAsync = oldInAsync;
-  this.yieldPos = oldYieldPos;
-  this.awaitPos = oldAwaitPos;
-  this.inFunction = oldInFunc;
-  return this.finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression")
-};
-
-pp$1.parseFunctionParams = function(node) {
-  this.expect(types.parenL);
-  node.params = this.parseBindingList(types.parenR, false, this.options.ecmaVersion >= 8);
-  this.checkYieldAwaitInDefaultParams();
-};
-
-// Parse a class declaration or literal (depending on the
-// `isStatement` parameter).
-
-pp$1.parseClass = function(node, isStatement) {
-  var this$1 = this;
-
-  this.next();
-
-  this.parseClassId(node, isStatement);
-  this.parseClassSuper(node);
-  var classBody = this.startNode();
-  var hadConstructor = false;
-  classBody.body = [];
-  this.expect(types.braceL);
-  while (!this.eat(types.braceR)) {
-    if (this$1.eat(types.semi)) { continue }
-    var method = this$1.startNode();
-    var isGenerator = this$1.eat(types.star);
-    var isAsync = false;
-    var isMaybeStatic = this$1.type === types.name && this$1.value === "static";
-    this$1.parsePropertyName(method);
-    method.static = isMaybeStatic && this$1.type !== types.parenL;
-    if (method.static) {
-      if (isGenerator) { this$1.unexpected(); }
-      isGenerator = this$1.eat(types.star);
-      this$1.parsePropertyName(method);
-    }
-    if (this$1.options.ecmaVersion >= 8 && !isGenerator && !method.computed &&
-        method.key.type === "Identifier" && method.key.name === "async" && this$1.type !== types.parenL &&
-        !this$1.canInsertSemicolon()) {
-      isAsync = true;
-      this$1.parsePropertyName(method);
-    }
-    method.kind = "method";
-    var isGetSet = false;
-    if (!method.computed) {
-      var key = method.key;
-      if (!isGenerator && !isAsync && key.type === "Identifier" && this$1.type !== types.parenL && (key.name === "get" || key.name === "set")) {
-        isGetSet = true;
-        method.kind = key.name;
-        key = this$1.parsePropertyName(method);
-      }
-      if (!method.static && (key.type === "Identifier" && key.name === "constructor" ||
-          key.type === "Literal" && key.value === "constructor")) {
-        if (hadConstructor) { this$1.raise(key.start, "Duplicate constructor in the same class"); }
-        if (isGetSet) { this$1.raise(key.start, "Constructor can't have get/set modifier"); }
-        if (isGenerator) { this$1.raise(key.start, "Constructor can't be a generator"); }
-        if (isAsync) { this$1.raise(key.start, "Constructor can't be an async method"); }
-        method.kind = "constructor";
-        hadConstructor = true;
-      }
-    }
-    this$1.parseClassMethod(classBody, method, isGenerator, isAsync);
-    if (isGetSet) {
-      var paramCount = method.kind === "get" ? 0 : 1;
-      if (method.value.params.length !== paramCount) {
-        var start = method.value.start;
-        if (method.kind === "get")
-          { this$1.raiseRecoverable(start, "getter should have no params"); }
-        else
-          { this$1.raiseRecoverable(start, "setter should have exactly one param"); }
-      } else {
-        if (method.kind === "set" && method.value.params[0].type === "RestElement")
-          { this$1.raiseRecoverable(method.value.params[0].start, "Setter cannot use rest params"); }
-      }
-    }
-  }
-  node.body = this.finishNode(classBody, "ClassBody");
-  return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression")
-};
-
-pp$1.parseClassMethod = function(classBody, method, isGenerator, isAsync) {
-  method.value = this.parseMethod(isGenerator, isAsync);
-  classBody.body.push(this.finishNode(method, "MethodDefinition"));
-};
-
-pp$1.parseClassId = function(node, isStatement) {
-  node.id = this.type === types.name ? this.parseIdent() : isStatement === true ? this.unexpected() : null;
-};
-
-pp$1.parseClassSuper = function(node) {
-  node.superClass = this.eat(types._extends) ? this.parseExprSubscripts() : null;
-};
-
-// Parses module export declaration.
-
-pp$1.parseExport = function(node, exports) {
-  var this$1 = this;
-
-  this.next();
-  // export * from '...'
-  if (this.eat(types.star)) {
-    this.expectContextual("from");
-    node.source = this.type === types.string ? this.parseExprAtom() : this.unexpected();
-    this.semicolon();
-    return this.finishNode(node, "ExportAllDeclaration")
-  }
-  if (this.eat(types._default)) { // export default ...
-    this.checkExport(exports, "default", this.lastTokStart);
-    var isAsync;
-    if (this.type === types._function || (isAsync = this.isAsyncFunction())) {
-      var fNode = this.startNode();
-      this.next();
-      if (isAsync) { this.next(); }
-      node.declaration = this.parseFunction(fNode, "nullableID", false, isAsync);
-    } else if (this.type === types._class) {
-      var cNode = this.startNode();
-      node.declaration = this.parseClass(cNode, "nullableID");
-    } else {
-      node.declaration = this.parseMaybeAssign();
-      this.semicolon();
-    }
-    return this.finishNode(node, "ExportDefaultDeclaration")
-  }
-  // export var|const|let|function|class ...
-  if (this.shouldParseExportStatement()) {
-    node.declaration = this.parseStatement(true);
-    if (node.declaration.type === "VariableDeclaration")
-      { this.checkVariableExport(exports, node.declaration.declarations); }
-    else
-      { this.checkExport(exports, node.declaration.id.name, node.declaration.id.start); }
-    node.specifiers = [];
-    node.source = null;
-  } else { // export { x, y as z } [from '...']
-    node.declaration = null;
-    node.specifiers = this.parseExportSpecifiers(exports);
-    if (this.eatContextual("from")) {
-      node.source = this.type === types.string ? this.parseExprAtom() : this.unexpected();
-    } else {
-      // check for keywords used as local names
-      for (var i = 0, list = node.specifiers; i < list.length; i += 1) {
-        var spec = list[i];
-
-        this$1.checkUnreserved(spec.local);
-      }
-
-      node.source = null;
-    }
-    this.semicolon();
-  }
-  return this.finishNode(node, "ExportNamedDeclaration")
-};
-
-pp$1.checkExport = function(exports, name, pos) {
-  if (!exports) { return }
-  if (has(exports, name))
-    { this.raiseRecoverable(pos, "Duplicate export '" + name + "'"); }
-  exports[name] = true;
-};
-
-pp$1.checkPatternExport = function(exports, pat) {
-  var this$1 = this;
-
-  var type = pat.type;
-  if (type == "Identifier")
-    { this.checkExport(exports, pat.name, pat.start); }
-  else if (type == "ObjectPattern")
-    { for (var i = 0, list = pat.properties; i < list.length; i += 1)
-      {
-        var prop = list[i];
-
-        this$1.checkPatternExport(exports, prop.value);
-      } }
-  else if (type == "ArrayPattern")
-    { for (var i$1 = 0, list$1 = pat.elements; i$1 < list$1.length; i$1 += 1) {
-      var elt = list$1[i$1];
-
-        if (elt) { this$1.checkPatternExport(exports, elt); }
-    } }
-  else if (type == "AssignmentPattern")
-    { this.checkPatternExport(exports, pat.left); }
-  else if (type == "ParenthesizedExpression")
-    { this.checkPatternExport(exports, pat.expression); }
-};
-
-pp$1.checkVariableExport = function(exports, decls) {
-  var this$1 = this;
-
-  if (!exports) { return }
-  for (var i = 0, list = decls; i < list.length; i += 1)
-    {
-    var decl = list[i];
-
-    this$1.checkPatternExport(exports, decl.id);
-  }
-};
-
-pp$1.shouldParseExportStatement = function() {
-  return this.type.keyword === "var" ||
-    this.type.keyword === "const" ||
-    this.type.keyword === "class" ||
-    this.type.keyword === "function" ||
-    this.isLet() ||
-    this.isAsyncFunction()
-};
-
-// Parses a comma-separated list of module exports.
-
-pp$1.parseExportSpecifiers = function(exports) {
-  var this$1 = this;
-
-  var nodes = [], first = true;
-  // export { x, y as z } [from '...']
-  this.expect(types.braceL);
-  while (!this.eat(types.braceR)) {
-    if (!first) {
-      this$1.expect(types.comma);
-      if (this$1.afterTrailingComma(types.braceR)) { break }
-    } else { first = false; }
-
-    var node = this$1.startNode();
-    node.local = this$1.parseIdent(true);
-    node.exported = this$1.eatContextual("as") ? this$1.parseIdent(true) : node.local;
-    this$1.checkExport(exports, node.exported.name, node.exported.start);
-    nodes.push(this$1.finishNode(node, "ExportSpecifier"));
-  }
-  return nodes
-};
-
-// Parses import declaration.
-
-pp$1.parseImport = function(node) {
-  this.next();
-  // import '...'
-  if (this.type === types.string) {
-    node.specifiers = empty;
-    node.source = this.parseExprAtom();
-  } else {
-    node.specifiers = this.parseImportSpecifiers();
-    this.expectContextual("from");
-    node.source = this.type === types.string ? this.parseExprAtom() : this.unexpected();
-  }
-  this.semicolon();
-  return this.finishNode(node, "ImportDeclaration")
-};
-
-// Parses a comma-separated list of module imports.
-
-pp$1.parseImportSpecifiers = function() {
-  var this$1 = this;
-
-  var nodes = [], first = true;
-  if (this.type === types.name) {
-    // import defaultObj, { x, y as z } from '...'
-    var node = this.startNode();
-    node.local = this.parseIdent();
-    this.checkLVal(node.local, "let");
-    nodes.push(this.finishNode(node, "ImportDefaultSpecifier"));
-    if (!this.eat(types.comma)) { return nodes }
-  }
-  if (this.type === types.star) {
-    var node$1 = this.startNode();
-    this.next();
-    this.expectContextual("as");
-    node$1.local = this.parseIdent();
-    this.checkLVal(node$1.local, "let");
-    nodes.push(this.finishNode(node$1, "ImportNamespaceSpecifier"));
-    return nodes
-  }
-  this.expect(types.braceL);
-  while (!this.eat(types.braceR)) {
-    if (!first) {
-      this$1.expect(types.comma);
-      if (this$1.afterTrailingComma(types.braceR)) { break }
-    } else { first = false; }
-
-    var node$2 = this$1.startNode();
-    node$2.imported = this$1.parseIdent(true);
-    if (this$1.eatContextual("as")) {
-      node$2.local = this$1.parseIdent();
-    } else {
-      this$1.checkUnreserved(node$2.imported);
-      node$2.local = node$2.imported;
-    }
-    this$1.checkLVal(node$2.local, "let");
-    nodes.push(this$1.finishNode(node$2, "ImportSpecifier"));
-  }
-  return nodes
-};
-
-var pp$2 = Parser.prototype;
-
-// Convert existing expression atom to assignable pattern
-// if possible.
-
-pp$2.toAssignable = function(node, isBinding) {
-  var this$1 = this;
-
-  if (this.options.ecmaVersion >= 6 && node) {
-    switch (node.type) {
-    case "Identifier":
-      if (this.inAsync && node.name === "await")
-        { this.raise(node.start, "Can not use 'await' as identifier inside an async function"); }
-      break
-
-    case "ObjectPattern":
-    case "ArrayPattern":
-      break
-
-    case "ObjectExpression":
-      node.type = "ObjectPattern";
-      for (var i = 0, list = node.properties; i < list.length; i += 1) {
-        var prop = list[i];
-
-      if (prop.kind !== "init") { this$1.raise(prop.key.start, "Object pattern can't contain getter or setter"); }
-        this$1.toAssignable(prop.value, isBinding);
-      }
-      break
-
-    case "ArrayExpression":
-      node.type = "ArrayPattern";
-      this.toAssignableList(node.elements, isBinding);
-      break
-
-    case "AssignmentExpression":
-      if (node.operator === "=") {
-        node.type = "AssignmentPattern";
-        delete node.operator;
-        this.toAssignable(node.left, isBinding);
-        // falls through to AssignmentPattern
-      } else {
-        this.raise(node.left.end, "Only '=' operator can be used for specifying default value.");
-        break
-      }
-
-    case "AssignmentPattern":
-      break
-
-    case "ParenthesizedExpression":
-      this.toAssignable(node.expression, isBinding);
-      break
-
-    case "MemberExpression":
-      if (!isBinding) { break }
-
-    default:
-      this.raise(node.start, "Assigning to rvalue");
-    }
-  }
-  return node
-};
-
-// Convert list of expression atoms to binding list.
-
-pp$2.toAssignableList = function(exprList, isBinding) {
-  var this$1 = this;
-
-  var end = exprList.length;
-  if (end) {
-    var last = exprList[end - 1];
-    if (last && last.type == "RestElement") {
-      --end;
-    } else if (last && last.type == "SpreadElement") {
-      last.type = "RestElement";
-      var arg = last.argument;
-      this.toAssignable(arg, isBinding);
-      --end;
-    }
-
-    if (this.options.ecmaVersion === 6 && isBinding && last && last.type === "RestElement" && last.argument.type !== "Identifier")
-      { this.unexpected(last.argument.start); }
-  }
-  for (var i = 0; i < end; i++) {
-    var elt = exprList[i];
-    if (elt) { this$1.toAssignable(elt, isBinding); }
-  }
-  return exprList
-};
-
-// Parses spread element.
-
-pp$2.parseSpread = function(refDestructuringErrors) {
-  var node = this.startNode();
-  this.next();
-  node.argument = this.parseMaybeAssign(false, refDestructuringErrors);
-  return this.finishNode(node, "SpreadElement")
-};
-
-pp$2.parseRestBinding = function() {
-  var node = this.startNode();
-  this.next();
-
-  // RestElement inside of a function parameter must be an identifier
-  if (this.options.ecmaVersion === 6 && this.type !== types.name)
-    { this.unexpected(); }
-
-  node.argument = this.parseBindingAtom();
-
-  return this.finishNode(node, "RestElement")
-};
-
-// Parses lvalue (assignable) atom.
-
-pp$2.parseBindingAtom = function() {
-  if (this.options.ecmaVersion < 6) { return this.parseIdent() }
-  switch (this.type) {
-  case types.name:
-    return this.parseIdent()
-
-  case types.bracketL:
-    var node = this.startNode();
-    this.next();
-    node.elements = this.parseBindingList(types.bracketR, true, true);
-    return this.finishNode(node, "ArrayPattern")
-
-  case types.braceL:
-    return this.parseObj(true)
-
-  default:
-    this.unexpected();
-  }
-};
-
-pp$2.parseBindingList = function(close, allowEmpty, allowTrailingComma) {
-  var this$1 = this;
-
-  var elts = [], first = true;
-  while (!this.eat(close)) {
-    if (first) { first = false; }
-    else { this$1.expect(types.comma); }
-    if (allowEmpty && this$1.type === types.comma) {
-      elts.push(null);
-    } else if (allowTrailingComma && this$1.afterTrailingComma(close)) {
-      break
-    } else if (this$1.type === types.ellipsis) {
-      var rest = this$1.parseRestBinding();
-      this$1.parseBindingListItem(rest);
-      elts.push(rest);
-      if (this$1.type === types.comma) { this$1.raise(this$1.start, "Comma is not permitted after the rest element"); }
-      this$1.expect(close);
-      break
-    } else {
-      var elem = this$1.parseMaybeDefault(this$1.start, this$1.startLoc);
-      this$1.parseBindingListItem(elem);
-      elts.push(elem);
-    }
-  }
-  return elts
-};
-
-pp$2.parseBindingListItem = function(param) {
-  return param
-};
-
-// Parses assignment pattern around given atom if possible.
-
-pp$2.parseMaybeDefault = function(startPos, startLoc, left) {
-  left = left || this.parseBindingAtom();
-  if (this.options.ecmaVersion < 6 || !this.eat(types.eq)) { return left }
-  var node = this.startNodeAt(startPos, startLoc);
-  node.left = left;
-  node.right = this.parseMaybeAssign();
-  return this.finishNode(node, "AssignmentPattern")
-};
-
-// Verify that a node is an lval — something that can be assigned
-// to.
-// bindingType can be either:
-// 'var' indicating that the lval creates a 'var' binding
-// 'let' indicating that the lval creates a lexical ('let' or 'const') binding
-// 'none' indicating that the binding should be checked for illegal identifiers, but not for duplicate references
-
-pp$2.checkLVal = function(expr, bindingType, checkClashes) {
-  var this$1 = this;
-
-  switch (expr.type) {
-  case "Identifier":
-    if (this.strict && this.reservedWordsStrictBind.test(expr.name))
-      { this.raiseRecoverable(expr.start, (bindingType ? "Binding " : "Assigning to ") + expr.name + " in strict mode"); }
-    if (checkClashes) {
-      if (has(checkClashes, expr.name))
-        { this.raiseRecoverable(expr.start, "Argument name clash"); }
-      checkClashes[expr.name] = true;
-    }
-    if (bindingType && bindingType !== "none") {
-      if (
-        bindingType === "var" && !this.canDeclareVarName(expr.name) ||
-        bindingType !== "var" && !this.canDeclareLexicalName(expr.name)
-      ) {
-        this.raiseRecoverable(expr.start, ("Identifier '" + (expr.name) + "' has already been declared"));
-      }
-      if (bindingType === "var") {
-        this.declareVarName(expr.name);
-      } else {
-        this.declareLexicalName(expr.name);
-      }
-    }
-    break
-
-  case "MemberExpression":
-    if (bindingType) { this.raiseRecoverable(expr.start, (bindingType ? "Binding" : "Assigning to") + " member expression"); }
-    break
-
-  case "ObjectPattern":
-    for (var i = 0, list = expr.properties; i < list.length; i += 1)
-      {
-    var prop = list[i];
-
-    this$1.checkLVal(prop.value, bindingType, checkClashes);
-  }
-    break
-
-  case "ArrayPattern":
-    for (var i$1 = 0, list$1 = expr.elements; i$1 < list$1.length; i$1 += 1) {
-      var elem = list$1[i$1];
-
-    if (elem) { this$1.checkLVal(elem, bindingType, checkClashes); }
-    }
-    break
-
-  case "AssignmentPattern":
-    this.checkLVal(expr.left, bindingType, checkClashes);
-    break
-
-  case "RestElement":
-    this.checkLVal(expr.argument, bindingType, checkClashes);
-    break
-
-  case "ParenthesizedExpression":
-    this.checkLVal(expr.expression, bindingType, checkClashes);
-    break
-
-  default:
-    this.raise(expr.start, (bindingType ? "Binding" : "Assigning to") + " rvalue");
-  }
-};
-
-// A recursive descent parser operates by defining functions for all
-// syntactic elements, and recursively calling those, each function
-// advancing the input stream and returning an AST node. Precedence
-// of constructs (for example, the fact that `!x[1]` means `!(x[1])`
-// instead of `(!x)[1]` is handled by the fact that the parser
-// function that parses unary prefix operators is called first, and
-// in turn calls the function that parses `[]` subscripts — that
-// way, it'll receive the node for `x[1]` already parsed, and wraps
-// *that* in the unary operator node.
-//
-// Acorn uses an [operator precedence parser][opp] to handle binary
-// operator precedence, because it is much more compact than using
-// the technique outlined above, which uses different, nesting
-// functions to specify precedence, for all of the ten binary
-// precedence levels that JavaScript defines.
-//
-// [opp]: http://en.wikipedia.org/wiki/Operator-precedence_parser
-
-var pp$3 = Parser.prototype;
-
-// Check if property name clashes with already added.
-// Object/class getters and setters are not allowed to clash —
-// either with each other or with an init property — and in
-// strict mode, init properties are also not allowed to be repeated.
-
-pp$3.checkPropClash = function(prop, propHash) {
-  if (this.options.ecmaVersion >= 6 && (prop.computed || prop.method || prop.shorthand))
-    { return }
-  var key = prop.key;
-  var name;
-  switch (key.type) {
-  case "Identifier": name = key.name; break
-  case "Literal": name = String(key.value); break
-  default: return
-  }
-  var kind = prop.kind;
-  if (this.options.ecmaVersion >= 6) {
-    if (name === "__proto__" && kind === "init") {
-      if (propHash.proto) { this.raiseRecoverable(key.start, "Redefinition of __proto__ property"); }
-      propHash.proto = true;
-    }
-    return
-  }
-  name = "$" + name;
-  var other = propHash[name];
-  if (other) {
-    var redefinition;
-    if (kind === "init") {
-      redefinition = this.strict && other.init || other.get || other.set;
-    } else {
-      redefinition = other.init || other[kind];
-    }
-    if (redefinition)
-      { this.raiseRecoverable(key.start, "Redefinition of property"); }
-  } else {
-    other = propHash[name] = {
-      init: false,
-      get: false,
-      set: false
-    };
-  }
-  other[kind] = true;
-};
-
-// ### Expression parsing
-
-// These nest, from the most general expression type at the top to
-// 'atomic', nondivisible expression types at the bottom. Most of
-// the functions will simply let the function(s) below them parse,
-// and, *if* the syntactic construct they handle is present, wrap
-// the AST node that the inner parser gave them in another node.
-
-// Parse a full expression. The optional arguments are used to
-// forbid the `in` operator (in for loops initalization expressions)
-// and provide reference for storing '=' operator inside shorthand
-// property assignment in contexts where both object expression
-// and object pattern might appear (so it's possible to raise
-// delayed syntax error at correct position).
-
-pp$3.parseExpression = function(noIn, refDestructuringErrors) {
-  var this$1 = this;
-
-  var startPos = this.start, startLoc = this.startLoc;
-  var expr = this.parseMaybeAssign(noIn, refDestructuringErrors);
-  if (this.type === types.comma) {
-    var node = this.startNodeAt(startPos, startLoc);
-    node.expressions = [expr];
-    while (this.eat(types.comma)) { node.expressions.push(this$1.parseMaybeAssign(noIn, refDestructuringErrors)); }
-    return this.finishNode(node, "SequenceExpression")
-  }
-  return expr
-};
-
-// Parse an assignment expression. This includes applications of
-// operators like `+=`.
-
-pp$3.parseMaybeAssign = function(noIn, refDestructuringErrors, afterLeftParse) {
-  if (this.inGenerator && this.isContextual("yield")) { return this.parseYield() }
-
-  var ownDestructuringErrors = false, oldParenAssign = -1, oldTrailingComma = -1;
-  if (refDestructuringErrors) {
-    oldParenAssign = refDestructuringErrors.parenthesizedAssign;
-    oldTrailingComma = refDestructuringErrors.trailingComma;
-    refDestructuringErrors.parenthesizedAssign = refDestructuringErrors.trailingComma = -1;
-  } else {
-    refDestructuringErrors = new DestructuringErrors;
-    ownDestructuringErrors = true;
-  }
-
-  var startPos = this.start, startLoc = this.startLoc;
-  if (this.type == types.parenL || this.type == types.name)
-    { this.potentialArrowAt = this.start; }
-  var left = this.parseMaybeConditional(noIn, refDestructuringErrors);
-  if (afterLeftParse) { left = afterLeftParse.call(this, left, startPos, startLoc); }
-  if (this.type.isAssign) {
-    this.checkPatternErrors(refDestructuringErrors, true);
-    if (!ownDestructuringErrors) { DestructuringErrors.call(refDestructuringErrors); }
-    var node = this.startNodeAt(startPos, startLoc);
-    node.operator = this.value;
-    node.left = this.type === types.eq ? this.toAssignable(left) : left;
-    refDestructuringErrors.shorthandAssign = -1; // reset because shorthand default was used correctly
-    this.checkLVal(left);
-    this.next();
-    node.right = this.parseMaybeAssign(noIn);
-    return this.finishNode(node, "AssignmentExpression")
-  } else {
-    if (ownDestructuringErrors) { this.checkExpressionErrors(refDestructuringErrors, true); }
-  }
-  if (oldParenAssign > -1) { refDestructuringErrors.parenthesizedAssign = oldParenAssign; }
-  if (oldTrailingComma > -1) { refDestructuringErrors.trailingComma = oldTrailingComma; }
-  return left
-};
-
-// Parse a ternary conditional (`?:`) operator.
-
-pp$3.parseMaybeConditional = function(noIn, refDestructuringErrors) {
-  var startPos = this.start, startLoc = this.startLoc;
-  var expr = this.parseExprOps(noIn, refDestructuringErrors);
-  if (this.checkExpressionErrors(refDestructuringErrors)) { return expr }
-  if (this.eat(types.question)) {
-    var node = this.startNodeAt(startPos, startLoc);
-    node.test = expr;
-    node.consequent = this.parseMaybeAssign();
-    this.expect(types.colon);
-    node.alternate = this.parseMaybeAssign(noIn);
-    return this.finishNode(node, "ConditionalExpression")
-  }
-  return expr
-};
-
-// Start the precedence parser.
-
-pp$3.parseExprOps = function(noIn, refDestructuringErrors) {
-  var startPos = this.start, startLoc = this.startLoc;
-  var expr = this.parseMaybeUnary(refDestructuringErrors, false);
-  if (this.checkExpressionErrors(refDestructuringErrors)) { return expr }
-  return expr.start == startPos && expr.type === "ArrowFunctionExpression" ? expr : this.parseExprOp(expr, startPos, startLoc, -1, noIn)
-};
-
-// Parse binary operators with the operator precedence parsing
-// algorithm. `left` is the left-hand side of the operator.
-// `minPrec` provides context that allows the function to stop and
-// defer further parser to one of its callers when it encounters an
-// operator that has a lower precedence than the set it is parsing.
-
-pp$3.parseExprOp = function(left, leftStartPos, leftStartLoc, minPrec, noIn) {
-  var prec = this.type.binop;
-  if (prec != null && (!noIn || this.type !== types._in)) {
-    if (prec > minPrec) {
-      var logical = this.type === types.logicalOR || this.type === types.logicalAND;
-      var op = this.value;
-      this.next();
-      var startPos = this.start, startLoc = this.startLoc;
-      var right = this.parseExprOp(this.parseMaybeUnary(null, false), startPos, startLoc, prec, noIn);
-      var node = this.buildBinary(leftStartPos, leftStartLoc, left, right, op, logical);
-      return this.parseExprOp(node, leftStartPos, leftStartLoc, minPrec, noIn)
-    }
-  }
-  return left
-};
-
-pp$3.buildBinary = function(startPos, startLoc, left, right, op, logical) {
-  var node = this.startNodeAt(startPos, startLoc);
-  node.left = left;
-  node.operator = op;
-  node.right = right;
-  return this.finishNode(node, logical ? "LogicalExpression" : "BinaryExpression")
-};
-
-// Parse unary operators, both prefix and postfix.
-
-pp$3.parseMaybeUnary = function(refDestructuringErrors, sawUnary) {
-  var this$1 = this;
-
-  var startPos = this.start, startLoc = this.startLoc, expr;
-  if (this.inAsync && this.isContextual("await")) {
-    expr = this.parseAwait(refDestructuringErrors);
-    sawUnary = true;
-  } else if (this.type.prefix) {
-    var node = this.startNode(), update = this.type === types.incDec;
-    node.operator = this.value;
-    node.prefix = true;
-    this.next();
-    node.argument = this.parseMaybeUnary(null, true);
-    this.checkExpressionErrors(refDestructuringErrors, true);
-    if (update) { this.checkLVal(node.argument); }
-    else if (this.strict && node.operator === "delete" &&
-             node.argument.type === "Identifier")
-      { this.raiseRecoverable(node.start, "Deleting local variable in strict mode"); }
-    else { sawUnary = true; }
-    expr = this.finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
-  } else {
-    expr = this.parseExprSubscripts(refDestructuringErrors);
-    if (this.checkExpressionErrors(refDestructuringErrors)) { return expr }
-    while (this.type.postfix && !this.canInsertSemicolon()) {
-      var node$1 = this$1.startNodeAt(startPos, startLoc);
-      node$1.operator = this$1.value;
-      node$1.prefix = false;
-      node$1.argument = expr;
-      this$1.checkLVal(expr);
-      this$1.next();
-      expr = this$1.finishNode(node$1, "UpdateExpression");
-    }
-  }
-
-  if (!sawUnary && this.eat(types.starstar))
-    { return this.buildBinary(startPos, startLoc, expr, this.parseMaybeUnary(null, false), "**", false) }
-  else
-    { return expr }
-};
-
-// Parse call, dot, and `[]`-subscript expressions.
-
-pp$3.parseExprSubscripts = function(refDestructuringErrors) {
-  var startPos = this.start, startLoc = this.startLoc;
-  var expr = this.parseExprAtom(refDestructuringErrors);
-  var skipArrowSubscripts = expr.type === "ArrowFunctionExpression" && this.input.slice(this.lastTokStart, this.lastTokEnd) !== ")";
-  if (this.checkExpressionErrors(refDestructuringErrors) || skipArrowSubscripts) { return expr }
-  var result = this.parseSubscripts(expr, startPos, startLoc);
-  if (refDestructuringErrors && result.type === "MemberExpression") {
-    if (refDestructuringErrors.parenthesizedAssign >= result.start) { refDestructuringErrors.parenthesizedAssign = -1; }
-    if (refDestructuringErrors.parenthesizedBind >= result.start) { refDestructuringErrors.parenthesizedBind = -1; }
-  }
-  return result
-};
-
-pp$3.parseSubscripts = function(base, startPos, startLoc, noCalls) {
-  var this$1 = this;
-
-  var maybeAsyncArrow = this.options.ecmaVersion >= 8 && base.type === "Identifier" && base.name === "async" &&
-      this.lastTokEnd == base.end && !this.canInsertSemicolon();
-  for (var computed = (void 0);;) {
-    if ((computed = this$1.eat(types.bracketL)) || this$1.eat(types.dot)) {
-      var node = this$1.startNodeAt(startPos, startLoc);
-      node.object = base;
-      node.property = computed ? this$1.parseExpression() : this$1.parseIdent(true);
-      node.computed = !!computed;
-      if (computed) { this$1.expect(types.bracketR); }
-      base = this$1.finishNode(node, "MemberExpression");
-    } else if (!noCalls && this$1.eat(types.parenL)) {
-      var refDestructuringErrors = new DestructuringErrors, oldYieldPos = this$1.yieldPos, oldAwaitPos = this$1.awaitPos;
-      this$1.yieldPos = 0;
-      this$1.awaitPos = 0;
-      var exprList = this$1.parseExprList(types.parenR, this$1.options.ecmaVersion >= 8, false, refDestructuringErrors);
-      if (maybeAsyncArrow && !this$1.canInsertSemicolon() && this$1.eat(types.arrow)) {
-        this$1.checkPatternErrors(refDestructuringErrors, false);
-        this$1.checkYieldAwaitInDefaultParams();
-        this$1.yieldPos = oldYieldPos;
-        this$1.awaitPos = oldAwaitPos;
-        return this$1.parseArrowExpression(this$1.startNodeAt(startPos, startLoc), exprList, true)
-      }
-      this$1.checkExpressionErrors(refDestructuringErrors, true);
-      this$1.yieldPos = oldYieldPos || this$1.yieldPos;
-      this$1.awaitPos = oldAwaitPos || this$1.awaitPos;
-      var node$1 = this$1.startNodeAt(startPos, startLoc);
-      node$1.callee = base;
-      node$1.arguments = exprList;
-      base = this$1.finishNode(node$1, "CallExpression");
-    } else if (this$1.type === types.backQuote) {
-      var node$2 = this$1.startNodeAt(startPos, startLoc);
-      node$2.tag = base;
-      node$2.quasi = this$1.parseTemplate({isTagged: true});
-      base = this$1.finishNode(node$2, "TaggedTemplateExpression");
-    } else {
-      return base
-    }
-  }
-};
-
-// Parse an atomic expression — either a single token that is an
-// expression, an expression started by a keyword like `function` or
-// `new`, or an expression wrapped in punctuation like `()`, `[]`,
-// or `{}`.
-
-pp$3.parseExprAtom = function(refDestructuringErrors) {
-  var node, canBeArrow = this.potentialArrowAt == this.start;
-  switch (this.type) {
-  case types._super:
-    if (!this.inFunction)
-      { this.raise(this.start, "'super' outside of function or class"); }
-
-  case types._this:
-    var type = this.type === types._this ? "ThisExpression" : "Super";
-    node = this.startNode();
-    this.next();
-    return this.finishNode(node, type)
-
-  case types.name:
-    var startPos = this.start, startLoc = this.startLoc;
-    var id = this.parseIdent(this.type !== types.name);
-    if (this.options.ecmaVersion >= 8 && id.name === "async" && !this.canInsertSemicolon() && this.eat(types._function))
-      { return this.parseFunction(this.startNodeAt(startPos, startLoc), false, false, true) }
-    if (canBeArrow && !this.canInsertSemicolon()) {
-      if (this.eat(types.arrow))
-        { return this.parseArrowExpression(this.startNodeAt(startPos, startLoc), [id], false) }
-      if (this.options.ecmaVersion >= 8 && id.name === "async" && this.type === types.name) {
-        id = this.parseIdent();
-        if (this.canInsertSemicolon() || !this.eat(types.arrow))
-          { this.unexpected(); }
-        return this.parseArrowExpression(this.startNodeAt(startPos, startLoc), [id], true)
-      }
-    }
-    return id
-
-  case types.regexp:
-    var value = this.value;
-    node = this.parseLiteral(value.value);
-    node.regex = {pattern: value.pattern, flags: value.flags};
-    return node
-
-  case types.num: case types.string:
-    return this.parseLiteral(this.value)
-
-  case types._null: case types._true: case types._false:
-    node = this.startNode();
-    node.value = this.type === types._null ? null : this.type === types._true;
-    node.raw = this.type.keyword;
-    this.next();
-    return this.finishNode(node, "Literal")
-
-  case types.parenL:
-    var start = this.start, expr = this.parseParenAndDistinguishExpression(canBeArrow);
-    if (refDestructuringErrors) {
-      if (refDestructuringErrors.parenthesizedAssign < 0 && !this.isSimpleAssignTarget(expr))
-        { refDestructuringErrors.parenthesizedAssign = start; }
-      if (refDestructuringErrors.parenthesizedBind < 0)
-        { refDestructuringErrors.parenthesizedBind = start; }
-    }
-    return expr
-
-  case types.bracketL:
-    node = this.startNode();
-    this.next();
-    node.elements = this.parseExprList(types.bracketR, true, true, refDestructuringErrors);
-    return this.finishNode(node, "ArrayExpression")
-
-  case types.braceL:
-    return this.parseObj(false, refDestructuringErrors)
-
-  case types._function:
-    node = this.startNode();
-    this.next();
-    return this.parseFunction(node, false)
-
-  case types._class:
-    return this.parseClass(this.startNode(), false)
-
-  case types._new:
-    return this.parseNew()
-
-  case types.backQuote:
-    return this.parseTemplate()
-
-  default:
-    this.unexpected();
-  }
-};
-
-pp$3.parseLiteral = function(value) {
-  var node = this.startNode();
-  node.value = value;
-  node.raw = this.input.slice(this.start, this.end);
-  this.next();
-  return this.finishNode(node, "Literal")
-};
-
-pp$3.parseParenExpression = function() {
-  this.expect(types.parenL);
-  var val = this.parseExpression();
-  this.expect(types.parenR);
-  return val
-};
-
-pp$3.parseParenAndDistinguishExpression = function(canBeArrow) {
-  var this$1 = this;
-
-  var startPos = this.start, startLoc = this.startLoc, val, allowTrailingComma = this.options.ecmaVersion >= 8;
-  if (this.options.ecmaVersion >= 6) {
-    this.next();
-
-    var innerStartPos = this.start, innerStartLoc = this.startLoc;
-    var exprList = [], first = true, lastIsComma = false;
-    var refDestructuringErrors = new DestructuringErrors, oldYieldPos = this.yieldPos, oldAwaitPos = this.awaitPos, spreadStart, innerParenStart;
-    this.yieldPos = 0;
-    this.awaitPos = 0;
-    while (this.type !== types.parenR) {
-      first ? first = false : this$1.expect(types.comma);
-      if (allowTrailingComma && this$1.afterTrailingComma(types.parenR, true)) {
-        lastIsComma = true;
-        break
-      } else if (this$1.type === types.ellipsis) {
-        spreadStart = this$1.start;
-        exprList.push(this$1.parseParenItem(this$1.parseRestBinding()));
-        if (this$1.type === types.comma) { this$1.raise(this$1.start, "Comma is not permitted after the rest element"); }
-        break
-      } else {
-        if (this$1.type === types.parenL && !innerParenStart) {
-          innerParenStart = this$1.start;
-        }
-        exprList.push(this$1.parseMaybeAssign(false, refDestructuringErrors, this$1.parseParenItem));
-      }
-    }
-    var innerEndPos = this.start, innerEndLoc = this.startLoc;
-    this.expect(types.parenR);
-
-    if (canBeArrow && !this.canInsertSemicolon() && this.eat(types.arrow)) {
-      this.checkPatternErrors(refDestructuringErrors, false);
-      this.checkYieldAwaitInDefaultParams();
-      if (innerParenStart) { this.unexpected(innerParenStart); }
-      this.yieldPos = oldYieldPos;
-      this.awaitPos = oldAwaitPos;
-      return this.parseParenArrowList(startPos, startLoc, exprList)
-    }
-
-    if (!exprList.length || lastIsComma) { this.unexpected(this.lastTokStart); }
-    if (spreadStart) { this.unexpected(spreadStart); }
-    this.checkExpressionErrors(refDestructuringErrors, true);
-    this.yieldPos = oldYieldPos || this.yieldPos;
-    this.awaitPos = oldAwaitPos || this.awaitPos;
-
-    if (exprList.length > 1) {
-      val = this.startNodeAt(innerStartPos, innerStartLoc);
-      val.expressions = exprList;
-      this.finishNodeAt(val, "SequenceExpression", innerEndPos, innerEndLoc);
-    } else {
-      val = exprList[0];
-    }
-  } else {
-    val = this.parseParenExpression();
-  }
-
-  if (this.options.preserveParens) {
-    var par = this.startNodeAt(startPos, startLoc);
-    par.expression = val;
-    return this.finishNode(par, "ParenthesizedExpression")
-  } else {
-    return val
-  }
-};
-
-pp$3.parseParenItem = function(item) {
-  return item
-};
-
-pp$3.parseParenArrowList = function(startPos, startLoc, exprList) {
-  return this.parseArrowExpression(this.startNodeAt(startPos, startLoc), exprList)
-};
-
-// New's precedence is slightly tricky. It must allow its argument to
-// be a `[]` or dot subscript expression, but not a call — at least,
-// not without wrapping it in parentheses. Thus, it uses the noCalls
-// argument to parseSubscripts to prevent it from consuming the
-// argument list.
-
-var empty$1 = [];
-
-pp$3.parseNew = function() {
-  var node = this.startNode();
-  var meta = this.parseIdent(true);
-  if (this.options.ecmaVersion >= 6 && this.eat(types.dot)) {
-    node.meta = meta;
-    node.property = this.parseIdent(true);
-    if (node.property.name !== "target")
-      { this.raiseRecoverable(node.property.start, "The only valid meta property for new is new.target"); }
-    if (!this.inFunction)
-      { this.raiseRecoverable(node.start, "new.target can only be used in functions"); }
-    return this.finishNode(node, "MetaProperty")
-  }
-  var startPos = this.start, startLoc = this.startLoc;
-  node.callee = this.parseSubscripts(this.parseExprAtom(), startPos, startLoc, true);
-  if (this.eat(types.parenL)) { node.arguments = this.parseExprList(types.parenR, this.options.ecmaVersion >= 8, false); }
-  else { node.arguments = empty$1; }
-  return this.finishNode(node, "NewExpression")
-};
-
-// Parse template expression.
-
-pp$3.parseTemplateElement = function(ref) {
-  var isTagged = ref.isTagged;
-
-  var elem = this.startNode();
-  if (this.type === types.invalidTemplate) {
-    if (!isTagged) {
-      this.raiseRecoverable(this.start, "Bad escape sequence in untagged template literal");
-    }
-    elem.value = {
-      raw: this.value,
-      cooked: null
-    };
-  } else {
-    elem.value = {
-      raw: this.input.slice(this.start, this.end).replace(/\r\n?/g, "\n"),
-      cooked: this.value
-    };
-  }
-  this.next();
-  elem.tail = this.type === types.backQuote;
-  return this.finishNode(elem, "TemplateElement")
-};
-
-pp$3.parseTemplate = function(ref) {
-  var this$1 = this;
-  if ( ref === void 0 ) ref = {};
-  var isTagged = ref.isTagged; if ( isTagged === void 0 ) isTagged = false;
-
-  var node = this.startNode();
-  this.next();
-  node.expressions = [];
-  var curElt = this.parseTemplateElement({isTagged: isTagged});
-  node.quasis = [curElt];
-  while (!curElt.tail) {
-    this$1.expect(types.dollarBraceL);
-    node.expressions.push(this$1.parseExpression());
-    this$1.expect(types.braceR);
-    node.quasis.push(curElt = this$1.parseTemplateElement({isTagged: isTagged}));
-  }
-  this.next();
-  return this.finishNode(node, "TemplateLiteral")
-};
-
-// Parse an object literal or binding pattern.
-
-pp$3.isAsyncProp = function(prop) {
-  return !prop.computed && prop.key.type === "Identifier" && prop.key.name === "async" &&
-    (this.type === types.name || this.type === types.num || this.type === types.string || this.type === types.bracketL) &&
-    !lineBreak.test(this.input.slice(this.lastTokEnd, this.start))
-};
-
-pp$3.parseObj = function(isPattern, refDestructuringErrors) {
-  var this$1 = this;
-
-  var node = this.startNode(), first = true, propHash = {};
-  node.properties = [];
-  this.next();
-  while (!this.eat(types.braceR)) {
-    if (!first) {
-      this$1.expect(types.comma);
-      if (this$1.afterTrailingComma(types.braceR)) { break }
-    } else { first = false; }
-
-    var prop = this$1.startNode(), isGenerator = (void 0), isAsync = (void 0), startPos = (void 0), startLoc = (void 0);
-    if (this$1.options.ecmaVersion >= 6) {
-      prop.method = false;
-      prop.shorthand = false;
-      if (isPattern || refDestructuringErrors) {
-        startPos = this$1.start;
-        startLoc = this$1.startLoc;
-      }
-      if (!isPattern)
-        { isGenerator = this$1.eat(types.star); }
-    }
-    this$1.parsePropertyName(prop);
-    if (!isPattern && this$1.options.ecmaVersion >= 8 && !isGenerator && this$1.isAsyncProp(prop)) {
-      isAsync = true;
-      this$1.parsePropertyName(prop, refDestructuringErrors);
-    } else {
-      isAsync = false;
-    }
-    this$1.parsePropertyValue(prop, isPattern, isGenerator, isAsync, startPos, startLoc, refDestructuringErrors);
-    this$1.checkPropClash(prop, propHash);
-    node.properties.push(this$1.finishNode(prop, "Property"));
-  }
-  return this.finishNode(node, isPattern ? "ObjectPattern" : "ObjectExpression")
-};
-
-pp$3.parsePropertyValue = function(prop, isPattern, isGenerator, isAsync, startPos, startLoc, refDestructuringErrors) {
-  if ((isGenerator || isAsync) && this.type === types.colon)
-    { this.unexpected(); }
-
-  if (this.eat(types.colon)) {
-    prop.value = isPattern ? this.parseMaybeDefault(this.start, this.startLoc) : this.parseMaybeAssign(false, refDestructuringErrors);
-    prop.kind = "init";
-  } else if (this.options.ecmaVersion >= 6 && this.type === types.parenL) {
-    if (isPattern) { this.unexpected(); }
-    prop.kind = "init";
-    prop.method = true;
-    prop.value = this.parseMethod(isGenerator, isAsync);
-  } else if (this.options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
-             (prop.key.name === "get" || prop.key.name === "set") &&
-             (this.type != types.comma && this.type != types.braceR)) {
-    if (isGenerator || isAsync || isPattern) { this.unexpected(); }
-    prop.kind = prop.key.name;
-    this.parsePropertyName(prop);
-    prop.value = this.parseMethod(false);
-    var paramCount = prop.kind === "get" ? 0 : 1;
-    if (prop.value.params.length !== paramCount) {
-      var start = prop.value.start;
-      if (prop.kind === "get")
-        { this.raiseRecoverable(start, "getter should have no params"); }
-      else
-        { this.raiseRecoverable(start, "setter should have exactly one param"); }
-    } else {
-      if (prop.kind === "set" && prop.value.params[0].type === "RestElement")
-        { this.raiseRecoverable(prop.value.params[0].start, "Setter cannot use rest params"); }
-    }
-  } else if (this.options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
-    this.checkUnreserved(prop.key);
-    prop.kind = "init";
-    if (isPattern) {
-      prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key);
-    } else if (this.type === types.eq && refDestructuringErrors) {
-      if (refDestructuringErrors.shorthandAssign < 0)
-        { refDestructuringErrors.shorthandAssign = this.start; }
-      prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key);
-    } else {
-      prop.value = prop.key;
-    }
-    prop.shorthand = true;
-  } else { this.unexpected(); }
-};
-
-pp$3.parsePropertyName = function(prop) {
-  if (this.options.ecmaVersion >= 6) {
-    if (this.eat(types.bracketL)) {
-      prop.computed = true;
-      prop.key = this.parseMaybeAssign();
-      this.expect(types.bracketR);
-      return prop.key
-    } else {
-      prop.computed = false;
-    }
-  }
-  return prop.key = this.type === types.num || this.type === types.string ? this.parseExprAtom() : this.parseIdent(true)
-};
-
-// Initialize empty function node.
-
-pp$3.initFunction = function(node) {
-  node.id = null;
-  if (this.options.ecmaVersion >= 6) {
-    node.generator = false;
-    node.expression = false;
-  }
-  if (this.options.ecmaVersion >= 8)
-    { node.async = false; }
-};
-
-// Parse object or class method.
-
-pp$3.parseMethod = function(isGenerator, isAsync) {
-  var node = this.startNode(), oldInGen = this.inGenerator, oldInAsync = this.inAsync,
-      oldYieldPos = this.yieldPos, oldAwaitPos = this.awaitPos, oldInFunc = this.inFunction;
-
-  this.initFunction(node);
-  if (this.options.ecmaVersion >= 6)
-    { node.generator = isGenerator; }
-  if (this.options.ecmaVersion >= 8)
-    { node.async = !!isAsync; }
-
-  this.inGenerator = node.generator;
-  this.inAsync = node.async;
-  this.yieldPos = 0;
-  this.awaitPos = 0;
-  this.inFunction = true;
-  this.enterFunctionScope();
-
-  this.expect(types.parenL);
-  node.params = this.parseBindingList(types.parenR, false, this.options.ecmaVersion >= 8);
-  this.checkYieldAwaitInDefaultParams();
-  this.parseFunctionBody(node, false);
-
-  this.inGenerator = oldInGen;
-  this.inAsync = oldInAsync;
-  this.yieldPos = oldYieldPos;
-  this.awaitPos = oldAwaitPos;
-  this.inFunction = oldInFunc;
-  return this.finishNode(node, "FunctionExpression")
-};
-
-// Parse arrow function expression with given parameters.
-
-pp$3.parseArrowExpression = function(node, params, isAsync) {
-  var oldInGen = this.inGenerator, oldInAsync = this.inAsync,
-      oldYieldPos = this.yieldPos, oldAwaitPos = this.awaitPos, oldInFunc = this.inFunction;
-
-  this.enterFunctionScope();
-  this.initFunction(node);
-  if (this.options.ecmaVersion >= 8)
-    { node.async = !!isAsync; }
-
-  this.inGenerator = false;
-  this.inAsync = node.async;
-  this.yieldPos = 0;
-  this.awaitPos = 0;
-  this.inFunction = true;
-
-  node.params = this.toAssignableList(params, true);
-  this.parseFunctionBody(node, true);
-
-  this.inGenerator = oldInGen;
-  this.inAsync = oldInAsync;
-  this.yieldPos = oldYieldPos;
-  this.awaitPos = oldAwaitPos;
-  this.inFunction = oldInFunc;
-  return this.finishNode(node, "ArrowFunctionExpression")
-};
-
-// Parse function body and check parameters.
-
-pp$3.parseFunctionBody = function(node, isArrowFunction) {
-  var isExpression = isArrowFunction && this.type !== types.braceL;
-  var oldStrict = this.strict, useStrict = false;
-
-  if (isExpression) {
-    node.body = this.parseMaybeAssign();
-    node.expression = true;
-    this.checkParams(node, false);
-  } else {
-    var nonSimple = this.options.ecmaVersion >= 7 && !this.isSimpleParamList(node.params);
-    if (!oldStrict || nonSimple) {
-      useStrict = this.strictDirective(this.end);
-      // If this is a strict mode function, verify that argument names
-      // are not repeated, and it does not try to bind the words `eval`
-      // or `arguments`.
-      if (useStrict && nonSimple)
-        { this.raiseRecoverable(node.start, "Illegal 'use strict' directive in function with non-simple parameter list"); }
-    }
-    // Start a new scope with regard to labels and the `inFunction`
-    // flag (restore them to their old value afterwards).
-    var oldLabels = this.labels;
-    this.labels = [];
-    if (useStrict) { this.strict = true; }
-
-    // Add the params to varDeclaredNames to ensure that an error is thrown
-    // if a let/const declaration in the function clashes with one of the params.
-    this.checkParams(node, !oldStrict && !useStrict && !isArrowFunction && this.isSimpleParamList(node.params));
-    node.body = this.parseBlock(false);
-    node.expression = false;
-    this.labels = oldLabels;
-  }
-  this.exitFunctionScope();
-
-  if (this.strict && node.id) {
-    // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'
-    this.checkLVal(node.id, "none");
-  }
-  this.strict = oldStrict;
-};
-
-pp$3.isSimpleParamList = function(params) {
-  for (var i = 0, list = params; i < list.length; i += 1)
-    {
-    var param = list[i];
-
-    if (param.type !== "Identifier") { return false
-  } }
-  return true
-};
-
-// Checks function params for various disallowed patterns such as using "eval"
-// or "arguments" and duplicate parameters.
-
-pp$3.checkParams = function(node, allowDuplicates) {
-  var this$1 = this;
-
-  var nameHash = {};
-  for (var i = 0, list = node.params; i < list.length; i += 1)
-    {
-    var param = list[i];
-
-    this$1.checkLVal(param, "var", allowDuplicates ? null : nameHash);
-  }
-};
-
-// Parses a comma-separated list of expressions, and returns them as
-// an array. `close` is the token type that ends the list, and
-// `allowEmpty` can be turned on to allow subsequent commas with
-// nothing in between them to be parsed as `null` (which is needed
-// for array literals).
-
-pp$3.parseExprList = function(close, allowTrailingComma, allowEmpty, refDestructuringErrors) {
-  var this$1 = this;
-
-  var elts = [], first = true;
-  while (!this.eat(close)) {
-    if (!first) {
-      this$1.expect(types.comma);
-      if (allowTrailingComma && this$1.afterTrailingComma(close)) { break }
-    } else { first = false; }
-
-    var elt = (void 0);
-    if (allowEmpty && this$1.type === types.comma)
-      { elt = null; }
-    else if (this$1.type === types.ellipsis) {
-      elt = this$1.parseSpread(refDestructuringErrors);
-      if (refDestructuringErrors && this$1.type === types.comma && refDestructuringErrors.trailingComma < 0)
-        { refDestructuringErrors.trailingComma = this$1.start; }
-    } else {
-      elt = this$1.parseMaybeAssign(false, refDestructuringErrors);
-    }
-    elts.push(elt);
-  }
-  return elts
-};
-
-// Parse the next token as an identifier. If `liberal` is true (used
-// when parsing properties), it will also convert keywords into
-// identifiers.
-
-pp$3.checkUnreserved = function(ref) {
-  var start = ref.start;
-  var end = ref.end;
-  var name = ref.name;
-
-  if (this.inGenerator && name === "yield")
-    { this.raiseRecoverable(start, "Can not use 'yield' as identifier inside a generator"); }
-  if (this.inAsync && name === "await")
-    { this.raiseRecoverable(start, "Can not use 'await' as identifier inside an async function"); }
-  if (this.isKeyword(name))
-    { this.raise(start, ("Unexpected keyword '" + name + "'")); }
-  if (this.options.ecmaVersion < 6 &&
-    this.input.slice(start, end).indexOf("\\") != -1) { return }
-  var re = this.strict ? this.reservedWordsStrict : this.reservedWords;
-  if (re.test(name))
-    { this.raiseRecoverable(start, ("The keyword '" + name + "' is reserved")); }
-};
-
-pp$3.parseIdent = function(liberal, isBinding) {
-  var node = this.startNode();
-  if (liberal && this.options.allowReserved == "never") { liberal = false; }
-  if (this.type === types.name) {
-    node.name = this.value;
-  } else if (this.type.keyword) {
-    node.name = this.type.keyword;
-  } else {
-    this.unexpected();
-  }
-  this.next();
-  this.finishNode(node, "Identifier");
-  if (!liberal) { this.checkUnreserved(node); }
-  return node
-};
-
-// Parses yield expression inside generator.
-
-pp$3.parseYield = function() {
-  if (!this.yieldPos) { this.yieldPos = this.start; }
-
-  var node = this.startNode();
-  this.next();
-  if (this.type == types.semi || this.canInsertSemicolon() || (this.type != types.star && !this.type.startsExpr)) {
-    node.delegate = false;
-    node.argument = null;
-  } else {
-    node.delegate = this.eat(types.star);
-    node.argument = this.parseMaybeAssign();
-  }
-  return this.finishNode(node, "YieldExpression")
-};
-
-pp$3.parseAwait = function() {
-  if (!this.awaitPos) { this.awaitPos = this.start; }
-
-  var node = this.startNode();
-  this.next();
-  node.argument = this.parseMaybeUnary(null, true);
-  return this.finishNode(node, "AwaitExpression")
-};
-
-var pp$4 = Parser.prototype;
-
-// This function is used to raise exceptions on parse errors. It
-// takes an offset integer (into the current `input`) to indicate
-// the location of the error, attaches the position to the end
-// of the error message, and then raises a `SyntaxError` with that
-// message.
-
-pp$4.raise = function(pos, message) {
-  var loc = getLineInfo(this.input, pos);
-  message += " (" + loc.line + ":" + loc.column + ")";
-  var err = new SyntaxError(message);
-  err.pos = pos; err.loc = loc; err.raisedAt = this.pos;
-  throw err
-};
-
-pp$4.raiseRecoverable = pp$4.raise;
-
-pp$4.curPosition = function() {
-  if (this.options.locations) {
-    return new Position(this.curLine, this.pos - this.lineStart)
-  }
-};
-
-var pp$5 = Parser.prototype;
-
-// Object.assign polyfill
-var assign = Object.assign || function(target) {
-  var sources = [], len = arguments.length - 1;
-  while ( len-- > 0 ) sources[ len ] = arguments[ len + 1 ];
-
-  for (var i = 0, list = sources; i < list.length; i += 1) {
-    var source = list[i];
-
-    for (var key in source) {
-      if (has(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-  return target
-};
-
-// The functions in this module keep track of declared variables in the current scope in order to detect duplicate variable names.
-
-pp$5.enterFunctionScope = function() {
-  // var: a hash of var-declared names in the current lexical scope
-  // lexical: a hash of lexically-declared names in the current lexical scope
-  // childVar: a hash of var-declared names in all child lexical scopes of the current lexical scope (within the current function scope)
-  // parentLexical: a hash of lexically-declared names in all parent lexical scopes of the current lexical scope (within the current function scope)
-  this.scopeStack.push({var: {}, lexical: {}, childVar: {}, parentLexical: {}});
-};
-
-pp$5.exitFunctionScope = function() {
-  this.scopeStack.pop();
-};
-
-pp$5.enterLexicalScope = function() {
-  var parentScope = this.scopeStack[this.scopeStack.length - 1];
-  var childScope = {var: {}, lexical: {}, childVar: {}, parentLexical: {}};
-
-  this.scopeStack.push(childScope);
-  assign(childScope.parentLexical, parentScope.lexical, parentScope.parentLexical);
-};
-
-pp$5.exitLexicalScope = function() {
-  var childScope = this.scopeStack.pop();
-  var parentScope = this.scopeStack[this.scopeStack.length - 1];
-
-  assign(parentScope.childVar, childScope.var, childScope.childVar);
-};
-
-/**
- * A name can be declared with `var` if there are no variables with the same name declared with `let`/`const`
- * in the current lexical scope or any of the parent lexical scopes in this function.
- */
-pp$5.canDeclareVarName = function(name) {
-  var currentScope = this.scopeStack[this.scopeStack.length - 1];
-
-  return !has(currentScope.lexical, name) && !has(currentScope.parentLexical, name)
-};
-
-/**
- * A name can be declared with `let`/`const` if there are no variables with the same name declared with `let`/`const`
- * in the current scope, and there are no variables with the same name declared with `var` in the current scope or in
- * any child lexical scopes in this function.
- */
-pp$5.canDeclareLexicalName = function(name) {
-  var currentScope = this.scopeStack[this.scopeStack.length - 1];
-
-  return !has(currentScope.lexical, name) && !has(currentScope.var, name) && !has(currentScope.childVar, name)
-};
-
-pp$5.declareVarName = function(name) {
-  this.scopeStack[this.scopeStack.length - 1].var[name] = true;
-};
-
-pp$5.declareLexicalName = function(name) {
-  this.scopeStack[this.scopeStack.length - 1].lexical[name] = true;
-};
-
-var Node = function Node(parser, pos, loc) {
-  this.type = "";
-  this.start = pos;
-  this.end = 0;
-  if (parser.options.locations)
-    { this.loc = new SourceLocation(parser, loc); }
-  if (parser.options.directSourceFile)
-    { this.sourceFile = parser.options.directSourceFile; }
-  if (parser.options.ranges)
-    { this.range = [pos, 0]; }
-};
-
-// Start an AST node, attaching a start offset.
-
-var pp$6 = Parser.prototype;
-
-pp$6.startNode = function() {
-  return new Node(this, this.start, this.startLoc)
-};
-
-pp$6.startNodeAt = function(pos, loc) {
-  return new Node(this, pos, loc)
-};
-
-// Finish an AST node, adding `type` and `end` properties.
-
-function finishNodeAt(node, type, pos, loc) {
-  node.type = type;
-  node.end = pos;
-  if (this.options.locations)
-    { node.loc.end = loc; }
-  if (this.options.ranges)
-    { node.range[1] = pos; }
-  return node
-}
-
-pp$6.finishNode = function(node, type) {
-  return finishNodeAt.call(this, node, type, this.lastTokEnd, this.lastTokEndLoc)
-};
-
-// Finish node at given position
-
-pp$6.finishNodeAt = function(node, type, pos, loc) {
-  return finishNodeAt.call(this, node, type, pos, loc)
-};
-
-// The algorithm used to determine whether a regexp can appear at a
-// given point in the program is loosely based on sweet.js' approach.
-// See https://github.com/mozilla/sweet.js/wiki/design
-
-var TokContext = function TokContext(token, isExpr, preserveSpace, override, generator) {
-  this.token = token;
-  this.isExpr = !!isExpr;
-  this.preserveSpace = !!preserveSpace;
-  this.override = override;
-  this.generator = !!generator;
-};
-
-var types$1 = {
-  b_stat: new TokContext("{", false),
-  b_expr: new TokContext("{", true),
-  b_tmpl: new TokContext("${", false),
-  p_stat: new TokContext("(", false),
-  p_expr: new TokContext("(", true),
-  q_tmpl: new TokContext("`", true, true, function (p) { return p.tryReadTemplateToken(); }),
-  f_stat: new TokContext("function", false),
-  f_expr: new TokContext("function", true),
-  f_expr_gen: new TokContext("function", true, false, null, true),
-  f_gen: new TokContext("function", false, false, null, true)
-};
-
-var pp$7 = Parser.prototype;
-
-pp$7.initialContext = function() {
-  return [types$1.b_stat]
-};
-
-pp$7.braceIsBlock = function(prevType) {
-  var parent = this.curContext();
-  if (parent === types$1.f_expr || parent === types$1.f_stat)
-    { return true }
-  if (prevType === types.colon && (parent === types$1.b_stat || parent === types$1.b_expr))
-    { return !parent.isExpr }
-
-  // The check for `tt.name && exprAllowed` detects whether we are
-  // after a `yield` or `of` construct. See the `updateContext` for
-  // `tt.name`.
-  if (prevType === types._return || prevType == types.name && this.exprAllowed)
-    { return lineBreak.test(this.input.slice(this.lastTokEnd, this.start)) }
-  if (prevType === types._else || prevType === types.semi || prevType === types.eof || prevType === types.parenR || prevType == types.arrow)
-    { return true }
-  if (prevType == types.braceL)
-    { return parent === types$1.b_stat }
-  if (prevType == types._var || prevType == types.name)
-    { return false }
-  return !this.exprAllowed
-};
-
-pp$7.inGeneratorContext = function() {
-  var this$1 = this;
-
-  for (var i = this.context.length - 1; i >= 1; i--) {
-    var context = this$1.context[i];
-    if (context.token === "function")
-      { return context.generator }
-  }
-  return false
-};
-
-pp$7.updateContext = function(prevType) {
-  var update, type = this.type;
-  if (type.keyword && prevType == types.dot)
-    { this.exprAllowed = false; }
-  else if (update = type.updateContext)
-    { update.call(this, prevType); }
-  else
-    { this.exprAllowed = type.beforeExpr; }
-};
-
-// Token-specific context update code
-
-types.parenR.updateContext = types.braceR.updateContext = function() {
-  if (this.context.length == 1) {
-    this.exprAllowed = true;
-    return
-  }
-  var out = this.context.pop();
-  if (out === types$1.b_stat && this.curContext().token === "function") {
-    out = this.context.pop();
-  }
-  this.exprAllowed = !out.isExpr;
-};
-
-types.braceL.updateContext = function(prevType) {
-  this.context.push(this.braceIsBlock(prevType) ? types$1.b_stat : types$1.b_expr);
-  this.exprAllowed = true;
-};
-
-types.dollarBraceL.updateContext = function() {
-  this.context.push(types$1.b_tmpl);
-  this.exprAllowed = true;
-};
-
-types.parenL.updateContext = function(prevType) {
-  var statementParens = prevType === types._if || prevType === types._for || prevType === types._with || prevType === types._while;
-  this.context.push(statementParens ? types$1.p_stat : types$1.p_expr);
-  this.exprAllowed = true;
-};
-
-types.incDec.updateContext = function() {
-  // tokExprAllowed stays unchanged
-};
-
-types._function.updateContext = types._class.updateContext = function(prevType) {
-  if (prevType.beforeExpr && prevType !== types.semi && prevType !== types._else &&
-      !((prevType === types.colon || prevType === types.braceL) && this.curContext() === types$1.b_stat))
-    { this.context.push(types$1.f_expr); }
-  else
-    { this.context.push(types$1.f_stat); }
-  this.exprAllowed = false;
-};
-
-types.backQuote.updateContext = function() {
-  if (this.curContext() === types$1.q_tmpl)
-    { this.context.pop(); }
-  else
-    { this.context.push(types$1.q_tmpl); }
-  this.exprAllowed = false;
-};
-
-types.star.updateContext = function(prevType) {
-  if (prevType == types._function) {
-    var index = this.context.length - 1;
-    if (this.context[index] === types$1.f_expr)
-      { this.context[index] = types$1.f_expr_gen; }
-    else
-      { this.context[index] = types$1.f_gen; }
-  }
-  this.exprAllowed = true;
-};
-
-types.name.updateContext = function(prevType) {
-  var allowed = false;
-  if (this.options.ecmaVersion >= 6) {
-    if (this.value == "of" && !this.exprAllowed ||
-        this.value == "yield" && this.inGeneratorContext())
-      { allowed = true; }
-  }
-  this.exprAllowed = allowed;
-};
-
-// Object type used to represent tokens. Note that normally, tokens
-// simply exist as properties on the parser object. This is only
-// used for the onToken callback and the external tokenizer.
-
-var Token = function Token(p) {
-  this.type = p.type;
-  this.value = p.value;
-  this.start = p.start;
-  this.end = p.end;
-  if (p.options.locations)
-    { this.loc = new SourceLocation(p, p.startLoc, p.endLoc); }
-  if (p.options.ranges)
-    { this.range = [p.start, p.end]; }
-};
-
-// ## Tokenizer
-
-var pp$8 = Parser.prototype;
-
-// Are we running under Rhino?
-var isRhino = typeof Packages == "object" && Object.prototype.toString.call(Packages) == "[object JavaPackage]";
-
-// Move to the next token
-
-pp$8.next = function() {
-  if (this.options.onToken)
-    { this.options.onToken(new Token(this)); }
-
-  this.lastTokEnd = this.end;
-  this.lastTokStart = this.start;
-  this.lastTokEndLoc = this.endLoc;
-  this.lastTokStartLoc = this.startLoc;
-  this.nextToken();
-};
-
-pp$8.getToken = function() {
-  this.next();
-  return new Token(this)
-};
-
-// If we're in an ES6 environment, make parsers iterable
-if (typeof Symbol !== "undefined")
-  { pp$8[Symbol.iterator] = function() {
-    var this$1 = this;
-
-    return {
-      next: function () {
-        var token = this$1.getToken();
-        return {
-          done: token.type === types.eof,
-          value: token
-        }
-      }
-    }
-  }; }
-
-// Toggle strict mode. Re-reads the next number or string to please
-// pedantic tests (`"use strict"; 010;` should fail).
-
-pp$8.curContext = function() {
-  return this.context[this.context.length - 1]
-};
-
-// Read a single token, updating the parser object's token-related
-// properties.
-
-pp$8.nextToken = function() {
-  var curContext = this.curContext();
-  if (!curContext || !curContext.preserveSpace) { this.skipSpace(); }
-
-  this.start = this.pos;
-  if (this.options.locations) { this.startLoc = this.curPosition(); }
-  if (this.pos >= this.input.length) { return this.finishToken(types.eof) }
-
-  if (curContext.override) { return curContext.override(this) }
-  else { this.readToken(this.fullCharCodeAtPos()); }
-};
-
-pp$8.readToken = function(code) {
-  // Identifier or keyword. '\uXXXX' sequences are allowed in
-  // identifiers, so '\' also dispatches to that.
-  if (isIdentifierStart(code, this.options.ecmaVersion >= 6) || code === 92 /* '\' */)
-    { return this.readWord() }
-
-  return this.getTokenFromCode(code)
-};
-
-pp$8.fullCharCodeAtPos = function() {
-  var code = this.input.charCodeAt(this.pos);
-  if (code <= 0xd7ff || code >= 0xe000) { return code }
-  var next = this.input.charCodeAt(this.pos + 1);
-  return (code << 10) + next - 0x35fdc00
-};
-
-pp$8.skipBlockComment = function() {
-  var this$1 = this;
-
-  var startLoc = this.options.onComment && this.curPosition();
-  var start = this.pos, end = this.input.indexOf("*/", this.pos += 2);
-  if (end === -1) { this.raise(this.pos - 2, "Unterminated comment"); }
-  this.pos = end + 2;
-  if (this.options.locations) {
-    lineBreakG.lastIndex = start;
-    var match;
-    while ((match = lineBreakG.exec(this.input)) && match.index < this.pos) {
-      ++this$1.curLine;
-      this$1.lineStart = match.index + match[0].length;
-    }
-  }
-  if (this.options.onComment)
-    { this.options.onComment(true, this.input.slice(start + 2, end), start, this.pos,
-                           startLoc, this.curPosition()); }
-};
-
-pp$8.skipLineComment = function(startSkip) {
-  var this$1 = this;
-
-  var start = this.pos;
-  var startLoc = this.options.onComment && this.curPosition();
-  var ch = this.input.charCodeAt(this.pos += startSkip);
-  while (this.pos < this.input.length && !isNewLine(ch)) {
-    ch = this$1.input.charCodeAt(++this$1.pos);
-  }
-  if (this.options.onComment)
-    { this.options.onComment(false, this.input.slice(start + startSkip, this.pos), start, this.pos,
-                           startLoc, this.curPosition()); }
-};
-
-// Called at the start of the parse and after every token. Skips
-// whitespace and comments, and.
-
-pp$8.skipSpace = function() {
-  var this$1 = this;
-
-  loop: while (this.pos < this.input.length) {
-    var ch = this$1.input.charCodeAt(this$1.pos);
-    switch (ch) {
-    case 32: case 160: // ' '
-      ++this$1.pos;
-      break
-    case 13:
-      if (this$1.input.charCodeAt(this$1.pos + 1) === 10) {
-        ++this$1.pos;
-      }
-    case 10: case 8232: case 8233:
-      ++this$1.pos;
-      if (this$1.options.locations) {
-        ++this$1.curLine;
-        this$1.lineStart = this$1.pos;
-      }
-      break
-    case 47: // '/'
-      switch (this$1.input.charCodeAt(this$1.pos + 1)) {
-      case 42: // '*'
-        this$1.skipBlockComment();
-        break
-      case 47:
-        this$1.skipLineComment(2);
-        break
-      default:
-        break loop
-      }
-      break
-    default:
-      if (ch > 8 && ch < 14 || ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch))) {
-        ++this$1.pos;
-      } else {
-        break loop
-      }
-    }
-  }
-};
-
-// Called at the end of every token. Sets `end`, `val`, and
-// maintains `context` and `exprAllowed`, and skips the space after
-// the token, so that the next one's `start` will point at the
-// right position.
-
-pp$8.finishToken = function(type, val) {
-  this.end = this.pos;
-  if (this.options.locations) { this.endLoc = this.curPosition(); }
-  var prevType = this.type;
-  this.type = type;
-  this.value = val;
-
-  this.updateContext(prevType);
-};
-
-// ### Token reading
-
-// This is the function that is called to fetch the next token. It
-// is somewhat obscure, because it works in character codes rather
-// than characters, and because operator parsing has been inlined
-// into it.
-//
-// All in the name of speed.
-//
-pp$8.readToken_dot = function() {
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next >= 48 && next <= 57) { return this.readNumber(true) }
-  var next2 = this.input.charCodeAt(this.pos + 2);
-  if (this.options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
-    this.pos += 3;
-    return this.finishToken(types.ellipsis)
-  } else {
-    ++this.pos;
-    return this.finishToken(types.dot)
-  }
-};
-
-pp$8.readToken_slash = function() { // '/'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (this.exprAllowed) { ++this.pos; return this.readRegexp() }
-  if (next === 61) { return this.finishOp(types.assign, 2) }
-  return this.finishOp(types.slash, 1)
-};
-
-pp$8.readToken_mult_modulo_exp = function(code) { // '%*'
-  var next = this.input.charCodeAt(this.pos + 1);
-  var size = 1;
-  var tokentype = code === 42 ? types.star : types.modulo;
-
-  // exponentiation operator ** and **=
-  if (this.options.ecmaVersion >= 7 && next === 42) {
-    ++size;
-    tokentype = types.starstar;
-    next = this.input.charCodeAt(this.pos + 2);
-  }
-
-  if (next === 61) { return this.finishOp(types.assign, size + 1) }
-  return this.finishOp(tokentype, size)
-};
-
-pp$8.readToken_pipe_amp = function(code) { // '|&'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next === code) { return this.finishOp(code === 124 ? types.logicalOR : types.logicalAND, 2) }
-  if (next === 61) { return this.finishOp(types.assign, 2) }
-  return this.finishOp(code === 124 ? types.bitwiseOR : types.bitwiseAND, 1)
-};
-
-pp$8.readToken_caret = function() { // '^'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next === 61) { return this.finishOp(types.assign, 2) }
-  return this.finishOp(types.bitwiseXOR, 1)
-};
-
-pp$8.readToken_plus_min = function(code) { // '+-'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next === code) {
-    if (next == 45 && this.input.charCodeAt(this.pos + 2) == 62 &&
-        (this.lastTokEnd === 0 || lineBreak.test(this.input.slice(this.lastTokEnd, this.pos)))) {
-      // A `-->` line comment
-      this.skipLineComment(3);
-      this.skipSpace();
-      return this.nextToken()
-    }
-    return this.finishOp(types.incDec, 2)
-  }
-  if (next === 61) { return this.finishOp(types.assign, 2) }
-  return this.finishOp(types.plusMin, 1)
-};
-
-pp$8.readToken_lt_gt = function(code) { // '<>'
-  var next = this.input.charCodeAt(this.pos + 1);
-  var size = 1;
-  if (next === code) {
-    size = code === 62 && this.input.charCodeAt(this.pos + 2) === 62 ? 3 : 2;
-    if (this.input.charCodeAt(this.pos + size) === 61) { return this.finishOp(types.assign, size + 1) }
-    return this.finishOp(types.bitShift, size)
-  }
-  if (next == 33 && code == 60 && this.input.charCodeAt(this.pos + 2) == 45 &&
-      this.input.charCodeAt(this.pos + 3) == 45) {
-    if (this.inModule) { this.unexpected(); }
-    // `<!--`, an XML-style comment that should be interpreted as a line comment
-    this.skipLineComment(4);
-    this.skipSpace();
-    return this.nextToken()
-  }
-  if (next === 61) { size = 2; }
-  return this.finishOp(types.relational, size)
-};
-
-pp$8.readToken_eq_excl = function(code) { // '=!'
-  var next = this.input.charCodeAt(this.pos + 1);
-  if (next === 61) { return this.finishOp(types.equality, this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2) }
-  if (code === 61 && next === 62 && this.options.ecmaVersion >= 6) { // '=>'
-    this.pos += 2;
-    return this.finishToken(types.arrow)
-  }
-  return this.finishOp(code === 61 ? types.eq : types.prefix, 1)
-};
-
-pp$8.getTokenFromCode = function(code) {
-  switch (code) {
-    // The interpretation of a dot depends on whether it is followed
-    // by a digit or another two dots.
-  case 46: // '.'
-    return this.readToken_dot()
-
-    // Punctuation tokens.
-  case 40: ++this.pos; return this.finishToken(types.parenL)
-  case 41: ++this.pos; return this.finishToken(types.parenR)
-  case 59: ++this.pos; return this.finishToken(types.semi)
-  case 44: ++this.pos; return this.finishToken(types.comma)
-  case 91: ++this.pos; return this.finishToken(types.bracketL)
-  case 93: ++this.pos; return this.finishToken(types.bracketR)
-  case 123: ++this.pos; return this.finishToken(types.braceL)
-  case 125: ++this.pos; return this.finishToken(types.braceR)
-  case 58: ++this.pos; return this.finishToken(types.colon)
-  case 63: ++this.pos; return this.finishToken(types.question)
-
-  case 96: // '`'
-    if (this.options.ecmaVersion < 6) { break }
-    ++this.pos;
-    return this.finishToken(types.backQuote)
-
-  case 48: // '0'
-    var next = this.input.charCodeAt(this.pos + 1);
-    if (next === 120 || next === 88) { return this.readRadixNumber(16) } // '0x', '0X' - hex number
-    if (this.options.ecmaVersion >= 6) {
-      if (next === 111 || next === 79) { return this.readRadixNumber(8) } // '0o', '0O' - octal number
-      if (next === 98 || next === 66) { return this.readRadixNumber(2) } // '0b', '0B' - binary number
-    }
-    // Anything else beginning with a digit is an integer, octal
-    // number, or float.
-  case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57: // 1-9
-    return this.readNumber(false)
-
-    // Quotes produce strings.
-  case 34: case 39: // '"', "'"
-    return this.readString(code)
-
-    // Operators are parsed inline in tiny state machines. '=' (61) is
-    // often referred to. `finishOp` simply skips the amount of
-    // characters it is given as second argument, and returns a token
-    // of the type given by its first argument.
-
-  case 47: // '/'
-    return this.readToken_slash()
-
-  case 37: case 42: // '%*'
-    return this.readToken_mult_modulo_exp(code)
-
-  case 124: case 38: // '|&'
-    return this.readToken_pipe_amp(code)
-
-  case 94: // '^'
-    return this.readToken_caret()
-
-  case 43: case 45: // '+-'
-    return this.readToken_plus_min(code)
-
-  case 60: case 62: // '<>'
-    return this.readToken_lt_gt(code)
-
-  case 61: case 33: // '=!'
-    return this.readToken_eq_excl(code)
-
-  case 126: // '~'
-    return this.finishOp(types.prefix, 1)
-  }
-
-  this.raise(this.pos, "Unexpected character '" + codePointToString(code) + "'");
-};
-
-pp$8.finishOp = function(type, size) {
-  var str = this.input.slice(this.pos, this.pos + size);
-  this.pos += size;
-  return this.finishToken(type, str)
-};
-
-// Parse a regular expression. Some context-awareness is necessary,
-// since a '/' inside a '[]' set does not end the expression.
-
-function tryCreateRegexp(src, flags, throwErrorAt, parser) {
-  try {
-    return new RegExp(src, flags)
-  } catch (e) {
-    if (throwErrorAt !== undefined) {
-      if (e instanceof SyntaxError) { parser.raise(throwErrorAt, "Error parsing regular expression: " + e.message); }
-      throw e
-    }
-  }
-}
-
-var regexpUnicodeSupport = !!tryCreateRegexp("\uffff", "u");
-
-pp$8.readRegexp = function() {
-  var this$1 = this;
-
-  var escaped, inClass, start = this.pos;
-  for (;;) {
-    if (this$1.pos >= this$1.input.length) { this$1.raise(start, "Unterminated regular expression"); }
-    var ch = this$1.input.charAt(this$1.pos);
-    if (lineBreak.test(ch)) { this$1.raise(start, "Unterminated regular expression"); }
-    if (!escaped) {
-      if (ch === "[") { inClass = true; }
-      else if (ch === "]" && inClass) { inClass = false; }
-      else if (ch === "/" && !inClass) { break }
-      escaped = ch === "\\";
-    } else { escaped = false; }
-    ++this$1.pos;
-  }
-  var content = this.input.slice(start, this.pos);
-  ++this.pos;
-  // Need to use `readWord1` because '\uXXXX' sequences are allowed
-  // here (don't ask).
-  var mods = this.readWord1();
-  var tmp = content, tmpFlags = "";
-  if (mods) {
-    var validFlags = /^[gim]*$/;
-    if (this.options.ecmaVersion >= 6) { validFlags = /^[gimuy]*$/; }
-    if (!validFlags.test(mods)) { this.raise(start, "Invalid regular expression flag"); }
-    if (mods.indexOf("u") >= 0) {
-      if (regexpUnicodeSupport) {
-        tmpFlags = "u";
-      } else {
-        // Replace each astral symbol and every Unicode escape sequence that
-        // possibly represents an astral symbol or a paired surrogate with a
-        // single ASCII symbol to avoid throwing on regular expressions that
-        // are only valid in combination with the `/u` flag.
-        // Note: replacing with the ASCII symbol `x` might cause false
-        // negatives in unlikely scenarios. For example, `[\u{61}-b]` is a
-        // perfectly valid pattern that is equivalent to `[a-b]`, but it would
-        // be replaced by `[x-b]` which throws an error.
-        tmp = tmp.replace(/\\u\{([0-9a-fA-F]+)\}/g, function (_match, code, offset) {
-          code = Number("0x" + code);
-          if (code > 0x10FFFF) { this$1.raise(start + offset + 3, "Code point out of bounds"); }
-          return "x"
-        });
-        tmp = tmp.replace(/\\u([a-fA-F0-9]{4})|[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x");
-        tmpFlags = tmpFlags.replace("u", "");
-      }
-    }
-  }
-  // Detect invalid regular expressions.
-  var value = null;
-  // Rhino's regular expression parser is flaky and throws uncatchable exceptions,
-  // so don't do detection if we are running under Rhino
-  if (!isRhino) {
-    tryCreateRegexp(tmp, tmpFlags, start, this);
-    // Get a regular expression object for this pattern-flag pair, or `null` in
-    // case the current environment doesn't support the flags it uses.
-    value = tryCreateRegexp(content, mods);
-  }
-  return this.finishToken(types.regexp, {pattern: content, flags: mods, value: value})
-};
-
-// Read an integer in the given radix. Return null if zero digits
-// were read, the integer value otherwise. When `len` is given, this
-// will return `null` unless the integer has exactly `len` digits.
-
-pp$8.readInt = function(radix, len) {
-  var this$1 = this;
-
-  var start = this.pos, total = 0;
-  for (var i = 0, e = len == null ? Infinity : len; i < e; ++i) {
-    var code = this$1.input.charCodeAt(this$1.pos), val = (void 0);
-    if (code >= 97) { val = code - 97 + 10; } // a
-    else if (code >= 65) { val = code - 65 + 10; } // A
-    else if (code >= 48 && code <= 57) { val = code - 48; } // 0-9
-    else { val = Infinity; }
-    if (val >= radix) { break }
-    ++this$1.pos;
-    total = total * radix + val;
-  }
-  if (this.pos === start || len != null && this.pos - start !== len) { return null }
-
-  return total
-};
-
-pp$8.readRadixNumber = function(radix) {
-  this.pos += 2; // 0x
-  var val = this.readInt(radix);
-  if (val == null) { this.raise(this.start + 2, "Expected number in radix " + radix); }
-  if (isIdentifierStart(this.fullCharCodeAtPos())) { this.raise(this.pos, "Identifier directly after number"); }
-  return this.finishToken(types.num, val)
-};
-
-// Read an integer, octal integer, or floating-point number.
-
-pp$8.readNumber = function(startsWithDot) {
-  var start = this.pos, isFloat = false, octal = this.input.charCodeAt(this.pos) === 48;
-  if (!startsWithDot && this.readInt(10) === null) { this.raise(start, "Invalid number"); }
-  if (octal && this.pos == start + 1) { octal = false; }
-  var next = this.input.charCodeAt(this.pos);
-  if (next === 46 && !octal) { // '.'
-    ++this.pos;
-    this.readInt(10);
-    isFloat = true;
-    next = this.input.charCodeAt(this.pos);
-  }
-  if ((next === 69 || next === 101) && !octal) { // 'eE'
-    next = this.input.charCodeAt(++this.pos);
-    if (next === 43 || next === 45) { ++this.pos; } // '+-'
-    if (this.readInt(10) === null) { this.raise(start, "Invalid number"); }
-    isFloat = true;
-  }
-  if (isIdentifierStart(this.fullCharCodeAtPos())) { this.raise(this.pos, "Identifier directly after number"); }
-
-  var str = this.input.slice(start, this.pos), val;
-  if (isFloat) { val = parseFloat(str); }
-  else if (!octal || str.length === 1) { val = parseInt(str, 10); }
-  else if (this.strict) { this.raise(start, "Invalid number"); }
-  else if (/[89]/.test(str)) { val = parseInt(str, 10); }
-  else { val = parseInt(str, 8); }
-  return this.finishToken(types.num, val)
-};
-
-// Read a string value, interpreting backslash-escapes.
-
-pp$8.readCodePoint = function() {
-  var ch = this.input.charCodeAt(this.pos), code;
-
-  if (ch === 123) { // '{'
-    if (this.options.ecmaVersion < 6) { this.unexpected(); }
-    var codePos = ++this.pos;
-    code = this.readHexChar(this.input.indexOf("}", this.pos) - this.pos);
-    ++this.pos;
-    if (code > 0x10FFFF) { this.invalidStringToken(codePos, "Code point out of bounds"); }
-  } else {
-    code = this.readHexChar(4);
-  }
-  return code
-};
-
-function codePointToString(code) {
-  // UTF-16 Decoding
-  if (code <= 0xFFFF) { return String.fromCharCode(code) }
-  code -= 0x10000;
-  return String.fromCharCode((code >> 10) + 0xD800, (code & 1023) + 0xDC00)
-}
-
-pp$8.readString = function(quote) {
-  var this$1 = this;
-
-  var out = "", chunkStart = ++this.pos;
-  for (;;) {
-    if (this$1.pos >= this$1.input.length) { this$1.raise(this$1.start, "Unterminated string constant"); }
-    var ch = this$1.input.charCodeAt(this$1.pos);
-    if (ch === quote) { break }
-    if (ch === 92) { // '\'
-      out += this$1.input.slice(chunkStart, this$1.pos);
-      out += this$1.readEscapedChar(false);
-      chunkStart = this$1.pos;
-    } else {
-      if (isNewLine(ch)) { this$1.raise(this$1.start, "Unterminated string constant"); }
-      ++this$1.pos;
-    }
-  }
-  out += this.input.slice(chunkStart, this.pos++);
-  return this.finishToken(types.string, out)
-};
-
-// Reads template string tokens.
-
-var INVALID_TEMPLATE_ESCAPE_ERROR = {};
-
-pp$8.tryReadTemplateToken = function() {
-  this.inTemplateElement = true;
-  try {
-    this.readTmplToken();
-  } catch (err) {
-    if (err === INVALID_TEMPLATE_ESCAPE_ERROR) {
-      this.readInvalidTemplateToken();
-    } else {
-      throw err
-    }
-  }
-
-  this.inTemplateElement = false;
-};
-
-pp$8.invalidStringToken = function(position, message) {
-  if (this.inTemplateElement && this.options.ecmaVersion >= 9) {
-    throw INVALID_TEMPLATE_ESCAPE_ERROR
-  } else {
-    this.raise(position, message);
-  }
-};
-
-pp$8.readTmplToken = function() {
-  var this$1 = this;
-
-  var out = "", chunkStart = this.pos;
-  for (;;) {
-    if (this$1.pos >= this$1.input.length) { this$1.raise(this$1.start, "Unterminated template"); }
-    var ch = this$1.input.charCodeAt(this$1.pos);
-    if (ch === 96 || ch === 36 && this$1.input.charCodeAt(this$1.pos + 1) === 123) { // '`', '${'
-      if (this$1.pos === this$1.start && (this$1.type === types.template || this$1.type === types.invalidTemplate)) {
-        if (ch === 36) {
-          this$1.pos += 2;
-          return this$1.finishToken(types.dollarBraceL)
-        } else {
-          ++this$1.pos;
-          return this$1.finishToken(types.backQuote)
-        }
-      }
-      out += this$1.input.slice(chunkStart, this$1.pos);
-      return this$1.finishToken(types.template, out)
-    }
-    if (ch === 92) { // '\'
-      out += this$1.input.slice(chunkStart, this$1.pos);
-      out += this$1.readEscapedChar(true);
-      chunkStart = this$1.pos;
-    } else if (isNewLine(ch)) {
-      out += this$1.input.slice(chunkStart, this$1.pos);
-      ++this$1.pos;
-      switch (ch) {
-      case 13:
-        if (this$1.input.charCodeAt(this$1.pos) === 10) { ++this$1.pos; }
-      case 10:
-        out += "\n";
-        break
-      default:
-        out += String.fromCharCode(ch);
-        break
-      }
-      if (this$1.options.locations) {
-        ++this$1.curLine;
-        this$1.lineStart = this$1.pos;
-      }
-      chunkStart = this$1.pos;
-    } else {
-      ++this$1.pos;
-    }
-  }
-};
-
-// Reads a template token to search for the end, without validating any escape sequences
-pp$8.readInvalidTemplateToken = function() {
-  var this$1 = this;
-
-  for (; this.pos < this.input.length; this.pos++) {
-    switch (this$1.input[this$1.pos]) {
-    case "\\":
-      ++this$1.pos;
-      break
-
-    case "$":
-      if (this$1.input[this$1.pos + 1] !== "{") {
-        break
-      }
-    // falls through
-
-    case "`":
-      return this$1.finishToken(types.invalidTemplate, this$1.input.slice(this$1.start, this$1.pos))
-
-    // no default
-    }
-  }
-  this.raise(this.start, "Unterminated template");
-};
-
-// Used to read escaped characters
-
-pp$8.readEscapedChar = function(inTemplate) {
-  var ch = this.input.charCodeAt(++this.pos);
-  ++this.pos;
-  switch (ch) {
-  case 110: return "\n" // 'n' -> '\n'
-  case 114: return "\r" // 'r' -> '\r'
-  case 120: return String.fromCharCode(this.readHexChar(2)) // 'x'
-  case 117: return codePointToString(this.readCodePoint()) // 'u'
-  case 116: return "\t" // 't' -> '\t'
-  case 98: return "\b" // 'b' -> '\b'
-  case 118: return "\u000b" // 'v' -> '\u000b'
-  case 102: return "\f" // 'f' -> '\f'
-  case 13: if (this.input.charCodeAt(this.pos) === 10) { ++this.pos; } // '\r\n'
-  case 10: // ' \n'
-    if (this.options.locations) { this.lineStart = this.pos; ++this.curLine; }
-    return ""
-  default:
-    if (ch >= 48 && ch <= 55) {
-      var octalStr = this.input.substr(this.pos - 1, 3).match(/^[0-7]+/)[0];
-      var octal = parseInt(octalStr, 8);
-      if (octal > 255) {
-        octalStr = octalStr.slice(0, -1);
-        octal = parseInt(octalStr, 8);
-      }
-      if (octalStr !== "0" && (this.strict || inTemplate)) {
-        this.invalidStringToken(this.pos - 2, "Octal literal in strict mode");
-      }
-      this.pos += octalStr.length - 1;
-      return String.fromCharCode(octal)
-    }
-    return String.fromCharCode(ch)
-  }
-};
-
-// Used to read character escape sequences ('\x', '\u', '\U').
-
-pp$8.readHexChar = function(len) {
-  var codePos = this.pos;
-  var n = this.readInt(16, len);
-  if (n === null) { this.invalidStringToken(codePos, "Bad character escape sequence"); }
-  return n
-};
-
-// Read an identifier, and return it as a string. Sets `this.containsEsc`
-// to whether the word contained a '\u' escape.
-//
-// Incrementally adds only escaped chars, adding other chunks as-is
-// as a micro-optimization.
-
-pp$8.readWord1 = function() {
-  var this$1 = this;
-
-  this.containsEsc = false;
-  var word = "", first = true, chunkStart = this.pos;
-  var astral = this.options.ecmaVersion >= 6;
-  while (this.pos < this.input.length) {
-    var ch = this$1.fullCharCodeAtPos();
-    if (isIdentifierChar(ch, astral)) {
-      this$1.pos += ch <= 0xffff ? 1 : 2;
-    } else if (ch === 92) { // "\"
-      this$1.containsEsc = true;
-      word += this$1.input.slice(chunkStart, this$1.pos);
-      var escStart = this$1.pos;
-      if (this$1.input.charCodeAt(++this$1.pos) != 117) // "u"
-        { this$1.invalidStringToken(this$1.pos, "Expecting Unicode escape sequence \\uXXXX"); }
-      ++this$1.pos;
-      var esc = this$1.readCodePoint();
-      if (!(first ? isIdentifierStart : isIdentifierChar)(esc, astral))
-        { this$1.invalidStringToken(escStart, "Invalid Unicode escape"); }
-      word += codePointToString(esc);
-      chunkStart = this$1.pos;
-    } else {
-      break
-    }
-    first = false;
-  }
-  return word + this.input.slice(chunkStart, this.pos)
-};
-
-// Read an identifier or keyword token. Will check for reserved
-// words when necessary.
-
-pp$8.readWord = function() {
-  var word = this.readWord1();
-  var type = types.name;
-  if (this.keywords.test(word)) {
-    if (this.containsEsc) { this.raiseRecoverable(this.start, "Escape sequence in keyword " + word); }
-    type = keywords$1[word];
-  }
-  return this.finishToken(type, word)
-};
-
-// Acorn is a tiny, fast JavaScript parser written in JavaScript.
-//
-// Acorn was written by Marijn Haverbeke, Ingvar Stepanyan, and
-// various contributors and released under an MIT license.
-//
-// Git repositories for Acorn are available at
-//
-//     http://marijnhaverbeke.nl/git/acorn
-//     https://github.com/ternjs/acorn.git
-//
-// Please use the [github bug tracker][ghbt] to report issues.
-//
-// [ghbt]: https://github.com/ternjs/acorn/issues
-//
-// This file defines the main parser interface. The library also comes
-// with a [error-tolerant parser][dammit] and an
-// [abstract syntax tree walker][walk], defined in other files.
-//
-// [dammit]: acorn_loose.js
-// [walk]: util/walk.js
-
-var version = "5.1.1";
-
-// The main exported interface (under `self.acorn` when in the
-// browser) is a `parse` function that takes a code string and
-// returns an abstract syntax tree as specified by [Mozilla parser
-// API][api].
-//
-// [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
-
-function parse(input, options) {
-  return new Parser(options, input).parse()
-}
-
-// This function tries to parse a single expression at a given
-// offset in a string. Useful for parsing mixed-language formats
-// that embed JavaScript expressions.
-
-function parseExpressionAt(input, pos, options) {
-  var p = new Parser(options, input, pos);
-  p.nextToken();
-  return p.parseExpression()
-}
-
-// Acorn is organized as a tokenizer and a recursive-descent parser.
-// The `tokenizer` export provides an interface to the tokenizer.
-
-function tokenizer(input, options) {
-  return new Parser(options, input)
-}
-
-// This is a terrible kludge to support the existing, pre-ES6
-// interface where the loose parser module retroactively adds exports
-// to this module.
-var parse_dammit;
-var LooseParser;
-var pluginsLoose; // eslint-disable-line camelcase
-function addLooseExports(parse, Parser$$1, plugins$$1) {
-  parse_dammit = parse; // eslint-disable-line camelcase
-  LooseParser = Parser$$1;
-  pluginsLoose = plugins$$1;
-}
-
-
-
-
-/***/ }),
-/* 104 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _propTypes = __webpack_require__(22);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _react = __webpack_require__(13);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _paperCanvas = __webpack_require__(106);
-
-var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
-
-var _toolTypes = __webpack_require__(27);
-
-var _toolTypes2 = _interopRequireDefault(_toolTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var PaintEditorComponent = function PaintEditorComponent(props) {
-    return _react2.default.createElement(_paperCanvas2.default, {
-        tool: props.tool
-    });
-};
-
-PaintEditorComponent.propTypes = {
-    tool: _propTypes2.default.oneOf(Object.keys(_toolTypes2.default)).isRequired
-};
-
-exports.default = PaintEditorComponent;
-
-/***/ }),
-/* 105 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _propTypes = __webpack_require__(22);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _react = __webpack_require__(13);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _paintEditor = __webpack_require__(104);
-
-var _paintEditor2 = _interopRequireDefault(_paintEditor);
-
-var _tools = __webpack_require__(59);
-
-var _tools2 = _interopRequireDefault(_tools);
-
-var _toolTypes = __webpack_require__(27);
-
-var _toolTypes2 = _interopRequireDefault(_toolTypes);
-
-var _reactRedux = __webpack_require__(58);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var PaintEditor = function (_React$Component) {
-    _inherits(PaintEditor, _React$Component);
-
-    function PaintEditor() {
-        _classCallCheck(this, PaintEditor);
-
-        return _possibleConstructorReturn(this, (PaintEditor.__proto__ || Object.getPrototypeOf(PaintEditor)).apply(this, arguments));
-    }
-
-    _createClass(PaintEditor, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            document.addEventListener('keydown', this.props.onKeyPress);
-        }
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            document.removeEventListener('keydown', this.props.onKeyPress);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                onKeyPress = _props.onKeyPress,
-                props = _objectWithoutProperties(_props, ['onKeyPress']);
-
-            return _react2.default.createElement(_paintEditor2.default, props);
-        }
-    }]);
-
-    return PaintEditor;
-}(_react2.default.Component);
-
-PaintEditor.propTypes = {
-    onKeyPress: _propTypes2.default.func.isRequired,
-    tool: _propTypes2.default.oneOf(Object.keys(_toolTypes2.default)).isRequired
-};
-
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        tool: state.tool
-    };
-};
-var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-    return {
-        onKeyPress: function onKeyPress(e) {
-            if (e.key === 'e') {
-                dispatch(_tools2.default.changeTool(_toolTypes2.default.ERASER));
-            } else if (e.key === 'b') {
-                dispatch(_tools2.default.changeTool(_toolTypes2.default.BRUSH));
-            }
-        }
-    };
-};
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PaintEditor);
-
-/***/ }),
-/* 106 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _propTypes = __webpack_require__(22);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _react = __webpack_require__(13);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _paper = __webpack_require__(145);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _toolTypes = __webpack_require__(27);
-
-var _toolTypes2 = _interopRequireDefault(_toolTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var PaperCanvas = function (_React$Component) {
-    _inherits(PaperCanvas, _React$Component);
-
-    function PaperCanvas() {
-        _classCallCheck(this, PaperCanvas);
-
-        return _possibleConstructorReturn(this, (PaperCanvas.__proto__ || Object.getPrototypeOf(PaperCanvas)).apply(this, arguments));
-    }
-
-    _createClass(PaperCanvas, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            _paper2.default.setup(this.canvas);
-            // Create a Paper.js Path to draw a line into it:
-            var path = new _paper2.default.Path();
-            // Give the stroke a color
-            path.strokeColor = 'black';
-            var start = new _paper2.default.Point(100, 100);
-            // Move to start and draw a line from there
-            path.moveTo(start);
-            // Note that the plus operator on Point objects does not work
-            // in JavaScript. Instead, we need to call the add() function:
-            path.lineTo(start.add([200, -50]));
-            // Draw the view now:
-            _paper2.default.view.draw();
-        }
-    }, {
-        key: 'componentWillReceiveProps',
-        value: function componentWillReceiveProps(nextProps) {
-            if (nextProps.tool !== this.props.tool) {
-                // TODO switch tool
-            }
-        }
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            _paper2.default.remove();
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement('canvas', {
-                ref: function ref(canvas) {
-                    _this2.canvas = canvas;
-                }
-            });
-        }
-    }]);
-
-    return PaperCanvas;
-}(_react2.default.Component);
-
-PaperCanvas.propTypes = {
-    tool: _propTypes2.default.oneOf(Object.keys(_toolTypes2.default)).isRequired
-};
-
-exports.default = PaperCanvas;
-
-/***/ }),
-/* 107 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _minilog = __webpack_require__(142);
+var _minilog = __webpack_require__(152);
 
 var _minilog2 = _interopRequireDefault(_minilog);
 
@@ -5261,308 +179,350 @@ _minilog2.default.enable();
 exports.default = (0, _minilog2.default)('scratch-paint');
 
 /***/ }),
-/* 108 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _react = __webpack_require__(13);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-var _react2 = _interopRequireDefault(_react);
+var _keymirror = __webpack_require__(136);
 
-var _reactDom = __webpack_require__(37);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _ = __webpack_require__(101);
-
-var _2 = _interopRequireDefault(_);
-
-var _reactRedux = __webpack_require__(58);
-
-var _redux = __webpack_require__(36);
-
-var _combineReducers = __webpack_require__(102);
-
-var _combineReducers2 = _interopRequireDefault(_combineReducers);
+var _keymirror2 = _interopRequireDefault(_keymirror);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var appTarget = document.createElement('div');
-document.body.appendChild(appTarget);
-var store = (0, _redux.createStore)(_combineReducers2.default, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
-_reactDom2.default.render(_react2.default.createElement(
-    _reactRedux.Provider,
-    { store: store },
-    _react2.default.createElement(_2.default, null)
-), appTarget);
+var Modes = (0, _keymirror2.default)({
+    BRUSH: null,
+    ERASER: null
+});
+
+exports.default = Modes;
 
 /***/ }),
-/* 109 */,
-/* 110 */,
-/* 111 */,
-/* 112 */,
-/* 113 */,
-/* 114 */,
-/* 115 */,
-/* 116 */,
-/* 117 */,
-/* 118 */,
-/* 119 */,
-/* 120 */,
-/* 121 */,
-/* 122 */,
-/* 123 */,
-/* 124 */
+/* 30 */,
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/**
- * Copyright 2015, Yahoo! Inc.
- * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+/* WEBPACK VAR INJECTION */(function(global) {/**
+ * lodash (Custom Build) <https://lodash.com/>
+ * Build: `lodash modularize exports="npm" -o ./`
+ * Copyright jQuery Foundation and other contributors <https://jquery.org/>
+ * Released under MIT license <https://lodash.com/license>
+ * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
+ * Copyright Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  */
 
+/** Used as the `TypeError` message for "Functions" methods. */
+var FUNC_ERROR_TEXT = 'Expected a function';
 
-var REACT_STATICS = {
-    childContextTypes: true,
-    contextTypes: true,
-    defaultProps: true,
-    displayName: true,
-    getDefaultProps: true,
-    mixins: true,
-    propTypes: true,
-    type: true
-};
+/** Used as the internal argument placeholder. */
+var PLACEHOLDER = '__lodash_placeholder__';
 
-var KNOWN_STATICS = {
-    name: true,
-    length: true,
-    prototype: true,
-    caller: true,
-    arguments: true,
-    arity: true
-};
+/** Used to compose bitmasks for function metadata. */
+var BIND_FLAG = 1,
+    BIND_KEY_FLAG = 2,
+    CURRY_BOUND_FLAG = 4,
+    CURRY_FLAG = 8,
+    CURRY_RIGHT_FLAG = 16,
+    PARTIAL_FLAG = 32,
+    PARTIAL_RIGHT_FLAG = 64,
+    ARY_FLAG = 128,
+    REARG_FLAG = 256,
+    FLIP_FLAG = 512;
 
-var isGetOwnPropertySymbolsAvailable = typeof Object.getOwnPropertySymbols === 'function';
+/** Used as references for various `Number` constants. */
+var INFINITY = 1 / 0,
+    MAX_SAFE_INTEGER = 9007199254740991,
+    MAX_INTEGER = 1.7976931348623157e+308,
+    NAN = 0 / 0;
 
-module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, customStatics) {
-    if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
-        var keys = Object.getOwnPropertyNames(sourceComponent);
-
-        /* istanbul ignore else */
-        if (isGetOwnPropertySymbolsAvailable) {
-            keys = keys.concat(Object.getOwnPropertySymbols(sourceComponent));
-        }
-
-        for (var i = 0; i < keys.length; ++i) {
-            if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]] && (!customStatics || !customStatics[keys[i]])) {
-                try {
-                    targetComponent[keys[i]] = sourceComponent[keys[i]];
-                } catch (error) {
-
-                }
-            }
-        }
-    }
-
-    return targetComponent;
-};
-
-
-/***/ }),
-/* 125 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/**
- * Copyright 2013-2015, Facebook, Inc.
- * All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
- */
-
-
-
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments
- * to provide information about what broke and what you were
- * expecting.
- *
- * The invariant message will be stripped in production, but the invariant
- * will remain to ensure logic does not differ in production.
- */
-
-var invariant = function(condition, format, a, b, c, d, e, f) {
-  if (process.env.NODE_ENV !== 'production') {
-    if (format === undefined) {
-      throw new Error('invariant requires an error message argument');
-    }
-  }
-
-  if (!condition) {
-    var error;
-    if (format === undefined) {
-      error = new Error(
-        'Minified exception occurred; use the non-minified dev environment ' +
-        'for the full error message and additional helpful warnings.'
-      );
-    } else {
-      var args = [a, b, c, d, e, f];
-      var argIndex = 0;
-      error = new Error(
-        format.replace(/%s/g, function() { return args[argIndex++]; })
-      );
-      error.name = 'Invariant Violation';
-    }
-
-    error.framesToPop = 1; // we don't care about invariant's own frame
-    throw error;
-  }
-};
-
-module.exports = invariant;
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 126 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright 2013-2014 Facebook, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-
-
-
-/**
- * Constructs an enumeration with keys equal to their value.
- *
- * For example:
- *
- *   var COLORS = keyMirror({blue: null, red: null});
- *   var myColor = COLORS.blue;
- *   var isColorValid = !!COLORS[myColor];
- *
- * The last line could not be performed if the values of the generated enum were
- * not equal to their keys.
- *
- *   Input:  {key1: val1, key2: val2}
- *   Output: {key1: key1, key2: key2}
- *
- * @param {object} obj
- * @return {object}
- */
-var keyMirror = function(obj) {
-  var ret = {};
-  var key;
-  if (!(obj instanceof Object && !Array.isArray(obj))) {
-    throw new Error('keyMirror(...): Argument must be an object.');
-  }
-  for (key in obj) {
-    if (!obj.hasOwnProperty(key)) {
-      continue;
-    }
-    ret[key] = key;
-  }
-  return ret;
-};
-
-module.exports = keyMirror;
-
-
-/***/ }),
-/* 127 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(130);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(131);
-
-
-
+/** Used to associate wrap methods with their bit flags. */
+var wrapFlags = [
+  ['ary', ARY_FLAG],
+  ['bind', BIND_FLAG],
+  ['bindKey', BIND_KEY_FLAG],
+  ['curry', CURRY_FLAG],
+  ['curryRight', CURRY_RIGHT_FLAG],
+  ['flip', FLIP_FLAG],
+  ['partial', PARTIAL_FLAG],
+  ['partialRight', PARTIAL_RIGHT_FLAG],
+  ['rearg', REARG_FLAG]
+];
 
 /** `Object#toString` result references. */
-var nullTag = '[object Null]',
-    undefinedTag = '[object Undefined]';
-
-/** Built-in value references. */
-var symToStringTag = __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */] ? __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */].toStringTag : undefined;
+var argsTag = '[object Arguments]',
+    funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]',
+    symbolTag = '[object Symbol]';
 
 /**
- * The base implementation of `getTag` without fallbacks for buggy environments.
- *
- * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the `toStringTag`.
+ * Used to match `RegExp`
+ * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).
  */
-function baseGetTag(value) {
-  if (value == null) {
-    return value === undefined ? undefinedTag : nullTag;
-  }
-  return (symToStringTag && symToStringTag in Object(value))
-    ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__getRawTag_js__["a" /* default */])(value)
-    : __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__objectToString_js__["a" /* default */])(value);
-}
+var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
 
-/* harmony default export */ __webpack_exports__["a"] = (baseGetTag);
+/** Used to match leading and trailing whitespace. */
+var reTrim = /^\s+|\s+$/g;
 
+/** Used to match wrap detail comments. */
+var reWrapComment = /\{(?:\n\/\* \[wrapped with .+\] \*\/)?\n?/,
+    reWrapDetails = /\{\n\/\* \[wrapped with (.+)\] \*/,
+    reSplitDetails = /,? & /;
 
-/***/ }),
-/* 128 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect host constructors (Safari). */
+var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Used to detect unsigned integer values. */
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/** Detect free variable `global` from Node.js. */
 var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
 
-/* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(100)))
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
 
-/***/ }),
-/* 129 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/**
+ * A faster alternative to `Function#apply`, this function invokes `func`
+ * with the `this` binding of `thisArg` and the arguments of `args`.
+ *
+ * @private
+ * @param {Function} func The function to invoke.
+ * @param {*} thisArg The `this` binding of `func`.
+ * @param {Array} args The arguments to invoke `func` with.
+ * @returns {*} Returns the result of `func`.
+ */
+function apply(func, thisArg, args) {
+  switch (args.length) {
+    case 0: return func.call(thisArg);
+    case 1: return func.call(thisArg, args[0]);
+    case 2: return func.call(thisArg, args[0], args[1]);
+    case 3: return func.call(thisArg, args[0], args[1], args[2]);
+  }
+  return func.apply(thisArg, args);
+}
 
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(132);
+/**
+ * A specialized version of `_.forEach` for arrays without support for
+ * iteratee shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns `array`.
+ */
+function arrayEach(array, iteratee) {
+  var index = -1,
+      length = array ? array.length : 0;
 
+  while (++index < length) {
+    if (iteratee(array[index], index, array) === false) {
+      break;
+    }
+  }
+  return array;
+}
 
-/** Built-in value references. */
-var getPrototype = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__overArg_js__["a" /* default */])(Object.getPrototypeOf, Object);
+/**
+ * A specialized version of `_.includes` for arrays without support for
+ * specifying an index to search from.
+ *
+ * @private
+ * @param {Array} [array] The array to inspect.
+ * @param {*} target The value to search for.
+ * @returns {boolean} Returns `true` if `target` is found, else `false`.
+ */
+function arrayIncludes(array, value) {
+  var length = array ? array.length : 0;
+  return !!length && baseIndexOf(array, value, 0) > -1;
+}
 
-/* harmony default export */ __webpack_exports__["a"] = (getPrototype);
+/**
+ * Appends the elements of `values` to `array`.
+ *
+ * @private
+ * @param {Array} array The array to modify.
+ * @param {Array} values The values to append.
+ * @returns {Array} Returns `array`.
+ */
+function arrayPush(array, values) {
+  var index = -1,
+      length = values.length,
+      offset = array.length;
 
+  while (++index < length) {
+    array[offset + index] = values[index];
+  }
+  return array;
+}
 
-/***/ }),
-/* 130 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/**
+ * The base implementation of `_.findIndex` and `_.findLastIndex` without
+ * support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {Function} predicate The function invoked per iteration.
+ * @param {number} fromIndex The index to search from.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {number} Returns the index of the matched value, else `-1`.
+ */
+function baseFindIndex(array, predicate, fromIndex, fromRight) {
+  var length = array.length,
+      index = fromIndex + (fromRight ? 1 : -1);
 
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(63);
+  while ((fromRight ? index-- : ++index < length)) {
+    if (predicate(array[index], index, array)) {
+      return index;
+    }
+  }
+  return -1;
+}
 
+/**
+ * The base implementation of `_.indexOf` without `fromIndex` bounds checks.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {*} value The value to search for.
+ * @param {number} fromIndex The index to search from.
+ * @returns {number} Returns the index of the matched value, else `-1`.
+ */
+function baseIndexOf(array, value, fromIndex) {
+  if (value !== value) {
+    return baseFindIndex(array, baseIsNaN, fromIndex);
+  }
+  var index = fromIndex - 1,
+      length = array.length;
+
+  while (++index < length) {
+    if (array[index] === value) {
+      return index;
+    }
+  }
+  return -1;
+}
+
+/**
+ * The base implementation of `_.isNaN` without support for number objects.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is `NaN`, else `false`.
+ */
+function baseIsNaN(value) {
+  return value !== value;
+}
+
+/**
+ * Gets the number of `placeholder` occurrences in `array`.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {*} placeholder The placeholder to search for.
+ * @returns {number} Returns the placeholder count.
+ */
+function countHolders(array, placeholder) {
+  var length = array.length,
+      result = 0;
+
+  while (length--) {
+    if (array[length] === placeholder) {
+      result++;
+    }
+  }
+  return result;
+}
+
+/**
+ * Gets the value at `key` of `object`.
+ *
+ * @private
+ * @param {Object} [object] The object to query.
+ * @param {string} key The key of the property to get.
+ * @returns {*} Returns the property value.
+ */
+function getValue(object, key) {
+  return object == null ? undefined : object[key];
+}
+
+/**
+ * Checks if `value` is a host object in IE < 9.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a host object, else `false`.
+ */
+function isHostObject(value) {
+  // Many host objects are `Object` objects that can coerce to strings
+  // despite having improperly defined `toString` methods.
+  var result = false;
+  if (value != null && typeof value.toString != 'function') {
+    try {
+      result = !!(value + '');
+    } catch (e) {}
+  }
+  return result;
+}
+
+/**
+ * Replaces all `placeholder` elements in `array` with an internal placeholder
+ * and returns an array of their indexes.
+ *
+ * @private
+ * @param {Array} array The array to modify.
+ * @param {*} placeholder The placeholder to replace.
+ * @returns {Array} Returns the new array of placeholder indexes.
+ */
+function replaceHolders(array, placeholder) {
+  var index = -1,
+      length = array.length,
+      resIndex = 0,
+      result = [];
+
+  while (++index < length) {
+    var value = array[index];
+    if (value === placeholder || value === PLACEHOLDER) {
+      array[index] = PLACEHOLDER;
+      result[resIndex++] = index;
+    }
+  }
+  return result;
+}
 
 /** Used for built-in method references. */
-var objectProto = Object.prototype;
+var funcProto = Function.prototype,
+    objectProto = Object.prototype;
+
+/** Used to detect overreaching core-js shims. */
+var coreJsData = root['__core-js_shared__'];
+
+/** Used to detect methods masquerading as native. */
+var maskSrcKey = (function() {
+  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
+  return uid ? ('Symbol(src)_1.' + uid) : '';
+}());
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString = funcProto.toString;
 
 /** Used to check objects for own properties. */
 var hasOwnProperty = objectProto.hasOwnProperty;
@@ -5572,114 +532,946 @@ var hasOwnProperty = objectProto.hasOwnProperty;
  * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
  * of values.
  */
-var nativeObjectToString = objectProto.toString;
+var objectToString = objectProto.toString;
+
+/** Used to detect if a method is native. */
+var reIsNative = RegExp('^' +
+  funcToString.call(hasOwnProperty).replace(reRegExpChar, '\\$&')
+  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+);
 
 /** Built-in value references. */
-var symToStringTag = __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */] ? __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */].toStringTag : undefined;
+var Symbol = root.Symbol,
+    objectCreate = Object.create,
+    propertyIsEnumerable = objectProto.propertyIsEnumerable,
+    spreadableSymbol = Symbol ? Symbol.isConcatSpreadable : undefined;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max,
+    nativeMin = Math.min;
+
+/* Used to set `toString` methods. */
+var defineProperty = (function() {
+  var func = getNative(Object, 'defineProperty'),
+      name = getNative.name;
+
+  return (name && name.length > 2) ? func : undefined;
+}());
 
 /**
- * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ * The base implementation of `_.create` without support for assigning
+ * properties to the created object.
  *
  * @private
- * @param {*} value The value to query.
- * @returns {string} Returns the raw `toStringTag`.
+ * @param {Object} prototype The object to inherit from.
+ * @returns {Object} Returns the new object.
  */
-function getRawTag(value) {
-  var isOwn = hasOwnProperty.call(value, symToStringTag),
-      tag = value[symToStringTag];
+function baseCreate(proto) {
+  return isObject(proto) ? objectCreate(proto) : {};
+}
 
-  try {
-    value[symToStringTag] = undefined;
-    var unmasked = true;
-  } catch (e) {}
+/**
+ * The base implementation of `_.flatten` with support for restricting flattening.
+ *
+ * @private
+ * @param {Array} array The array to flatten.
+ * @param {number} depth The maximum recursion depth.
+ * @param {boolean} [predicate=isFlattenable] The function invoked per iteration.
+ * @param {boolean} [isStrict] Restrict to values that pass `predicate` checks.
+ * @param {Array} [result=[]] The initial result value.
+ * @returns {Array} Returns the new flattened array.
+ */
+function baseFlatten(array, depth, predicate, isStrict, result) {
+  var index = -1,
+      length = array.length;
 
-  var result = nativeObjectToString.call(value);
-  if (unmasked) {
-    if (isOwn) {
-      value[symToStringTag] = tag;
-    } else {
-      delete value[symToStringTag];
+  predicate || (predicate = isFlattenable);
+  result || (result = []);
+
+  while (++index < length) {
+    var value = array[index];
+    if (depth > 0 && predicate(value)) {
+      if (depth > 1) {
+        // Recursively flatten arrays (susceptible to call stack limits).
+        baseFlatten(value, depth - 1, predicate, isStrict, result);
+      } else {
+        arrayPush(result, value);
+      }
+    } else if (!isStrict) {
+      result[result.length] = value;
     }
   }
   return result;
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (getRawTag);
-
-
-/***/ }),
-/* 131 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/** Used for built-in method references. */
-var objectProto = Object.prototype;
-
 /**
- * Used to resolve the
- * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
- * of values.
- */
-var nativeObjectToString = objectProto.toString;
-
-/**
- * Converts `value` to a string using `Object.prototype.toString`.
+ * The base implementation of `_.isNative` without bad shim checks.
  *
  * @private
- * @param {*} value The value to convert.
- * @returns {string} Returns the converted string.
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a native function,
+ *  else `false`.
  */
-function objectToString(value) {
-  return nativeObjectToString.call(value);
+function baseIsNative(value) {
+  if (!isObject(value) || isMasked(value)) {
+    return false;
+  }
+  var pattern = (isFunction(value) || isHostObject(value)) ? reIsNative : reIsHostCtor;
+  return pattern.test(toSource(value));
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (objectToString);
-
-
-/***/ }),
-/* 132 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /**
- * Creates a unary function that invokes `func` with its argument transformed.
+ * The base implementation of `_.rest` which doesn't validate or coerce arguments.
  *
  * @private
- * @param {Function} func The function to wrap.
- * @param {Function} transform The argument transform.
+ * @param {Function} func The function to apply a rest parameter to.
+ * @param {number} [start=func.length-1] The start position of the rest parameter.
  * @returns {Function} Returns the new function.
  */
-function overArg(func, transform) {
-  return function(arg) {
-    return func(transform(arg));
+function baseRest(func, start) {
+  start = nativeMax(start === undefined ? (func.length - 1) : start, 0);
+  return function() {
+    var args = arguments,
+        index = -1,
+        length = nativeMax(args.length - start, 0),
+        array = Array(length);
+
+    while (++index < length) {
+      array[index] = args[start + index];
+    }
+    index = -1;
+    var otherArgs = Array(start + 1);
+    while (++index < start) {
+      otherArgs[index] = args[index];
+    }
+    otherArgs[start] = array;
+    return apply(func, this, otherArgs);
   };
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (overArg);
+/**
+ * Creates an array that is the composition of partially applied arguments,
+ * placeholders, and provided arguments into a single array of arguments.
+ *
+ * @private
+ * @param {Array} args The provided arguments.
+ * @param {Array} partials The arguments to prepend to those provided.
+ * @param {Array} holders The `partials` placeholder indexes.
+ * @params {boolean} [isCurried] Specify composing for a curried function.
+ * @returns {Array} Returns the new array of composed arguments.
+ */
+function composeArgs(args, partials, holders, isCurried) {
+  var argsIndex = -1,
+      argsLength = args.length,
+      holdersLength = holders.length,
+      leftIndex = -1,
+      leftLength = partials.length,
+      rangeLength = nativeMax(argsLength - holdersLength, 0),
+      result = Array(leftLength + rangeLength),
+      isUncurried = !isCurried;
 
+  while (++leftIndex < leftLength) {
+    result[leftIndex] = partials[leftIndex];
+  }
+  while (++argsIndex < holdersLength) {
+    if (isUncurried || argsIndex < argsLength) {
+      result[holders[argsIndex]] = args[argsIndex];
+    }
+  }
+  while (rangeLength--) {
+    result[leftIndex++] = args[argsIndex++];
+  }
+  return result;
+}
 
-/***/ }),
-/* 133 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/**
+ * This function is like `composeArgs` except that the arguments composition
+ * is tailored for `_.partialRight`.
+ *
+ * @private
+ * @param {Array} args The provided arguments.
+ * @param {Array} partials The arguments to append to those provided.
+ * @param {Array} holders The `partials` placeholder indexes.
+ * @params {boolean} [isCurried] Specify composing for a curried function.
+ * @returns {Array} Returns the new array of composed arguments.
+ */
+function composeArgsRight(args, partials, holders, isCurried) {
+  var argsIndex = -1,
+      argsLength = args.length,
+      holdersIndex = -1,
+      holdersLength = holders.length,
+      rightIndex = -1,
+      rightLength = partials.length,
+      rangeLength = nativeMax(argsLength - holdersLength, 0),
+      result = Array(rangeLength + rightLength),
+      isUncurried = !isCurried;
 
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(128);
+  while (++argsIndex < rangeLength) {
+    result[argsIndex] = args[argsIndex];
+  }
+  var offset = argsIndex;
+  while (++rightIndex < rightLength) {
+    result[offset + rightIndex] = partials[rightIndex];
+  }
+  while (++holdersIndex < holdersLength) {
+    if (isUncurried || argsIndex < argsLength) {
+      result[offset + holders[holdersIndex]] = args[argsIndex++];
+    }
+  }
+  return result;
+}
 
+/**
+ * Copies the values of `source` to `array`.
+ *
+ * @private
+ * @param {Array} source The array to copy values from.
+ * @param {Array} [array=[]] The array to copy values to.
+ * @returns {Array} Returns `array`.
+ */
+function copyArray(source, array) {
+  var index = -1,
+      length = source.length;
 
-/** Detect free variable `self`. */
-var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+  array || (array = Array(length));
+  while (++index < length) {
+    array[index] = source[index];
+  }
+  return array;
+}
 
-/** Used as a reference to the global object. */
-var root = __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__["a" /* default */] || freeSelf || Function('return this')();
+/**
+ * Creates a function that wraps `func` to invoke it with the optional `this`
+ * binding of `thisArg`.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {number} bitmask The bitmask flags. See `createWrap` for more details.
+ * @param {*} [thisArg] The `this` binding of `func`.
+ * @returns {Function} Returns the new wrapped function.
+ */
+function createBind(func, bitmask, thisArg) {
+  var isBind = bitmask & BIND_FLAG,
+      Ctor = createCtor(func);
 
-/* harmony default export */ __webpack_exports__["a"] = (root);
+  function wrapper() {
+    var fn = (this && this !== root && this instanceof wrapper) ? Ctor : func;
+    return fn.apply(isBind ? thisArg : this, arguments);
+  }
+  return wrapper;
+}
 
+/**
+ * Creates a function that produces an instance of `Ctor` regardless of
+ * whether it was invoked as part of a `new` expression or by `call` or `apply`.
+ *
+ * @private
+ * @param {Function} Ctor The constructor to wrap.
+ * @returns {Function} Returns the new wrapped function.
+ */
+function createCtor(Ctor) {
+  return function() {
+    // Use a `switch` statement to work with class constructors. See
+    // http://ecma-international.org/ecma-262/7.0/#sec-ecmascript-function-objects-call-thisargument-argumentslist
+    // for more details.
+    var args = arguments;
+    switch (args.length) {
+      case 0: return new Ctor;
+      case 1: return new Ctor(args[0]);
+      case 2: return new Ctor(args[0], args[1]);
+      case 3: return new Ctor(args[0], args[1], args[2]);
+      case 4: return new Ctor(args[0], args[1], args[2], args[3]);
+      case 5: return new Ctor(args[0], args[1], args[2], args[3], args[4]);
+      case 6: return new Ctor(args[0], args[1], args[2], args[3], args[4], args[5]);
+      case 7: return new Ctor(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+    }
+    var thisBinding = baseCreate(Ctor.prototype),
+        result = Ctor.apply(thisBinding, args);
 
-/***/ }),
-/* 134 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+    // Mimic the constructor's `return` behavior.
+    // See https://es5.github.io/#x13.2.2 for more details.
+    return isObject(result) ? result : thisBinding;
+  };
+}
 
-"use strict";
+/**
+ * Creates a function that wraps `func` to enable currying.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {number} bitmask The bitmask flags. See `createWrap` for more details.
+ * @param {number} arity The arity of `func`.
+ * @returns {Function} Returns the new wrapped function.
+ */
+function createCurry(func, bitmask, arity) {
+  var Ctor = createCtor(func);
+
+  function wrapper() {
+    var length = arguments.length,
+        args = Array(length),
+        index = length,
+        placeholder = getHolder(wrapper);
+
+    while (index--) {
+      args[index] = arguments[index];
+    }
+    var holders = (length < 3 && args[0] !== placeholder && args[length - 1] !== placeholder)
+      ? []
+      : replaceHolders(args, placeholder);
+
+    length -= holders.length;
+    if (length < arity) {
+      return createRecurry(
+        func, bitmask, createHybrid, wrapper.placeholder, undefined,
+        args, holders, undefined, undefined, arity - length);
+    }
+    var fn = (this && this !== root && this instanceof wrapper) ? Ctor : func;
+    return apply(fn, this, args);
+  }
+  return wrapper;
+}
+
+/**
+ * Creates a function that wraps `func` to invoke it with optional `this`
+ * binding of `thisArg`, partial application, and currying.
+ *
+ * @private
+ * @param {Function|string} func The function or method name to wrap.
+ * @param {number} bitmask The bitmask flags. See `createWrap` for more details.
+ * @param {*} [thisArg] The `this` binding of `func`.
+ * @param {Array} [partials] The arguments to prepend to those provided to
+ *  the new function.
+ * @param {Array} [holders] The `partials` placeholder indexes.
+ * @param {Array} [partialsRight] The arguments to append to those provided
+ *  to the new function.
+ * @param {Array} [holdersRight] The `partialsRight` placeholder indexes.
+ * @param {Array} [argPos] The argument positions of the new function.
+ * @param {number} [ary] The arity cap of `func`.
+ * @param {number} [arity] The arity of `func`.
+ * @returns {Function} Returns the new wrapped function.
+ */
+function createHybrid(func, bitmask, thisArg, partials, holders, partialsRight, holdersRight, argPos, ary, arity) {
+  var isAry = bitmask & ARY_FLAG,
+      isBind = bitmask & BIND_FLAG,
+      isBindKey = bitmask & BIND_KEY_FLAG,
+      isCurried = bitmask & (CURRY_FLAG | CURRY_RIGHT_FLAG),
+      isFlip = bitmask & FLIP_FLAG,
+      Ctor = isBindKey ? undefined : createCtor(func);
+
+  function wrapper() {
+    var length = arguments.length,
+        args = Array(length),
+        index = length;
+
+    while (index--) {
+      args[index] = arguments[index];
+    }
+    if (isCurried) {
+      var placeholder = getHolder(wrapper),
+          holdersCount = countHolders(args, placeholder);
+    }
+    if (partials) {
+      args = composeArgs(args, partials, holders, isCurried);
+    }
+    if (partialsRight) {
+      args = composeArgsRight(args, partialsRight, holdersRight, isCurried);
+    }
+    length -= holdersCount;
+    if (isCurried && length < arity) {
+      var newHolders = replaceHolders(args, placeholder);
+      return createRecurry(
+        func, bitmask, createHybrid, wrapper.placeholder, thisArg,
+        args, newHolders, argPos, ary, arity - length
+      );
+    }
+    var thisBinding = isBind ? thisArg : this,
+        fn = isBindKey ? thisBinding[func] : func;
+
+    length = args.length;
+    if (argPos) {
+      args = reorder(args, argPos);
+    } else if (isFlip && length > 1) {
+      args.reverse();
+    }
+    if (isAry && ary < length) {
+      args.length = ary;
+    }
+    if (this && this !== root && this instanceof wrapper) {
+      fn = Ctor || createCtor(fn);
+    }
+    return fn.apply(thisBinding, args);
+  }
+  return wrapper;
+}
+
+/**
+ * Creates a function that wraps `func` to invoke it with the `this` binding
+ * of `thisArg` and `partials` prepended to the arguments it receives.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {number} bitmask The bitmask flags. See `createWrap` for more details.
+ * @param {*} thisArg The `this` binding of `func`.
+ * @param {Array} partials The arguments to prepend to those provided to
+ *  the new function.
+ * @returns {Function} Returns the new wrapped function.
+ */
+function createPartial(func, bitmask, thisArg, partials) {
+  var isBind = bitmask & BIND_FLAG,
+      Ctor = createCtor(func);
+
+  function wrapper() {
+    var argsIndex = -1,
+        argsLength = arguments.length,
+        leftIndex = -1,
+        leftLength = partials.length,
+        args = Array(leftLength + argsLength),
+        fn = (this && this !== root && this instanceof wrapper) ? Ctor : func;
+
+    while (++leftIndex < leftLength) {
+      args[leftIndex] = partials[leftIndex];
+    }
+    while (argsLength--) {
+      args[leftIndex++] = arguments[++argsIndex];
+    }
+    return apply(fn, isBind ? thisArg : this, args);
+  }
+  return wrapper;
+}
+
+/**
+ * Creates a function that wraps `func` to continue currying.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {number} bitmask The bitmask flags. See `createWrap` for more details.
+ * @param {Function} wrapFunc The function to create the `func` wrapper.
+ * @param {*} placeholder The placeholder value.
+ * @param {*} [thisArg] The `this` binding of `func`.
+ * @param {Array} [partials] The arguments to prepend to those provided to
+ *  the new function.
+ * @param {Array} [holders] The `partials` placeholder indexes.
+ * @param {Array} [argPos] The argument positions of the new function.
+ * @param {number} [ary] The arity cap of `func`.
+ * @param {number} [arity] The arity of `func`.
+ * @returns {Function} Returns the new wrapped function.
+ */
+function createRecurry(func, bitmask, wrapFunc, placeholder, thisArg, partials, holders, argPos, ary, arity) {
+  var isCurry = bitmask & CURRY_FLAG,
+      newHolders = isCurry ? holders : undefined,
+      newHoldersRight = isCurry ? undefined : holders,
+      newPartials = isCurry ? partials : undefined,
+      newPartialsRight = isCurry ? undefined : partials;
+
+  bitmask |= (isCurry ? PARTIAL_FLAG : PARTIAL_RIGHT_FLAG);
+  bitmask &= ~(isCurry ? PARTIAL_RIGHT_FLAG : PARTIAL_FLAG);
+
+  if (!(bitmask & CURRY_BOUND_FLAG)) {
+    bitmask &= ~(BIND_FLAG | BIND_KEY_FLAG);
+  }
+
+  var result = wrapFunc(func, bitmask, thisArg, newPartials, newHolders, newPartialsRight, newHoldersRight, argPos, ary, arity);
+  result.placeholder = placeholder;
+  return setWrapToString(result, func, bitmask);
+}
+
+/**
+ * Creates a function that either curries or invokes `func` with optional
+ * `this` binding and partially applied arguments.
+ *
+ * @private
+ * @param {Function|string} func The function or method name to wrap.
+ * @param {number} bitmask The bitmask flags.
+ *  The bitmask may be composed of the following flags:
+ *     1 - `_.bind`
+ *     2 - `_.bindKey`
+ *     4 - `_.curry` or `_.curryRight` of a bound function
+ *     8 - `_.curry`
+ *    16 - `_.curryRight`
+ *    32 - `_.partial`
+ *    64 - `_.partialRight`
+ *   128 - `_.rearg`
+ *   256 - `_.ary`
+ *   512 - `_.flip`
+ * @param {*} [thisArg] The `this` binding of `func`.
+ * @param {Array} [partials] The arguments to be partially applied.
+ * @param {Array} [holders] The `partials` placeholder indexes.
+ * @param {Array} [argPos] The argument positions of the new function.
+ * @param {number} [ary] The arity cap of `func`.
+ * @param {number} [arity] The arity of `func`.
+ * @returns {Function} Returns the new wrapped function.
+ */
+function createWrap(func, bitmask, thisArg, partials, holders, argPos, ary, arity) {
+  var isBindKey = bitmask & BIND_KEY_FLAG;
+  if (!isBindKey && typeof func != 'function') {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  var length = partials ? partials.length : 0;
+  if (!length) {
+    bitmask &= ~(PARTIAL_FLAG | PARTIAL_RIGHT_FLAG);
+    partials = holders = undefined;
+  }
+  ary = ary === undefined ? ary : nativeMax(toInteger(ary), 0);
+  arity = arity === undefined ? arity : toInteger(arity);
+  length -= holders ? holders.length : 0;
+
+  if (bitmask & PARTIAL_RIGHT_FLAG) {
+    var partialsRight = partials,
+        holdersRight = holders;
+
+    partials = holders = undefined;
+  }
+
+  var newData = [
+    func, bitmask, thisArg, partials, holders, partialsRight, holdersRight,
+    argPos, ary, arity
+  ];
+
+  func = newData[0];
+  bitmask = newData[1];
+  thisArg = newData[2];
+  partials = newData[3];
+  holders = newData[4];
+  arity = newData[9] = newData[9] == null
+    ? (isBindKey ? 0 : func.length)
+    : nativeMax(newData[9] - length, 0);
+
+  if (!arity && bitmask & (CURRY_FLAG | CURRY_RIGHT_FLAG)) {
+    bitmask &= ~(CURRY_FLAG | CURRY_RIGHT_FLAG);
+  }
+  if (!bitmask || bitmask == BIND_FLAG) {
+    var result = createBind(func, bitmask, thisArg);
+  } else if (bitmask == CURRY_FLAG || bitmask == CURRY_RIGHT_FLAG) {
+    result = createCurry(func, bitmask, arity);
+  } else if ((bitmask == PARTIAL_FLAG || bitmask == (BIND_FLAG | PARTIAL_FLAG)) && !holders.length) {
+    result = createPartial(func, bitmask, thisArg, partials);
+  } else {
+    result = createHybrid.apply(undefined, newData);
+  }
+  return setWrapToString(result, func, bitmask);
+}
+
+/**
+ * Gets the argument placeholder value for `func`.
+ *
+ * @private
+ * @param {Function} func The function to inspect.
+ * @returns {*} Returns the placeholder value.
+ */
+function getHolder(func) {
+  var object = func;
+  return object.placeholder;
+}
+
+/**
+ * Gets the native function at `key` of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {string} key The key of the method to get.
+ * @returns {*} Returns the function if it's native, else `undefined`.
+ */
+function getNative(object, key) {
+  var value = getValue(object, key);
+  return baseIsNative(value) ? value : undefined;
+}
+
+/**
+ * Extracts wrapper details from the `source` body comment.
+ *
+ * @private
+ * @param {string} source The source to inspect.
+ * @returns {Array} Returns the wrapper details.
+ */
+function getWrapDetails(source) {
+  var match = source.match(reWrapDetails);
+  return match ? match[1].split(reSplitDetails) : [];
+}
+
+/**
+ * Inserts wrapper `details` in a comment at the top of the `source` body.
+ *
+ * @private
+ * @param {string} source The source to modify.
+ * @returns {Array} details The details to insert.
+ * @returns {string} Returns the modified source.
+ */
+function insertWrapDetails(source, details) {
+  var length = details.length,
+      lastIndex = length - 1;
+
+  details[lastIndex] = (length > 1 ? '& ' : '') + details[lastIndex];
+  details = details.join(length > 2 ? ', ' : ' ');
+  return source.replace(reWrapComment, '{\n/* [wrapped with ' + details + '] */\n');
+}
+
+/**
+ * Checks if `value` is a flattenable `arguments` object or array.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is flattenable, else `false`.
+ */
+function isFlattenable(value) {
+  return isArray(value) || isArguments(value) ||
+    !!(spreadableSymbol && value && value[spreadableSymbol]);
+}
+
+/**
+ * Checks if `value` is a valid array-like index.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+ * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+ */
+function isIndex(value, length) {
+  length = length == null ? MAX_SAFE_INTEGER : length;
+  return !!length &&
+    (typeof value == 'number' || reIsUint.test(value)) &&
+    (value > -1 && value % 1 == 0 && value < length);
+}
+
+/**
+ * Checks if `func` has its source masked.
+ *
+ * @private
+ * @param {Function} func The function to check.
+ * @returns {boolean} Returns `true` if `func` is masked, else `false`.
+ */
+function isMasked(func) {
+  return !!maskSrcKey && (maskSrcKey in func);
+}
+
+/**
+ * Reorder `array` according to the specified indexes where the element at
+ * the first index is assigned as the first element, the element at
+ * the second index is assigned as the second element, and so on.
+ *
+ * @private
+ * @param {Array} array The array to reorder.
+ * @param {Array} indexes The arranged array indexes.
+ * @returns {Array} Returns `array`.
+ */
+function reorder(array, indexes) {
+  var arrLength = array.length,
+      length = nativeMin(indexes.length, arrLength),
+      oldArray = copyArray(array);
+
+  while (length--) {
+    var index = indexes[length];
+    array[length] = isIndex(index, arrLength) ? oldArray[index] : undefined;
+  }
+  return array;
+}
+
+/**
+ * Sets the `toString` method of `wrapper` to mimic the source of `reference`
+ * with wrapper details in a comment at the top of the source body.
+ *
+ * @private
+ * @param {Function} wrapper The function to modify.
+ * @param {Function} reference The reference function.
+ * @param {number} bitmask The bitmask flags. See `createWrap` for more details.
+ * @returns {Function} Returns `wrapper`.
+ */
+var setWrapToString = !defineProperty ? identity : function(wrapper, reference, bitmask) {
+  var source = (reference + '');
+  return defineProperty(wrapper, 'toString', {
+    'configurable': true,
+    'enumerable': false,
+    'value': constant(insertWrapDetails(source, updateWrapDetails(getWrapDetails(source), bitmask)))
+  });
+};
+
+/**
+ * Converts `value` to a string key if it's not a string or symbol.
+ *
+ * @private
+ * @param {*} value The value to inspect.
+ * @returns {string|symbol} Returns the key.
+ */
+function toKey(value) {
+  if (typeof value == 'string' || isSymbol(value)) {
+    return value;
+  }
+  var result = (value + '');
+  return (result == '0' && (1 / value) == -INFINITY) ? '-0' : result;
+}
+
+/**
+ * Converts `func` to its source code.
+ *
+ * @private
+ * @param {Function} func The function to process.
+ * @returns {string} Returns the source code.
+ */
+function toSource(func) {
+  if (func != null) {
+    try {
+      return funcToString.call(func);
+    } catch (e) {}
+    try {
+      return (func + '');
+    } catch (e) {}
+  }
+  return '';
+}
+
+/**
+ * Updates wrapper `details` based on `bitmask` flags.
+ *
+ * @private
+ * @returns {Array} details The details to modify.
+ * @param {number} bitmask The bitmask flags. See `createWrap` for more details.
+ * @returns {Array} Returns `details`.
+ */
+function updateWrapDetails(details, bitmask) {
+  arrayEach(wrapFlags, function(pair) {
+    var value = '_.' + pair[0];
+    if ((bitmask & pair[1]) && !arrayIncludes(details, value)) {
+      details.push(value);
+    }
+  });
+  return details.sort();
+}
+
+/**
+ * Creates a function that invokes `func` with the `this` binding of `thisArg`
+ * and `partials` prepended to the arguments it receives.
+ *
+ * The `_.bind.placeholder` value, which defaults to `_` in monolithic builds,
+ * may be used as a placeholder for partially applied arguments.
+ *
+ * **Note:** Unlike native `Function#bind`, this method doesn't set the "length"
+ * property of bound functions.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to bind.
+ * @param {*} thisArg The `this` binding of `func`.
+ * @param {...*} [partials] The arguments to be partially applied.
+ * @returns {Function} Returns the new bound function.
+ * @example
+ *
+ * function greet(greeting, punctuation) {
+ *   return greeting + ' ' + this.user + punctuation;
+ * }
+ *
+ * var object = { 'user': 'fred' };
+ *
+ * var bound = _.bind(greet, object, 'hi');
+ * bound('!');
+ * // => 'hi fred!'
+ *
+ * // Bound with placeholders.
+ * var bound = _.bind(greet, object, _, '!');
+ * bound('hi');
+ * // => 'hi fred!'
+ */
+var bind = baseRest(function(func, thisArg, partials) {
+  var bitmask = BIND_FLAG;
+  if (partials.length) {
+    var holders = replaceHolders(partials, getHolder(bind));
+    bitmask |= PARTIAL_FLAG;
+  }
+  return createWrap(func, bitmask, thisArg, partials, holders);
+});
+
+/**
+ * Checks if `value` is likely an `arguments` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArguments(function() { return arguments; }());
+ * // => true
+ *
+ * _.isArguments([1, 2, 3]);
+ * // => false
+ */
+function isArguments(value) {
+  // Safari 8.1 makes `arguments.callee` enumerable in strict mode.
+  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
+    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
+}
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+/**
+ * Checks if `value` is array-like. A value is considered array-like if it's
+ * not a function and has a `value.length` that's an integer greater than or
+ * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+ * @example
+ *
+ * _.isArrayLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLike(document.body.children);
+ * // => true
+ *
+ * _.isArrayLike('abc');
+ * // => true
+ *
+ * _.isArrayLike(_.noop);
+ * // => false
+ */
+function isArrayLike(value) {
+  return value != null && isLength(value.length) && !isFunction(value);
+}
+
+/**
+ * This method is like `_.isArrayLike` except that it also checks if `value`
+ * is an object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array-like object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArrayLikeObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLikeObject(document.body.children);
+ * // => true
+ *
+ * _.isArrayLikeObject('abc');
+ * // => false
+ *
+ * _.isArrayLikeObject(_.noop);
+ * // => false
+ */
+function isArrayLikeObject(value) {
+  return isObjectLike(value) && isArrayLike(value);
+}
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction(value) {
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in Safari 8-9 which returns 'object' for typed array and other constructors.
+  var tag = isObject(value) ? objectToString.call(value) : '';
+  return tag == funcTag || tag == genTag;
+}
+
+/**
+ * Checks if `value` is a valid array-like length.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+ * @example
+ *
+ * _.isLength(3);
+ * // => true
+ *
+ * _.isLength(Number.MIN_VALUE);
+ * // => false
+ *
+ * _.isLength(Infinity);
+ * // => false
+ *
+ * _.isLength('3');
+ * // => false
+ */
+function isLength(value) {
+  return typeof value == 'number' &&
+    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+}
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return !!value && (type == 'object' || type == 'function');
+}
+
 /**
  * Checks if `value` is object-like. A value is object-like if it's not `null`
  * and has a `typeof` result of "object".
@@ -5705,445 +1497,231 @@ var root = __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__["a" /* default */] || fr
  * // => false
  */
 function isObjectLike(value) {
-  return value != null && typeof value == 'object';
+  return !!value && typeof value == 'object';
 }
 
-/* harmony default export */ __webpack_exports__["a"] = (isObjectLike);
-
-
-/***/ }),
-/* 135 */
-/***/ (function(module, exports) {
-
-function M() { this._events = {}; }
-M.prototype = {
-  on: function(ev, cb) {
-    this._events || (this._events = {});
-    var e = this._events;
-    (e[ev] || (e[ev] = [])).push(cb);
-    return this;
-  },
-  removeListener: function(ev, cb) {
-    var e = this._events[ev] || [], i;
-    for(i = e.length-1; i >= 0 && e[i]; i--){
-      if(e[i] === cb || e[i].cb === cb) { e.splice(i, 1); }
-    }
-  },
-  removeAllListeners: function(ev) {
-    if(!ev) { this._events = {}; }
-    else { this._events[ev] && (this._events[ev] = []); }
-  },
-  listeners: function(ev) {
-    return (this._events ? this._events[ev] || [] : []);
-  },
-  emit: function(ev) {
-    this._events || (this._events = {});
-    var args = Array.prototype.slice.call(arguments, 1), i, e = this._events[ev] || [];
-    for(i = e.length-1; i >= 0 && e[i]; i--){
-      e[i].apply(this, args);
-    }
-    return this;
-  },
-  when: function(ev, cb) {
-    return this.once(ev, cb, true);
-  },
-  once: function(ev, cb, when) {
-    if(!cb) return this;
-    function c() {
-      if(!when) this.removeListener(ev, c);
-      if(cb.apply(this, arguments) && when) this.removeListener(ev, c);
-    }
-    c.cb = cb;
-    this.on(ev, c);
-    return this;
-  }
-};
-M.mixin = function(dest) {
-  var o = M.prototype, k;
-  for (k in o) {
-    o.hasOwnProperty(k) && (dest.prototype[k] = o[k]);
-  }
-};
-module.exports = M;
-
-
-/***/ }),
-/* 136 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// default filter
-var Transform = __webpack_require__(14);
-
-var levelMap = { debug: 1, info: 2, warn: 3, error: 4 };
-
-function Filter() {
-  this.enabled = true;
-  this.defaultResult = true;
-  this.clear();
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && objectToString.call(value) == symbolTag);
 }
 
-Transform.mixin(Filter);
-
-// allow all matching, with level >= given level
-Filter.prototype.allow = function(name, level) {
-  this._white.push({ n: name, l: levelMap[level] });
-  return this;
-};
-
-// deny all matching, with level <= given level
-Filter.prototype.deny = function(name, level) {
-  this._black.push({ n: name, l: levelMap[level] });
-  return this;
-};
-
-Filter.prototype.clear = function() {
-  this._white = [];
-  this._black = [];
-  return this;
-};
-
-function test(rule, name) {
-  // use .test for RegExps
-  return (rule.n.test ? rule.n.test(name) : rule.n == name);
-};
-
-Filter.prototype.test = function(name, level) {
-  var i, len = Math.max(this._white.length, this._black.length);
-  for(i = 0; i < len; i++) {
-    if(this._white[i] && test(this._white[i], name) && levelMap[level] >= this._white[i].l) {
-      return true;
-    }
-    if(this._black[i] && test(this._black[i], name) && levelMap[level] <= this._black[i].l) {
-      return false;
-    }
+/**
+ * Converts `value` to a finite number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.12.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {number} Returns the converted number.
+ * @example
+ *
+ * _.toFinite(3.2);
+ * // => 3.2
+ *
+ * _.toFinite(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toFinite(Infinity);
+ * // => 1.7976931348623157e+308
+ *
+ * _.toFinite('3.2');
+ * // => 3.2
+ */
+function toFinite(value) {
+  if (!value) {
+    return value === 0 ? value : 0;
   }
-  return this.defaultResult;
-};
-
-Filter.prototype.write = function(name, level, args) {
-  if(!this.enabled || this.test(name, level)) {
-    return this.emit('item', name, level, args);
+  value = toNumber(value);
+  if (value === INFINITY || value === -INFINITY) {
+    var sign = (value < 0 ? -1 : 1);
+    return sign * MAX_INTEGER;
   }
-};
-
-module.exports = Filter;
-
-
-/***/ }),
-/* 137 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Transform = __webpack_require__(14),
-    Filter = __webpack_require__(136);
-
-var log = new Transform(),
-    slice = Array.prototype.slice;
-
-exports = module.exports = function create(name) {
-  var o   = function() { log.write(name, undefined, slice.call(arguments)); return o; };
-  o.debug = function() { log.write(name, 'debug', slice.call(arguments)); return o; };
-  o.info  = function() { log.write(name, 'info',  slice.call(arguments)); return o; };
-  o.warn  = function() { log.write(name, 'warn',  slice.call(arguments)); return o; };
-  o.error = function() { log.write(name, 'error', slice.call(arguments)); return o; };
-  o.log   = o.debug; // for interface compliance with Node and browser consoles
-  o.suggest = exports.suggest;
-  o.format = log.format;
-  return o;
-};
-
-// filled in separately
-exports.defaultBackend = exports.defaultFormatter = null;
-
-exports.pipe = function(dest) {
-  return log.pipe(dest);
-};
-
-exports.end = exports.unpipe = exports.disable = function(from) {
-  return log.unpipe(from);
-};
-
-exports.Transform = Transform;
-exports.Filter = Filter;
-// this is the default filter that's applied when .enable() is called normally
-// you can bypass it completely and set up your own pipes
-exports.suggest = new Filter();
-
-exports.enable = function() {
-  if(exports.defaultFormatter) {
-    return log.pipe(exports.suggest) // filter
-              .pipe(exports.defaultFormatter) // formatter
-              .pipe(exports.defaultBackend); // backend
-  }
-  return log.pipe(exports.suggest) // filter
-            .pipe(exports.defaultBackend); // formatter
-};
-
-
-
-/***/ }),
-/* 138 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Transform = __webpack_require__(14),
-    cache = [ ];
-
-var logger = new Transform();
-
-logger.write = function(name, level, args) {
-  cache.push([ name, level, args ]);
-};
-
-// utility functions
-logger.get = function() { return cache; };
-logger.empty = function() { cache = []; };
-
-module.exports = logger;
-
-
-/***/ }),
-/* 139 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Transform = __webpack_require__(14);
-
-var newlines = /\n+$/,
-    logger = new Transform();
-
-logger.write = function(name, level, args) {
-  var i = args.length-1;
-  if (typeof console === 'undefined' || !console.log) {
-    return;
-  }
-  if(console.log.apply) {
-    return console.log.apply(console, [name, level].concat(args));
-  } else if(JSON && JSON.stringify) {
-    // console.log.apply is undefined in IE8 and IE9
-    // for IE8/9: make console.log at least a bit less awful
-    if(args[i] && typeof args[i] == 'string') {
-      args[i] = args[i].replace(newlines, '');
-    }
-    try {
-      for(i = 0; i < args.length; i++) {
-        args[i] = JSON.stringify(args[i]);
-      }
-    } catch(e) {}
-    console.log(args.join(' '));
-  }
-};
-
-logger.formatters = ['color', 'minilog'];
-logger.color = __webpack_require__(140);
-logger.minilog = __webpack_require__(141);
-
-module.exports = logger;
-
-
-/***/ }),
-/* 140 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Transform = __webpack_require__(14),
-    color = __webpack_require__(64);
-
-var colors = { debug: ['cyan'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
-    logger = new Transform();
-
-logger.write = function(name, level, args) {
-  var fn = console.log;
-  if(console[level] && console[level].apply) {
-    fn = console[level];
-    fn.apply(console, [ '%c'+name+' %c'+level, color('gray'), color.apply(color, colors[level])].concat(args));
-  }
-};
-
-// NOP, because piping the formatted logs can only cause trouble.
-logger.pipe = function() { };
-
-module.exports = logger;
-
-
-/***/ }),
-/* 141 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Transform = __webpack_require__(14),
-    color = __webpack_require__(64),
-    colors = { debug: ['gray'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
-    logger = new Transform();
-
-logger.write = function(name, level, args) {
-  var fn = console.log;
-  if(level != 'debug' && console[level]) {
-    fn = console[level];
-  }
-
-  var subset = [], i = 0;
-  if(level != 'info') {
-    for(; i < args.length; i++) {
-      if(typeof args[i] != 'string') break;
-    }
-    fn.apply(console, [ '%c'+name +' '+ args.slice(0, i).join(' '), color.apply(color, colors[level]) ].concat(args.slice(i)));
-  } else {
-    fn.apply(console, [ '%c'+name, color.apply(color, colors[level]) ].concat(args));
-  }
-};
-
-// NOP, because piping the formatted logs can only cause trouble.
-logger.pipe = function() { };
-
-module.exports = logger;
-
-
-/***/ }),
-/* 142 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Minilog = __webpack_require__(137);
-
-var oldEnable = Minilog.enable,
-    oldDisable = Minilog.disable,
-    isChrome = (typeof navigator != 'undefined' && /chrome/i.test(navigator.userAgent)),
-    console = __webpack_require__(139);
-
-// Use a more capable logging backend if on Chrome
-Minilog.defaultBackend = (isChrome ? console.minilog : console);
-
-// apply enable inputs from localStorage and from the URL
-if(typeof window != 'undefined') {
-  try {
-    Minilog.enable(JSON.parse(window.localStorage['minilogSettings']));
-  } catch(e) {}
-  if(window.location && window.location.search) {
-    var match = RegExp('[?&]minilog=([^&]*)').exec(window.location.search);
-    match && Minilog.enable(decodeURIComponent(match[1]));
-  }
+  return value === value ? value : 0;
 }
 
-// Make enable also add to localStorage
-Minilog.enable = function() {
-  oldEnable.call(Minilog, true);
-  try { window.localStorage['minilogSettings'] = JSON.stringify(true); } catch(e) {}
-  return this;
-};
+/**
+ * Converts `value` to an integer.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToInteger`](http://www.ecma-international.org/ecma-262/7.0/#sec-tointeger).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {number} Returns the converted integer.
+ * @example
+ *
+ * _.toInteger(3.2);
+ * // => 3
+ *
+ * _.toInteger(Number.MIN_VALUE);
+ * // => 0
+ *
+ * _.toInteger(Infinity);
+ * // => 1.7976931348623157e+308
+ *
+ * _.toInteger('3.2');
+ * // => 3
+ */
+function toInteger(value) {
+  var result = toFinite(value),
+      remainder = result % 1;
 
-Minilog.disable = function() {
-  oldDisable.call(Minilog);
-  try { delete window.localStorage.minilogSettings; } catch(e) {}
-  return this;
-};
-
-exports = module.exports = Minilog;
-
-exports.backends = {
-  array: __webpack_require__(138),
-  browser: Minilog.defaultBackend,
-  localStorage: __webpack_require__(144),
-  jQuery: __webpack_require__(143)
-};
-
-
-/***/ }),
-/* 143 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Transform = __webpack_require__(14);
-
-var cid = new Date().valueOf().toString(36);
-
-function AjaxLogger(options) {
-  this.url = options.url || '';
-  this.cache = [];
-  this.timer = null;
-  this.interval = options.interval || 30*1000;
-  this.enabled = true;
-  this.jQuery = window.jQuery;
-  this.extras = {};
+  return result === result ? (remainder ? result - remainder : result) : 0;
 }
 
-Transform.mixin(AjaxLogger);
-
-AjaxLogger.prototype.write = function(name, level, args) {
-  if(!this.timer) { this.init(); }
-  this.cache.push([name, level].concat(args));
-};
-
-AjaxLogger.prototype.init = function() {
-  if(!this.enabled || !this.jQuery) return;
-  var self = this;
-  this.timer = setTimeout(function() {
-    var i, logs = [], ajaxData, url = self.url;
-    if(self.cache.length == 0) return self.init();
-    // Test each log line and only log the ones that are valid (e.g. don't have circular references).
-    // Slight performance hit but benefit is we log all valid lines.
-    for(i = 0; i < self.cache.length; i++) {
-      try {
-        JSON.stringify(self.cache[i]);
-        logs.push(self.cache[i]);
-      } catch(e) { }
-    }
-    if(self.jQuery.isEmptyObject(self.extras)) {
-        ajaxData = JSON.stringify({ logs: logs });
-        url = self.url + '?client_id=' + cid;
-    } else {
-        ajaxData = JSON.stringify(self.jQuery.extend({logs: logs}, self.extras));
-    }
-
-    self.jQuery.ajax(url, {
-      type: 'POST',
-      cache: false,
-      processData: false,
-      data: ajaxData,
-      contentType: 'application/json',
-      timeout: 10000
-    }).success(function(data, status, jqxhr) {
-      if(data.interval) {
-        self.interval = Math.max(1000, data.interval);
-      }
-    }).error(function() {
-      self.interval = 30000;
-    }).always(function() {
-      self.init();
-    });
-    self.cache = [];
-  }, this.interval);
-};
-
-AjaxLogger.prototype.end = function() {};
-
-// wait until jQuery is defined. Useful if you don't control the load order.
-AjaxLogger.jQueryWait = function(onDone) {
-  if(typeof window !== 'undefined' && (window.jQuery || window.$)) {
-    return onDone(window.jQuery || window.$);
-  } else if (typeof window !== 'undefined') {
-    setTimeout(function() { AjaxLogger.jQueryWait(onDone); }, 200);
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
   }
-};
+  if (isSymbol(value)) {
+    return NAN;
+  }
+  if (isObject(value)) {
+    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+    value = isObject(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = value.replace(reTrim, '');
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
 
-module.exports = AjaxLogger;
+/**
+ * Binds methods of an object to the object itself, overwriting the existing
+ * method.
+ *
+ * **Note:** This method doesn't set the "length" property of bound functions.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {Object} object The object to bind and assign the bound methods to.
+ * @param {...(string|string[])} methodNames The object method names to bind.
+ * @returns {Object} Returns `object`.
+ * @example
+ *
+ * var view = {
+ *   'label': 'docs',
+ *   'click': function() {
+ *     console.log('clicked ' + this.label);
+ *   }
+ * };
+ *
+ * _.bindAll(view, ['click']);
+ * jQuery(element).on('click', view.click);
+ * // => Logs 'clicked docs' when clicked.
+ */
+var bindAll = baseRest(function(object, methodNames) {
+  arrayEach(baseFlatten(methodNames, 1), function(key) {
+    key = toKey(key);
+    object[key] = bind(object[key], object);
+  });
+  return object;
+});
 
+/**
+ * Creates a function that returns `value`.
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Util
+ * @param {*} value The value to return from the new function.
+ * @returns {Function} Returns the new constant function.
+ * @example
+ *
+ * var objects = _.times(2, _.constant({ 'a': 1 }));
+ *
+ * console.log(objects);
+ * // => [{ 'a': 1 }, { 'a': 1 }]
+ *
+ * console.log(objects[0] === objects[1]);
+ * // => true
+ */
+function constant(value) {
+  return function() {
+    return value;
+  };
+}
+
+/**
+ * This method returns the first argument it receives.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {*} value Any value.
+ * @returns {*} Returns `value`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ *
+ * console.log(_.identity(object) === object);
+ * // => true
+ */
+function identity(value) {
+  return value;
+}
+
+// Assign default placeholders.
+bind.placeholder = {};
+
+module.exports = bindAll;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63)))
 
 /***/ }),
-/* 144 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Transform = __webpack_require__(14),
-    cache = false;
-
-var logger = new Transform();
-
-logger.write = function(name, level, args) {
-  if(typeof window == 'undefined' || typeof JSON == 'undefined' || !JSON.stringify || !JSON.parse) return;
-  try {
-    if(!cache) { cache = (window.localStorage.minilog ? JSON.parse(window.localStorage.minilog) : []); }
-    cache.push([ new Date().toString(), name, level, args ]);
-    window.localStorage.minilog = JSON.stringify(cache);
-  } catch(e) {}
-};
-
-module.exports = logger;
-
-/***/ }),
-/* 145 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -6180,7 +1758,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 var paper = function(self, undefined) {
 
-self = self || __webpack_require__(248);
+self = self || __webpack_require__(257);
 var window = self.window,
 	document = self.document;
 
@@ -20914,7 +16492,7 @@ Base.exports.PaperScript = function() {
 	var global = this,
 		acorn = global.acorn;
 	if (!acorn && "function" !== 'undefined') {
-		try { acorn = __webpack_require__(103); } catch(e) {}
+		try { acorn = __webpack_require__(110); } catch(e) {}
 	}
 	if (!acorn) {
 		var exports, module;
@@ -22624,7 +18202,7 @@ paper = new (PaperScope.inject(Base.exports, {
 }))();
 
 if (paper.agent.node) {
-	__webpack_require__(247)(paper);
+	__webpack_require__(256)(paper);
 }
 
 if (true) {
@@ -22642,8 +18220,7121 @@ return paper;
 
 
 /***/ }),
-/* 146 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(251);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(250);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(249);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(107);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "applyMiddleware", function() { return __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "compose", function() { return __WEBPACK_IMPORTED_MODULE_4__compose__["a"]; });
+
+
+
+
+
+
+
+/*
+* This is a dummy function to check if the function name has been altered by minification.
+* If the function has been minified and NODE_ENV !== 'production', warn the user.
+*/
+function isCrushed() {}
+
+if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_warning__["a" /* default */])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+}
+
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 41 */,
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var stylePath = function stylePath(path, isEraser) {
+    if (isEraser) {
+        path.fillColor = 'white';
+    } else {
+        // TODO: Add back brush styling. Keep a separate active toolbar style for brush vs pen.
+        // path = pg.stylebar.applyActiveToolbarStyle(path);
+        path.fillColor = 'black';
+    }
+};
+
+var styleCursorPreview = function styleCursorPreview(path, isEraser) {
+    if (isEraser) {
+        path.fillColor = 'white';
+        path.strokeColor = 'cornflowerblue';
+        path.strokeWidth = 1;
+    } else {
+        // TODO: Add back brush styling. Keep a separate active toolbar style for brush vs pen.
+        // path = pg.stylebar.applyActiveToolbarStyle(path);
+        path.fillColor = 'black';
+        path.strokeColor = 'cornflowerblue';
+        path.strokeWidth = 1;
+    }
+};
+
+exports.stylePath = stylePath;
+exports.styleCursorPreview = styleCursorPreview;
+
+/***/ }),
+/* 43 */,
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(144);
+
+
+
+
+/** `Object#toString` result references. */
+var objectTag = '[object Object]';
+
+/** Used for built-in method references. */
+var funcProto = Function.prototype,
+    objectProto = Object.prototype;
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString = funcProto.toString;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/** Used to infer the `Object` constructor. */
+var objectCtorString = funcToString.call(Object);
+
+/**
+ * Checks if `value` is a plain object, that is, an object created by the
+ * `Object` constructor or one with a `[[Prototype]]` of `null`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.8.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a plain object, else `false`.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ * }
+ *
+ * _.isPlainObject(new Foo);
+ * // => false
+ *
+ * _.isPlainObject([1, 2, 3]);
+ * // => false
+ *
+ * _.isPlainObject({ 'x': 0, 'y': 0 });
+ * // => true
+ *
+ * _.isPlainObject(Object.create(null));
+ * // => true
+ */
+function isPlainObject(value) {
+  if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__["a" /* default */])(value) || __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__["a" /* default */])(value) != objectTag) {
+    return false;
+  }
+  var proto = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__getPrototype_js__["a" /* default */])(value);
+  if (proto === null) {
+    return true;
+  }
+  var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+  return typeof Ctor == 'function' && Ctor instanceof Ctor &&
+    funcToString.call(Ctor) == objectCtorString;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (isPlainObject);
+
+
+/***/ }),
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = warning;
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+    /* eslint-disable no-empty */
+  } catch (e) {}
+  /* eslint-enable no-empty */
+}
+
+/***/ }),
+/* 62 */,
+/* 63 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _paper = __webpack_require__(32);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _log = __webpack_require__(28);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _broadBrushHelper = __webpack_require__(112);
+
+var _broadBrushHelper2 = _interopRequireDefault(_broadBrushHelper);
+
+var _segmentBrushHelper = __webpack_require__(113);
+
+var _segmentBrushHelper2 = _interopRequireDefault(_segmentBrushHelper);
+
+var _stylePath = __webpack_require__(42);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Shared code for the brush and eraser mode. Adds functions on the paper tool object
+ * to handle mouse events, which are delegated to broad-brush-helper and segment-brush-helper
+ * based on the brushSize in the state.
+ */
+var Blobbiness = function () {
+    _createClass(Blobbiness, null, [{
+        key: 'BROAD',
+        get: function get() {
+            return 'broadbrush';
+        }
+    }, {
+        key: 'SEGMENT',
+        get: function get() {
+            return 'segmentbrush';
+        }
+
+        // If brush size >= threshold use segment brush, else use broadbrush
+        // Segment brush has performance issues at low threshold, but broad brush has weird corners
+        // which get more obvious the bigger it is
+
+    }, {
+        key: 'THRESHOLD',
+        get: function get() {
+            return 9;
+        }
+    }]);
+
+    function Blobbiness() {
+        _classCallCheck(this, Blobbiness);
+
+        this.broadBrushHelper = new _broadBrushHelper2.default();
+        this.segmentBrushHelper = new _segmentBrushHelper2.default();
+    }
+
+    /**
+     * Set configuration options for a blob
+     * @param {!object} options Configuration
+     * @param {!number} options.brushSize Width of blob marking made by mouse
+     * @param {!boolean} options.isEraser Whether the stroke should be treated as an erase path. If false,
+     *     the stroke is an additive path.
+     */
+
+
+    _createClass(Blobbiness, [{
+        key: 'setOptions',
+        value: function setOptions(options) {
+            this.options = options;
+            this.resizeCursorIfNeeded();
+        }
+
+        /**
+         * Adds handlers on the mouse tool to draw blobs. Initialize with configuration options for a blob.
+         * @param {!object} options Configuration
+         * @param {!number} options.brushSize Width of blob marking made by mouse
+         * @param {!boolean} options.isEraser Whether the stroke should be treated as an erase path. If false,
+         *     the stroke is an additive path.
+         */
+
+    }, {
+        key: 'activateTool',
+        value: function activateTool(options) {
+            this.tool = new _paper2.default.Tool();
+            this.cursorPreviewLastPoint = new _paper2.default.Point(-10000, -10000);
+            this.setOptions(options);
+            this.tool.fixedDistance = 1;
+
+            var blob = this;
+            this.tool.onMouseMove = function (event) {
+                blob.resizeCursorIfNeeded(event.point);
+                (0, _stylePath.styleCursorPreview)(blob.cursorPreview, blob.options.isEraser);
+                blob.cursorPreview.bringToFront();
+                blob.cursorPreview.position = event.point;
+            };
+
+            this.tool.onMouseDown = function (event) {
+                blob.resizeCursorIfNeeded(event.point);
+                if (event.event.button > 0) return; // only first mouse button
+
+                if (blob.options.brushSize < Blobbiness.THRESHOLD) {
+                    blob.brush = Blobbiness.BROAD;
+                    blob.broadBrushHelper.onBroadMouseDown(event, blob.tool, blob.options);
+                } else {
+                    blob.brush = Blobbiness.SEGMENT;
+                    blob.segmentBrushHelper.onSegmentMouseDown(event, blob.tool, blob.options);
+                }
+                blob.cursorPreview.bringToFront();
+                blob.cursorPreview.position = event.point;
+                _paper2.default.view.draw();
+            };
+
+            this.tool.onMouseDrag = function (event) {
+                blob.resizeCursorIfNeeded(event.point);
+                if (event.event.button > 0) return; // only first mouse button
+                if (blob.brush === Blobbiness.BROAD) {
+                    blob.broadBrushHelper.onBroadMouseDrag(event, blob.tool, blob.options);
+                } else if (blob.brush === Blobbiness.SEGMENT) {
+                    blob.segmentBrushHelper.onSegmentMouseDrag(event, blob.tool, blob.options);
+                } else {
+                    _log2.default.warn('Brush type does not exist: ' + blob.brush);
+                }
+
+                blob.cursorPreview.bringToFront();
+                blob.cursorPreview.position = event.point;
+                _paper2.default.view.draw();
+            };
+
+            this.tool.onMouseUp = function (event) {
+                blob.resizeCursorIfNeeded(event.point);
+                if (event.event.button > 0) return; // only first mouse button
+
+                var lastPath = void 0;
+                if (blob.brush === Blobbiness.BROAD) {
+                    lastPath = blob.broadBrushHelper.onBroadMouseUp(event, blob.tool, blob.options);
+                } else if (blob.brush === Blobbiness.SEGMENT) {
+                    lastPath = blob.segmentBrushHelper.onSegmentMouseUp(event, blob.tool, blob.options);
+                } else {
+                    _log2.default.warn('Brush type does not exist: ' + blob.brush);
+                }
+
+                if (blob.options.isEraser) {
+                    blob.mergeEraser(lastPath);
+                } else {
+                    blob.mergeBrush(lastPath);
+                }
+
+                blob.cursorPreview.bringToFront();
+                blob.cursorPreview.position = event.point;
+
+                // Reset
+                blob.brush = null;
+                this.fixedDistance = 1;
+            };
+            this.tool.activate();
+        }
+    }, {
+        key: 'resizeCursorIfNeeded',
+        value: function resizeCursorIfNeeded(point) {
+            if (!this.options) {
+                return;
+            }
+
+            if (typeof point === 'undefined') {
+                point = this.cursorPreviewLastPoint;
+            } else {
+                this.cursorPreviewLastPoint = point;
+            }
+
+            if (this.cursorPreview && this.brushSize === this.options.brushSize) {
+                return;
+            }
+            var newPreview = new _paper2.default.Path.Circle({
+                center: point,
+                radius: this.options.brushSize / 2
+            });
+            if (this.cursorPreview) {
+                this.cursorPreview.segments = newPreview.segments;
+                newPreview.remove();
+            } else {
+                this.cursorPreview = newPreview;
+                (0, _stylePath.styleCursorPreview)(this.cursorPreview, this.options.isEraser);
+            }
+            this.brushSize = this.options.brushSize;
+        }
+    }, {
+        key: 'mergeBrush',
+        value: function mergeBrush(lastPath) {
+            var blob = this;
+
+            // Get all path items to merge with
+            var paths = _paper2.default.project.getItems({
+                match: function match(item) {
+                    return blob.isMergeable(lastPath, item);
+                }
+            });
+
+            var mergedPath = lastPath;
+            var i = void 0;
+            // Move down z order to first overlapping item
+            for (i = paths.length - 1; i >= 0 && !this.touches(paths[i], lastPath); i--) {
+                continue;
+            }
+            var mergedPathIndex = i;
+            for (; i >= 0; i--) {
+                if (!this.touches(paths[i], lastPath)) {
+                    continue;
+                }
+                if (!paths[i].getFillColor()) {
+                    // Ignore for merge. Paths without fill need to be in paths though,
+                    // since they can visibly change if z order changes
+                } else if (this.colorMatch(paths[i], lastPath)) {
+                    // Make sure the new shape isn't overlapped by anything that would
+                    // visibly change if we change its z order
+                    for (var j = mergedPathIndex; j > i; j--) {
+                        if (this.touches(paths[j], paths[i])) {
+                            continue;
+                        }
+                    }
+                    // Merge same fill color
+                    var tempPath = mergedPath.unite(paths[i]);
+                    tempPath.strokeColor = paths[i].strokeColor;
+                    tempPath.strokeWidth = paths[i].strokeWidth;
+                    if (mergedPath === lastPath) {
+                        tempPath.insertAbove(paths[i]); // First intersected path determines z position of the new path
+                    } else {
+                        tempPath.insertAbove(mergedPath); // Rest of merges join z index of merged path
+                        mergedPathIndex--; // Removed an item, so the merged path index decreases
+                    }
+                    mergedPath.remove();
+                    mergedPath = tempPath;
+                    paths[i].remove();
+                    paths.splice(i, 1);
+                }
+            }
+            // TODO: Add back undo
+            // pg.undo.snapshot('broadbrush');
+        }
+    }, {
+        key: 'mergeEraser',
+        value: function mergeEraser(lastPath) {
+            var blob = this;
+
+            // Get all path items to merge with
+            // If there are selected items, try to erase from amongst those.
+            var items = _paper2.default.project.getItems({
+                match: function match(item) {
+                    return item.selected && blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);
+                }
+            });
+            // Eraser didn't hit anything selected, so assume they meant to erase from all instead of from subset
+            // and deselect the selection
+            if (items.length === 0) {
+                // TODO: Add back selection handling
+                // pg.selection.clearSelection();
+                items = _paper2.default.project.getItems({
+                    match: function match(item) {
+                        return blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);
+                    }
+                });
+            }
+
+            for (var i = items.length - 1; i >= 0; i--) {
+                // TODO handle compound paths
+                if (items[i] instanceof _paper2.default.Path && (!items[i].fillColor || items[i].fillColor._alpha === 0)) {
+                    // Gather path segments
+                    var _subpaths = [];
+                    var firstSeg = items[i];
+                    var intersections = firstSeg.getIntersections(lastPath);
+                    for (var j = intersections.length - 1; j >= 0; j--) {
+                        var split = firstSeg.splitAt(intersections[j]);
+                        if (split) {
+                            split.insertAbove(firstSeg);
+                            _subpaths.push(split);
+                        }
+                    }
+                    _subpaths.push(firstSeg);
+
+                    // Remove the ones that are within the eraser stroke boundary
+                    for (var k = _subpaths.length - 1; k >= 0; k--) {
+                        var segMidpoint = _subpaths[k].getLocationAt(_subpaths[k].length / 2).point;
+                        if (lastPath.contains(segMidpoint)) {
+                            _subpaths[k].remove();
+                            _subpaths.splice(k, 1);
+                        }
+                    }
+                    lastPath.remove();
+                    // TODO add back undo
+                    // pg.undo.snapshot('eraser');
+                    continue;
+                }
+                // Erase
+                var newPath = items[i].subtract(lastPath);
+                newPath.insertBelow(items[i]);
+
+                // Gather path segments
+                var subpaths = [];
+                // TODO: Handle compound path
+                if (items[i] instanceof _paper2.default.Path && !items[i].closed) {
+                    var _firstSeg = items[i].clone();
+                    var _intersections = _firstSeg.getIntersections(lastPath);
+                    // keep first and last segments
+                    for (var _j = _intersections.length - 1; _j >= 0; _j--) {
+                        var _split = _firstSeg.splitAt(_intersections[_j]);
+                        _split.insertAbove(_firstSeg);
+                        subpaths.push(_split);
+                    }
+                    subpaths.push(_firstSeg);
+                }
+
+                // Remove the ones that are within the eraser stroke boundary, or are already part of new path.
+                // This way subpaths only remain if they didn't get turned into a shape by subtract.
+                for (var _k = subpaths.length - 1; _k >= 0; _k--) {
+                    var _segMidpoint = subpaths[_k].getLocationAt(subpaths[_k].length / 2).point;
+                    if (lastPath.contains(_segMidpoint) || newPath.contains(_segMidpoint)) {
+                        subpaths[_k].remove();
+                        subpaths.splice(_k, 1);
+                    }
+                }
+
+                // Divide topologically separate shapes into their own compound paths, instead of
+                // everything being stuck together.
+                // Assume that result of erase operation returns clockwise paths for positive shapes
+                var clockwiseChildren = [];
+                var ccwChildren = [];
+                if (newPath.children) {
+                    for (var _j2 = newPath.children.length - 1; _j2 >= 0; _j2--) {
+                        var child = newPath.children[_j2];
+                        if (child.isClockwise()) {
+                            clockwiseChildren.push(child);
+                        } else {
+                            ccwChildren.push(child);
+                        }
+                    }
+                    for (var _j3 = 0; _j3 < clockwiseChildren.length; _j3++) {
+                        var cw = clockwiseChildren[_j3];
+                        cw.copyAttributes(newPath);
+                        cw.fillColor = newPath.fillColor;
+                        cw.strokeColor = newPath.strokeColor;
+                        cw.strokeWidth = newPath.strokeWidth;
+                        cw.insertAbove(items[i]);
+
+                        // Go backward since we are deleting elements
+                        var newCw = cw;
+                        for (var _k2 = ccwChildren.length - 1; _k2 >= 0; _k2--) {
+                            var ccw = ccwChildren[_k2];
+                            if (this.firstEnclosesSecond(ccw, cw) || this.firstEnclosesSecond(cw, ccw)) {
+                                var temp = newCw.subtract(ccw);
+                                temp.insertAbove(newCw);
+                                newCw.remove();
+                                newCw = temp;
+                                ccw.remove();
+                                ccwChildren.splice(_k2, 1);
+                            }
+                        }
+                    }
+                    newPath.remove();
+                }
+                items[i].remove();
+            }
+            lastPath.remove();
+            // TODO: Add back undo handling
+            // pg.undo.snapshot('eraser');
+        }
+    }, {
+        key: 'colorMatch',
+        value: function colorMatch(existingPath, addedPath) {
+            // Note: transparent fill colors do notdetect as touching
+            return existingPath.getFillColor().equals(addedPath.getFillColor()) && (addedPath.getStrokeColor() === existingPath.getStrokeColor() || // both null
+            addedPath.getStrokeColor() && addedPath.getStrokeColor().equals(existingPath.getStrokeColor())) && addedPath.getStrokeWidth() === existingPath.getStrokeWidth() && this.touches(existingPath, addedPath);
+        }
+    }, {
+        key: 'touches',
+        value: function touches(path1, path2) {
+            // Two shapes are touching if their paths intersect
+            if (path1 && path2 && path1.intersects(path2)) {
+                return true;
+            }
+            return this.firstEnclosesSecond(path1, path2) || this.firstEnclosesSecond(path2, path1);
+        }
+    }, {
+        key: 'firstEnclosesSecond',
+        value: function firstEnclosesSecond(path1, path2) {
+            // Two shapes are also touching if one is completely inside the other
+            if (path1 && path2 && path2.firstSegment && path2.firstSegment.point && path1.hitTest(path2.firstSegment.point)) {
+                return true;
+            }
+            // TODO: clean up these no point paths
+            return false;
+        }
+    }, {
+        key: 'isMergeable',
+        value: function isMergeable(newPath, existingPath) {
+            return existingPath instanceof _paper2.default.PathItem && // path or compound path
+            existingPath !== this.cursorPreview && // don't merge with the mouse preview
+            existingPath !== newPath && // don't merge with self
+            existingPath.parent instanceof _paper2.default.Layer; // don't merge with nested in group
+        }
+    }, {
+        key: 'deactivateTool',
+        value: function deactivateTool() {
+            this.cursorPreview.remove();
+            this.cursorPreview = null;
+            this.tool.remove();
+            this.tool = null;
+        }
+    }]);
+
+    return Blobbiness;
+}();
+
+exports.default = Blobbiness;
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.changeBrushSize = exports.default = undefined;
+
+var _log = __webpack_require__(28);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_BRUSH_SIZE = 'scratch-paint/brush-mode/CHANGE_BRUSH_SIZE';
+var initialState = { brushSize: 5 };
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_BRUSH_SIZE:
+            if (isNaN(action.brushSize)) {
+                _log2.default.warn('Invalid brush size: ' + action.brushSize);
+                return state;
+            }
+            return { brushSize: Math.max(1, action.brushSize) };
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeBrushSize = function changeBrushSize(brushSize) {
+    return {
+        type: CHANGE_BRUSH_SIZE,
+        brushSize: brushSize
+    };
+};
+
+exports.default = reducer;
+exports.changeBrushSize = changeBrushSize;
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.changeBrushSize = exports.default = undefined;
+
+var _log = __webpack_require__(28);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_ERASER_SIZE = 'scratch-paint/eraser-mode/CHANGE_ERASER_SIZE';
+var initialState = { brushSize: 20 };
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_ERASER_SIZE:
+            if (isNaN(action.brushSize)) {
+                _log2.default.warn('Invalid brush size: ' + action.brushSize);
+                return state;
+            }
+            return { brushSize: Math.max(1, action.brushSize) };
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeBrushSize = function changeBrushSize(brushSize) {
+    return {
+        type: CHANGE_ERASER_SIZE,
+        brushSize: brushSize
+    };
+};
+
+exports.default = reducer;
+exports.changeBrushSize = changeBrushSize;
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.changeMode = exports.default = undefined;
+
+var _modes = __webpack_require__(29);
+
+var _modes2 = _interopRequireDefault(_modes);
+
+var _log = __webpack_require__(28);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_MODE = 'scratch-paint/modes/CHANGE_MODE';
+var initialState = _modes2.default.BRUSH;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_MODE:
+            if (action.mode in _modes2.default) {
+                return action.mode;
+            }
+            _log2.default.warn('Mode does not exist: ' + action.mode);
+        /* falls through */
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeMode = function changeMode(mode) {
+    return {
+        type: CHANGE_MODE,
+        mode: mode
+    };
+};
+
+exports.default = reducer;
+exports.changeMode = changeMode;
+
+/***/ }),
+/* 68 */,
+/* 69 */,
+/* 70 */,
+/* 71 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__root_js__ = __webpack_require__(143);
+
+
+/** Built-in value references. */
+var Symbol = __WEBPACK_IMPORTED_MODULE_0__root_js__["a" /* default */].Symbol;
+
+/* harmony default export */ __webpack_exports__["a"] = (Symbol);
+
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports) {
+
+var hex = {
+  black: '#000',
+  red: '#c23621',
+  green: '#25bc26',
+  yellow: '#bbbb00',
+  blue:  '#492ee1',
+  magenta: '#d338d3',
+  cyan: '#33bbc8',
+  gray: '#808080',
+  purple: '#708'
+};
+function color(fg, isInverse) {
+  if(isInverse) {
+    return 'color: #fff; background: '+hex[fg]+';';
+  } else {
+    return 'color: '+hex[fg]+';';
+  }
+}
+
+module.exports = color;
+
+
+/***/ }),
+/* 73 */,
+/* 74 */,
+/* 75 */,
+/* 76 */,
+/* 77 */,
+/* 78 */,
+/* 79 */,
+/* 80 */,
+/* 81 */,
+/* 82 */,
+/* 83 */,
+/* 84 */,
+/* 85 */,
+/* 86 */,
+/* 87 */,
+/* 88 */,
+/* 89 */,
+/* 90 */,
+/* 91 */,
+/* 92 */,
+/* 93 */,
+/* 94 */,
+/* 95 */,
+/* 96 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = connectAdvanced;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_invariant__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_Subscription__ = __webpack_require__(234);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_PropTypes__ = __webpack_require__(98);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+
+
+
+
+
+
+
+var hotReloadingVersion = 0;
+var dummyState = {};
+function noop() {}
+function makeSelectorStateful(sourceSelector, store) {
+  // wrap the selector in an object that tracks its results between runs.
+  var selector = {
+    run: function runComponentSelector(props) {
+      try {
+        var nextProps = sourceSelector(store.getState(), props);
+        if (nextProps !== selector.props || selector.error) {
+          selector.shouldComponentUpdate = true;
+          selector.props = nextProps;
+          selector.error = null;
+        }
+      } catch (error) {
+        selector.shouldComponentUpdate = true;
+        selector.error = error;
+      }
+    }
+  };
+
+  return selector;
+}
+
+function connectAdvanced(
+/*
+  selectorFactory is a func that is responsible for returning the selector function used to
+  compute new props from state, props, and dispatch. For example:
+     export default connectAdvanced((dispatch, options) => (state, props) => ({
+      thing: state.things[props.thingId],
+      saveThing: fields => dispatch(actionCreators.saveThing(props.thingId, fields)),
+    }))(YourComponent)
+   Access to dispatch is provided to the factory so selectorFactories can bind actionCreators
+  outside of their selector as an optimization. Options passed to connectAdvanced are passed to
+  the selectorFactory, along with displayName and WrappedComponent, as the second argument.
+   Note that selectorFactory is responsible for all caching/memoization of inbound and outbound
+  props. Do not use connectAdvanced directly without memoizing results between calls to your
+  selector, otherwise the Connect component will re-render on every state or props change.
+*/
+selectorFactory) {
+  var _contextTypes, _childContextTypes;
+
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref$getDisplayName = _ref.getDisplayName,
+      getDisplayName = _ref$getDisplayName === undefined ? function (name) {
+    return 'ConnectAdvanced(' + name + ')';
+  } : _ref$getDisplayName,
+      _ref$methodName = _ref.methodName,
+      methodName = _ref$methodName === undefined ? 'connectAdvanced' : _ref$methodName,
+      _ref$renderCountProp = _ref.renderCountProp,
+      renderCountProp = _ref$renderCountProp === undefined ? undefined : _ref$renderCountProp,
+      _ref$shouldHandleStat = _ref.shouldHandleStateChanges,
+      shouldHandleStateChanges = _ref$shouldHandleStat === undefined ? true : _ref$shouldHandleStat,
+      _ref$storeKey = _ref.storeKey,
+      storeKey = _ref$storeKey === undefined ? 'store' : _ref$storeKey,
+      _ref$withRef = _ref.withRef,
+      withRef = _ref$withRef === undefined ? false : _ref$withRef,
+      connectOptions = _objectWithoutProperties(_ref, ['getDisplayName', 'methodName', 'renderCountProp', 'shouldHandleStateChanges', 'storeKey', 'withRef']);
+
+  var subscriptionKey = storeKey + 'Subscription';
+  var version = hotReloadingVersion++;
+
+  var contextTypes = (_contextTypes = {}, _contextTypes[storeKey] = __WEBPACK_IMPORTED_MODULE_4__utils_PropTypes__["a" /* storeShape */], _contextTypes[subscriptionKey] = __WEBPACK_IMPORTED_MODULE_4__utils_PropTypes__["b" /* subscriptionShape */], _contextTypes);
+  var childContextTypes = (_childContextTypes = {}, _childContextTypes[subscriptionKey] = __WEBPACK_IMPORTED_MODULE_4__utils_PropTypes__["b" /* subscriptionShape */], _childContextTypes);
+
+  return function wrapWithConnect(WrappedComponent) {
+    __WEBPACK_IMPORTED_MODULE_1_invariant___default()(typeof WrappedComponent == 'function', 'You must pass a component to the function returned by ' + ('connect. Instead received ' + JSON.stringify(WrappedComponent)));
+
+    var wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+
+    var displayName = getDisplayName(wrappedComponentName);
+
+    var selectorFactoryOptions = _extends({}, connectOptions, {
+      getDisplayName: getDisplayName,
+      methodName: methodName,
+      renderCountProp: renderCountProp,
+      shouldHandleStateChanges: shouldHandleStateChanges,
+      storeKey: storeKey,
+      withRef: withRef,
+      displayName: displayName,
+      wrappedComponentName: wrappedComponentName,
+      WrappedComponent: WrappedComponent
+    });
+
+    var Connect = function (_Component) {
+      _inherits(Connect, _Component);
+
+      function Connect(props, context) {
+        _classCallCheck(this, Connect);
+
+        var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
+
+        _this.version = version;
+        _this.state = {};
+        _this.renderCount = 0;
+        _this.store = props[storeKey] || context[storeKey];
+        _this.propsMode = Boolean(props[storeKey]);
+        _this.setWrappedInstance = _this.setWrappedInstance.bind(_this);
+
+        __WEBPACK_IMPORTED_MODULE_1_invariant___default()(_this.store, 'Could not find "' + storeKey + '" in either the context or props of ' + ('"' + displayName + '". Either wrap the root component in a <Provider>, ') + ('or explicitly pass "' + storeKey + '" as a prop to "' + displayName + '".'));
+
+        _this.initSelector();
+        _this.initSubscription();
+        return _this;
+      }
+
+      Connect.prototype.getChildContext = function getChildContext() {
+        var _ref2;
+
+        // If this component received store from props, its subscription should be transparent
+        // to any descendants receiving store+subscription from context; it passes along
+        // subscription passed to it. Otherwise, it shadows the parent subscription, which allows
+        // Connect to control ordering of notifications to flow top-down.
+        var subscription = this.propsMode ? null : this.subscription;
+        return _ref2 = {}, _ref2[subscriptionKey] = subscription || this.context[subscriptionKey], _ref2;
+      };
+
+      Connect.prototype.componentDidMount = function componentDidMount() {
+        if (!shouldHandleStateChanges) return;
+
+        // componentWillMount fires during server side rendering, but componentDidMount and
+        // componentWillUnmount do not. Because of this, trySubscribe happens during ...didMount.
+        // Otherwise, unsubscription would never take place during SSR, causing a memory leak.
+        // To handle the case where a child component may have triggered a state change by
+        // dispatching an action in its componentWillMount, we have to re-run the select and maybe
+        // re-render.
+        this.subscription.trySubscribe();
+        this.selector.run(this.props);
+        if (this.selector.shouldComponentUpdate) this.forceUpdate();
+      };
+
+      Connect.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+        this.selector.run(nextProps);
+      };
+
+      Connect.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
+        return this.selector.shouldComponentUpdate;
+      };
+
+      Connect.prototype.componentWillUnmount = function componentWillUnmount() {
+        if (this.subscription) this.subscription.tryUnsubscribe();
+        this.subscription = null;
+        this.notifyNestedSubs = noop;
+        this.store = null;
+        this.selector.run = noop;
+        this.selector.shouldComponentUpdate = false;
+      };
+
+      Connect.prototype.getWrappedInstance = function getWrappedInstance() {
+        __WEBPACK_IMPORTED_MODULE_1_invariant___default()(withRef, 'To access the wrapped instance, you need to specify ' + ('{ withRef: true } in the options argument of the ' + methodName + '() call.'));
+        return this.wrappedInstance;
+      };
+
+      Connect.prototype.setWrappedInstance = function setWrappedInstance(ref) {
+        this.wrappedInstance = ref;
+      };
+
+      Connect.prototype.initSelector = function initSelector() {
+        var sourceSelector = selectorFactory(this.store.dispatch, selectorFactoryOptions);
+        this.selector = makeSelectorStateful(sourceSelector, this.store);
+        this.selector.run(this.props);
+      };
+
+      Connect.prototype.initSubscription = function initSubscription() {
+        if (!shouldHandleStateChanges) return;
+
+        // parentSub's source should match where store came from: props vs. context. A component
+        // connected to the store via props shouldn't use subscription from context, or vice versa.
+        var parentSub = (this.propsMode ? this.props : this.context)[subscriptionKey];
+        this.subscription = new __WEBPACK_IMPORTED_MODULE_3__utils_Subscription__["a" /* default */](this.store, parentSub, this.onStateChange.bind(this));
+
+        // `notifyNestedSubs` is duplicated to handle the case where the component is  unmounted in
+        // the middle of the notification loop, where `this.subscription` will then be null. An
+        // extra null check every change can be avoided by copying the method onto `this` and then
+        // replacing it with a no-op on unmount. This can probably be avoided if Subscription's
+        // listeners logic is changed to not call listeners that have been unsubscribed in the
+        // middle of the notification loop.
+        this.notifyNestedSubs = this.subscription.notifyNestedSubs.bind(this.subscription);
+      };
+
+      Connect.prototype.onStateChange = function onStateChange() {
+        this.selector.run(this.props);
+
+        if (!this.selector.shouldComponentUpdate) {
+          this.notifyNestedSubs();
+        } else {
+          this.componentDidUpdate = this.notifyNestedSubsOnComponentDidUpdate;
+          this.setState(dummyState);
+        }
+      };
+
+      Connect.prototype.notifyNestedSubsOnComponentDidUpdate = function notifyNestedSubsOnComponentDidUpdate() {
+        // `componentDidUpdate` is conditionally implemented when `onStateChange` determines it
+        // needs to notify nested subs. Once called, it unimplements itself until further state
+        // changes occur. Doing it this way vs having a permanent `componentDidMount` that does
+        // a boolean check every time avoids an extra method call most of the time, resulting
+        // in some perf boost.
+        this.componentDidUpdate = undefined;
+        this.notifyNestedSubs();
+      };
+
+      Connect.prototype.isSubscribed = function isSubscribed() {
+        return Boolean(this.subscription) && this.subscription.isSubscribed();
+      };
+
+      Connect.prototype.addExtraProps = function addExtraProps(props) {
+        if (!withRef && !renderCountProp && !(this.propsMode && this.subscription)) return props;
+        // make a shallow copy so that fields added don't leak to the original selector.
+        // this is especially important for 'ref' since that's a reference back to the component
+        // instance. a singleton memoized selector would then be holding a reference to the
+        // instance, preventing the instance from being garbage collected, and that would be bad
+        var withExtras = _extends({}, props);
+        if (withRef) withExtras.ref = this.setWrappedInstance;
+        if (renderCountProp) withExtras[renderCountProp] = this.renderCount++;
+        if (this.propsMode && this.subscription) withExtras[subscriptionKey] = this.subscription;
+        return withExtras;
+      };
+
+      Connect.prototype.render = function render() {
+        var selector = this.selector;
+        selector.shouldComponentUpdate = false;
+
+        if (selector.error) {
+          throw selector.error;
+        } else {
+          return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react__["createElement"])(WrappedComponent, this.addExtraProps(selector.props));
+        }
+      };
+
+      return Connect;
+    }(__WEBPACK_IMPORTED_MODULE_2_react__["Component"]);
+
+    Connect.WrappedComponent = WrappedComponent;
+    Connect.displayName = displayName;
+    Connect.childContextTypes = childContextTypes;
+    Connect.contextTypes = contextTypes;
+    Connect.propTypes = contextTypes;
+
+    if (process.env.NODE_ENV !== 'production') {
+      Connect.prototype.componentWillUpdate = function componentWillUpdate() {
+        // We are hot reloading!
+        if (this.version !== version) {
+          this.version = version;
+          this.initSelector();
+
+          if (this.subscription) this.subscription.tryUnsubscribe();
+          this.initSubscription();
+          if (shouldHandleStateChanges) this.subscription.trySubscribe();
+        }
+      };
+    }
+
+    return __WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics___default()(Connect, WrappedComponent);
+  };
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 97 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["b"] = wrapMapToPropsConstant;
+/* unused harmony export getDependsOnOwnProps */
+/* harmony export (immutable) */ __webpack_exports__["a"] = wrapMapToPropsFunc;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_verifyPlainObject__ = __webpack_require__(99);
+
+
+function wrapMapToPropsConstant(getConstant) {
+  return function initConstantSelector(dispatch, options) {
+    var constant = getConstant(dispatch, options);
+
+    function constantSelector() {
+      return constant;
+    }
+    constantSelector.dependsOnOwnProps = false;
+    return constantSelector;
+  };
+}
+
+// dependsOnOwnProps is used by createMapToPropsProxy to determine whether to pass props as args
+// to the mapToProps function being wrapped. It is also used by makePurePropsSelector to determine
+// whether mapToProps needs to be invoked when props have changed.
+// 
+// A length of one signals that mapToProps does not depend on props from the parent component.
+// A length of zero is assumed to mean mapToProps is getting args via arguments or ...args and
+// therefore not reporting its length accurately..
+function getDependsOnOwnProps(mapToProps) {
+  return mapToProps.dependsOnOwnProps !== null && mapToProps.dependsOnOwnProps !== undefined ? Boolean(mapToProps.dependsOnOwnProps) : mapToProps.length !== 1;
+}
+
+// Used by whenMapStateToPropsIsFunction and whenMapDispatchToPropsIsFunction,
+// this function wraps mapToProps in a proxy function which does several things:
+// 
+//  * Detects whether the mapToProps function being called depends on props, which
+//    is used by selectorFactory to decide if it should reinvoke on props changes.
+//    
+//  * On first call, handles mapToProps if returns another function, and treats that
+//    new function as the true mapToProps for subsequent calls.
+//    
+//  * On first call, verifies the first result is a plain object, in order to warn
+//    the developer that their mapToProps function is not returning a valid result.
+//    
+function wrapMapToPropsFunc(mapToProps, methodName) {
+  return function initProxySelector(dispatch, _ref) {
+    var displayName = _ref.displayName;
+
+    var proxy = function mapToPropsProxy(stateOrDispatch, ownProps) {
+      return proxy.dependsOnOwnProps ? proxy.mapToProps(stateOrDispatch, ownProps) : proxy.mapToProps(stateOrDispatch);
+    };
+
+    // allow detectFactoryAndVerify to get ownProps
+    proxy.dependsOnOwnProps = true;
+
+    proxy.mapToProps = function detectFactoryAndVerify(stateOrDispatch, ownProps) {
+      proxy.mapToProps = mapToProps;
+      proxy.dependsOnOwnProps = getDependsOnOwnProps(mapToProps);
+      var props = proxy(stateOrDispatch, ownProps);
+
+      if (typeof props === 'function') {
+        proxy.mapToProps = props;
+        proxy.dependsOnOwnProps = getDependsOnOwnProps(props);
+        props = proxy(stateOrDispatch, ownProps);
+      }
+
+      if (process.env.NODE_ENV !== 'production') __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__utils_verifyPlainObject__["a" /* default */])(props, displayName, methodName);
+
+      return props;
+    };
+
+    return proxy;
+  };
+}
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
+
+/***/ }),
+/* 98 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return subscriptionShape; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return storeShape; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_prop_types__);
+
+
+var subscriptionShape = __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.shape({
+  trySubscribe: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
+  tryUnsubscribe: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
+  notifyNestedSubs: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
+  isSubscribed: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired
+});
+
+var storeShape = __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.shape({
+  subscribe: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
+  dispatch: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
+  getState: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired
+});
+
+/***/ }),
+/* 99 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = verifyPlainObject;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warning__ = __webpack_require__(61);
+
+
+
+function verifyPlainObject(value, displayName, methodName) {
+  if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__["a" /* default */])(value)) {
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__warning__["a" /* default */])(methodName + '() in ' + displayName + ' must return a plain object. Instead received ' + value + '.');
+  }
+}
+
+/***/ }),
+/* 100 */,
+/* 101 */,
+/* 102 */,
+/* 103 */,
+/* 104 */,
+/* 105 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = compose;
+/**
+ * Composes single-argument functions from right to left. The rightmost
+ * function can take multiple arguments as it provides the signature for
+ * the resulting composite function.
+ *
+ * @param {...Function} funcs The functions to compose.
+ * @returns {Function} A function obtained by composing the argument functions
+ * from right to left. For example, compose(f, g, h) is identical to doing
+ * (...args) => f(g(h(...args))).
+ */
+
+function compose() {
+  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  if (funcs.length === 0) {
+    return function (arg) {
+      return arg;
+    };
+  }
+
+  if (funcs.length === 1) {
+    return funcs[0];
+  }
+
+  var last = funcs[funcs.length - 1];
+  var rest = funcs.slice(0, -1);
+  return function () {
+    return rest.reduceRight(function (composed, f) {
+      return f(composed);
+    }, last.apply(undefined, arguments));
+  };
+}
+
+/***/ }),
+/* 106 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return ActionTypes; });
+/* harmony export (immutable) */ __webpack_exports__["a"] = createStore;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(252);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
+
+
+
+/**
+ * These are private action types reserved by Redux.
+ * For any unknown actions, you must return the current state.
+ * If the current state is undefined, you must return the initial state.
+ * Do not reference these action types directly in your code.
+ */
+var ActionTypes = {
+  INIT: '@@redux/INIT'
+};
+
+/**
+ * Creates a Redux store that holds the state tree.
+ * The only way to change the data in the store is to call `dispatch()` on it.
+ *
+ * There should only be a single store in your app. To specify how different
+ * parts of the state tree respond to actions, you may combine several reducers
+ * into a single reducer function by using `combineReducers`.
+ *
+ * @param {Function} reducer A function that returns the next state tree, given
+ * the current state tree and the action to handle.
+ *
+ * @param {any} [preloadedState] The initial state. You may optionally specify it
+ * to hydrate the state from the server in universal apps, or to restore a
+ * previously serialized user session.
+ * If you use `combineReducers` to produce the root reducer function, this must be
+ * an object with the same shape as `combineReducers` keys.
+ *
+ * @param {Function} enhancer The store enhancer. You may optionally specify it
+ * to enhance the store with third-party capabilities such as middleware,
+ * time travel, persistence, etc. The only store enhancer that ships with Redux
+ * is `applyMiddleware()`.
+ *
+ * @returns {Store} A Redux store that lets you read the state, dispatch actions
+ * and subscribe to changes.
+ */
+function createStore(reducer, preloadedState, enhancer) {
+  var _ref2;
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = preloadedState;
+    preloadedState = undefined;
+  }
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.');
+    }
+
+    return enhancer(createStore)(reducer, preloadedState);
+  }
+
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function.');
+  }
+
+  var currentReducer = reducer;
+  var currentState = preloadedState;
+  var currentListeners = [];
+  var nextListeners = currentListeners;
+  var isDispatching = false;
+
+  function ensureCanMutateNextListeners() {
+    if (nextListeners === currentListeners) {
+      nextListeners = currentListeners.slice();
+    }
+  }
+
+  /**
+   * Reads the state tree managed by the store.
+   *
+   * @returns {any} The current state tree of your application.
+   */
+  function getState() {
+    return currentState;
+  }
+
+  /**
+   * Adds a change listener. It will be called any time an action is dispatched,
+   * and some part of the state tree may potentially have changed. You may then
+   * call `getState()` to read the current state tree inside the callback.
+   *
+   * You may call `dispatch()` from a change listener, with the following
+   * caveats:
+   *
+   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+   * If you subscribe or unsubscribe while the listeners are being invoked, this
+   * will not have any effect on the `dispatch()` that is currently in progress.
+   * However, the next `dispatch()` call, whether nested or not, will use a more
+   * recent snapshot of the subscription list.
+   *
+   * 2. The listener should not expect to see all state changes, as the state
+   * might have been updated multiple times during a nested `dispatch()` before
+   * the listener is called. It is, however, guaranteed that all subscribers
+   * registered before the `dispatch()` started will be called with the latest
+   * state by the time it exits.
+   *
+   * @param {Function} listener A callback to be invoked on every dispatch.
+   * @returns {Function} A function to remove this change listener.
+   */
+  function subscribe(listener) {
+    if (typeof listener !== 'function') {
+      throw new Error('Expected listener to be a function.');
+    }
+
+    var isSubscribed = true;
+
+    ensureCanMutateNextListeners();
+    nextListeners.push(listener);
+
+    return function unsubscribe() {
+      if (!isSubscribed) {
+        return;
+      }
+
+      isSubscribed = false;
+
+      ensureCanMutateNextListeners();
+      var index = nextListeners.indexOf(listener);
+      nextListeners.splice(index, 1);
+    };
+  }
+
+  /**
+   * Dispatches an action. It is the only way to trigger a state change.
+   *
+   * The `reducer` function, used to create the store, will be called with the
+   * current state tree and the given `action`. Its return value will
+   * be considered the **next** state of the tree, and the change listeners
+   * will be notified.
+   *
+   * The base implementation only supports plain object actions. If you want to
+   * dispatch a Promise, an Observable, a thunk, or something else, you need to
+   * wrap your store creating function into the corresponding middleware. For
+   * example, see the documentation for the `redux-thunk` package. Even the
+   * middleware will eventually dispatch plain object actions using this method.
+   *
+   * @param {Object} action A plain object representing “what changed”. It is
+   * a good idea to keep actions serializable so you can record and replay user
+   * sessions, or use the time travelling `redux-devtools`. An action must have
+   * a `type` property which may not be `undefined`. It is a good idea to use
+   * string constants for action types.
+   *
+   * @returns {Object} For convenience, the same action object you dispatched.
+   *
+   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
+   * return something else (for example, a Promise you can await).
+   */
+  function dispatch(action) {
+    if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__["a" /* default */])(action)) {
+      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+    }
+
+    if (typeof action.type === 'undefined') {
+      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+    }
+
+    if (isDispatching) {
+      throw new Error('Reducers may not dispatch actions.');
+    }
+
+    try {
+      isDispatching = true;
+      currentState = currentReducer(currentState, action);
+    } finally {
+      isDispatching = false;
+    }
+
+    var listeners = currentListeners = nextListeners;
+    for (var i = 0; i < listeners.length; i++) {
+      listeners[i]();
+    }
+
+    return action;
+  }
+
+  /**
+   * Replaces the reducer currently used by the store to calculate the state.
+   *
+   * You might need this if your app implements code splitting and you want to
+   * load some of the reducers dynamically. You might also need this if you
+   * implement a hot reloading mechanism for Redux.
+   *
+   * @param {Function} nextReducer The reducer for the store to use instead.
+   * @returns {void}
+   */
+  function replaceReducer(nextReducer) {
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the nextReducer to be a function.');
+    }
+
+    currentReducer = nextReducer;
+    dispatch({ type: ActionTypes.INIT });
+  }
+
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/zenparsing/es-observable
+   */
+  function observable() {
+    var _ref;
+
+    var outerSubscribe = subscribe;
+    return _ref = {
+      /**
+       * The minimal observable subscription method.
+       * @param {Object} observer Any object that can be used as an observer.
+       * The observer object should have a `next` method.
+       * @returns {subscription} An object with an `unsubscribe` method that can
+       * be used to unsubscribe the observable from the store, and prevent further
+       * emission of values from the observable.
+       */
+      subscribe: function subscribe(observer) {
+        if (typeof observer !== 'object') {
+          throw new TypeError('Expected the observer to be an object.');
+        }
+
+        function observeState() {
+          if (observer.next) {
+            observer.next(getState());
+          }
+        }
+
+        observeState();
+        var unsubscribe = outerSubscribe(observeState);
+        return { unsubscribe: unsubscribe };
+      }
+    }, _ref[__WEBPACK_IMPORTED_MODULE_1_symbol_observable___default.a] = function () {
+      return this;
+    }, _ref;
+  }
+
+  // When a store is created, an "INIT" action is dispatched so that every
+  // reducer returns their initial state. This effectively populates
+  // the initial state tree.
+  dispatch({ type: ActionTypes.INIT });
+
+  return _ref2 = {
+    dispatch: dispatch,
+    subscribe: subscribe,
+    getState: getState,
+    replaceReducer: replaceReducer
+  }, _ref2[__WEBPACK_IMPORTED_MODULE_1_symbol_observable___default.a] = observable, _ref2;
+}
+
+/***/ }),
+/* 107 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = warning;
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+    /* eslint-disable no-empty */
+  } catch (e) {}
+  /* eslint-enable no-empty */
+}
+
+/***/ }),
+/* 108 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _paintEditor = __webpack_require__(116);
+
+var _paintEditor2 = _interopRequireDefault(_paintEditor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _paintEditor2.default;
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _redux = __webpack_require__(40);
+
+var _modes = __webpack_require__(67);
+
+var _modes2 = _interopRequireDefault(_modes);
+
+var _brushMode = __webpack_require__(65);
+
+var _brushMode2 = _interopRequireDefault(_brushMode);
+
+var _eraserMode = __webpack_require__(66);
+
+var _eraserMode2 = _interopRequireDefault(_eraserMode);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = (0, _redux.combineReducers)({
+    mode: _modes2.default,
+    brushMode: _brushMode2.default,
+    eraserMode: _eraserMode2.default
+});
+
+/***/ }),
+/* 110 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "version", function() { return version; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parse", function() { return parse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parseExpressionAt", function() { return parseExpressionAt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tokenizer", function() { return tokenizer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parse_dammit", function() { return parse_dammit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LooseParser", function() { return LooseParser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pluginsLoose", function() { return pluginsLoose; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addLooseExports", function() { return addLooseExports; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Parser", function() { return Parser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "plugins", function() { return plugins; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultOptions", function() { return defaultOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Position", function() { return Position; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SourceLocation", function() { return SourceLocation; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getLineInfo", function() { return getLineInfo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Node", function() { return Node; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TokenType", function() { return TokenType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tokTypes", function() { return types; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "keywordTypes", function() { return keywords$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TokContext", function() { return TokContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tokContexts", function() { return types$1; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isIdentifierChar", function() { return isIdentifierChar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isIdentifierStart", function() { return isIdentifierStart; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Token", function() { return Token; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isNewLine", function() { return isNewLine; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lineBreak", function() { return lineBreak; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lineBreakG", function() { return lineBreakG; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "nonASCIIwhitespace", function() { return nonASCIIwhitespace; });
+// Reserved word lists for various dialects of the language
+
+var reservedWords = {
+  3: "abstract boolean byte char class double enum export extends final float goto implements import int interface long native package private protected public short static super synchronized throws transient volatile",
+  5: "class enum extends super const export import",
+  6: "enum",
+  strict: "implements interface let package private protected public static yield",
+  strictBind: "eval arguments"
+};
+
+// And the keywords
+
+var ecma5AndLessKeywords = "break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this";
+
+var keywords = {
+  5: ecma5AndLessKeywords,
+  6: ecma5AndLessKeywords + " const class extends export import super"
+};
+
+// ## Character categories
+
+// Big ugly regular expressions that match characters in the
+// whitespace, identifier, and identifier-start categories. These
+// are only applied when a character is found to actually have a
+// code point above 128.
+// Generated by `bin/generate-identifier-regex.js`.
+
+var nonASCIIidentifierStartChars = "\xaa\xb5\xba\xc0-\xd6\xd8-\xf6\xf8-\u02c1\u02c6-\u02d1\u02e0-\u02e4\u02ec\u02ee\u0370-\u0374\u0376\u0377\u037a-\u037d\u037f\u0386\u0388-\u038a\u038c\u038e-\u03a1\u03a3-\u03f5\u03f7-\u0481\u048a-\u052f\u0531-\u0556\u0559\u0561-\u0587\u05d0-\u05ea\u05f0-\u05f2\u0620-\u064a\u066e\u066f\u0671-\u06d3\u06d5\u06e5\u06e6\u06ee\u06ef\u06fa-\u06fc\u06ff\u0710\u0712-\u072f\u074d-\u07a5\u07b1\u07ca-\u07ea\u07f4\u07f5\u07fa\u0800-\u0815\u081a\u0824\u0828\u0840-\u0858\u08a0-\u08b4\u08b6-\u08bd\u0904-\u0939\u093d\u0950\u0958-\u0961\u0971-\u0980\u0985-\u098c\u098f\u0990\u0993-\u09a8\u09aa-\u09b0\u09b2\u09b6-\u09b9\u09bd\u09ce\u09dc\u09dd\u09df-\u09e1\u09f0\u09f1\u0a05-\u0a0a\u0a0f\u0a10\u0a13-\u0a28\u0a2a-\u0a30\u0a32\u0a33\u0a35\u0a36\u0a38\u0a39\u0a59-\u0a5c\u0a5e\u0a72-\u0a74\u0a85-\u0a8d\u0a8f-\u0a91\u0a93-\u0aa8\u0aaa-\u0ab0\u0ab2\u0ab3\u0ab5-\u0ab9\u0abd\u0ad0\u0ae0\u0ae1\u0af9\u0b05-\u0b0c\u0b0f\u0b10\u0b13-\u0b28\u0b2a-\u0b30\u0b32\u0b33\u0b35-\u0b39\u0b3d\u0b5c\u0b5d\u0b5f-\u0b61\u0b71\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bd0\u0c05-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c39\u0c3d\u0c58-\u0c5a\u0c60\u0c61\u0c80\u0c85-\u0c8c\u0c8e-\u0c90\u0c92-\u0ca8\u0caa-\u0cb3\u0cb5-\u0cb9\u0cbd\u0cde\u0ce0\u0ce1\u0cf1\u0cf2\u0d05-\u0d0c\u0d0e-\u0d10\u0d12-\u0d3a\u0d3d\u0d4e\u0d54-\u0d56\u0d5f-\u0d61\u0d7a-\u0d7f\u0d85-\u0d96\u0d9a-\u0db1\u0db3-\u0dbb\u0dbd\u0dc0-\u0dc6\u0e01-\u0e30\u0e32\u0e33\u0e40-\u0e46\u0e81\u0e82\u0e84\u0e87\u0e88\u0e8a\u0e8d\u0e94-\u0e97\u0e99-\u0e9f\u0ea1-\u0ea3\u0ea5\u0ea7\u0eaa\u0eab\u0ead-\u0eb0\u0eb2\u0eb3\u0ebd\u0ec0-\u0ec4\u0ec6\u0edc-\u0edf\u0f00\u0f40-\u0f47\u0f49-\u0f6c\u0f88-\u0f8c\u1000-\u102a\u103f\u1050-\u1055\u105a-\u105d\u1061\u1065\u1066\u106e-\u1070\u1075-\u1081\u108e\u10a0-\u10c5\u10c7\u10cd\u10d0-\u10fa\u10fc-\u1248\u124a-\u124d\u1250-\u1256\u1258\u125a-\u125d\u1260-\u1288\u128a-\u128d\u1290-\u12b0\u12b2-\u12b5\u12b8-\u12be\u12c0\u12c2-\u12c5\u12c8-\u12d6\u12d8-\u1310\u1312-\u1315\u1318-\u135a\u1380-\u138f\u13a0-\u13f5\u13f8-\u13fd\u1401-\u166c\u166f-\u167f\u1681-\u169a\u16a0-\u16ea\u16ee-\u16f8\u1700-\u170c\u170e-\u1711\u1720-\u1731\u1740-\u1751\u1760-\u176c\u176e-\u1770\u1780-\u17b3\u17d7\u17dc\u1820-\u1877\u1880-\u18a8\u18aa\u18b0-\u18f5\u1900-\u191e\u1950-\u196d\u1970-\u1974\u1980-\u19ab\u19b0-\u19c9\u1a00-\u1a16\u1a20-\u1a54\u1aa7\u1b05-\u1b33\u1b45-\u1b4b\u1b83-\u1ba0\u1bae\u1baf\u1bba-\u1be5\u1c00-\u1c23\u1c4d-\u1c4f\u1c5a-\u1c7d\u1c80-\u1c88\u1ce9-\u1cec\u1cee-\u1cf1\u1cf5\u1cf6\u1d00-\u1dbf\u1e00-\u1f15\u1f18-\u1f1d\u1f20-\u1f45\u1f48-\u1f4d\u1f50-\u1f57\u1f59\u1f5b\u1f5d\u1f5f-\u1f7d\u1f80-\u1fb4\u1fb6-\u1fbc\u1fbe\u1fc2-\u1fc4\u1fc6-\u1fcc\u1fd0-\u1fd3\u1fd6-\u1fdb\u1fe0-\u1fec\u1ff2-\u1ff4\u1ff6-\u1ffc\u2071\u207f\u2090-\u209c\u2102\u2107\u210a-\u2113\u2115\u2118-\u211d\u2124\u2126\u2128\u212a-\u2139\u213c-\u213f\u2145-\u2149\u214e\u2160-\u2188\u2c00-\u2c2e\u2c30-\u2c5e\u2c60-\u2ce4\u2ceb-\u2cee\u2cf2\u2cf3\u2d00-\u2d25\u2d27\u2d2d\u2d30-\u2d67\u2d6f\u2d80-\u2d96\u2da0-\u2da6\u2da8-\u2dae\u2db0-\u2db6\u2db8-\u2dbe\u2dc0-\u2dc6\u2dc8-\u2dce\u2dd0-\u2dd6\u2dd8-\u2dde\u3005-\u3007\u3021-\u3029\u3031-\u3035\u3038-\u303c\u3041-\u3096\u309b-\u309f\u30a1-\u30fa\u30fc-\u30ff\u3105-\u312d\u3131-\u318e\u31a0-\u31ba\u31f0-\u31ff\u3400-\u4db5\u4e00-\u9fd5\ua000-\ua48c\ua4d0-\ua4fd\ua500-\ua60c\ua610-\ua61f\ua62a\ua62b\ua640-\ua66e\ua67f-\ua69d\ua6a0-\ua6ef\ua717-\ua71f\ua722-\ua788\ua78b-\ua7ae\ua7b0-\ua7b7\ua7f7-\ua801\ua803-\ua805\ua807-\ua80a\ua80c-\ua822\ua840-\ua873\ua882-\ua8b3\ua8f2-\ua8f7\ua8fb\ua8fd\ua90a-\ua925\ua930-\ua946\ua960-\ua97c\ua984-\ua9b2\ua9cf\ua9e0-\ua9e4\ua9e6-\ua9ef\ua9fa-\ua9fe\uaa00-\uaa28\uaa40-\uaa42\uaa44-\uaa4b\uaa60-\uaa76\uaa7a\uaa7e-\uaaaf\uaab1\uaab5\uaab6\uaab9-\uaabd\uaac0\uaac2\uaadb-\uaadd\uaae0-\uaaea\uaaf2-\uaaf4\uab01-\uab06\uab09-\uab0e\uab11-\uab16\uab20-\uab26\uab28-\uab2e\uab30-\uab5a\uab5c-\uab65\uab70-\uabe2\uac00-\ud7a3\ud7b0-\ud7c6\ud7cb-\ud7fb\uf900-\ufa6d\ufa70-\ufad9\ufb00-\ufb06\ufb13-\ufb17\ufb1d\ufb1f-\ufb28\ufb2a-\ufb36\ufb38-\ufb3c\ufb3e\ufb40\ufb41\ufb43\ufb44\ufb46-\ufbb1\ufbd3-\ufd3d\ufd50-\ufd8f\ufd92-\ufdc7\ufdf0-\ufdfb\ufe70-\ufe74\ufe76-\ufefc\uff21-\uff3a\uff41-\uff5a\uff66-\uffbe\uffc2-\uffc7\uffca-\uffcf\uffd2-\uffd7\uffda-\uffdc";
+var nonASCIIidentifierChars = "\u200c\u200d\xb7\u0300-\u036f\u0387\u0483-\u0487\u0591-\u05bd\u05bf\u05c1\u05c2\u05c4\u05c5\u05c7\u0610-\u061a\u064b-\u0669\u0670\u06d6-\u06dc\u06df-\u06e4\u06e7\u06e8\u06ea-\u06ed\u06f0-\u06f9\u0711\u0730-\u074a\u07a6-\u07b0\u07c0-\u07c9\u07eb-\u07f3\u0816-\u0819\u081b-\u0823\u0825-\u0827\u0829-\u082d\u0859-\u085b\u08d4-\u08e1\u08e3-\u0903\u093a-\u093c\u093e-\u094f\u0951-\u0957\u0962\u0963\u0966-\u096f\u0981-\u0983\u09bc\u09be-\u09c4\u09c7\u09c8\u09cb-\u09cd\u09d7\u09e2\u09e3\u09e6-\u09ef\u0a01-\u0a03\u0a3c\u0a3e-\u0a42\u0a47\u0a48\u0a4b-\u0a4d\u0a51\u0a66-\u0a71\u0a75\u0a81-\u0a83\u0abc\u0abe-\u0ac5\u0ac7-\u0ac9\u0acb-\u0acd\u0ae2\u0ae3\u0ae6-\u0aef\u0b01-\u0b03\u0b3c\u0b3e-\u0b44\u0b47\u0b48\u0b4b-\u0b4d\u0b56\u0b57\u0b62\u0b63\u0b66-\u0b6f\u0b82\u0bbe-\u0bc2\u0bc6-\u0bc8\u0bca-\u0bcd\u0bd7\u0be6-\u0bef\u0c00-\u0c03\u0c3e-\u0c44\u0c46-\u0c48\u0c4a-\u0c4d\u0c55\u0c56\u0c62\u0c63\u0c66-\u0c6f\u0c81-\u0c83\u0cbc\u0cbe-\u0cc4\u0cc6-\u0cc8\u0cca-\u0ccd\u0cd5\u0cd6\u0ce2\u0ce3\u0ce6-\u0cef\u0d01-\u0d03\u0d3e-\u0d44\u0d46-\u0d48\u0d4a-\u0d4d\u0d57\u0d62\u0d63\u0d66-\u0d6f\u0d82\u0d83\u0dca\u0dcf-\u0dd4\u0dd6\u0dd8-\u0ddf\u0de6-\u0def\u0df2\u0df3\u0e31\u0e34-\u0e3a\u0e47-\u0e4e\u0e50-\u0e59\u0eb1\u0eb4-\u0eb9\u0ebb\u0ebc\u0ec8-\u0ecd\u0ed0-\u0ed9\u0f18\u0f19\u0f20-\u0f29\u0f35\u0f37\u0f39\u0f3e\u0f3f\u0f71-\u0f84\u0f86\u0f87\u0f8d-\u0f97\u0f99-\u0fbc\u0fc6\u102b-\u103e\u1040-\u1049\u1056-\u1059\u105e-\u1060\u1062-\u1064\u1067-\u106d\u1071-\u1074\u1082-\u108d\u108f-\u109d\u135d-\u135f\u1369-\u1371\u1712-\u1714\u1732-\u1734\u1752\u1753\u1772\u1773\u17b4-\u17d3\u17dd\u17e0-\u17e9\u180b-\u180d\u1810-\u1819\u18a9\u1920-\u192b\u1930-\u193b\u1946-\u194f\u19d0-\u19da\u1a17-\u1a1b\u1a55-\u1a5e\u1a60-\u1a7c\u1a7f-\u1a89\u1a90-\u1a99\u1ab0-\u1abd\u1b00-\u1b04\u1b34-\u1b44\u1b50-\u1b59\u1b6b-\u1b73\u1b80-\u1b82\u1ba1-\u1bad\u1bb0-\u1bb9\u1be6-\u1bf3\u1c24-\u1c37\u1c40-\u1c49\u1c50-\u1c59\u1cd0-\u1cd2\u1cd4-\u1ce8\u1ced\u1cf2-\u1cf4\u1cf8\u1cf9\u1dc0-\u1df5\u1dfb-\u1dff\u203f\u2040\u2054\u20d0-\u20dc\u20e1\u20e5-\u20f0\u2cef-\u2cf1\u2d7f\u2de0-\u2dff\u302a-\u302f\u3099\u309a\ua620-\ua629\ua66f\ua674-\ua67d\ua69e\ua69f\ua6f0\ua6f1\ua802\ua806\ua80b\ua823-\ua827\ua880\ua881\ua8b4-\ua8c5\ua8d0-\ua8d9\ua8e0-\ua8f1\ua900-\ua909\ua926-\ua92d\ua947-\ua953\ua980-\ua983\ua9b3-\ua9c0\ua9d0-\ua9d9\ua9e5\ua9f0-\ua9f9\uaa29-\uaa36\uaa43\uaa4c\uaa4d\uaa50-\uaa59\uaa7b-\uaa7d\uaab0\uaab2-\uaab4\uaab7\uaab8\uaabe\uaabf\uaac1\uaaeb-\uaaef\uaaf5\uaaf6\uabe3-\uabea\uabec\uabed\uabf0-\uabf9\ufb1e\ufe00-\ufe0f\ufe20-\ufe2f\ufe33\ufe34\ufe4d-\ufe4f\uff10-\uff19\uff3f";
+
+var nonASCIIidentifierStart = new RegExp("[" + nonASCIIidentifierStartChars + "]");
+var nonASCIIidentifier = new RegExp("[" + nonASCIIidentifierStartChars + nonASCIIidentifierChars + "]");
+
+nonASCIIidentifierStartChars = nonASCIIidentifierChars = null;
+
+// These are a run-length and offset encoded representation of the
+// >0xffff code points that are a valid part of identifiers. The
+// offset starts at 0x10000, and each pair of numbers represents an
+// offset to the next range, and then a size of the range. They were
+// generated by bin/generate-identifier-regex.js
+
+// eslint-disable-next-line comma-spacing
+var astralIdentifierStartCodes = [0,11,2,25,2,18,2,1,2,14,3,13,35,122,70,52,268,28,4,48,48,31,17,26,6,37,11,29,3,35,5,7,2,4,43,157,19,35,5,35,5,39,9,51,157,310,10,21,11,7,153,5,3,0,2,43,2,1,4,0,3,22,11,22,10,30,66,18,2,1,11,21,11,25,71,55,7,1,65,0,16,3,2,2,2,26,45,28,4,28,36,7,2,27,28,53,11,21,11,18,14,17,111,72,56,50,14,50,785,52,76,44,33,24,27,35,42,34,4,0,13,47,15,3,22,0,2,0,36,17,2,24,85,6,2,0,2,3,2,14,2,9,8,46,39,7,3,1,3,21,2,6,2,1,2,4,4,0,19,0,13,4,159,52,19,3,54,47,21,1,2,0,185,46,42,3,37,47,21,0,60,42,86,25,391,63,32,0,449,56,264,8,2,36,18,0,50,29,881,921,103,110,18,195,2749,1070,4050,582,8634,568,8,30,114,29,19,47,17,3,32,20,6,18,881,68,12,0,67,12,65,0,32,6124,20,754,9486,1,3071,106,6,12,4,8,8,9,5991,84,2,70,2,1,3,0,3,1,3,3,2,11,2,0,2,6,2,64,2,3,3,7,2,6,2,27,2,3,2,4,2,0,4,6,2,339,3,24,2,24,2,30,2,24,2,30,2,24,2,30,2,24,2,30,2,24,2,7,4149,196,60,67,1213,3,2,26,2,1,2,0,3,0,2,9,2,3,2,0,2,0,7,0,5,0,2,0,2,0,2,2,2,1,2,0,3,0,2,0,2,0,2,0,2,0,2,1,2,0,3,3,2,6,2,3,2,3,2,0,2,9,2,16,6,2,2,4,2,16,4421,42710,42,4148,12,221,3,5761,10591,541];
+
+// eslint-disable-next-line comma-spacing
+var astralIdentifierCodes = [509,0,227,0,150,4,294,9,1368,2,2,1,6,3,41,2,5,0,166,1,1306,2,54,14,32,9,16,3,46,10,54,9,7,2,37,13,2,9,52,0,13,2,49,13,10,2,4,9,83,11,7,0,161,11,6,9,7,3,57,0,2,6,3,1,3,2,10,0,11,1,3,6,4,4,193,17,10,9,87,19,13,9,214,6,3,8,28,1,83,16,16,9,82,12,9,9,84,14,5,9,423,9,838,7,2,7,17,9,57,21,2,13,19882,9,135,4,60,6,26,9,1016,45,17,3,19723,1,5319,4,4,5,9,7,3,6,31,3,149,2,1418,49,513,54,5,49,9,0,15,0,23,4,2,14,1361,6,2,16,3,6,2,1,2,4,2214,6,110,6,6,9,792487,239];
+
+// This has a complexity linear to the value of the code. The
+// assumption is that looking up astral identifier characters is
+// rare.
+function isInAstralSet(code, set) {
+  var pos = 0x10000;
+  for (var i = 0; i < set.length; i += 2) {
+    pos += set[i];
+    if (pos > code) { return false }
+    pos += set[i + 1];
+    if (pos >= code) { return true }
+  }
+}
+
+// Test whether a given character code starts an identifier.
+
+function isIdentifierStart(code, astral) {
+  if (code < 65) { return code === 36 }
+  if (code < 91) { return true }
+  if (code < 97) { return code === 95 }
+  if (code < 123) { return true }
+  if (code <= 0xffff) { return code >= 0xaa && nonASCIIidentifierStart.test(String.fromCharCode(code)) }
+  if (astral === false) { return false }
+  return isInAstralSet(code, astralIdentifierStartCodes)
+}
+
+// Test whether a given character is part of an identifier.
+
+function isIdentifierChar(code, astral) {
+  if (code < 48) { return code === 36 }
+  if (code < 58) { return true }
+  if (code < 65) { return false }
+  if (code < 91) { return true }
+  if (code < 97) { return code === 95 }
+  if (code < 123) { return true }
+  if (code <= 0xffff) { return code >= 0xaa && nonASCIIidentifier.test(String.fromCharCode(code)) }
+  if (astral === false) { return false }
+  return isInAstralSet(code, astralIdentifierStartCodes) || isInAstralSet(code, astralIdentifierCodes)
+}
+
+// ## Token types
+
+// The assignment of fine-grained, information-carrying type objects
+// allows the tokenizer to store the information it has about a
+// token in a way that is very cheap for the parser to look up.
+
+// All token type variables start with an underscore, to make them
+// easy to recognize.
+
+// The `beforeExpr` property is used to disambiguate between regular
+// expressions and divisions. It is set on all token types that can
+// be followed by an expression (thus, a slash after them would be a
+// regular expression).
+//
+// The `startsExpr` property is used to check if the token ends a
+// `yield` expression. It is set on all token types that either can
+// directly start an expression (like a quotation mark) or can
+// continue an expression (like the body of a string).
+//
+// `isLoop` marks a keyword as starting a loop, which is important
+// to know when parsing a label, in order to allow or disallow
+// continue jumps to that label.
+
+var TokenType = function TokenType(label, conf) {
+  if ( conf === void 0 ) conf = {};
+
+  this.label = label;
+  this.keyword = conf.keyword;
+  this.beforeExpr = !!conf.beforeExpr;
+  this.startsExpr = !!conf.startsExpr;
+  this.isLoop = !!conf.isLoop;
+  this.isAssign = !!conf.isAssign;
+  this.prefix = !!conf.prefix;
+  this.postfix = !!conf.postfix;
+  this.binop = conf.binop || null;
+  this.updateContext = null;
+};
+
+function binop(name, prec) {
+  return new TokenType(name, {beforeExpr: true, binop: prec})
+}
+var beforeExpr = {beforeExpr: true};
+var startsExpr = {startsExpr: true};
+
+// Map keyword names to token types.
+
+var keywords$1 = {};
+
+// Succinct definitions of keyword token types
+function kw(name, options) {
+  if ( options === void 0 ) options = {};
+
+  options.keyword = name;
+  return keywords$1[name] = new TokenType(name, options)
+}
+
+var types = {
+  num: new TokenType("num", startsExpr),
+  regexp: new TokenType("regexp", startsExpr),
+  string: new TokenType("string", startsExpr),
+  name: new TokenType("name", startsExpr),
+  eof: new TokenType("eof"),
+
+  // Punctuation token types.
+  bracketL: new TokenType("[", {beforeExpr: true, startsExpr: true}),
+  bracketR: new TokenType("]"),
+  braceL: new TokenType("{", {beforeExpr: true, startsExpr: true}),
+  braceR: new TokenType("}"),
+  parenL: new TokenType("(", {beforeExpr: true, startsExpr: true}),
+  parenR: new TokenType(")"),
+  comma: new TokenType(",", beforeExpr),
+  semi: new TokenType(";", beforeExpr),
+  colon: new TokenType(":", beforeExpr),
+  dot: new TokenType("."),
+  question: new TokenType("?", beforeExpr),
+  arrow: new TokenType("=>", beforeExpr),
+  template: new TokenType("template"),
+  invalidTemplate: new TokenType("invalidTemplate"),
+  ellipsis: new TokenType("...", beforeExpr),
+  backQuote: new TokenType("`", startsExpr),
+  dollarBraceL: new TokenType("${", {beforeExpr: true, startsExpr: true}),
+
+  // Operators. These carry several kinds of properties to help the
+  // parser use them properly (the presence of these properties is
+  // what categorizes them as operators).
+  //
+  // `binop`, when present, specifies that this operator is a binary
+  // operator, and will refer to its precedence.
+  //
+  // `prefix` and `postfix` mark the operator as a prefix or postfix
+  // unary operator.
+  //
+  // `isAssign` marks all of `=`, `+=`, `-=` etcetera, which act as
+  // binary operators with a very low precedence, that should result
+  // in AssignmentExpression nodes.
+
+  eq: new TokenType("=", {beforeExpr: true, isAssign: true}),
+  assign: new TokenType("_=", {beforeExpr: true, isAssign: true}),
+  incDec: new TokenType("++/--", {prefix: true, postfix: true, startsExpr: true}),
+  prefix: new TokenType("prefix", {beforeExpr: true, prefix: true, startsExpr: true}),
+  logicalOR: binop("||", 1),
+  logicalAND: binop("&&", 2),
+  bitwiseOR: binop("|", 3),
+  bitwiseXOR: binop("^", 4),
+  bitwiseAND: binop("&", 5),
+  equality: binop("==/!=", 6),
+  relational: binop("</>", 7),
+  bitShift: binop("<</>>", 8),
+  plusMin: new TokenType("+/-", {beforeExpr: true, binop: 9, prefix: true, startsExpr: true}),
+  modulo: binop("%", 10),
+  star: binop("*", 10),
+  slash: binop("/", 10),
+  starstar: new TokenType("**", {beforeExpr: true}),
+
+  // Keyword token types.
+  _break: kw("break"),
+  _case: kw("case", beforeExpr),
+  _catch: kw("catch"),
+  _continue: kw("continue"),
+  _debugger: kw("debugger"),
+  _default: kw("default", beforeExpr),
+  _do: kw("do", {isLoop: true, beforeExpr: true}),
+  _else: kw("else", beforeExpr),
+  _finally: kw("finally"),
+  _for: kw("for", {isLoop: true}),
+  _function: kw("function", startsExpr),
+  _if: kw("if"),
+  _return: kw("return", beforeExpr),
+  _switch: kw("switch"),
+  _throw: kw("throw", beforeExpr),
+  _try: kw("try"),
+  _var: kw("var"),
+  _const: kw("const"),
+  _while: kw("while", {isLoop: true}),
+  _with: kw("with"),
+  _new: kw("new", {beforeExpr: true, startsExpr: true}),
+  _this: kw("this", startsExpr),
+  _super: kw("super", startsExpr),
+  _class: kw("class", startsExpr),
+  _extends: kw("extends", beforeExpr),
+  _export: kw("export"),
+  _import: kw("import"),
+  _null: kw("null", startsExpr),
+  _true: kw("true", startsExpr),
+  _false: kw("false", startsExpr),
+  _in: kw("in", {beforeExpr: true, binop: 7}),
+  _instanceof: kw("instanceof", {beforeExpr: true, binop: 7}),
+  _typeof: kw("typeof", {beforeExpr: true, prefix: true, startsExpr: true}),
+  _void: kw("void", {beforeExpr: true, prefix: true, startsExpr: true}),
+  _delete: kw("delete", {beforeExpr: true, prefix: true, startsExpr: true})
+};
+
+// Matches a whole line break (where CRLF is considered a single
+// line break). Used to count lines.
+
+var lineBreak = /\r\n?|\n|\u2028|\u2029/;
+var lineBreakG = new RegExp(lineBreak.source, "g");
+
+function isNewLine(code) {
+  return code === 10 || code === 13 || code === 0x2028 || code === 0x2029
+}
+
+var nonASCIIwhitespace = /[\u1680\u180e\u2000-\u200a\u202f\u205f\u3000\ufeff]/;
+
+var skipWhiteSpace = /(?:\s|\/\/.*|\/\*[^]*?\*\/)*/g;
+
+var ref = Object.prototype;
+var hasOwnProperty = ref.hasOwnProperty;
+var toString = ref.toString;
+
+// Checks if an object has a property.
+
+function has(obj, propName) {
+  return hasOwnProperty.call(obj, propName)
+}
+
+var isArray = Array.isArray || (function (obj) { return (
+  toString.call(obj) === "[object Array]"
+); });
+
+// These are used when `options.locations` is on, for the
+// `startLoc` and `endLoc` properties.
+
+var Position = function Position(line, col) {
+  this.line = line;
+  this.column = col;
+};
+
+Position.prototype.offset = function offset (n) {
+  return new Position(this.line, this.column + n)
+};
+
+var SourceLocation = function SourceLocation(p, start, end) {
+  this.start = start;
+  this.end = end;
+  if (p.sourceFile !== null) { this.source = p.sourceFile; }
+};
+
+// The `getLineInfo` function is mostly useful when the
+// `locations` option is off (for performance reasons) and you
+// want to find the line/column position for a given character
+// offset. `input` should be the code string that the offset refers
+// into.
+
+function getLineInfo(input, offset) {
+  for (var line = 1, cur = 0;;) {
+    lineBreakG.lastIndex = cur;
+    var match = lineBreakG.exec(input);
+    if (match && match.index < offset) {
+      ++line;
+      cur = match.index + match[0].length;
+    } else {
+      return new Position(line, offset - cur)
+    }
+  }
+}
+
+// A second optional argument can be given to further configure
+// the parser process. These options are recognized:
+
+var defaultOptions = {
+  // `ecmaVersion` indicates the ECMAScript version to parse. Must
+  // be either 3, 5, 6 (2015), 7 (2016), or 8 (2017). This influences support
+  // for strict mode, the set of reserved words, and support for
+  // new syntax features. The default is 7.
+  ecmaVersion: 7,
+  // `sourceType` indicates the mode the code should be parsed in.
+  // Can be either `"script"` or `"module"`. This influences global
+  // strict mode and parsing of `import` and `export` declarations.
+  sourceType: "script",
+  // `onInsertedSemicolon` can be a callback that will be called
+  // when a semicolon is automatically inserted. It will be passed
+  // th position of the comma as an offset, and if `locations` is
+  // enabled, it is given the location as a `{line, column}` object
+  // as second argument.
+  onInsertedSemicolon: null,
+  // `onTrailingComma` is similar to `onInsertedSemicolon`, but for
+  // trailing commas.
+  onTrailingComma: null,
+  // By default, reserved words are only enforced if ecmaVersion >= 5.
+  // Set `allowReserved` to a boolean value to explicitly turn this on
+  // an off. When this option has the value "never", reserved words
+  // and keywords can also not be used as property names.
+  allowReserved: null,
+  // When enabled, a return at the top level is not considered an
+  // error.
+  allowReturnOutsideFunction: false,
+  // When enabled, import/export statements are not constrained to
+  // appearing at the top of the program.
+  allowImportExportEverywhere: false,
+  // When enabled, hashbang directive in the beginning of file
+  // is allowed and treated as a line comment.
+  allowHashBang: false,
+  // When `locations` is on, `loc` properties holding objects with
+  // `start` and `end` properties in `{line, column}` form (with
+  // line being 1-based and column 0-based) will be attached to the
+  // nodes.
+  locations: false,
+  // A function can be passed as `onToken` option, which will
+  // cause Acorn to call that function with object in the same
+  // format as tokens returned from `tokenizer().getToken()`. Note
+  // that you are not allowed to call the parser from the
+  // callback—that will corrupt its internal state.
+  onToken: null,
+  // A function can be passed as `onComment` option, which will
+  // cause Acorn to call that function with `(block, text, start,
+  // end)` parameters whenever a comment is skipped. `block` is a
+  // boolean indicating whether this is a block (`/* */`) comment,
+  // `text` is the content of the comment, and `start` and `end` are
+  // character offsets that denote the start and end of the comment.
+  // When the `locations` option is on, two more parameters are
+  // passed, the full `{line, column}` locations of the start and
+  // end of the comments. Note that you are not allowed to call the
+  // parser from the callback—that will corrupt its internal state.
+  onComment: null,
+  // Nodes have their start and end characters offsets recorded in
+  // `start` and `end` properties (directly on the node, rather than
+  // the `loc` object, which holds line/column data. To also add a
+  // [semi-standardized][range] `range` property holding a `[start,
+  // end]` array with the same numbers, set the `ranges` option to
+  // `true`.
+  //
+  // [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
+  ranges: false,
+  // It is possible to parse multiple files into a single AST by
+  // passing the tree produced by parsing the first file as
+  // `program` option in subsequent parses. This will add the
+  // toplevel forms of the parsed file to the `Program` (top) node
+  // of an existing parse tree.
+  program: null,
+  // When `locations` is on, you can pass this to record the source
+  // file in every node's `loc` object.
+  sourceFile: null,
+  // This value, if given, is stored in every node, whether
+  // `locations` is on or off.
+  directSourceFile: null,
+  // When enabled, parenthesized expressions are represented by
+  // (non-standard) ParenthesizedExpression nodes
+  preserveParens: false,
+  plugins: {}
+};
+
+// Interpret and default an options object
+
+function getOptions(opts) {
+  var options = {};
+
+  for (var opt in defaultOptions)
+    { options[opt] = opts && has(opts, opt) ? opts[opt] : defaultOptions[opt]; }
+
+  if (options.ecmaVersion >= 2015)
+    { options.ecmaVersion -= 2009; }
+
+  if (options.allowReserved == null)
+    { options.allowReserved = options.ecmaVersion < 5; }
+
+  if (isArray(options.onToken)) {
+    var tokens = options.onToken;
+    options.onToken = function (token) { return tokens.push(token); };
+  }
+  if (isArray(options.onComment))
+    { options.onComment = pushComment(options, options.onComment); }
+
+  return options
+}
+
+function pushComment(options, array) {
+  return function(block, text, start, end, startLoc, endLoc) {
+    var comment = {
+      type: block ? "Block" : "Line",
+      value: text,
+      start: start,
+      end: end
+    };
+    if (options.locations)
+      { comment.loc = new SourceLocation(this, startLoc, endLoc); }
+    if (options.ranges)
+      { comment.range = [start, end]; }
+    array.push(comment);
+  }
+}
+
+// Registered plugins
+var plugins = {};
+
+function keywordRegexp(words) {
+  return new RegExp("^(?:" + words.replace(/ /g, "|") + ")$")
+}
+
+var Parser = function Parser(options, input, startPos) {
+  this.options = options = getOptions(options);
+  this.sourceFile = options.sourceFile;
+  this.keywords = keywordRegexp(keywords[options.ecmaVersion >= 6 ? 6 : 5]);
+  var reserved = "";
+  if (!options.allowReserved) {
+    for (var v = options.ecmaVersion;; v--)
+      { if (reserved = reservedWords[v]) { break } }
+    if (options.sourceType == "module") { reserved += " await"; }
+  }
+  this.reservedWords = keywordRegexp(reserved);
+  var reservedStrict = (reserved ? reserved + " " : "") + reservedWords.strict;
+  this.reservedWordsStrict = keywordRegexp(reservedStrict);
+  this.reservedWordsStrictBind = keywordRegexp(reservedStrict + " " + reservedWords.strictBind);
+  this.input = String(input);
+
+  // Used to signal to callers of `readWord1` whether the word
+  // contained any escape sequences. This is needed because words with
+  // escape sequences must not be interpreted as keywords.
+  this.containsEsc = false;
+
+  // Load plugins
+  this.loadPlugins(options.plugins);
+
+  // Set up token state
+
+  // The current position of the tokenizer in the input.
+  if (startPos) {
+    this.pos = startPos;
+    this.lineStart = this.input.lastIndexOf("\n", startPos - 1) + 1;
+    this.curLine = this.input.slice(0, this.lineStart).split(lineBreak).length;
+  } else {
+    this.pos = this.lineStart = 0;
+    this.curLine = 1;
+  }
+
+  // Properties of the current token:
+  // Its type
+  this.type = types.eof;
+  // For tokens that include more information than their type, the value
+  this.value = null;
+  // Its start and end offset
+  this.start = this.end = this.pos;
+  // And, if locations are used, the {line, column} object
+  // corresponding to those offsets
+  this.startLoc = this.endLoc = this.curPosition();
+
+  // Position information for the previous token
+  this.lastTokEndLoc = this.lastTokStartLoc = null;
+  this.lastTokStart = this.lastTokEnd = this.pos;
+
+  // The context stack is used to superficially track syntactic
+  // context to predict whether a regular expression is allowed in a
+  // given position.
+  this.context = this.initialContext();
+  this.exprAllowed = true;
+
+  // Figure out if it's a module code.
+  this.inModule = options.sourceType === "module";
+  this.strict = this.inModule || this.strictDirective(this.pos);
+
+  // Used to signify the start of a potential arrow function
+  this.potentialArrowAt = -1;
+
+  // Flags to track whether we are in a function, a generator, an async function.
+  this.inFunction = this.inGenerator = this.inAsync = false;
+  // Positions to delayed-check that yield/await does not exist in default parameters.
+  this.yieldPos = this.awaitPos = 0;
+  // Labels in scope.
+  this.labels = [];
+
+  // If enabled, skip leading hashbang line.
+  if (this.pos === 0 && options.allowHashBang && this.input.slice(0, 2) === "#!")
+    { this.skipLineComment(2); }
+
+  // Scope tracking for duplicate variable names (see scope.js)
+  this.scopeStack = [];
+  this.enterFunctionScope();
+};
+
+// DEPRECATED Kept for backwards compatibility until 3.0 in case a plugin uses them
+Parser.prototype.isKeyword = function isKeyword (word) { return this.keywords.test(word) };
+Parser.prototype.isReservedWord = function isReservedWord (word) { return this.reservedWords.test(word) };
+
+Parser.prototype.extend = function extend (name, f) {
+  this[name] = f(this[name]);
+};
+
+Parser.prototype.loadPlugins = function loadPlugins (pluginConfigs) {
+    var this$1 = this;
+
+  for (var name in pluginConfigs) {
+    var plugin = plugins[name];
+    if (!plugin) { throw new Error("Plugin '" + name + "' not found") }
+    plugin(this$1, pluginConfigs[name]);
+  }
+};
+
+Parser.prototype.parse = function parse () {
+  var node = this.options.program || this.startNode();
+  this.nextToken();
+  return this.parseTopLevel(node)
+};
+
+var pp = Parser.prototype;
+
+// ## Parser utilities
+
+var literal = /^(?:'((?:[^']|\.)*)'|"((?:[^"]|\.)*)"|;)/;
+pp.strictDirective = function(start) {
+  var this$1 = this;
+
+  for (;;) {
+    skipWhiteSpace.lastIndex = start;
+    start += skipWhiteSpace.exec(this$1.input)[0].length;
+    var match = literal.exec(this$1.input.slice(start));
+    if (!match) { return false }
+    if ((match[1] || match[2]) == "use strict") { return true }
+    start += match[0].length;
+  }
+};
+
+// Predicate that tests whether the next token is of the given
+// type, and if yes, consumes it as a side effect.
+
+pp.eat = function(type) {
+  if (this.type === type) {
+    this.next();
+    return true
+  } else {
+    return false
+  }
+};
+
+// Tests whether parsed token is a contextual keyword.
+
+pp.isContextual = function(name) {
+  return this.type === types.name && this.value === name
+};
+
+// Consumes contextual keyword if possible.
+
+pp.eatContextual = function(name) {
+  return this.value === name && this.eat(types.name)
+};
+
+// Asserts that following token is given contextual keyword.
+
+pp.expectContextual = function(name) {
+  if (!this.eatContextual(name)) { this.unexpected(); }
+};
+
+// Test whether a semicolon can be inserted at the current position.
+
+pp.canInsertSemicolon = function() {
+  return this.type === types.eof ||
+    this.type === types.braceR ||
+    lineBreak.test(this.input.slice(this.lastTokEnd, this.start))
+};
+
+pp.insertSemicolon = function() {
+  if (this.canInsertSemicolon()) {
+    if (this.options.onInsertedSemicolon)
+      { this.options.onInsertedSemicolon(this.lastTokEnd, this.lastTokEndLoc); }
+    return true
+  }
+};
+
+// Consume a semicolon, or, failing that, see if we are allowed to
+// pretend that there is a semicolon at this position.
+
+pp.semicolon = function() {
+  if (!this.eat(types.semi) && !this.insertSemicolon()) { this.unexpected(); }
+};
+
+pp.afterTrailingComma = function(tokType, notNext) {
+  if (this.type == tokType) {
+    if (this.options.onTrailingComma)
+      { this.options.onTrailingComma(this.lastTokStart, this.lastTokStartLoc); }
+    if (!notNext)
+      { this.next(); }
+    return true
+  }
+};
+
+// Expect a token of a given type. If found, consume it, otherwise,
+// raise an unexpected token error.
+
+pp.expect = function(type) {
+  this.eat(type) || this.unexpected();
+};
+
+// Raise an unexpected token error.
+
+pp.unexpected = function(pos) {
+  this.raise(pos != null ? pos : this.start, "Unexpected token");
+};
+
+function DestructuringErrors() {
+  this.shorthandAssign =
+  this.trailingComma =
+  this.parenthesizedAssign =
+  this.parenthesizedBind =
+    -1;
+}
+
+pp.checkPatternErrors = function(refDestructuringErrors, isAssign) {
+  if (!refDestructuringErrors) { return }
+  if (refDestructuringErrors.trailingComma > -1)
+    { this.raiseRecoverable(refDestructuringErrors.trailingComma, "Comma is not permitted after the rest element"); }
+  var parens = isAssign ? refDestructuringErrors.parenthesizedAssign : refDestructuringErrors.parenthesizedBind;
+  if (parens > -1) { this.raiseRecoverable(parens, "Parenthesized pattern"); }
+};
+
+pp.checkExpressionErrors = function(refDestructuringErrors, andThrow) {
+  var pos = refDestructuringErrors ? refDestructuringErrors.shorthandAssign : -1;
+  if (!andThrow) { return pos >= 0 }
+  if (pos > -1) { this.raise(pos, "Shorthand property assignments are valid only in destructuring patterns"); }
+};
+
+pp.checkYieldAwaitInDefaultParams = function() {
+  if (this.yieldPos && (!this.awaitPos || this.yieldPos < this.awaitPos))
+    { this.raise(this.yieldPos, "Yield expression cannot be a default value"); }
+  if (this.awaitPos)
+    { this.raise(this.awaitPos, "Await expression cannot be a default value"); }
+};
+
+pp.isSimpleAssignTarget = function(expr) {
+  if (expr.type === "ParenthesizedExpression")
+    { return this.isSimpleAssignTarget(expr.expression) }
+  return expr.type === "Identifier" || expr.type === "MemberExpression"
+};
+
+var pp$1 = Parser.prototype;
+
+// ### Statement parsing
+
+// Parse a program. Initializes the parser, reads any number of
+// statements, and wraps them in a Program node.  Optionally takes a
+// `program` argument.  If present, the statements will be appended
+// to its body instead of creating a new node.
+
+pp$1.parseTopLevel = function(node) {
+  var this$1 = this;
+
+  var exports = {};
+  if (!node.body) { node.body = []; }
+  while (this.type !== types.eof) {
+    var stmt = this$1.parseStatement(true, true, exports);
+    node.body.push(stmt);
+  }
+  this.next();
+  if (this.options.ecmaVersion >= 6) {
+    node.sourceType = this.options.sourceType;
+  }
+  return this.finishNode(node, "Program")
+};
+
+var loopLabel = {kind: "loop"};
+var switchLabel = {kind: "switch"};
+
+pp$1.isLet = function() {
+  if (this.type !== types.name || this.options.ecmaVersion < 6 || this.value != "let") { return false }
+  skipWhiteSpace.lastIndex = this.pos;
+  var skip = skipWhiteSpace.exec(this.input);
+  var next = this.pos + skip[0].length, nextCh = this.input.charCodeAt(next);
+  if (nextCh === 91 || nextCh == 123) { return true } // '{' and '['
+  if (isIdentifierStart(nextCh, true)) {
+    var pos = next + 1;
+    while (isIdentifierChar(this.input.charCodeAt(pos), true)) { ++pos; }
+    var ident = this.input.slice(next, pos);
+    if (!this.isKeyword(ident)) { return true }
+  }
+  return false
+};
+
+// check 'async [no LineTerminator here] function'
+// - 'async /*foo*/ function' is OK.
+// - 'async /*\n*/ function' is invalid.
+pp$1.isAsyncFunction = function() {
+  if (this.type !== types.name || this.options.ecmaVersion < 8 || this.value != "async")
+    { return false }
+
+  skipWhiteSpace.lastIndex = this.pos;
+  var skip = skipWhiteSpace.exec(this.input);
+  var next = this.pos + skip[0].length;
+  return !lineBreak.test(this.input.slice(this.pos, next)) &&
+    this.input.slice(next, next + 8) === "function" &&
+    (next + 8 == this.input.length || !isIdentifierChar(this.input.charAt(next + 8)))
+};
+
+// Parse a single statement.
+//
+// If expecting a statement and finding a slash operator, parse a
+// regular expression literal. This is to handle cases like
+// `if (foo) /blah/.exec(foo)`, where looking at the previous token
+// does not help.
+
+pp$1.parseStatement = function(declaration, topLevel, exports) {
+  var starttype = this.type, node = this.startNode(), kind;
+
+  if (this.isLet()) {
+    starttype = types._var;
+    kind = "let";
+  }
+
+  // Most types of statements are recognized by the keyword they
+  // start with. Many are trivial to parse, some require a bit of
+  // complexity.
+
+  switch (starttype) {
+  case types._break: case types._continue: return this.parseBreakContinueStatement(node, starttype.keyword)
+  case types._debugger: return this.parseDebuggerStatement(node)
+  case types._do: return this.parseDoStatement(node)
+  case types._for: return this.parseForStatement(node)
+  case types._function:
+    if (!declaration && this.options.ecmaVersion >= 6) { this.unexpected(); }
+    return this.parseFunctionStatement(node, false)
+  case types._class:
+    if (!declaration) { this.unexpected(); }
+    return this.parseClass(node, true)
+  case types._if: return this.parseIfStatement(node)
+  case types._return: return this.parseReturnStatement(node)
+  case types._switch: return this.parseSwitchStatement(node)
+  case types._throw: return this.parseThrowStatement(node)
+  case types._try: return this.parseTryStatement(node)
+  case types._const: case types._var:
+    kind = kind || this.value;
+    if (!declaration && kind != "var") { this.unexpected(); }
+    return this.parseVarStatement(node, kind)
+  case types._while: return this.parseWhileStatement(node)
+  case types._with: return this.parseWithStatement(node)
+  case types.braceL: return this.parseBlock()
+  case types.semi: return this.parseEmptyStatement(node)
+  case types._export:
+  case types._import:
+    if (!this.options.allowImportExportEverywhere) {
+      if (!topLevel)
+        { this.raise(this.start, "'import' and 'export' may only appear at the top level"); }
+      if (!this.inModule)
+        { this.raise(this.start, "'import' and 'export' may appear only with 'sourceType: module'"); }
+    }
+    return starttype === types._import ? this.parseImport(node) : this.parseExport(node, exports)
+
+    // If the statement does not start with a statement keyword or a
+    // brace, it's an ExpressionStatement or LabeledStatement. We
+    // simply start parsing an expression, and afterwards, if the
+    // next token is a colon and the expression was a simple
+    // Identifier node, we switch to interpreting it as a label.
+  default:
+    if (this.isAsyncFunction() && declaration) {
+      this.next();
+      return this.parseFunctionStatement(node, true)
+    }
+
+    var maybeName = this.value, expr = this.parseExpression();
+    if (starttype === types.name && expr.type === "Identifier" && this.eat(types.colon))
+      { return this.parseLabeledStatement(node, maybeName, expr) }
+    else { return this.parseExpressionStatement(node, expr) }
+  }
+};
+
+pp$1.parseBreakContinueStatement = function(node, keyword) {
+  var this$1 = this;
+
+  var isBreak = keyword == "break";
+  this.next();
+  if (this.eat(types.semi) || this.insertSemicolon()) { node.label = null; }
+  else if (this.type !== types.name) { this.unexpected(); }
+  else {
+    node.label = this.parseIdent();
+    this.semicolon();
+  }
+
+  // Verify that there is an actual destination to break or
+  // continue to.
+  var i = 0;
+  for (; i < this.labels.length; ++i) {
+    var lab = this$1.labels[i];
+    if (node.label == null || lab.name === node.label.name) {
+      if (lab.kind != null && (isBreak || lab.kind === "loop")) { break }
+      if (node.label && isBreak) { break }
+    }
+  }
+  if (i === this.labels.length) { this.raise(node.start, "Unsyntactic " + keyword); }
+  return this.finishNode(node, isBreak ? "BreakStatement" : "ContinueStatement")
+};
+
+pp$1.parseDebuggerStatement = function(node) {
+  this.next();
+  this.semicolon();
+  return this.finishNode(node, "DebuggerStatement")
+};
+
+pp$1.parseDoStatement = function(node) {
+  this.next();
+  this.labels.push(loopLabel);
+  node.body = this.parseStatement(false);
+  this.labels.pop();
+  this.expect(types._while);
+  node.test = this.parseParenExpression();
+  if (this.options.ecmaVersion >= 6)
+    { this.eat(types.semi); }
+  else
+    { this.semicolon(); }
+  return this.finishNode(node, "DoWhileStatement")
+};
+
+// Disambiguating between a `for` and a `for`/`in` or `for`/`of`
+// loop is non-trivial. Basically, we have to parse the init `var`
+// statement or expression, disallowing the `in` operator (see
+// the second parameter to `parseExpression`), and then check
+// whether the next token is `in` or `of`. When there is no init
+// part (semicolon immediately after the opening parenthesis), it
+// is a regular `for` loop.
+
+pp$1.parseForStatement = function(node) {
+  this.next();
+  this.labels.push(loopLabel);
+  this.enterLexicalScope();
+  this.expect(types.parenL);
+  if (this.type === types.semi) { return this.parseFor(node, null) }
+  var isLet = this.isLet();
+  if (this.type === types._var || this.type === types._const || isLet) {
+    var init$1 = this.startNode(), kind = isLet ? "let" : this.value;
+    this.next();
+    this.parseVar(init$1, true, kind);
+    this.finishNode(init$1, "VariableDeclaration");
+    if ((this.type === types._in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) && init$1.declarations.length === 1 &&
+        !(kind !== "var" && init$1.declarations[0].init))
+      { return this.parseForIn(node, init$1) }
+    return this.parseFor(node, init$1)
+  }
+  var refDestructuringErrors = new DestructuringErrors;
+  var init = this.parseExpression(true, refDestructuringErrors);
+  if (this.type === types._in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) {
+    this.toAssignable(init);
+    this.checkLVal(init);
+    this.checkPatternErrors(refDestructuringErrors, true);
+    return this.parseForIn(node, init)
+  } else {
+    this.checkExpressionErrors(refDestructuringErrors, true);
+  }
+  return this.parseFor(node, init)
+};
+
+pp$1.parseFunctionStatement = function(node, isAsync) {
+  this.next();
+  return this.parseFunction(node, true, false, isAsync)
+};
+
+pp$1.isFunction = function() {
+  return this.type === types._function || this.isAsyncFunction()
+};
+
+pp$1.parseIfStatement = function(node) {
+  this.next();
+  node.test = this.parseParenExpression();
+  // allow function declarations in branches, but only in non-strict mode
+  node.consequent = this.parseStatement(!this.strict && this.isFunction());
+  node.alternate = this.eat(types._else) ? this.parseStatement(!this.strict && this.isFunction()) : null;
+  return this.finishNode(node, "IfStatement")
+};
+
+pp$1.parseReturnStatement = function(node) {
+  if (!this.inFunction && !this.options.allowReturnOutsideFunction)
+    { this.raise(this.start, "'return' outside of function"); }
+  this.next();
+
+  // In `return` (and `break`/`continue`), the keywords with
+  // optional arguments, we eagerly look for a semicolon or the
+  // possibility to insert one.
+
+  if (this.eat(types.semi) || this.insertSemicolon()) { node.argument = null; }
+  else { node.argument = this.parseExpression(); this.semicolon(); }
+  return this.finishNode(node, "ReturnStatement")
+};
+
+pp$1.parseSwitchStatement = function(node) {
+  var this$1 = this;
+
+  this.next();
+  node.discriminant = this.parseParenExpression();
+  node.cases = [];
+  this.expect(types.braceL);
+  this.labels.push(switchLabel);
+  this.enterLexicalScope();
+
+  // Statements under must be grouped (by label) in SwitchCase
+  // nodes. `cur` is used to keep the node that we are currently
+  // adding statements to.
+
+  var cur;
+  for (var sawDefault = false; this.type != types.braceR;) {
+    if (this$1.type === types._case || this$1.type === types._default) {
+      var isCase = this$1.type === types._case;
+      if (cur) { this$1.finishNode(cur, "SwitchCase"); }
+      node.cases.push(cur = this$1.startNode());
+      cur.consequent = [];
+      this$1.next();
+      if (isCase) {
+        cur.test = this$1.parseExpression();
+      } else {
+        if (sawDefault) { this$1.raiseRecoverable(this$1.lastTokStart, "Multiple default clauses"); }
+        sawDefault = true;
+        cur.test = null;
+      }
+      this$1.expect(types.colon);
+    } else {
+      if (!cur) { this$1.unexpected(); }
+      cur.consequent.push(this$1.parseStatement(true));
+    }
+  }
+  this.exitLexicalScope();
+  if (cur) { this.finishNode(cur, "SwitchCase"); }
+  this.next(); // Closing brace
+  this.labels.pop();
+  return this.finishNode(node, "SwitchStatement")
+};
+
+pp$1.parseThrowStatement = function(node) {
+  this.next();
+  if (lineBreak.test(this.input.slice(this.lastTokEnd, this.start)))
+    { this.raise(this.lastTokEnd, "Illegal newline after throw"); }
+  node.argument = this.parseExpression();
+  this.semicolon();
+  return this.finishNode(node, "ThrowStatement")
+};
+
+// Reused empty array added for node fields that are always empty.
+
+var empty = [];
+
+pp$1.parseTryStatement = function(node) {
+  this.next();
+  node.block = this.parseBlock();
+  node.handler = null;
+  if (this.type === types._catch) {
+    var clause = this.startNode();
+    this.next();
+    this.expect(types.parenL);
+    clause.param = this.parseBindingAtom();
+    this.enterLexicalScope();
+    this.checkLVal(clause.param, "let");
+    this.expect(types.parenR);
+    clause.body = this.parseBlock(false);
+    this.exitLexicalScope();
+    node.handler = this.finishNode(clause, "CatchClause");
+  }
+  node.finalizer = this.eat(types._finally) ? this.parseBlock() : null;
+  if (!node.handler && !node.finalizer)
+    { this.raise(node.start, "Missing catch or finally clause"); }
+  return this.finishNode(node, "TryStatement")
+};
+
+pp$1.parseVarStatement = function(node, kind) {
+  this.next();
+  this.parseVar(node, false, kind);
+  this.semicolon();
+  return this.finishNode(node, "VariableDeclaration")
+};
+
+pp$1.parseWhileStatement = function(node) {
+  this.next();
+  node.test = this.parseParenExpression();
+  this.labels.push(loopLabel);
+  node.body = this.parseStatement(false);
+  this.labels.pop();
+  return this.finishNode(node, "WhileStatement")
+};
+
+pp$1.parseWithStatement = function(node) {
+  if (this.strict) { this.raise(this.start, "'with' in strict mode"); }
+  this.next();
+  node.object = this.parseParenExpression();
+  node.body = this.parseStatement(false);
+  return this.finishNode(node, "WithStatement")
+};
+
+pp$1.parseEmptyStatement = function(node) {
+  this.next();
+  return this.finishNode(node, "EmptyStatement")
+};
+
+pp$1.parseLabeledStatement = function(node, maybeName, expr) {
+  var this$1 = this;
+
+  for (var i$1 = 0, list = this$1.labels; i$1 < list.length; i$1 += 1)
+    {
+    var label = list[i$1];
+
+    if (label.name === maybeName)
+      { this$1.raise(expr.start, "Label '" + maybeName + "' is already declared");
+  } }
+  var kind = this.type.isLoop ? "loop" : this.type === types._switch ? "switch" : null;
+  for (var i = this.labels.length - 1; i >= 0; i--) {
+    var label$1 = this$1.labels[i];
+    if (label$1.statementStart == node.start) {
+      label$1.statementStart = this$1.start;
+      label$1.kind = kind;
+    } else { break }
+  }
+  this.labels.push({name: maybeName, kind: kind, statementStart: this.start});
+  node.body = this.parseStatement(true);
+  if (node.body.type == "ClassDeclaration" ||
+      node.body.type == "VariableDeclaration" && node.body.kind != "var" ||
+      node.body.type == "FunctionDeclaration" && (this.strict || node.body.generator))
+    { this.raiseRecoverable(node.body.start, "Invalid labeled declaration"); }
+  this.labels.pop();
+  node.label = expr;
+  return this.finishNode(node, "LabeledStatement")
+};
+
+pp$1.parseExpressionStatement = function(node, expr) {
+  node.expression = expr;
+  this.semicolon();
+  return this.finishNode(node, "ExpressionStatement")
+};
+
+// Parse a semicolon-enclosed block of statements, handling `"use
+// strict"` declarations when `allowStrict` is true (used for
+// function bodies).
+
+pp$1.parseBlock = function(createNewLexicalScope) {
+  var this$1 = this;
+  if ( createNewLexicalScope === void 0 ) createNewLexicalScope = true;
+
+  var node = this.startNode();
+  node.body = [];
+  this.expect(types.braceL);
+  if (createNewLexicalScope) {
+    this.enterLexicalScope();
+  }
+  while (!this.eat(types.braceR)) {
+    var stmt = this$1.parseStatement(true);
+    node.body.push(stmt);
+  }
+  if (createNewLexicalScope) {
+    this.exitLexicalScope();
+  }
+  return this.finishNode(node, "BlockStatement")
+};
+
+// Parse a regular `for` loop. The disambiguation code in
+// `parseStatement` will already have parsed the init statement or
+// expression.
+
+pp$1.parseFor = function(node, init) {
+  node.init = init;
+  this.expect(types.semi);
+  node.test = this.type === types.semi ? null : this.parseExpression();
+  this.expect(types.semi);
+  node.update = this.type === types.parenR ? null : this.parseExpression();
+  this.expect(types.parenR);
+  this.exitLexicalScope();
+  node.body = this.parseStatement(false);
+  this.labels.pop();
+  return this.finishNode(node, "ForStatement")
+};
+
+// Parse a `for`/`in` and `for`/`of` loop, which are almost
+// same from parser's perspective.
+
+pp$1.parseForIn = function(node, init) {
+  var type = this.type === types._in ? "ForInStatement" : "ForOfStatement";
+  this.next();
+  node.left = init;
+  node.right = this.parseExpression();
+  this.expect(types.parenR);
+  this.exitLexicalScope();
+  node.body = this.parseStatement(false);
+  this.labels.pop();
+  return this.finishNode(node, type)
+};
+
+// Parse a list of variable declarations.
+
+pp$1.parseVar = function(node, isFor, kind) {
+  var this$1 = this;
+
+  node.declarations = [];
+  node.kind = kind;
+  for (;;) {
+    var decl = this$1.startNode();
+    this$1.parseVarId(decl, kind);
+    if (this$1.eat(types.eq)) {
+      decl.init = this$1.parseMaybeAssign(isFor);
+    } else if (kind === "const" && !(this$1.type === types._in || (this$1.options.ecmaVersion >= 6 && this$1.isContextual("of")))) {
+      this$1.unexpected();
+    } else if (decl.id.type != "Identifier" && !(isFor && (this$1.type === types._in || this$1.isContextual("of")))) {
+      this$1.raise(this$1.lastTokEnd, "Complex binding patterns require an initialization value");
+    } else {
+      decl.init = null;
+    }
+    node.declarations.push(this$1.finishNode(decl, "VariableDeclarator"));
+    if (!this$1.eat(types.comma)) { break }
+  }
+  return node
+};
+
+pp$1.parseVarId = function(decl, kind) {
+  decl.id = this.parseBindingAtom(kind);
+  this.checkLVal(decl.id, kind, false);
+};
+
+// Parse a function declaration or literal (depending on the
+// `isStatement` parameter).
+
+pp$1.parseFunction = function(node, isStatement, allowExpressionBody, isAsync) {
+  this.initFunction(node);
+  if (this.options.ecmaVersion >= 6 && !isAsync)
+    { node.generator = this.eat(types.star); }
+  if (this.options.ecmaVersion >= 8)
+    { node.async = !!isAsync; }
+
+  if (isStatement) {
+    node.id = isStatement === "nullableID" && this.type != types.name ? null : this.parseIdent();
+    if (node.id) {
+      this.checkLVal(node.id, "var");
+    }
+  }
+
+  var oldInGen = this.inGenerator, oldInAsync = this.inAsync,
+      oldYieldPos = this.yieldPos, oldAwaitPos = this.awaitPos, oldInFunc = this.inFunction;
+  this.inGenerator = node.generator;
+  this.inAsync = node.async;
+  this.yieldPos = 0;
+  this.awaitPos = 0;
+  this.inFunction = true;
+  this.enterFunctionScope();
+
+  if (!isStatement)
+    { node.id = this.type == types.name ? this.parseIdent() : null; }
+
+  this.parseFunctionParams(node);
+  this.parseFunctionBody(node, allowExpressionBody);
+
+  this.inGenerator = oldInGen;
+  this.inAsync = oldInAsync;
+  this.yieldPos = oldYieldPos;
+  this.awaitPos = oldAwaitPos;
+  this.inFunction = oldInFunc;
+  return this.finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression")
+};
+
+pp$1.parseFunctionParams = function(node) {
+  this.expect(types.parenL);
+  node.params = this.parseBindingList(types.parenR, false, this.options.ecmaVersion >= 8);
+  this.checkYieldAwaitInDefaultParams();
+};
+
+// Parse a class declaration or literal (depending on the
+// `isStatement` parameter).
+
+pp$1.parseClass = function(node, isStatement) {
+  var this$1 = this;
+
+  this.next();
+
+  this.parseClassId(node, isStatement);
+  this.parseClassSuper(node);
+  var classBody = this.startNode();
+  var hadConstructor = false;
+  classBody.body = [];
+  this.expect(types.braceL);
+  while (!this.eat(types.braceR)) {
+    if (this$1.eat(types.semi)) { continue }
+    var method = this$1.startNode();
+    var isGenerator = this$1.eat(types.star);
+    var isAsync = false;
+    var isMaybeStatic = this$1.type === types.name && this$1.value === "static";
+    this$1.parsePropertyName(method);
+    method.static = isMaybeStatic && this$1.type !== types.parenL;
+    if (method.static) {
+      if (isGenerator) { this$1.unexpected(); }
+      isGenerator = this$1.eat(types.star);
+      this$1.parsePropertyName(method);
+    }
+    if (this$1.options.ecmaVersion >= 8 && !isGenerator && !method.computed &&
+        method.key.type === "Identifier" && method.key.name === "async" && this$1.type !== types.parenL &&
+        !this$1.canInsertSemicolon()) {
+      isAsync = true;
+      this$1.parsePropertyName(method);
+    }
+    method.kind = "method";
+    var isGetSet = false;
+    if (!method.computed) {
+      var key = method.key;
+      if (!isGenerator && !isAsync && key.type === "Identifier" && this$1.type !== types.parenL && (key.name === "get" || key.name === "set")) {
+        isGetSet = true;
+        method.kind = key.name;
+        key = this$1.parsePropertyName(method);
+      }
+      if (!method.static && (key.type === "Identifier" && key.name === "constructor" ||
+          key.type === "Literal" && key.value === "constructor")) {
+        if (hadConstructor) { this$1.raise(key.start, "Duplicate constructor in the same class"); }
+        if (isGetSet) { this$1.raise(key.start, "Constructor can't have get/set modifier"); }
+        if (isGenerator) { this$1.raise(key.start, "Constructor can't be a generator"); }
+        if (isAsync) { this$1.raise(key.start, "Constructor can't be an async method"); }
+        method.kind = "constructor";
+        hadConstructor = true;
+      }
+    }
+    this$1.parseClassMethod(classBody, method, isGenerator, isAsync);
+    if (isGetSet) {
+      var paramCount = method.kind === "get" ? 0 : 1;
+      if (method.value.params.length !== paramCount) {
+        var start = method.value.start;
+        if (method.kind === "get")
+          { this$1.raiseRecoverable(start, "getter should have no params"); }
+        else
+          { this$1.raiseRecoverable(start, "setter should have exactly one param"); }
+      } else {
+        if (method.kind === "set" && method.value.params[0].type === "RestElement")
+          { this$1.raiseRecoverable(method.value.params[0].start, "Setter cannot use rest params"); }
+      }
+    }
+  }
+  node.body = this.finishNode(classBody, "ClassBody");
+  return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression")
+};
+
+pp$1.parseClassMethod = function(classBody, method, isGenerator, isAsync) {
+  method.value = this.parseMethod(isGenerator, isAsync);
+  classBody.body.push(this.finishNode(method, "MethodDefinition"));
+};
+
+pp$1.parseClassId = function(node, isStatement) {
+  node.id = this.type === types.name ? this.parseIdent() : isStatement === true ? this.unexpected() : null;
+};
+
+pp$1.parseClassSuper = function(node) {
+  node.superClass = this.eat(types._extends) ? this.parseExprSubscripts() : null;
+};
+
+// Parses module export declaration.
+
+pp$1.parseExport = function(node, exports) {
+  var this$1 = this;
+
+  this.next();
+  // export * from '...'
+  if (this.eat(types.star)) {
+    this.expectContextual("from");
+    node.source = this.type === types.string ? this.parseExprAtom() : this.unexpected();
+    this.semicolon();
+    return this.finishNode(node, "ExportAllDeclaration")
+  }
+  if (this.eat(types._default)) { // export default ...
+    this.checkExport(exports, "default", this.lastTokStart);
+    var isAsync;
+    if (this.type === types._function || (isAsync = this.isAsyncFunction())) {
+      var fNode = this.startNode();
+      this.next();
+      if (isAsync) { this.next(); }
+      node.declaration = this.parseFunction(fNode, "nullableID", false, isAsync);
+    } else if (this.type === types._class) {
+      var cNode = this.startNode();
+      node.declaration = this.parseClass(cNode, "nullableID");
+    } else {
+      node.declaration = this.parseMaybeAssign();
+      this.semicolon();
+    }
+    return this.finishNode(node, "ExportDefaultDeclaration")
+  }
+  // export var|const|let|function|class ...
+  if (this.shouldParseExportStatement()) {
+    node.declaration = this.parseStatement(true);
+    if (node.declaration.type === "VariableDeclaration")
+      { this.checkVariableExport(exports, node.declaration.declarations); }
+    else
+      { this.checkExport(exports, node.declaration.id.name, node.declaration.id.start); }
+    node.specifiers = [];
+    node.source = null;
+  } else { // export { x, y as z } [from '...']
+    node.declaration = null;
+    node.specifiers = this.parseExportSpecifiers(exports);
+    if (this.eatContextual("from")) {
+      node.source = this.type === types.string ? this.parseExprAtom() : this.unexpected();
+    } else {
+      // check for keywords used as local names
+      for (var i = 0, list = node.specifiers; i < list.length; i += 1) {
+        var spec = list[i];
+
+        this$1.checkUnreserved(spec.local);
+      }
+
+      node.source = null;
+    }
+    this.semicolon();
+  }
+  return this.finishNode(node, "ExportNamedDeclaration")
+};
+
+pp$1.checkExport = function(exports, name, pos) {
+  if (!exports) { return }
+  if (has(exports, name))
+    { this.raiseRecoverable(pos, "Duplicate export '" + name + "'"); }
+  exports[name] = true;
+};
+
+pp$1.checkPatternExport = function(exports, pat) {
+  var this$1 = this;
+
+  var type = pat.type;
+  if (type == "Identifier")
+    { this.checkExport(exports, pat.name, pat.start); }
+  else if (type == "ObjectPattern")
+    { for (var i = 0, list = pat.properties; i < list.length; i += 1)
+      {
+        var prop = list[i];
+
+        this$1.checkPatternExport(exports, prop.value);
+      } }
+  else if (type == "ArrayPattern")
+    { for (var i$1 = 0, list$1 = pat.elements; i$1 < list$1.length; i$1 += 1) {
+      var elt = list$1[i$1];
+
+        if (elt) { this$1.checkPatternExport(exports, elt); }
+    } }
+  else if (type == "AssignmentPattern")
+    { this.checkPatternExport(exports, pat.left); }
+  else if (type == "ParenthesizedExpression")
+    { this.checkPatternExport(exports, pat.expression); }
+};
+
+pp$1.checkVariableExport = function(exports, decls) {
+  var this$1 = this;
+
+  if (!exports) { return }
+  for (var i = 0, list = decls; i < list.length; i += 1)
+    {
+    var decl = list[i];
+
+    this$1.checkPatternExport(exports, decl.id);
+  }
+};
+
+pp$1.shouldParseExportStatement = function() {
+  return this.type.keyword === "var" ||
+    this.type.keyword === "const" ||
+    this.type.keyword === "class" ||
+    this.type.keyword === "function" ||
+    this.isLet() ||
+    this.isAsyncFunction()
+};
+
+// Parses a comma-separated list of module exports.
+
+pp$1.parseExportSpecifiers = function(exports) {
+  var this$1 = this;
+
+  var nodes = [], first = true;
+  // export { x, y as z } [from '...']
+  this.expect(types.braceL);
+  while (!this.eat(types.braceR)) {
+    if (!first) {
+      this$1.expect(types.comma);
+      if (this$1.afterTrailingComma(types.braceR)) { break }
+    } else { first = false; }
+
+    var node = this$1.startNode();
+    node.local = this$1.parseIdent(true);
+    node.exported = this$1.eatContextual("as") ? this$1.parseIdent(true) : node.local;
+    this$1.checkExport(exports, node.exported.name, node.exported.start);
+    nodes.push(this$1.finishNode(node, "ExportSpecifier"));
+  }
+  return nodes
+};
+
+// Parses import declaration.
+
+pp$1.parseImport = function(node) {
+  this.next();
+  // import '...'
+  if (this.type === types.string) {
+    node.specifiers = empty;
+    node.source = this.parseExprAtom();
+  } else {
+    node.specifiers = this.parseImportSpecifiers();
+    this.expectContextual("from");
+    node.source = this.type === types.string ? this.parseExprAtom() : this.unexpected();
+  }
+  this.semicolon();
+  return this.finishNode(node, "ImportDeclaration")
+};
+
+// Parses a comma-separated list of module imports.
+
+pp$1.parseImportSpecifiers = function() {
+  var this$1 = this;
+
+  var nodes = [], first = true;
+  if (this.type === types.name) {
+    // import defaultObj, { x, y as z } from '...'
+    var node = this.startNode();
+    node.local = this.parseIdent();
+    this.checkLVal(node.local, "let");
+    nodes.push(this.finishNode(node, "ImportDefaultSpecifier"));
+    if (!this.eat(types.comma)) { return nodes }
+  }
+  if (this.type === types.star) {
+    var node$1 = this.startNode();
+    this.next();
+    this.expectContextual("as");
+    node$1.local = this.parseIdent();
+    this.checkLVal(node$1.local, "let");
+    nodes.push(this.finishNode(node$1, "ImportNamespaceSpecifier"));
+    return nodes
+  }
+  this.expect(types.braceL);
+  while (!this.eat(types.braceR)) {
+    if (!first) {
+      this$1.expect(types.comma);
+      if (this$1.afterTrailingComma(types.braceR)) { break }
+    } else { first = false; }
+
+    var node$2 = this$1.startNode();
+    node$2.imported = this$1.parseIdent(true);
+    if (this$1.eatContextual("as")) {
+      node$2.local = this$1.parseIdent();
+    } else {
+      this$1.checkUnreserved(node$2.imported);
+      node$2.local = node$2.imported;
+    }
+    this$1.checkLVal(node$2.local, "let");
+    nodes.push(this$1.finishNode(node$2, "ImportSpecifier"));
+  }
+  return nodes
+};
+
+var pp$2 = Parser.prototype;
+
+// Convert existing expression atom to assignable pattern
+// if possible.
+
+pp$2.toAssignable = function(node, isBinding) {
+  var this$1 = this;
+
+  if (this.options.ecmaVersion >= 6 && node) {
+    switch (node.type) {
+    case "Identifier":
+      if (this.inAsync && node.name === "await")
+        { this.raise(node.start, "Can not use 'await' as identifier inside an async function"); }
+      break
+
+    case "ObjectPattern":
+    case "ArrayPattern":
+      break
+
+    case "ObjectExpression":
+      node.type = "ObjectPattern";
+      for (var i = 0, list = node.properties; i < list.length; i += 1) {
+        var prop = list[i];
+
+      if (prop.kind !== "init") { this$1.raise(prop.key.start, "Object pattern can't contain getter or setter"); }
+        this$1.toAssignable(prop.value, isBinding);
+      }
+      break
+
+    case "ArrayExpression":
+      node.type = "ArrayPattern";
+      this.toAssignableList(node.elements, isBinding);
+      break
+
+    case "AssignmentExpression":
+      if (node.operator === "=") {
+        node.type = "AssignmentPattern";
+        delete node.operator;
+        this.toAssignable(node.left, isBinding);
+        // falls through to AssignmentPattern
+      } else {
+        this.raise(node.left.end, "Only '=' operator can be used for specifying default value.");
+        break
+      }
+
+    case "AssignmentPattern":
+      break
+
+    case "ParenthesizedExpression":
+      this.toAssignable(node.expression, isBinding);
+      break
+
+    case "MemberExpression":
+      if (!isBinding) { break }
+
+    default:
+      this.raise(node.start, "Assigning to rvalue");
+    }
+  }
+  return node
+};
+
+// Convert list of expression atoms to binding list.
+
+pp$2.toAssignableList = function(exprList, isBinding) {
+  var this$1 = this;
+
+  var end = exprList.length;
+  if (end) {
+    var last = exprList[end - 1];
+    if (last && last.type == "RestElement") {
+      --end;
+    } else if (last && last.type == "SpreadElement") {
+      last.type = "RestElement";
+      var arg = last.argument;
+      this.toAssignable(arg, isBinding);
+      --end;
+    }
+
+    if (this.options.ecmaVersion === 6 && isBinding && last && last.type === "RestElement" && last.argument.type !== "Identifier")
+      { this.unexpected(last.argument.start); }
+  }
+  for (var i = 0; i < end; i++) {
+    var elt = exprList[i];
+    if (elt) { this$1.toAssignable(elt, isBinding); }
+  }
+  return exprList
+};
+
+// Parses spread element.
+
+pp$2.parseSpread = function(refDestructuringErrors) {
+  var node = this.startNode();
+  this.next();
+  node.argument = this.parseMaybeAssign(false, refDestructuringErrors);
+  return this.finishNode(node, "SpreadElement")
+};
+
+pp$2.parseRestBinding = function() {
+  var node = this.startNode();
+  this.next();
+
+  // RestElement inside of a function parameter must be an identifier
+  if (this.options.ecmaVersion === 6 && this.type !== types.name)
+    { this.unexpected(); }
+
+  node.argument = this.parseBindingAtom();
+
+  return this.finishNode(node, "RestElement")
+};
+
+// Parses lvalue (assignable) atom.
+
+pp$2.parseBindingAtom = function() {
+  if (this.options.ecmaVersion < 6) { return this.parseIdent() }
+  switch (this.type) {
+  case types.name:
+    return this.parseIdent()
+
+  case types.bracketL:
+    var node = this.startNode();
+    this.next();
+    node.elements = this.parseBindingList(types.bracketR, true, true);
+    return this.finishNode(node, "ArrayPattern")
+
+  case types.braceL:
+    return this.parseObj(true)
+
+  default:
+    this.unexpected();
+  }
+};
+
+pp$2.parseBindingList = function(close, allowEmpty, allowTrailingComma) {
+  var this$1 = this;
+
+  var elts = [], first = true;
+  while (!this.eat(close)) {
+    if (first) { first = false; }
+    else { this$1.expect(types.comma); }
+    if (allowEmpty && this$1.type === types.comma) {
+      elts.push(null);
+    } else if (allowTrailingComma && this$1.afterTrailingComma(close)) {
+      break
+    } else if (this$1.type === types.ellipsis) {
+      var rest = this$1.parseRestBinding();
+      this$1.parseBindingListItem(rest);
+      elts.push(rest);
+      if (this$1.type === types.comma) { this$1.raise(this$1.start, "Comma is not permitted after the rest element"); }
+      this$1.expect(close);
+      break
+    } else {
+      var elem = this$1.parseMaybeDefault(this$1.start, this$1.startLoc);
+      this$1.parseBindingListItem(elem);
+      elts.push(elem);
+    }
+  }
+  return elts
+};
+
+pp$2.parseBindingListItem = function(param) {
+  return param
+};
+
+// Parses assignment pattern around given atom if possible.
+
+pp$2.parseMaybeDefault = function(startPos, startLoc, left) {
+  left = left || this.parseBindingAtom();
+  if (this.options.ecmaVersion < 6 || !this.eat(types.eq)) { return left }
+  var node = this.startNodeAt(startPos, startLoc);
+  node.left = left;
+  node.right = this.parseMaybeAssign();
+  return this.finishNode(node, "AssignmentPattern")
+};
+
+// Verify that a node is an lval — something that can be assigned
+// to.
+// bindingType can be either:
+// 'var' indicating that the lval creates a 'var' binding
+// 'let' indicating that the lval creates a lexical ('let' or 'const') binding
+// 'none' indicating that the binding should be checked for illegal identifiers, but not for duplicate references
+
+pp$2.checkLVal = function(expr, bindingType, checkClashes) {
+  var this$1 = this;
+
+  switch (expr.type) {
+  case "Identifier":
+    if (this.strict && this.reservedWordsStrictBind.test(expr.name))
+      { this.raiseRecoverable(expr.start, (bindingType ? "Binding " : "Assigning to ") + expr.name + " in strict mode"); }
+    if (checkClashes) {
+      if (has(checkClashes, expr.name))
+        { this.raiseRecoverable(expr.start, "Argument name clash"); }
+      checkClashes[expr.name] = true;
+    }
+    if (bindingType && bindingType !== "none") {
+      if (
+        bindingType === "var" && !this.canDeclareVarName(expr.name) ||
+        bindingType !== "var" && !this.canDeclareLexicalName(expr.name)
+      ) {
+        this.raiseRecoverable(expr.start, ("Identifier '" + (expr.name) + "' has already been declared"));
+      }
+      if (bindingType === "var") {
+        this.declareVarName(expr.name);
+      } else {
+        this.declareLexicalName(expr.name);
+      }
+    }
+    break
+
+  case "MemberExpression":
+    if (bindingType) { this.raiseRecoverable(expr.start, (bindingType ? "Binding" : "Assigning to") + " member expression"); }
+    break
+
+  case "ObjectPattern":
+    for (var i = 0, list = expr.properties; i < list.length; i += 1)
+      {
+    var prop = list[i];
+
+    this$1.checkLVal(prop.value, bindingType, checkClashes);
+  }
+    break
+
+  case "ArrayPattern":
+    for (var i$1 = 0, list$1 = expr.elements; i$1 < list$1.length; i$1 += 1) {
+      var elem = list$1[i$1];
+
+    if (elem) { this$1.checkLVal(elem, bindingType, checkClashes); }
+    }
+    break
+
+  case "AssignmentPattern":
+    this.checkLVal(expr.left, bindingType, checkClashes);
+    break
+
+  case "RestElement":
+    this.checkLVal(expr.argument, bindingType, checkClashes);
+    break
+
+  case "ParenthesizedExpression":
+    this.checkLVal(expr.expression, bindingType, checkClashes);
+    break
+
+  default:
+    this.raise(expr.start, (bindingType ? "Binding" : "Assigning to") + " rvalue");
+  }
+};
+
+// A recursive descent parser operates by defining functions for all
+// syntactic elements, and recursively calling those, each function
+// advancing the input stream and returning an AST node. Precedence
+// of constructs (for example, the fact that `!x[1]` means `!(x[1])`
+// instead of `(!x)[1]` is handled by the fact that the parser
+// function that parses unary prefix operators is called first, and
+// in turn calls the function that parses `[]` subscripts — that
+// way, it'll receive the node for `x[1]` already parsed, and wraps
+// *that* in the unary operator node.
+//
+// Acorn uses an [operator precedence parser][opp] to handle binary
+// operator precedence, because it is much more compact than using
+// the technique outlined above, which uses different, nesting
+// functions to specify precedence, for all of the ten binary
+// precedence levels that JavaScript defines.
+//
+// [opp]: http://en.wikipedia.org/wiki/Operator-precedence_parser
+
+var pp$3 = Parser.prototype;
+
+// Check if property name clashes with already added.
+// Object/class getters and setters are not allowed to clash —
+// either with each other or with an init property — and in
+// strict mode, init properties are also not allowed to be repeated.
+
+pp$3.checkPropClash = function(prop, propHash) {
+  if (this.options.ecmaVersion >= 6 && (prop.computed || prop.method || prop.shorthand))
+    { return }
+  var key = prop.key;
+  var name;
+  switch (key.type) {
+  case "Identifier": name = key.name; break
+  case "Literal": name = String(key.value); break
+  default: return
+  }
+  var kind = prop.kind;
+  if (this.options.ecmaVersion >= 6) {
+    if (name === "__proto__" && kind === "init") {
+      if (propHash.proto) { this.raiseRecoverable(key.start, "Redefinition of __proto__ property"); }
+      propHash.proto = true;
+    }
+    return
+  }
+  name = "$" + name;
+  var other = propHash[name];
+  if (other) {
+    var redefinition;
+    if (kind === "init") {
+      redefinition = this.strict && other.init || other.get || other.set;
+    } else {
+      redefinition = other.init || other[kind];
+    }
+    if (redefinition)
+      { this.raiseRecoverable(key.start, "Redefinition of property"); }
+  } else {
+    other = propHash[name] = {
+      init: false,
+      get: false,
+      set: false
+    };
+  }
+  other[kind] = true;
+};
+
+// ### Expression parsing
+
+// These nest, from the most general expression type at the top to
+// 'atomic', nondivisible expression types at the bottom. Most of
+// the functions will simply let the function(s) below them parse,
+// and, *if* the syntactic construct they handle is present, wrap
+// the AST node that the inner parser gave them in another node.
+
+// Parse a full expression. The optional arguments are used to
+// forbid the `in` operator (in for loops initalization expressions)
+// and provide reference for storing '=' operator inside shorthand
+// property assignment in contexts where both object expression
+// and object pattern might appear (so it's possible to raise
+// delayed syntax error at correct position).
+
+pp$3.parseExpression = function(noIn, refDestructuringErrors) {
+  var this$1 = this;
+
+  var startPos = this.start, startLoc = this.startLoc;
+  var expr = this.parseMaybeAssign(noIn, refDestructuringErrors);
+  if (this.type === types.comma) {
+    var node = this.startNodeAt(startPos, startLoc);
+    node.expressions = [expr];
+    while (this.eat(types.comma)) { node.expressions.push(this$1.parseMaybeAssign(noIn, refDestructuringErrors)); }
+    return this.finishNode(node, "SequenceExpression")
+  }
+  return expr
+};
+
+// Parse an assignment expression. This includes applications of
+// operators like `+=`.
+
+pp$3.parseMaybeAssign = function(noIn, refDestructuringErrors, afterLeftParse) {
+  if (this.inGenerator && this.isContextual("yield")) { return this.parseYield() }
+
+  var ownDestructuringErrors = false, oldParenAssign = -1, oldTrailingComma = -1;
+  if (refDestructuringErrors) {
+    oldParenAssign = refDestructuringErrors.parenthesizedAssign;
+    oldTrailingComma = refDestructuringErrors.trailingComma;
+    refDestructuringErrors.parenthesizedAssign = refDestructuringErrors.trailingComma = -1;
+  } else {
+    refDestructuringErrors = new DestructuringErrors;
+    ownDestructuringErrors = true;
+  }
+
+  var startPos = this.start, startLoc = this.startLoc;
+  if (this.type == types.parenL || this.type == types.name)
+    { this.potentialArrowAt = this.start; }
+  var left = this.parseMaybeConditional(noIn, refDestructuringErrors);
+  if (afterLeftParse) { left = afterLeftParse.call(this, left, startPos, startLoc); }
+  if (this.type.isAssign) {
+    this.checkPatternErrors(refDestructuringErrors, true);
+    if (!ownDestructuringErrors) { DestructuringErrors.call(refDestructuringErrors); }
+    var node = this.startNodeAt(startPos, startLoc);
+    node.operator = this.value;
+    node.left = this.type === types.eq ? this.toAssignable(left) : left;
+    refDestructuringErrors.shorthandAssign = -1; // reset because shorthand default was used correctly
+    this.checkLVal(left);
+    this.next();
+    node.right = this.parseMaybeAssign(noIn);
+    return this.finishNode(node, "AssignmentExpression")
+  } else {
+    if (ownDestructuringErrors) { this.checkExpressionErrors(refDestructuringErrors, true); }
+  }
+  if (oldParenAssign > -1) { refDestructuringErrors.parenthesizedAssign = oldParenAssign; }
+  if (oldTrailingComma > -1) { refDestructuringErrors.trailingComma = oldTrailingComma; }
+  return left
+};
+
+// Parse a ternary conditional (`?:`) operator.
+
+pp$3.parseMaybeConditional = function(noIn, refDestructuringErrors) {
+  var startPos = this.start, startLoc = this.startLoc;
+  var expr = this.parseExprOps(noIn, refDestructuringErrors);
+  if (this.checkExpressionErrors(refDestructuringErrors)) { return expr }
+  if (this.eat(types.question)) {
+    var node = this.startNodeAt(startPos, startLoc);
+    node.test = expr;
+    node.consequent = this.parseMaybeAssign();
+    this.expect(types.colon);
+    node.alternate = this.parseMaybeAssign(noIn);
+    return this.finishNode(node, "ConditionalExpression")
+  }
+  return expr
+};
+
+// Start the precedence parser.
+
+pp$3.parseExprOps = function(noIn, refDestructuringErrors) {
+  var startPos = this.start, startLoc = this.startLoc;
+  var expr = this.parseMaybeUnary(refDestructuringErrors, false);
+  if (this.checkExpressionErrors(refDestructuringErrors)) { return expr }
+  return expr.start == startPos && expr.type === "ArrowFunctionExpression" ? expr : this.parseExprOp(expr, startPos, startLoc, -1, noIn)
+};
+
+// Parse binary operators with the operator precedence parsing
+// algorithm. `left` is the left-hand side of the operator.
+// `minPrec` provides context that allows the function to stop and
+// defer further parser to one of its callers when it encounters an
+// operator that has a lower precedence than the set it is parsing.
+
+pp$3.parseExprOp = function(left, leftStartPos, leftStartLoc, minPrec, noIn) {
+  var prec = this.type.binop;
+  if (prec != null && (!noIn || this.type !== types._in)) {
+    if (prec > minPrec) {
+      var logical = this.type === types.logicalOR || this.type === types.logicalAND;
+      var op = this.value;
+      this.next();
+      var startPos = this.start, startLoc = this.startLoc;
+      var right = this.parseExprOp(this.parseMaybeUnary(null, false), startPos, startLoc, prec, noIn);
+      var node = this.buildBinary(leftStartPos, leftStartLoc, left, right, op, logical);
+      return this.parseExprOp(node, leftStartPos, leftStartLoc, minPrec, noIn)
+    }
+  }
+  return left
+};
+
+pp$3.buildBinary = function(startPos, startLoc, left, right, op, logical) {
+  var node = this.startNodeAt(startPos, startLoc);
+  node.left = left;
+  node.operator = op;
+  node.right = right;
+  return this.finishNode(node, logical ? "LogicalExpression" : "BinaryExpression")
+};
+
+// Parse unary operators, both prefix and postfix.
+
+pp$3.parseMaybeUnary = function(refDestructuringErrors, sawUnary) {
+  var this$1 = this;
+
+  var startPos = this.start, startLoc = this.startLoc, expr;
+  if (this.inAsync && this.isContextual("await")) {
+    expr = this.parseAwait(refDestructuringErrors);
+    sawUnary = true;
+  } else if (this.type.prefix) {
+    var node = this.startNode(), update = this.type === types.incDec;
+    node.operator = this.value;
+    node.prefix = true;
+    this.next();
+    node.argument = this.parseMaybeUnary(null, true);
+    this.checkExpressionErrors(refDestructuringErrors, true);
+    if (update) { this.checkLVal(node.argument); }
+    else if (this.strict && node.operator === "delete" &&
+             node.argument.type === "Identifier")
+      { this.raiseRecoverable(node.start, "Deleting local variable in strict mode"); }
+    else { sawUnary = true; }
+    expr = this.finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
+  } else {
+    expr = this.parseExprSubscripts(refDestructuringErrors);
+    if (this.checkExpressionErrors(refDestructuringErrors)) { return expr }
+    while (this.type.postfix && !this.canInsertSemicolon()) {
+      var node$1 = this$1.startNodeAt(startPos, startLoc);
+      node$1.operator = this$1.value;
+      node$1.prefix = false;
+      node$1.argument = expr;
+      this$1.checkLVal(expr);
+      this$1.next();
+      expr = this$1.finishNode(node$1, "UpdateExpression");
+    }
+  }
+
+  if (!sawUnary && this.eat(types.starstar))
+    { return this.buildBinary(startPos, startLoc, expr, this.parseMaybeUnary(null, false), "**", false) }
+  else
+    { return expr }
+};
+
+// Parse call, dot, and `[]`-subscript expressions.
+
+pp$3.parseExprSubscripts = function(refDestructuringErrors) {
+  var startPos = this.start, startLoc = this.startLoc;
+  var expr = this.parseExprAtom(refDestructuringErrors);
+  var skipArrowSubscripts = expr.type === "ArrowFunctionExpression" && this.input.slice(this.lastTokStart, this.lastTokEnd) !== ")";
+  if (this.checkExpressionErrors(refDestructuringErrors) || skipArrowSubscripts) { return expr }
+  var result = this.parseSubscripts(expr, startPos, startLoc);
+  if (refDestructuringErrors && result.type === "MemberExpression") {
+    if (refDestructuringErrors.parenthesizedAssign >= result.start) { refDestructuringErrors.parenthesizedAssign = -1; }
+    if (refDestructuringErrors.parenthesizedBind >= result.start) { refDestructuringErrors.parenthesizedBind = -1; }
+  }
+  return result
+};
+
+pp$3.parseSubscripts = function(base, startPos, startLoc, noCalls) {
+  var this$1 = this;
+
+  var maybeAsyncArrow = this.options.ecmaVersion >= 8 && base.type === "Identifier" && base.name === "async" &&
+      this.lastTokEnd == base.end && !this.canInsertSemicolon();
+  for (var computed = (void 0);;) {
+    if ((computed = this$1.eat(types.bracketL)) || this$1.eat(types.dot)) {
+      var node = this$1.startNodeAt(startPos, startLoc);
+      node.object = base;
+      node.property = computed ? this$1.parseExpression() : this$1.parseIdent(true);
+      node.computed = !!computed;
+      if (computed) { this$1.expect(types.bracketR); }
+      base = this$1.finishNode(node, "MemberExpression");
+    } else if (!noCalls && this$1.eat(types.parenL)) {
+      var refDestructuringErrors = new DestructuringErrors, oldYieldPos = this$1.yieldPos, oldAwaitPos = this$1.awaitPos;
+      this$1.yieldPos = 0;
+      this$1.awaitPos = 0;
+      var exprList = this$1.parseExprList(types.parenR, this$1.options.ecmaVersion >= 8, false, refDestructuringErrors);
+      if (maybeAsyncArrow && !this$1.canInsertSemicolon() && this$1.eat(types.arrow)) {
+        this$1.checkPatternErrors(refDestructuringErrors, false);
+        this$1.checkYieldAwaitInDefaultParams();
+        this$1.yieldPos = oldYieldPos;
+        this$1.awaitPos = oldAwaitPos;
+        return this$1.parseArrowExpression(this$1.startNodeAt(startPos, startLoc), exprList, true)
+      }
+      this$1.checkExpressionErrors(refDestructuringErrors, true);
+      this$1.yieldPos = oldYieldPos || this$1.yieldPos;
+      this$1.awaitPos = oldAwaitPos || this$1.awaitPos;
+      var node$1 = this$1.startNodeAt(startPos, startLoc);
+      node$1.callee = base;
+      node$1.arguments = exprList;
+      base = this$1.finishNode(node$1, "CallExpression");
+    } else if (this$1.type === types.backQuote) {
+      var node$2 = this$1.startNodeAt(startPos, startLoc);
+      node$2.tag = base;
+      node$2.quasi = this$1.parseTemplate({isTagged: true});
+      base = this$1.finishNode(node$2, "TaggedTemplateExpression");
+    } else {
+      return base
+    }
+  }
+};
+
+// Parse an atomic expression — either a single token that is an
+// expression, an expression started by a keyword like `function` or
+// `new`, or an expression wrapped in punctuation like `()`, `[]`,
+// or `{}`.
+
+pp$3.parseExprAtom = function(refDestructuringErrors) {
+  var node, canBeArrow = this.potentialArrowAt == this.start;
+  switch (this.type) {
+  case types._super:
+    if (!this.inFunction)
+      { this.raise(this.start, "'super' outside of function or class"); }
+
+  case types._this:
+    var type = this.type === types._this ? "ThisExpression" : "Super";
+    node = this.startNode();
+    this.next();
+    return this.finishNode(node, type)
+
+  case types.name:
+    var startPos = this.start, startLoc = this.startLoc;
+    var id = this.parseIdent(this.type !== types.name);
+    if (this.options.ecmaVersion >= 8 && id.name === "async" && !this.canInsertSemicolon() && this.eat(types._function))
+      { return this.parseFunction(this.startNodeAt(startPos, startLoc), false, false, true) }
+    if (canBeArrow && !this.canInsertSemicolon()) {
+      if (this.eat(types.arrow))
+        { return this.parseArrowExpression(this.startNodeAt(startPos, startLoc), [id], false) }
+      if (this.options.ecmaVersion >= 8 && id.name === "async" && this.type === types.name) {
+        id = this.parseIdent();
+        if (this.canInsertSemicolon() || !this.eat(types.arrow))
+          { this.unexpected(); }
+        return this.parseArrowExpression(this.startNodeAt(startPos, startLoc), [id], true)
+      }
+    }
+    return id
+
+  case types.regexp:
+    var value = this.value;
+    node = this.parseLiteral(value.value);
+    node.regex = {pattern: value.pattern, flags: value.flags};
+    return node
+
+  case types.num: case types.string:
+    return this.parseLiteral(this.value)
+
+  case types._null: case types._true: case types._false:
+    node = this.startNode();
+    node.value = this.type === types._null ? null : this.type === types._true;
+    node.raw = this.type.keyword;
+    this.next();
+    return this.finishNode(node, "Literal")
+
+  case types.parenL:
+    var start = this.start, expr = this.parseParenAndDistinguishExpression(canBeArrow);
+    if (refDestructuringErrors) {
+      if (refDestructuringErrors.parenthesizedAssign < 0 && !this.isSimpleAssignTarget(expr))
+        { refDestructuringErrors.parenthesizedAssign = start; }
+      if (refDestructuringErrors.parenthesizedBind < 0)
+        { refDestructuringErrors.parenthesizedBind = start; }
+    }
+    return expr
+
+  case types.bracketL:
+    node = this.startNode();
+    this.next();
+    node.elements = this.parseExprList(types.bracketR, true, true, refDestructuringErrors);
+    return this.finishNode(node, "ArrayExpression")
+
+  case types.braceL:
+    return this.parseObj(false, refDestructuringErrors)
+
+  case types._function:
+    node = this.startNode();
+    this.next();
+    return this.parseFunction(node, false)
+
+  case types._class:
+    return this.parseClass(this.startNode(), false)
+
+  case types._new:
+    return this.parseNew()
+
+  case types.backQuote:
+    return this.parseTemplate()
+
+  default:
+    this.unexpected();
+  }
+};
+
+pp$3.parseLiteral = function(value) {
+  var node = this.startNode();
+  node.value = value;
+  node.raw = this.input.slice(this.start, this.end);
+  this.next();
+  return this.finishNode(node, "Literal")
+};
+
+pp$3.parseParenExpression = function() {
+  this.expect(types.parenL);
+  var val = this.parseExpression();
+  this.expect(types.parenR);
+  return val
+};
+
+pp$3.parseParenAndDistinguishExpression = function(canBeArrow) {
+  var this$1 = this;
+
+  var startPos = this.start, startLoc = this.startLoc, val, allowTrailingComma = this.options.ecmaVersion >= 8;
+  if (this.options.ecmaVersion >= 6) {
+    this.next();
+
+    var innerStartPos = this.start, innerStartLoc = this.startLoc;
+    var exprList = [], first = true, lastIsComma = false;
+    var refDestructuringErrors = new DestructuringErrors, oldYieldPos = this.yieldPos, oldAwaitPos = this.awaitPos, spreadStart, innerParenStart;
+    this.yieldPos = 0;
+    this.awaitPos = 0;
+    while (this.type !== types.parenR) {
+      first ? first = false : this$1.expect(types.comma);
+      if (allowTrailingComma && this$1.afterTrailingComma(types.parenR, true)) {
+        lastIsComma = true;
+        break
+      } else if (this$1.type === types.ellipsis) {
+        spreadStart = this$1.start;
+        exprList.push(this$1.parseParenItem(this$1.parseRestBinding()));
+        if (this$1.type === types.comma) { this$1.raise(this$1.start, "Comma is not permitted after the rest element"); }
+        break
+      } else {
+        if (this$1.type === types.parenL && !innerParenStart) {
+          innerParenStart = this$1.start;
+        }
+        exprList.push(this$1.parseMaybeAssign(false, refDestructuringErrors, this$1.parseParenItem));
+      }
+    }
+    var innerEndPos = this.start, innerEndLoc = this.startLoc;
+    this.expect(types.parenR);
+
+    if (canBeArrow && !this.canInsertSemicolon() && this.eat(types.arrow)) {
+      this.checkPatternErrors(refDestructuringErrors, false);
+      this.checkYieldAwaitInDefaultParams();
+      if (innerParenStart) { this.unexpected(innerParenStart); }
+      this.yieldPos = oldYieldPos;
+      this.awaitPos = oldAwaitPos;
+      return this.parseParenArrowList(startPos, startLoc, exprList)
+    }
+
+    if (!exprList.length || lastIsComma) { this.unexpected(this.lastTokStart); }
+    if (spreadStart) { this.unexpected(spreadStart); }
+    this.checkExpressionErrors(refDestructuringErrors, true);
+    this.yieldPos = oldYieldPos || this.yieldPos;
+    this.awaitPos = oldAwaitPos || this.awaitPos;
+
+    if (exprList.length > 1) {
+      val = this.startNodeAt(innerStartPos, innerStartLoc);
+      val.expressions = exprList;
+      this.finishNodeAt(val, "SequenceExpression", innerEndPos, innerEndLoc);
+    } else {
+      val = exprList[0];
+    }
+  } else {
+    val = this.parseParenExpression();
+  }
+
+  if (this.options.preserveParens) {
+    var par = this.startNodeAt(startPos, startLoc);
+    par.expression = val;
+    return this.finishNode(par, "ParenthesizedExpression")
+  } else {
+    return val
+  }
+};
+
+pp$3.parseParenItem = function(item) {
+  return item
+};
+
+pp$3.parseParenArrowList = function(startPos, startLoc, exprList) {
+  return this.parseArrowExpression(this.startNodeAt(startPos, startLoc), exprList)
+};
+
+// New's precedence is slightly tricky. It must allow its argument to
+// be a `[]` or dot subscript expression, but not a call — at least,
+// not without wrapping it in parentheses. Thus, it uses the noCalls
+// argument to parseSubscripts to prevent it from consuming the
+// argument list.
+
+var empty$1 = [];
+
+pp$3.parseNew = function() {
+  var node = this.startNode();
+  var meta = this.parseIdent(true);
+  if (this.options.ecmaVersion >= 6 && this.eat(types.dot)) {
+    node.meta = meta;
+    node.property = this.parseIdent(true);
+    if (node.property.name !== "target")
+      { this.raiseRecoverable(node.property.start, "The only valid meta property for new is new.target"); }
+    if (!this.inFunction)
+      { this.raiseRecoverable(node.start, "new.target can only be used in functions"); }
+    return this.finishNode(node, "MetaProperty")
+  }
+  var startPos = this.start, startLoc = this.startLoc;
+  node.callee = this.parseSubscripts(this.parseExprAtom(), startPos, startLoc, true);
+  if (this.eat(types.parenL)) { node.arguments = this.parseExprList(types.parenR, this.options.ecmaVersion >= 8, false); }
+  else { node.arguments = empty$1; }
+  return this.finishNode(node, "NewExpression")
+};
+
+// Parse template expression.
+
+pp$3.parseTemplateElement = function(ref) {
+  var isTagged = ref.isTagged;
+
+  var elem = this.startNode();
+  if (this.type === types.invalidTemplate) {
+    if (!isTagged) {
+      this.raiseRecoverable(this.start, "Bad escape sequence in untagged template literal");
+    }
+    elem.value = {
+      raw: this.value,
+      cooked: null
+    };
+  } else {
+    elem.value = {
+      raw: this.input.slice(this.start, this.end).replace(/\r\n?/g, "\n"),
+      cooked: this.value
+    };
+  }
+  this.next();
+  elem.tail = this.type === types.backQuote;
+  return this.finishNode(elem, "TemplateElement")
+};
+
+pp$3.parseTemplate = function(ref) {
+  var this$1 = this;
+  if ( ref === void 0 ) ref = {};
+  var isTagged = ref.isTagged; if ( isTagged === void 0 ) isTagged = false;
+
+  var node = this.startNode();
+  this.next();
+  node.expressions = [];
+  var curElt = this.parseTemplateElement({isTagged: isTagged});
+  node.quasis = [curElt];
+  while (!curElt.tail) {
+    this$1.expect(types.dollarBraceL);
+    node.expressions.push(this$1.parseExpression());
+    this$1.expect(types.braceR);
+    node.quasis.push(curElt = this$1.parseTemplateElement({isTagged: isTagged}));
+  }
+  this.next();
+  return this.finishNode(node, "TemplateLiteral")
+};
+
+// Parse an object literal or binding pattern.
+
+pp$3.isAsyncProp = function(prop) {
+  return !prop.computed && prop.key.type === "Identifier" && prop.key.name === "async" &&
+    (this.type === types.name || this.type === types.num || this.type === types.string || this.type === types.bracketL) &&
+    !lineBreak.test(this.input.slice(this.lastTokEnd, this.start))
+};
+
+pp$3.parseObj = function(isPattern, refDestructuringErrors) {
+  var this$1 = this;
+
+  var node = this.startNode(), first = true, propHash = {};
+  node.properties = [];
+  this.next();
+  while (!this.eat(types.braceR)) {
+    if (!first) {
+      this$1.expect(types.comma);
+      if (this$1.afterTrailingComma(types.braceR)) { break }
+    } else { first = false; }
+
+    var prop = this$1.startNode(), isGenerator = (void 0), isAsync = (void 0), startPos = (void 0), startLoc = (void 0);
+    if (this$1.options.ecmaVersion >= 6) {
+      prop.method = false;
+      prop.shorthand = false;
+      if (isPattern || refDestructuringErrors) {
+        startPos = this$1.start;
+        startLoc = this$1.startLoc;
+      }
+      if (!isPattern)
+        { isGenerator = this$1.eat(types.star); }
+    }
+    this$1.parsePropertyName(prop);
+    if (!isPattern && this$1.options.ecmaVersion >= 8 && !isGenerator && this$1.isAsyncProp(prop)) {
+      isAsync = true;
+      this$1.parsePropertyName(prop, refDestructuringErrors);
+    } else {
+      isAsync = false;
+    }
+    this$1.parsePropertyValue(prop, isPattern, isGenerator, isAsync, startPos, startLoc, refDestructuringErrors);
+    this$1.checkPropClash(prop, propHash);
+    node.properties.push(this$1.finishNode(prop, "Property"));
+  }
+  return this.finishNode(node, isPattern ? "ObjectPattern" : "ObjectExpression")
+};
+
+pp$3.parsePropertyValue = function(prop, isPattern, isGenerator, isAsync, startPos, startLoc, refDestructuringErrors) {
+  if ((isGenerator || isAsync) && this.type === types.colon)
+    { this.unexpected(); }
+
+  if (this.eat(types.colon)) {
+    prop.value = isPattern ? this.parseMaybeDefault(this.start, this.startLoc) : this.parseMaybeAssign(false, refDestructuringErrors);
+    prop.kind = "init";
+  } else if (this.options.ecmaVersion >= 6 && this.type === types.parenL) {
+    if (isPattern) { this.unexpected(); }
+    prop.kind = "init";
+    prop.method = true;
+    prop.value = this.parseMethod(isGenerator, isAsync);
+  } else if (this.options.ecmaVersion >= 5 && !prop.computed && prop.key.type === "Identifier" &&
+             (prop.key.name === "get" || prop.key.name === "set") &&
+             (this.type != types.comma && this.type != types.braceR)) {
+    if (isGenerator || isAsync || isPattern) { this.unexpected(); }
+    prop.kind = prop.key.name;
+    this.parsePropertyName(prop);
+    prop.value = this.parseMethod(false);
+    var paramCount = prop.kind === "get" ? 0 : 1;
+    if (prop.value.params.length !== paramCount) {
+      var start = prop.value.start;
+      if (prop.kind === "get")
+        { this.raiseRecoverable(start, "getter should have no params"); }
+      else
+        { this.raiseRecoverable(start, "setter should have exactly one param"); }
+    } else {
+      if (prop.kind === "set" && prop.value.params[0].type === "RestElement")
+        { this.raiseRecoverable(prop.value.params[0].start, "Setter cannot use rest params"); }
+    }
+  } else if (this.options.ecmaVersion >= 6 && !prop.computed && prop.key.type === "Identifier") {
+    this.checkUnreserved(prop.key);
+    prop.kind = "init";
+    if (isPattern) {
+      prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key);
+    } else if (this.type === types.eq && refDestructuringErrors) {
+      if (refDestructuringErrors.shorthandAssign < 0)
+        { refDestructuringErrors.shorthandAssign = this.start; }
+      prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key);
+    } else {
+      prop.value = prop.key;
+    }
+    prop.shorthand = true;
+  } else { this.unexpected(); }
+};
+
+pp$3.parsePropertyName = function(prop) {
+  if (this.options.ecmaVersion >= 6) {
+    if (this.eat(types.bracketL)) {
+      prop.computed = true;
+      prop.key = this.parseMaybeAssign();
+      this.expect(types.bracketR);
+      return prop.key
+    } else {
+      prop.computed = false;
+    }
+  }
+  return prop.key = this.type === types.num || this.type === types.string ? this.parseExprAtom() : this.parseIdent(true)
+};
+
+// Initialize empty function node.
+
+pp$3.initFunction = function(node) {
+  node.id = null;
+  if (this.options.ecmaVersion >= 6) {
+    node.generator = false;
+    node.expression = false;
+  }
+  if (this.options.ecmaVersion >= 8)
+    { node.async = false; }
+};
+
+// Parse object or class method.
+
+pp$3.parseMethod = function(isGenerator, isAsync) {
+  var node = this.startNode(), oldInGen = this.inGenerator, oldInAsync = this.inAsync,
+      oldYieldPos = this.yieldPos, oldAwaitPos = this.awaitPos, oldInFunc = this.inFunction;
+
+  this.initFunction(node);
+  if (this.options.ecmaVersion >= 6)
+    { node.generator = isGenerator; }
+  if (this.options.ecmaVersion >= 8)
+    { node.async = !!isAsync; }
+
+  this.inGenerator = node.generator;
+  this.inAsync = node.async;
+  this.yieldPos = 0;
+  this.awaitPos = 0;
+  this.inFunction = true;
+  this.enterFunctionScope();
+
+  this.expect(types.parenL);
+  node.params = this.parseBindingList(types.parenR, false, this.options.ecmaVersion >= 8);
+  this.checkYieldAwaitInDefaultParams();
+  this.parseFunctionBody(node, false);
+
+  this.inGenerator = oldInGen;
+  this.inAsync = oldInAsync;
+  this.yieldPos = oldYieldPos;
+  this.awaitPos = oldAwaitPos;
+  this.inFunction = oldInFunc;
+  return this.finishNode(node, "FunctionExpression")
+};
+
+// Parse arrow function expression with given parameters.
+
+pp$3.parseArrowExpression = function(node, params, isAsync) {
+  var oldInGen = this.inGenerator, oldInAsync = this.inAsync,
+      oldYieldPos = this.yieldPos, oldAwaitPos = this.awaitPos, oldInFunc = this.inFunction;
+
+  this.enterFunctionScope();
+  this.initFunction(node);
+  if (this.options.ecmaVersion >= 8)
+    { node.async = !!isAsync; }
+
+  this.inGenerator = false;
+  this.inAsync = node.async;
+  this.yieldPos = 0;
+  this.awaitPos = 0;
+  this.inFunction = true;
+
+  node.params = this.toAssignableList(params, true);
+  this.parseFunctionBody(node, true);
+
+  this.inGenerator = oldInGen;
+  this.inAsync = oldInAsync;
+  this.yieldPos = oldYieldPos;
+  this.awaitPos = oldAwaitPos;
+  this.inFunction = oldInFunc;
+  return this.finishNode(node, "ArrowFunctionExpression")
+};
+
+// Parse function body and check parameters.
+
+pp$3.parseFunctionBody = function(node, isArrowFunction) {
+  var isExpression = isArrowFunction && this.type !== types.braceL;
+  var oldStrict = this.strict, useStrict = false;
+
+  if (isExpression) {
+    node.body = this.parseMaybeAssign();
+    node.expression = true;
+    this.checkParams(node, false);
+  } else {
+    var nonSimple = this.options.ecmaVersion >= 7 && !this.isSimpleParamList(node.params);
+    if (!oldStrict || nonSimple) {
+      useStrict = this.strictDirective(this.end);
+      // If this is a strict mode function, verify that argument names
+      // are not repeated, and it does not try to bind the words `eval`
+      // or `arguments`.
+      if (useStrict && nonSimple)
+        { this.raiseRecoverable(node.start, "Illegal 'use strict' directive in function with non-simple parameter list"); }
+    }
+    // Start a new scope with regard to labels and the `inFunction`
+    // flag (restore them to their old value afterwards).
+    var oldLabels = this.labels;
+    this.labels = [];
+    if (useStrict) { this.strict = true; }
+
+    // Add the params to varDeclaredNames to ensure that an error is thrown
+    // if a let/const declaration in the function clashes with one of the params.
+    this.checkParams(node, !oldStrict && !useStrict && !isArrowFunction && this.isSimpleParamList(node.params));
+    node.body = this.parseBlock(false);
+    node.expression = false;
+    this.labels = oldLabels;
+  }
+  this.exitFunctionScope();
+
+  if (this.strict && node.id) {
+    // Ensure the function name isn't a forbidden identifier in strict mode, e.g. 'eval'
+    this.checkLVal(node.id, "none");
+  }
+  this.strict = oldStrict;
+};
+
+pp$3.isSimpleParamList = function(params) {
+  for (var i = 0, list = params; i < list.length; i += 1)
+    {
+    var param = list[i];
+
+    if (param.type !== "Identifier") { return false
+  } }
+  return true
+};
+
+// Checks function params for various disallowed patterns such as using "eval"
+// or "arguments" and duplicate parameters.
+
+pp$3.checkParams = function(node, allowDuplicates) {
+  var this$1 = this;
+
+  var nameHash = {};
+  for (var i = 0, list = node.params; i < list.length; i += 1)
+    {
+    var param = list[i];
+
+    this$1.checkLVal(param, "var", allowDuplicates ? null : nameHash);
+  }
+};
+
+// Parses a comma-separated list of expressions, and returns them as
+// an array. `close` is the token type that ends the list, and
+// `allowEmpty` can be turned on to allow subsequent commas with
+// nothing in between them to be parsed as `null` (which is needed
+// for array literals).
+
+pp$3.parseExprList = function(close, allowTrailingComma, allowEmpty, refDestructuringErrors) {
+  var this$1 = this;
+
+  var elts = [], first = true;
+  while (!this.eat(close)) {
+    if (!first) {
+      this$1.expect(types.comma);
+      if (allowTrailingComma && this$1.afterTrailingComma(close)) { break }
+    } else { first = false; }
+
+    var elt = (void 0);
+    if (allowEmpty && this$1.type === types.comma)
+      { elt = null; }
+    else if (this$1.type === types.ellipsis) {
+      elt = this$1.parseSpread(refDestructuringErrors);
+      if (refDestructuringErrors && this$1.type === types.comma && refDestructuringErrors.trailingComma < 0)
+        { refDestructuringErrors.trailingComma = this$1.start; }
+    } else {
+      elt = this$1.parseMaybeAssign(false, refDestructuringErrors);
+    }
+    elts.push(elt);
+  }
+  return elts
+};
+
+// Parse the next token as an identifier. If `liberal` is true (used
+// when parsing properties), it will also convert keywords into
+// identifiers.
+
+pp$3.checkUnreserved = function(ref) {
+  var start = ref.start;
+  var end = ref.end;
+  var name = ref.name;
+
+  if (this.inGenerator && name === "yield")
+    { this.raiseRecoverable(start, "Can not use 'yield' as identifier inside a generator"); }
+  if (this.inAsync && name === "await")
+    { this.raiseRecoverable(start, "Can not use 'await' as identifier inside an async function"); }
+  if (this.isKeyword(name))
+    { this.raise(start, ("Unexpected keyword '" + name + "'")); }
+  if (this.options.ecmaVersion < 6 &&
+    this.input.slice(start, end).indexOf("\\") != -1) { return }
+  var re = this.strict ? this.reservedWordsStrict : this.reservedWords;
+  if (re.test(name))
+    { this.raiseRecoverable(start, ("The keyword '" + name + "' is reserved")); }
+};
+
+pp$3.parseIdent = function(liberal, isBinding) {
+  var node = this.startNode();
+  if (liberal && this.options.allowReserved == "never") { liberal = false; }
+  if (this.type === types.name) {
+    node.name = this.value;
+  } else if (this.type.keyword) {
+    node.name = this.type.keyword;
+  } else {
+    this.unexpected();
+  }
+  this.next();
+  this.finishNode(node, "Identifier");
+  if (!liberal) { this.checkUnreserved(node); }
+  return node
+};
+
+// Parses yield expression inside generator.
+
+pp$3.parseYield = function() {
+  if (!this.yieldPos) { this.yieldPos = this.start; }
+
+  var node = this.startNode();
+  this.next();
+  if (this.type == types.semi || this.canInsertSemicolon() || (this.type != types.star && !this.type.startsExpr)) {
+    node.delegate = false;
+    node.argument = null;
+  } else {
+    node.delegate = this.eat(types.star);
+    node.argument = this.parseMaybeAssign();
+  }
+  return this.finishNode(node, "YieldExpression")
+};
+
+pp$3.parseAwait = function() {
+  if (!this.awaitPos) { this.awaitPos = this.start; }
+
+  var node = this.startNode();
+  this.next();
+  node.argument = this.parseMaybeUnary(null, true);
+  return this.finishNode(node, "AwaitExpression")
+};
+
+var pp$4 = Parser.prototype;
+
+// This function is used to raise exceptions on parse errors. It
+// takes an offset integer (into the current `input`) to indicate
+// the location of the error, attaches the position to the end
+// of the error message, and then raises a `SyntaxError` with that
+// message.
+
+pp$4.raise = function(pos, message) {
+  var loc = getLineInfo(this.input, pos);
+  message += " (" + loc.line + ":" + loc.column + ")";
+  var err = new SyntaxError(message);
+  err.pos = pos; err.loc = loc; err.raisedAt = this.pos;
+  throw err
+};
+
+pp$4.raiseRecoverable = pp$4.raise;
+
+pp$4.curPosition = function() {
+  if (this.options.locations) {
+    return new Position(this.curLine, this.pos - this.lineStart)
+  }
+};
+
+var pp$5 = Parser.prototype;
+
+// Object.assign polyfill
+var assign = Object.assign || function(target) {
+  var sources = [], len = arguments.length - 1;
+  while ( len-- > 0 ) sources[ len ] = arguments[ len + 1 ];
+
+  for (var i = 0, list = sources; i < list.length; i += 1) {
+    var source = list[i];
+
+    for (var key in source) {
+      if (has(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+  return target
+};
+
+// The functions in this module keep track of declared variables in the current scope in order to detect duplicate variable names.
+
+pp$5.enterFunctionScope = function() {
+  // var: a hash of var-declared names in the current lexical scope
+  // lexical: a hash of lexically-declared names in the current lexical scope
+  // childVar: a hash of var-declared names in all child lexical scopes of the current lexical scope (within the current function scope)
+  // parentLexical: a hash of lexically-declared names in all parent lexical scopes of the current lexical scope (within the current function scope)
+  this.scopeStack.push({var: {}, lexical: {}, childVar: {}, parentLexical: {}});
+};
+
+pp$5.exitFunctionScope = function() {
+  this.scopeStack.pop();
+};
+
+pp$5.enterLexicalScope = function() {
+  var parentScope = this.scopeStack[this.scopeStack.length - 1];
+  var childScope = {var: {}, lexical: {}, childVar: {}, parentLexical: {}};
+
+  this.scopeStack.push(childScope);
+  assign(childScope.parentLexical, parentScope.lexical, parentScope.parentLexical);
+};
+
+pp$5.exitLexicalScope = function() {
+  var childScope = this.scopeStack.pop();
+  var parentScope = this.scopeStack[this.scopeStack.length - 1];
+
+  assign(parentScope.childVar, childScope.var, childScope.childVar);
+};
+
+/**
+ * A name can be declared with `var` if there are no variables with the same name declared with `let`/`const`
+ * in the current lexical scope or any of the parent lexical scopes in this function.
+ */
+pp$5.canDeclareVarName = function(name) {
+  var currentScope = this.scopeStack[this.scopeStack.length - 1];
+
+  return !has(currentScope.lexical, name) && !has(currentScope.parentLexical, name)
+};
+
+/**
+ * A name can be declared with `let`/`const` if there are no variables with the same name declared with `let`/`const`
+ * in the current scope, and there are no variables with the same name declared with `var` in the current scope or in
+ * any child lexical scopes in this function.
+ */
+pp$5.canDeclareLexicalName = function(name) {
+  var currentScope = this.scopeStack[this.scopeStack.length - 1];
+
+  return !has(currentScope.lexical, name) && !has(currentScope.var, name) && !has(currentScope.childVar, name)
+};
+
+pp$5.declareVarName = function(name) {
+  this.scopeStack[this.scopeStack.length - 1].var[name] = true;
+};
+
+pp$5.declareLexicalName = function(name) {
+  this.scopeStack[this.scopeStack.length - 1].lexical[name] = true;
+};
+
+var Node = function Node(parser, pos, loc) {
+  this.type = "";
+  this.start = pos;
+  this.end = 0;
+  if (parser.options.locations)
+    { this.loc = new SourceLocation(parser, loc); }
+  if (parser.options.directSourceFile)
+    { this.sourceFile = parser.options.directSourceFile; }
+  if (parser.options.ranges)
+    { this.range = [pos, 0]; }
+};
+
+// Start an AST node, attaching a start offset.
+
+var pp$6 = Parser.prototype;
+
+pp$6.startNode = function() {
+  return new Node(this, this.start, this.startLoc)
+};
+
+pp$6.startNodeAt = function(pos, loc) {
+  return new Node(this, pos, loc)
+};
+
+// Finish an AST node, adding `type` and `end` properties.
+
+function finishNodeAt(node, type, pos, loc) {
+  node.type = type;
+  node.end = pos;
+  if (this.options.locations)
+    { node.loc.end = loc; }
+  if (this.options.ranges)
+    { node.range[1] = pos; }
+  return node
+}
+
+pp$6.finishNode = function(node, type) {
+  return finishNodeAt.call(this, node, type, this.lastTokEnd, this.lastTokEndLoc)
+};
+
+// Finish node at given position
+
+pp$6.finishNodeAt = function(node, type, pos, loc) {
+  return finishNodeAt.call(this, node, type, pos, loc)
+};
+
+// The algorithm used to determine whether a regexp can appear at a
+// given point in the program is loosely based on sweet.js' approach.
+// See https://github.com/mozilla/sweet.js/wiki/design
+
+var TokContext = function TokContext(token, isExpr, preserveSpace, override, generator) {
+  this.token = token;
+  this.isExpr = !!isExpr;
+  this.preserveSpace = !!preserveSpace;
+  this.override = override;
+  this.generator = !!generator;
+};
+
+var types$1 = {
+  b_stat: new TokContext("{", false),
+  b_expr: new TokContext("{", true),
+  b_tmpl: new TokContext("${", false),
+  p_stat: new TokContext("(", false),
+  p_expr: new TokContext("(", true),
+  q_tmpl: new TokContext("`", true, true, function (p) { return p.tryReadTemplateToken(); }),
+  f_stat: new TokContext("function", false),
+  f_expr: new TokContext("function", true),
+  f_expr_gen: new TokContext("function", true, false, null, true),
+  f_gen: new TokContext("function", false, false, null, true)
+};
+
+var pp$7 = Parser.prototype;
+
+pp$7.initialContext = function() {
+  return [types$1.b_stat]
+};
+
+pp$7.braceIsBlock = function(prevType) {
+  var parent = this.curContext();
+  if (parent === types$1.f_expr || parent === types$1.f_stat)
+    { return true }
+  if (prevType === types.colon && (parent === types$1.b_stat || parent === types$1.b_expr))
+    { return !parent.isExpr }
+
+  // The check for `tt.name && exprAllowed` detects whether we are
+  // after a `yield` or `of` construct. See the `updateContext` for
+  // `tt.name`.
+  if (prevType === types._return || prevType == types.name && this.exprAllowed)
+    { return lineBreak.test(this.input.slice(this.lastTokEnd, this.start)) }
+  if (prevType === types._else || prevType === types.semi || prevType === types.eof || prevType === types.parenR || prevType == types.arrow)
+    { return true }
+  if (prevType == types.braceL)
+    { return parent === types$1.b_stat }
+  if (prevType == types._var || prevType == types.name)
+    { return false }
+  return !this.exprAllowed
+};
+
+pp$7.inGeneratorContext = function() {
+  var this$1 = this;
+
+  for (var i = this.context.length - 1; i >= 1; i--) {
+    var context = this$1.context[i];
+    if (context.token === "function")
+      { return context.generator }
+  }
+  return false
+};
+
+pp$7.updateContext = function(prevType) {
+  var update, type = this.type;
+  if (type.keyword && prevType == types.dot)
+    { this.exprAllowed = false; }
+  else if (update = type.updateContext)
+    { update.call(this, prevType); }
+  else
+    { this.exprAllowed = type.beforeExpr; }
+};
+
+// Token-specific context update code
+
+types.parenR.updateContext = types.braceR.updateContext = function() {
+  if (this.context.length == 1) {
+    this.exprAllowed = true;
+    return
+  }
+  var out = this.context.pop();
+  if (out === types$1.b_stat && this.curContext().token === "function") {
+    out = this.context.pop();
+  }
+  this.exprAllowed = !out.isExpr;
+};
+
+types.braceL.updateContext = function(prevType) {
+  this.context.push(this.braceIsBlock(prevType) ? types$1.b_stat : types$1.b_expr);
+  this.exprAllowed = true;
+};
+
+types.dollarBraceL.updateContext = function() {
+  this.context.push(types$1.b_tmpl);
+  this.exprAllowed = true;
+};
+
+types.parenL.updateContext = function(prevType) {
+  var statementParens = prevType === types._if || prevType === types._for || prevType === types._with || prevType === types._while;
+  this.context.push(statementParens ? types$1.p_stat : types$1.p_expr);
+  this.exprAllowed = true;
+};
+
+types.incDec.updateContext = function() {
+  // tokExprAllowed stays unchanged
+};
+
+types._function.updateContext = types._class.updateContext = function(prevType) {
+  if (prevType.beforeExpr && prevType !== types.semi && prevType !== types._else &&
+      !((prevType === types.colon || prevType === types.braceL) && this.curContext() === types$1.b_stat))
+    { this.context.push(types$1.f_expr); }
+  else
+    { this.context.push(types$1.f_stat); }
+  this.exprAllowed = false;
+};
+
+types.backQuote.updateContext = function() {
+  if (this.curContext() === types$1.q_tmpl)
+    { this.context.pop(); }
+  else
+    { this.context.push(types$1.q_tmpl); }
+  this.exprAllowed = false;
+};
+
+types.star.updateContext = function(prevType) {
+  if (prevType == types._function) {
+    var index = this.context.length - 1;
+    if (this.context[index] === types$1.f_expr)
+      { this.context[index] = types$1.f_expr_gen; }
+    else
+      { this.context[index] = types$1.f_gen; }
+  }
+  this.exprAllowed = true;
+};
+
+types.name.updateContext = function(prevType) {
+  var allowed = false;
+  if (this.options.ecmaVersion >= 6) {
+    if (this.value == "of" && !this.exprAllowed ||
+        this.value == "yield" && this.inGeneratorContext())
+      { allowed = true; }
+  }
+  this.exprAllowed = allowed;
+};
+
+// Object type used to represent tokens. Note that normally, tokens
+// simply exist as properties on the parser object. This is only
+// used for the onToken callback and the external tokenizer.
+
+var Token = function Token(p) {
+  this.type = p.type;
+  this.value = p.value;
+  this.start = p.start;
+  this.end = p.end;
+  if (p.options.locations)
+    { this.loc = new SourceLocation(p, p.startLoc, p.endLoc); }
+  if (p.options.ranges)
+    { this.range = [p.start, p.end]; }
+};
+
+// ## Tokenizer
+
+var pp$8 = Parser.prototype;
+
+// Are we running under Rhino?
+var isRhino = typeof Packages == "object" && Object.prototype.toString.call(Packages) == "[object JavaPackage]";
+
+// Move to the next token
+
+pp$8.next = function() {
+  if (this.options.onToken)
+    { this.options.onToken(new Token(this)); }
+
+  this.lastTokEnd = this.end;
+  this.lastTokStart = this.start;
+  this.lastTokEndLoc = this.endLoc;
+  this.lastTokStartLoc = this.startLoc;
+  this.nextToken();
+};
+
+pp$8.getToken = function() {
+  this.next();
+  return new Token(this)
+};
+
+// If we're in an ES6 environment, make parsers iterable
+if (typeof Symbol !== "undefined")
+  { pp$8[Symbol.iterator] = function() {
+    var this$1 = this;
+
+    return {
+      next: function () {
+        var token = this$1.getToken();
+        return {
+          done: token.type === types.eof,
+          value: token
+        }
+      }
+    }
+  }; }
+
+// Toggle strict mode. Re-reads the next number or string to please
+// pedantic tests (`"use strict"; 010;` should fail).
+
+pp$8.curContext = function() {
+  return this.context[this.context.length - 1]
+};
+
+// Read a single token, updating the parser object's token-related
+// properties.
+
+pp$8.nextToken = function() {
+  var curContext = this.curContext();
+  if (!curContext || !curContext.preserveSpace) { this.skipSpace(); }
+
+  this.start = this.pos;
+  if (this.options.locations) { this.startLoc = this.curPosition(); }
+  if (this.pos >= this.input.length) { return this.finishToken(types.eof) }
+
+  if (curContext.override) { return curContext.override(this) }
+  else { this.readToken(this.fullCharCodeAtPos()); }
+};
+
+pp$8.readToken = function(code) {
+  // Identifier or keyword. '\uXXXX' sequences are allowed in
+  // identifiers, so '\' also dispatches to that.
+  if (isIdentifierStart(code, this.options.ecmaVersion >= 6) || code === 92 /* '\' */)
+    { return this.readWord() }
+
+  return this.getTokenFromCode(code)
+};
+
+pp$8.fullCharCodeAtPos = function() {
+  var code = this.input.charCodeAt(this.pos);
+  if (code <= 0xd7ff || code >= 0xe000) { return code }
+  var next = this.input.charCodeAt(this.pos + 1);
+  return (code << 10) + next - 0x35fdc00
+};
+
+pp$8.skipBlockComment = function() {
+  var this$1 = this;
+
+  var startLoc = this.options.onComment && this.curPosition();
+  var start = this.pos, end = this.input.indexOf("*/", this.pos += 2);
+  if (end === -1) { this.raise(this.pos - 2, "Unterminated comment"); }
+  this.pos = end + 2;
+  if (this.options.locations) {
+    lineBreakG.lastIndex = start;
+    var match;
+    while ((match = lineBreakG.exec(this.input)) && match.index < this.pos) {
+      ++this$1.curLine;
+      this$1.lineStart = match.index + match[0].length;
+    }
+  }
+  if (this.options.onComment)
+    { this.options.onComment(true, this.input.slice(start + 2, end), start, this.pos,
+                           startLoc, this.curPosition()); }
+};
+
+pp$8.skipLineComment = function(startSkip) {
+  var this$1 = this;
+
+  var start = this.pos;
+  var startLoc = this.options.onComment && this.curPosition();
+  var ch = this.input.charCodeAt(this.pos += startSkip);
+  while (this.pos < this.input.length && !isNewLine(ch)) {
+    ch = this$1.input.charCodeAt(++this$1.pos);
+  }
+  if (this.options.onComment)
+    { this.options.onComment(false, this.input.slice(start + startSkip, this.pos), start, this.pos,
+                           startLoc, this.curPosition()); }
+};
+
+// Called at the start of the parse and after every token. Skips
+// whitespace and comments, and.
+
+pp$8.skipSpace = function() {
+  var this$1 = this;
+
+  loop: while (this.pos < this.input.length) {
+    var ch = this$1.input.charCodeAt(this$1.pos);
+    switch (ch) {
+    case 32: case 160: // ' '
+      ++this$1.pos;
+      break
+    case 13:
+      if (this$1.input.charCodeAt(this$1.pos + 1) === 10) {
+        ++this$1.pos;
+      }
+    case 10: case 8232: case 8233:
+      ++this$1.pos;
+      if (this$1.options.locations) {
+        ++this$1.curLine;
+        this$1.lineStart = this$1.pos;
+      }
+      break
+    case 47: // '/'
+      switch (this$1.input.charCodeAt(this$1.pos + 1)) {
+      case 42: // '*'
+        this$1.skipBlockComment();
+        break
+      case 47:
+        this$1.skipLineComment(2);
+        break
+      default:
+        break loop
+      }
+      break
+    default:
+      if (ch > 8 && ch < 14 || ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch))) {
+        ++this$1.pos;
+      } else {
+        break loop
+      }
+    }
+  }
+};
+
+// Called at the end of every token. Sets `end`, `val`, and
+// maintains `context` and `exprAllowed`, and skips the space after
+// the token, so that the next one's `start` will point at the
+// right position.
+
+pp$8.finishToken = function(type, val) {
+  this.end = this.pos;
+  if (this.options.locations) { this.endLoc = this.curPosition(); }
+  var prevType = this.type;
+  this.type = type;
+  this.value = val;
+
+  this.updateContext(prevType);
+};
+
+// ### Token reading
+
+// This is the function that is called to fetch the next token. It
+// is somewhat obscure, because it works in character codes rather
+// than characters, and because operator parsing has been inlined
+// into it.
+//
+// All in the name of speed.
+//
+pp$8.readToken_dot = function() {
+  var next = this.input.charCodeAt(this.pos + 1);
+  if (next >= 48 && next <= 57) { return this.readNumber(true) }
+  var next2 = this.input.charCodeAt(this.pos + 2);
+  if (this.options.ecmaVersion >= 6 && next === 46 && next2 === 46) { // 46 = dot '.'
+    this.pos += 3;
+    return this.finishToken(types.ellipsis)
+  } else {
+    ++this.pos;
+    return this.finishToken(types.dot)
+  }
+};
+
+pp$8.readToken_slash = function() { // '/'
+  var next = this.input.charCodeAt(this.pos + 1);
+  if (this.exprAllowed) { ++this.pos; return this.readRegexp() }
+  if (next === 61) { return this.finishOp(types.assign, 2) }
+  return this.finishOp(types.slash, 1)
+};
+
+pp$8.readToken_mult_modulo_exp = function(code) { // '%*'
+  var next = this.input.charCodeAt(this.pos + 1);
+  var size = 1;
+  var tokentype = code === 42 ? types.star : types.modulo;
+
+  // exponentiation operator ** and **=
+  if (this.options.ecmaVersion >= 7 && next === 42) {
+    ++size;
+    tokentype = types.starstar;
+    next = this.input.charCodeAt(this.pos + 2);
+  }
+
+  if (next === 61) { return this.finishOp(types.assign, size + 1) }
+  return this.finishOp(tokentype, size)
+};
+
+pp$8.readToken_pipe_amp = function(code) { // '|&'
+  var next = this.input.charCodeAt(this.pos + 1);
+  if (next === code) { return this.finishOp(code === 124 ? types.logicalOR : types.logicalAND, 2) }
+  if (next === 61) { return this.finishOp(types.assign, 2) }
+  return this.finishOp(code === 124 ? types.bitwiseOR : types.bitwiseAND, 1)
+};
+
+pp$8.readToken_caret = function() { // '^'
+  var next = this.input.charCodeAt(this.pos + 1);
+  if (next === 61) { return this.finishOp(types.assign, 2) }
+  return this.finishOp(types.bitwiseXOR, 1)
+};
+
+pp$8.readToken_plus_min = function(code) { // '+-'
+  var next = this.input.charCodeAt(this.pos + 1);
+  if (next === code) {
+    if (next == 45 && this.input.charCodeAt(this.pos + 2) == 62 &&
+        (this.lastTokEnd === 0 || lineBreak.test(this.input.slice(this.lastTokEnd, this.pos)))) {
+      // A `-->` line comment
+      this.skipLineComment(3);
+      this.skipSpace();
+      return this.nextToken()
+    }
+    return this.finishOp(types.incDec, 2)
+  }
+  if (next === 61) { return this.finishOp(types.assign, 2) }
+  return this.finishOp(types.plusMin, 1)
+};
+
+pp$8.readToken_lt_gt = function(code) { // '<>'
+  var next = this.input.charCodeAt(this.pos + 1);
+  var size = 1;
+  if (next === code) {
+    size = code === 62 && this.input.charCodeAt(this.pos + 2) === 62 ? 3 : 2;
+    if (this.input.charCodeAt(this.pos + size) === 61) { return this.finishOp(types.assign, size + 1) }
+    return this.finishOp(types.bitShift, size)
+  }
+  if (next == 33 && code == 60 && this.input.charCodeAt(this.pos + 2) == 45 &&
+      this.input.charCodeAt(this.pos + 3) == 45) {
+    if (this.inModule) { this.unexpected(); }
+    // `<!--`, an XML-style comment that should be interpreted as a line comment
+    this.skipLineComment(4);
+    this.skipSpace();
+    return this.nextToken()
+  }
+  if (next === 61) { size = 2; }
+  return this.finishOp(types.relational, size)
+};
+
+pp$8.readToken_eq_excl = function(code) { // '=!'
+  var next = this.input.charCodeAt(this.pos + 1);
+  if (next === 61) { return this.finishOp(types.equality, this.input.charCodeAt(this.pos + 2) === 61 ? 3 : 2) }
+  if (code === 61 && next === 62 && this.options.ecmaVersion >= 6) { // '=>'
+    this.pos += 2;
+    return this.finishToken(types.arrow)
+  }
+  return this.finishOp(code === 61 ? types.eq : types.prefix, 1)
+};
+
+pp$8.getTokenFromCode = function(code) {
+  switch (code) {
+    // The interpretation of a dot depends on whether it is followed
+    // by a digit or another two dots.
+  case 46: // '.'
+    return this.readToken_dot()
+
+    // Punctuation tokens.
+  case 40: ++this.pos; return this.finishToken(types.parenL)
+  case 41: ++this.pos; return this.finishToken(types.parenR)
+  case 59: ++this.pos; return this.finishToken(types.semi)
+  case 44: ++this.pos; return this.finishToken(types.comma)
+  case 91: ++this.pos; return this.finishToken(types.bracketL)
+  case 93: ++this.pos; return this.finishToken(types.bracketR)
+  case 123: ++this.pos; return this.finishToken(types.braceL)
+  case 125: ++this.pos; return this.finishToken(types.braceR)
+  case 58: ++this.pos; return this.finishToken(types.colon)
+  case 63: ++this.pos; return this.finishToken(types.question)
+
+  case 96: // '`'
+    if (this.options.ecmaVersion < 6) { break }
+    ++this.pos;
+    return this.finishToken(types.backQuote)
+
+  case 48: // '0'
+    var next = this.input.charCodeAt(this.pos + 1);
+    if (next === 120 || next === 88) { return this.readRadixNumber(16) } // '0x', '0X' - hex number
+    if (this.options.ecmaVersion >= 6) {
+      if (next === 111 || next === 79) { return this.readRadixNumber(8) } // '0o', '0O' - octal number
+      if (next === 98 || next === 66) { return this.readRadixNumber(2) } // '0b', '0B' - binary number
+    }
+    // Anything else beginning with a digit is an integer, octal
+    // number, or float.
+  case 49: case 50: case 51: case 52: case 53: case 54: case 55: case 56: case 57: // 1-9
+    return this.readNumber(false)
+
+    // Quotes produce strings.
+  case 34: case 39: // '"', "'"
+    return this.readString(code)
+
+    // Operators are parsed inline in tiny state machines. '=' (61) is
+    // often referred to. `finishOp` simply skips the amount of
+    // characters it is given as second argument, and returns a token
+    // of the type given by its first argument.
+
+  case 47: // '/'
+    return this.readToken_slash()
+
+  case 37: case 42: // '%*'
+    return this.readToken_mult_modulo_exp(code)
+
+  case 124: case 38: // '|&'
+    return this.readToken_pipe_amp(code)
+
+  case 94: // '^'
+    return this.readToken_caret()
+
+  case 43: case 45: // '+-'
+    return this.readToken_plus_min(code)
+
+  case 60: case 62: // '<>'
+    return this.readToken_lt_gt(code)
+
+  case 61: case 33: // '=!'
+    return this.readToken_eq_excl(code)
+
+  case 126: // '~'
+    return this.finishOp(types.prefix, 1)
+  }
+
+  this.raise(this.pos, "Unexpected character '" + codePointToString(code) + "'");
+};
+
+pp$8.finishOp = function(type, size) {
+  var str = this.input.slice(this.pos, this.pos + size);
+  this.pos += size;
+  return this.finishToken(type, str)
+};
+
+// Parse a regular expression. Some context-awareness is necessary,
+// since a '/' inside a '[]' set does not end the expression.
+
+function tryCreateRegexp(src, flags, throwErrorAt, parser) {
+  try {
+    return new RegExp(src, flags)
+  } catch (e) {
+    if (throwErrorAt !== undefined) {
+      if (e instanceof SyntaxError) { parser.raise(throwErrorAt, "Error parsing regular expression: " + e.message); }
+      throw e
+    }
+  }
+}
+
+var regexpUnicodeSupport = !!tryCreateRegexp("\uffff", "u");
+
+pp$8.readRegexp = function() {
+  var this$1 = this;
+
+  var escaped, inClass, start = this.pos;
+  for (;;) {
+    if (this$1.pos >= this$1.input.length) { this$1.raise(start, "Unterminated regular expression"); }
+    var ch = this$1.input.charAt(this$1.pos);
+    if (lineBreak.test(ch)) { this$1.raise(start, "Unterminated regular expression"); }
+    if (!escaped) {
+      if (ch === "[") { inClass = true; }
+      else if (ch === "]" && inClass) { inClass = false; }
+      else if (ch === "/" && !inClass) { break }
+      escaped = ch === "\\";
+    } else { escaped = false; }
+    ++this$1.pos;
+  }
+  var content = this.input.slice(start, this.pos);
+  ++this.pos;
+  // Need to use `readWord1` because '\uXXXX' sequences are allowed
+  // here (don't ask).
+  var mods = this.readWord1();
+  var tmp = content, tmpFlags = "";
+  if (mods) {
+    var validFlags = /^[gim]*$/;
+    if (this.options.ecmaVersion >= 6) { validFlags = /^[gimuy]*$/; }
+    if (!validFlags.test(mods)) { this.raise(start, "Invalid regular expression flag"); }
+    if (mods.indexOf("u") >= 0) {
+      if (regexpUnicodeSupport) {
+        tmpFlags = "u";
+      } else {
+        // Replace each astral symbol and every Unicode escape sequence that
+        // possibly represents an astral symbol or a paired surrogate with a
+        // single ASCII symbol to avoid throwing on regular expressions that
+        // are only valid in combination with the `/u` flag.
+        // Note: replacing with the ASCII symbol `x` might cause false
+        // negatives in unlikely scenarios. For example, `[\u{61}-b]` is a
+        // perfectly valid pattern that is equivalent to `[a-b]`, but it would
+        // be replaced by `[x-b]` which throws an error.
+        tmp = tmp.replace(/\\u\{([0-9a-fA-F]+)\}/g, function (_match, code, offset) {
+          code = Number("0x" + code);
+          if (code > 0x10FFFF) { this$1.raise(start + offset + 3, "Code point out of bounds"); }
+          return "x"
+        });
+        tmp = tmp.replace(/\\u([a-fA-F0-9]{4})|[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x");
+        tmpFlags = tmpFlags.replace("u", "");
+      }
+    }
+  }
+  // Detect invalid regular expressions.
+  var value = null;
+  // Rhino's regular expression parser is flaky and throws uncatchable exceptions,
+  // so don't do detection if we are running under Rhino
+  if (!isRhino) {
+    tryCreateRegexp(tmp, tmpFlags, start, this);
+    // Get a regular expression object for this pattern-flag pair, or `null` in
+    // case the current environment doesn't support the flags it uses.
+    value = tryCreateRegexp(content, mods);
+  }
+  return this.finishToken(types.regexp, {pattern: content, flags: mods, value: value})
+};
+
+// Read an integer in the given radix. Return null if zero digits
+// were read, the integer value otherwise. When `len` is given, this
+// will return `null` unless the integer has exactly `len` digits.
+
+pp$8.readInt = function(radix, len) {
+  var this$1 = this;
+
+  var start = this.pos, total = 0;
+  for (var i = 0, e = len == null ? Infinity : len; i < e; ++i) {
+    var code = this$1.input.charCodeAt(this$1.pos), val = (void 0);
+    if (code >= 97) { val = code - 97 + 10; } // a
+    else if (code >= 65) { val = code - 65 + 10; } // A
+    else if (code >= 48 && code <= 57) { val = code - 48; } // 0-9
+    else { val = Infinity; }
+    if (val >= radix) { break }
+    ++this$1.pos;
+    total = total * radix + val;
+  }
+  if (this.pos === start || len != null && this.pos - start !== len) { return null }
+
+  return total
+};
+
+pp$8.readRadixNumber = function(radix) {
+  this.pos += 2; // 0x
+  var val = this.readInt(radix);
+  if (val == null) { this.raise(this.start + 2, "Expected number in radix " + radix); }
+  if (isIdentifierStart(this.fullCharCodeAtPos())) { this.raise(this.pos, "Identifier directly after number"); }
+  return this.finishToken(types.num, val)
+};
+
+// Read an integer, octal integer, or floating-point number.
+
+pp$8.readNumber = function(startsWithDot) {
+  var start = this.pos, isFloat = false, octal = this.input.charCodeAt(this.pos) === 48;
+  if (!startsWithDot && this.readInt(10) === null) { this.raise(start, "Invalid number"); }
+  if (octal && this.pos == start + 1) { octal = false; }
+  var next = this.input.charCodeAt(this.pos);
+  if (next === 46 && !octal) { // '.'
+    ++this.pos;
+    this.readInt(10);
+    isFloat = true;
+    next = this.input.charCodeAt(this.pos);
+  }
+  if ((next === 69 || next === 101) && !octal) { // 'eE'
+    next = this.input.charCodeAt(++this.pos);
+    if (next === 43 || next === 45) { ++this.pos; } // '+-'
+    if (this.readInt(10) === null) { this.raise(start, "Invalid number"); }
+    isFloat = true;
+  }
+  if (isIdentifierStart(this.fullCharCodeAtPos())) { this.raise(this.pos, "Identifier directly after number"); }
+
+  var str = this.input.slice(start, this.pos), val;
+  if (isFloat) { val = parseFloat(str); }
+  else if (!octal || str.length === 1) { val = parseInt(str, 10); }
+  else if (this.strict) { this.raise(start, "Invalid number"); }
+  else if (/[89]/.test(str)) { val = parseInt(str, 10); }
+  else { val = parseInt(str, 8); }
+  return this.finishToken(types.num, val)
+};
+
+// Read a string value, interpreting backslash-escapes.
+
+pp$8.readCodePoint = function() {
+  var ch = this.input.charCodeAt(this.pos), code;
+
+  if (ch === 123) { // '{'
+    if (this.options.ecmaVersion < 6) { this.unexpected(); }
+    var codePos = ++this.pos;
+    code = this.readHexChar(this.input.indexOf("}", this.pos) - this.pos);
+    ++this.pos;
+    if (code > 0x10FFFF) { this.invalidStringToken(codePos, "Code point out of bounds"); }
+  } else {
+    code = this.readHexChar(4);
+  }
+  return code
+};
+
+function codePointToString(code) {
+  // UTF-16 Decoding
+  if (code <= 0xFFFF) { return String.fromCharCode(code) }
+  code -= 0x10000;
+  return String.fromCharCode((code >> 10) + 0xD800, (code & 1023) + 0xDC00)
+}
+
+pp$8.readString = function(quote) {
+  var this$1 = this;
+
+  var out = "", chunkStart = ++this.pos;
+  for (;;) {
+    if (this$1.pos >= this$1.input.length) { this$1.raise(this$1.start, "Unterminated string constant"); }
+    var ch = this$1.input.charCodeAt(this$1.pos);
+    if (ch === quote) { break }
+    if (ch === 92) { // '\'
+      out += this$1.input.slice(chunkStart, this$1.pos);
+      out += this$1.readEscapedChar(false);
+      chunkStart = this$1.pos;
+    } else {
+      if (isNewLine(ch)) { this$1.raise(this$1.start, "Unterminated string constant"); }
+      ++this$1.pos;
+    }
+  }
+  out += this.input.slice(chunkStart, this.pos++);
+  return this.finishToken(types.string, out)
+};
+
+// Reads template string tokens.
+
+var INVALID_TEMPLATE_ESCAPE_ERROR = {};
+
+pp$8.tryReadTemplateToken = function() {
+  this.inTemplateElement = true;
+  try {
+    this.readTmplToken();
+  } catch (err) {
+    if (err === INVALID_TEMPLATE_ESCAPE_ERROR) {
+      this.readInvalidTemplateToken();
+    } else {
+      throw err
+    }
+  }
+
+  this.inTemplateElement = false;
+};
+
+pp$8.invalidStringToken = function(position, message) {
+  if (this.inTemplateElement && this.options.ecmaVersion >= 9) {
+    throw INVALID_TEMPLATE_ESCAPE_ERROR
+  } else {
+    this.raise(position, message);
+  }
+};
+
+pp$8.readTmplToken = function() {
+  var this$1 = this;
+
+  var out = "", chunkStart = this.pos;
+  for (;;) {
+    if (this$1.pos >= this$1.input.length) { this$1.raise(this$1.start, "Unterminated template"); }
+    var ch = this$1.input.charCodeAt(this$1.pos);
+    if (ch === 96 || ch === 36 && this$1.input.charCodeAt(this$1.pos + 1) === 123) { // '`', '${'
+      if (this$1.pos === this$1.start && (this$1.type === types.template || this$1.type === types.invalidTemplate)) {
+        if (ch === 36) {
+          this$1.pos += 2;
+          return this$1.finishToken(types.dollarBraceL)
+        } else {
+          ++this$1.pos;
+          return this$1.finishToken(types.backQuote)
+        }
+      }
+      out += this$1.input.slice(chunkStart, this$1.pos);
+      return this$1.finishToken(types.template, out)
+    }
+    if (ch === 92) { // '\'
+      out += this$1.input.slice(chunkStart, this$1.pos);
+      out += this$1.readEscapedChar(true);
+      chunkStart = this$1.pos;
+    } else if (isNewLine(ch)) {
+      out += this$1.input.slice(chunkStart, this$1.pos);
+      ++this$1.pos;
+      switch (ch) {
+      case 13:
+        if (this$1.input.charCodeAt(this$1.pos) === 10) { ++this$1.pos; }
+      case 10:
+        out += "\n";
+        break
+      default:
+        out += String.fromCharCode(ch);
+        break
+      }
+      if (this$1.options.locations) {
+        ++this$1.curLine;
+        this$1.lineStart = this$1.pos;
+      }
+      chunkStart = this$1.pos;
+    } else {
+      ++this$1.pos;
+    }
+  }
+};
+
+// Reads a template token to search for the end, without validating any escape sequences
+pp$8.readInvalidTemplateToken = function() {
+  var this$1 = this;
+
+  for (; this.pos < this.input.length; this.pos++) {
+    switch (this$1.input[this$1.pos]) {
+    case "\\":
+      ++this$1.pos;
+      break
+
+    case "$":
+      if (this$1.input[this$1.pos + 1] !== "{") {
+        break
+      }
+    // falls through
+
+    case "`":
+      return this$1.finishToken(types.invalidTemplate, this$1.input.slice(this$1.start, this$1.pos))
+
+    // no default
+    }
+  }
+  this.raise(this.start, "Unterminated template");
+};
+
+// Used to read escaped characters
+
+pp$8.readEscapedChar = function(inTemplate) {
+  var ch = this.input.charCodeAt(++this.pos);
+  ++this.pos;
+  switch (ch) {
+  case 110: return "\n" // 'n' -> '\n'
+  case 114: return "\r" // 'r' -> '\r'
+  case 120: return String.fromCharCode(this.readHexChar(2)) // 'x'
+  case 117: return codePointToString(this.readCodePoint()) // 'u'
+  case 116: return "\t" // 't' -> '\t'
+  case 98: return "\b" // 'b' -> '\b'
+  case 118: return "\u000b" // 'v' -> '\u000b'
+  case 102: return "\f" // 'f' -> '\f'
+  case 13: if (this.input.charCodeAt(this.pos) === 10) { ++this.pos; } // '\r\n'
+  case 10: // ' \n'
+    if (this.options.locations) { this.lineStart = this.pos; ++this.curLine; }
+    return ""
+  default:
+    if (ch >= 48 && ch <= 55) {
+      var octalStr = this.input.substr(this.pos - 1, 3).match(/^[0-7]+/)[0];
+      var octal = parseInt(octalStr, 8);
+      if (octal > 255) {
+        octalStr = octalStr.slice(0, -1);
+        octal = parseInt(octalStr, 8);
+      }
+      if (octalStr !== "0" && (this.strict || inTemplate)) {
+        this.invalidStringToken(this.pos - 2, "Octal literal in strict mode");
+      }
+      this.pos += octalStr.length - 1;
+      return String.fromCharCode(octal)
+    }
+    return String.fromCharCode(ch)
+  }
+};
+
+// Used to read character escape sequences ('\x', '\u', '\U').
+
+pp$8.readHexChar = function(len) {
+  var codePos = this.pos;
+  var n = this.readInt(16, len);
+  if (n === null) { this.invalidStringToken(codePos, "Bad character escape sequence"); }
+  return n
+};
+
+// Read an identifier, and return it as a string. Sets `this.containsEsc`
+// to whether the word contained a '\u' escape.
+//
+// Incrementally adds only escaped chars, adding other chunks as-is
+// as a micro-optimization.
+
+pp$8.readWord1 = function() {
+  var this$1 = this;
+
+  this.containsEsc = false;
+  var word = "", first = true, chunkStart = this.pos;
+  var astral = this.options.ecmaVersion >= 6;
+  while (this.pos < this.input.length) {
+    var ch = this$1.fullCharCodeAtPos();
+    if (isIdentifierChar(ch, astral)) {
+      this$1.pos += ch <= 0xffff ? 1 : 2;
+    } else if (ch === 92) { // "\"
+      this$1.containsEsc = true;
+      word += this$1.input.slice(chunkStart, this$1.pos);
+      var escStart = this$1.pos;
+      if (this$1.input.charCodeAt(++this$1.pos) != 117) // "u"
+        { this$1.invalidStringToken(this$1.pos, "Expecting Unicode escape sequence \\uXXXX"); }
+      ++this$1.pos;
+      var esc = this$1.readCodePoint();
+      if (!(first ? isIdentifierStart : isIdentifierChar)(esc, astral))
+        { this$1.invalidStringToken(escStart, "Invalid Unicode escape"); }
+      word += codePointToString(esc);
+      chunkStart = this$1.pos;
+    } else {
+      break
+    }
+    first = false;
+  }
+  return word + this.input.slice(chunkStart, this.pos)
+};
+
+// Read an identifier or keyword token. Will check for reserved
+// words when necessary.
+
+pp$8.readWord = function() {
+  var word = this.readWord1();
+  var type = types.name;
+  if (this.keywords.test(word)) {
+    if (this.containsEsc) { this.raiseRecoverable(this.start, "Escape sequence in keyword " + word); }
+    type = keywords$1[word];
+  }
+  return this.finishToken(type, word)
+};
+
+// Acorn is a tiny, fast JavaScript parser written in JavaScript.
+//
+// Acorn was written by Marijn Haverbeke, Ingvar Stepanyan, and
+// various contributors and released under an MIT license.
+//
+// Git repositories for Acorn are available at
+//
+//     http://marijnhaverbeke.nl/git/acorn
+//     https://github.com/ternjs/acorn.git
+//
+// Please use the [github bug tracker][ghbt] to report issues.
+//
+// [ghbt]: https://github.com/ternjs/acorn/issues
+//
+// This file defines the main parser interface. The library also comes
+// with a [error-tolerant parser][dammit] and an
+// [abstract syntax tree walker][walk], defined in other files.
+//
+// [dammit]: acorn_loose.js
+// [walk]: util/walk.js
+
+var version = "5.1.1";
+
+// The main exported interface (under `self.acorn` when in the
+// browser) is a `parse` function that takes a code string and
+// returns an abstract syntax tree as specified by [Mozilla parser
+// API][api].
+//
+// [api]: https://developer.mozilla.org/en-US/docs/SpiderMonkey/Parser_API
+
+function parse(input, options) {
+  return new Parser(options, input).parse()
+}
+
+// This function tries to parse a single expression at a given
+// offset in a string. Useful for parsing mixed-language formats
+// that embed JavaScript expressions.
+
+function parseExpressionAt(input, pos, options) {
+  var p = new Parser(options, input, pos);
+  p.nextToken();
+  return p.parseExpression()
+}
+
+// Acorn is organized as a tokenizer and a recursive-descent parser.
+// The `tokenizer` export provides an interface to the tokenizer.
+
+function tokenizer(input, options) {
+  return new Parser(options, input)
+}
+
+// This is a terrible kludge to support the existing, pre-ES6
+// interface where the loose parser module retroactively adds exports
+// to this module.
+var parse_dammit;
+var LooseParser;
+var pluginsLoose; // eslint-disable-line camelcase
+function addLooseExports(parse, Parser$$1, plugins$$1) {
+  parse_dammit = parse; // eslint-disable-line camelcase
+  LooseParser = Parser$$1;
+  pluginsLoose = plugins$$1;
+}
+
+
+
+
+/***/ }),
+/* 111 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _lodash = __webpack_require__(31);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _react = __webpack_require__(10);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _paperCanvas = __webpack_require__(117);
+
+var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
+
+var _brushMode = __webpack_require__(114);
+
+var _brushMode2 = _interopRequireDefault(_brushMode);
+
+var _eraserMode = __webpack_require__(115);
+
+var _eraserMode2 = _interopRequireDefault(_eraserMode);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PaintEditorComponent = function (_React$Component) {
+    _inherits(PaintEditorComponent, _React$Component);
+
+    function PaintEditorComponent(props) {
+        _classCallCheck(this, PaintEditorComponent);
+
+        var _this = _possibleConstructorReturn(this, (PaintEditorComponent.__proto__ || Object.getPrototypeOf(PaintEditorComponent)).call(this, props));
+
+        (0, _lodash2.default)(_this, ['setCanvas']);
+        _this.state = {};
+        return _this;
+    }
+
+    _createClass(PaintEditorComponent, [{
+        key: 'setCanvas',
+        value: function setCanvas(canvas) {
+            this.setState({ canvas: canvas });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            // Modes can't work without a canvas, so we don't render them until we have it
+            if (this.state.canvas) {
+                return _react2.default.createElement(
+                    'div',
+                    null,
+                    _react2.default.createElement(_paperCanvas2.default, { canvasRef: this.setCanvas }),
+                    _react2.default.createElement(_brushMode2.default, { canvas: this.state.canvas }),
+                    _react2.default.createElement(_eraserMode2.default, { canvas: this.state.canvas })
+                );
+            }
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(_paperCanvas2.default, { canvasRef: this.setCanvas })
+            );
+        }
+    }]);
+
+    return PaintEditorComponent;
+}(_react2.default.Component);
+
+exports.default = PaintEditorComponent;
+
+/***/ }),
+/* 112 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); // Broadbrush based on http://paperjs.org/tutorials/interaction/working-with-mouse-vectors/
+
+
+var _paper = __webpack_require__(32);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _stylePath = __webpack_require__(42);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Broad brush functions to add as listeners on the mouse. Call them when the corresponding mouse event happens
+ * to get the broad brush behavior.
+ *
+ * Broad brush draws strokes by drawing points equidistant from the mouse event, perpendicular to the
+ * direction of motion. Shortcomings are that this path can cross itself, and 180 degree turns result
+ * in a flat edge.
+ *
+ * @param {!Tool} tool paper.js mouse object
+ */
+var BroadBrushHelper = function () {
+    function BroadBrushHelper() {
+        _classCallCheck(this, BroadBrushHelper);
+
+        this.lastPoint = null;
+        this.secondLastPoint = null;
+        this.finalPath = null;
+    }
+
+    _createClass(BroadBrushHelper, [{
+        key: 'onBroadMouseDown',
+        value: function onBroadMouseDown(event, tool, options) {
+            tool.minDistance = options.brushSize / 2;
+            tool.maxDistance = options.brushSize;
+            if (event.event.button > 0) return; // only first mouse button
+
+            this.finalPath = new _paper2.default.Path();
+            (0, _stylePath.stylePath)(this.finalPath, options.isEraser);
+            this.finalPath.add(event.point);
+            this.lastPoint = this.secondLastPoint = event.point;
+        }
+    }, {
+        key: 'onBroadMouseDrag',
+        value: function onBroadMouseDrag(event, tool, options) {
+            var step = event.delta.normalize(options.brushSize / 2);
+
+            // Move the first point out away from the drag so that the end of the path is rounded
+            if (this.finalPath.segments && this.finalPath.segments.length === 1) {
+                var removedPoint = this.finalPath.removeSegment(0).point;
+                // Add handles to round the end caps
+                var handleVec = step.clone();
+                handleVec.length = options.brushSize / 2;
+                handleVec.angle += 90;
+                this.finalPath.add(new _paper2.default.Segment(removedPoint.subtract(step), -handleVec, handleVec));
+            }
+            step.angle += 90;
+            var top = event.middlePoint.add(step);
+            var bottom = event.middlePoint.subtract(step);
+
+            if (this.finalPath.segments.length > 3) {
+                this.finalPath.removeSegment(this.finalPath.segments.length - 1);
+                this.finalPath.removeSegment(0);
+            }
+            this.finalPath.add(top);
+            this.finalPath.add(event.point.add(step));
+            this.finalPath.insert(0, bottom);
+            this.finalPath.insert(0, event.point.subtract(step));
+            if (this.finalPath.segments.length === 5) {
+                // Flatten is necessary to prevent smooth from getting rid of the effect
+                // of the handles on the first point.
+                this.finalPath.flatten(Math.min(5, options.brushSize / 5));
+            }
+            this.finalPath.smooth();
+            this.lastPoint = event.point;
+            this.secondLastPoint = event.lastPoint;
+        }
+    }, {
+        key: 'onBroadMouseUp',
+        value: function onBroadMouseUp(event, tool, options) {
+            // If the mouse up is at the same point as the mouse drag event then we need
+            // the second to last point to get the right direction vector for the end cap
+            if (event.point.equals(this.lastPoint)) {
+                this.lastPoint = this.secondLastPoint;
+            }
+            // If the points are still equal, then there was no drag, so just draw a circle.
+            if (event.point.equals(this.lastPoint)) {
+                this.finalPath.remove();
+                this.finalPath = new _paper2.default.Path.Circle({
+                    center: event.point,
+                    radius: options.brushSize / 2
+                });
+                (0, _stylePath.stylePath)(this.finalPath, options.isEraser);
+            } else {
+                var step = event.point.subtract(this.lastPoint).normalize(options.brushSize / 2);
+                step.angle += 90;
+                var handleVec = step.clone();
+                handleVec.length = options.brushSize / 2;
+
+                var top = event.point.add(step);
+                var bottom = event.point.subtract(step);
+                this.finalPath.add(top);
+                this.finalPath.insert(0, bottom);
+
+                // Simplify before adding end cap so cap doesn't get warped
+                this.finalPath.simplify(1);
+
+                // Add end cap
+                step.angle -= 90;
+                this.finalPath.add(new _paper2.default.Segment(event.point.add(step), handleVec, -handleVec));
+                this.finalPath.closed = true;
+            }
+
+            // Resolve self-crossings
+            var newPath = this.finalPath.resolveCrossings().reorient(true /* nonZero */, true /* clockwise */).reduce({ simplify: true });
+            newPath.copyAttributes(this.finalPath);
+            newPath.fillColor = this.finalPath.fillColor;
+            this.finalPath = newPath;
+            return this.finalPath;
+        }
+    }]);
+
+    return BroadBrushHelper;
+}();
+
+exports.default = BroadBrushHelper;
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _paper = __webpack_require__(32);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _stylePath = __webpack_require__(42);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Segment brush functions to add as listeners on the mouse. Call them when the corresponding mouse event happens
+ * to get the broad brush behavior.
+ *
+ * Segment brush draws by creating a rounded rectangle for each mouse move event and merging all of
+ * those shapes. Unlike the broad brush, the resulting shape will not self-intersect and when you make
+ * 180 degree turns, you will get a rounded point as expected. Shortcomings include that performance is
+ * worse, especially as the number of segments to join increase, and that there are problems in paper.js
+ * with union on shapes with curves, so that chunks of the union tend to disappear.
+ * (https://github.com/paperjs/paper.js/issues/1321)
+ *
+ * @param {!Tool} tool paper.js mouse object
+ */
+var SegmentBrushHelper = function () {
+    function SegmentBrushHelper() {
+        _classCallCheck(this, SegmentBrushHelper);
+
+        this.lastPoint = null;
+        this.finalPath = null;
+        this.firstCircle = null;
+    }
+
+    _createClass(SegmentBrushHelper, [{
+        key: 'onSegmentMouseDown',
+        value: function onSegmentMouseDown(event, tool, options) {
+            if (event.event.button > 0) return; // only first mouse button
+
+            tool.minDistance = 1;
+            tool.maxDistance = options.brushSize;
+
+            this.firstCircle = new _paper2.default.Path.Circle({
+                center: event.point,
+                radius: options.brushSize / 2
+            });
+            this.finalPath = this.firstCircle;
+            (0, _stylePath.stylePath)(this.finalPath, options.isEraser);
+            this.lastPoint = event.point;
+        }
+    }, {
+        key: 'onSegmentMouseDrag',
+        value: function onSegmentMouseDrag(event, tool, options) {
+            if (event.event.button > 0) return; // only first mouse button
+
+            var step = event.delta.normalize(options.brushSize / 2);
+            var handleVec = step.clone();
+            handleVec.length = options.brushSize / 2;
+            handleVec.angle += 90;
+
+            var path = new _paper2.default.Path();
+
+            // TODO: Add back brush styling
+            // path = pg.stylebar.applyActiveToolbarStyle(path);
+            path.fillColor = 'black';
+
+            // Add handles to round the end caps
+            path.add(new _paper2.default.Segment(this.lastPoint.subtract(step), handleVec.multiply(-1), handleVec));
+            step.angle += 90;
+
+            path.add(event.lastPoint.add(step));
+            path.insert(0, event.lastPoint.subtract(step));
+            path.add(event.point.add(step));
+            path.insert(0, event.point.subtract(step));
+
+            // Add end cap
+            step.angle -= 90;
+            path.add(new _paper2.default.Segment(event.point.add(step), handleVec, handleVec.multiply(-1)));
+            path.closed = true;
+            // The unite function on curved paths does not always work (sometimes deletes half the path)
+            // so we have to flatten.
+            path.flatten(Math.min(5, options.brushSize / 5));
+
+            this.lastPoint = event.point;
+            var newPath = this.finalPath.unite(path);
+            path.remove();
+            this.finalPath.remove();
+            this.finalPath = newPath;
+        }
+    }, {
+        key: 'onSegmentMouseUp',
+        value: function onSegmentMouseUp(event) {
+            if (event.event.button > 0) return; // only first mouse button
+
+            // TODO: This smoothing tends to cut off large portions of the path! Would like to eventually
+            // add back smoothing, maybe a custom implementation that only applies to a subset of the line?
+
+            // Smooth the path. Make it unclosed first because smoothing of closed
+            // paths tends to cut off the path.
+            if (this.finalPath.segments && this.finalPath.segments.length > 4) {
+                this.finalPath.closed = false;
+                this.finalPath.simplify(2);
+                this.finalPath.closed = true;
+                // Merge again with the first point, since it gets distorted when we unclose the path.
+                var temp = this.finalPath.unite(this.firstCircle);
+                this.finalPath.remove();
+                this.finalPath = temp;
+            }
+            return this.finalPath;
+        }
+    }]);
+
+    return SegmentBrushHelper;
+}();
+
+exports.default = SegmentBrushHelper;
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _propTypes = __webpack_require__(18);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _react = __webpack_require__(10);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(27);
+
+var _lodash = __webpack_require__(31);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _modes = __webpack_require__(29);
+
+var _modes2 = _interopRequireDefault(_modes);
+
+var _blob = __webpack_require__(64);
+
+var _blob2 = _interopRequireDefault(_blob);
+
+var _brushMode = __webpack_require__(65);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BrushMode = function (_React$Component) {
+    _inherits(BrushMode, _React$Component);
+
+    _createClass(BrushMode, null, [{
+        key: 'MODE',
+        get: function get() {
+            return _modes2.default.BRUSH;
+        }
+    }]);
+
+    function BrushMode(props) {
+        _classCallCheck(this, BrushMode);
+
+        var _this = _possibleConstructorReturn(this, (BrushMode.__proto__ || Object.getPrototypeOf(BrushMode)).call(this, props));
+
+        (0, _lodash2.default)(_this, ['activateTool', 'deactivateTool', 'onScroll']);
+        _this.blob = new _blob2.default();
+        return _this;
+    }
+
+    _createClass(BrushMode, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            if (this.props.isBrushModeActive) {
+                this.activateTool(this.props);
+            }
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            if (nextProps.isBrushModeActive && !this.props.isBrushModeActive) {
+                this.activateTool();
+            } else if (!nextProps.isBrushModeActive && this.props.isBrushModeActive) {
+                this.deactivateTool();
+            } else if (nextProps.isBrushModeActive && this.props.isBrushModeActive) {
+                this.blob.setOptions(_extends({ isEraser: false }, nextProps.brushModeState));
+            }
+        }
+    }, {
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate() {
+            return false; // Logic only component
+        }
+    }, {
+        key: 'activateTool',
+        value: function activateTool() {
+            // TODO: Instead of clearing selection, consider a kind of "draw inside"
+            // analogous to how selection works with eraser
+            // pg.selection.clearSelection();
+
+            // TODO: This is temporary until a component that provides the brush size is hooked up
+            this.props.canvas.addEventListener('mousewheel', this.onScroll);
+            this.blob.activateTool(_extends({ isEraser: false }, this.props.brushModeState));
+        }
+    }, {
+        key: 'deactivateTool',
+        value: function deactivateTool() {
+            this.props.canvas.removeEventListener('mousewheel', this.onScroll);
+            this.blob.deactivateTool();
+        }
+    }, {
+        key: 'onScroll',
+        value: function onScroll(event) {
+            if (event.deltaY < 0) {
+                this.props.changeBrushSize(this.props.brushModeState.brushSize + 1);
+            } else if (event.deltaY > 0 && this.props.brushModeState.brushSize > 1) {
+                this.props.changeBrushSize(this.props.brushModeState.brushSize - 1);
+            }
+            return true;
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                'Brush Mode'
+            );
+        }
+    }]);
+
+    return BrushMode;
+}(_react2.default.Component);
+
+BrushMode.propTypes = {
+    brushModeState: _propTypes2.default.shape({
+        brushSize: _propTypes2.default.number.isRequired
+    }),
+    canvas: _propTypes2.default.instanceOf(Element).isRequired,
+    changeBrushSize: _propTypes2.default.func.isRequired,
+    isBrushModeActive: _propTypes2.default.bool.isRequired
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        brushModeState: state.brushMode,
+        isBrushModeActive: state.mode === BrushMode.MODE
+    };
+};
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        changeBrushSize: function changeBrushSize(brushSize) {
+            dispatch((0, _brushMode.changeBrushSize)(brushSize));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BrushMode);
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _propTypes = __webpack_require__(18);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _react = __webpack_require__(10);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(27);
+
+var _lodash = __webpack_require__(31);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _modes = __webpack_require__(29);
+
+var _modes2 = _interopRequireDefault(_modes);
+
+var _blob = __webpack_require__(64);
+
+var _blob2 = _interopRequireDefault(_blob);
+
+var _eraserMode = __webpack_require__(66);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var EraserMode = function (_React$Component) {
+    _inherits(EraserMode, _React$Component);
+
+    _createClass(EraserMode, null, [{
+        key: 'MODE',
+        get: function get() {
+            return _modes2.default.ERASER;
+        }
+    }]);
+
+    function EraserMode(props) {
+        _classCallCheck(this, EraserMode);
+
+        var _this = _possibleConstructorReturn(this, (EraserMode.__proto__ || Object.getPrototypeOf(EraserMode)).call(this, props));
+
+        (0, _lodash2.default)(_this, ['activateTool', 'deactivateTool', 'onScroll']);
+        _this.blob = new _blob2.default();
+        return _this;
+    }
+
+    _createClass(EraserMode, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            if (this.props.isEraserModeActive) {
+                this.activateTool();
+            }
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            if (nextProps.isEraserModeActive && !this.props.isEraserModeActive) {
+                this.activateTool();
+            } else if (!nextProps.isEraserModeActive && this.props.isEraserModeActive) {
+                this.deactivateTool();
+            } else if (nextProps.isEraserModeActive && this.props.isEraserModeActive) {
+                this.blob.setOptions(_extends({ isEraser: true }, nextProps.eraserModeState));
+            }
+        }
+    }, {
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate() {
+            return false; // Logic only component
+        }
+    }, {
+        key: 'activateTool',
+        value: function activateTool() {
+            this.props.canvas.addEventListener('mousewheel', this.onScroll);
+
+            this.blob.activateTool(_extends({ isEraser: true }, this.props.eraserModeState));
+        }
+    }, {
+        key: 'deactivateTool',
+        value: function deactivateTool() {
+            this.props.canvas.removeEventListener('mousewheel', this.onScroll);
+            this.blob.deactivateTool();
+        }
+    }, {
+        key: 'onScroll',
+        value: function onScroll(event) {
+            event.preventDefault();
+            if (event.deltaY < 0) {
+                this.props.changeBrushSize(this.props.eraserModeState.brushSize + 1);
+            } else if (event.deltaY > 0 && this.props.eraserModeState.brushSize > 1) {
+                this.props.changeBrushSize(this.props.eraserModeState.brushSize - 1);
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                null,
+                'Eraser Mode'
+            );
+        }
+    }]);
+
+    return EraserMode;
+}(_react2.default.Component);
+
+EraserMode.propTypes = {
+    canvas: _propTypes2.default.instanceOf(Element).isRequired,
+    changeBrushSize: _propTypes2.default.func.isRequired,
+    eraserModeState: _propTypes2.default.shape({
+        brushSize: _propTypes2.default.number.isRequired
+    }),
+    isEraserModeActive: _propTypes2.default.bool.isRequired
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        eraserModeState: state.eraserMode,
+        isEraserModeActive: state.mode === EraserMode.MODE
+    };
+};
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        changeBrushSize: function changeBrushSize(brushSize) {
+            dispatch((0, _eraserMode.changeBrushSize)(brushSize));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(EraserMode);
+
+/***/ }),
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _propTypes = __webpack_require__(18);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _react = __webpack_require__(10);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _paintEditor = __webpack_require__(111);
+
+var _paintEditor2 = _interopRequireDefault(_paintEditor);
+
+var _modes = __webpack_require__(67);
+
+var _modes2 = __webpack_require__(29);
+
+var _modes3 = _interopRequireDefault(_modes2);
+
+var _reactRedux = __webpack_require__(27);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PaintEditor = function (_React$Component) {
+    _inherits(PaintEditor, _React$Component);
+
+    function PaintEditor() {
+        _classCallCheck(this, PaintEditor);
+
+        return _possibleConstructorReturn(this, (PaintEditor.__proto__ || Object.getPrototypeOf(PaintEditor)).apply(this, arguments));
+    }
+
+    _createClass(PaintEditor, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            document.addEventListener('keydown', this.props.onKeyPress);
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            document.removeEventListener('keydown', this.props.onKeyPress);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(_paintEditor2.default, null);
+        }
+    }]);
+
+    return PaintEditor;
+}(_react2.default.Component);
+
+PaintEditor.propTypes = {
+    onKeyPress: _propTypes2.default.func.isRequired
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        onKeyPress: function onKeyPress(event) {
+            if (event.key === 'e') {
+                dispatch((0, _modes.changeMode)(_modes3.default.ERASER));
+            } else if (event.key === 'b') {
+                dispatch((0, _modes.changeMode)(_modes3.default.BRUSH));
+            }
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(PaintEditor);
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _lodash = __webpack_require__(31);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _propTypes = __webpack_require__(18);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _react = __webpack_require__(10);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _paper = __webpack_require__(32);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PaperCanvas = function (_React$Component) {
+    _inherits(PaperCanvas, _React$Component);
+
+    function PaperCanvas(props) {
+        _classCallCheck(this, PaperCanvas);
+
+        var _this = _possibleConstructorReturn(this, (PaperCanvas.__proto__ || Object.getPrototypeOf(PaperCanvas)).call(this, props));
+
+        (0, _lodash2.default)(_this, ['setCanvas']);
+        return _this;
+    }
+
+    _createClass(PaperCanvas, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            _paper2.default.setup(this.canvas);
+            // Create a Paper.js Path to draw a line into it:
+            var path = new _paper2.default.Path();
+            // Give the stroke a color
+            path.strokeColor = 'black';
+            var start = new _paper2.default.Point(100, 100);
+            // Move to start and draw a line from there
+            path.moveTo(start);
+            // Note that the plus operator on Point objects does not work
+            // in JavaScript. Instead, we need to call the add() function:
+            path.lineTo(start.add([200, -50]));
+            // Draw the view now:
+            _paper2.default.view.draw();
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            _paper2.default.remove();
+        }
+    }, {
+        key: 'setCanvas',
+        value: function setCanvas(canvas) {
+            this.canvas = canvas;
+            if (this.props.canvasRef) {
+                this.props.canvasRef(canvas);
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement('canvas', {
+                ref: this.setCanvas
+            });
+        }
+    }]);
+
+    return PaperCanvas;
+}(_react2.default.Component);
+
+PaperCanvas.propTypes = {
+    canvasRef: _propTypes2.default.func
+};
+
+exports.default = PaperCanvas;
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _react = __webpack_require__(10);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(41);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _ = __webpack_require__(108);
+
+var _2 = _interopRequireDefault(_);
+
+var _reactRedux = __webpack_require__(27);
+
+var _redux = __webpack_require__(40);
+
+var _combineReducers = __webpack_require__(109);
+
+var _combineReducers2 = _interopRequireDefault(_combineReducers);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var appTarget = document.createElement('div');
+document.body.appendChild(appTarget);
+var store = (0, _redux.createStore)(_combineReducers2.default, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+_reactDom2.default.render(_react2.default.createElement(
+    _reactRedux.Provider,
+    { store: store },
+    _react2.default.createElement(_2.default, null)
+), appTarget);
+
+/***/ }),
+/* 119 */,
+/* 120 */,
+/* 121 */,
+/* 122 */,
+/* 123 */,
+/* 124 */,
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */,
+/* 129 */,
+/* 130 */,
+/* 131 */,
+/* 132 */,
+/* 133 */,
+/* 134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright 2015, Yahoo! Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
+
+
+var REACT_STATICS = {
+    childContextTypes: true,
+    contextTypes: true,
+    defaultProps: true,
+    displayName: true,
+    getDefaultProps: true,
+    mixins: true,
+    propTypes: true,
+    type: true
+};
+
+var KNOWN_STATICS = {
+    name: true,
+    length: true,
+    prototype: true,
+    caller: true,
+    arguments: true,
+    arity: true
+};
+
+var isGetOwnPropertySymbolsAvailable = typeof Object.getOwnPropertySymbols === 'function';
+
+module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, customStatics) {
+    if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
+        var keys = Object.getOwnPropertyNames(sourceComponent);
+
+        /* istanbul ignore else */
+        if (isGetOwnPropertySymbolsAvailable) {
+            keys = keys.concat(Object.getOwnPropertySymbols(sourceComponent));
+        }
+
+        for (var i = 0; i < keys.length; ++i) {
+            if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]] && (!customStatics || !customStatics[keys[i]])) {
+                try {
+                    targetComponent[keys[i]] = sourceComponent[keys[i]];
+                } catch (error) {
+
+                }
+            }
+        }
+    }
+
+    return targetComponent;
+};
+
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {/**
+ * Copyright 2013-2015, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var invariant = function(condition, format, a, b, c, d, e, f) {
+  if (process.env.NODE_ENV !== 'production') {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  }
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error(
+        'Minified exception occurred; use the non-minified dev environment ' +
+        'for the full error message and additional helpful warnings.'
+      );
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(
+        format.replace(/%s/g, function() { return args[argIndex++]; })
+      );
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+};
+
+module.exports = invariant;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright 2013-2014 Facebook, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+
+
+/**
+ * Constructs an enumeration with keys equal to their value.
+ *
+ * For example:
+ *
+ *   var COLORS = keyMirror({blue: null, red: null});
+ *   var myColor = COLORS.blue;
+ *   var isColorValid = !!COLORS[myColor];
+ *
+ * The last line could not be performed if the values of the generated enum were
+ * not equal to their keys.
+ *
+ *   Input:  {key1: val1, key2: val2}
+ *   Output: {key1: key1, key2: key2}
+ *
+ * @param {object} obj
+ * @return {object}
+ */
+var keyMirror = function(obj) {
+  var ret = {};
+  var key;
+  if (!(obj instanceof Object && !Array.isArray(obj))) {
+    throw new Error('keyMirror(...): Argument must be an object.');
+  }
+  for (key in obj) {
+    if (!obj.hasOwnProperty(key)) {
+      continue;
+    }
+    ret[key] = key;
+  }
+  return ret;
+};
+
+module.exports = keyMirror;
+
+
+/***/ }),
+/* 137 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(140);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(141);
+
+
+
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */] ? __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */].toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__getRawTag_js__["a" /* default */])(value)
+    : __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__objectToString_js__["a" /* default */])(value);
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (baseGetTag);
+
+
+/***/ }),
+/* 138 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+/* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
+
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(63)))
+
+/***/ }),
+/* 139 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__overArg_js__ = __webpack_require__(142);
+
+
+/** Built-in value references. */
+var getPrototype = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__overArg_js__["a" /* default */])(Object.getPrototypeOf, Object);
+
+/* harmony default export */ __webpack_exports__["a"] = (getPrototype);
+
+
+/***/ }),
+/* 140 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(71);
+
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag = __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */] ? __WEBPACK_IMPORTED_MODULE_0__Symbol_js__["a" /* default */].toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag),
+      tag = value[symToStringTag];
+
+  try {
+    value[symToStringTag] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag] = tag;
+    } else {
+      delete value[symToStringTag];
+    }
+  }
+  return result;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (getRawTag);
+
+
+/***/ }),
+/* 141 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (objectToString);
+
+
+/***/ }),
+/* 142 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * Creates a unary function that invokes `func` with its argument transformed.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {Function} transform The argument transform.
+ * @returns {Function} Returns the new function.
+ */
+function overArg(func, transform) {
+  return function(arg) {
+    return func(transform(arg));
+  };
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (overArg);
+
+
+/***/ }),
+/* 143 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__ = __webpack_require__(138);
+
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = __WEBPACK_IMPORTED_MODULE_0__freeGlobal_js__["a" /* default */] || freeSelf || Function('return this')();
+
+/* harmony default export */ __webpack_exports__["a"] = (root);
+
+
+/***/ }),
+/* 144 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (isObjectLike);
+
+
+/***/ }),
+/* 145 */
+/***/ (function(module, exports) {
+
+function M() { this._events = {}; }
+M.prototype = {
+  on: function(ev, cb) {
+    this._events || (this._events = {});
+    var e = this._events;
+    (e[ev] || (e[ev] = [])).push(cb);
+    return this;
+  },
+  removeListener: function(ev, cb) {
+    var e = this._events[ev] || [], i;
+    for(i = e.length-1; i >= 0 && e[i]; i--){
+      if(e[i] === cb || e[i].cb === cb) { e.splice(i, 1); }
+    }
+  },
+  removeAllListeners: function(ev) {
+    if(!ev) { this._events = {}; }
+    else { this._events[ev] && (this._events[ev] = []); }
+  },
+  listeners: function(ev) {
+    return (this._events ? this._events[ev] || [] : []);
+  },
+  emit: function(ev) {
+    this._events || (this._events = {});
+    var args = Array.prototype.slice.call(arguments, 1), i, e = this._events[ev] || [];
+    for(i = e.length-1; i >= 0 && e[i]; i--){
+      e[i].apply(this, args);
+    }
+    return this;
+  },
+  when: function(ev, cb) {
+    return this.once(ev, cb, true);
+  },
+  once: function(ev, cb, when) {
+    if(!cb) return this;
+    function c() {
+      if(!when) this.removeListener(ev, c);
+      if(cb.apply(this, arguments) && when) this.removeListener(ev, c);
+    }
+    c.cb = cb;
+    this.on(ev, c);
+    return this;
+  }
+};
+M.mixin = function(dest) {
+  var o = M.prototype, k;
+  for (k in o) {
+    o.hasOwnProperty(k) && (dest.prototype[k] = o[k]);
+  }
+};
+module.exports = M;
+
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// default filter
+var Transform = __webpack_require__(14);
+
+var levelMap = { debug: 1, info: 2, warn: 3, error: 4 };
+
+function Filter() {
+  this.enabled = true;
+  this.defaultResult = true;
+  this.clear();
+}
+
+Transform.mixin(Filter);
+
+// allow all matching, with level >= given level
+Filter.prototype.allow = function(name, level) {
+  this._white.push({ n: name, l: levelMap[level] });
+  return this;
+};
+
+// deny all matching, with level <= given level
+Filter.prototype.deny = function(name, level) {
+  this._black.push({ n: name, l: levelMap[level] });
+  return this;
+};
+
+Filter.prototype.clear = function() {
+  this._white = [];
+  this._black = [];
+  return this;
+};
+
+function test(rule, name) {
+  // use .test for RegExps
+  return (rule.n.test ? rule.n.test(name) : rule.n == name);
+};
+
+Filter.prototype.test = function(name, level) {
+  var i, len = Math.max(this._white.length, this._black.length);
+  for(i = 0; i < len; i++) {
+    if(this._white[i] && test(this._white[i], name) && levelMap[level] >= this._white[i].l) {
+      return true;
+    }
+    if(this._black[i] && test(this._black[i], name) && levelMap[level] <= this._black[i].l) {
+      return false;
+    }
+  }
+  return this.defaultResult;
+};
+
+Filter.prototype.write = function(name, level, args) {
+  if(!this.enabled || this.test(name, level)) {
+    return this.emit('item', name, level, args);
+  }
+};
+
+module.exports = Filter;
+
+
+/***/ }),
 /* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(14),
+    Filter = __webpack_require__(146);
+
+var log = new Transform(),
+    slice = Array.prototype.slice;
+
+exports = module.exports = function create(name) {
+  var o   = function() { log.write(name, undefined, slice.call(arguments)); return o; };
+  o.debug = function() { log.write(name, 'debug', slice.call(arguments)); return o; };
+  o.info  = function() { log.write(name, 'info',  slice.call(arguments)); return o; };
+  o.warn  = function() { log.write(name, 'warn',  slice.call(arguments)); return o; };
+  o.error = function() { log.write(name, 'error', slice.call(arguments)); return o; };
+  o.log   = o.debug; // for interface compliance with Node and browser consoles
+  o.suggest = exports.suggest;
+  o.format = log.format;
+  return o;
+};
+
+// filled in separately
+exports.defaultBackend = exports.defaultFormatter = null;
+
+exports.pipe = function(dest) {
+  return log.pipe(dest);
+};
+
+exports.end = exports.unpipe = exports.disable = function(from) {
+  return log.unpipe(from);
+};
+
+exports.Transform = Transform;
+exports.Filter = Filter;
+// this is the default filter that's applied when .enable() is called normally
+// you can bypass it completely and set up your own pipes
+exports.suggest = new Filter();
+
+exports.enable = function() {
+  if(exports.defaultFormatter) {
+    return log.pipe(exports.suggest) // filter
+              .pipe(exports.defaultFormatter) // formatter
+              .pipe(exports.defaultBackend); // backend
+  }
+  return log.pipe(exports.suggest) // filter
+            .pipe(exports.defaultBackend); // formatter
+};
+
+
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(14),
+    cache = [ ];
+
+var logger = new Transform();
+
+logger.write = function(name, level, args) {
+  cache.push([ name, level, args ]);
+};
+
+// utility functions
+logger.get = function() { return cache; };
+logger.empty = function() { cache = []; };
+
+module.exports = logger;
+
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(14);
+
+var newlines = /\n+$/,
+    logger = new Transform();
+
+logger.write = function(name, level, args) {
+  var i = args.length-1;
+  if (typeof console === 'undefined' || !console.log) {
+    return;
+  }
+  if(console.log.apply) {
+    return console.log.apply(console, [name, level].concat(args));
+  } else if(JSON && JSON.stringify) {
+    // console.log.apply is undefined in IE8 and IE9
+    // for IE8/9: make console.log at least a bit less awful
+    if(args[i] && typeof args[i] == 'string') {
+      args[i] = args[i].replace(newlines, '');
+    }
+    try {
+      for(i = 0; i < args.length; i++) {
+        args[i] = JSON.stringify(args[i]);
+      }
+    } catch(e) {}
+    console.log(args.join(' '));
+  }
+};
+
+logger.formatters = ['color', 'minilog'];
+logger.color = __webpack_require__(150);
+logger.minilog = __webpack_require__(151);
+
+module.exports = logger;
+
+
+/***/ }),
+/* 150 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(14),
+    color = __webpack_require__(72);
+
+var colors = { debug: ['cyan'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
+    logger = new Transform();
+
+logger.write = function(name, level, args) {
+  var fn = console.log;
+  if(console[level] && console[level].apply) {
+    fn = console[level];
+    fn.apply(console, [ '%c'+name+' %c'+level, color('gray'), color.apply(color, colors[level])].concat(args));
+  }
+};
+
+// NOP, because piping the formatted logs can only cause trouble.
+logger.pipe = function() { };
+
+module.exports = logger;
+
+
+/***/ }),
+/* 151 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(14),
+    color = __webpack_require__(72),
+    colors = { debug: ['gray'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
+    logger = new Transform();
+
+logger.write = function(name, level, args) {
+  var fn = console.log;
+  if(level != 'debug' && console[level]) {
+    fn = console[level];
+  }
+
+  var subset = [], i = 0;
+  if(level != 'info') {
+    for(; i < args.length; i++) {
+      if(typeof args[i] != 'string') break;
+    }
+    fn.apply(console, [ '%c'+name +' '+ args.slice(0, i).join(' '), color.apply(color, colors[level]) ].concat(args.slice(i)));
+  } else {
+    fn.apply(console, [ '%c'+name, color.apply(color, colors[level]) ].concat(args));
+  }
+};
+
+// NOP, because piping the formatted logs can only cause trouble.
+logger.pipe = function() { };
+
+module.exports = logger;
+
+
+/***/ }),
+/* 152 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Minilog = __webpack_require__(147);
+
+var oldEnable = Minilog.enable,
+    oldDisable = Minilog.disable,
+    isChrome = (typeof navigator != 'undefined' && /chrome/i.test(navigator.userAgent)),
+    console = __webpack_require__(149);
+
+// Use a more capable logging backend if on Chrome
+Minilog.defaultBackend = (isChrome ? console.minilog : console);
+
+// apply enable inputs from localStorage and from the URL
+if(typeof window != 'undefined') {
+  try {
+    Minilog.enable(JSON.parse(window.localStorage['minilogSettings']));
+  } catch(e) {}
+  if(window.location && window.location.search) {
+    var match = RegExp('[?&]minilog=([^&]*)').exec(window.location.search);
+    match && Minilog.enable(decodeURIComponent(match[1]));
+  }
+}
+
+// Make enable also add to localStorage
+Minilog.enable = function() {
+  oldEnable.call(Minilog, true);
+  try { window.localStorage['minilogSettings'] = JSON.stringify(true); } catch(e) {}
+  return this;
+};
+
+Minilog.disable = function() {
+  oldDisable.call(Minilog);
+  try { delete window.localStorage.minilogSettings; } catch(e) {}
+  return this;
+};
+
+exports = module.exports = Minilog;
+
+exports.backends = {
+  array: __webpack_require__(148),
+  browser: Minilog.defaultBackend,
+  localStorage: __webpack_require__(154),
+  jQuery: __webpack_require__(153)
+};
+
+
+/***/ }),
+/* 153 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(14);
+
+var cid = new Date().valueOf().toString(36);
+
+function AjaxLogger(options) {
+  this.url = options.url || '';
+  this.cache = [];
+  this.timer = null;
+  this.interval = options.interval || 30*1000;
+  this.enabled = true;
+  this.jQuery = window.jQuery;
+  this.extras = {};
+}
+
+Transform.mixin(AjaxLogger);
+
+AjaxLogger.prototype.write = function(name, level, args) {
+  if(!this.timer) { this.init(); }
+  this.cache.push([name, level].concat(args));
+};
+
+AjaxLogger.prototype.init = function() {
+  if(!this.enabled || !this.jQuery) return;
+  var self = this;
+  this.timer = setTimeout(function() {
+    var i, logs = [], ajaxData, url = self.url;
+    if(self.cache.length == 0) return self.init();
+    // Test each log line and only log the ones that are valid (e.g. don't have circular references).
+    // Slight performance hit but benefit is we log all valid lines.
+    for(i = 0; i < self.cache.length; i++) {
+      try {
+        JSON.stringify(self.cache[i]);
+        logs.push(self.cache[i]);
+      } catch(e) { }
+    }
+    if(self.jQuery.isEmptyObject(self.extras)) {
+        ajaxData = JSON.stringify({ logs: logs });
+        url = self.url + '?client_id=' + cid;
+    } else {
+        ajaxData = JSON.stringify(self.jQuery.extend({logs: logs}, self.extras));
+    }
+
+    self.jQuery.ajax(url, {
+      type: 'POST',
+      cache: false,
+      processData: false,
+      data: ajaxData,
+      contentType: 'application/json',
+      timeout: 10000
+    }).success(function(data, status, jqxhr) {
+      if(data.interval) {
+        self.interval = Math.max(1000, data.interval);
+      }
+    }).error(function() {
+      self.interval = 30000;
+    }).always(function() {
+      self.init();
+    });
+    self.cache = [];
+  }, this.interval);
+};
+
+AjaxLogger.prototype.end = function() {};
+
+// wait until jQuery is defined. Useful if you don't control the load order.
+AjaxLogger.jQueryWait = function(onDone) {
+  if(typeof window !== 'undefined' && (window.jQuery || window.$)) {
+    return onDone(window.jQuery || window.$);
+  } else if (typeof window !== 'undefined') {
+    setTimeout(function() { AjaxLogger.jQueryWait(onDone); }, 200);
+  }
+};
+
+module.exports = AjaxLogger;
+
+
+/***/ }),
+/* 154 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Transform = __webpack_require__(14),
+    cache = false;
+
+var logger = new Transform();
+
+logger.write = function(name, level, args) {
+  if(typeof window == 'undefined' || typeof JSON == 'undefined' || !JSON.stringify || !JSON.parse) return;
+  try {
+    if(!cache) { cache = (window.localStorage.minilog ? JSON.parse(window.localStorage.minilog) : []); }
+    cache.push([ new Date().toString(), name, level, args ]);
+    window.localStorage.minilog = JSON.stringify(cache);
+  } catch(e) {}
+};
+
+module.exports = logger;
+
+/***/ }),
+/* 155 */,
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22660,7 +25351,7 @@ return paper;
 
 var emptyFunction = __webpack_require__(8);
 var invariant = __webpack_require__(1);
-var ReactPropTypesSecret = __webpack_require__(40);
+var ReactPropTypesSecret = __webpack_require__(45);
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -22709,15 +25400,6 @@ module.exports = function() {
 
 
 /***/ }),
-/* 148 */,
-/* 149 */,
-/* 150 */,
-/* 151 */,
-/* 152 */,
-/* 153 */,
-/* 154 */,
-/* 155 */,
-/* 156 */,
 /* 157 */,
 /* 158 */,
 /* 159 */,
@@ -22779,17 +25461,26 @@ module.exports = function() {
 /* 215 */,
 /* 216 */,
 /* 217 */,
-/* 218 */
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */,
+/* 224 */,
+/* 225 */,
+/* 226 */,
+/* 227 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["b"] = createProvider;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_PropTypes__ = __webpack_require__(90);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_warning__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_PropTypes__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_warning__ = __webpack_require__(61);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -22866,17 +25557,17 @@ function createProvider() {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 219 */
+/* 228 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export createConnect */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_connectAdvanced__ = __webpack_require__(88);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_shallowEqual__ = __webpack_require__(226);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mapDispatchToProps__ = __webpack_require__(220);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mapStateToProps__ = __webpack_require__(221);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mergeProps__ = __webpack_require__(222);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__selectorFactory__ = __webpack_require__(223);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_connectAdvanced__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_shallowEqual__ = __webpack_require__(235);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mapDispatchToProps__ = __webpack_require__(229);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mapStateToProps__ = __webpack_require__(230);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mergeProps__ = __webpack_require__(231);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__selectorFactory__ = __webpack_require__(232);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
@@ -22982,15 +25673,15 @@ function createConnect() {
 /* harmony default export */ __webpack_exports__["a"] = (createConnect());
 
 /***/ }),
-/* 220 */
+/* 229 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export whenMapDispatchToPropsIsFunction */
 /* unused harmony export whenMapDispatchToPropsIsMissing */
 /* unused harmony export whenMapDispatchToPropsIsObject */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__wrapMapToProps__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__wrapMapToProps__ = __webpack_require__(97);
 
 
 
@@ -23013,13 +25704,13 @@ function whenMapDispatchToPropsIsObject(mapDispatchToProps) {
 /* harmony default export */ __webpack_exports__["a"] = ([whenMapDispatchToPropsIsFunction, whenMapDispatchToPropsIsMissing, whenMapDispatchToPropsIsObject]);
 
 /***/ }),
-/* 221 */
+/* 230 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* unused harmony export whenMapStateToPropsIsFunction */
 /* unused harmony export whenMapStateToPropsIsMissing */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__wrapMapToProps__ = __webpack_require__(89);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__wrapMapToProps__ = __webpack_require__(97);
 
 
 function whenMapStateToPropsIsFunction(mapStateToProps) {
@@ -23035,7 +25726,7 @@ function whenMapStateToPropsIsMissing(mapStateToProps) {
 /* harmony default export */ __webpack_exports__["a"] = ([whenMapStateToPropsIsFunction, whenMapStateToPropsIsMissing]);
 
 /***/ }),
-/* 222 */
+/* 231 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23043,7 +25734,7 @@ function whenMapStateToPropsIsMissing(mapStateToProps) {
 /* unused harmony export wrapMergePropsFunc */
 /* unused harmony export whenMergePropsIsFunction */
 /* unused harmony export whenMergePropsIsOmitted */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_verifyPlainObject__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_verifyPlainObject__ = __webpack_require__(99);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -23092,14 +25783,14 @@ function whenMergePropsIsOmitted(mergeProps) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 223 */
+/* 232 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* unused harmony export impureFinalPropsSelectorFactory */
 /* unused harmony export pureFinalPropsSelectorFactory */
 /* harmony export (immutable) */ __webpack_exports__["a"] = finalPropsSelectorFactory;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__verifySubselectors__ = __webpack_require__(224);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__verifySubselectors__ = __webpack_require__(233);
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 
@@ -23205,12 +25896,12 @@ function finalPropsSelectorFactory(dispatch, _ref2) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 224 */
+/* 233 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = verifySubselectors;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_warning__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_warning__ = __webpack_require__(61);
 
 
 function verify(selector, methodName, displayName) {
@@ -23230,7 +25921,7 @@ function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, dis
 }
 
 /***/ }),
-/* 225 */
+/* 234 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23326,7 +26017,7 @@ var Subscription = function () {
 
 
 /***/ }),
-/* 226 */
+/* 235 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23363,25 +26054,25 @@ function shallowEqual(objA, objB) {
 }
 
 /***/ }),
-/* 227 */,
-/* 228 */,
-/* 229 */,
-/* 230 */,
-/* 231 */,
-/* 232 */,
-/* 233 */,
-/* 234 */,
-/* 235 */,
 /* 236 */,
 /* 237 */,
 /* 238 */,
 /* 239 */,
-/* 240 */
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = applyMiddleware;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(105);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -23432,7 +26123,7 @@ function applyMiddleware() {
 }
 
 /***/ }),
-/* 241 */
+/* 250 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23486,14 +26177,14 @@ function bindActionCreators(actionCreators, dispatch) {
 }
 
 /***/ }),
-/* 242 */
+/* 251 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = combineReducers;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(98);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(99);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(107);
 
 
 
@@ -23626,14 +26317,14 @@ function combineReducers(reducers) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 243 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(244);
+module.exports = __webpack_require__(253);
 
 
 /***/ }),
-/* 244 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23643,7 +26334,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _ponyfill = __webpack_require__(245);
+var _ponyfill = __webpack_require__(254);
 
 var _ponyfill2 = _interopRequireDefault(_ponyfill);
 
@@ -23666,10 +26357,10 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(100), __webpack_require__(246)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63), __webpack_require__(255)(module)))
 
 /***/ }),
-/* 245 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23698,7 +26389,7 @@ function symbolObservablePonyfill(root) {
 };
 
 /***/ }),
-/* 246 */
+/* 255 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -23726,17 +26417,17 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 247 */
+/* 256 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 248 */
+/* 257 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ })
-],[108]);
+],[118]);
 //# sourceMappingURL=playground.js.map
