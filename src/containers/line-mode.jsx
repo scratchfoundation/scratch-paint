@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
+import {changeLineWidth} from '../reducers/line-mode';
 import LineModeComponent from '../components/line-mode.jsx';
 import {changeMode} from '../reducers/modes';
 import paper from 'paper';
@@ -16,8 +17,13 @@ class LineMode extends React.Component {
         bindAll(this, [
             'activateTool',
             'deactivateTool',
+            'onMouseDown',
+            'onMouseMove',
+            'onMouseDrag',
+            'onMouseUp',
             'toleranceSquared',
-            'findLineEnd'
+            'findLineEnd',
+            'onScroll'
         ]);
     }
     componentDidMount () {
@@ -30,8 +36,6 @@ class LineMode extends React.Component {
             this.activateTool();
         } else if (!nextProps.isLineModeActive && this.props.isLineModeActive) {
             this.deactivateTool();
-        } else if (nextProps.isLineModeActive && this.props.isLineModeActive) {
-            this.blob.setOptions(nextProps.lineModeState);
         }
     }
     shouldComponentUpdate () {
@@ -40,7 +44,7 @@ class LineMode extends React.Component {
     activateTool () {
         // TODO add back selection
         // pg.selection.clearSelection();
-        
+        this.props.canvas.addEventListener('mousewheel', this.onScroll);
         this.tool = new paper.Tool();
         
         this.path = null;
@@ -56,58 +60,103 @@ class LineMode extends React.Component {
         const lineMode = this;
         this.tool.onMouseDown = function (event) {
             if (event.event.button > 0) return;  // only first mouse button
-
-            if (this.path) {
-                this.path.setSelected(false);
-                this.path = null;
-            }
-
-            // If you click near a point, continue that line instead of making a new line
-            this.hitResult = lineMode.findLineEnd(event.point);
-            if (this.hitResult) {
-                this.path = this.hitResult.path;
-                if (this.hitResult.isFirst) {
-                    this.path.reverse();
-                }
-                this.path.lastSegment.setSelected(true);
-                this.path.add(this.hitResult.segment); // Add second point, which is what will move when dragged
-                this.path.lastSegment.handleOut = null; // Make sure line isn't curvy
-                this.path.lastSegment.handleIn = null;
-            }
-
-            // If not near other path, start a new path
-            if (!this.path) {
-                this.path = new paper.Path();
-                
-                // TODO add back style
-                // this.path = pg.stylebar.applyActiveToolbarStyle(path);
-                this.path.setStrokeColor('black');
-
-                this.path.setSelected(true);
-                this.path.add(event.point);
-                this.path.add(event.point); // Add second point, which is what will move when dragged
-                paper.view.draw();
-            }
+            lineMode.onMouseDown(event);
+        };
+        this.tool.onMouseMove = function (event) {
+            lineMode.onMouseMove(event);
+        };
+        this.tool.onMouseDrag = function (event) {
+            if (event.event.button > 0) return;  // only first mouse button
+            lineMode.onMouseDrag(event);
+        };
+        this.tool.onMouseUp = function (event) {
+            if (event.event.button > 0) return;  // only first mouse button
+            lineMode.onMouseUp(event);
         };
 
-        this.tool.onMouseMove = function (event) {
-            // If near another path's endpoint, or this path's beginpoint, clip to it to suggest
-            // joining/closing the paths.
-            if (this.hitResult) {
-                this.hitResult.path.setSelected(false);
-                this.hitResult = null;
-            }
+        this.tool.activate();
+    }
+    onMouseDown (event) {
+        // Deselect old path
+        if (this.path) {
+            this.path.setSelected(false);
+            this.path = null;
+        }
 
-            if (this.path && !this.path.closed && this.path.firstSegment.point.getDistance(event.point, true) < lineMode.toleranceSquared()) {
-                this.hitResult = {
-                    path: this.path,
-                    segment: this.path.firstSegment,
-                    isFirst: true
-                };
+        // If you click near a point, continue that line instead of making a new line
+        this.hitResult = this.findLineEnd(event.point);
+        if (this.hitResult) {
+            this.path = this.hitResult.path;
+            if (this.hitResult.isFirst) {
+                this.path.reverse();
+            }
+            this.path.lastSegment.setSelected(true);
+            this.path.add(this.hitResult.segment); // Add second point, which is what will move when dragged
+            this.path.lastSegment.handleOut = null; // Make sure line isn't curvy
+            this.path.lastSegment.handleIn = null;
+        }
+
+        // If not near other path, start a new path
+        if (!this.path) {
+            this.path = new paper.Path();
+            
+            // TODO add back style
+            // this.path = pg.stylebar.applyActiveToolbarStyle(path);
+            this.path.setStrokeColor('black');
+            this.path.setStrokeWidth(this.props.lineModeState.lineWidth);
+
+            this.path.setSelected(true);
+            this.path.add(event.point);
+            this.path.add(event.point); // Add second point, which is what will move when dragged
+            paper.view.draw();
+        }
+    }
+    onMouseMove (event) {
+        // If near another path's endpoint, or this path's beginpoint, clip to it to suggest
+        // joining/closing the paths.
+        if (this.hitResult) {
+            this.hitResult.path.setSelected(false);
+            this.hitResult = null;
+        }
+
+        if (this.path &&
+                !this.path.closed &&
+                this.path.firstSegment.point.getDistance(event.point, true) < this.toleranceSquared()) {
+            this.hitResult = {
+                path: this.path,
+                segment: this.path.firstSegment,
+                isFirst: true
+            };
+        } else {
+            this.hitResult = this.findLineEnd(event.point);
+        }
+
+        if (this.hitResult) {
+            const hitPath = this.hitResult.path;
+            hitPath.setSelected(true);
+            if (this.hitResult.isFirst) {
+                hitPath.firstSegment.setSelected(true);
             } else {
-                this.hitResult = lineMode.findLineEnd(event.point);
+                hitPath.lastSegment.setSelected(true);
             }
+        }
+    }
+    onMouseDrag (event) {
+        // If near another path's endpoint, or this path's beginpoint, clip to it to suggest
+        // joining/closing the paths.
+        if (this.hitResult && this.hitResult.path !== this.path) this.hitResult.path.setSelected(false);
+        this.hitResult = null;
 
+        if (this.path &&
+                this.path.segments.length > 3 &&
+                this.path.firstSegment.point.getDistance(event.point, true) < this.toleranceSquared()) {
+            this.hitResult = {
+                path: this.path,
+                segment: this.path.firstSegment,
+                isFirst: true
+            };
+        } else {
+            this.hitResult = this.findLineEnd(event.point, this.path);
             if (this.hitResult) {
                 const hitPath = this.hitResult.path;
                 hitPath.setSelected(true);
@@ -117,84 +166,54 @@ class LineMode extends React.Component {
                     hitPath.lastSegment.setSelected(true);
                 }
             }
-        };
-        
-        this.tool.onMouseDrag = function (event) {
-            if (event.event.button > 0) return;  // only first mouse button
-            // If near another path's endpoint, or this path's beginpoint, clip to it to suggest
-            // joining/closing the paths.
-            if (this.hitResult && this.hitResult.path !== this.path) this.hitResult.path.setSelected(false);
-            this.hitResult = null;
+        }
 
-            if (this.path && this.path.segments.length > 3 && this.path.firstSegment.point.getDistance(event.point, true) < lineMode.toleranceSquared()) {
-                this.hitResult = {
-                    path: this.path,
-                    segment: this.path.firstSegment,
-                    isFirst: true
-                };
-            } else {
-                this.hitResult = lineMode.findLineEnd(event.point, this.path);
-                if (this.hitResult) {
-                    const hitPath = this.hitResult.path;
-                    hitPath.setSelected(true);
-                    if (this.hitResult.isFirst) {
-                        hitPath.firstSegment.setSelected(true);
-                    } else {
-                        hitPath.lastSegment.setSelected(true);
-                    }
-                }
-            }
-
-            // snapping
-            if (this.path) {
-                if (this.hitResult) {
-                    this.path.lastSegment.point = this.hitResult.segment.point;
-                } else {
-                    this.path.lastSegment.point = event.point;
-                }
-            }
-        };
-        
-        
-        this.tool.onMouseUp = function (event) {
-            if (event.event.button > 0) return;  // only first mouse button
-
-            // If I single clicked, don't do anything
-            if (this.path.segments.length < 2 || (this.path.segments.length === 2 && this.path.firstSegment.point.getDistance(event.point, true) < lineMode.toleranceSquared())) {
-                this.path.remove();
-                this.path = null;
-                // TODO don't erase the line if both ends are snapped to different points
-                return;
-            } else if (this.path.lastSegment.point.getDistance(this.path.segments[this.path.segments.length - 2].point, true) < lineMode.toleranceSquared()) {
-                this.path.removeSegment(this.path.segments.length - 1);
-                return;
-            }
-            
-            // If I intersect other line end points, join or close
+        // snapping
+        if (this.path) {
             if (this.hitResult) {
-                this.path.removeSegment(this.path.segments.length - 1);
-                if (this.path.firstSegment === this.hitResult.segment) {
-                    // close path
-                    this.path.closed = true;
-                    this.path.setSelected(false);
-                } else {
-                    // joining two paths
-                    if (!this.hitResult.isFirst) {
-                        this.hitResult.path.reverse();
-                    }
-                    this.path.join(this.hitResult.path);
-                }
-                this.hitResult = null;
+                this.path.lastSegment.point = this.hitResult.segment.point;
+            } else {
+                this.path.lastSegment.point = event.point;
             }
+        }
+    }
+    onMouseUp (event) {
+        // If I single clicked, don't do anything
+        if (this.path.segments.length < 2 ||
+                (this.path.segments.length === 2 &&
+                    this.path.firstSegment.point.getDistance(event.point, true) < this.toleranceSquared())) {
+            this.path.remove();
+            this.path = null;
+            // TODO don't erase the line if both ends are snapped to different points
+            return;
+        } else if (
+                this.path.lastSegment.point.getDistance(this.path.segments[this.path.segments.length - 2].point, true) <
+                    this.toleranceSquared()) {
+            this.path.removeSegment(this.path.segments.length - 1);
+            return;
+        }
+        
+        // If I intersect other line end points, join or close
+        if (this.hitResult) {
+            this.path.removeSegment(this.path.segments.length - 1);
+            if (this.path.firstSegment === this.hitResult.segment) {
+                // close path
+                this.path.closed = true;
+                this.path.setSelected(false);
+            } else {
+                // joining two paths
+                if (!this.hitResult.isFirst) {
+                    this.hitResult.path.reverse();
+                }
+                this.path.join(this.hitResult.path);
+            }
+            this.hitResult = null;
+        }
 
-            // TODO add back undo
-            // if (this.path) {
-            //     pg.undo.snapshot('line');
-            // }
-            
-        };
-
-        this.tool.activate();
+        // TODO add back undo
+        // if (this.path) {
+        //     pg.undo.snapshot('line');
+        // }
     }
     toleranceSquared () {
         return Math.pow(LineMode.SNAP_TOLERANCE / paper.view.zoom, 2);
@@ -211,7 +230,8 @@ class LineMode extends React.Component {
             if (excludePath && lines[i] === excludePath) {
                 continue;
             }
-            if (lines[i].firstSegment && lines[i].firstSegment.point.getDistance(point, true) < this.toleranceSquared()) {
+            if (lines[i].firstSegment &&
+                    lines[i].firstSegment.point.getDistance(point, true) < this.toleranceSquared()) {
                 return {
                     path: lines[i],
                     segment: lines[i].firstSegment,
@@ -229,10 +249,19 @@ class LineMode extends React.Component {
         return null;
     }
     deactivateTool () {
+        this.props.canvas.removeEventListener('mousewheel', this.onScroll);
         if (this.path) {
             this.path.setSelected(false);
             this.path = null;
         }
+    }
+    onScroll (event) {
+        if (event.deltaY < 0) {
+            this.props.changeLineWidth(this.props.lineModeState.lineWidth + 1);
+        } else if (event.deltaY > 0 && this.props.lineModeState.lineWidth > 1) {
+            this.props.changeLineWidth(this.props.lineModeState.lineWidth - 1);
+        }
+        return true;
     }
     render () {
         return (
@@ -242,6 +271,8 @@ class LineMode extends React.Component {
 }
 
 LineMode.propTypes = {
+    canvas: PropTypes.instanceOf(Element).isRequired,
+    changeLineWidth: PropTypes.func.isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isLineModeActive: PropTypes.bool.isRequired,
     lineModeState: PropTypes.shape({
@@ -254,6 +285,9 @@ const mapStateToProps = state => ({
     isLineModeActive: state.mode === Modes.LINE
 });
 const mapDispatchToProps = dispatch => ({
+    changeLineWidth: lineWidth => {
+        dispatch(changeLineWidth(lineWidth));
+    },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.LINE));
     }

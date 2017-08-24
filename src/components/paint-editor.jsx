@@ -24,7 +24,7 @@ class PaintEditorComponent extends React.Component {
                     <PaperCanvas canvasRef={this.setCanvas} />
                     <BrushMode canvas={this.state.canvas} />
                     <EraserMode canvas={this.state.canvas} />
-                    <LineMode />
+                    <LineMode canvas={this.state.canvas} />
                 </div>
             );
         }
