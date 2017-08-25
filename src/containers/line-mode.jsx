@@ -250,6 +250,9 @@ class LineMode extends React.Component {
     }
     deactivateTool () {
         this.props.canvas.removeEventListener('mousewheel', this.onScroll);
+        this.tool.remove();
+        this.tool = null;
+        this.hitResult = null;
         if (this.path) {
             this.path.setSelected(false);
             this.path = null;
