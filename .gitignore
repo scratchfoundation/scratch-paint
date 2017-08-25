@@ -12,3 +12,7 @@ dist/*
 # Editors
 /#*
 *~
+
+# generated translation files
+/translations
+/locale

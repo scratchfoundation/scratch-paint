@@ -281,8 +281,8 @@ LineMode.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    lineModeState: state.lineMode,
-    isLineModeActive: state.mode === Modes.LINE
+    lineModeState: state.scratchPaint.lineMode,
+    isLineModeActive: state.scratchPaint.mode === Modes.LINE
 });
 const mapDispatchToProps = dispatch => ({
     changeLineWidth: lineWidth => {
