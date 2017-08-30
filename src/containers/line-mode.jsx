@@ -59,18 +59,18 @@ class LineMode extends React.Component {
 
         const lineMode = this;
         this.tool.onMouseDown = function (event) {
-            if (event.event.button > 0) return;  // only first mouse button
+            if (event.event.button > 0) return; // only first mouse button
             lineMode.onMouseDown(event);
         };
         this.tool.onMouseMove = function (event) {
             lineMode.onMouseMove(event);
         };
         this.tool.onMouseDrag = function (event) {
-            if (event.event.button > 0) return;  // only first mouse button
+            if (event.event.button > 0) return; // only first mouse button
             lineMode.onMouseDrag(event);
         };
         this.tool.onMouseUp = function (event) {
-            if (event.event.button > 0) return;  // only first mouse button
+            if (event.event.button > 0) return; // only first mouse button
             lineMode.onMouseUp(event);
         };
 
@@ -187,8 +187,8 @@ class LineMode extends React.Component {
             // TODO don't erase the line if both ends are snapped to different points
             return;
         } else if (
-                this.path.lastSegment.point.getDistance(this.path.segments[this.path.segments.length - 2].point, true) <
-                    this.toleranceSquared()) {
+            this.path.lastSegment.point.getDistance(this.path.segments[this.path.segments.length - 2].point, true) <
+                this.toleranceSquared()) {
             this.path.removeSegment(this.path.segments.length - 1);
             return;
         }
