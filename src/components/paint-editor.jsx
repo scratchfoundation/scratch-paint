@@ -3,6 +3,7 @@ import React from 'react';
 import PaperCanvas from '../containers/paper-canvas.jsx';
 import BrushMode from '../containers/brush-mode.jsx';
 import EraserMode from '../containers/eraser-mode.jsx';
+import PropTypes from 'prop-types';
 
 class PaintEditorComponent extends React.Component {
     constructor (props) {
@@ -20,7 +21,10 @@ class PaintEditorComponent extends React.Component {
         if (this.state.canvas) {
             return (
                 <div>
-                    <PaperCanvas canvasRef={this.setCanvas} />
+                    <PaperCanvas
+                        canvasRef={this.setCanvas}
+                        svg={this.props.svg}
+                    />
                     <BrushMode canvas={this.state.canvas} />
                     <EraserMode canvas={this.state.canvas} />
                 </div>
@@ -33,5 +37,9 @@ class PaintEditorComponent extends React.Component {
         );
     }
 }
+
+PaintEditorComponent.propTypes = {
+    svg: PropTypes.string
+};
 
 export default PaintEditorComponent;
