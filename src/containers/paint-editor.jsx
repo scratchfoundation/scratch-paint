@@ -21,9 +21,6 @@ class PaintEditor extends React.Component {
         document.removeEventListener('keydown', this.props.onKeyPress);
     }
     handleUpdateSvg () {
-        if (!this.props.onUpdateSvg) {
-            return;
-        }
         const bounds = paper.project.activeLayer.bounds;
         this.props.onUpdateSvg(
             paper.project.exportSVG({
