@@ -14,19 +14,24 @@ const store = createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 const svgString =
-    '<svg xmlns="http://www.w3.org/2000/svg" version="1.1">' +
-        '<rect x="25" y="25" width="200" height="200" fill="lime" stroke-width="4" stroke="pink" />' +
-        '<circle cx="125" cy="125" r="75" fill="orange" />' +
-        '<polyline points="50,150 50,200 200,200 200,100" stroke="red" stroke-width="4" fill="none" />' +
-        '<line x1="50" y1="50" x2="200" y2="200" stroke="blue" stroke-width="4" />' +
+    '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"' +
+            ' x="0px" y="0px" width="32px" height="32px" viewBox="0.5 384.5 32 32"' +
+            ' enable-background="new 0.5 384.5 32 32" xml:space="preserve">' +
+        '<path fill="none" stroke="#000000" stroke-width="3" stroke-miterlimit="10" d="M7.5,392.241h7.269' +
+            'c4.571,0,8.231,5.555,8.231,10.123v7.377"/>' +
+        '<polyline points="10.689,399.492 3.193,391.997 10.689,384.5 "/>' +
+        '<polyline points="30.185,405.995 22.689,413.491 15.192,405.995 "/>' +
     '</svg>';
-const onUpdateSvg = function () {
-    return;
+const onUpdateSvg = function (newSvgString, rotationCenterX, rotationCenterY) {
+    console.log(newSvgString);
+    console.log(`rotationCenterX: ${rotationCenterX}    rotationCenterY: ${rotationCenterY}`);
 };
 ReactDOM.render((
     <Provider store={store}>
         <IntlProvider>
             <PaintEditor
+                rotationCenterX={0}
+                rotationCenterY={0}
                 svg={svgString}
                 onUpdateSvg={onUpdateSvg}
             />

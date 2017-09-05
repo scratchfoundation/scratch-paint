@@ -24,13 +24,20 @@ class PaintEditor extends React.Component {
         if (!this.props.onUpdateSvg) {
             return;
         }
+        const bounds = paper.project.activeLayer.bounds;
         this.props.onUpdateSvg(
-            paper.project.exportSVG({asString: true}) // TODO can this be made independent of paper
-        );
+            paper.project.exportSVG({
+                asString: true,
+                matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
+            }),
+            paper.project.view.center.x - bounds.x,
+            paper.project.view.center.y - bounds.y);
     }
     render () {
         return (
             <PaintEditorComponent
+                rotationCenterX={this.props.rotationCenterX}
+                rotationCenterY={this.props.rotationCenterY}
                 svg={this.props.svg}
                 onUpdateSvg={this.handleUpdateSvg}
             />
@@ -41,6 +48,8 @@ class PaintEditor extends React.Component {
 PaintEditor.propTypes = {
     onKeyPress: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
+    rotationCenterX: PropTypes.number,
+    rotationCenterY: PropTypes.number,
     svg: PropTypes.string
 };
 

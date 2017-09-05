@@ -24,6 +24,8 @@ class PaintEditorComponent extends React.Component {
                 <div>
                     <PaperCanvas
                         canvasRef={this.setCanvas}
+                        rotationCenterX={this.props.rotationCenterX}
+                        rotationCenterY={this.props.rotationCenterY}
                         svg={this.props.svg}
                     />
                     <BrushMode
@@ -51,6 +53,8 @@ class PaintEditorComponent extends React.Component {
 
 PaintEditorComponent.propTypes = {
     onUpdateSvg: PropTypes.func.isRequired,
+    rotationCenterX: PropTypes.number,
+    rotationCenterY: PropTypes.number,
     svg: PropTypes.string
 };
 
