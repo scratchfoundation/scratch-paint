@@ -24,9 +24,13 @@ class Blobbiness {
         return 9;
     }
 
-    constructor () {
+    /**
+     * @param {function} updateCallback call when the drawing has changed to let listeners know
+     */
+    constructor (updateCallback) {
         this.broadBrushHelper = new BroadBrushHelper();
         this.segmentBrushHelper = new SegmentBrushHelper();
+        this.updateCallback = updateCallback;
     }
     
     /**
@@ -64,7 +68,7 @@ class Blobbiness {
         
         this.tool.onMouseDown = function (event) {
             blob.resizeCursorIfNeeded(event.point);
-            if (event.event.button > 0) return;  // only first mouse button
+            if (event.event.button > 0) return; // only first mouse button
 
             if (blob.options.brushSize < Blobbiness.THRESHOLD) {
                 blob.brush = Blobbiness.BROAD;
@@ -80,7 +84,7 @@ class Blobbiness {
 
         this.tool.onMouseDrag = function (event) {
             blob.resizeCursorIfNeeded(event.point);
-            if (event.event.button > 0) return;  // only first mouse button
+            if (event.event.button > 0) return; // only first mouse button
             if (blob.brush === Blobbiness.BROAD) {
                 blob.broadBrushHelper.onBroadMouseDrag(event, blob.tool, blob.options);
             } else if (blob.brush === Blobbiness.SEGMENT) {
@@ -96,7 +100,7 @@ class Blobbiness {
 
         this.tool.onMouseUp = function (event) {
             blob.resizeCursorIfNeeded(event.point);
-            if (event.event.button > 0) return;  // only first mouse button
+            if (event.event.button > 0) return; // only first mouse button
             
             let lastPath;
             if (blob.brush === Blobbiness.BROAD) {
@@ -113,6 +117,9 @@ class Blobbiness {
                 blob.mergeBrush(lastPath);
             }
 
+            blob.cursorPreview.visible = false;
+            blob.updateCallback();
+            blob.cursorPreview.visible = true;
             blob.cursorPreview.bringToFront();
             blob.cursorPreview.position = event.point;
 

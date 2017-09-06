@@ -1,4 +1,3 @@
-
 const defaultsDeep = require('lodash.defaultsdeep');
 const path = require('path');
 const webpack = require('webpack');
@@ -53,12 +52,12 @@ const base = {
         }]
     },
     plugins: []
-    .concat(process.env.NODE_ENV === 'production' ? [
-        new webpack.optimize.UglifyJsPlugin({
-            include: /\.min\.js$/,
-            minimize: true
-        })
-    ] : [])
+        .concat(process.env.NODE_ENV === 'production' ? [
+            new webpack.optimize.UglifyJsPlugin({
+                include: /\.min\.js$/,
+                minimize: true
+            })
+        ] : [])
 };
 
 module.exports = [
@@ -96,7 +95,7 @@ module.exports = [
         output: {
             path: path.resolve(__dirname, 'dist'),
             filename: '[name].js',
-            libraryTarget: 'commonjs2',
+            libraryTarget: 'commonjs2'
         }
     })
 ];

@@ -3,6 +3,8 @@ import React from 'react';
 import PaperCanvas from '../containers/paper-canvas.jsx';
 import BrushMode from '../containers/brush-mode.jsx';
 import EraserMode from '../containers/eraser-mode.jsx';
+import PropTypes from 'prop-types';
+import LineMode from '../containers/line-mode.jsx';
 
 import styles from './paint-editor.css';
 
@@ -26,7 +28,7 @@ class PaintEditorComponent extends React.Component {
                     <div className={styles.inputGroup}>
                         {/* Todo use Label and BufferedInput from Gui */}
                         <label>Costume
-                            <input value="meow"/>
+                            <input value="meow" />
                         </label>
                     </div>
 
@@ -103,19 +105,41 @@ class PaintEditorComponent extends React.Component {
                     {/* Modes */}
                     {this.state.canvas ? (
                         <div className={styles.modeSelector}>
-                            <BrushMode canvas={this.state.canvas} />
-                            <EraserMode canvas={this.state.canvas} />
+                            <BrushMode
+                                canvas={this.state.canvas}
+                                onUpdateSvg={this.props.onUpdateSvg}
+                            />
+                            <EraserMode
+                                canvas={this.state.canvas}
+                                onUpdateSvg={this.props.onUpdateSvg}
+                            />
+                            <LineMode
+                                canvas={this.state.canvas}
+                                onUpdateSvg={this.props.onUpdateSvg}
+                            />
                         </div>
                     ) : null}
 
                     {/* Canvas */}
                     <div className={styles.canvasContainer}>
-                        <PaperCanvas canvasRef={this.setCanvas} />
+                        <PaperCanvas
+                            canvasRef={this.setCanvas}
+                            rotationCenterX={this.props.rotationCenterX}
+                            rotationCenterY={this.props.rotationCenterY}
+                            svg={this.props.svg}
+                        />
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+PaintEditorComponent.propTypes = {
+    onUpdateSvg: PropTypes.func.isRequired,
+    rotationCenterX: PropTypes.number,
+    rotationCenterY: PropTypes.number,
+    svg: PropTypes.string
+};
 
 export default PaintEditorComponent;
