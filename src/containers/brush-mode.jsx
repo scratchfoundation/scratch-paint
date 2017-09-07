@@ -31,7 +31,7 @@ class BrushMode extends React.Component {
         } else if (nextProps.isBrushModeActive && this.props.isBrushModeActive) {
             this.blob.setOptions({
                 isEraser: false,
-                ...this.props.colorState,
+                ...nextProps.colorState,
                 ...nextProps.brushModeState
             });
         }
@@ -78,7 +78,8 @@ BrushMode.propTypes = {
     canvas: PropTypes.instanceOf(Element).isRequired,
     changeBrushSize: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
-        fillColor: PropTypes.string.isRequired
+        fillColor: PropTypes.string.isRequired,
+        strokeColor: PropTypes.string.isRequired
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isBrushModeActive: PropTypes.bool.isRequired,

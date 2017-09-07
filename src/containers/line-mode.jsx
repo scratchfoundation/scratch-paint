@@ -100,9 +100,8 @@ class LineMode extends React.Component {
         if (!this.path) {
             this.path = new paper.Path();
             
-            // TODO add back style
-            // this.path = pg.stylebar.applyActiveToolbarStyle(path);
-            this.path.setStrokeColor('black');
+            // TODO add back stroke width styling
+            this.path.setStrokeColor(this.props.colorState.strokeColor);
             this.path.setStrokeWidth(this.props.lineModeState.lineWidth);
 
             this.path.setSelected(true);
@@ -277,6 +276,10 @@ class LineMode extends React.Component {
 LineMode.propTypes = {
     canvas: PropTypes.instanceOf(Element).isRequired,
     changeLineWidth: PropTypes.func.isRequired,
+    colorState: PropTypes.shape({
+        fillColor: PropTypes.string.isRequired,
+        strokeColor: PropTypes.string.isRequired
+    }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isLineModeActive: PropTypes.bool.isRequired,
     lineModeState: PropTypes.shape({
@@ -286,6 +289,7 @@ LineMode.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    colorState: state.scratchPaint.color,
     lineModeState: state.scratchPaint.lineMode,
     isLineModeActive: state.scratchPaint.mode === Modes.LINE
 });

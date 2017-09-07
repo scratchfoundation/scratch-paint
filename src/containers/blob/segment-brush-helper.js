@@ -46,9 +46,7 @@ class SegmentBrushHelper {
 
         const path = new paper.Path();
         
-        // TODO: Add back brush styling
-        // path = pg.stylebar.applyActiveToolbarStyle(path);
-        path.fillColor = options.fillColor;
+        stylePath(path, options);
 
         // Add handles to round the end caps
         path.add(new paper.Segment(this.lastPoint.subtract(step), handleVec.multiply(-1), handleVec));

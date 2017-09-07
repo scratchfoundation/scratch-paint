@@ -147,7 +147,10 @@ class Blobbiness {
             this.cursorPreviewLastPoint = point;
         }
 
-        if (this.cursorPreview && this.brushSize === this.options.brushSize) {
+        if (this.cursorPreview &&
+                this.brushSize === this.options.brushSize &&
+                this.fillColor === this.options.fillColor &&
+                this.strokeColor === this.options.strokeColor) {
             return;
         }
         const newPreview = new paper.Path.Circle({
@@ -155,13 +158,13 @@ class Blobbiness {
             radius: this.options.brushSize / 2
         });
         if (this.cursorPreview) {
-            this.cursorPreview.segments = newPreview.segments;
-            newPreview.remove();
-        } else {
-            this.cursorPreview = newPreview;
-            styleCursorPreview(this.cursorPreview, this.options);
+            this.cursorPreview.remove();
         }
         this.brushSize = this.options.brushSize;
+        this.fillColor = this.options.fillColor;
+        this.strokeColor = this.options.strokeColor;
+        this.cursorPreview = newPreview;
+        styleCursorPreview(this.cursorPreview, this.options);
     }
 
     mergeBrush (lastPath) {
