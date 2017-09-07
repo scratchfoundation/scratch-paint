@@ -39,6 +39,9 @@ class Blobbiness {
      * @param {!number} options.brushSize Width of blob marking made by mouse
      * @param {!boolean} options.isEraser Whether the stroke should be treated as an erase path. If false,
      *     the stroke is an additive path.
+     * @param {?string} options.fillColor Color of the brush stroke.
+     * @param {?string} options.strokeColor Color of the brush outline.
+     * @param {?number} options.strokeWidth Width of the brush outline.
      */
     setOptions (options) {
         this.options = options;
@@ -51,6 +54,9 @@ class Blobbiness {
      * @param {!number} options.brushSize Width of blob marking made by mouse
      * @param {!boolean} options.isEraser Whether the stroke should be treated as an erase path. If false,
      *     the stroke is an additive path.
+     * @param {?string} options.fillColor Color of the brush stroke.
+     * @param {?string} options.strokeColor Color of the brush outline.
+     * @param {?number} options.strokeWidth Width of the brush outline.
      */
     activateTool (options) {
         this.tool = new paper.Tool();
@@ -61,7 +67,7 @@ class Blobbiness {
         const blob = this;
         this.tool.onMouseMove = function (event) {
             blob.resizeCursorIfNeeded(event.point);
-            styleCursorPreview(blob.cursorPreview, blob.options.isEraser);
+            styleCursorPreview(blob.cursorPreview, blob.options);
             blob.cursorPreview.bringToFront();
             blob.cursorPreview.position = event.point;
         };
@@ -153,7 +159,7 @@ class Blobbiness {
             newPreview.remove();
         } else {
             this.cursorPreview = newPreview;
-            styleCursorPreview(this.cursorPreview, this.options.isEraser);
+            styleCursorPreview(this.cursorPreview, this.options);
         }
         this.brushSize = this.options.brushSize;
     }

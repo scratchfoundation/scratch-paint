@@ -17,7 +17,7 @@ FillColorIndicator.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    fillColor: state.scratchPaint.fillColor
+    fillColor: state.scratchPaint.color.fillColor
 });
 const mapDispatchToProps = dispatch => ({
     handleChangeFillColor: fillColor => {

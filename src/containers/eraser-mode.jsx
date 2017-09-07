@@ -29,7 +29,10 @@ class EraserMode extends React.Component {
         } else if (!nextProps.isEraserModeActive && this.props.isEraserModeActive) {
             this.deactivateTool();
         } else if (nextProps.isEraserModeActive && this.props.isEraserModeActive) {
-            this.blob.setOptions({isEraser: true, ...nextProps.eraserModeState});
+            this.blob.setOptions({
+                isEraser: true,
+                ...nextProps.eraserModeState
+            });
         }
     }
     shouldComponentUpdate () {
