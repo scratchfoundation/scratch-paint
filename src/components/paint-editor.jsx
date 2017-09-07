@@ -5,6 +5,7 @@ import BrushMode from '../containers/brush-mode.jsx';
 import EraserMode from '../containers/eraser-mode.jsx';
 import PropTypes from 'prop-types';
 import LineMode from '../containers/line-mode.jsx';
+import FillColorIndicatorComponent from '../containers/fill-color-indicator.jsx';
 
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import BufferedInputHOC from './forms/buffered-input-hoc.jsx';
@@ -107,15 +108,7 @@ class PaintEditorComponent extends React.Component {
                 {/* Second Row */}
                 <div className={styles.row}>
                     {/* To be fill */}
-                    <div className={styles.inputGroup}>
-                        <Label text={this.props.intl.formatMessage(messages.fill)}>
-                            <BufferedInput
-                                tabIndex="1"
-                                type="text"
-                                value="meow"
-                            />
-                        </Label>
-                    </div>
+                    <FillColorIndicatorComponent />
                     {/* To be stroke */}
                     <div className={styles.inputGroup}>
                         <Label text={this.props.intl.formatMessage(messages.outline)}>
