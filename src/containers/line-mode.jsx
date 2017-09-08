@@ -3,7 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
-import {changeLineWidth} from '../reducers/line-mode';
+import {changeStrokeWidth} from '../reducers/stroke-width';
 import LineModeComponent from '../components/line-mode.jsx';
 import {changeMode} from '../reducers/modes';
 import paper from 'paper';
@@ -50,13 +50,6 @@ class LineMode extends React.Component {
         this.path = null;
         this.hitResult = null;
 
-        // TODO add back colors
-        // Make sure a stroke color is set on the line tool
-        // if(!pg.stylebar.getStrokeColor()) {
-        //     pg.stylebar.setStrokeColor(pg.stylebar.getFillColor());
-        //     pg.stylebar.setFillColor(null);
-        // }
-
         const lineMode = this;
         this.tool.onMouseDown = function (event) {
             if (event.event.button > 0) return; // only first mouse button
@@ -100,9 +93,9 @@ class LineMode extends React.Component {
         if (!this.path) {
             this.path = new paper.Path();
             
-            // TODO add back stroke width styling
             this.path.setStrokeColor(this.props.colorState.strokeColor);
-            this.path.setStrokeWidth(this.props.lineModeState.lineWidth);
+            // Make sure a visible line is drawn
+            this.path.setStrokeWidth(Math.max(1, this.props.colorState.strokeWidth));
 
             this.path.setSelected(true);
             this.path.add(event.point);
@@ -260,9 +253,9 @@ class LineMode extends React.Component {
     }
     onScroll (event) {
         if (event.deltaY < 0) {
-            this.props.changeLineWidth(this.props.lineModeState.lineWidth + 1);
-        } else if (event.deltaY > 0 && this.props.lineModeState.lineWidth > 1) {
-            this.props.changeLineWidth(this.props.lineModeState.lineWidth - 1);
+            this.props.changeStrokeWidth(this.props.colorState.strokeWidth + 1);
+        } else if (event.deltaY > 0 && this.props.colorState.strokeWidth > 1) {
+            this.props.changeStrokeWidth(this.props.colorState.strokeWidth - 1);
         }
         return true;
     }
@@ -275,27 +268,24 @@ class LineMode extends React.Component {
 
 LineMode.propTypes = {
     canvas: PropTypes.instanceOf(Element).isRequired,
-    changeLineWidth: PropTypes.func.isRequired,
+    changeStrokeWidth: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string.isRequired,
-        strokeColor: PropTypes.string.isRequired
+        strokeColor: PropTypes.string.isRequired,
+        strokeWidth: PropTypes.string.isRequired
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isLineModeActive: PropTypes.bool.isRequired,
-    lineModeState: PropTypes.shape({
-        lineWidth: PropTypes.number.isRequired
-    }),
     onUpdateSvg: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     colorState: state.scratchPaint.color,
-    lineModeState: state.scratchPaint.lineMode,
     isLineModeActive: state.scratchPaint.mode === Modes.LINE
 });
 const mapDispatchToProps = dispatch => ({
-    changeLineWidth: lineWidth => {
-        dispatch(changeLineWidth(lineWidth));
+    changeStrokeWidth: strokeWidth => {
+        dispatch(changeStrokeWidth(strokeWidth));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.LINE));
