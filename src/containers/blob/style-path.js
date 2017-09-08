@@ -5,7 +5,6 @@ const stylePath = function (path, options) {
         // TODO: Add back brush styling. Keep a separate active toolbar style for brush vs pen.
         // path = pg.stylebar.applyActiveToolbarStyle(path);
         path.fillColor = options.fillColor;
-        path.strokeColor = options.strokeColor;
     }
 };
 
@@ -18,8 +17,6 @@ const styleCursorPreview = function (path, options) {
         // TODO: Add back brush styling. Keep a separate active toolbar style for brush vs pen.
         // path = pg.stylebar.applyActiveToolbarStyle(path);
         path.fillColor = options.fillColor;
-        path.strokeColor = options.strokeColor;
-        path.strokeWidth = 1;
     }
 };
 
