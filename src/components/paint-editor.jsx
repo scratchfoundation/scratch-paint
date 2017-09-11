@@ -5,6 +5,8 @@ import BrushMode from '../containers/brush-mode.jsx';
 import EraserMode from '../containers/eraser-mode.jsx';
 import PropTypes from 'prop-types';
 import LineMode from '../containers/line-mode.jsx';
+import FillColorIndicatorComponent from '../containers/fill-color-indicator.jsx';
+import StrokeColorIndicatorComponent from '../containers/stroke-color-indicator.jsx';
 
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import BufferedInputHOC from './forms/buffered-input-hoc.jsx';
@@ -19,16 +21,6 @@ const messages = defineMessages({
         id: 'paint.paintEditor.costume',
         description: 'Label for the name of a sound',
         defaultMessage: 'Costume'
-    },
-    fill: {
-        id: 'paint.paintEditor.fill',
-        description: 'Label for the color picker for the fill color',
-        defaultMessage: 'Fill'
-    },
-    outline: {
-        id: 'paint.paintEditor.outline',
-        description: 'Label for the color picker for the outline color',
-        defaultMessage: 'Outline'
     }
 });
 
@@ -52,7 +44,6 @@ class PaintEditorComponent extends React.Component {
                     <div className={styles.inputGroup}>
                         <Label text={this.props.intl.formatMessage(messages.costume)}>
                             <BufferedInput
-                                tabIndex="1"
                                 type="text"
                                 value="meow"
                             />
@@ -106,26 +97,10 @@ class PaintEditorComponent extends React.Component {
 
                 {/* Second Row */}
                 <div className={styles.row}>
-                    {/* To be fill */}
-                    <div className={styles.inputGroup}>
-                        <Label text={this.props.intl.formatMessage(messages.fill)}>
-                            <BufferedInput
-                                tabIndex="1"
-                                type="text"
-                                value="meow"
-                            />
-                        </Label>
-                    </div>
-                    {/* To be stroke */}
-                    <div className={styles.inputGroup}>
-                        <Label text={this.props.intl.formatMessage(messages.outline)}>
-                            <BufferedInput
-                                tabIndex="1"
-                                type="text"
-                                value="meow"
-                            />
-                        </Label>
-                    </div>
+                    {/* fill */}
+                    <FillColorIndicatorComponent />
+                    {/* stroke */}
+                    <StrokeColorIndicatorComponent />
 
                     <div className={styles.inputGroup}>
                         Mode tools

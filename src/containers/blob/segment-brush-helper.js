@@ -32,7 +32,7 @@ class SegmentBrushHelper {
             radius: options.brushSize / 2
         });
         this.finalPath = this.firstCircle;
-        stylePath(this.finalPath, options.isEraser);
+        stylePath(this.finalPath, options);
         this.lastPoint = event.point;
     }
     
@@ -46,9 +46,7 @@ class SegmentBrushHelper {
 
         const path = new paper.Path();
         
-        // TODO: Add back brush styling
-        // path = pg.stylebar.applyActiveToolbarStyle(path);
-        path.fillColor = 'black';
+        stylePath(path, options);
 
         // Add handles to round the end caps
         path.add(new paper.Segment(this.lastPoint.subtract(step), handleVec.multiply(-1), handleVec));

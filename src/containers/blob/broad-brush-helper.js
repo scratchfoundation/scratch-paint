@@ -25,7 +25,7 @@ class BroadBrushHelper {
         if (event.event.button > 0) return; // only first mouse button
         
         this.finalPath = new paper.Path();
-        stylePath(this.finalPath, options.isEraser);
+        stylePath(this.finalPath, options);
         this.finalPath.add(event.point);
         this.lastPoint = this.secondLastPoint = event.point;
     }
@@ -77,7 +77,7 @@ class BroadBrushHelper {
                 center: event.point,
                 radius: options.brushSize / 2
             });
-            stylePath(this.finalPath, options.isEraser);
+            stylePath(this.finalPath, options);
         } else {
             const step = (event.point.subtract(this.lastPoint)).normalize(options.brushSize / 2);
             step.angle += 90;

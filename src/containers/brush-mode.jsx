@@ -29,7 +29,11 @@ class BrushMode extends React.Component {
         } else if (!nextProps.isBrushModeActive && this.props.isBrushModeActive) {
             this.deactivateTool();
         } else if (nextProps.isBrushModeActive && this.props.isBrushModeActive) {
-            this.blob.setOptions({isEraser: false, ...nextProps.brushModeState});
+            this.blob.setOptions({
+                isEraser: false,
+                ...nextProps.colorState,
+                ...nextProps.brushModeState
+            });
         }
     }
     shouldComponentUpdate () {
@@ -42,7 +46,11 @@ class BrushMode extends React.Component {
 
         // TODO: This is temporary until a component that provides the brush size is hooked up
         this.props.canvas.addEventListener('mousewheel', this.onScroll);
-        this.blob.activateTool({isEraser: false, ...this.props.brushModeState});
+        this.blob.activateTool({
+            isEraser: false,
+            ...this.props.colorState,
+            ...this.props.brushModeState
+        });
     }
     deactivateTool () {
         this.props.canvas.removeEventListener('mousewheel', this.onScroll);
@@ -69,6 +77,10 @@ BrushMode.propTypes = {
     }),
     canvas: PropTypes.instanceOf(Element).isRequired,
     changeBrushSize: PropTypes.func.isRequired,
+    colorState: PropTypes.shape({
+        fillColor: PropTypes.string.isRequired,
+        strokeColor: PropTypes.string.isRequired
+    }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isBrushModeActive: PropTypes.bool.isRequired,
     onUpdateSvg: PropTypes.func.isRequired
@@ -76,6 +88,7 @@ BrushMode.propTypes = {
 
 const mapStateToProps = state => ({
     brushModeState: state.scratchPaint.brushMode,
+    colorState: state.scratchPaint.color,
     isBrushModeActive: state.scratchPaint.mode === Modes.BRUSH
 });
 const mapDispatchToProps = dispatch => ({
