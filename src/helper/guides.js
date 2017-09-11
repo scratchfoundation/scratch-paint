@@ -1,184 +1,172 @@
-// functions related to guide items
+import paper from 'paper';
+import {getGuideLayer} from './layer';
+import {removePaperItemsByTags, removePaperItemsByDataTags} from './helper';
 
-pg.guides = function() {
-	
-	var guideBlue = '#009dec';
-	var guideGrey = '#aaaaaa';
-	
-	var hoverItem = function(hitResult) {
-		var segments = hitResult.item.segments;
-		var clone = new paper.Path(segments);
-		setDefaultGuideStyle(clone);
-		if(hitResult.item.closed) {
-			clone.closed = true;
-		}
-		clone.parent = pg.layer.getGuideLayer();
-		clone.strokeColor = guideBlue;
-		clone.fillColor = null;
-		clone.data.isHelperItem = true;
-		clone.bringToFront();
+const GUIDE_BLUE = '#009dec';
+const GUIDE_GREY = '#aaaaaa';
 
-		return clone;
-	};
-	
-	
-	var hoverBounds = function(item) {
-		var rect = new paper.Path.Rectangle(item.internalBounds);
-		rect.matrix = item.matrix;
-		setDefaultGuideStyle(rect);
-		rect.parent = pg.layer.getGuideLayer();
-		rect.strokeColor = guideBlue;
-		rect.fillColor = null;
-		rect.data.isHelperItem = true;
-		rect.bringToFront();
+const setDefaultGuideStyle = function (item) {
+    item.strokeWidth = 1 / paper.view.zoom;
+    item.opacity = 1;
+    item.blendMode = 'normal';
+    item.guide = true;
+};
 
-		return rect;
-	};
-	
-	
-	var rectSelect = function(event, color) {
-		var half = new paper.Point(0.5 / paper.view.zoom, 0.5 / paper.view.zoom);
-		var start = event.downPoint.add(half);
-		var end = event.point.add(half);
-		var rect = new paper.Path.Rectangle(start, end);
-		var zoom = 1.0/paper.view.zoom;
-		setDefaultGuideStyle(rect);
-		if(!color) color = guideGrey;
-		rect.parent = pg.layer.getGuideLayer();
-		rect.strokeColor = color;
-		rect.data.isRectSelect = true;
-		rect.data.isHelperItem = true;
-		rect.dashArray = [3.0*zoom, 3.0*zoom];
-		return rect;
-	};
-	
-	
-	var line = function(from, to, color) {
-		var line = new paper.Path.Line(from, to);
-		var zoom = 1/paper.view.zoom;
-		setDefaultGuideStyle(line);
-		if (!color) color = guideGrey;
-		line.parent = pg.layer.getGuideLayer();
-		line.strokeColor = color;
-		line.strokeColor = color;
-		line.dashArray = [5*zoom, 5*zoom];
-		line.data.isHelperItem = true;
-		return line;
-	};
+const hoverItem = function (hitResult) {
+    const segments = hitResult.item.segments;
+    const clone = new paper.Path(segments);
+    setDefaultGuideStyle(clone);
+    if (hitResult.item.closed) {
+        clone.closed = true;
+    }
+    clone.parent = getGuideLayer();
+    clone.strokeColor = GUIDE_BLUE;
+    clone.fillColor = null;
+    clone.data.isHelperItem = true;
+    clone.bringToFront();
+
+    return clone;
+};
+
+const hoverBounds = function (item) {
+    const rect = new paper.Path.Rectangle(item.internalBounds);
+    rect.matrix = item.matrix;
+    setDefaultGuideStyle(rect);
+    rect.parent = getGuideLayer();
+    rect.strokeColor = GUIDE_BLUE;
+    rect.fillColor = null;
+    rect.data.isHelperItem = true;
+    rect.bringToFront();
+
+    return rect;
+};
+
+const rectSelect = function (event, color) {
+    const half = new paper.Point(0.5 / paper.view.zoom, 0.5 / paper.view.zoom);
+    const start = event.downPoint.add(half);
+    const end = event.point.add(half);
+    const rect = new paper.Path.Rectangle(start, end);
+    const zoom = 1.0 / paper.view.zoom;
+    setDefaultGuideStyle(rect);
+    if (!color) color = GUIDE_GREY;
+    rect.parent = getGuideLayer();
+    rect.strokeColor = color;
+    rect.data.isRectSelect = true;
+    rect.data.isHelperItem = true;
+    rect.dashArray = [3.0 * zoom, 3.0 * zoom];
+    return rect;
+};
+
+const line = function (from, to, color) {
+    const theLine = new paper.Path.Line(from, to);
+    const zoom = 1 / paper.view.zoom;
+    setDefaultGuideStyle(theLine);
+    if (!color) color = GUIDE_GREY;
+    theLine.parent = getGuideLayer();
+    theLine.strokeColor = color;
+    theLine.strokeColor = color;
+    theLine.dashArray = [5 * zoom, 5 * zoom];
+    theLine.data.isHelperItem = true;
+    return theLine;
+};
+
+const crossPivot = function (center, color) {
+    const zoom = 1 / paper.view.zoom;
+    const star = new paper.Path.Star(center, 4, 4 * zoom, 0.5 * zoom);
+    setDefaultGuideStyle(star);
+    if (!color) color = GUIDE_BLUE;
+    star.parent = getGuideLayer();
+    star.fillColor = color;
+    star.strokeColor = color;
+    star.strokeWidth = 0.5 * zoom;
+    star.data.isHelperItem = true;
+    star.rotate(45);
+
+    return star;
+};
+
+const rotPivot = function (center, color) {
+    const zoom = 1 / paper.view.zoom;
+    const path = new paper.Path.Circle(center, 3 * zoom);
+    setDefaultGuideStyle(path);
+    if (!color) color = GUIDE_BLUE;
+    path.parent = getGuideLayer();
+    path.fillColor = color;
+    path.data.isHelperItem = true;
+
+    return path;
+};
+
+const label = function (pos, content, color) {
+    const text = new paper.PointText(pos);
+    if (!color) color = GUIDE_GREY;
+    text.parent = getGuideLayer();
+    text.fillColor = color;
+    text.content = content;
+};
+
+const getGuideColor = function (colorName) {
+    if (colorName === 'blue') {
+        return GUIDE_BLUE;
+    } else if (colorName === 'grey') {
+        return GUIDE_GREY;
+    }
+};
+
+const getAllGuides = function () {
+    const allItems = [];
+    for (let i = 0; i < paper.project.layers.length; i++) {
+        const layer = paper.project.layers[i];
+        for (let j = 0; j < layer.children.length; j++) {
+            const child = layer.children[j];
+            // only give guides
+            if (!child.guide) {
+                continue;
+            }
+            allItems.push(child);
+        }
+    }
+    return allItems;
+};
+
+const getExportRectGuide = function () {
+    const guides = getAllGuides();
+    for (let i = 0; i < guides.length; i++){
+        if (guides[i].data && guides[i].data.isExportRect) {
+            return guides[i];
+        }
+    }
+};
 
 
-	var crossPivot = function(center, color) {
-		var zoom = 1/paper.view.zoom;
-		var star = new paper.Path.Star(center, 4, 4*zoom, 0.5*zoom);
-		setDefaultGuideStyle(star);
-		if(!color) color = guideBlue;
-		star.parent = pg.layer.getGuideLayer();
-		star.fillColor = color;
-		star.strokeColor = color;
-		star.strokeWidth = 0.5*zoom;
-		star.data.isHelperItem = true;
-		star.rotate(45);
+const removeHelperItems = function () {
+    removePaperItemsByDataTags(['isHelperItem']);
+};
 
-		return star;
-	};
-	
-	
-	var rotPivot = function(center, color) {
-		var zoom = 1/paper.view.zoom;
-		var path = new paper.Path.Circle(center, 3*zoom);
-		setDefaultGuideStyle(path);
-		if(!color) color = guideBlue;
-		path.parent = pg.layer.getGuideLayer();
-		path.fillColor = color;
-		path.data.isHelperItem = true;
 
-		return path;
-	};
-	
-	
-	var label = function(pos, content, color) {
-		var text = new paper.PointText(pos);
-		if(!color) color = guideGrey;
-		text.parent = pg.layer.getGuideLayer();
-		text.fillColor = color;
-		text.content = content;
-	};
-	
-	
-	var setDefaultGuideStyle = function(item) {
-		item.strokeWidth = 1/paper.view.zoom;
-		item.opacity = 1;
-		item.blendMode = 'normal';
-		item.guide = true;
-	};
-	
-	
-	var getGuideColor = function(colorName) {
-		if(colorName == 'blue') {
-			return guideBlue;
-		} else if(colorName == 'grey') {
-			return guideGrey;
-		}
-	};
-	
-	
-	var getAllGuides = function() {
-		var allItems = [];
-		for(var i=0; i<paper.project.layers.length; i++) {
-			var layer = paper.project.layers[i];
-			for(var j=0; j<layer.children.length; j++) {
-				var child = layer.children[j];
-				// only give guides
-				if(!child.guide) {
-					continue;
-				}
-				allItems.push(child);
-			}
-		}
-		return allItems;
-	};
-	
-	
-	var getExportRectGuide = function() {
-		var guides = getAllGuides();
-		for(var i=0; i<guides.length; i++){
-			if(guides[i].data && guides[i].data.isExportRect) {
-				return guides[i];
-			}
-		}
-	};
-	
-	
-	var removeHelperItems = function() {
-		pg.helper.removePaperItemsByDataTags(['isHelperItem']);
-	};
-	
-	
-	var removeAllGuides = function() {
-		pg.helper.removePaperItemsByTags(['guide']);
-	};
-	
-	
-	var removeExportRectGuide = function() {
-		pg.helper.removePaperItemsByDataTags(['isExportRect']);
-	};
-	
-	
-	return {
-		hoverItem: hoverItem,
-		hoverBounds: hoverBounds,
-		rectSelect: rectSelect,
-		line: line,
-		crossPivot: crossPivot,
-		rotPivot: rotPivot,
-		label: label,
-		removeAllGuides: removeAllGuides,
-		removeHelperItems: removeHelperItems,
-		removeExportRectGuide: removeExportRectGuide,
-		getAllGuides: getAllGuides,
-		getExportRectGuide: getExportRectGuide,
-		getGuideColor: getGuideColor,
-		setDefaultGuideStyle:setDefaultGuideStyle
-	};
+const removeAllGuides = function () {
+    removePaperItemsByTags(['guide']);
+};
 
-}();
+
+const removeExportRectGuide = function () {
+    removePaperItemsByDataTags(['isExportRect']);
+};
+
+
+export {
+    hoverItem,
+    hoverBounds,
+    rectSelect,
+    line,
+    crossPivot,
+    rotPivot,
+    label,
+    removeAllGuides,
+    removeHelperItems,
+    removeExportRectGuide,
+    getAllGuides,
+    getExportRectGuide,
+    getGuideColor,
+    setDefaultGuideStyle
+};

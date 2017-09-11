@@ -1,12 +1,14 @@
 import paper from 'paper';
+import {isBoundsItem, getRootItem} from './item';
+import {hoverBounds, hoverItem} from './guides';
+import {isGroupChild} from './group';
 
-const CLEAR_HOVERED_ITEM = 'scratch-paint/hover/CLEAR_HOVERED_ITEM';
 /**
- * @param hitOptions hit options to use
- * @param event mouse event
- * @return the hovered item or null if there is none
+ * @param {!MouseEvent} event mouse event
+ * @param {?object} hitOptions hit options to use
+ * @return {paper.Item} the hovered item or null if there is none
  */
-const getHoveredItem = function (hitOptions, event) {
+const getHoveredItem = function (event, hitOptions) {
     const hitResults = paper.project.hitTestAll(event.point, hitOptions);
     if (hitResults.length === 0) {
         return null;
@@ -23,28 +25,14 @@ const getHoveredItem = function (hitOptions, event) {
         return null;
     }
 
-    if (pg.item.isBoundsItem(hitResult.item)) {
-        return pg.guides.hoverBounds(hitResult.item);
-
-    } else if(pg.group.isGroupChild(hitResult.item)) {
-        return pg.guides.hoverBounds(pg.item.getRootItem(hitResult.item));
-        
-    } else {
-        return pg.guides.hoverItem(hitResult);
+    if (isBoundsItem(hitResult.item)) {
+        return hoverBounds(hitResult.item);
+    } else if (isGroupChild(hitResult.item)) {
+        return hoverBounds(getRootItem(hitResult.item));
     }
+    return hoverItem(hitResult);
 };
-
-
-// Action creators ==================================
-const clearHoveredItem = function () {
-    return {
-        type: CLEAR_HOVERED_ITEM
-    };
-    // TODO: paper.view.update();
-};
-
 
 export {
-    getHoveredItem,
-    clearHoveredItem
+    getHoveredItem
 };

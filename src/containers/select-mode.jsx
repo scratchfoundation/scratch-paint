@@ -3,11 +3,16 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
-import {clearSelection} from '../reducers/selection';
-import {setHoveredItem} from '../reducers/hover';
-import {getHoveredItem} from '../helper/hover';
+
 import {changeMode} from '../reducers/modes';
+import {setHoveredItem, clearHoveredItem} from '../reducers/hover';
+
+import {getHoveredItem} from '../helper/hover';
+import {rectSelect} from '../helper/guides';
+import {clearSelection, selectRootItem, processRectangularSelection} from '../helper/selection';
+
 import SelectModeComponent from '../components/select-mode.jsx';
+import BoundingBoxTool from '../helper/bounding-box/bounding-box-tool';
 import paper from 'paper';
 
 class SelectMode extends React.Component {
@@ -33,7 +38,9 @@ class SelectMode extends React.Component {
             fill: true,
             guide: false
         };
-
+        this.boundingBoxTool = new BoundingBoxTool();
+        this.selectionBoxMode = false;
+        this.selectionRect = null;
     }
     componentDidMount () {
         if (this.props.isSelectModeActive) {
@@ -50,47 +57,60 @@ class SelectMode extends React.Component {
     shouldComponentUpdate () {
         return false; // Static component, for now
     }
-    getHitOptions () {
+    getHitOptions (preselectedOnly) {
         this._hitOptions.tolerance = SelectMode.TOLERANCE / paper.view.zoom;
+        if (preselectedOnly) {
+            this._hitOptions.selected = true;
+        } else {
+            delete this._hitOptions.selected;
+        }
         return this._hitOptions;
     }
     activateTool () {
         clearSelection();
-        this.preProcessSelection();
+        selectRootItem();
         this.tool = new paper.Tool();
 
 
         this.tool.onMouseDown = function (event) {
-            this.onMouseDown(event);
+            if (event.event.button > 0) return;  // only first mouse button
+            this.props.clearHoveredItem();
+            if (!this.boundingBoxTool.onMouseDown(
+                    event, event.modifiers.alt, event.modifiers.shift, true /* preselectedOnly */)) {
+                this.selectionBoxMode = true;
+            }
         };
 
         this.tool.onMouseMove = function (event) {
-            this.props.setHoveredItem(getHoveredItem(this.getHitOptions()));
+            this.props.setHoveredItem(getHoveredItem(event, this.getHitOptions()));
         };
 
         
         this.tool.onMouseDrag = function (event) {
-            this.onMouseDrag(event);
+            if (event.event.button > 0) return;  // only first mouse button
+            if (this.selectionBoxMode) {
+                this.selectionRect = rectSelect(event);
+                // Remove this rect on the next drag and up event
+                this.selectionRect.removeOnDrag();
+            } else {
+                this.boundingBoxTool.onMouseDrag(event);
+            }
         };
 
         this.tool.onMouseUp = function (event) {
-            this.onMouseUp(event);
+            if (event.event.button > 0) return;  // only first mouse button
+            if (this.selectionBoxMode) {
+                processRectangularSelection(event, this.selectionRect);
+                this.selectionRect.remove();
+            } else {
+                this.boundingBoxTool.onMouseUp(event);
+                this.props.onUpdateSvg();
+            }
+            this.selectionBoxMode = false;
+            this.selectionRect = null;
         };
         this.tool.activate();
     }
-    preProcessSelection () {
-        // when switching to the select tool while having a child object of a
-        // compound path selected, deselect the child and select the compound path
-        // instead. (otherwise the compound path breaks because of scale-grouping)
-        const items = this.props.selectedItems;
-        for (let item of items) {
-            if(isCompoundPathChild(item)) {
-                var cp = getItemsCompoundPath(item);
-                setItemSelection(item, false);
-                setItemSelection(cp, true);
-            }
-        };
-    };
     deactivateTool () {
         this.props.setHoveredItem();
         this.tool.remove();
@@ -105,9 +125,11 @@ class SelectMode extends React.Component {
 }
 
 SelectMode.propTypes = {
+    clearHoveredItem: PropTypes.func.isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isSelectModeActive: PropTypes.bool.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired
+    onUpdateSvg: PropTypes.func.isRequired,
+    setHoveredItem: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -116,6 +138,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     setHoveredItem: hoveredItem => {
         dispatch(setHoveredItem(hoveredItem));
+    },
+    clearHoveredItem: () => {
+        dispatch(clearHoveredItem());
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.SELECT));
