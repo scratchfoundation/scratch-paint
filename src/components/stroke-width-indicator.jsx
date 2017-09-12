@@ -23,7 +23,7 @@ const StrokeWidthIndicatorComponent = props => (
 
 StrokeWidthIndicatorComponent.propTypes = {
     onChangeStrokeWidth: PropTypes.func.isRequired,
-    strokeWidth: PropTypes.string.isRequired
+    strokeWidth: PropTypes.number.isRequired
 };
 
 export default StrokeWidthIndicatorComponent;

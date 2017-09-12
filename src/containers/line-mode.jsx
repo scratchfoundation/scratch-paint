@@ -272,7 +272,7 @@ LineMode.propTypes = {
     colorState: PropTypes.shape({
         fillColor: PropTypes.string.isRequired,
         strokeColor: PropTypes.string.isRequired,
-        strokeWidth: PropTypes.string.isRequired
+        strokeWidth: PropTypes.number.isRequired
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isLineModeActive: PropTypes.bool.isRequired,
