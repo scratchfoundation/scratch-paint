@@ -7,11 +7,13 @@ class ScaleTool {
         this.corner = null;
         this.origSize = null;
         this.origCenter = null;
-        this.scaleItems = null;
         this.itemGroup = null;
         this.boundsPath = null;
         // Lowest item above all scale items in z index
         this.itemToInsertBelow = null;
+        this.scaleItems = [];
+        this.boundsScaleHandles = [];
+        this.boundsRotHandles = [];
     }
 
     /**
@@ -21,26 +23,34 @@ class ScaleTool {
      * @param {boolean} clone Whether to clone on mouse down (e.g. alt key held)
      * @param {boolean} multiselect Whether to multiselect on mouse down (e.g. shift key held)
      */
-    onMouseDown (hitResult, boundsPath, selectedItems) {
+    onMouseDown (hitResult, boundsPath, boundsScaleHandles, boundsRotHandles, selectedItems) {
         const index = hitResult.item.data.index;
+        this.boundsPath = boundsPath;
+        this.boundsScaleHandles = boundsScaleHandles;
+        this.boundsRotHandles = boundsRotHandles;
         this.pivot = this.boundsPath.bounds[this.getOpposingRectCornerNameByIndex(index)].clone();
         this.origPivot = this.boundsPath.bounds[this.getOpposingRectCornerNameByIndex(index)].clone();
         this.corner = this.boundsPath.bounds[this.getRectCornerNameByIndex(index)].clone();
         this.origSize = this.corner.subtract(this.pivot);
         this.origCenter = this.boundsPath.bounds.center;
-        this.boundsPath = boundsPath;
-        this.scaleItems = selectedItems;
+        for (const item of selectedItems) {
+            // Scale only root items
+            if (item.parent instanceof paper.Layer) {
+                this.scaleItems.push(item);
+            }
+        }
     }
     onMouseDrag (event) {
+        const scaleTool = this;
         const modOrigSize = this.origSize;
 
         // get item to insert below so that scaled items stay in same z position
         const items = paper.project.getItems({
             match: function (item) {
-                if (item instanceof paper.Layer) {
+                if (item instanceof paper.Layer || item.data.isHelperItem) {
                     return false;
                 }
-                for (const scaleItem of this.scaleItems) {
+                for (const scaleItem of scaleTool.scaleItems) {
                     if (!scaleItem.isBelow(item)) {
                         return false;
                     }
@@ -107,8 +117,10 @@ class ScaleTool {
         this.corner = null;
         this.origSize = null;
         this.origCenter = null;
-        this.scaleItems = null;
+        this.scaleItems.length = 0;
         this.boundsPath = null;
+        this.boundsScaleHandles = [];
+        this.boundsRotHandles = [];
 
         if (!this.itemGroup) {
             return;

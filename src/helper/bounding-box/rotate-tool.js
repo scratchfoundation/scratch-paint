@@ -15,7 +15,7 @@ class RotateTool {
     onMouseDown (hitResult, boundsPath, selectedItems) {
         this.rotGroupPivot = boundsPath.bounds.center;
         for (const item of selectedItems) {
-            // Rotate only root items; all nested items shouldn't get rotated again.
+            // Rotate only root items
             if (item.parent instanceof paper.Layer) {
                 this.rotItems.push(item);
             }

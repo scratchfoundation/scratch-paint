@@ -60,18 +60,23 @@ class BoundingBoxTool {
             if (hitResults[i].item.data && hitResults[i].item.data.isScaleHandle) {
                 hitResult = hitResults[i];
                 this.mode = Modes.SCALE;
-                this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedItems());
                 break;
             } else if (hitResults[i].item.data && hitResults[i].item.data.isRotHandle) {
                 hitResult = hitResults[i];
                 this.mode = Modes.ROTATE;
-                this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedItems());
             }
         }
-
         if (!this.mode) {
             this.mode = Modes.MOVE;
+        }
+
+        if (this.mode === Modes.MOVE) {
             this._modeMap[this.mode].onMouseDown(hitResult, clone, multiselect);
+        } else if (this.mode === Modes.SCALE) {
+            this._modeMap[this.mode].onMouseDown(
+                hitResult, this.boundsPath, this.boundsScaleHandles, this.boundsRotHandles, getSelectedItems());
+        } else if (this.mode === Modes.ROTATE) {
+            this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedItems());
         }
 
         // while transforming object, never show the bounds stuff
