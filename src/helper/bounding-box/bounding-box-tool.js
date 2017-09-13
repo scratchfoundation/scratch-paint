@@ -119,7 +119,7 @@ class BoundingBoxTool {
         this.boundsPath.fullySelected = true;
         this.boundsPath.parent = getGuideLayer();
         
-        for (let index = 0; index < this.boundsPath.segments; index++) {
+        for (let index = 0; index < this.boundsPath.segments.length; index++) {
             const segment = this.boundsPath.segments[index];
             let size = 4;
             
@@ -131,11 +131,11 @@ class BoundingBoxTool {
                 const offset = new paper.Point(0, 20);
                 
                 const arrows = new paper.Path(ARROW_PATH);
-                arrows.translate(segment.point + offset + [-10.5, -5]);
+                arrows.translate(segment.point.add(offset).add(-10.5, -5));
                 
                 const line = new paper.Path.Rectangle(
-                    segment.point + offset - [1, 0],
-                    segment.point + [1, 0]);
+                    segment.point.add(offset).subtract(1, 0),
+                    segment.point);
 
                 const rotHandle = arrows.unite(line);
                 line.remove();

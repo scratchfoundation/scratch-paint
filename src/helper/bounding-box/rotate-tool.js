@@ -1,3 +1,5 @@
+import paper from 'paper';
+
 class RotateTool {
     constructor () {
         this.rotItems = [];
@@ -10,16 +12,21 @@ class RotateTool {
      * @param {!object} boundsPath Where the boundaries of the hit item are
      * @param {!Array.<paper.Item>} selectedItems Set of selected paper.Items
      */
-    onMouseDown (boundsPath, selectedItems) {
+    onMouseDown (hitResult, boundsPath, selectedItems) {
         this.rotGroupPivot = boundsPath.bounds.center;
-        this.rotItems = selectedItems;
+        for (const item of selectedItems) {
+            // Rotate only root items; all nested items shouldn't get rotated again.
+            if (item.parent instanceof paper.Layer) {
+                this.rotItems.push(item);
+            }
+        }
         
         for (let i = 0; i < this.rotItems.length; i++) {
-            this.prevRot[i] = (event.point - this.rotGroupPivot).angle;
+            this.prevRot[i] = 90;
         }
     }
     onMouseDrag (event) {
-        let rotAngle = (event.point - this.rotGroupPivot).angle;
+        let rotAngle = (event.point.subtract(this.rotGroupPivot)).angle;
         
         for (let i = 0; i < this.rotItems.length; i++) {
             const item = this.rotItems[i];
@@ -44,6 +51,11 @@ class RotateTool {
         for (const item of this.rotItems) {
             item.applyMatrix = true;
         }
+        
+        this.rotItems.length = 0;
+        this.rotGroupPivot = null;
+        this.prevRot = [];
+
         // @todo add back undo
         // pg.undo.snapshot('rotateSelection');
     }

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import PaintEditorComponent from '../components/paint-editor.jsx';
 import {changeMode} from '../reducers/modes';
+import {getGuideLayer} from '../helper/layer';
 import Modes from '../modes/modes';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
@@ -21,6 +22,8 @@ class PaintEditor extends React.Component {
         document.removeEventListener('keydown', this.props.onKeyPress);
     }
     handleUpdateSvg () {
+        // Hide bounding box
+        getGuideLayer().visible = false;
         const bounds = paper.project.activeLayer.bounds;
         this.props.onUpdateSvg(
             paper.project.exportSVG({
@@ -29,6 +32,7 @@ class PaintEditor extends React.Component {
             }),
             paper.project.view.center.x - bounds.x,
             paper.project.view.center.y - bounds.y);
+        getGuideLayer().visible = true;
     }
     render () {
         return (
