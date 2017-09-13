@@ -62,8 +62,8 @@ class SelectMode extends React.Component {
         return this._hitOptions;
     }
     activateTool () {
-        clearSelection();
         selectRootItem();
+        this.boundingBoxTool.setSelectionBounds();
         this.tool = new paper.Tool();
 
         const selectMode = this;
@@ -126,6 +126,7 @@ class SelectMode extends React.Component {
     }
     deactivateTool () {
         this.props.clearHoveredItem();
+        this.boundingBoxTool.removeBoundsPath();
         this.tool.remove();
         this.tool = null;
         this.hitResult = null;
