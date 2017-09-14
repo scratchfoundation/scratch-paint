@@ -62,6 +62,8 @@ const mapDispatchToProps = dispatch => ({
             dispatch(changeMode(Modes.BRUSH));
         } else if (event.key === 'l') {
             dispatch(changeMode(Modes.LINE));
+        } else if (event.key === 's') {
+            dispatch(changeMode(Modes.SELECT));
         }
     }
 });

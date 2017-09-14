@@ -68,9 +68,6 @@ class SelectMode extends React.Component {
 
         // Define these to sate linter
         const selectMode = this;
-        const hoveredItemProp = this.props.hoveredItem;
-        const setHoveredItemProp = this.props.setHoveredItem;
-        const onUpdateSvgProp = this.props.onUpdateSvg;
 
         this.tool.onMouseDown = function (event) {
             if (event.event.button > 0) return; // only first mouse button
@@ -88,13 +85,11 @@ class SelectMode extends React.Component {
 
         this.tool.onMouseMove = function (event) {
             const hoveredItem = getHoveredItem(event, selectMode.getHitOptions());
-            if ((!hoveredItem && hoveredItemProp) || // There is no longer a hovered item
-                    (hoveredItem && !hoveredItemProp) || // There is now a hovered item
-                    (hoveredItem && hoveredItemProp && hoveredItem.id !== hoveredItemProp.id)) { // hovered item changed
-                if (hoveredItemProp) {
-                    hoveredItemProp.remove();
-                }
-                setHoveredItemProp(hoveredItem);
+            const oldHoveredItem = selectMode.props.hoveredItem;
+            if ((!hoveredItem && oldHoveredItem) || // There is no longer a hovered item
+                    (hoveredItem && !oldHoveredItem) || // There is now a hovered item
+                    (hoveredItem && oldHoveredItem && hoveredItem.id !== oldHoveredItem.id)) { // hovered item changed
+                selectMode.props.setHoveredItem(hoveredItem);
             }
         };
 
@@ -122,7 +117,7 @@ class SelectMode extends React.Component {
                 selectMode.boundingBoxTool.setSelectionBounds();
             } else {
                 selectMode.boundingBoxTool.onMouseUp(event);
-                onUpdateSvgProp();
+                selectMode.props.onUpdateSvg();
             }
             selectMode.selectionBoxMode = false;
             selectMode.selectionRect = null;
@@ -146,10 +141,10 @@ class SelectMode extends React.Component {
 SelectMode.propTypes = {
     clearHoveredItem: PropTypes.func.isRequired,
     handleMouseDown: PropTypes.func.isRequired,
-    hoveredItem: PropTypes.instanceOf(paper.Item),
+    hoveredItem: PropTypes.instanceOf(paper.Item), // eslint-disable-line react/no-unused-prop-types
     isSelectModeActive: PropTypes.bool.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
-    setHoveredItem: PropTypes.func.isRequired
+    onUpdateSvg: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
+    setHoveredItem: PropTypes.func.isRequired // eslint-disable-line react/no-unused-prop-types
 };
 
 const mapStateToProps = state => ({

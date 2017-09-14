@@ -13,11 +13,12 @@ const SelectionHOV = function (WrappedComponent) {
         componentDidUpdate (prevProps) {
             if (this.props.hoveredItem && this.props.hoveredItem !== prevProps.hoveredItem) {
                 // A hover item has been added. Update the view
-                paper.view.update();
+                if (prevProps.hoveredItem) {
+                    prevProps.hoveredItem.remove();
+                }
             } else if (!this.props.hoveredItem && prevProps.hoveredItem) {
                 // Remove the hover item
                 prevProps.hoveredItem.remove();
-                paper.view.update();
             }
         }
         render () {
