@@ -19,6 +19,8 @@ class ScaleTool {
     /**
      * @param {!paper.HitResult} hitResult Data about the location of the mouse click
      * @param {!object} boundsPath Where the boundaries of the hit item are
+     * @param {!object} boundsScaleHandles Bounding box scale handles
+     * @param {!object} boundsRotHandles Bounding box rotation handle
      * @param {!Array.<paper.Item>} selectedItems Set of selected paper.Items
      * @param {boolean} clone Whether to clone on mouse down (e.g. alt key held)
      * @param {boolean} multiselect Whether to multiselect on mouse down (e.g. shift key held)

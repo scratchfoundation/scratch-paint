@@ -9,7 +9,7 @@ import {setHoveredItem, clearHoveredItem} from '../reducers/hover';
 
 import {getHoveredItem} from '../helper/hover';
 import {rectSelect} from '../helper/guides';
-import {clearSelection, selectRootItem, processRectangularSelection} from '../helper/selection';
+import {selectRootItem, processRectangularSelection} from '../helper/selection';
 
 import SelectModeComponent from '../components/select-mode.jsx';
 import BoundingBoxTool from '../helper/bounding-box/bounding-box-tool';
@@ -66,12 +66,18 @@ class SelectMode extends React.Component {
         this.boundingBoxTool.setSelectionBounds();
         this.tool = new paper.Tool();
 
+        // Define these to sate linter
         const selectMode = this;
+        const hoveredItemProp = this.props.hoveredItem;
+        const setHoveredItemProp = this.props.setHoveredItem;
+        const onUpdateSvgProp = this.props.onUpdateSvg;
+
         this.tool.onMouseDown = function (event) {
-            if (event.event.button > 0) return;  // only first mouse button
+            if (event.event.button > 0) return; // only first mouse button
 
             selectMode.props.clearHoveredItem();
-            if (!selectMode.boundingBoxTool.onMouseDown(
+            if (!selectMode.boundingBoxTool
+                .onMouseDown(
                     event,
                     event.modifiers.alt,
                     event.modifiers.shift,
@@ -82,20 +88,19 @@ class SelectMode extends React.Component {
 
         this.tool.onMouseMove = function (event) {
             const hoveredItem = getHoveredItem(event, selectMode.getHitOptions());
-            const oldHoveredItem = selectMode.props.hoveredItem;
-            if ((!hoveredItem && oldHoveredItem) || // There is no longer a hovered item
-                    (hoveredItem && !oldHoveredItem) || // There is now a hovered item
-                    (hoveredItem && oldHoveredItem && hoveredItem.id !== oldHoveredItem.id)) { // hovered item changed
-                if (oldHoveredItem) {
-                    oldHoveredItem.remove();
+            if ((!hoveredItem && hoveredItemProp) || // There is no longer a hovered item
+                    (hoveredItem && !hoveredItemProp) || // There is now a hovered item
+                    (hoveredItem && hoveredItemProp && hoveredItem.id !== hoveredItemProp.id)) { // hovered item changed
+                if (hoveredItemProp) {
+                    hoveredItemProp.remove();
                 }
-                selectMode.props.setHoveredItem(hoveredItem);
+                setHoveredItemProp(hoveredItem);
             }
         };
 
         
         this.tool.onMouseDrag = function (event) {
-            if (event.event.button > 0) return;  // only first mouse button
+            if (event.event.button > 0) return; // only first mouse button
 
             if (selectMode.selectionBoxMode) {
                 selectMode.selectionRect = rectSelect(event);
@@ -107,17 +112,17 @@ class SelectMode extends React.Component {
         };
 
         this.tool.onMouseUp = function (event) {
-            if (event.event.button > 0) return;  // only first mouse button
+            if (event.event.button > 0) return; // only first mouse button
 
             if (selectMode.selectionBoxMode) {
                 if (selectMode.selectionRect) {
-                    processRectangularSelection(event, selectMode.selectionRect);
+                    processRectangularSelection(event, selectMode.selectionRect, Modes.SELECT);
                     selectMode.selectionRect.remove();
                 }
                 selectMode.boundingBoxTool.setSelectionBounds();
             } else {
                 selectMode.boundingBoxTool.onMouseUp(event);
-                selectMode.props.onUpdateSvg();
+                onUpdateSvgProp();
             }
             selectMode.selectionBoxMode = false;
             selectMode.selectionRect = null;

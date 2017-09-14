@@ -58,21 +58,15 @@ const setItemSelection = function (item, state) {
     if (parentGroup) {
         // do it recursive
         setItemSelection(parentGroup, state);
-
     } else if (itemsCompoundPath) {
         setItemSelection(itemsCompoundPath, state);
-
     } else {
         if (item.data && item.data.noSelect) {
             return;
         }
         setGroupSelection(item, state);
     }
-    // pg.statusbar.update();
-    // pg.stylebar.updateFromSelection();
-    // pg.stylebar.blurInputs();
-    
-    // jQuery(document).trigger('SelectionChanged');
+    // @todo: Update toolbar state on change
     
 };
 
@@ -94,13 +88,10 @@ const selectAllSegments = function () {
 
 const clearSelection = function () {
     paper.project.deselectAll();
-    
-    // pg.statusbar.update();
-    // pg.stylebar.blurInputs();
-    // jQuery(document).trigger('SelectionChanged');
+    // @todo: Update toolbar state on change
 };
 
-// this gets all selected non-grouped items and groups
+// This gets all selected non-grouped items and groups
 // (alternative to paper.project.selectedItems, which includes
 // group children in addition to the group)
 // Returns in increasing Z order
@@ -137,8 +128,7 @@ const deleteItemSelection = function () {
         items[i].remove();
     }
     
-    // jQuery(document).trigger('DeleteItems');
-    // jQuery(document).trigger('SelectionChanged');
+    // @todo: Update toolbar state on change
     paper.project.view.update();
     // @todo add back undo
     // pg.undo.snapshot('deleteItemSelection');
@@ -289,9 +279,8 @@ const deleteSegmentSelection = function () {
     for (let i = 0; i < items.length; i++) {
         deleteSegments(items[i]);
     }
-    
-    // jQuery(document).trigger('DeleteSegments');
-    // jQuery(document).trigger('SelectionChanged');
+
+    // @todo: Update toolbar state on change
     paper.project.view.update();
     // @todo add back undo
     // pg.undo.snapshot('deleteSegmentSelection');
@@ -308,7 +297,7 @@ const cloneSelection = function () {
     // pg.undo.snapshot('cloneSelection');
 };
 
-// only returns paths, no compound paths, groups or any other stuff
+// Only returns paths, no compound paths, groups or any other stuff
 const getSelectedPaths = function () {
     const allPaths = getSelectedItems();
     const paths = [];
@@ -359,7 +348,7 @@ const handleRectangularSelectionItems = function (item, event, rect, mode) {
         for (let j = 0; j < item.segments.length; j++) {
             const seg = item.segments[j];
             if (rect.contains(seg.point)) {
-                if (mode === 'detail') {
+                if (mode === Modes.RESHAPE) {
                     if (event.modifiers.shift && seg.selected) {
                         seg.selected = false;
                     } else {
@@ -384,7 +373,7 @@ const handleRectangularSelectionItems = function (item, event, rect, mode) {
         if (intersections.length > 0 && !segmentMode) {
             // if in detail select mode, select the curves that intersect
             // with the selectionRect
-            if (mode === 'detail') {
+            if (mode === Modes.RESHAPE) {
                 for (let k = 0; k < intersections.length; k++) {
                     const curve = intersections[k].curve;
                     // intersections contains every curve twice because
@@ -411,7 +400,7 @@ const handleRectangularSelectionItems = function (item, event, rect, mode) {
                 return false;
             }
         }
-        // pg.statusbar.update();
+        // @todo: Update toolbar state on change
 
     } else if (isBoundsItem(item)) {
         if (checkBoundsItem(rect, item, event)) {
@@ -442,7 +431,7 @@ const processRectangularSelection = function (event, rect, mode) {
     itemLoop:
     for (let i = 0; i < allItems.length; i++) {
         const item = allItems[i];
-        if (mode === 'detail' && isPGTextItem(getRootItem(item))) {
+        if (mode === Modes.RESHAPE && isPGTextItem(getRootItem(item))) {
             continue itemLoop;
         }
         // check for item segment points inside selectionRect

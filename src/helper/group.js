@@ -15,7 +15,7 @@ const groupSelection = function () {
         for (let i = 0; i < group.children.length; i++) {
             group.children[i].selected = true;
         }
-        // jQuery(document).trigger('Grouped');
+        // @todo: Set selection bounds; enable/disable grouping icons
         // @todo add back undo
         // pg.undo.snapshot('groupSelection');
         return group;
@@ -65,7 +65,7 @@ const ungroupItems = function (items) {
     for (let j = 0; j < emptyGroups.length; j++) {
         emptyGroups[j].remove();
     }
-    // jQuery(document).trigger('Ungrouped');
+    // @todo: Set selection bounds; enable/disable grouping icons
     // @todo add back undo
     // pg.undo.snapshot('ungroupItems');
 };
@@ -73,15 +73,13 @@ const ungroupItems = function (items) {
 const ungroupSelection = function () {
     const items = getSelectedItems();
     ungroupItems(items);
-
-    // pg.statusbar.update();
 };
 
 
 const groupItems = function (items) {
     if (items.length > 0) {
         const group = new paper.Group(items);
-        // jQuery(document).trigger('Grouped');
+        // @todo: Set selection bounds; enable/disable grouping icons
         // @todo add back undo
         // pg.undo.snapshot('groupItems');
         return group;

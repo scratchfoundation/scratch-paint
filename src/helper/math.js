@@ -27,7 +27,6 @@ const snapDeltaToAngle = function (delta, snapAngle) {
     return new paper.Point(dirx * d, diry * d);
 };
 
-
 export {
     checkPointsClose,
     getRandomInt,

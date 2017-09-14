@@ -57,54 +57,6 @@ const rectSelect = function (event, color) {
     return rect;
 };
 
-const line = function (from, to, color) {
-    const theLine = new paper.Path.Line(from, to);
-    const zoom = 1 / paper.view.zoom;
-    setDefaultGuideStyle(theLine);
-    if (!color) color = GUIDE_GREY;
-    theLine.parent = getGuideLayer();
-    theLine.strokeColor = color;
-    theLine.strokeColor = color;
-    theLine.dashArray = [5 * zoom, 5 * zoom];
-    theLine.data.isHelperItem = true;
-    return theLine;
-};
-
-const crossPivot = function (center, color) {
-    const zoom = 1 / paper.view.zoom;
-    const star = new paper.Path.Star(center, 4, 4 * zoom, 0.5 * zoom);
-    setDefaultGuideStyle(star);
-    if (!color) color = GUIDE_BLUE;
-    star.parent = getGuideLayer();
-    star.fillColor = color;
-    star.strokeColor = color;
-    star.strokeWidth = 0.5 * zoom;
-    star.data.isHelperItem = true;
-    star.rotate(45);
-
-    return star;
-};
-
-const rotPivot = function (center, color) {
-    const zoom = 1 / paper.view.zoom;
-    const path = new paper.Path.Circle(center, 3 * zoom);
-    setDefaultGuideStyle(path);
-    if (!color) color = GUIDE_BLUE;
-    path.parent = getGuideLayer();
-    path.fillColor = color;
-    path.data.isHelperItem = true;
-
-    return path;
-};
-
-const label = function (pos, content, color) {
-    const text = new paper.PointText(pos);
-    if (!color) color = GUIDE_GREY;
-    text.parent = getGuideLayer();
-    text.fillColor = color;
-    text.content = content;
-};
-
 const getGuideColor = function (colorName) {
     if (colorName === 'blue') {
         return GUIDE_BLUE;
@@ -113,60 +65,20 @@ const getGuideColor = function (colorName) {
     }
 };
 
-const getAllGuides = function () {
-    const allItems = [];
-    for (let i = 0; i < paper.project.layers.length; i++) {
-        const layer = paper.project.layers[i];
-        for (let j = 0; j < layer.children.length; j++) {
-            const child = layer.children[j];
-            // only give guides
-            if (!child.guide) {
-                continue;
-            }
-            allItems.push(child);
-        }
-    }
-    return allItems;
-};
-
-const getExportRectGuide = function () {
-    const guides = getAllGuides();
-    for (let i = 0; i < guides.length; i++){
-        if (guides[i].data && guides[i].data.isExportRect) {
-            return guides[i];
-        }
-    }
-};
-
-
 const removeHelperItems = function () {
     removePaperItemsByDataTags(['isHelperItem']);
 };
-
 
 const removeAllGuides = function () {
     removePaperItemsByTags(['guide']);
 };
 
-
-const removeExportRectGuide = function () {
-    removePaperItemsByDataTags(['isExportRect']);
-};
-
-
 export {
     hoverItem,
     hoverBounds,
     rectSelect,
-    line,
-    crossPivot,
-    rotPivot,
-    label,
     removeAllGuides,
     removeHelperItems,
-    removeExportRectGuide,
-    getAllGuides,
-    getExportRectGuide,
     getGuideColor,
     setDefaultGuideStyle
 };

@@ -28,7 +28,6 @@ const getPaperItemsByTags = function (tags) {
     return foundItems;
 };
 
-
 const removePaperItemsByDataTags = function (tags) {
     const allItems = getAllPaperItems(true);
     for (const item of allItems) {
@@ -40,7 +39,6 @@ const removePaperItemsByDataTags = function (tags) {
     }
 };
 
-
 const removePaperItemsByTags = function (tags) {
     const allItems = getAllPaperItems(true);
     for (const item of allItems) {
@@ -51,7 +49,6 @@ const removePaperItemsByTags = function (tags) {
         }
     }
 };
-
 
 export {
     getAllPaperItems,
