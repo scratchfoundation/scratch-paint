@@ -79,7 +79,8 @@ BrushMode.propTypes = {
     changeBrushSize: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string.isRequired,
-        strokeColor: PropTypes.string.isRequired
+        strokeColor: PropTypes.string.isRequired,
+        strokeWidth: PropTypes.number.isRequired
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isBrushModeActive: PropTypes.bool.isRequired,

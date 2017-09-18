@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import LineMode from '../containers/line-mode.jsx';
 import FillColorIndicatorComponent from '../containers/fill-color-indicator.jsx';
 import StrokeColorIndicatorComponent from '../containers/stroke-color-indicator.jsx';
+import StrokeWidthIndicatorComponent from '../containers/stroke-width-indicator.jsx';
 
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import BufferedInputHOC from './forms/buffered-input-hoc.jsx';
@@ -101,6 +102,8 @@ class PaintEditorComponent extends React.Component {
                     <FillColorIndicatorComponent />
                     {/* stroke */}
                     <StrokeColorIndicatorComponent />
+                    {/* stroke width */}
+                    <StrokeWidthIndicatorComponent />
 
                     <div className={styles.inputGroup}>
                         Mode tools
