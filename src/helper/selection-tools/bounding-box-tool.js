@@ -100,6 +100,7 @@ class BoundingBoxTool {
         this.setSelectionBounds();
     }
     setSelectionBounds () {
+        debugger;
         this.removeBoundsPath();
         
         const items = getSelectedItems();
@@ -180,6 +181,7 @@ class BoundingBoxTool {
         }
     }
     removeBoundsPath () {
+        debugger;
         removeHelperItems();
         this.boundsPath = null;
         this.boundsScaleHandles.length = 0;

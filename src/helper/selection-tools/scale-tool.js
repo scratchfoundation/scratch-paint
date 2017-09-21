@@ -113,7 +113,7 @@ class ScaleTool {
             }
         }
     }
-    onMouseUp () {
+    onMouseUp (event) {
         this.pivot = null;
         this.origPivot = null;
         this.corner = null;

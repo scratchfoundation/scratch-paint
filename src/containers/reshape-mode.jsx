@@ -7,74 +7,19 @@ import Modes from '../modes/modes';
 import {changeMode} from '../reducers/modes';
 import {setHoveredItem, clearHoveredItem} from '../reducers/hover';
 
-import {getHoveredItem} from '../helper/hover';
-import {rectSelect} from '../helper/guides';
-import {processRectangularSelection} from '../helper/selection';
-
+import {selectSubItems} from '../helper/selection';
+import ReshapeTool from '../helper/selection-tools/reshape-tool';
 import ReshapeModeComponent from '../components/reshape-mode.jsx';
-import BoundingBoxTool from '../helper/bounding-box/bounding-box-tool';
 import paper from 'paper';
 
+
 class ReshapeMode extends React.Component {
-    static get TOLERANCE () {
-        return 8;
-    }
     constructor (props) {
         super(props);
         bindAll(this, [
             'activateTool',
-            'deactivateTool',
-            'getHitOptions'
+            'deactivateTool'
         ]);
-
-        this._hitOptionsSelected = {
-            match: function (item) {
-                if (!item.item || !item.item.selected) return;
-                if (item.type === 'handle-out' || item.type === 'handle-in') {
-                    // Only hit test against handles that are visible, that is,
-                    // their segment is selected
-                    if (!item.segment.selected) {
-                        return false;
-                    }
-                    // If the entire shape is selected, handles are hidden
-                    if (item.item.fullySelected) {
-                        return false;
-                    }
-                }
-                return true;
-            },
-            segments: true,
-            stroke: true,
-            curves: true,
-            handles: true,
-            fill: true,
-            guide: false
-        };
-        this._hitOptions = {
-            match: function (item) {
-                if (item.type === 'handle-out' || item.type === 'handle-in') {
-                    // Only hit test against handles that are visible, that is,
-                    // their segment is selected
-                    if (!item.segment.selected) {
-                        return false;
-                    }
-                    // If the entire shape is selected, handles are hidden
-                    if (item.item.fullySelected) {
-                        return false;
-                    }
-                }
-                return true;
-            },
-            segments: true,
-            stroke: true,
-            curves: true,
-            handles: true,
-            fill: true,
-            guide: false
-        };
-        this.boundingBoxTool = new BoundingBoxTool();
-        this.selectionBoxMode = false;
-        this.selectionRect = null;
     }
     componentDidMount () {
         if (this.props.isReshapeModeActive) {
@@ -82,6 +27,10 @@ class ReshapeMode extends React.Component {
         }
     }
     componentWillReceiveProps (nextProps) {
+        if (this.tool && nextProps.hoveredItem !== this.props.hoveredItem) {
+            this.tool.setPrevHoveredItem(nextProps.hoveredItem);
+        }
+
         if (nextProps.isReshapeModeActive && !this.props.isReshapeModeActive) {
             this.activateTool();
         } else if (!nextProps.isReshapeModeActive && this.props.isReshapeModeActive) {
@@ -91,72 +40,12 @@ class ReshapeMode extends React.Component {
     shouldComponentUpdate () {
         return false; // Static component, for now
     }
-    getHitOptions (preselectedOnly) {
-        this._hitOptions.tolerance = ReshapeMode.TOLERANCE / paper.view.zoom;
-        this._hitOptionsSelected.tolerance = ReshapeMode.TOLERANCE / paper.view.zoom;
-        return preselectedOnly ? this._hitOptionsSelected : this._hitOptions;
-    }
     activateTool () {
-        paper.settings.handleSize = 8;
-        this.boundingBoxTool.setSelectionBounds();
-        this.tool = new paper.Tool();
-
-        const reshapeMode = this;
-
-        this.tool.onMouseDown = function (event) {
-            if (event.event.button > 0) return; // only first mouse button
-
-            reshapeMode.props.clearHoveredItem();
-            if (!reshapeMode.boundingBoxTool
-                .onMouseDown(
-                    event,
-                    event.modifiers.alt,
-                    event.modifiers.shift,
-                    reshapeMode.getHitOptions(false /* preseelectedOnly */))) {
-                reshapeMode.selectionBoxMode = true;
-            }
-        };
-
-        this.tool.onMouseMove = function (event) {
-            const hoveredItem = getHoveredItem(event, reshapeMode.getHitOptions());
-            const oldHoveredItem = reshapeMode.props.hoveredItem;
-            if ((!hoveredItem && oldHoveredItem) || // There is no longer a hovered item
-                    (hoveredItem && !oldHoveredItem) || // There is now a hovered item
-                    (hoveredItem && oldHoveredItem && hoveredItem.id !== oldHoveredItem.id)) { // hovered item changed
-                reshapeMode.props.setHoveredItem(hoveredItem);
-            }
-        };
-
-        
-        this.tool.onMouseDrag = function (event) {
-            if (event.event.button > 0) return; // only first mouse button
-
-            if (reshapeMode.selectionBoxMode) {
-                reshapeMode.selectionRect = rectSelect(event);
-                // Remove this rect on the next drag and up event
-                reshapeMode.selectionRect.removeOnDrag();
-            } else {
-                reshapeMode.boundingBoxTool.onMouseDrag(event);
-            }
-        };
-
-        this.tool.onMouseUp = function (event) {
-            if (event.event.button > 0) return; // only first mouse button
-
-            if (reshapeMode.selectionBoxMode) {
-                if (reshapeMode.selectionRect) {
-                    processRectangularSelection(event, reshapeMode.selectionRect, Modes.RESHAPE);
-                    reshapeMode.selectionRect.remove();
-                }
-                reshapeMode.boundingBoxTool.setSelectionBounds();
-            } else {
-                reshapeMode.boundingBoxTool.onMouseUp(event);
-                reshapeMode.props.onUpdateSvg();
-            }
-            reshapeMode.selectionBoxMode = false;
-            reshapeMode.selectionRect = null;
-        };
+        selectSubItems();
+        this.tool = new ReshapeTool(this.props.setHoveredItem, this.props.clearHoveredItem);
+        this.tool.setPrevHoveredItem(this.props.hoveredItem);
         this.tool.activate();
+        paper.settings.handleSize = 8;
     }
     deactivateTool () {
         paper.settings.handleSize = 0;

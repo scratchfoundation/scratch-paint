@@ -3,7 +3,7 @@ import Modes from '../modes/modes';
 
 import {getAllPaperItems} from './helper';
 import {getItemsGroup, isGroup} from './group';
-import {getRootItem, isBoundsItem, isCompoundPathItem, isPathItem, isPGTextItem} from './item';
+import {getRootItem, isGroupItem, isCompoundPathItem, isPathItem, isPGTextItem} from './item';
 import {getItemsCompoundPath, isCompoundPath, isCompoundPathChild} from './compound-path';
 
 const getAllSelectableItems = function () {
@@ -54,12 +54,12 @@ const setItemSelection = function (item, state) {
     const parentGroup = getItemsGroup(item);
     const itemsCompoundPath = getItemsCompoundPath(item);
     
-    // if selection is in a group, select group not individual items
+    // if selection is in a group, select group
     if (parentGroup) {
         // do it recursive
         setItemSelection(parentGroup, state);
     } else if (itemsCompoundPath) {
-        setItemSelection(itemsCompoundPath, state);
+        setGroupSelection(itemsCompoundPath, state);
     } else {
         if (item.data && item.data.noSelect) {
             return;
@@ -122,8 +122,8 @@ const getSelectedItems = function (recursive) {
     return itemsAndGroups;
 };
 
-const deleteItemSelection = function () {
-    const items = getSelectedItems();
+const deleteItemSelection = function (recursive) {
+    const items = getSelectedItems(recursive);
     for (let i = 0; i < items.length; i++) {
         items[i].remove();
     }
@@ -134,11 +134,11 @@ const deleteItemSelection = function () {
     // pg.undo.snapshot('deleteItemSelection');
 };
 
-const removeSelectedSegments = function () {
+const removeSelectedSegments = function (recursive) {
     // @todo add back undo
     // pg.undo.snapshot('removeSelectedSegments');
     
-    const items = getSelectedItems();
+    const items = getSelectedItems(recursive);
     const segmentsToRemove = [];
     
     for (let i = 0; i < items.length; i++) {
@@ -163,8 +163,8 @@ const removeSelectedSegments = function () {
 const deleteSelection = function (mode) {
     if (mode === Modes.RESHAPE) {
         // If there are points selected remove them. If not delete the item selected.
-        if (!removeSelectedSegments()) {
-            deleteItemSelection();
+        if (!removeSelectedSegments(true /* recursive */)) {
+            deleteItemSelection(true /* recursive */);
         }
     } else {
         deleteItemSelection();
@@ -286,8 +286,8 @@ const deleteSegmentSelection = function () {
     // pg.undo.snapshot('deleteSegmentSelection');
 };
 
-const cloneSelection = function () {
-    const selectedItems = getSelectedItems();
+const cloneSelection = function (recursive) {
+    const selectedItems = getSelectedItems(recursive);
     for (let i = 0; i < selectedItems.length; i++) {
         const item = selectedItems[i];
         item.clone();
@@ -311,34 +311,34 @@ const getSelectedPaths = function () {
     return paths;
 };
 
-const checkBoundsItem = function (selectionRect, item, event) {
-    const itemBounds = new paper.Path([
-        item.localToGlobal(item.internalBounds.topLeft),
-        item.localToGlobal(item.internalBounds.topRight),
-        item.localToGlobal(item.internalBounds.bottomRight),
-        item.localToGlobal(item.internalBounds.bottomLeft)
-    ]);
-    itemBounds.closed = true;
-    itemBounds.guide = true;
+// const checkBoundsItem = function (selectionRect, item, event) {
+//     const itemBounds = new paper.Path([
+//         item.localToGlobal(item.internalBounds.topLeft),
+//         item.localToGlobal(item.internalBounds.topRight),
+//         item.localToGlobal(item.internalBounds.bottomRight),
+//         item.localToGlobal(item.internalBounds.bottomLeft)
+//     ]);
+//     itemBounds.closed = true;
+//     itemBounds.guide = true;
 
-    for (let i = 0; i < itemBounds.segments.length; i++) {
-        const seg = itemBounds.segments[i];
-        if (selectionRect.contains(seg.point) ||
-            (i === 0 && selectionRect.getIntersections(itemBounds).length > 0)) {
-            if (event.modifiers.shift && item.selected) {
-                setItemSelection(item, false);
+//     for (let i = 0; i < itemBounds.segments.length; i++) {
+//         const seg = itemBounds.segments[i];
+//         if (selectionRect.contains(seg.point) ||
+//             (i === 0 && selectionRect.getIntersections(itemBounds).length > 0)) {
+//             if (event.modifiers.shift && item.selected) {
+//                 setItemSelection(item, false);
 
-            } else {
-                setItemSelection(item, true);
-            }
-            itemBounds.remove();
-            return true;
+//             } else {
+//                 setItemSelection(item, true);
+//             }
+//             itemBounds.remove();
+//             return true;
             
-        }
-    }
+//         }
+//     }
 
-    itemBounds.remove();
-};
+//     itemBounds.remove();
+// };
 
 const handleRectangularSelectionItems = function (item, event, rect, mode) {
     if (isPathItem(item)) {
@@ -402,10 +402,10 @@ const handleRectangularSelectionItems = function (item, event, rect, mode) {
         }
         // @todo: Update toolbar state on change
 
-    } else if (isBoundsItem(item)) {
-        if (checkBoundsItem(rect, item, event)) {
-            return false;
-        }
+    // } else if (isBoundsItem(item)) {
+    //     if (checkBoundsItem(rect, item, event)) {
+    //         return false;
+    //     }
     }
     return true;
 };
@@ -448,17 +448,29 @@ const processRectangularSelection = function (event, rect, mode) {
 
 const selectRootItem = function () {
     // when switching to the select tool while having a child object of a
-    // compound path selected, deselect the child and select the compound path
-    // instead. (otherwise the compound path breaks because of scale-grouping)
-    const items = getSelectedItems();
+    // compound path or group selected, select the whole compound path or
+    // group instead. (otherwise the compound path breaks because of
+    // scale-grouping)
+    const items = getSelectedItems(true /* recursive */);
     for (const item of items) {
         if (isCompoundPathChild(item)) {
             const cp = getItemsCompoundPath(item);
-            setItemSelection(item, false);
             setItemSelection(cp, true);
+        }
+        const rootItem = getRootItem(item);
+        if (item !== rootItem) {
+            setItemSelection(item, false);
+            setItemSelection(rootItem, true);
         }
     }
 };
+
+const selectSubItems = function () {
+    // when switching to the reshape tool while having a compound path or group
+    // selected, deselect the group and select the children instead.
+    // TODO
+};
+
 
 const shouldShowIfSelection = function () {
     return getSelectedItems().length > 0;
@@ -488,6 +500,7 @@ export {
     removeSelectedSegments,
     processRectangularSelection,
     selectRootItem,
+    selectSubItems,
     shouldShowIfSelection,
     shouldShowIfSelectionRecursive,
     shouldShowSelectAll

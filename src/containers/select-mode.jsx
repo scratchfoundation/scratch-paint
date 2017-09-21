@@ -12,7 +12,8 @@ import {rectSelect} from '../helper/guides';
 import {selectRootItem, processRectangularSelection} from '../helper/selection';
 
 import SelectModeComponent from '../components/select-mode.jsx';
-import BoundingBoxTool from '../helper/bounding-box/bounding-box-tool';
+import BoundingBoxTool from '../helper/selection-tools/bounding-box-tool';
+import SelectionBoxTool from '../helper/selection-tools/selection-box-tool';
 import paper from 'paper';
 
 class SelectMode extends React.Component {
@@ -34,8 +35,8 @@ class SelectMode extends React.Component {
             guide: false
         };
         this.boundingBoxTool = new BoundingBoxTool();
+        this.selectionBoxTool = new SelectionBoxTool();
         this.selectionBoxMode = false;
-        this.selectionRect = null;
     }
     componentDidMount () {
         if (this.props.isSelectModeActive) {
@@ -62,6 +63,7 @@ class SelectMode extends React.Component {
         return this._hitOptions;
     }
     activateTool () {
+        debugger;
         selectRootItem();
         this.boundingBoxTool.setSelectionBounds();
         this.tool = new paper.Tool();
@@ -69,17 +71,18 @@ class SelectMode extends React.Component {
         // Define these to sate linter
         const selectMode = this;
 
-        this.tool.onMouseDown = function (event) {
+        this.tool.onMouseDown = event => {
             if (event.event.button > 0) return; // only first mouse button
 
-            selectMode.props.clearHoveredItem();
-            if (!selectMode.boundingBoxTool
+            this.props.clearHoveredItem();
+            if (!this.boundingBoxTool
                 .onMouseDown(
                     event,
                     event.modifiers.alt,
                     event.modifiers.shift,
-                    selectMode.getHitOptions(false /* preseelectedOnly */))) {
-                selectMode.selectionBoxMode = true;
+                    this.getHitOptions(false /* preseelectedOnly */))) {
+                this.selectionBoxMode = true;
+                this.selectionBoxTool.onMouseDown(event.modifiers.shift);
             }
         };
 
@@ -125,6 +128,7 @@ class SelectMode extends React.Component {
         this.tool.activate();
     }
     deactivateTool () {
+        debugger;
         this.props.clearHoveredItem();
         this.boundingBoxTool.removeBoundsPath();
         this.tool.remove();
