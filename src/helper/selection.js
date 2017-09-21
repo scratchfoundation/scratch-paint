@@ -34,37 +34,40 @@ const selectItemSegments = function (item, state) {
     }
 };
 
-const setGroupSelection = function (root, selected) {
-    // fully selected segments need to be unselected first
-    root.fullySelected = false;
-    // then the item can be normally selected
+const setGroupSelection = function (root, selected, fullySelected) {
+    root.fullySelected = fullySelected;
     root.selected = selected;
     // select children of compound-path or group
     if (isCompoundPath(root) || isGroup(root)) {
         const children = root.children;
         if (children) {
-            for (let i = 0; i < children.length; i++) {
-                children[i].selected = selected;
+            for (const child of children) {
+                if (isGroup(child)) {
+                    setGroupSelection(child, selected, fullySelected);
+                } else {
+                    child.fullySelected = fullySelected;
+                    child.selected = selected;
+                }
             }
         }
     }
 };
 
-const setItemSelection = function (item, state) {
+const setItemSelection = function (item, state, fullySelected) {
     const parentGroup = getItemsGroup(item);
     const itemsCompoundPath = getItemsCompoundPath(item);
     
     // if selection is in a group, select group not individual items
     if (parentGroup) {
         // do it recursive
-        setItemSelection(parentGroup, state);
+        setItemSelection(parentGroup, state, fullySelected);
     } else if (itemsCompoundPath) {
-        setItemSelection(itemsCompoundPath, state);
+        setGroupSelection(itemsCompoundPath, state, fullySelected);
     } else {
         if (item.data && item.data.noSelect) {
             return;
         }
-        setGroupSelection(item, state);
+        setGroupSelection(item, state, fullySelected);
     }
     // @todo: Update toolbar state on change
     
@@ -355,11 +358,9 @@ const handleRectangularSelectionItems = function (item, event, rect, mode) {
                         seg.selected = true;
                     }
                     segmentMode = true;
-
                 } else {
                     if (event.modifiers.shift && item.selected) {
                         setItemSelection(item, false);
-
                     } else {
                         setItemSelection(item, true);
                     }
@@ -371,7 +372,7 @@ const handleRectangularSelectionItems = function (item, event, rect, mode) {
         // second round checks for path intersections
         const intersections = item.getIntersections(rect);
         if (intersections.length > 0 && !segmentMode) {
-            // if in detail select mode, select the curves that intersect
+            // if in reshape mode, select the curves that intersect
             // with the selectionRect
             if (mode === Modes.RESHAPE) {
                 for (let k = 0; k < intersections.length; k++) {
@@ -389,7 +390,6 @@ const handleRectangularSelectionItems = function (item, event, rect, mode) {
                         curve.selected = true;
                     }
                 }
-
             } else {
                 if (event.modifiers.shift && item.selected) {
                     setItemSelection(item, false);
@@ -417,9 +417,8 @@ const rectangularSelectionGroupLoop = function (group, rect, root, event, mode) 
         
         if (isGroup(child) || isCompoundPathItem(child)) {
             rectangularSelectionGroupLoop(child, rect, root, event, mode);
-            
-        } else if (!handleRectangularSelectionItems(child, event, rect, mode)) {
-            return false;
+        } else {
+            handleRectangularSelectionItems(child, event, rect, mode);
         }
     }
     return true;
@@ -428,20 +427,16 @@ const rectangularSelectionGroupLoop = function (group, rect, root, event, mode) 
 const processRectangularSelection = function (event, rect, mode) {
     const allItems = getAllSelectableItems();
     
-    itemLoop:
     for (let i = 0; i < allItems.length; i++) {
         const item = allItems[i];
         if (mode === Modes.RESHAPE && isPGTextItem(getRootItem(item))) {
-            continue itemLoop;
+            continue;
         }
         // check for item segment points inside selectionRect
         if (isGroup(item) || isCompoundPathItem(item)) {
-            if (!rectangularSelectionGroupLoop(item, rect, item, event, mode)) {
-                continue itemLoop;
-            }
-            
-        } else if (!handleRectangularSelectionItems(item, event, rect, mode)) {
-            continue itemLoop;
+            rectangularSelectionGroupLoop(item, rect, item, event, mode);
+        } else {
+            handleRectangularSelectionItems(item, event, rect, mode);
         }
     }
 };
@@ -454,8 +449,11 @@ const selectRootItem = function () {
     for (const item of items) {
         if (isCompoundPathChild(item)) {
             const cp = getItemsCompoundPath(item);
-            setItemSelection(item, false);
-            setItemSelection(cp, true);
+            setItemSelection(cp, true, true /* fullySelected */);
+        }
+        const rootItem = getRootItem(item);
+        if (item !== rootItem) {
+            setItemSelection(rootItem, true, true /* fullySelected */);
         }
     }
 };
