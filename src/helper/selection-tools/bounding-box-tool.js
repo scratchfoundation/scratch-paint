@@ -24,7 +24,7 @@ const Modes = keyMirror({
 });
 
 /**
- * A paper.Tool that handles transforming the selection and drawing a bounding box with handles.
+ * Tool that handles transforming the selection and drawing a bounding box with handles.
  * On mouse down, the type of function (move, scale, rotate) is determined based on what is clicked
  * (scale handle, rotate handle, the object itself). This determines the mode of the tool, which then
  * delegates actions to the MoveTool, RotateTool or ScaleTool accordingly.

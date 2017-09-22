@@ -1,5 +1,9 @@
 import paper from 'paper';
 
+/**
+ * Tool to handle scaling items by pulling on the handles around the edges of the bounding
+ * box when in the bounding box tool.
+ */
 class ScaleTool {
     /**
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
@@ -34,9 +38,9 @@ class ScaleTool {
         this.boundsPath = boundsPath;
         this.boundsScaleHandles = boundsScaleHandles;
         this.boundsRotHandles = boundsRotHandles;
-        this.pivot = this.boundsPath.bounds[this.getOpposingRectCornerNameByIndex(index)].clone();
-        this.origPivot = this.boundsPath.bounds[this.getOpposingRectCornerNameByIndex(index)].clone();
-        this.corner = this.boundsPath.bounds[this.getRectCornerNameByIndex(index)].clone();
+        this.pivot = this.boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
+        this.origPivot = this.boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
+        this.corner = this.boundsPath.bounds[this._getRectCornerNameByIndex(index)].clone();
         this.origSize = this.corner.subtract(this.pivot);
         this.origCenter = this.boundsPath.bounds.center;
         for (const item of selectedItems) {
@@ -105,14 +109,14 @@ class ScaleTool {
         
         for (let i = 0; i < this.boundsScaleHandles.length; i++) {
             const handle = this.boundsScaleHandles[i];
-            handle.position = this.itemGroup.bounds[this.getRectCornerNameByIndex(i)];
+            handle.position = this.itemGroup.bounds[this._getRectCornerNameByIndex(i)];
             handle.bringToFront();
         }
         
         for (let i = 0; i < this.boundsRotHandles.length; i++) {
             const handle = this.boundsRotHandles[i];
             if (handle) {
-                handle.position = this.itemGroup.bounds[this.getRectCornerNameByIndex(i)] + handle.data.offset;
+                handle.position = this.itemGroup.bounds[this._getRectCornerNameByIndex(i)] + handle.data.offset;
                 handle.bringToFront();
             }
         }
@@ -156,7 +160,7 @@ class ScaleTool {
         // @todo add back undo
         this.onUpdateSvg();
     }
-    getRectCornerNameByIndex (index) {
+    _getRectCornerNameByIndex (index) {
         switch (index) {
         case 0:
             return 'bottomLeft';
@@ -176,7 +180,7 @@ class ScaleTool {
             return 'bottomCenter';
         }
     }
-    getOpposingRectCornerNameByIndex (index) {
+    _getOpposingRectCornerNameByIndex (index) {
         switch (index) {
         case 0:
             return 'topRight';

@@ -3,6 +3,9 @@ import {isCompoundPathItem, getRootItem} from '../item';
 import {snapDeltaToAngle} from '../math';
 import {clearSelection, cloneSelection, getSelectedItems, setItemSelection} from '../selection';
 
+/**
+ * Tool to handle dragging an item to reposition it in a selection mode.
+ */
 class MoveTool {
     /**
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
