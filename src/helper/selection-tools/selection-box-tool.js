@@ -1,4 +1,3 @@
-import Modes from '../../modes/modes';
 import {rectSelect} from '../guides';
 import {clearSelection, processRectangularSelection} from '../selection';
 
@@ -22,7 +21,7 @@ class SelectionBoxTool {
     }
     onMouseUp (event) {
         if (this.selectionRect) {
-            processRectangularSelection(event, this.selectionRect, Modes.RESHAPE);
+            processRectangularSelection(event, this.selectionRect, this.mode);
             this.selectionRect.remove();
             this.selectionRect = null;
         }
