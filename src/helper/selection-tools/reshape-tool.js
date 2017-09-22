@@ -197,7 +197,6 @@ class ReshapeTool extends paper.Tool {
         this.setHoveredItem = null;
         this.clearHoveredItem = null;
         this.onUpdateSvg = null;
-        this.prevHoveredItemId = null;
         this.lastEvent = null;
     }
 }
