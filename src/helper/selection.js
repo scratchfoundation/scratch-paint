@@ -366,7 +366,7 @@ const checkBoundsItem = function (selectionRect, item, event) {
     itemBounds.remove();
 };
 
-const handleRectangularSelectionItems = function (item, event, rect, mode) {
+const _handleRectangularSelectionItems = function (item, event, rect, mode, root) {
     if (isPathItem(item)) {
         let segmentMode = false;
         
@@ -383,9 +383,9 @@ const handleRectangularSelectionItems = function (item, event, rect, mode) {
                     segmentMode = true;
                 } else {
                     if (event.modifiers.shift && item.selected) {
-                        setItemSelection(item, false);
+                        setItemSelection(root, false);
                     } else {
-                        setItemSelection(item, true);
+                        setItemSelection(root, true, true /* fullySelected */);
                     }
                     return false;
                 }
@@ -441,7 +441,7 @@ const _rectangularSelectionGroupLoop = function (group, rect, root, event, mode)
         if (isGroup(child) || isCompoundPathItem(child)) {
             _rectangularSelectionGroupLoop(child, rect, root, event, mode);
         } else {
-            handleRectangularSelectionItems(child, event, rect, mode);
+            _handleRectangularSelectionItems(child, event, rect, mode, root);
         }
     }
     return true;
@@ -464,14 +464,10 @@ const processRectangularSelection = function (event, rect, mode) {
             continue;
         }
         if (isGroup(item) || isCompoundPathItem(item)) {
-            // Drill into the group in reshape mode; check for item segment points inside
-            if (mode === Modes.RESHAPE) {
-                _rectangularSelectionGroupLoop(item, rect, item, event, mode);
-            } else {
-                setGroupSelection(item, true, true /* fullySelected */);
-            }
+            // check for item segment points inside
+            _rectangularSelectionGroupLoop(item, rect, item, event, mode);
         } else {
-            handleRectangularSelectionItems(item, event, rect, mode);
+            _handleRectangularSelectionItems(item, event, rect, mode, item);
         }
     }
 };
