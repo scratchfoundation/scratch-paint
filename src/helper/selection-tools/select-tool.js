@@ -6,10 +6,23 @@ import BoundingBoxTool from './bounding-box-tool';
 import SelectionBoxTool from './selection-box-tool';
 import paper from 'paper';
 
+/**
+ * paper.Tool that handles select mode. This is made up of 2 subtools.
+ * - The selection box tool is active when the user clicks an empty space and drags.
+ *   It selects all items in the rectangle.
+ * - The bounding box tool is active if the user clicks on a non-empty space. It handles
+ *   reshaping the item that was clicked.
+ */
 class SelectTool extends paper.Tool {
+    /** The distance within which mouse events count as a hit against an item */
     static get TOLERANCE () {
         return 6;
     }
+    /**
+     * @param {function} setHoveredItem Callback to set the hovered item
+     * @param {function} clearHoveredItem Callback to clear the hovered item
+     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     */
     constructor (setHoveredItem, clearHoveredItem, onUpdateSvg) {
         super();
         this.setHoveredItem = setHoveredItem;
@@ -18,13 +31,6 @@ class SelectTool extends paper.Tool {
         this.boundingBoxTool = new BoundingBoxTool(onUpdateSvg);
         this.selectionBoxTool = new SelectionBoxTool(Modes.SELECT);
         this.selectionBoxMode = false;
-        this._hitOptions = {
-            segments: true,
-            stroke: true,
-            curves: true,
-            fill: true,
-            guide: false
-        };
         
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -37,21 +43,42 @@ class SelectTool extends paper.Tool {
         selectRootItem();
         this.boundingBoxTool.setSelectionBounds();
     }
+    /**
+     * To be called when the hovered item changes. When the select tool hovers over a
+     * new item, it compares against this to see if a hover item change event needs to
+     * be fired.
+     * @param {paper.Item} prevHoveredItem The highlight that indicates the mouse is over
+     *     a given item currently
+     */
     setPrevHoveredItem (prevHoveredItem) {
         this.prevHoveredItem = prevHoveredItem;
     }
+    /**
+     * Returns the hit options to use when conducting hit tests.
+     * @param {boolean} preselectedOnly True if we should only return results that are already
+     *     selected.
+     * @return {object} See paper.Item.hitTest for definition of options
+     */
     getHitOptions (preselectedOnly) {
-        this._hitOptions.tolerance = SelectTool.TOLERANCE / paper.view.zoom;
+        // Tolerance needs to be scaled when the view is zoomed in in order to represent the same
+        // distance for the user to move the mouse.
+        const hitOptions = {
+            segments: true,
+            stroke: true,
+            curves: true,
+            fill: true,
+            guide: false,
+            tolerance: SelectTool.TOLERANCE / paper.view.zoom
+        };
         if (preselectedOnly) {
-            this._hitOptions.selected = true;
-        } else {
-            delete this._hitOptions.selected;
+            hitOptions.selected = true;
         }
-        return this._hitOptions;
+        return hitOptions;
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
 
+        // If bounding box tool does not find an item that was hit, use selection box tool.
         this.clearHoveredItem();
         if (!this.boundingBoxTool
             .onMouseDown(

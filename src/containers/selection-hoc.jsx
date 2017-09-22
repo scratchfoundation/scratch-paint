@@ -3,7 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import paper from 'paper';
 
-const SelectionHOV = function (WrappedComponent) {
+const SelectionHOC = function (WrappedComponent) {
     class SelectionComponent extends React.Component {
         componentDidMount () {
             if (this.props.hoveredItem) {
@@ -43,4 +43,4 @@ const SelectionHOV = function (WrappedComponent) {
     )(SelectionComponent);
 };
 
-export default SelectionHOV;
+export default SelectionHOC;

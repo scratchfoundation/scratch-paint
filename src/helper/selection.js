@@ -1,10 +1,29 @@
 import paper from 'paper';
 import Modes from '../modes/modes';
 
-import {getAllPaperItems} from './helper';
 import {getItemsGroup, isGroup} from './group';
 import {getRootItem, isBoundsItem, isCompoundPathItem, isPathItem, isPGTextItem} from './item';
 import {getItemsCompoundPath, isCompoundPath, isCompoundPathChild} from './compound-path';
+
+/**
+ * @param {boolean} includeGuides True if guide layer items like the bounding box should
+ *     be included in the returned items.
+ * @return {Array<paper.item>} all top-level (direct descendants of a paper.Layer) items
+ */
+const getAllPaperItems = function (includeGuides) {
+    includeGuides = includeGuides || false;
+    const allItems = [];
+    for (const layer of paper.project.layers) {
+        for (const child of layer.children) {
+            // don't give guides back
+            if (!includeGuides && child.guide) {
+                continue;
+            }
+            allItems.push(child);
+        }
+    }
+    return allItems;
+};
 
 /**
  * @return {Array<paper.item>} all top-level (direct descendants of a paper.Layer) items
@@ -489,6 +508,7 @@ const shouldShowSelectAll = function () {
 };
 
 export {
+    getAllPaperItems,
     selectAllItems,
     selectAllSegments,
     clearSelection,

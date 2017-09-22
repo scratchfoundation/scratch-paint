@@ -1,5 +1,8 @@
 import paper from 'paper';
 
+/**
+ * Tool to handle rotation when dragging the rotation handle in the bounding box tool.
+ */
 class RotateTool {
     /**
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes

@@ -1,6 +1,7 @@
 import {rectSelect} from '../guides';
 import {clearSelection, processRectangularSelection} from '../selection';
 
+/** Tool to handle drag selection. A dotted line box appears and everything enclosed is selected. */
 class SelectionBoxTool {
     constructor (mode) {
         this.selectionRect = null;
