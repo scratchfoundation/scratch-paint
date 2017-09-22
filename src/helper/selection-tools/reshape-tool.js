@@ -31,10 +31,9 @@ class ReshapeTool extends paper.Tool {
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
         this.onUpdateSvg = onUpdateSvg;
-        this.prevHoveredItem = null;
+        this.prevHoveredItemId = null;
         this.lastEvent = null;
         this.mode = ReshapeModes.SELECTION_BOX;
-        this.selectionRect = null;
         this._modeMap = {};
         this._modeMap[ReshapeModes.FILL] = new MoveTool(onUpdateSvg);
         this._modeMap[ReshapeModes.POINT] = new PointTool(onUpdateSvg);
@@ -86,8 +85,8 @@ class ReshapeTool extends paper.Tool {
         }
         return hitOptions;
     }
-    setPrevHoveredItem (prevHoveredItem) {
-        this.prevHoveredItem = prevHoveredItem;
+    setPrevHoveredItemId (prevHoveredItemId) {
+        this.prevHoveredItemId = prevHoveredItemId;
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
@@ -169,11 +168,11 @@ class ReshapeTool extends paper.Tool {
     }
     handleMouseMove (event) {
         const hoveredItem = getHoveredItem(event, this.getHitOptions(), true /* subselect */);
-        if ((!hoveredItem && this.prevHoveredItem) || // There is no longer a hovered item
-                (hoveredItem && !this.prevHoveredItem) || // There is now a hovered item
-                (hoveredItem && this.prevHoveredItem &&
-                    hoveredItem.id !== this.prevHoveredItem.id)) { // hovered item changed
-            this.setHoveredItem(hoveredItem);
+        if ((!hoveredItem && this.prevHoveredItemId) || // There is no longer a hovered item
+                (hoveredItem && !this.prevHoveredItemId) || // There is now a hovered item
+                (hoveredItem && this.prevHoveredItemId &&
+                    hoveredItem.id !== this.prevHoveredItemId)) { // hovered item changed
+            this.setHoveredItem(hoveredItem ? hoveredItem.id : null);
         }
     }
     handleMouseDrag (event) {
@@ -192,9 +191,14 @@ class ReshapeTool extends paper.Tool {
             this.onUpdateSvg();
         }
     }
-    deactivateTool() {
+    deactivateTool () {
         paper.settings.handleSize = 0;
         this.clearHoveredItem();
+        this.setHoveredItem = null;
+        this.clearHoveredItem = null;
+        this.onUpdateSvg = null;
+        this.prevHoveredItemId = null;
+        this.lastEvent = null;
     }
 }
 

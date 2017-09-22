@@ -26,8 +26,8 @@ class ReshapeMode extends React.Component {
         }
     }
     componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.hoveredItem !== this.props.hoveredItem) {
-            this.tool.setPrevHoveredItem(nextProps.hoveredItem);
+        if (this.tool && nextProps.hoveredItemId !== this.props.hoveredItemId) {
+            this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
         }
 
         if (nextProps.isReshapeModeActive && !this.props.isReshapeModeActive) {
@@ -41,7 +41,7 @@ class ReshapeMode extends React.Component {
     }
     activateTool () {
         this.tool = new ReshapeTool(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.onUpdateSvg);
-        this.tool.setPrevHoveredItem(this.props.hoveredItem);
+        this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
         this.tool.activate();
     }
     deactivateTool () {
@@ -60,7 +60,7 @@ class ReshapeMode extends React.Component {
 ReshapeMode.propTypes = {
     clearHoveredItem: PropTypes.func.isRequired,
     handleMouseDown: PropTypes.func.isRequired,
-    hoveredItem: PropTypes.instanceOf(paper.Item),
+    hoveredItemId: PropTypes.number,
     isReshapeModeActive: PropTypes.bool.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     setHoveredItem: PropTypes.func.isRequired
@@ -68,11 +68,11 @@ ReshapeMode.propTypes = {
 
 const mapStateToProps = state => ({
     isReshapeModeActive: state.scratchPaint.mode === Modes.RESHAPE,
-    hoveredItem: state.scratchPaint.hoveredItem
+    hoveredItemId: state.scratchPaint.hoveredItemId
 });
 const mapDispatchToProps = dispatch => ({
-    setHoveredItem: hoveredItem => {
-        dispatch(setHoveredItem(hoveredItem));
+    setHoveredItem: hoveredItemId => {
+        dispatch(setHoveredItem(hoveredItemId));
     },
     clearHoveredItem: () => {
         dispatch(clearHoveredItem());
