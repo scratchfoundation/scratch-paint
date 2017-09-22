@@ -1,5 +1,10 @@
 import paper from 'paper';
 
+/**
+ * @param {boolean} includeGuides True if guide layer items like the bounding box should
+ *     be included in the returned items.
+ * @return {Array<paper.item>} all top-level (direct descendants of a paper.Layer) items
+ */
 const getAllPaperItems = function (includeGuides) {
     includeGuides = includeGuides || false;
     const allItems = [];

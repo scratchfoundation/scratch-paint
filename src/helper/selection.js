@@ -6,6 +6,10 @@ import {getItemsGroup, isGroup} from './group';
 import {getRootItem, isCompoundPathItem, isBoundsItem, isPathItem, isPGTextItem} from './item';
 import {getItemsCompoundPath, isCompoundPath, isCompoundPathChild} from './compound-path';
 
+/**
+ * @return {Array<paper.item>} all top-level (direct descendants of a paper.Layer) items
+ *     that aren't guide items or helper items.
+ */
 const getAllSelectableItems = function () {
     const allItems = getAllPaperItems();
     const selectables = [];
@@ -411,12 +415,12 @@ const handleRectangularSelectionItems = function (item, event, rect, mode) {
 };
 
 // if the rectangular selection found a group, drill into it recursively
-const rectangularSelectionGroupLoop = function (group, rect, root, event, mode) {
+const _rectangularSelectionGroupLoop = function (group, rect, root, event, mode) {
     for (let i = 0; i < group.children.length; i++) {
         const child = group.children[i];
         
         if (isGroup(child) || isCompoundPathItem(child)) {
-            rectangularSelectionGroupLoop(child, rect, root, event, mode);
+            _rectangularSelectionGroupLoop(child, rect, root, event, mode);
         } else {
             handleRectangularSelectionItems(child, event, rect, mode);
         }
@@ -424,6 +428,14 @@ const rectangularSelectionGroupLoop = function (group, rect, root, event, mode) 
     return true;
 };
 
+/**
+ * Called after drawing a selection rectangle in a select mode. In reshape mode, this
+ * selects all control points and curves within the rectangle. In select mode, this
+ * selects all items and groups that intersect the rectangle
+ * @param {!MouseEvent} event The mouse event to draw the rectangle
+ * @param {!paper.Rect} rect The selection rectangle
+ * @param {Modes} mode The mode of the paint editor when drawing the rectangle
+ */
 const processRectangularSelection = function (event, rect, mode) {
     const allItems = getAllSelectableItems();
     
@@ -432,20 +444,25 @@ const processRectangularSelection = function (event, rect, mode) {
         if (mode === Modes.RESHAPE && isPGTextItem(getRootItem(item))) {
             continue;
         }
-        // check for item segment points inside selectionRect
         if (isGroup(item) || isCompoundPathItem(item)) {
-            rectangularSelectionGroupLoop(item, rect, item, event, mode);
+            // Drill into the group in reshape mode; check for item segment points inside
+            if (mode === Modes.RESHAPE) {
+                _rectangularSelectionGroupLoop(item, rect, item, event, mode);
+            } else {
+                setGroupSelection(item, true, true /* fullySelected */);
+            }
         } else {
             handleRectangularSelectionItems(item, event, rect, mode);
         }
     }
 };
 
+/**
+ * When switching to the select tool while having a child object of a
+ * compound path selected, deselect the child and select the compound path
+ * instead. (otherwise the compound path breaks because of scale-grouping)
+ */
 const selectRootItem = function () {
-    // when switching to the select tool while having a child object of a
-    // compound path or group selected, select the whole compound path or
-    // group instead. (otherwise the compound path breaks because of
-    // scale-grouping)
     const items = getSelectedItems(true /* recursive */);
     for (const item of items) {
         if (isCompoundPathChild(item)) {
