@@ -1,5 +1,5 @@
 import paper from 'paper';
-import {stylePath} from './style-path';
+import {stylePath} from '../../helper/style-path';
 
 /**
  * Segment brush functions to add as listeners on the mouse. Call them when the corresponding mouse event happens

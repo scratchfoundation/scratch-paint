@@ -2,7 +2,7 @@ import paper from 'paper';
 import log from '../../log/log';
 import BroadBrushHelper from './broad-brush-helper';
 import SegmentBrushHelper from './segment-brush-helper';
-import {styleCursorPreview} from './style-path';
+import {MIXED, styleCursorPreview} from '../../helper/style-path';
 import {clearSelection} from '../../helper/selection';
 
 /**
@@ -32,6 +32,11 @@ class Blobbiness {
         this.broadBrushHelper = new BroadBrushHelper();
         this.segmentBrushHelper = new SegmentBrushHelper();
         this.updateCallback = updateCallback;
+
+        // The following are stored to check whether these have changed and the cursor preview needs to be redrawn.
+        this.strokeColor = null;
+        this.brushSize = null;
+        this.fillColor = null;
     }
     
     /**
@@ -45,7 +50,15 @@ class Blobbiness {
      * @param {?number} options.strokeWidth Width of the brush outline.
      */
     setOptions (options) {
-        this.options = options;
+        const oldFillColor = this.options ? this.options.fillColor : null;
+        const oldStrokeColor = this.options ? this.options.strokeColor : null;
+        const oldStrokeWidth = this.options ? this.options.strokeWidth : null;
+        this.options = {
+            ...options,
+            fillColor: options.fillColor === MIXED ? oldFillColor : options.fillColor,
+            strokeColor: options.strokeColor === MIXED ? oldStrokeColor : options.strokeColor,
+            strokeWidth: options.strokeWidth === null ? oldStrokeWidth : options.strokeWidth
+        };
         this.resizeCursorIfNeeded();
     }
 
@@ -150,8 +163,8 @@ class Blobbiness {
 
         if (this.cursorPreview &&
                 this.brushSize === this.options.brushSize &&
-                this.fillColor === this.options.fillColor &&
-                this.strokeColor === this.options.strokeColor) {
+                (this.options.fillColor === MIXED || this.fillColor === this.options.fillColor) &&
+                (this.options.strokeColor === MIXED || this.strokeColor === this.options.strokeColor)) {
             return;
         }
         const newPreview = new paper.Path.Circle({
@@ -162,8 +175,12 @@ class Blobbiness {
             this.cursorPreview.remove();
         }
         this.brushSize = this.options.brushSize;
-        this.fillColor = this.options.fillColor;
-        this.strokeColor = this.options.strokeColor;
+        if (this.options.fillColor !== MIXED) {
+            this.fillColor = this.options.fillColor;
+        }
+        if (this.options.strokeColor !== MIXED) {
+            this.strokeColor = this.options.strokeColor;
+        }
         this.cursorPreview = newPreview;
         styleCursorPreview(this.cursorPreview, this.options);
     }
@@ -233,7 +250,7 @@ class Blobbiness {
         // Eraser didn't hit anything selected, so assume they meant to erase from all instead of from subset
         // and deselect the selection
         if (items.length === 0) {
-            clearSelection();
+            clearSelection(this.clearSelectedItems);
             items = paper.project.getItems({
                 match: function (item) {
                     return blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);

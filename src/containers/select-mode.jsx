@@ -5,8 +5,10 @@ import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
 
 import {changeMode} from '../reducers/modes';
-import {setHoveredItem, clearHoveredItem} from '../reducers/hover';
+import {clearHoveredItem, setHoveredItem} from '../reducers/hover';
+import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 
+import {getSelectedItems} from '../helper/selection';
 import SelectTool from '../helper/selection-tools/select-tool';
 import SelectModeComponent from '../components/select-mode.jsx';
 
@@ -38,7 +40,12 @@ class SelectMode extends React.Component {
         return false; // Static component, for now
     }
     activateTool () {
-        this.tool = new SelectTool(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.onUpdateSvg);
+        this.tool = new SelectTool(
+            this.props.setHoveredItem,
+            this.props.clearHoveredItem,
+            this.props.setSelectedItems,
+            this.props.clearSelectedItems,
+            this.props.onUpdateSvg);
         this.tool.activate();
     }
     deactivateTool () {
@@ -55,11 +62,13 @@ class SelectMode extends React.Component {
 
 SelectMode.propTypes = {
     clearHoveredItem: PropTypes.func.isRequired,
+    clearSelectedItems: PropTypes.func.isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     hoveredItemId: PropTypes.number,
     isSelectModeActive: PropTypes.bool.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
-    setHoveredItem: PropTypes.func.isRequired
+    setHoveredItem: PropTypes.func.isRequired,
+    setSelectedItems: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -72,6 +81,12 @@ const mapDispatchToProps = dispatch => ({
     },
     clearHoveredItem: () => {
         dispatch(clearHoveredItem());
+    },
+    clearSelectedItems: () => {
+        dispatch(clearSelectedItems());
+    },
+    setSelectedItems: () => {
+        dispatch(setSelectedItems(getSelectedItems(true /* recursive */)));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.SELECT));

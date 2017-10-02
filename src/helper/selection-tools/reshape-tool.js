@@ -41,9 +41,11 @@ class ReshapeTool extends paper.Tool {
     /**
      * @param {function} setHoveredItem Callback to set the hovered item
      * @param {function} clearHoveredItem Callback to clear the hovered item
+     * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
+     * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
-    constructor (setHoveredItem, clearHoveredItem, onUpdateSvg) {
+    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg) {
         super();
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
@@ -52,10 +54,10 @@ class ReshapeTool extends paper.Tool {
         this.lastEvent = null;
         this.mode = ReshapeModes.SELECTION_BOX;
         this._modeMap = {};
-        this._modeMap[ReshapeModes.FILL] = new MoveTool(onUpdateSvg);
-        this._modeMap[ReshapeModes.POINT] = new PointTool(onUpdateSvg);
-        this._modeMap[ReshapeModes.HANDLE] = new HandleTool(onUpdateSvg);
-        this._modeMap[ReshapeModes.SELECTION_BOX] = new SelectionBoxTool(Modes.RESHAPE);
+        this._modeMap[ReshapeModes.FILL] = new MoveTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
+        this._modeMap[ReshapeModes.POINT] = new PointTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
+        this._modeMap[ReshapeModes.HANDLE] = new HandleTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
+        this._modeMap[ReshapeModes.SELECTION_BOX] = new SelectionBoxTool(Modes.RESHAPE, setSelectedItems, clearSelectedItems);
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.

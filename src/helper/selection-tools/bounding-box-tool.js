@@ -31,7 +31,14 @@ const Modes = keyMirror({
  * @param {!function} onUpdateSvg A callback to call when the image visibly changes
  */
 class BoundingBoxTool {
-    constructor (onUpdateSvg) {
+    /**
+     * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
+     * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
+     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     */
+    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
+        this.setSelectedItems = setSelectedItems;
+        this.clearSelectedItems = clearSelectedItems;
         this.onUpdateSvg = onUpdateSvg;
         this.mode = null;
         this.boundsPath = null;
@@ -40,7 +47,7 @@ class BoundingBoxTool {
         this._modeMap = {};
         this._modeMap[Modes.SCALE] = new ScaleTool(onUpdateSvg);
         this._modeMap[Modes.ROTATE] = new RotateTool(onUpdateSvg);
-        this._modeMap[Modes.MOVE] = new MoveTool(onUpdateSvg);
+        this._modeMap[Modes.MOVE] = new MoveTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
     }
 
     /**
@@ -56,7 +63,6 @@ class BoundingBoxTool {
         if (!hitResults || hitResults.length === 0) {
             if (!multiselect) {
                 this.removeBoundsPath();
-                clearSelection();
             }
             return false;
         }

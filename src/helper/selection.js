@@ -112,9 +112,11 @@ const selectAllSegments = function () {
     }
 };
 
-const clearSelection = function () {
+/** @param {!function} dispatchClearSelect Function to update the Redux select state */
+const clearSelection = function (dispatchClearSelect) {
     paper.project.deselectAll();
     // @todo: Update toolbar state on change
+    dispatchClearSelect();
 };
 
 // This gets all selected non-grouped items and groups

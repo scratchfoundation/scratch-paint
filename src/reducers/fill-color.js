@@ -1,4 +1,6 @@
 import log from '../log/log';
+import {CHANGE_SELECTED_ITEMS} from './selected-items';
+import {getColorsFromSelection} from '../helper/style-path';
 
 const CHANGE_FILL_COLOR = 'scratch-paint/fill-color/CHANGE_FILL_COLOR';
 const initialState = '#000';
@@ -14,6 +16,12 @@ const reducer = function (state, action) {
             return state;
         }
         return action.fillColor;
+    case CHANGE_SELECTED_ITEMS:
+        // Don't change state if no selection
+        if (!action.selectedItems || !action.selectedItems.length) {
+            return state;
+        }
+        return getColorsFromSelection().fillColor;
     default:
         return state;
     }

@@ -6,11 +6,11 @@ const isGroup = function (item) {
     return isGroupItem(item);
 };
 
-const groupSelection = function () {
+const groupSelection = function (clearSelectedItems) {
     const items = getSelectedItems();
     if (items.length > 0) {
         const group = new paper.Group(items);
-        clearSelection();
+        clearSelection(clearSelectedItems);
         setItemSelection(group, true);
         for (let i = 0; i < group.children.length; i++) {
             group.children[i].selected = true;
@@ -47,8 +47,8 @@ const ungroupLoop = function (group, recursive) {
 };
 
 // ungroup items (only top hierarchy)
-const ungroupItems = function (items) {
-    clearSelection();
+const ungroupItems = function (items, clearSelectedItems) {
+    clearSelection(clearSelectedItems);
     const emptyGroups = [];
     for (let i = 0; i < items.length; i++) {
         const item = items[i];

@@ -1,4 +1,6 @@
 import log from '../log/log';
+import {CHANGE_SELECTED_ITEMS} from './selected-items';
+import {getColorsFromSelection} from '../helper/style-path';
 
 const CHANGE_STROKE_WIDTH = 'scratch-paint/stroke-width/CHANGE_STROKE_WIDTH';
 const MAX_STROKE_WIDTH = 400;
@@ -13,6 +15,12 @@ const reducer = function (state, action) {
             return state;
         }
         return Math.min(MAX_STROKE_WIDTH, Math.max(0, action.strokeWidth));
+    case CHANGE_SELECTED_ITEMS:
+        // Don't change state if no selection
+        if (!action.selectedItems || !action.selectedItems.length) {
+            return state;
+        }
+        return getColorsFromSelection().strokeWidth;
     default:
         return state;
     }

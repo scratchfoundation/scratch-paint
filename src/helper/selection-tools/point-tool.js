@@ -5,9 +5,11 @@ import {clearSelection, getSelectedItems} from '../selection';
 /** Subtool of ReshapeTool for moving control points. */
 class PointTool {
     /**
+     * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
+     * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
-    constructor (onUpdateSvg) {
+    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
         /**
          * Deselection often does not happen until mouse up. If the mouse is dragged before
          * mouse up, deselection is cancelled. This variable keeps track of which paper.Item to deselect.
@@ -24,6 +26,8 @@ class PointTool {
          */
         this.invertDeselect = false;
         this.selectedItems = null;
+        this.setSelectedItems = setSelectedItems;
+        this.clearSelectedItems = clearSelectedItems;
         this.onUpdateSvg = onUpdateSvg;
     }
 
@@ -49,7 +53,7 @@ class PointTool {
             }
         } else {
             if (!hitProperties.multiselect) {
-                clearSelection();
+                clearSelection(this.clearSelectedItems);
             }
             hitProperties.hitResult.segment.selected = true;
         }
@@ -86,7 +90,7 @@ class PointTool {
         hitProperties.hitResult.item.insert(hitProperties.hitResult.location.index + 1, newSegment);
         hitProperties.hitResult.segment = newSegment;
         if (!hitProperties.multiselect) {
-            clearSelection();
+            clearSelection(this.clearSelectedItems);
         }
         newSegment.selected = true;
 
@@ -175,7 +179,7 @@ class PointTool {
         // and delete
         if (this.deselectOnMouseUp) {
             if (this.invertDeselect) {
-                clearSelection();
+                clearSelection(this.clearSelectedItems);
                 this.deselectOnMouseUp.selected = true;
             } else {
                 this.deselectOnMouseUp.selected = false;
@@ -188,6 +192,7 @@ class PointTool {
             this.deleteOnMouseUp = null;
         }
         this.selectedItems = null;
+        this.setSelectedItems();
         // @todo add back undo
         this.onUpdateSvg();
     }

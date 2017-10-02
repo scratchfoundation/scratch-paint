@@ -1,8 +1,15 @@
+import paper from 'paper';
+
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
-import paper from 'paper';
+
+import {getSelectedItems} from '../helper/selection';
+import {getColorsFromSelection} from '../helper/style-path';
+import {changeStrokeColor} from '../reducers/stroke-color';
+import {changeStrokeWidth} from '../reducers/stroke-width';
+import {changeFillColor} from '../reducers/fill-color';
 
 const SelectionHOC = function (WrappedComponent) {
     class SelectionComponent extends React.Component {
@@ -52,8 +59,21 @@ const SelectionHOC = function (WrappedComponent) {
     const mapStateToProps = state => ({
         hoveredItemId: state.scratchPaint.hoveredItemId
     });
+    const mapDispatchToProps = dispatch => ({
+        onUpdateColors: (() => {
+            const selectedItems = getSelectedItems(true /* recursive */);
+            if (selectedItems.length === 0) {
+                return;
+            }
+            const colorState = getColorsFromSelection();
+            dispatch(changeFillColor(colorState.fillColor));
+            dispatch(changeStrokeColor(colorState.strokeColor));
+            dispatch(changeStrokeWidth(colorState.strokeWidth));
+        })
+    });
     return connect(
-        mapStateToProps
+        mapStateToProps,
+        mapDispatchToProps
     )(SelectionComponent);
 };
 
