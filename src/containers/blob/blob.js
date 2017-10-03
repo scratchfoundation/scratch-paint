@@ -27,11 +27,13 @@ class Blobbiness {
 
     /**
      * @param {function} updateCallback call when the drawing has changed to let listeners know
+     * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      */
-    constructor (updateCallback) {
+    constructor (updateCallback, clearSelectedItems) {
         this.broadBrushHelper = new BroadBrushHelper();
         this.segmentBrushHelper = new SegmentBrushHelper();
         this.updateCallback = updateCallback;
+        this.clearSelectedItems = clearSelectedItems;
 
         // The following are stored to check whether these have changed and the cursor preview needs to be redrawn.
         this.strokeColor = null;
