@@ -82,12 +82,12 @@ const applyStrokeWidthToSelection = function (value) {
 
 /**
  * Get state of colors and stroke width for selection
+ * @param {!Array<paper.Item>} selectedItems Selected paper items
  * @return {object} Object of strokeColor, strokeWidth, fillColor of the selection.
  *     Gives MIXED when there are mixed values for a color, and null for transparent.
  *     Gives null when there are mixed values for stroke width.
  */
-const getColorsFromSelection = function () {
-    const selectedItems = getSelectedItems(true /* recursive */);
+const getColorsFromSelection = function (selectedItems) {
     let selectionFillColorString;
     let selectionStrokeColorString;
     let selectionStrokeWidth;

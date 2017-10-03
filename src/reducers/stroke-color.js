@@ -21,7 +21,7 @@ const reducer = function (state, action) {
         if (!action.selectedItems || !action.selectedItems.length) {
             return state;
         }
-        return getColorsFromSelection().strokeColor;
+        return getColorsFromSelection(action.selectedItems).strokeColor;
     default:
         return state;
     }

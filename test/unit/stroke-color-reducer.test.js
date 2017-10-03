@@ -1,6 +1,9 @@
 /* eslint-env jest */
 import strokeColorReducer from '../../src/reducers/stroke-color';
 import {changeStrokeColor} from '../../src/reducers/stroke-color';
+import {setSelectedItems} from '../../src/reducers/selected-items';
+import {MIXED} from '../../src/helper/style-path';
+import {mockPaperRootItem} from '../__mocks__/paperMocks';
 
 test('initialState', () => {
     let defaultState;
@@ -24,6 +27,22 @@ test('changeStrokeColor', () => {
         .toEqual(newStrokeColor);
     expect(strokeColorReducer('#010' /* state */, changeStrokeColor(newStrokeColor) /* action */))
         .toEqual(newStrokeColor);
+});
+
+test('changeStrokeColorViaSelectedItems', () => {
+    let defaultState;
+
+    const strokeColor1 = 6;
+    const strokeColor2 = null; // transparent
+    let selectedItems = [mockPaperRootItem({strokeColor: strokeColor1})];
+    expect(strokeColorReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */))
+        .toEqual(strokeColor1);
+    selectedItems = [mockPaperRootItem({strokeColor: strokeColor2})];
+    expect(strokeColorReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */))
+        .toEqual(strokeColor2);
+    selectedItems = [mockPaperRootItem({strokeColor: strokeColor1}), mockPaperRootItem({strokeColor: strokeColor2})];
+    expect(strokeColorReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */))
+        .toEqual(MIXED);
 });
 
 test('invalidChangeStrokeColor', () => {

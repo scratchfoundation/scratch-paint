@@ -65,7 +65,7 @@ const SelectionHOC = function (WrappedComponent) {
             if (selectedItems.length === 0) {
                 return;
             }
-            const colorState = getColorsFromSelection();
+            const colorState = getColorsFromSelection(selectedItems);
             dispatch(changeFillColor(colorState.fillColor));
             dispatch(changeStrokeColor(colorState.strokeColor));
             dispatch(changeStrokeWidth(colorState.strokeWidth));

@@ -1,6 +1,9 @@
 /* eslint-env jest */
 import fillColorReducer from '../../src/reducers/fill-color';
 import {changeFillColor} from '../../src/reducers/fill-color';
+import {setSelectedItems} from '../../src/reducers/selected-items';
+import {MIXED} from '../../src/helper/style-path';
+import {mockPaperRootItem} from '../__mocks__/paperMocks';
 
 test('initialState', () => {
     let defaultState;
@@ -24,6 +27,22 @@ test('changeFillColor', () => {
         .toEqual(newFillColor);
     expect(fillColorReducer('#010' /* state */, changeFillColor(newFillColor) /* action */))
         .toEqual(newFillColor);
+});
+
+test('changefillColorViaSelectedItems', () => {
+    let defaultState;
+
+    const fillColor1 = 6;
+    const fillColor2 = null; // transparent
+    let selectedItems = [mockPaperRootItem({fillColor: fillColor1})];
+    expect(fillColorReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */))
+        .toEqual(fillColor1);
+    selectedItems = [mockPaperRootItem({fillColor: fillColor2})];
+    expect(fillColorReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */))
+        .toEqual(fillColor2);
+    selectedItems = [mockPaperRootItem({fillColor: fillColor1}), mockPaperRootItem({fillColor: fillColor2})];
+    expect(fillColorReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */))
+        .toEqual(MIXED);
 });
 
 test('invalidChangeFillColor', () => {
