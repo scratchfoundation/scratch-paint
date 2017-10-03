@@ -9,8 +9,6 @@ import {setHoveredItem, clearHoveredItem} from '../reducers/hover';
 
 import ReshapeTool from '../helper/selection-tools/reshape-tool';
 import ReshapeModeComponent from '../components/reshape-mode.jsx';
-import paper from 'paper';
-
 
 class ReshapeMode extends React.Component {
     constructor (props) {
