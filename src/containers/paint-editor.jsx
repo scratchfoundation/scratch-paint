@@ -28,7 +28,7 @@ class PaintEditor extends React.Component {
     componentWillUnmount () {
         document.removeEventListener('keydown', this.props.onKeyPress);
     }
-    handleUpdateSvg () {
+    handleUpdateSvg (skipSnapshot) {
         // Hide bounding box
         getGuideLayer().visible = false;
         const bounds = paper.project.activeLayer.bounds;
@@ -39,14 +39,16 @@ class PaintEditor extends React.Component {
             }),
             paper.project.view.center.x - bounds.x,
             paper.project.view.center.y - bounds.y);
-        performSnapshot(this.props.undoSnapshot);
+        if (!skipSnapshot) {
+            performSnapshot(this.props.undoSnapshot);
+        }
         getGuideLayer().visible = true;
     }
     handleUndo () {
-        performUndo(this.props.undoState, this.props.onUndo);
+        performUndo(this.props.undoState, this.props.onUndo, this.handleUpdateSvg);
     }
     handleRedo () {
-        performRedo(this.props.undoState, this.props.onRedo);
+        performRedo(this.props.undoState, this.props.onRedo, this.handleUpdateSvg);
     }
     render () {
         return (

@@ -11,15 +11,16 @@ const performSnapshot = function (dispatchPerformSnapshot) {
     // updateButtonVisibility();
 };
 
-const _restore = function (entry) {
+const _restore = function (entry, onUpdateSvg) {
     paper.project.clear();
     paper.project.importJSON(entry.json);
     paper.view.update();
+    onUpdateSvg(true /* skipSnapshot */);
 };
 
-const performUndo = function (undoState, dispatchPerformUndo) {
+const performUndo = function (undoState, dispatchPerformUndo, onUpdateSvg) {
     if (undoState.pointer > 0) {
-        _restore(undoState.stack[undoState.pointer - 1]);
+        _restore(undoState.stack[undoState.pointer - 1], onUpdateSvg);
         dispatchPerformUndo();
 
         // @todo enable/disable buttons
@@ -28,9 +29,9 @@ const performUndo = function (undoState, dispatchPerformUndo) {
 };
 
 
-const performRedo = function (undoState, dispatchPerformRedo) {
+const performRedo = function (undoState, dispatchPerformRedo, onUpdateSvg) {
     if (undoState.pointer >= 0 && undoState.pointer < undoState.stack.length - 1) {
-        _restore(undoState.stack[undoState.pointer + 1]);
+        _restore(undoState.stack[undoState.pointer + 1], onUpdateSvg);
         dispatchPerformRedo();
         
         // @todo enable/disable buttons
