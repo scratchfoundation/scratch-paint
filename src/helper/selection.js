@@ -58,7 +58,7 @@ const selectItemSegments = function (item, state) {
     }
 };
 
-const setGroupSelection = function (root, selected, fullySelected) {
+const _setGroupSelection = function (root, selected, fullySelected) {
     root.fullySelected = fullySelected;
     root.selected = selected;
     // select children of compound-path or group
@@ -67,7 +67,7 @@ const setGroupSelection = function (root, selected, fullySelected) {
         if (children) {
             for (const child of children) {
                 if (isGroup(child)) {
-                    setGroupSelection(child, selected, fullySelected);
+                    _setGroupSelection(child, selected, fullySelected);
                 } else {
                     child.fullySelected = fullySelected;
                     child.selected = selected;
@@ -86,12 +86,12 @@ const setItemSelection = function (item, state, fullySelected) {
         // do it recursive
         setItemSelection(parentGroup, state, fullySelected);
     } else if (itemsCompoundPath) {
-        setGroupSelection(itemsCompoundPath, state, fullySelected);
+        _setGroupSelection(itemsCompoundPath, state, fullySelected);
     } else {
         if (item.data && item.data.noSelect) {
             return;
         }
-        setGroupSelection(item, state, fullySelected);
+        _setGroupSelection(item, state, fullySelected);
     }
     // @todo: Update toolbar state on change
     
@@ -166,19 +166,20 @@ const getSelectedLeafItems = function () {
     return items;
 };
 
-const deleteItemSelection = function (items, undoSnapshot) {
+const _deleteItemSelection = function (items, undoSnapshot) {
     for (let i = 0; i < items.length; i++) {
         items[i].remove();
     }
     
     // @todo: Update toolbar state on change
-    paper.project.view.update();
-    performSnapshot(undoSnapshot);
+    if (items.lenth > 0) {
+        paper.project.view.update();
+        performSnapshot(undoSnapshot);
+    }
 };
 
-const removeSelectedSegments = function (items, undoSnapshot) {
+const _removeSelectedSegments = function (items, undoSnapshot) {
     performSnapshot(undoSnapshot);
-    
     const segmentsToRemove = [];
     
     for (let i = 0; i < items.length; i++) {
@@ -197,6 +198,10 @@ const removeSelectedSegments = function (items, undoSnapshot) {
         seg.remove();
         removedSegments = true;
     }
+    if (removedSegments) {
+        paper.project.view.update();
+        performSnapshot(undoSnapshot);
+    }
     return removedSegments;
 };
 
@@ -204,125 +209,13 @@ const deleteSelection = function (mode, undoSnapshot) {
     if (mode === Modes.RESHAPE) {
         const selectedItems = getSelectedLeafItems();
         // If there are points selected remove them. If not delete the item selected.
-        if (!removeSelectedSegments(selectedItems, undoSnapshot)) {
-            deleteItemSelection(selectedItems, undoSnapshot);
+        if (!_removeSelectedSegments(selectedItems, undoSnapshot)) {
+            _deleteItemSelection(selectedItems, undoSnapshot);
         }
     } else {
         const selectedItems = getSelectedRootItems();
-        deleteItemSelection(selectedItems, undoSnapshot);
+        _deleteItemSelection(selectedItems, undoSnapshot);
     }
-};
-
-const splitPathRetainSelection = function (path, index, deselectSplitSegments) {
-    const selectedPoints = [];
-    
-    // collect points of selected segments, so we can reselect them
-    // once the path is split.
-    for (let i = 0; i < path.segments.length; i++) {
-        const seg = path.segments[i];
-        if (seg.selected) {
-            if (deselectSplitSegments && i === index) {
-                continue;
-            }
-            selectedPoints.push(seg.point);
-        }
-    }
-    
-    const newPath = path.split(index, 0);
-    if (!newPath) return;
-    
-    // reselect all of the newPaths segments that are in the exact same location
-    // as the ones that are stored in selectedPoints
-    for (let i = 0; i < newPath.segments.length; i++) {
-        const seg = newPath.segments[i];
-        for (let j = 0; j < selectedPoints.length; j++) {
-            const point = selectedPoints[j];
-            if (point.x === seg.point.x && point.y === seg.point.y) {
-                seg.selected = true;
-            }
-        }
-    }
-    
-    // only do this if path and newPath are different
-    // (split at more than one point)
-    if (path !== newPath) {
-        for (let i = 0; i < path.segments.length; i++) {
-            const seg = path.segments[i];
-            for (let j = 0; j < selectedPoints.length; j++) {
-                const point = selectedPoints[j];
-                if (point.x === seg.point.x && point.y === seg.point.y) {
-                    seg.selected = true;
-                }
-            }
-        }
-    }
-};
-
-const splitPathAtSelectedSegments = function () {
-    const items = getSelectedRootItems();
-    for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        const segments = item.segments;
-        for (let j = 0; j < segments.length; j++) {
-            const segment = segments[j];
-            if (segment.selected) {
-                if (item.closed ||
-                    (segment.next &&
-                    !segment.next.selected &&
-                    segment.previous &&
-                    !segment.previous.selected)) {
-                    splitPathRetainSelection(item, j, true);
-                    splitPathAtSelectedSegments();
-                    return;
-                }
-            }
-        }
-    }
-};
-
-const deleteSegments = function (item, undoSnapshot) {
-    if (item.children) {
-        for (let i = 0; i < item.children.length; i++) {
-            const child = item.children[i];
-            deleteSegments(child, undoSnapshot);
-        }
-    } else {
-        const segments = item.segments;
-        for (let j = 0; j < segments.length; j++) {
-            const segment = segments[j];
-            if (segment.selected) {
-                if (item.closed ||
-                    (segment.next &&
-                    !segment.next.selected &&
-                    segment.previous &&
-                    !segment.previous.selected)) {
-
-                    splitPathRetainSelection(item, j);
-                    deleteSelection(Modes.RESHAPE, undoSnapshot);
-                    return;
-
-                } else if (!item.closed) {
-                    segment.remove();
-                    j--; // decrease counter if we removed one from the loop
-                }
-
-            }
-        }
-    }
-    // remove items with no segments left
-    if (item.segments.length <= 0) {
-        item.remove();
-    }
-};
-
-const deleteSegmentSelection = function (items, undoSnapshot) {
-    for (let i = 0; i < items.length; i++) {
-        deleteSegments(items[i], undoSnapshot);
-    }
-
-    // @todo: Update toolbar state on change
-    paper.project.view.update();
-    performSnapshot(undoSnapshot);
 };
 
 const cloneSelection = function (recursive, undoSnapshot) {
@@ -335,21 +228,7 @@ const cloneSelection = function (recursive, undoSnapshot) {
     performSnapshot(undoSnapshot);
 };
 
-// Only returns paths, no compound paths, groups or any other stuff
-const getSelectedPaths = function () {
-    const allPaths = getSelectedRootItems();
-    const paths = [];
-
-    for (let i = 0; i < allPaths.length; i++) {
-        const path = allPaths[i];
-        if (path.className === 'Path') {
-            paths.push(path);
-        }
-    }
-    return paths;
-};
-
-const checkBoundsItem = function (selectionRect, item, event) {
+const _checkBoundsItem = function (selectionRect, item, event) {
     const itemBounds = new paper.Path([
         item.localToGlobal(item.internalBounds.topLeft),
         item.localToGlobal(item.internalBounds.topRight),
@@ -438,7 +317,7 @@ const _handleRectangularSelectionItems = function (item, event, rect, mode, root
         // @todo: Update toolbar state on change
 
     } else if (isBoundsItem(item)) {
-        if (checkBoundsItem(rect, item, event)) {
+        if (_checkBoundsItem(rect, item, event)) {
             return false;
         }
     }
@@ -521,16 +400,10 @@ export {
     selectAllSegments,
     clearSelection,
     deleteSelection,
-    deleteItemSelection,
-    deleteSegmentSelection,
-    splitPathAtSelectedSegments,
     cloneSelection,
     setItemSelection,
-    setGroupSelection,
     getSelectedLeafItems,
-    getSelectedPaths,
     getSelectedRootItems,
-    removeSelectedSegments,
     processRectangularSelection,
     selectRootItem,
     shouldShowIfSelection,
