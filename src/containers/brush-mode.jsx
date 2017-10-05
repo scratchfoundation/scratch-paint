@@ -4,10 +4,13 @@ import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
 import Blobbiness from './blob/blob';
+
 import {changeBrushSize} from '../reducers/brush-mode';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
+import {undoSnapshot} from '../reducers/undo';
 import {clearSelection} from '../helper/selection';
+
 import BrushModeComponent from '../components/brush-mode.jsx';
 
 class BrushMode extends React.Component {
@@ -18,7 +21,8 @@ class BrushMode extends React.Component {
             'deactivateTool',
             'onScroll'
         ]);
-        this.blob = new Blobbiness(this.props.onUpdateSvg, this.props.clearSelectedItems);
+        this.blob = new Blobbiness(
+            this.props.onUpdateSvg, this.props.clearSelectedItems, this.props.undoSnapshot);
     }
     componentDidMount () {
         if (this.props.isBrushModeActive) {
@@ -87,7 +91,8 @@ BrushMode.propTypes = {
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isBrushModeActive: PropTypes.bool.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired
+    onUpdateSvg: PropTypes.func.isRequired,
+    undoSnapshot: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -104,6 +109,9 @@ const mapDispatchToProps = dispatch => ({
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.BRUSH));
+    },
+    undoSnapshot: snapshot => {
+        dispatch(undoSnapshot(snapshot));
     }
 });
 

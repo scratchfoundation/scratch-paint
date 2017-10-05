@@ -13,7 +13,7 @@ const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
     case UNDO:
-        if (state.pointer === -1) {
+        if (state.pointer <= 0) {
             log.warn(`Can't undo, undo stack is empty`);
             return state;
         }
@@ -22,7 +22,7 @@ const reducer = function (state, action) {
             pointer: state.pointer - 1
         };
     case REDO:
-        if (state.pointer === state.stack.length - 1) {
+        if (state.pointer <= -1 || state.pointer === state.stack.length - 1) {
             log.warn(`Can't redo, redo stack is empty`);
             return state;
         }

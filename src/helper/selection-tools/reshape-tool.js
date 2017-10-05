@@ -45,18 +45,19 @@ class ReshapeTool extends paper.Tool {
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
-    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg, undoSnapshot) {
         super();
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
         this.onUpdateSvg = onUpdateSvg;
+        this.undoSnapshot = undoSnapshot;
         this.prevHoveredItemId = null;
         this.lastEvent = null;
         this.mode = ReshapeModes.SELECTION_BOX;
         this._modeMap = {};
-        this._modeMap[ReshapeModes.FILL] = new MoveTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
-        this._modeMap[ReshapeModes.POINT] = new PointTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
-        this._modeMap[ReshapeModes.HANDLE] = new HandleTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
+        this._modeMap[ReshapeModes.FILL] = new MoveTool(setSelectedItems, clearSelectedItems, onUpdateSvg, undoSnapshot);
+        this._modeMap[ReshapeModes.POINT] = new PointTool(setSelectedItems, clearSelectedItems, onUpdateSvg, undoSnapshot);
+        this._modeMap[ReshapeModes.HANDLE] = new HandleTool(setSelectedItems, clearSelectedItems, onUpdateSvg, undoSnapshot);
         this._modeMap[ReshapeModes.SELECTION_BOX] =
             new SelectionBoxTool(Modes.RESHAPE, setSelectedItems, clearSelectedItems);
 
@@ -221,7 +222,7 @@ class ReshapeTool extends paper.Tool {
     handleKeyUp (event) {
         // Backspace, delete
         if (event.key === 'delete' || event.key === 'backspace') {
-            deleteSelection(Modes.RESHAPE);
+            deleteSelection(Modes.RESHAPE, this.undoSnapshot);
             this.onUpdateSvg();
         }
     }

@@ -52,12 +52,20 @@ test('clearUndoState', () => {
 
 test('cantUndo', () => {
     let defaultState;
+    const state1 = {state: 1};
 
     // Undo when there's no undo stack
-    const reduxState = undoReducer(defaultState /* state */, undo() /* action */);
+    let reduxState = undoReducer(defaultState /* state */, undo() /* action */);
 
     expect(reduxState.pointer).toEqual(-1);
     expect(reduxState.stack).toHaveLength(0);
+
+    // Undo when there's only one state
+    reduxState = undoReducer(reduxState /* state */, undoSnapshot([state1]) /* action */);
+    reduxState = undoReducer(reduxState /* state */, undo() /* action */);
+
+    expect(reduxState.pointer).toEqual(0);
+    expect(reduxState.stack).toHaveLength(1);
 });
 
 test('cantRedo', () => {
@@ -111,23 +119,23 @@ test('undoSnapshotCantRedo', () => {
     let defaultState;
     const state1 = {state: 1};
     const state2 = {state: 2};
+    const state3 = {state: 3};
 
-    // Push 2 states then undo twice
+    // Push 2 states then undo
     let reduxState = undoReducer(defaultState /* state */, undoSnapshot([state1]) /* action */);
     reduxState = undoReducer(reduxState /* state */, undoSnapshot([state2]) /* action */);
     reduxState = undoReducer(reduxState /* state */, undo() /* action */);
-    reduxState = undoReducer(reduxState /* state */, undo() /* action */);
 
-    expect(reduxState.pointer).toEqual(-1);
+    expect(reduxState.pointer).toEqual(0);
     expect(reduxState.stack).toHaveLength(2);
 
     // Snapshot
-    reduxState = undoReducer(reduxState /* state */, undoSnapshot([state2]) /* action */);
+    reduxState = undoReducer(reduxState /* state */, undoSnapshot([state3]) /* action */);
     // Redo should do nothing
     const newReduxState = undoReducer(reduxState /* state */, redo() /* action */);
 
     expect(newReduxState.pointer).toEqual(reduxState.pointer);
     expect(newReduxState.stack).toHaveLength(reduxState.stack.length);
     expect(newReduxState.stack[0]).toEqual(reduxState.stack[0]);
-    expect(newReduxState.stack[0]).toEqual(state2);
+    expect(newReduxState.stack[1]).toEqual(state3);
 });

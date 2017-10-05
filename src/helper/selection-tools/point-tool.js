@@ -1,6 +1,7 @@
 import paper from 'paper';
 import {snapDeltaToAngle} from '../math';
 import {clearSelection, getSelectedLeafItems} from '../selection';
+import {performSnapshot} from '../undo';
 
 /** Subtool of ReshapeTool for moving control points. */
 class PointTool {
@@ -9,7 +10,7 @@ class PointTool {
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
-    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg, undoSnapshot) {
         /**
          * Deselection often does not happen until mouse up. If the mouse is dragged before
          * mouse up, deselection is cancelled. This variable keeps track of which paper.Item to deselect.
@@ -29,6 +30,7 @@ class PointTool {
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateSvg = onUpdateSvg;
+        this.undoSnapshot = undoSnapshot;
     }
 
     /**
@@ -166,11 +168,15 @@ class PointTool {
     }
     onMouseUp () {
         // resetting the items and segments origin points for the next usage
+        let moved = false;
         for (const item of this.selectedItems) {
             if (!item.segments) {
                 return;
             }
             for (const seg of item.segments) {
+                if (seg.origPoint && !seg.equals(seg.origPoint)) {
+                    moved = true;
+                }
                 seg.origPoint = null;
             }
         }
@@ -193,8 +199,10 @@ class PointTool {
         }
         this.selectedItems = null;
         this.setSelectedItems();
-        // @todo add back undo
-        this.onUpdateSvg();
+        if (moved) {
+            performSnapshot(this.undoSnapshot);
+            this.onUpdateSvg();
+        }
     }
 }
 

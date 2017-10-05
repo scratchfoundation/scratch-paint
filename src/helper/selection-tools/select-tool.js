@@ -25,12 +25,12 @@ class SelectTool extends paper.Tool {
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
-    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg, undoSnapshot) {
         super();
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
         this.onUpdateSvg = onUpdateSvg;
-        this.boundingBoxTool = new BoundingBoxTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
+        this.boundingBoxTool = new BoundingBoxTool(setSelectedItems, clearSelectedItems, onUpdateSvg, undoSnapshot);
         this.selectionBoxTool = new SelectionBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems);
         this.selectionBoxMode = false;
         this.prevHoveredItemId = null;
@@ -126,7 +126,7 @@ class SelectTool extends paper.Tool {
     handleKeyUp (event) {
         // Backspace, delete
         if (event.key === 'delete' || event.key === 'backspace') {
-            deleteSelection(Modes.SELECT);
+            deleteSelection(Modes.SELECT, this.undoSnapshot);
             this.clearHoveredItem();
             this.boundingBoxTool.removeBoundsPath();
             this.onUpdateSvg();

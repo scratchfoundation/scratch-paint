@@ -4,6 +4,7 @@ import Modes from '../modes/modes';
 import {getItemsGroup, isGroup} from './group';
 import {getRootItem, isCompoundPathItem, isBoundsItem, isPathItem, isPGTextItem} from './item';
 import {getItemsCompoundPath, isCompoundPath, isCompoundPathChild} from './compound-path';
+import {performSnapshot} from './undo';
 
 /**
  * @param {boolean} includeGuides True if guide layer items like the bounding box should
@@ -165,20 +166,18 @@ const getSelectedLeafItems = function () {
     return items;
 };
 
-const deleteItemSelection = function (items) {
+const deleteItemSelection = function (items, undoSnapshot) {
     for (let i = 0; i < items.length; i++) {
         items[i].remove();
     }
     
     // @todo: Update toolbar state on change
     paper.project.view.update();
-    // @todo add back undo
-    // pg.undo.snapshot('deleteItemSelection');
+    performSnapshot(undoSnapshot);
 };
 
-const removeSelectedSegments = function (items) {
-    // @todo add back undo
-    // pg.undo.snapshot('removeSelectedSegments');
+const removeSelectedSegments = function (items, undoSnapshot) {
+    performSnapshot(undoSnapshot);
     
     const segmentsToRemove = [];
     
@@ -201,16 +200,16 @@ const removeSelectedSegments = function (items) {
     return removedSegments;
 };
 
-const deleteSelection = function (mode) {
+const deleteSelection = function (mode, undoSnapshot) {
     if (mode === Modes.RESHAPE) {
         const selectedItems = getSelectedLeafItems();
         // If there are points selected remove them. If not delete the item selected.
-        if (!removeSelectedSegments(selectedItems)) {
-            deleteItemSelection(selectedItems);
+        if (!removeSelectedSegments(selectedItems, undoSnapshot)) {
+            deleteItemSelection(selectedItems, undoSnapshot);
         }
     } else {
         const selectedItems = getSelectedRootItems();
-        deleteItemSelection(selectedItems);
+        deleteItemSelection(selectedItems, undoSnapshot);
     }
 };
 
@@ -281,11 +280,11 @@ const splitPathAtSelectedSegments = function () {
     }
 };
 
-const deleteSegments = function (item) {
+const deleteSegments = function (item, undoSnapshot) {
     if (item.children) {
         for (let i = 0; i < item.children.length; i++) {
             const child = item.children[i];
-            deleteSegments(child);
+            deleteSegments(child, undoSnapshot);
         }
     } else {
         const segments = item.segments;
@@ -299,7 +298,7 @@ const deleteSegments = function (item) {
                     !segment.previous.selected)) {
 
                     splitPathRetainSelection(item, j);
-                    deleteSelection();
+                    deleteSelection(Modes.RESHAPE, undoSnapshot);
                     return;
 
                 } else if (!item.closed) {
@@ -316,26 +315,24 @@ const deleteSegments = function (item) {
     }
 };
 
-const deleteSegmentSelection = function (items) {
+const deleteSegmentSelection = function (items, undoSnapshot) {
     for (let i = 0; i < items.length; i++) {
-        deleteSegments(items[i]);
+        deleteSegments(items[i], undoSnapshot);
     }
 
     // @todo: Update toolbar state on change
     paper.project.view.update();
-    // @todo add back undo
-    // pg.undo.snapshot('deleteSegmentSelection');
+    performSnapshot(undoSnapshot);
 };
 
-const cloneSelection = function (recursive) {
+const cloneSelection = function (recursive, undoSnapshot) {
     const selectedItems = recursive ? getSelectedLeafItems() : getSelectedRootItems();
     for (let i = 0; i < selectedItems.length; i++) {
         const item = selectedItems[i];
         item.clone();
         item.selected = false;
     }
-    // @todo add back undo
-    // pg.undo.snapshot('cloneSelection');
+    performSnapshot(undoSnapshot);
 };
 
 // Only returns paths, no compound paths, groups or any other stuff

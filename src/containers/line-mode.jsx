@@ -1,3 +1,4 @@
+import paper from 'paper';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -6,10 +7,13 @@ import Modes from '../modes/modes';
 import {changeStrokeWidth} from '../reducers/stroke-width';
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
 import {MIXED} from '../helper/style-path';
-import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
-import LineModeComponent from '../components/line-mode.jsx';
 import {changeMode} from '../reducers/modes';
-import paper from 'paper';
+import {changeStrokeWidth} from '../reducers/stroke-width';
+import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
+import {performSnapshot} from '../helper/undo';
+import {undoSnapshot} from '../reducers/undo';
+
+import LineModeComponent from '../components/line-mode.jsx';
 
 class LineMode extends React.Component {
     static get SNAP_TOLERANCE () {
@@ -209,10 +213,9 @@ class LineMode extends React.Component {
         this.props.onUpdateSvg();
         this.props.setSelectedItems();
 
-        // TODO add back undo
-        // if (this.path) {
-        //     pg.undo.snapshot('line');
-        // }
+        if (this.path) {
+            performSnapshot(this.props.undoSnapshot);
+        }
     }
     toleranceSquared () {
         return Math.pow(LineMode.SNAP_TOLERANCE / paper.view.zoom, 2);
@@ -284,7 +287,8 @@ LineMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isLineModeActive: PropTypes.bool.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func.isRequired,
+    undoSnapshot: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -303,6 +307,9 @@ const mapDispatchToProps = dispatch => ({
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.LINE));
+    },
+    undoSnapshot: snapshot => {
+        dispatch(undoSnapshot(snapshot));
     }
 });
 

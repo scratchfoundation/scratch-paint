@@ -1,8 +1,13 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import PaintEditorComponent from '../components/paint-editor.jsx';
+
 import {changeMode} from '../reducers/modes';
+import {undo, redo} from '../reducers/undo';
+
 import {getGuideLayer} from '../helper/layer';
+import {performUndo, performRedo} from '../helper/undo';
+
 import Modes from '../modes/modes';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
@@ -12,7 +17,9 @@ class PaintEditor extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleUpdateSvg'
+            'handleUpdateSvg',
+            'handleUndo',
+            'handleRedo'
         ]);
     }
     componentDidMount () {
@@ -34,12 +41,20 @@ class PaintEditor extends React.Component {
             paper.project.view.center.y - bounds.y);
         getGuideLayer().visible = true;
     }
+    handleUndo () {
+        performUndo(this.props.undoState, this.props.onUndo);
+    }
+    handleRedo () {
+        performRedo(this.props.undoState, this.props.onRedo);
+    }
     render () {
         return (
             <PaintEditorComponent
                 rotationCenterX={this.props.rotationCenterX}
                 rotationCenterY={this.props.rotationCenterY}
                 svg={this.props.svg}
+                onRedo={this.handleRedo}
+                onUndo={this.handleUndo}
                 onUpdateSvg={this.handleUpdateSvg}
             />
         );
@@ -48,12 +63,21 @@ class PaintEditor extends React.Component {
 
 PaintEditor.propTypes = {
     onKeyPress: PropTypes.func.isRequired,
+    onRedo: PropTypes.func.isRequired,
+    onUndo: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
-    svg: PropTypes.string
+    svg: PropTypes.string,
+    undoState: PropTypes.shape({
+        stack: PropTypes.arrayOf(PropTypes.object).isRequired,
+        pointer: PropTypes.number.isRequired
+    })
 };
 
+const mapStateToProps = state => ({
+    undoState: state.scratchPaint.undo
+});
 const mapDispatchToProps = dispatch => ({
     onKeyPress: event => {
         if (event.key === 'e') {
@@ -65,10 +89,16 @@ const mapDispatchToProps = dispatch => ({
         } else if (event.key === 's') {
             dispatch(changeMode(Modes.SELECT));
         }
+    },
+    onUndo: () => {
+        dispatch(undo());
+    },
+    onRedo: () => {
+        dispatch(redo());
     }
 });
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(PaintEditor);

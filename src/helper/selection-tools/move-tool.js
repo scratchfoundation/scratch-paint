@@ -2,6 +2,7 @@ import {isGroup} from '../group';
 import {isCompoundPathItem, getRootItem} from '../item';
 import {snapDeltaToAngle} from '../math';
 import {clearSelection, cloneSelection, getSelectedLeafItems, setItemSelection} from '../selection';
+import {performSnapshot} from '../undo';
 
 /**
  * Tool to handle dragging an item to reposition it in a selection mode.
@@ -12,11 +13,12 @@ class MoveTool {
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
-    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg, undoSnapshot) {
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
         this.onUpdateSvg = onUpdateSvg;
+        this.undoSnapshot = undoSnapshot;
     }
 
     /**
@@ -51,7 +53,7 @@ class MoveTool {
             }
             this._select(item, true, hitProperties.subselect);
         }
-        if (hitProperties.clone) cloneSelection(hitProperties.subselect);
+        if (hitProperties.clone) cloneSelection(hitProperties.subselect, this.undoSnapshot);
         this.selectedItems = getSelectedLeafItems();
     }
     /**
@@ -94,15 +96,20 @@ class MoveTool {
         }
     }
     onMouseUp () {
+        let moved = false;
         // resetting the items origin point for the next usage
         for (const item of this.selectedItems) {
+            if (item.data.origPos && !item.position.equals(item.data.origPos)) {
+                moved = true;
+            }
             item.data.origPos = null;
         }
         this.selectedItems = null;
 
-        // @todo add back undo
-        // pg.undo.snapshot('moveSelection');
-        this.onUpdateSvg();
+        if (moved) {
+            performSnapshot(this.undoSnapshot);
+            this.onUpdateSvg();
+        }
     }
 }
 

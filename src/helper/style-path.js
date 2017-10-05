@@ -1,6 +1,7 @@
 import {getSelectedLeafItems} from './selection';
 import {isPGTextItem, isPointTextItem} from './item';
 import {isGroup} from './group';
+import {performSnapshot} from './undo';
 
 const MIXED = 'scratch-paint/style-path/mixed';
 
@@ -8,7 +9,7 @@ const MIXED = 'scratch-paint/style-path/mixed';
  * Called when setting fill color
  * @param {string} colorString New color, css format
  */
-const applyFillColorToSelection = function (colorString) {
+const applyFillColorToSelection = function (colorString, undoSnapshot) {
     const items = getSelectedLeafItems();
     for (const item of items) {
         if (isPGTextItem(item)) {
@@ -30,14 +31,14 @@ const applyFillColorToSelection = function (colorString) {
             item.fillColor = colorString;
         }
     }
-    // @todo add back undo
+    performSnapshot(undoSnapshot);
 };
 
 /**
  * Called when setting stroke color
  * @param {string} colorString New color, css format
  */
-const applyStrokeColorToSelection = function (colorString) {
+const applyStrokeColorToSelection = function (colorString, undoSnapshot) {
     const items = getSelectedLeafItems();
 
     for (const item of items) {
@@ -61,14 +62,14 @@ const applyStrokeColorToSelection = function (colorString) {
             item.strokeColor = colorString;
         }
     }
-    // @todo add back undo
+    performSnapshot(undoSnapshot);
 };
 
 /**
  * Called when setting stroke width
  * @param {number} value New stroke width
  */
-const applyStrokeWidthToSelection = function (value) {
+const applyStrokeWidthToSelection = function (value, undoSnapshot) {
     const items = getSelectedLeafItems();
     for (const item of items) {
         if (isGroup(item)) {
@@ -77,7 +78,7 @@ const applyStrokeWidthToSelection = function (value) {
             item.strokeWidth = value;
         }
     }
-    // @todo add back undo
+    performSnapshot(undoSnapshot);
 };
 
 /**
@@ -168,7 +169,12 @@ const stylePath = function (path, options) {
     if (options.isEraser) {
         path.fillColor = 'white';
     } else {
-        path.fillColor = options.fillColor;
+        if (options.fillColor) {
+            path.fillColor = options.fillColor;
+        } else {
+            // Make sure something visible is drawn
+            path.fillColor = 'black';
+        }   
     }
 };
 
@@ -178,7 +184,12 @@ const styleCursorPreview = function (path, options) {
         path.strokeColor = 'cornflowerblue';
         path.strokeWidth = 1;
     } else {
-        path.fillColor = options.fillColor;
+        if (options.fillColor) {
+            path.fillColor = options.fillColor;
+        } else {
+            // Make sure something visible is drawn
+            path.fillColor = 'black';
+        }
     }
 };
 
