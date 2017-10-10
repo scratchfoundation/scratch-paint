@@ -54,7 +54,7 @@ class ReshapeTool extends paper.Tool {
         this.lastEvent = null;
         this.mode = ReshapeModes.SELECTION_BOX;
         this._modeMap = {};
-        this._modeMap[ReshapeModes.FILL] = new MoveTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
+        this._modeMap[ReshapeModes.FILL] = new MoveTool(Modes.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateSvg);
         this._modeMap[ReshapeModes.POINT] = new PointTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
         this._modeMap[ReshapeModes.HANDLE] = new HandleTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
         this._modeMap[ReshapeModes.SELECTION_BOX] =
