@@ -76,12 +76,12 @@ class PaintEditorComponent extends React.Component {
                         <button
                             className={styles.button}
                         >
-                            <font color="silver"> Front </ font>
+                            <font color="silver"> Front </font>
                         </button>
                         <button
                             className={styles.button}
                         >
-                            <font color="silver"> Back </ font>
+                            <font color="silver"> Back </font>
                         </button>
                     </div>
 
@@ -90,12 +90,12 @@ class PaintEditorComponent extends React.Component {
                         <button
                             className={styles.button}
                         >
-                            <font color="silver"> Group </ font>
+                            <font color="silver"> Group </font>
                         </button>
                         <button
                             className={styles.button}
                         >
-                            <font color="silver"> Ungroup </ font>
+                            <font color="silver"> Ungroup </font>
                         </button>
                     </div>
                 </div>
