@@ -1,7 +1,7 @@
 import paper from 'paper';
 import keyMirror from 'keymirror';
 
-import {getSelectedItems} from '../selection';
+import {getSelectedRootItems} from '../selection';
 import {getGuideColor, removeHelperItems} from '../guides';
 import {getGuideLayer} from '../layer';
 
@@ -90,9 +90,9 @@ class BoundingBoxTool {
             this._modeMap[this.mode].onMouseDown(hitProperties);
         } else if (this.mode === Modes.SCALE) {
             this._modeMap[this.mode].onMouseDown(
-                hitResult, this.boundsPath, this.boundsScaleHandles, this.boundsRotHandles, getSelectedItems());
+                hitResult, this.boundsPath, this.boundsScaleHandles, this.boundsRotHandles, getSelectedRootItems());
         } else if (this.mode === Modes.ROTATE) {
-            this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedItems());
+            this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedRootItems());
         }
 
         // while transforming object, never show the bounds stuff
@@ -113,7 +113,7 @@ class BoundingBoxTool {
     setSelectionBounds () {
         this.removeBoundsPath();
         
-        const items = getSelectedItems(true /* recursive */);
+        const items = getSelectedRootItems();
         if (items.length <= 0) return;
         
         let rect = null;

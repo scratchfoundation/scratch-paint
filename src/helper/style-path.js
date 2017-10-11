@@ -1,4 +1,4 @@
-import {getSelectedItems} from './selection';
+import {getSelectedLeafItems} from './selection';
 import {isPGTextItem, isPointTextItem} from './item';
 import {isGroup} from './group';
 
@@ -9,7 +9,7 @@ const MIXED = 'scratch-paint/style-path/mixed';
  * @param {string} colorString New color, css format
  */
 const applyFillColorToSelection = function (colorString) {
-    const items = getSelectedItems(true /* recursive */);
+    const items = getSelectedLeafItems;
     for (const item of items) {
         if (isPGTextItem(item)) {
             for (const child of item.children) {
@@ -38,7 +38,7 @@ const applyFillColorToSelection = function (colorString) {
  * @param {string} colorString New color, css format
  */
 const applyStrokeColorToSelection = function (colorString) {
-    const items = getSelectedItems(true /* recursive */);
+    const items = getSelectedLeafItems();
 
     for (const item of items) {
         if (isPGTextItem(item)) {
@@ -69,7 +69,7 @@ const applyStrokeColorToSelection = function (colorString) {
  * @param {number} value New stroke width
  */
 const applyStrokeWidthToSelection = function (value) {
-    const items = getSelectedItems(true /* recursive */);
+    const items = getSelectedLeafItems();
     for (const item of items) {
         if (isGroup(item)) {
             continue;

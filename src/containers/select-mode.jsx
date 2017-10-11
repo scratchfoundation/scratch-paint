@@ -8,7 +8,7 @@ import {changeMode} from '../reducers/modes';
 import {clearHoveredItem, setHoveredItem} from '../reducers/hover';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 
-import {getSelectedItems} from '../helper/selection';
+import {getSelectedLeafItems} from '../helper/selection';
 import SelectTool from '../helper/selection-tools/select-tool';
 import SelectModeComponent from '../components/select-mode.jsx';
 
@@ -86,7 +86,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearSelectedItems());
     },
     setSelectedItems: () => {
-        dispatch(setSelectedItems(getSelectedItems(true /* recursive */)));
+        dispatch(setSelectedItems(getSelectedLeafItems()));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.SELECT));

@@ -1,4 +1,4 @@
-import {clearSelection, getSelectedItems} from '../selection';
+import {clearSelection, getSelectedLeafItems} from '../selection';
 
 /** Sub tool of the Reshape tool for moving handles, which adjust bezier curves. */
 class HandleTool {
@@ -28,7 +28,7 @@ class HandleTool {
         this.hitType = hitProperties.hitResult.type;
     }
     onMouseDrag (event) {
-        const selectedItems = getSelectedItems(true /* recursive */);
+        const selectedItems = getSelectedLeafItems();
         
         for (const item of selectedItems) {
             for (const seg of item.segments) {

@@ -7,7 +7,7 @@ import Modes from '../modes/modes';
 import {changeMode} from '../reducers/modes';
 import {clearHoveredItem, setHoveredItem} from '../reducers/hover';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
-import {getSelectedItems} from '../helper/selection';
+import {getSelectedLeafItems} from '../helper/selection';
 
 import ReshapeTool from '../helper/selection-tools/reshape-tool';
 import ReshapeModeComponent from '../components/reshape-mode.jsx';
@@ -88,7 +88,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearSelectedItems());
     },
     setSelectedItems: () => {
-        dispatch(setSelectedItems(getSelectedItems(true /* recursive */)));
+        dispatch(setSelectedItems(getSelectedLeafItems()));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.RESHAPE));

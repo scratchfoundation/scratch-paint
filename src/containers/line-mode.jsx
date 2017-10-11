@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
 import {changeStrokeWidth} from '../reducers/stroke-width';
-import {clearSelection, getSelectedItems} from '../helper/selection';
+import {clearSelection, getSelectedLeafItems} from '../helper/selection';
 import {MIXED} from '../helper/style-path';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import LineModeComponent from '../components/line-mode.jsx';
@@ -299,7 +299,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearSelectedItems());
     },
     setSelectedItems: () => {
-        dispatch(setSelectedItems(getSelectedItems(true /* recursive */)));
+        dispatch(setSelectedItems(getSelectedLeafItems()));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.LINE));

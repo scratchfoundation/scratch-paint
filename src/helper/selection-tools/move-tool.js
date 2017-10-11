@@ -1,7 +1,7 @@
 import {isGroup} from '../group';
 import {isCompoundPathItem, getRootItem} from '../item';
 import {snapDeltaToAngle} from '../math';
-import {clearSelection, cloneSelection, getSelectedItems, setItemSelection} from '../selection';
+import {clearSelection, cloneSelection, getSelectedLeafItems, setItemSelection} from '../selection';
 
 /**
  * Tool to handle dragging an item to reposition it in a selection mode.
@@ -52,7 +52,7 @@ class MoveTool {
             this._select(item, true, hitProperties.subselect);
         }
         if (hitProperties.clone) cloneSelection(hitProperties.subselect);
-        this.selectedItems = getSelectedItems(true /* subselect */);
+        this.selectedItems = getSelectedLeafItems();
     }
     /**
      * Sets the selection state of an item.

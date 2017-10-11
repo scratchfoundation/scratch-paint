@@ -56,7 +56,7 @@ class Blobbiness {
         const oldStrokeColor = this.options ? this.options.strokeColor : null;
         const oldStrokeWidth = this.options ? this.options.strokeWidth : null;
         // If values are mixed, it means the color was set by a selection contained multiple values.
-        // In this case keep drawing with the previous values if any. (For stroke width, null indicates)
+        // In this case keep drawing with the previous values if any. (For stroke width, null indicates
         // mixed, because stroke width is required to be a number)
         this.options = {
             ...options,

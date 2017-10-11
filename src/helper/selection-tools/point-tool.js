@@ -1,6 +1,6 @@
 import paper from 'paper';
 import {snapDeltaToAngle} from '../math';
-import {clearSelection, getSelectedItems} from '../selection';
+import {clearSelection, getSelectedLeafItems} from '../selection';
 
 /** Subtool of ReshapeTool for moving control points. */
 class PointTool {
@@ -58,7 +58,7 @@ class PointTool {
             hitProperties.hitResult.segment.selected = true;
         }
         
-        this.selectedItems = getSelectedItems(true /* recursive */);
+        this.selectedItems = getSelectedLeafItems();
     }
     /**
      * @param {!object} hitProperties Describes the mouse event
