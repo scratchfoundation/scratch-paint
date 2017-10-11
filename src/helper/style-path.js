@@ -9,7 +9,7 @@ const MIXED = 'scratch-paint/style-path/mixed';
  * @param {string} colorString New color, css format
  */
 const applyFillColorToSelection = function (colorString) {
-    const items = getSelectedLeafItems;
+    const items = getSelectedLeafItems();
     for (const item of items) {
         if (isPGTextItem(item)) {
             for (const child of item.children) {
