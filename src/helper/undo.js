@@ -12,6 +12,9 @@ const performSnapshot = function (dispatchPerformSnapshot) {
 };
 
 const _restore = function (entry, onUpdateSvg) {
+    for (const layer of paper.project.layers) {
+        layer.removeChildren();
+    }
     paper.project.clear();
     paper.project.importJSON(entry.json);
     paper.view.update();

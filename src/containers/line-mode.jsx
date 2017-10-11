@@ -4,7 +4,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
-import {changeStrokeWidth} from '../reducers/stroke-width';
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
 import {MIXED} from '../helper/style-path';
 import {changeMode} from '../reducers/modes';

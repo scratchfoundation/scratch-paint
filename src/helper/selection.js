@@ -178,7 +178,6 @@ const _deleteItemSelection = function (items, onUpdateSvg) {
 };
 
 const _removeSelectedSegments = function (items, onUpdateSvg) {
-    performSnapshot(undoSnapshot);
     const segmentsToRemove = [];
     
     for (let i = 0; i < items.length; i++) {
