@@ -1,6 +1,8 @@
 /* eslint-env jest */
 import strokeWidthReducer from '../../src/reducers/stroke-width';
 import {MAX_STROKE_WIDTH, changeStrokeWidth} from '../../src/reducers/stroke-width';
+import {setSelectedItems} from '../../src/reducers/selected-items';
+import {mockPaperRootItem} from '../__mocks__/paperMocks';
 
 test('initialState', () => {
     let defaultState;
@@ -21,6 +23,22 @@ test('changestrokeWidth', () => {
         .toEqual(0);
     expect(strokeWidthReducer(1 /* state */, changeStrokeWidth(453452352) /* action */))
         .toEqual(MAX_STROKE_WIDTH);
+});
+
+test('changeStrokeWidthViaSelectedItems', () => {
+    let defaultState;
+
+    const strokeWidth1 = 6;
+    let strokeWidth2; // no outline
+    let selectedItems = [mockPaperRootItem({strokeWidth: strokeWidth1})];
+    expect(strokeWidthReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */))
+        .toEqual(strokeWidth1);
+    selectedItems = [mockPaperRootItem({strokeWidth: strokeWidth2})];
+    expect(strokeWidthReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */))
+        .toEqual(0); // Convert no outline to stroke width 0
+    selectedItems = [mockPaperRootItem({strokeWidth: strokeWidth1}), mockPaperRootItem({strokeWidth: strokeWidth2})];
+    expect(strokeWidthReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */))
+        .toEqual(null); // null indicates mixed for stroke width
 });
 
 test('invalidChangestrokeWidth', () => {

@@ -1,16 +1,20 @@
 import {isGroup} from '../group';
 import {isCompoundPathItem, getRootItem} from '../item';
 import {snapDeltaToAngle} from '../math';
-import {clearSelection, cloneSelection, getSelectedItems, setItemSelection} from '../selection';
+import {clearSelection, cloneSelection, getSelectedLeafItems, setItemSelection} from '../selection';
 
 /**
  * Tool to handle dragging an item to reposition it in a selection mode.
  */
 class MoveTool {
     /**
+     * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
+     * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
-    constructor (onUpdateSvg) {
+    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
+        this.setSelectedItems = setSelectedItems;
+        this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
         this.onUpdateSvg = onUpdateSvg;
     }
@@ -34,7 +38,7 @@ class MoveTool {
             // Double click causes all points to be selected in subselect mode.
             if (hitProperties.doubleClicked) {
                 if (!hitProperties.multiselect) {
-                    clearSelection();
+                    clearSelection(this.clearSelectedItems);
                 }
                 this._select(item, true /* state */, hitProperties.subselect, true /* fullySelect */);
             } else if (hitProperties.multiselect) {
@@ -43,12 +47,12 @@ class MoveTool {
         } else {
             // deselect all by default if multiselect isn't on
             if (!hitProperties.multiselect) {
-                clearSelection();
+                clearSelection(this.clearSelectedItems);
             }
             this._select(item, true, hitProperties.subselect);
         }
         if (hitProperties.clone) cloneSelection(hitProperties.subselect);
-        this.selectedItems = getSelectedItems(true /* subselect */);
+        this.selectedItems = getSelectedLeafItems();
     }
     /**
      * Sets the selection state of an item.
@@ -71,6 +75,7 @@ class MoveTool {
         } else {
             setItemSelection(item, state);
         }
+        this.setSelectedItems();
     }
     onMouseDrag (event) {
         const dragVector = event.point.subtract(event.downPoint);

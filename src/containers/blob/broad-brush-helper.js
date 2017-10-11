@@ -1,6 +1,6 @@
 // Broadbrush based on http://paperjs.org/tutorials/interaction/working-with-mouse-vectors/
 import paper from 'paper';
-import {stylePath} from './style-path';
+import {stylePath} from '../../helper/style-path';
 
 /**
  * Broad brush functions to add as listeners on the mouse. Call them when the corresponding mouse event happens

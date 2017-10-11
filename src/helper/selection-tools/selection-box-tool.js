@@ -3,16 +3,24 @@ import {clearSelection, processRectangularSelection} from '../selection';
 
 /** Tool to handle drag selection. A dotted line box appears and everything enclosed is selected. */
 class SelectionBoxTool {
-    constructor (mode) {
+    /**
+     * @param {!Modes} mode Current paint editor mode
+     * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
+     * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
+     */
+    constructor (mode, setSelectedItems, clearSelectedItems) {
         this.selectionRect = null;
         this.mode = mode;
+        this.setSelectedItems = setSelectedItems;
+        this.clearSelectedItems = clearSelectedItems;
     }
     /**
      * @param {boolean} multiselect Whether to multiselect on mouse down (e.g. shift key held)
      */
     onMouseDown (multiselect) {
         if (!multiselect) {
-            clearSelection();
+            clearSelection(this.clearSelectedItems);
+            this.clearSelectedItems();
         }
     }
     onMouseDrag (event) {
@@ -25,6 +33,7 @@ class SelectionBoxTool {
             processRectangularSelection(event, this.selectionRect, this.mode);
             this.selectionRect.remove();
             this.selectionRect = null;
+            this.setSelectedItems();
         }
     }
 }

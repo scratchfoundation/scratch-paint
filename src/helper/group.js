@@ -1,16 +1,16 @@
 import paper from 'paper';
 import {getRootItem, isGroupItem} from './item';
-import {clearSelection, getSelectedItems, setItemSelection} from './selection';
+import {clearSelection, getSelectedRootItems, setItemSelection} from './selection';
 
 const isGroup = function (item) {
     return isGroupItem(item);
 };
 
-const groupSelection = function () {
-    const items = getSelectedItems();
+const groupSelection = function (clearSelectedItems) {
+    const items = getSelectedRootItems();
     if (items.length > 0) {
         const group = new paper.Group(items);
-        clearSelection();
+        clearSelection(clearSelectedItems);
         setItemSelection(group, true);
         for (let i = 0; i < group.children.length; i++) {
             group.children[i].selected = true;
@@ -47,8 +47,8 @@ const ungroupLoop = function (group, recursive) {
 };
 
 // ungroup items (only top hierarchy)
-const ungroupItems = function (items) {
-    clearSelection();
+const ungroupItems = function (items, clearSelectedItems) {
+    clearSelection(clearSelectedItems);
     const emptyGroups = [];
     for (let i = 0; i < items.length; i++) {
         const item = items[i];
@@ -71,7 +71,7 @@ const ungroupItems = function (items) {
 };
 
 const ungroupSelection = function () {
-    const items = getSelectedItems();
+    const items = getSelectedRootItems();
     ungroupItems(items);
 };
 
@@ -102,12 +102,12 @@ const isGroupChild = function (item) {
 };
 
 const shouldShowGroup = function () {
-    const items = getSelectedItems();
+    const items = getSelectedRootItems();
     return items.length > 1;
 };
 
 const shouldShowUngroup = function () {
-    const items = getSelectedItems();
+    const items = getSelectedRootItems();
     for (let i = 0; i < items.length; i++) {
         const item = items[i];
         if (isGroup(item) && !item.data.isPGTextItem && item.children && item.children.length > 0) {

@@ -5,6 +5,7 @@ import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
 import Blobbiness from './blob/blob';
 import {changeBrushSize} from '../reducers/eraser-mode';
+import {clearSelectedItems} from '../reducers/selected-items';
 import EraserModeComponent from '../components/eraser-mode.jsx';
 import {changeMode} from '../reducers/modes';
 
@@ -16,7 +17,7 @@ class EraserMode extends React.Component {
             'deactivateTool',
             'onScroll'
         ]);
-        this.blob = new Blobbiness(this.props.onUpdateSvg);
+        this.blob = new Blobbiness(this.props.onUpdateSvg, this.props.clearSelectedItems);
     }
     componentDidMount () {
         if (this.props.isEraserModeActive) {
@@ -65,6 +66,7 @@ class EraserMode extends React.Component {
 EraserMode.propTypes = {
     canvas: PropTypes.instanceOf(Element).isRequired,
     changeBrushSize: PropTypes.func.isRequired,
+    clearSelectedItems: PropTypes.func.isRequired,
     eraserModeState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
     }),
@@ -78,6 +80,9 @@ const mapStateToProps = state => ({
     isEraserModeActive: state.scratchPaint.mode === Modes.ERASER
 });
 const mapDispatchToProps = dispatch => ({
+    clearSelectedItems: () => {
+        dispatch(clearSelectedItems());
+    },
     changeBrushSize: brushSize => {
         dispatch(changeBrushSize(brushSize));
     },
