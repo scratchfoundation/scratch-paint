@@ -171,7 +171,7 @@ const _deleteItemSelection = function (items, onUpdateSvg) {
     }
     
     // @todo: Update toolbar state on change
-    if (items.lenth > 0) {
+    if (items.length > 0) {
         paper.project.view.update();
         onUpdateSvg();
     }
