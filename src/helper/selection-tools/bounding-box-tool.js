@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 import keyMirror from 'keymirror';
 
 import {getSelectedRootItems} from '../selection';

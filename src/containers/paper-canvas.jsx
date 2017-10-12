@@ -2,7 +2,7 @@ import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import paper from 'paper';
+import paper from '@scratch/paper';
 
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot} from '../reducers/undo';

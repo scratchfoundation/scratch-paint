@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 import log from '../../log/log';
 import keyMirror from 'keymirror';
 

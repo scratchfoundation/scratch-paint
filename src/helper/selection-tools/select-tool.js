@@ -4,7 +4,7 @@ import {getHoveredItem} from '../hover';
 import {deleteSelection, selectRootItem} from '../selection';
 import BoundingBoxTool from './bounding-box-tool';
 import SelectionBoxTool from './selection-box-tool';
-import paper from 'paper';
+import paper from '@scratch/paper';
 
 /**
  * paper.Tool that handles select mode. This is made up of 2 subtools.

@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 import {getRootItem, isGroupItem} from './item';
 import {clearSelection, getSelectedRootItems, setItemSelection} from './selection';
 
