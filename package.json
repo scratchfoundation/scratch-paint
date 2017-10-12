@@ -27,6 +27,7 @@
     "react-dom": "^15"
   },
   "devDependencies": {
+    "@scratch/paper": "~0.11.6",
     "autoprefixer": "7.1.2",
     "babel-cli": "6.26.0",
     "babel-core": "^6.23.1",

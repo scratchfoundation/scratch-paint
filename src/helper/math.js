@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 
 const checkPointsClose = function (startPos, eventPoint, threshold) {
     const xOff = Math.abs(startPos.x - eventPoint.x);

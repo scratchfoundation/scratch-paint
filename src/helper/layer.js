@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 
 const getGuideLayer = function () {
     for (let i = 0; i < paper.project.layers.length; i++) {
