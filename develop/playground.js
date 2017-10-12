@@ -17323,7 +17323,7 @@ var _paper = __webpack_require__(7);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _modes = __webpack_require__(20);
+var _modes = __webpack_require__(18);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -17852,7 +17852,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var _prodInvariant = __webpack_require__(30);
 
-var ReactCurrentOwner = __webpack_require__(18);
+var ReactCurrentOwner = __webpack_require__(19);
 
 var invariant = __webpack_require__(1);
 var warning = __webpack_require__(2);
@@ -20289,6 +20289,33 @@ exports.default = (0, _minilog2.default)('scratch-paint');
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _keymirror = __webpack_require__(78);
+
+var _keymirror2 = _interopRequireDefault(_keymirror);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Modes = (0, _keymirror2.default)({
+    BRUSH: null,
+    ERASER: null,
+    LINE: null,
+    SELECT: null,
+    RESHAPE: null
+});
+
+exports.default = Modes;
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -20319,7 +20346,7 @@ var ReactCurrentOwner = {
 module.exports = ReactCurrentOwner;
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20574,33 +20601,6 @@ var ReactUpdates = {
 
 module.exports = ReactUpdates;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _keymirror = __webpack_require__(78);
-
-var _keymirror2 = _interopRequireDefault(_keymirror);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Modes = (0, _keymirror2.default)({
-    BRUSH: null,
-    ERASER: null,
-    LINE: null,
-    SELECT: null,
-    RESHAPE: null
-});
-
-exports.default = Modes;
 
 /***/ }),
 /* 21 */
@@ -22932,7 +22932,7 @@ module.exports = Transform;
 
 var _assign = __webpack_require__(6);
 
-var ReactCurrentOwner = __webpack_require__(18);
+var ReactCurrentOwner = __webpack_require__(19);
 
 var warning = __webpack_require__(2);
 var canDefineProperty = __webpack_require__(39);
@@ -23390,7 +23390,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeMode = exports.default = undefined;
 
-var _modes = __webpack_require__(20);
+var _modes = __webpack_require__(18);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -27864,10 +27864,10 @@ module.exports = KeyEscapeUtils;
 
 var _prodInvariant = __webpack_require__(3);
 
-var ReactCurrentOwner = __webpack_require__(18);
+var ReactCurrentOwner = __webpack_require__(19);
 var ReactInstanceMap = __webpack_require__(37);
 var ReactInstrumentation = __webpack_require__(15);
-var ReactUpdates = __webpack_require__(19);
+var ReactUpdates = __webpack_require__(20);
 
 var invariant = __webpack_require__(1);
 var warning = __webpack_require__(2);
@@ -28928,6 +28928,7 @@ var hoverItem = function hoverItem(hitResult) {
         clone.closed = true;
     }
     clone.parent = (0, _layer.getGuideLayer)();
+    clone.position = hitResult.item.position;
     clone.strokeColor = GUIDE_BLUE;
     clone.fillColor = null;
     clone.data.isHelperItem = true;
@@ -29490,7 +29491,7 @@ module.exports = getIteratorFn;
 
 
 
-var ReactCurrentOwner = __webpack_require__(18);
+var ReactCurrentOwner = __webpack_require__(19);
 var ReactComponentTreeHook = __webpack_require__(12);
 var ReactElement = __webpack_require__(26);
 
@@ -31360,7 +31361,7 @@ var _assign = __webpack_require__(6);
 
 var LinkedValueUtils = __webpack_require__(65);
 var ReactDOMComponentTree = __webpack_require__(8);
-var ReactUpdates = __webpack_require__(19);
+var ReactUpdates = __webpack_require__(20);
 
 var warning = __webpack_require__(2);
 
@@ -31854,7 +31855,7 @@ module.exports = ReactHostComponent;
 
 var _prodInvariant = __webpack_require__(3);
 
-var ReactCurrentOwner = __webpack_require__(18);
+var ReactCurrentOwner = __webpack_require__(19);
 var REACT_ELEMENT_TYPE = __webpack_require__(199);
 
 var getIteratorFn = __webpack_require__(200);
@@ -32291,7 +32292,7 @@ var DOMLazyTree = __webpack_require__(32);
 var DOMProperty = __webpack_require__(24);
 var React = __webpack_require__(29);
 var ReactBrowserEventEmitter = __webpack_require__(46);
-var ReactCurrentOwner = __webpack_require__(18);
+var ReactCurrentOwner = __webpack_require__(19);
 var ReactDOMComponentTree = __webpack_require__(8);
 var ReactDOMContainerInfo = __webpack_require__(229);
 var ReactDOMFeatureFlags = __webpack_require__(230);
@@ -32301,7 +32302,7 @@ var ReactInstrumentation = __webpack_require__(15);
 var ReactMarkupChecksum = __webpack_require__(231);
 var ReactReconciler = __webpack_require__(31);
 var ReactUpdateQueue = __webpack_require__(70);
-var ReactUpdates = __webpack_require__(19);
+var ReactUpdates = __webpack_require__(20);
 
 var emptyObject = __webpack_require__(40);
 var instantiateReactComponent = __webpack_require__(104);
@@ -34472,6 +34473,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _modes = __webpack_require__(18);
+
+var _modes2 = _interopRequireDefault(_modes);
+
 var _group = __webpack_require__(49);
 
 var _item = __webpack_require__(33);
@@ -34480,6 +34485,8 @@ var _math = __webpack_require__(132);
 
 var _selection = __webpack_require__(10);
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
@@ -34487,13 +34494,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var MoveTool = function () {
     /**
+     * @param {Modes} mode Paint editor mode
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
-    function MoveTool(setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    function MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateSvg) {
         _classCallCheck(this, MoveTool);
 
+        this.mode = mode;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
@@ -34537,7 +34546,7 @@ var MoveTool = function () {
                 this._select(item, true, hitProperties.subselect);
             }
             if (hitProperties.clone) (0, _selection.cloneSelection)(hitProperties.subselect, this.onUpdateSvg);
-            this.selectedItems = (0, _selection.getSelectedLeafItems)();
+            this.selectedItems = this.mode === _modes2.default.RESHAPE ? (0, _selection.getSelectedLeafItems)() : (0, _selection.getSelectedRootItems)();
         }
         /**
          * Sets the selection state of an item.
@@ -35354,7 +35363,7 @@ module.exports = PooledClass;
 
 var _prodInvariant = __webpack_require__(30);
 
-var ReactCurrentOwner = __webpack_require__(18);
+var ReactCurrentOwner = __webpack_require__(19);
 var REACT_ELEMENT_TYPE = __webpack_require__(84);
 
 var getIteratorFn = __webpack_require__(85);
@@ -36995,7 +37004,7 @@ var ReactDOMComponentTree = __webpack_require__(8);
 var ReactDefaultInjection = __webpack_require__(155);
 var ReactMount = __webpack_require__(112);
 var ReactReconciler = __webpack_require__(31);
-var ReactUpdates = __webpack_require__(19);
+var ReactUpdates = __webpack_require__(20);
 var ReactVersion = __webpack_require__(233);
 
 var findDOMNode = __webpack_require__(234);
@@ -37852,7 +37861,7 @@ var EventPluginHub = __webpack_require__(35);
 var EventPropagators = __webpack_require__(34);
 var ExecutionEnvironment = __webpack_require__(9);
 var ReactDOMComponentTree = __webpack_require__(8);
-var ReactUpdates = __webpack_require__(19);
+var ReactUpdates = __webpack_require__(20);
 var SyntheticEvent = __webpack_require__(22);
 
 var inputValueTracking = __webpack_require__(95);
@@ -41406,7 +41415,7 @@ var _prodInvariant = __webpack_require__(3),
 var DOMPropertyOperations = __webpack_require__(101);
 var LinkedValueUtils = __webpack_require__(65);
 var ReactDOMComponentTree = __webpack_require__(8);
-var ReactUpdates = __webpack_require__(19);
+var ReactUpdates = __webpack_require__(20);
 
 var invariant = __webpack_require__(1);
 var warning = __webpack_require__(2);
@@ -41826,7 +41835,7 @@ var _prodInvariant = __webpack_require__(3),
 
 var LinkedValueUtils = __webpack_require__(65);
 var ReactDOMComponentTree = __webpack_require__(8);
-var ReactUpdates = __webpack_require__(19);
+var ReactUpdates = __webpack_require__(20);
 
 var invariant = __webpack_require__(1);
 var warning = __webpack_require__(2);
@@ -41993,7 +42002,7 @@ var ReactComponentEnvironment = __webpack_require__(66);
 var ReactInstanceMap = __webpack_require__(37);
 var ReactInstrumentation = __webpack_require__(15);
 
-var ReactCurrentOwner = __webpack_require__(18);
+var ReactCurrentOwner = __webpack_require__(19);
 var ReactReconciler = __webpack_require__(31);
 var ReactChildReconciler = __webpack_require__(194);
 
@@ -42603,7 +42612,7 @@ var _prodInvariant = __webpack_require__(3),
 
 var React = __webpack_require__(29);
 var ReactComponentEnvironment = __webpack_require__(66);
-var ReactCurrentOwner = __webpack_require__(18);
+var ReactCurrentOwner = __webpack_require__(19);
 var ReactErrorUtils = __webpack_require__(58);
 var ReactInstanceMap = __webpack_require__(37);
 var ReactInstrumentation = __webpack_require__(15);
@@ -44425,7 +44434,7 @@ module.exports = ReactDOMTextComponent;
 
 var _assign = __webpack_require__(6);
 
-var ReactUpdates = __webpack_require__(19);
+var ReactUpdates = __webpack_require__(20);
 var Transaction = __webpack_require__(42);
 
 var emptyFunction = __webpack_require__(14);
@@ -44502,7 +44511,7 @@ var EventListener = __webpack_require__(109);
 var ExecutionEnvironment = __webpack_require__(9);
 var PooledClass = __webpack_require__(27);
 var ReactDOMComponentTree = __webpack_require__(8);
-var ReactUpdates = __webpack_require__(19);
+var ReactUpdates = __webpack_require__(20);
 
 var getEventTarget = __webpack_require__(59);
 var getUnboundedScrollPosition = __webpack_require__(209);
@@ -44705,7 +44714,7 @@ var ReactComponentEnvironment = __webpack_require__(66);
 var ReactEmptyComponent = __webpack_require__(106);
 var ReactBrowserEventEmitter = __webpack_require__(46);
 var ReactHostComponent = __webpack_require__(107);
-var ReactUpdates = __webpack_require__(19);
+var ReactUpdates = __webpack_require__(20);
 
 var ReactInjection = {
   Component: ReactComponentEnvironment.injection,
@@ -46761,7 +46770,7 @@ module.exports = '15.6.1';
 
 var _prodInvariant = __webpack_require__(3);
 
-var ReactCurrentOwner = __webpack_require__(18);
+var ReactCurrentOwner = __webpack_require__(19);
 var ReactDOMComponentTree = __webpack_require__(8);
 var ReactInstanceMap = __webpack_require__(37);
 
@@ -47128,7 +47137,7 @@ var _layer = __webpack_require__(50);
 
 var _undo2 = __webpack_require__(123);
 
-var _modes2 = __webpack_require__(20);
+var _modes2 = __webpack_require__(18);
 
 var _modes3 = _interopRequireDefault(_modes2);
 
@@ -53339,7 +53348,7 @@ var _lodash = __webpack_require__(13);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(20);
+var _modes = __webpack_require__(18);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -56479,7 +56488,7 @@ var _lodash = __webpack_require__(13);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(20);
+var _modes = __webpack_require__(18);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -56678,7 +56687,7 @@ var _lodash = __webpack_require__(13);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(20);
+var _modes = __webpack_require__(18);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -56832,7 +56841,7 @@ var _keymirror = __webpack_require__(78);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
-var _modes = __webpack_require__(20);
+var _modes = __webpack_require__(18);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -56924,7 +56933,7 @@ var ReshapeTool = function (_paper$Tool) {
         _this.lastEvent = null;
         _this.mode = ReshapeModes.SELECTION_BOX;
         _this._modeMap = {};
-        _this._modeMap[ReshapeModes.FILL] = new _moveTool2.default(setSelectedItems, clearSelectedItems, onUpdateSvg);
+        _this._modeMap[ReshapeModes.FILL] = new _moveTool2.default(_modes2.default.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateSvg);
         _this._modeMap[ReshapeModes.POINT] = new _pointTool2.default(setSelectedItems, clearSelectedItems, onUpdateSvg);
         _this._modeMap[ReshapeModes.HANDLE] = new _handleTool2.default(setSelectedItems, clearSelectedItems, onUpdateSvg);
         _this._modeMap[ReshapeModes.SELECTION_BOX] = new _selectionBoxTool2.default(_modes2.default.RESHAPE, setSelectedItems, clearSelectedItems);
@@ -57716,7 +57725,7 @@ var _lodash = __webpack_require__(13);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(20);
+var _modes = __webpack_require__(18);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -57856,7 +57865,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _modes = __webpack_require__(20);
+var _modes = __webpack_require__(18);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -57919,7 +57928,7 @@ var SelectTool = function (_paper$Tool) {
         _this.setHoveredItem = setHoveredItem;
         _this.clearHoveredItem = clearHoveredItem;
         _this.onUpdateSvg = onUpdateSvg;
-        _this.boundingBoxTool = new _boundingBoxTool2.default(setSelectedItems, clearSelectedItems, onUpdateSvg);
+        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.SELECT, setSelectedItems, clearSelectedItems, onUpdateSvg);
         _this.selectionBoxTool = new _selectionBoxTool2.default(_modes2.default.SELECT, setSelectedItems, clearSelectedItems);
         _this.selectionBoxMode = false;
         _this.prevHoveredItemId = null;
@@ -58097,7 +58106,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /** SVG for the rotation icon on the bounding box */
 var ARROW_PATH = 'M19.28,1.09C19.28.28,19,0,18.2,0c-1.67,0-3.34,0-5,0-.34,0-.88.24-1,.47a1.4,1.4,' + '0,0,0,.36,1.08,15.27,15.27,0,0,0,1.46,1.36A6.4,6.4,0,0,1,6.52,4,5.85,5.85,0,0,1,5.24,3,15.27,15.27,' + '0,0,0,6.7,1.61,1.4,1.4,0,0,0,7.06.54C7,.3,6.44.07,6.1.06c-1.67,0-3.34,0-5,0C.28,0,0,.31,0,1.12c0,1.67,' + '0,3.34,0,5a1.23,1.23,0,0,0,.49,1,1.22,1.22,0,0,0,1-.31A14.38,14.38,0,0,0,2.84,5.26l.73.62a9.45,9.45,' + '0,0,0,7.34,2,9.45,9.45,0,0,0,4.82-2.05l.73-.62a14.38,14.38,0,0,0,1.29,1.51,1.22,1.22,' + '0,0,0,1,.31,1.23,1.23,0,0,0,.49-1C19.31,4.43,19.29,2.76,19.28,1.09Z';
 /** Modes of the bounding box tool, which can do many things depending on how it's used. */
-var Modes = (0, _keymirror2.default)({
+var BoundingBoxModes = (0, _keymirror2.default)({
     SCALE: null,
     ROTATE: null,
     MOVE: null
@@ -58113,11 +58122,12 @@ var Modes = (0, _keymirror2.default)({
 
 var BoundingBoxTool = function () {
     /**
+     * @param {Modes} mode Paint editor mode
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
-    function BoundingBoxTool(setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    function BoundingBoxTool(mode, setSelectedItems, clearSelectedItems, onUpdateSvg) {
         _classCallCheck(this, BoundingBoxTool);
 
         this.onUpdateSvg = onUpdateSvg;
@@ -58126,9 +58136,9 @@ var BoundingBoxTool = function () {
         this.boundsScaleHandles = [];
         this.boundsRotHandles = [];
         this._modeMap = {};
-        this._modeMap[Modes.SCALE] = new _scaleTool2.default(onUpdateSvg);
-        this._modeMap[Modes.ROTATE] = new _rotateTool2.default(onUpdateSvg);
-        this._modeMap[Modes.MOVE] = new _moveTool2.default(setSelectedItems, clearSelectedItems, onUpdateSvg);
+        this._modeMap[BoundingBoxModes.SCALE] = new _scaleTool2.default(onUpdateSvg);
+        this._modeMap[BoundingBoxModes.ROTATE] = new _rotateTool2.default(onUpdateSvg);
+        this._modeMap[BoundingBoxModes.MOVE] = new _moveTool2.default(mode, setSelectedItems, clearSelectedItems, onUpdateSvg);
     }
 
     /**
@@ -58157,15 +58167,15 @@ var BoundingBoxTool = function () {
             for (var i = 0; i < hitResults.length; i++) {
                 if (hitResults[i].item.data && hitResults[i].item.data.isScaleHandle) {
                     hitResult = hitResults[i];
-                    this.mode = Modes.SCALE;
+                    this.mode = BoundingBoxModes.SCALE;
                     break;
                 } else if (hitResults[i].item.data && hitResults[i].item.data.isRotHandle) {
                     hitResult = hitResults[i];
-                    this.mode = Modes.ROTATE;
+                    this.mode = BoundingBoxModes.ROTATE;
                 }
             }
             if (!this.mode) {
-                this.mode = Modes.MOVE;
+                this.mode = BoundingBoxModes.MOVE;
             }
 
             var hitProperties = {
@@ -58173,11 +58183,11 @@ var BoundingBoxTool = function () {
                 clone: event.modifiers.alt,
                 multiselect: event.modifiers.shift
             };
-            if (this.mode === Modes.MOVE) {
+            if (this.mode === BoundingBoxModes.MOVE) {
                 this._modeMap[this.mode].onMouseDown(hitProperties);
-            } else if (this.mode === Modes.SCALE) {
+            } else if (this.mode === BoundingBoxModes.SCALE) {
                 this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, this.boundsScaleHandles, this.boundsRotHandles, (0, _selection.getSelectedRootItems)());
-            } else if (this.mode === Modes.ROTATE) {
+            } else if (this.mode === BoundingBoxModes.ROTATE) {
                 this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, (0, _selection.getSelectedRootItems)());
             }
 
@@ -58816,7 +58826,7 @@ var _lodash = __webpack_require__(13);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(20);
+var _modes = __webpack_require__(18);
 
 var _modes2 = _interopRequireDefault(_modes);
 
