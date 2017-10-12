@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 
 import PropTypes from 'prop-types';
 import React from 'react';

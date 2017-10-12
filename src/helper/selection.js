@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 import Modes from '../modes/modes';
 
 import {getItemsGroup, isGroup} from './group';

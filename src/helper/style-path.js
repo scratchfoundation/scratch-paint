@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 import {getSelectedLeafItems} from './selection';
 import {isPGTextItem, isPointTextItem} from './item';
 import {isGroup} from './group';

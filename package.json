@@ -27,6 +27,7 @@
     "react-dom": "^15"
   },
   "devDependencies": {
+    "@scratch/paper": "0.11.5",
     "autoprefixer": "7.1.2",
     "babel-cli": "6.26.0",
     "babel-core": "^6.23.1",
@@ -53,7 +54,6 @@
     "lodash.defaultsdeep": "4.6.0",
     "minilog": "3.1.0",
     "mkdirp": "^0.5.1",
-    "paper": "0.11.4",
     "postcss-import": "^10.0.0",
     "postcss-loader": "^2.0.5",
     "postcss-simple-vars": "^4.0.0",

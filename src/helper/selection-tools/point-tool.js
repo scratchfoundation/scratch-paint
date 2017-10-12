@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 import {snapDeltaToAngle} from '../math';
 import {clearSelection, getSelectedLeafItems} from '../selection';
 

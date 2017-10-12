@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 
 const getRootItem = function (item) {
     if (item.parent.className === 'Layer') {

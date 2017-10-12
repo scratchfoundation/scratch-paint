@@ -1,5 +1,5 @@
 // Broadbrush based on http://paperjs.org/tutorials/interaction/working-with-mouse-vectors/
-import paper from 'paper';
+import paper from '@scratch/paper';
 import {stylePath} from '../../helper/style-path';
 
 /**

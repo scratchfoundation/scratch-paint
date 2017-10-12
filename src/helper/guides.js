@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 import {getGuideLayer} from './layer';
 import {getAllRootItems} from './selection';
 
