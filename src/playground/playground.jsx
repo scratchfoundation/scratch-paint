@@ -32,6 +32,7 @@ ReactDOM.render((
             <PaintEditor
                 rotationCenterX={0}
                 rotationCenterY={0}
+                svg={svgString}
                 onUpdateSvg={onUpdateSvg}
             />
         </IntlProvider>
