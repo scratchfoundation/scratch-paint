@@ -34,39 +34,43 @@ class PaperCanvas extends React.Component {
         paper.remove();
     }
     importSvg (svg, rotationCenterX, rotationCenterY) {
-        const imported = paper.project.importSVG(svg,
-            {
-                expandShapes: true,
-                onLoad: function (item) {
-                    // Remove viewbox
-                    if (item.clipped) {
-                        let mask;
-                        for (const child of item.children) {
-                            if (child.isClipMask()) {
-                                mask = child;
-                                break;
-                            }
-                        }
-                        item.clipped = false;
-                        mask.remove();
-                        // Consider removing clip mask here?
-                    }
-                    while (item.reduce() !== item) {
-                        item = item.reduce();
-                    }
-                }
-            });
-        if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
-            imported.position =
-                paper.project.view.center
-                    .add(imported.bounds.width / 2, imported.bounds.height / 2)
-                    .subtract(rotationCenterX, rotationCenterY);
-        } else {
-            // Center
-            imported.position = paper.project.view.center;
-        }
+        paper.project.importSVG(svg, {
+            expandShapes: true,
+            onLoad: function (item) {
+                const itemWidth = item.bounds.width;
+                const itemHeight = item.bounds.height;
 
-        paper.project.view.update();
+                // Remove viewbox
+                if (item.clipped) {
+                    let mask;
+                    for (const child of item.children) {
+                        if (child.isClipMask()) {
+                            mask = child;
+                            break;
+                        }
+                    }
+                    item.clipped = false;
+                    mask.remove();
+                }
+                
+                // Reduce single item nested in groups
+                if (item.children && item.children.length === 1) {
+                    item = item.reduce();
+                }
+
+                if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
+                    item.position =
+                        paper.project.view.center
+                            .add(itemWidth / 2, itemHeight / 2)
+                            .subtract(rotationCenterX, rotationCenterY);
+                } else {
+                    // Center
+                    item.position = paper.project.view.center;
+                }
+
+                paper.project.view.update();
+            }
+        });
     }
     setCanvas (canvas) {
         this.canvas = canvas;
