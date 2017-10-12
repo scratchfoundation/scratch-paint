@@ -21,17 +21,18 @@ deploy:
 - provider: script
   on:
     all_branches: true
-    condition: $TRAVIS_BRANCH != master
+    condition: $TRAVIS_BRANCH != develop
   skip_cleanup: true
   script: npm run deploy -- -x -e $TRAVIS_BRANCH -r https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
 - provider: script
   on:
-    branch: master
+    branch: develop
   skip_cleanup: true
   script: npm run --silent deploy -- -x -a -r https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
 - provider: npm
+  on:
+    branch: develop
   skip_cleanup: true
   email: $NPM_EMAIL
   api_key: $NPM_TOKEN
-  on:
-    all_branches: true
+  
