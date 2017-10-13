@@ -84,6 +84,8 @@ class ColorPickerComponent extends React.Component {
 
     _makeBackground (channel) {
         const stops = [];
+        // Generate the color slider background CSS gradients by adding
+        // color stops depending on the slider.
         for (let n = 100; n >= 0; n -= 10) {
             switch (channel) {
             case 'hue':

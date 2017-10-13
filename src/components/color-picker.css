@@ -1,5 +1,4 @@
 /* Popover styles */
-/* @TODO need to fix tip border issue */
 :global(.Popover-body) {
     background: white;
     border: 1px solid #ddd;
@@ -8,6 +7,7 @@
     padding: 4px;
     box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, .3);
 }
+
 :global(.Popover-tipShape) {
     fill: white;
     stroke: #ddd;

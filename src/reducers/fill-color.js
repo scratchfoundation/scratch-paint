@@ -3,7 +3,7 @@ import {CHANGE_SELECTED_ITEMS} from './selected-items';
 import {getColorsFromSelection} from '../helper/style-path';
 
 const CHANGE_FILL_COLOR = 'scratch-paint/fill-color/CHANGE_FILL_COLOR';
-const initialState = '#aa0551';
+const initialState = '#000';
 // Matches hex colors
 const regExp = /^#([0-9a-f]{3}){1,2}$/i;
 
