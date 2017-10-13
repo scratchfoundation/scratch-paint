@@ -6,9 +6,6 @@ node_js:
 cache:
   directories:
   - node_modules
-env:
-  global:
-  - NODE_ENV=production
 install:
 - sudo apt-get update && sudo apt-get install -y libcairo2-dev libpango1.0-dev libssl-dev libjpeg62-dev libgif-dev pkg-config
 - npm install canvas
@@ -35,4 +32,3 @@ deploy:
   skip_cleanup: true
   email: $NPM_EMAIL
   api_key: $NPM_TOKEN
-  
