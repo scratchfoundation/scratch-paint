@@ -308,7 +308,7 @@ process.umask = function() { return 0; };
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * Paper.js v0.11.4 - The Swiss Army Knife of Vector Graphics Scripting.
+ * Paper.js v0.11.3 - The Swiss Army Knife of Vector Graphics Scripting.
  * http://paperjs.org/
  *
  * Copyright (c) 2011 - 2016, Juerg Lehni & Jonathan Puckey
@@ -318,7 +318,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Wed Jun 7 16:56:44 2017 +0200
+ * Date: Sat Apr 22 20:01:34 2017 +0200
  *
  ***
  *
@@ -1087,7 +1087,7 @@ var PaperScope = Base.extend({
 		}
 	},
 
-	version: "0.11.4",
+	version: "0.11.3",
 
 	getView: function() {
 		var project = this.project;
@@ -1830,7 +1830,7 @@ var LinkedPoint = Point.extend({
 	},
 
 	setSelected: function(selected) {
-		this._owner._changeSelection(this._getSelection(), selected);
+		this._owner.changeSelection(this._getSelection(), selected);
 	},
 
 	_getSelection: function() {
@@ -2406,8 +2406,8 @@ new function() {
 
 			setSelected: function(selected) {
 				var owner = this._owner;
-				if (owner._changeSelection) {
-					owner._changeSelection(2, selected);
+				if (owner.changeSelection) {
+					owner.changeSelection(2, selected);
 				}
 			}
 		})
@@ -3441,7 +3441,7 @@ new function() {
 		}
 	},
 
-	_changeSelection: function(flag, selected) {
+	changeSelection: function(flag, selected) {
 		var selection = this._selection;
 		this.setSelection(selected ? selection | flag : selection & ~flag);
 	},
@@ -3462,7 +3462,7 @@ new function() {
 			for (var i = 0, l = children.length; i < l; i++)
 				children[i].setSelected(selected);
 		}
-		this._changeSelection(1, selected);
+		this.changeSelection(1, selected);
 	},
 
 	isFullySelected: function() {
@@ -3483,7 +3483,7 @@ new function() {
 			for (var i = 0, l = children.length; i < l; i++)
 				children[i].setFullySelected(selected);
 		}
-		this._changeSelection(1, selected);
+		this.changeSelection(1, selected);
 	},
 
 	isClipMask: function() {
@@ -4834,6 +4834,7 @@ new function() {
 				half = size / 2;
 			ctx.strokeStyle = ctx.fillStyle = color
 					? color.toCanvasStyle(ctx) : '#009dec';
+			ctx.lineWidth=2.5;
 			if (itemSelected)
 				this._drawSelected(ctx, mx, selectionItems);
 			if (positionSelected) {
@@ -5983,7 +5984,7 @@ var Segment = Base.extend({
 		}
 	},
 
-	_changeSelection: function(flag, selected) {
+	changeSelection: function(flag, selected) {
 		var selection = this._selection;
 		this.setSelection(selected ? selection | flag : selection & ~flag);
 	},
@@ -5993,7 +5994,7 @@ var Segment = Base.extend({
 	},
 
 	setSelected: function(selected) {
-		this._changeSelection(7, selected);
+		this.changeSelection(7, selected);
 	},
 
 	getIndex: function() {
@@ -6267,7 +6268,7 @@ var SegmentPoint = Point.extend({
 	},
 
 	setSelected: function(selected) {
-		this._owner._changeSelection(this._getSelection(), selected);
+		this._owner.changeSelection(this._getSelection(), selected);
 	},
 
 	_getSelection: function() {
@@ -9197,7 +9198,10 @@ var Path = PathItem.extend({
 }),
 new function() {
 
-	function drawHandles(ctx, segments, matrix, size) {
+	function drawHandles(ctx, segments, matrix, size, isFullySelected) {
+		if (size === 0) {
+			return;
+		}
 		var half = size / 2,
 			coords = new Array(6),
 			pX, pY;
@@ -9209,10 +9213,12 @@ new function() {
 				ctx.beginPath();
 				ctx.moveTo(pX, pY);
 				ctx.lineTo(hX, hY);
+				ctx.moveTo(hX - half, hY);
+				ctx.lineTo(hX, hY + half);
+				ctx.lineTo(hX + half, hY);
+				ctx.lineTo(hX, hY - half);
+				ctx.lineTo(hX - half, hY);
 				ctx.stroke();
-				ctx.beginPath();
-				ctx.arc(hX, hY, half, 0, Math.PI * 2, true);
-				ctx.fill();
 			}
 		}
 
@@ -9222,17 +9228,19 @@ new function() {
 			segment._transformCoordinates(matrix, coords);
 			pX = coords[0];
 			pY = coords[1];
-			if (selection & 2)
+			if (selection & 2 && !isFullySelected)
 				drawHandle(2);
-			if (selection & 4)
+			if (selection & 4 && !isFullySelected)
 				drawHandle(4);
-			ctx.fillRect(pX - half, pY - half, size, size);
+			ctx.beginPath();
+			ctx.arc(pX, pY, half, 0, Math.PI * 2, true);
+			ctx.stroke();
+			var fillStyle = ctx.fillStyle;
 			if (!(selection & 1)) {
-				var fillStyle = ctx.fillStyle;
-				ctx.fillStyle = '#ffffff';
-				ctx.fillRect(pX - half + 1, pY - half + 1, size - 2, size - 2);
-				ctx.fillStyle = fillStyle;
+				ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
 			}
+			ctx.fill();
+			ctx.fillStyle = fillStyle;
 		}
 	}
 
@@ -9353,7 +9361,7 @@ new function() {
 			ctx.beginPath();
 			drawSegments(ctx, this, matrix);
 			ctx.stroke();
-			drawHandles(ctx, this._segments, matrix, paper.settings.handleSize);
+			drawHandles(ctx, this._segments, matrix, paper.settings.handleSize, this.isFullySelected());
 		}
 	};
 },
@@ -10780,7 +10788,7 @@ PathItem.inject(new function() {
 			}
 			if (finished) {
 				if (closed) {
-					path.getFirstSegment().setHandleIn(handleIn);
+					path.firstSegment.setHandleIn(handleIn);
 					path.setClosed(closed);
 				}
 				if (path.getArea() !== 0) {
