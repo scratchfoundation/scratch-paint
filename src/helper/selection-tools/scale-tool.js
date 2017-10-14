@@ -1,4 +1,4 @@
-import paper from 'paper';
+import paper from '@scratch/paper';
 
 /**
  * Tool to handle scaling items by pulling on the handles around the edges of the bounding

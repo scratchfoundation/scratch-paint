@@ -11,7 +11,7 @@ import {performUndo, performRedo, performSnapshot} from '../helper/undo';
 import Modes from '../modes/modes';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
-import paper from 'paper';
+import paper from '@scratch/paper';
 
 class PaintEditor extends React.Component {
     constructor (props) {

@@ -1,6 +1,6 @@
 // undo functionality
 // modifed from https://github.com/memononen/stylii
-import paper from 'paper';
+import paper from '@scratch/paper';
 
 const performSnapshot = function (dispatchPerformSnapshot) {
     dispatchPerformSnapshot({
