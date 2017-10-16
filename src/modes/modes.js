@@ -5,7 +5,8 @@ const Modes = keyMirror({
     ERASER: null,
     LINE: null,
     SELECT: null,
-    RESHAPE: null
+    RESHAPE: null,
+    PEN: null
 });
 
 export default Modes;

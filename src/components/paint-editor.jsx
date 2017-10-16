@@ -1,12 +1,16 @@
 import bindAll from 'lodash.bindall';
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import PaperCanvas from '../containers/paper-canvas.jsx';
+
 import BrushMode from '../containers/brush-mode.jsx';
 import EraserMode from '../containers/eraser-mode.jsx';
 import ReshapeMode from '../containers/reshape-mode.jsx';
 import SelectMode from '../containers/select-mode.jsx';
-import PropTypes from 'prop-types';
 import LineMode from '../containers/line-mode.jsx';
+import PenMode from '../containers/pen-mode.jsx';
+
 import FillColorIndicatorComponent from '../containers/fill-color-indicator.jsx';
 import StrokeColorIndicatorComponent from '../containers/stroke-color-indicator.jsx';
 import StrokeWidthIndicatorComponent from '../containers/stroke-width-indicator.jsx';
@@ -129,6 +133,10 @@ class PaintEditorComponent extends React.Component {
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             <EraserMode
+                                canvas={this.state.canvas}
+                                onUpdateSvg={this.props.onUpdateSvg}
+                            />
+                            <PenMode
                                 canvas={this.state.canvas}
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
