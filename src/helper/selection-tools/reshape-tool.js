@@ -96,6 +96,10 @@ class ReshapeTool extends paper.Tool {
                     if (!item.segment.selected) {
                         return false;
                     }
+                    // If the entire shape is selected, handles are hidden
+                    if (item.item.fullySelected) {
+                        return false;
+                    }
                 }
                 return true;
             };
@@ -105,6 +109,10 @@ class ReshapeTool extends paper.Tool {
                     // Only hit test against handles that are visible, that is,
                     // their segment is selected
                     if (!item.segment.selected) {
+                        return false;
+                    }
+                    // If the entire shape is selected, handles are hidden
+                    if (item.item.fullySelected) {
                         return false;
                     }
                 }
