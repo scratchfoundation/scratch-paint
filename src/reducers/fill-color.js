@@ -11,7 +11,7 @@ const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
     case CHANGE_FILL_COLOR:
-        if (!regExp.test(action.fillColor)) {
+        if (!regExp.test(action.fillColor) && action.fillColor !== null) {
             log.warn(`Invalid hex color code: ${action.fillColor}`);
             return state;
         }
