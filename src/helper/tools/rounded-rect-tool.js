@@ -2,9 +2,9 @@ import paper from '@scratch/paper';
 import log from '../../log/log';
 
 /**
- * Tool to handle freehand drawing of lines.
+ * Tool for drawing rounded rectangles
  */
-class PenTool extends paper.Tool {
+class RoundedRectTool extends paper.Tool {
     /**
      * @param {function} setHoveredItem Callback to set the hovered item
      * @param {function} clearHoveredItem Callback to clear the hovered item
@@ -39,7 +39,7 @@ class PenTool extends paper.Tool {
         this.prevHoveredItemId = prevHoveredItemId;
     }
     handleMouseDown () {
-        log.warn('Pen not yet implemented');
+        log.warn('Rounded Rectangle tool not yet implemented');
     }
     handleMouseMove () {
     }
@@ -51,4 +51,4 @@ class PenTool extends paper.Tool {
     }
 }
 
-export default PenTool;
+export default RoundedRectTool;
