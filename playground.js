@@ -18347,11 +18347,11 @@ var _modes = __webpack_require__(8);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(24);
+var _group = __webpack_require__(22);
 
 var _item = __webpack_require__(19);
 
-var _compoundPath = __webpack_require__(141);
+var _compoundPath = __webpack_require__(136);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20671,7 +20671,7 @@ var _selection = __webpack_require__(5);
 
 var _item = __webpack_require__(19);
 
-var _group = __webpack_require__(24);
+var _group = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21467,7 +21467,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(138);
+var	fixUrls = __webpack_require__(139);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -22063,6 +22063,157 @@ if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.shouldShowUngroup = exports.shouldShowGroup = exports.isGroupChild = exports.isGroup = exports.getItemsGroup = exports.ungroupItems = exports.groupItems = exports.ungroupSelection = exports.groupSelection = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _item = __webpack_require__(19);
+
+var _selection = __webpack_require__(5);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var isGroup = function isGroup(item) {
+    return (0, _item.isGroupItem)(item);
+};
+
+var groupSelection = function groupSelection(clearSelectedItems) {
+    var items = (0, _selection.getSelectedRootItems)();
+    if (items.length > 0) {
+        var group = new _paper2.default.Group(items);
+        (0, _selection.clearSelection)(clearSelectedItems);
+        (0, _selection.setItemSelection)(group, true);
+        for (var i = 0; i < group.children.length; i++) {
+            group.children[i].selected = true;
+        }
+        // @todo: Set selection bounds; enable/disable grouping icons
+        // @todo add back undo
+        // pg.undo.snapshot('groupSelection');
+        return group;
+    }
+    return false;
+};
+
+var ungroupLoop = function ungroupLoop(group, recursive, selectUngroupedItems) {
+    // Can't ungroup items that are not groups
+    if (!group || !group.children || !isGroup(group)) return;
+
+    group.applyMatrix = true;
+    // iterate over group children recursively
+    for (var i = 0; i < group.children.length; i++) {
+        var groupChild = group.children[i];
+        if (groupChild.hasChildren()) {
+            // recursion (groups can contain groups, ie. from SVG import)
+            if (recursive) {
+                ungroupLoop(groupChild, recursive, selectUngroupedItems);
+                continue;
+            }
+            if (groupChild.children.length === 1) {
+                groupChild = groupChild.reduce();
+            }
+        }
+        groupChild.applyMatrix = true;
+        // move items from the group to the activeLayer (ungrouping)
+        groupChild.insertBelow(group);
+        if (selectUngroupedItems) {
+            groupChild.selected = true;
+        }
+        i--;
+    }
+};
+
+// ungroup items (only top hierarchy)
+var ungroupItems = function ungroupItems(items, selectUngroupedItems) {
+    var emptyGroups = [];
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (isGroup(item) && !item.data.isPGTextItem) {
+            ungroupLoop(item, false /* recursive */, selectUngroupedItems /* selectUngroupedItems */);
+
+            if (!item.hasChildren()) {
+                emptyGroups.push(item);
+            }
+        }
+    }
+
+    // remove all empty groups after ungrouping
+    for (var j = 0; j < emptyGroups.length; j++) {
+        emptyGroups[j].remove();
+    }
+    // @todo: Set selection bounds; enable/disable grouping icons
+    // @todo add back undo
+    // pg.undo.snapshot('ungroupItems');
+};
+
+var ungroupSelection = function ungroupSelection(clearSelectedItems) {
+    var items = (0, _selection.getSelectedRootItems)();
+    (0, _selection.clearSelection)(clearSelectedItems);
+    ungroupItems(items, true /* selectUngroupedItems */);
+};
+
+var groupItems = function groupItems(items) {
+    if (items.length > 0) {
+        var group = new _paper2.default.Group(items);
+        // @todo: Set selection bounds; enable/disable grouping icons
+        // @todo add back undo
+        // pg.undo.snapshot('groupItems');
+        return group;
+    }
+    return false;
+};
+
+var getItemsGroup = function getItemsGroup(item) {
+    var itemParent = item.parent;
+
+    if (isGroup(itemParent)) {
+        return itemParent;
+    }
+    return null;
+};
+
+var isGroupChild = function isGroupChild(item) {
+    var rootItem = (0, _item.getRootItem)(item);
+    return isGroup(rootItem);
+};
+
+var shouldShowGroup = function shouldShowGroup() {
+    var items = (0, _selection.getSelectedRootItems)();
+    return items.length > 1;
+};
+
+var shouldShowUngroup = function shouldShowUngroup() {
+    var items = (0, _selection.getSelectedRootItems)();
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (isGroup(item) && !item.data.isPGTextItem && item.children && item.children.length > 0) {
+            return true;
+        }
+    }
+    return false;
+};
+
+exports.groupSelection = groupSelection;
+exports.ungroupSelection = ungroupSelection;
+exports.groupItems = groupItems;
+exports.ungroupItems = ungroupItems;
+exports.getItemsGroup = getItemsGroup;
+exports.isGroup = isGroup;
+exports.isGroupChild = isGroupChild;
+exports.shouldShowGroup = shouldShowGroup;
+exports.shouldShowUngroup = shouldShowUngroup;
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -22083,7 +22234,7 @@ module.exports = emptyObject;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22150,152 +22301,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.shouldShowUngroup = exports.shouldShowGroup = exports.isGroupChild = exports.isGroup = exports.getItemsGroup = exports.ungroupItems = exports.groupItems = exports.ungroupSelection = exports.groupSelection = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _item = __webpack_require__(19);
-
-var _selection = __webpack_require__(5);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var isGroup = function isGroup(item) {
-    return (0, _item.isGroupItem)(item);
-};
-
-var groupSelection = function groupSelection(clearSelectedItems) {
-    var items = (0, _selection.getSelectedRootItems)();
-    if (items.length > 0) {
-        var group = new _paper2.default.Group(items);
-        (0, _selection.clearSelection)(clearSelectedItems);
-        (0, _selection.setItemSelection)(group, true);
-        for (var i = 0; i < group.children.length; i++) {
-            group.children[i].selected = true;
-        }
-        // @todo: Set selection bounds; enable/disable grouping icons
-        // @todo add back undo
-        // pg.undo.snapshot('groupSelection');
-        return group;
-    }
-    return false;
-};
-
-var ungroupLoop = function ungroupLoop(group, recursive) {
-    // don't ungroup items that are not groups
-    if (!group || !group.children || !isGroup(group)) return;
-
-    group.applyMatrix = true;
-    // iterate over group children recursively
-    for (var i = 0; i < group.children.length; i++) {
-        var groupChild = group.children[i];
-        if (groupChild.hasChildren()) {
-            // recursion (groups can contain groups, ie. from SVG import)
-            if (recursive) {
-                ungroupLoop(groupChild, true /* recursive */);
-                continue;
-            }
-        }
-        groupChild.applyMatrix = true;
-        // move items from the group to the activeLayer (ungrouping)
-        groupChild.insertBelow(group);
-        groupChild.selected = true;
-        i--;
-    }
-};
-
-// ungroup items (only top hierarchy)
-var ungroupItems = function ungroupItems(items, clearSelectedItems) {
-    (0, _selection.clearSelection)(clearSelectedItems);
-    var emptyGroups = [];
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (isGroup(item) && !item.data.isPGTextItem) {
-            ungroupLoop(item, false /* recursive */);
-
-            if (!item.hasChildren()) {
-                emptyGroups.push(item);
-            }
-        }
-    }
-
-    // remove all empty groups after ungrouping
-    for (var j = 0; j < emptyGroups.length; j++) {
-        emptyGroups[j].remove();
-    }
-    // @todo: Set selection bounds; enable/disable grouping icons
-    // @todo add back undo
-    // pg.undo.snapshot('ungroupItems');
-};
-
-var ungroupSelection = function ungroupSelection() {
-    var items = (0, _selection.getSelectedRootItems)();
-    ungroupItems(items);
-};
-
-var groupItems = function groupItems(items) {
-    if (items.length > 0) {
-        var group = new _paper2.default.Group(items);
-        // @todo: Set selection bounds; enable/disable grouping icons
-        // @todo add back undo
-        // pg.undo.snapshot('groupItems');
-        return group;
-    }
-    return false;
-};
-
-var getItemsGroup = function getItemsGroup(item) {
-    var itemParent = item.parent;
-
-    if (isGroup(itemParent)) {
-        return itemParent;
-    }
-    return null;
-};
-
-var isGroupChild = function isGroupChild(item) {
-    var rootItem = (0, _item.getRootItem)(item);
-    return isGroup(rootItem);
-};
-
-var shouldShowGroup = function shouldShowGroup() {
-    var items = (0, _selection.getSelectedRootItems)();
-    return items.length > 1;
-};
-
-var shouldShowUngroup = function shouldShowUngroup() {
-    var items = (0, _selection.getSelectedRootItems)();
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (isGroup(item) && !item.data.isPGTextItem && item.children && item.children.length > 0) {
-            return true;
-        }
-    }
-    return false;
-};
-
-exports.groupSelection = groupSelection;
-exports.ungroupSelection = ungroupSelection;
-exports.groupItems = groupItems;
-exports.ungroupItems = ungroupItems;
-exports.getItemsGroup = getItemsGroup;
-exports.isGroup = isGroup;
-exports.isGroupChild = isGroupChild;
-exports.shouldShowGroup = shouldShowGroup;
-exports.shouldShowUngroup = shouldShowUngroup;
 
 /***/ }),
 /* 25 */
@@ -22464,7 +22469,7 @@ if(false) {
 
 if (process.env.NODE_ENV !== 'production') {
   var invariant = __webpack_require__(15);
-  var warning = __webpack_require__(23);
+  var warning = __webpack_require__(24);
   var ReactPropTypesSecret = __webpack_require__(30);
   var loggedTypeFailures = {};
 }
@@ -24583,7 +24588,7 @@ var _log = __webpack_require__(7);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _broadBrushHelper = __webpack_require__(140);
+var _broadBrushHelper = __webpack_require__(141);
 
 var _broadBrushHelper2 = _interopRequireDefault(_broadBrushHelper);
 
@@ -25192,7 +25197,7 @@ var _item = __webpack_require__(19);
 
 var _guides = __webpack_require__(38);
 
-var _group = __webpack_require__(24);
+var _group = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25269,7 +25274,7 @@ var _modes = __webpack_require__(8);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(24);
+var _group = __webpack_require__(22);
 
 var _item = __webpack_require__(19);
 
@@ -26399,7 +26404,7 @@ _reactDom2.default.render(_react2.default.createElement(
  This source code is licensed under the MIT license found in the
  LICENSE file in the root directory of this source tree.
 */
-var f=__webpack_require__(20),p=__webpack_require__(22);__webpack_require__(15);var r=__webpack_require__(13);
+var f=__webpack_require__(20),p=__webpack_require__(23);__webpack_require__(15);var r=__webpack_require__(13);
 function t(a){for(var b=arguments.length-1,d="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,e=0;e<b;e++)d+="\x26args[]\x3d"+encodeURIComponent(arguments[e+1]);b=Error(d+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var u={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function v(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}v.prototype.isReactComponent={};v.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?t("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};v.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function w(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}function x(){}x.prototype=v.prototype;var y=w.prototype=new x;y.constructor=w;f(y,v.prototype);y.isPureReactComponent=!0;function z(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}var A=z.prototype=new x;A.constructor=z;f(A,v.prototype);A.unstable_isAsyncReactComponent=!0;A.render=function(){return this.props.children};
@@ -26437,8 +26442,8 @@ if (process.env.NODE_ENV !== "production") {
 'use strict';
 
 var objectAssign$1 = __webpack_require__(20);
-var require$$0 = __webpack_require__(23);
-var emptyObject = __webpack_require__(22);
+var require$$0 = __webpack_require__(24);
+var emptyObject = __webpack_require__(23);
 var invariant = __webpack_require__(15);
 var emptyFunction = __webpack_require__(13);
 var checkPropTypes = __webpack_require__(29);
@@ -28136,7 +28141,7 @@ module.exports = ReactEntry;
  LICENSE file in the root directory of this source tree.
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0);__webpack_require__(15);var l=__webpack_require__(31),n=__webpack_require__(20),ba=__webpack_require__(45),ca=__webpack_require__(13),da=__webpack_require__(22),ea=__webpack_require__(46),fa=__webpack_require__(47),ha=__webpack_require__(48),ia=__webpack_require__(49);
+var aa=__webpack_require__(0);__webpack_require__(15);var l=__webpack_require__(31),n=__webpack_require__(20),ba=__webpack_require__(45),ca=__webpack_require__(13),da=__webpack_require__(23),ea=__webpack_require__(46),fa=__webpack_require__(47),ha=__webpack_require__(48),ia=__webpack_require__(49);
 function w(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:w("227");
 function ja(a){switch(a){case "svg":return"http://www.w3.org/2000/svg";case "math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}
 var ka={Namespaces:{html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"},getIntrinsicNamespace:ja,getChildNamespace:function(a,b){return null==a||"http://www.w3.org/1999/xhtml"===a?ja(b):"http://www.w3.org/2000/svg"===a&&"foreignObject"===b?"http://www.w3.org/1999/xhtml":a}},la=null,oa={};
@@ -28466,13 +28471,13 @@ var invariant = __webpack_require__(15);
 var ExecutionEnvironment = __webpack_require__(31);
 var _assign = __webpack_require__(20);
 var EventListener = __webpack_require__(45);
-var require$$0 = __webpack_require__(23);
+var require$$0 = __webpack_require__(24);
 var hyphenateStyleName = __webpack_require__(87);
 var emptyFunction = __webpack_require__(13);
 var camelizeStyleName = __webpack_require__(89);
 var performanceNow = __webpack_require__(91);
 var propTypes = __webpack_require__(1);
-var emptyObject = __webpack_require__(22);
+var emptyObject = __webpack_require__(23);
 var checkPropTypes = __webpack_require__(29);
 var shallowEqual = __webpack_require__(46);
 var containsNode = __webpack_require__(47);
@@ -45904,7 +45909,7 @@ module.exports = performance || {};
 
 var emptyFunction = __webpack_require__(13);
 var invariant = __webpack_require__(15);
-var warning = __webpack_require__(23);
+var warning = __webpack_require__(24);
 var assign = __webpack_require__(20);
 
 var ReactPropTypesSecret = __webpack_require__(30);
@@ -46583,8 +46588,9 @@ var PaintEditor = function (_React$Component) {
     }, {
         key: 'handleUpdateSvg',
         value: function handleUpdateSvg(skipSnapshot) {
-            // Hide bounding box
-            (0, _layer.getGuideLayer)().visible = false;
+            // Hide guide layer
+            var guideLayer = (0, _layer.getGuideLayer)();
+            guideLayer.remove();
             var bounds = _paper2.default.project.activeLayer.bounds;
             this.props.onUpdateSvg(_paper2.default.project.exportSVG({
                 asString: true,
@@ -46593,7 +46599,7 @@ var PaintEditor = function (_React$Component) {
             if (!skipSnapshot) {
                 (0, _undo2.performSnapshot)(this.props.undoSnapshot);
             }
-            (0, _layer.getGuideLayer)().visible = true;
+            _paper2.default.project.addLayer(guideLayer);
         }
     }, {
         key: 'handleUndo',
@@ -46698,7 +46704,7 @@ var _paperCanvas = __webpack_require__(97);
 
 var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
 
-var _brushMode = __webpack_require__(139);
+var _brushMode = __webpack_require__(140);
 
 var _brushMode2 = _interopRequireDefault(_brushMode);
 
@@ -47001,7 +47007,9 @@ var _undo = __webpack_require__(59);
 
 var _undo2 = __webpack_require__(36);
 
-var _paperCanvas = __webpack_require__(136);
+var _group = __webpack_require__(22);
+
+var _paperCanvas = __webpack_require__(137);
 
 var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
 
@@ -47033,14 +47041,42 @@ var PaperCanvas = function (_React$Component) {
             _paper2.default.settings.handleSize = 0;
             if (this.props.svg) {
                 this.importSvg(this.props.svg, this.props.rotationCenterX, this.props.rotationCenterY);
+            } else {
+                (0, _undo.performSnapshot)(this.props.undoSnapshot);
             }
-            (0, _undo.performSnapshot)(this.props.undoSnapshot);
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(newProps) {
-            _paper2.default.project.activeLayer.removeChildren();
-            this.importSvg(newProps.svg, newProps.rotationCenterX, newProps.rotationCenterY);
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = _paper2.default.project.layers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var layer = _step.value;
+
+                    layer.removeChildren();
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            this.props.clearUndo();
+            if (newProps.svg) {
+                this.importSvg(newProps.svg, newProps.rotationCenterX, newProps.rotationCenterY);
+            }
         }
     }, {
         key: 'componentWillUnmount',
@@ -47050,6 +47086,7 @@ var PaperCanvas = function (_React$Component) {
     }, {
         key: 'importSvg',
         value: function importSvg(svg, rotationCenterX, rotationCenterY) {
+            var paperCanvas = this;
             _paper2.default.project.importSVG(svg, {
                 expandShapes: true,
                 onLoad: function onLoad(item) {
@@ -47059,13 +47096,13 @@ var PaperCanvas = function (_React$Component) {
                     // Remove viewbox
                     if (item.clipped) {
                         var mask = void 0;
-                        var _iteratorNormalCompletion = true;
-                        var _didIteratorError = false;
-                        var _iteratorError = undefined;
+                        var _iteratorNormalCompletion2 = true;
+                        var _didIteratorError2 = false;
+                        var _iteratorError2 = undefined;
 
                         try {
-                            for (var _iterator = item.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                                var child = _step.value;
+                            for (var _iterator2 = item.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                                var child = _step2.value;
 
                                 if (child.isClipMask()) {
                                     mask = child;
@@ -47073,16 +47110,16 @@ var PaperCanvas = function (_React$Component) {
                                 }
                             }
                         } catch (err) {
-                            _didIteratorError = true;
-                            _iteratorError = err;
+                            _didIteratorError2 = true;
+                            _iteratorError2 = err;
                         } finally {
                             try {
-                                if (!_iteratorNormalCompletion && _iterator.return) {
-                                    _iterator.return();
+                                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                                    _iterator2.return();
                                 }
                             } finally {
-                                if (_didIteratorError) {
-                                    throw _iteratorError;
+                                if (_didIteratorError2) {
+                                    throw _iteratorError2;
                                 }
                             }
                         }
@@ -47102,7 +47139,11 @@ var PaperCanvas = function (_React$Component) {
                         // Center
                         item.position = _paper2.default.project.view.center;
                     }
+                    if ((0, _group.isGroup)(item)) {
+                        (0, _group.ungroupItems)([item]);
+                    }
 
+                    (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot);
                     _paper2.default.project.view.update();
                 }
             });
@@ -47132,6 +47173,7 @@ var PaperCanvas = function (_React$Component) {
 
 PaperCanvas.propTypes = {
     canvasRef: _propTypes2.default.func,
+    clearUndo: _propTypes2.default.func.isRequired,
     rotationCenterX: _propTypes2.default.number,
     rotationCenterY: _propTypes2.default.number,
     svg: _propTypes2.default.string,
@@ -47141,6 +47183,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         undoSnapshot: function undoSnapshot(snapshot) {
             dispatch((0, _undo2.undoSnapshot)(snapshot));
+        },
+        clearUndo: function clearUndo() {
+            dispatch((0, _undo2.clearUndoState)());
         }
     };
 };
@@ -52543,10 +52588,44 @@ module.exports = AjaxLogger;
 /* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var isCompoundPath = function isCompoundPath(item) {
+    return item && item.className === 'CompoundPath';
+};
+
+var isCompoundPathChild = function isCompoundPathChild(item) {
+    if (item.parent) {
+        return item.parent.className === 'CompoundPath';
+    }
+    return false;
+};
+
+var getItemsCompoundPath = function getItemsCompoundPath(item) {
+    var itemParent = item.parent;
+
+    if (isCompoundPath(itemParent)) {
+        return itemParent;
+    }
+    return null;
+};
+
+exports.isCompoundPath = isCompoundPath;
+exports.isCompoundPathChild = isCompoundPathChild;
+exports.getItemsCompoundPath = getItemsCompoundPath;
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(137);
+var content = __webpack_require__(138);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -52571,7 +52650,7 @@ if(false) {
 }
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(16)(undefined);
@@ -52588,7 +52667,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports) {
 
 
@@ -52683,7 +52762,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52857,7 +52936,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BrushMode);
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52995,40 +53074,6 @@ var BroadBrushHelper = function () {
 }();
 
 exports.default = BroadBrushHelper;
-
-/***/ }),
-/* 141 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var isCompoundPath = function isCompoundPath(item) {
-    return item && item.className === 'CompoundPath';
-};
-
-var isCompoundPathChild = function isCompoundPathChild(item) {
-    if (item.parent) {
-        return item.parent.className === 'CompoundPath';
-    }
-    return false;
-};
-
-var getItemsCompoundPath = function getItemsCompoundPath(item) {
-    var itemParent = item.parent;
-
-    if (isCompoundPath(itemParent)) {
-        return itemParent;
-    }
-    return null;
-};
-
-exports.isCompoundPath = isCompoundPath;
-exports.isCompoundPathChild = isCompoundPathChild;
-exports.getItemsCompoundPath = getItemsCompoundPath;
 
 /***/ }),
 /* 142 */
