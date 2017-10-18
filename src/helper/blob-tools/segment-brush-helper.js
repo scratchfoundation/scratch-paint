@@ -1,5 +1,5 @@
 import paper from '@scratch/paper';
-import {stylePath} from '../../helper/style-path';
+import {styleBlob} from '../../helper/style-path';
 
 /**
  * Segment brush functions to add as listeners on the mouse. Call them when the corresponding mouse event happens
@@ -32,7 +32,7 @@ class SegmentBrushHelper {
             radius: options.brushSize / 2
         });
         this.finalPath = this.firstCircle;
-        stylePath(this.finalPath, options);
+        styleBlob(this.finalPath, options);
         this.lastPoint = event.point;
     }
     
@@ -46,7 +46,7 @@ class SegmentBrushHelper {
 
         const path = new paper.Path();
         
-        stylePath(path, options);
+        styleBlob(path, options);
 
         // Add handles to round the end caps
         path.add(new paper.Segment(this.lastPoint.subtract(step), handleVec.multiply(-1), handleVec));

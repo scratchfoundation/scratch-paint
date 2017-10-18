@@ -7,7 +7,7 @@ import Modes from '../modes/modes';
 import {clearSelection} from '../helper/selection';
 import {endPointHit, touching} from '../helper/snapping';
 import {drawHitPoint, removeHitPoint} from '../helper/guides';
-import {MIXED} from '../helper/style-path';
+import {stylePath} from '../helper/style-path';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 
@@ -77,7 +77,7 @@ class LineMode extends React.Component {
         this.hitResult = endPointHit(event.point, LineMode.SNAP_TOLERANCE);
         if (this.hitResult) {
             this.path = this.hitResult.path;
-            this.stylePath(this.path);
+            stylePath(this.path, this.props.colorState.strokeColor, this.props.colorState.strokeWidth);
             if (this.hitResult.isFirst) {
                 this.path.reverse();
             }
@@ -89,21 +89,12 @@ class LineMode extends React.Component {
         // If not near other path, start a new path
         if (!this.path) {
             this.path = new paper.Path();
-            this.stylePath(this.path);
+            stylePath(this.path, this.props.colorState.strokeColor, this.props.colorState.strokeWidth);
 
             this.path.add(event.point);
             this.path.add(event.point); // Add second point, which is what will move when dragged
             paper.view.draw();
         }
-    }
-    stylePath (path) {
-        // Make sure a visible line is drawn
-        path.setStrokeColor(
-            (this.props.colorState.strokeColor === MIXED || this.props.colorState.strokeColor === null) ?
-                'black' : this.props.colorState.strokeColor);
-        path.setStrokeWidth(
-            this.props.colorState.strokeWidth === null || this.props.colorState.strokeWidth === 0 ?
-                1 : this.props.colorState.strokeWidth);
     }
     drawHitPoint (hitResult) {
         // If near another path's endpoint, draw hit point to indicate that paths would merge
@@ -117,7 +108,9 @@ class LineMode extends React.Component {
         }
     }
     onMouseMove (event) {
-        removeHitPoint();
+        if (this.hitResult) {
+            removeHitPoint();
+        }
         this.hitResult = endPointHit(event.point, LineMode.SNAP_TOLERANCE);
         this.drawHitPoint(this.hitResult);
     }
@@ -126,8 +119,10 @@ class LineMode extends React.Component {
 
         // If near another path's endpoint, or this path's beginpoint, clip to it to suggest
         // joining/closing the paths.
-        removeHitPoint();
-        this.hitResult = null;
+        if (this.hitResult) {
+            removeHitPoint();
+            this.hitResult = null;
+        }
 
         if (this.path &&
                 !this.path.closed &&
@@ -151,18 +146,15 @@ class LineMode extends React.Component {
         }
     }
     onMouseUp (event) {
-        debugger;
         if (event.event.button > 0) return; // only first mouse button
 
-        removeHitPoint();
-
         // If I single clicked, don't do anything
-        if (this.path.segments.length < 2 ||
-                (this.path.segments.length === 2 &&
-                touching(this.path.firstSegment.point, event.point, LineMode.SNAP_TOLERANCE))) {
+        if (!this.hitResult && // Might be connecting 2 points that are very close
+                (this.path.segments.length < 2 ||
+                    (this.path.segments.length === 2 &&
+                    touching(this.path.firstSegment.point, event.point, LineMode.SNAP_TOLERANCE)))) {
             this.path.remove();
             this.path = null;
-            // TODO don't erase the line if both ends are snapped to different points
             return;
         } else if (
             // Single click on an existing path end point
@@ -178,17 +170,17 @@ class LineMode extends React.Component {
         // If I intersect other line end points, join or close
         if (this.hitResult) {
             this.path.removeSegment(this.path.segments.length - 1);
-            if (this.path.firstSegment === this.hitResult.segment) {
+            if (this.path.firstSegment.point.equals(this.hitResult.segment.point)) {
                 // close path
                 this.path.closed = true;
             } else {
-                debugger;
                 // joining two paths
                 if (!this.hitResult.isFirst) {
                     this.hitResult.path.reverse();
                 }
                 this.path.join(this.hitResult.path);
             }
+            removeHitPoint();
             this.hitResult = null;
         }
         
@@ -201,8 +193,10 @@ class LineMode extends React.Component {
         this.props.canvas.removeEventListener('mousewheel', this.onScroll);
         this.tool.remove();
         this.tool = null;
-        removeHitPoint();
-        this.hitResult = null;
+        if (this.hitResult) {
+            removeHitPoint();
+            this.hitResult = null;
+        }
         if (this.path) {
             this.path = null;
         }
