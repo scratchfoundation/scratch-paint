@@ -15,19 +15,14 @@ class PenTool extends paper.Tool {
         return 2;
     }
     /**
-     * @param {function} setHoveredItem Callback to set the hovered item
-     * @param {function} clearHoveredItem Callback to clear the hovered item
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
-    constructor (setHoveredItem, clearHoveredItem, clearSelectedItems, onUpdateSvg) {
+    constructor (clearSelectedItems, onUpdateSvg) {
         super();
-        this.setHoveredItem = setHoveredItem;
-        this.clearHoveredItem = clearHoveredItem;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateSvg = onUpdateSvg;
 
-        this.prevHoveredItemId = null;
         this.colorState = null;
         this.path = null;
         this.hitResult = null;
@@ -44,16 +39,6 @@ class PenTool extends paper.Tool {
         this.onMouseUp = this.handleMouseUp;
 
         this.fixedDistance = 2;
-    }
-    /**
-     * To be called when the hovered item changes. When the select tool hovers over a
-     * new item, it compares against this to see if a hover item change event needs to
-     * be fired.
-     * @param {paper.Item} prevHoveredItemId ID of the highlight item that indicates the mouse is
-     *     over a given item currently
-     */
-    setPrevHoveredItemId (prevHoveredItemId) {
-        this.prevHoveredItemId = prevHoveredItemId;
     }
     setColorState (colorState) {
         this.colorState = colorState;

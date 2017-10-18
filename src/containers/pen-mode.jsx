@@ -5,7 +5,6 @@ import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
 
 import {changeMode} from '../reducers/modes';
-import {clearHoveredItem, setHoveredItem} from '../reducers/hover';
 import {clearSelectedItems} from '../reducers/selected-items';
 
 import {clearSelection} from '../helper/selection';
@@ -26,9 +25,6 @@ class PenMode extends React.Component {
         }
     }
     componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.hoveredItemId !== this.props.hoveredItemId) {
-            this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
-        }
         if (this.tool &&
                 (nextProps.colorState.strokeColor !== this.props.colorState.strokeColor ||
                 nextProps.colorState.strokeWidth !== this.props.colorState.strokeWidth)) {
@@ -47,12 +43,9 @@ class PenMode extends React.Component {
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
         this.tool = new PenTool(
-            this.props.setHoveredItem,
-            this.props.clearHoveredItem,
             this.props.clearSelectedItems,
             this.props.onUpdateSvg
         );
-        this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
         this.tool.setColorState(this.props.colorState);
         this.tool.activate();
     }
@@ -69,7 +62,6 @@ class PenMode extends React.Component {
 }
 
 PenMode.propTypes = {
-    clearHoveredItem: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,
@@ -77,25 +69,16 @@ PenMode.propTypes = {
         strokeWidth: PropTypes.number
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
-    hoveredItemId: PropTypes.number,
     isPenModeActive: PropTypes.bool.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
-    setHoveredItem: PropTypes.func.isRequired
+    onUpdateSvg: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     colorState: state.scratchPaint.color,
-    isPenModeActive: state.scratchPaint.mode === Modes.PEN,
-    hoveredItemId: state.scratchPaint.hoveredItemId
+    isPenModeActive: state.scratchPaint.mode === Modes.PEN
 
 });
 const mapDispatchToProps = dispatch => ({
-    setHoveredItem: hoveredItemId => {
-        dispatch(setHoveredItem(hoveredItemId));
-    },
-    clearHoveredItem: () => {
-        dispatch(clearHoveredItem());
-    },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
