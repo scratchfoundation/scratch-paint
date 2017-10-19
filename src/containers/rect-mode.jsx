@@ -25,6 +25,10 @@ class RectMode extends React.Component {
         }
     }
     componentWillReceiveProps (nextProps) {
+        if (this.tool && nextProps.colorState !== this.props.colorState) {
+            this.tool.setColorState(nextProps.colorState);
+        }
+
         if (nextProps.isRectModeActive && !this.props.isRectModeActive) {
             this.activateTool();
         } else if (!nextProps.isRectModeActive && this.props.isRectModeActive) {
@@ -35,11 +39,13 @@ class RectMode extends React.Component {
         return nextProps.isRectModeActive !== this.props.isRectModeActive;
     }
     activateTool () {
+        this.props.clearSelectedItems();
         this.tool = new RectTool(
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
             this.props.onUpdateSvg
         );
+        this.tool.setColorState(this.props.colorState);
         this.tool.activate();
     }
     deactivateTool () {
@@ -59,6 +65,11 @@ class RectMode extends React.Component {
 
 RectMode.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
+    colorState: PropTypes.shape({
+        fillColor: PropTypes.string,
+        strokeColor: PropTypes.string,
+        strokeWidth: PropTypes.number
+    }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isRectModeActive: PropTypes.bool.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
@@ -66,6 +77,7 @@ RectMode.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    colorState: state.scratchPaint.color,
     isRectModeActive: state.scratchPaint.mode === Modes.RECT
 });
 const mapDispatchToProps = dispatch => ({
