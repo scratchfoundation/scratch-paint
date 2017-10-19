@@ -54,7 +54,8 @@ class PaintEditorComponent extends React.Component {
                         <Label text={this.props.intl.formatMessage(messages.costume)}>
                             <BufferedInput
                                 type="text"
-                                value="meow"
+                                value={this.props.name}
+                                onSubmit={this.props.onUpdateName}
                             />
                         </Label>
                     </div>
@@ -178,8 +179,10 @@ class PaintEditorComponent extends React.Component {
 
 PaintEditorComponent.propTypes = {
     intl: intlShape,
+    name: PropTypes.string,
     onRedo: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
+    onUpdateName: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
