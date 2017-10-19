@@ -1,4 +1,6 @@
-// Copied from scratch-gui for now
+/* DO NOT EDIT
+@todo This file is copied from GUI and should be pulled out into a shared library.
+See #13 */
 
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
