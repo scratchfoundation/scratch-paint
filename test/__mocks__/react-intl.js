@@ -1,4 +1,6 @@
-import React from 'react';
+// __mocks__/react-intl.js
+
+import React from 'react'; // eslint-disable-line no-unused-vars
 const Intl = require.requireActual('react-intl');
 
 // Here goes intl context injected into component, feel free to extend
