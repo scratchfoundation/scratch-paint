@@ -83,8 +83,7 @@ class LineMode extends React.Component {
             }
 
             this.path.lastSegment.handleOut = null; // Make sure added line isn't made curvy
-            this.path.lastSegment.handleIn = null; // Bug in paper.js? You need to remove the other handle too
-            this.path.add(this.hitResult.segment); // Add second point, which is what will move when dragged
+            this.path.add(this.hitResult.segment.point); // Add second point, which is what will move when dragged
         }
 
         // If not near other path, start a new path
