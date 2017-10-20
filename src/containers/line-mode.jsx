@@ -81,9 +81,10 @@ class LineMode extends React.Component {
             if (this.hitResult.isFirst) {
                 this.path.reverse();
             }
+
+            this.path.lastSegment.handleOut = null; // Make sure added line isn't made curvy
+            this.path.lastSegment.handleIn = null; // Bug in paper.js? You need to remove the other handle too
             this.path.add(this.hitResult.segment); // Add second point, which is what will move when dragged
-            this.path.lastSegment.handleOut = null; // Make sure line isn't curvy
-            this.path.lastSegment.handleIn = null;
         }
 
         // If not near other path, start a new path
@@ -164,11 +165,11 @@ class LineMode extends React.Component {
             this.path = null;
             return;
         }
-        
         // If I intersect other line end points, join or close
         if (this.hitResult) {
             this.path.removeSegment(this.path.segments.length - 1);
             if (this.path.firstSegment.point.equals(this.hitResult.segment.point)) {
+                this.path.firstSegment.handleIn = null; // Make sure added line isn't made curvy
                 // close path
                 this.path.closed = true;
             } else {
@@ -176,6 +177,7 @@ class LineMode extends React.Component {
                 if (!this.hitResult.isFirst) {
                     this.hitResult.path.reverse();
                 }
+                this.hitResult.path.firstSegment.handleIn = null; // Make sure added line isn't made curvy
                 this.path.join(this.hitResult.path);
             }
             removeHitPoint();
