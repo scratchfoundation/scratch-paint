@@ -33,6 +33,7 @@ class MoveTool {
      *     select the whole group.
      */
     onMouseDown (hitProperties) {
+        debugger;
         let item = hitProperties.hitResult.item;
         if (!hitProperties.subselect) {
             const root = getRootItem(hitProperties.hitResult.item);
