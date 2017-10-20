@@ -149,19 +149,17 @@ class LineMode extends React.Component {
         if (event.event.button > 0) return; // only first mouse button
 
         // If I single clicked, don't do anything
-        if (!this.hitResult && // Might be connecting 2 points that are very close
-                (this.path.segments.length < 2 ||
-                    (this.path.segments.length === 2 &&
-                    touching(this.path.firstSegment.point, event.point, LineMode.SNAP_TOLERANCE)))) {
+        if (this.path.segments.length < 2 ||
+                (this.path.segments.length === 2 &&
+                touching(this.path.firstSegment.point, event.point, LineMode.SNAP_TOLERANCE) &&
+                !this.hitResult)) { // Let lines be short if you're connecting them
             this.path.remove();
             this.path = null;
             return;
-        } else if (
-            // Single click on an existing path end point
-            touching(
-                this.path.lastSegment.point,
-                this.path.segments[this.path.segments.length - 2].point,
-                LineMode.SNAP_TOLERANCE)) {
+        } else if (!this.hitResult &&
+                touching(this.path.lastSegment.point, this.path.segments[this.path.segments.length - 2].point,
+                    LineMode.SNAP_TOLERANCE)) {
+            // Single click or short drag on an existing path end point
             this.path.removeSegment(this.path.segments.length - 1);
             this.path = null;
             return;
