@@ -7,7 +7,7 @@ import Modes from '../modes/modes';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 
-import {getSelectedLeafItems} from '../helper/selection';
+import {clearSelection, getSelectedLeafItems} from '../helper/selection';
 import RectTool from '../helper/tools/rect-tool';
 import RectModeComponent from '../components/rect-mode/rect-mode.jsx';
 
@@ -39,7 +39,7 @@ class RectMode extends React.Component {
         return nextProps.isRectModeActive !== this.props.isRectModeActive;
     }
     activateTool () {
-        this.props.clearSelectedItems();
+        clearSelection(this.props.clearSelectedItems);
         this.tool = new RectTool(
             this.props.setSelectedItems,
             this.props.clearSelectedItems,

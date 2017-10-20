@@ -51,18 +51,15 @@ class RectTool extends paper.Tool {
         this.colorState = colorState;
     }
     handleMouseDown (event) {
-        const clickedItem = paper.project.hitTest(event.point, this.getHitOptions());
-        if (clickedItem) {
+        if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions())) {
             this.isBoundingBoxMode = true;
-            this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions());
         } else {
             this.isBoundingBoxMode = false;
-            this.boundingBoxTool.removeBoundsPath();
             clearSelection(this.clearSelectedItems);
         }
     }
     handleMouseDrag (event) {
-        if (event.event.button > 0) return;  // only first mouse button
+        if (event.event.button > 0) return; // only first mouse button
 
         if (this.isBoundingBoxMode) {
             this.boundingBoxTool.onMouseDrag(event);
@@ -86,7 +83,7 @@ class RectTool extends paper.Tool {
         styleShape(this.rect, this.colorState);
     }
     handleMouseUp (event) {
-        if (event.event.button > 0) return;  // only first mouse button
+        if (event.event.button > 0) return; // only first mouse button
         
         if (this.isBoundingBoxMode) {
             this.boundingBoxTool.onMouseUp(event);
@@ -95,10 +92,16 @@ class RectTool extends paper.Tool {
         }
 
         if (this.rect) {
-            this.rect.selected = true;
-            this.boundingBoxTool.setSelectionBounds();
-            this.onUpdateSvg();
-            this.rect = null;
+            if (this.rect.area < RectTool.TOLERANCE / paper.view.zoom) {
+                // Tiny rectangle created unintentionally?
+                this.rect.remove();
+                this.rect = null;
+            } else {
+                this.rect.selected = true;
+                this.boundingBoxTool.setSelectionBounds();
+                this.onUpdateSvg();
+                this.rect = null;
+            }
         }
     }
     deactivateTool () {
