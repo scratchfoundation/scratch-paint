@@ -198,7 +198,7 @@ const getColorsFromSelection = function (selectedItems) {
     };
 };
 
-const stylePath = function (path, options) {
+const styleBlob = function (path, options) {
     if (options.isEraser) {
         path.fillColor = 'white';
     } else if (options.fillColor) {
@@ -207,6 +207,14 @@ const stylePath = function (path, options) {
         // Make sure something visible is drawn
         path.fillColor = 'black';
     }
+};
+
+const stylePath = function (path, strokeColor, strokeWidth) {
+    // Make sure a visible line is drawn
+    path.setStrokeColor(
+        (strokeColor === MIXED || strokeColor === null) ? 'black' : strokeColor);
+    path.setStrokeWidth(
+        strokeWidth === null || strokeWidth === 0 ? 1 : strokeWidth);
 };
 
 const styleCursorPreview = function (path, options) {
@@ -228,6 +236,7 @@ export {
     applyStrokeWidthToSelection,
     getColorsFromSelection,
     MIXED,
+    styleBlob,
     stylePath,
     styleCursorPreview
 };
