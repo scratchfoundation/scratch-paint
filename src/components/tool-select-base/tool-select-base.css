@@ -1,8 +1,16 @@
 @import '../../css/colors.css';
 
+$border-radius: .25rem;
+
 .tool-select {
-    background: none;
+    display: inline-block;
     border: none;
+    border-radius: $border-radius;
+    outline: none;
+    background: none;
+    padding: 0.25rem;
+    font-size: 0.85rem;
+    transition: 0.2s;
 }
 
 .tool-select.is-selected {
@@ -16,4 +24,6 @@
 img.tool-select-icon {
     width: 2rem;
     height: 2rem;
+    flex-grow: 1;
+    vertical-align: middle;
 }
