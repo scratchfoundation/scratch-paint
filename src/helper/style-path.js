@@ -50,6 +50,11 @@ const applyFillColorToSelection = function (colorString, onUpdateSvg) {
     }
 };
 
+const _strokeColorMatch = function (item, incomingColor) {
+    return (!item.strokeColor && !incomingColor) ||
+        (item.strokeColor && incomingColor && item.strokeColor.toCSS() === new paper.Color(incomingColor).toCSS());
+};
+
 /**
  * Called when setting stroke color
  * @param {string} colorString New color, css format
@@ -65,8 +70,7 @@ const applyStrokeColorToSelection = function (colorString, onUpdateSvg) {
                     if (child.children) {
                         for (const path of child.children) {
                             if (!path.data.isPGGlyphRect) {
-                                if ((path.strokeColor === null && colorString) ||
-                                        path.strokeColor.toCSS() !== new paper.Color(colorString).toCSS()) {
+                                if (!_strokeColorMatch(path, colorString)) {
                                     changed = true;
                                     path.strokeColor = colorString;
                                 }
@@ -80,14 +84,12 @@ const applyStrokeColorToSelection = function (colorString, onUpdateSvg) {
                     }
                 }
             } else if (!item.data.isPGGlyphRect) {
-                if ((item.strokeColor === null && colorString) ||
-                        item.strokeColor.toCSS() !== new paper.Color(colorString).toCSS()) {
+                if (!_strokeColorMatch(item, colorString)) {
                     changed = true;
                     item.strokeColor = colorString;
                 }
             }
-        } else if ((item.strokeColor === null && colorString) ||
-                    item.strokeColor.toCSS() !== new paper.Color(colorString).toCSS()) {
+        } else if (!_strokeColorMatch(item, colorString)) {
             changed = true;
             item.strokeColor = colorString;
         }
