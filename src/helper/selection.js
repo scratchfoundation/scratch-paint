@@ -151,7 +151,7 @@ const getSelectedLeafItems = function () {
 
     for (let i = 0; i < allItems.length; i++) {
         const item = allItems[i];
-        if (!isGroup(item) && item.data && !item.data.isSelectionBound) {
+        if (!(item instanceof paper.Layer) && !isGroup(item) && item.data && !item.data.isSelectionBound) {
             items.push(item);
         }
     }
