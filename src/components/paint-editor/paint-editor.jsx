@@ -169,6 +169,7 @@ class PaintEditorComponent extends React.Component {
                             rotationCenterX={this.props.rotationCenterX}
                             rotationCenterY={this.props.rotationCenterY}
                             svg={this.props.svg}
+                            svgId={this.props.svgId}
                         />
                     </div>
                 </div>
@@ -186,7 +187,8 @@ PaintEditorComponent.propTypes = {
     onUpdateSvg: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
-    svg: PropTypes.string
+    svg: PropTypes.string,
+    svgId: PropTypes.string
 };
 
 export default injectIntl(PaintEditorComponent);

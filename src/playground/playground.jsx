@@ -49,6 +49,7 @@ class Playground extends React.Component {
         return (
             <PaintEditor
                 {...this.state}
+                svgId="meow"
                 onUpdateName={this.handleUpdateName}
                 onUpdateSvg={this.handleUpdateSvg}
             />

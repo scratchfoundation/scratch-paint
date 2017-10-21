@@ -58,6 +58,7 @@ class PaintEditor extends React.Component {
                 rotationCenterX={this.props.rotationCenterX}
                 rotationCenterY={this.props.rotationCenterY}
                 svg={this.props.svg}
+                svgId={this.props.svgId}
                 onRedo={this.handleRedo}
                 onUndo={this.handleUndo}
                 onUpdateName={this.props.onUpdateName}
@@ -77,6 +78,7 @@ PaintEditor.propTypes = {
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     svg: PropTypes.string,
+    svgId: PropTypes.string,
     undoSnapshot: PropTypes.func.isRequired,
     undoState: PropTypes.shape({
         stack: PropTypes.arrayOf(PropTypes.object).isRequired,
