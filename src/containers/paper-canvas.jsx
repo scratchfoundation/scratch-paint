@@ -29,6 +29,7 @@ class PaperCanvas extends React.Component {
         }
     }
     componentWillReceiveProps (newProps) {
+        if (this.props.svgId === newProps.svgId) return;
         for (const layer of paper.project.layers) {
             layer.removeChildren();
         }
@@ -108,6 +109,7 @@ PaperCanvas.propTypes = {
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     svg: PropTypes.string,
+    svgId: PropTypes.string,
     undoSnapshot: PropTypes.func.isRequired
 };
 const mapDispatchToProps = dispatch => ({

@@ -54,7 +54,8 @@ class PaintEditorComponent extends React.Component {
                         <Label text={this.props.intl.formatMessage(messages.costume)}>
                             <BufferedInput
                                 type="text"
-                                value="meow"
+                                value={this.props.name}
+                                onSubmit={this.props.onUpdateName}
                             />
                         </Label>
                     </div>
@@ -168,6 +169,7 @@ class PaintEditorComponent extends React.Component {
                             rotationCenterX={this.props.rotationCenterX}
                             rotationCenterY={this.props.rotationCenterY}
                             svg={this.props.svg}
+                            svgId={this.props.svgId}
                         />
                     </div>
                 </div>
@@ -178,12 +180,15 @@ class PaintEditorComponent extends React.Component {
 
 PaintEditorComponent.propTypes = {
     intl: intlShape,
+    name: PropTypes.string,
     onRedo: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
+    onUpdateName: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
-    svg: PropTypes.string
+    svg: PropTypes.string,
+    svgId: PropTypes.string
 };
 
 export default injectIntl(PaintEditorComponent);

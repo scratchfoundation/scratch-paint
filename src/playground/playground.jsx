@@ -1,3 +1,4 @@
+import bindAll from 'lodash.bindall';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PaintEditor from '..';
@@ -22,19 +23,44 @@ const svgString =
         '<polyline points="10.689,399.492 3.193,391.997 10.689,384.5 "/>' +
         '<polyline points="30.185,405.995 22.689,413.491 15.192,405.995 "/>' +
     '</svg>';
-const onUpdateSvg = function (newSvgString, rotationCenterX, rotationCenterY) {
-    console.log(newSvgString);
-    console.log(`rotationCenterX: ${rotationCenterX}    rotationCenterY: ${rotationCenterY}`);
-};
+class Playground extends React.Component {
+    constructor (props) {
+        super(props);
+        bindAll(this, [
+            'handleUpdateName',
+            'handleUpdateSvg'
+        ]);
+        this.state = {
+            name: 'meow',
+            rotationCenterX: 0,
+            rotationCenterY: 0,
+            svg: svgString
+        };
+    }
+    handleUpdateName (name) {
+        this.setState({name});
+    }
+    handleUpdateSvg (svg, rotationCenterX, rotationCenterY) {
+        console.log(svg);
+        console.log(`rotationCenterX: ${rotationCenterX}    rotationCenterY: ${rotationCenterY}`);
+        this.setState({svg, rotationCenterX, rotationCenterY});
+    }
+    render () {
+        return (
+            <PaintEditor
+                {...this.state}
+                svgId="meow"
+                onUpdateName={this.handleUpdateName}
+                onUpdateSvg={this.handleUpdateSvg}
+            />
+        );
+    }
+
+}
 ReactDOM.render((
     <Provider store={store}>
         <IntlProvider>
-            <PaintEditor
-                rotationCenterX={0}
-                rotationCenterY={0}
-                svg={svgString}
-                onUpdateSvg={onUpdateSvg}
-            />
+            <Playground />
         </IntlProvider>
     </Provider>
 ), appTarget);
