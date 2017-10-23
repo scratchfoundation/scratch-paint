@@ -101,13 +101,13 @@ class PaintEditorComponent extends React.Component {
                             </ButtonGroup>
                         </InputGroup>
 
-                        {/* To be Group/Ungroup */}
+                        {/* Group/Ungroup */}
                         <InputGroup className={styles.modDashedBorder}>
                             <EditFieldButton
                                 imgAlt="Group Icon"
                                 imgSrc={groupIcon}
                                 title="Group"
-                                onClick={function () {}}
+                                onClick={this.props.onGroup}
                             />
                             <EditFieldButton
                                 imgAlt="Ungroup Icon"
@@ -150,14 +150,14 @@ class PaintEditorComponent extends React.Component {
                         </InputGroup>
 
                         {/* To be rotation point */}
-                        {/* <InputGroup>
+                        <InputGroup>
                             <EditFieldButton
                                 imgAlt="Rotation Point Icon"
                                 imgSrc={rotationPointIcon}
                                 title="Rotation Point"
                                 onClick={function () {}}
                             />
-                        </InputGroup> */}
+                        </InputGroup>
                     </div>
 
                     {/* Second Row */}
@@ -236,12 +236,14 @@ class PaintEditorComponent extends React.Component {
 PaintEditorComponent.propTypes = {
     intl: intlShape,
     name: PropTypes.string,
+    onGroup: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
     onSendBackward: PropTypes.func.isRequired,
     onSendForward: PropTypes.func.isRequired,
     onSendToBack: PropTypes.func.isRequired,
     onSendToFront: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
+    onUngroup: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
