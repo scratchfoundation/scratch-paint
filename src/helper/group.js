@@ -6,8 +6,7 @@ const isGroup = function (item) {
     return isGroupItem(item);
 };
 
-const groupSelection = function (clearSelectedItems) {
-    const items = getSelectedRootItems();
+const groupItems = function (items, clearSelectedItems, setSelectedItems, onUpdateSvg) {
     if (items.length > 0) {
         const group = new paper.Group(items);
         clearSelection(clearSelectedItems);
@@ -15,15 +14,20 @@ const groupSelection = function (clearSelectedItems) {
         for (let i = 0; i < group.children.length; i++) {
             group.children[i].selected = true;
         }
+        setSelectedItems();
         // @todo: Set selection bounds; enable/disable grouping icons
-        // @todo add back undo
-        // pg.undo.snapshot('groupSelection');
+        onUpdateSvg();
         return group;
     }
     return false;
 };
 
-const ungroupLoop = function (group, recursive, selectUngroupedItems) {
+const groupSelection = function (clearSelectedItems, setSelectedItems, onUpdateSvg) {
+    const items = getSelectedRootItems();
+    return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg);
+};
+
+const ungroupLoop = function (group, recursive, setSelectedItems) {
     // Can't ungroup items that are not groups
     if (!group || !group.children || !isGroup(group)) return;
             
@@ -34,7 +38,7 @@ const ungroupLoop = function (group, recursive, selectUngroupedItems) {
         if (groupChild.hasChildren()) {
             // recursion (groups can contain groups, ie. from SVG import)
             if (recursive) {
-                ungroupLoop(groupChild, recursive, selectUngroupedItems);
+                ungroupLoop(groupChild, recursive, setSelectedItems);
                 continue;
             }
             if (groupChild.children.length === 1) {
@@ -44,7 +48,7 @@ const ungroupLoop = function (group, recursive, selectUngroupedItems) {
         groupChild.applyMatrix = true;
         // move items from the group to the activeLayer (ungrouping)
         groupChild.insertBelow(group);
-        if (selectUngroupedItems) {
+        if (setSelectedItems) {
             groupChild.selected = true;
         }
         i--;
@@ -52,44 +56,38 @@ const ungroupLoop = function (group, recursive, selectUngroupedItems) {
 };
 
 // ungroup items (only top hierarchy)
-const ungroupItems = function (items, selectUngroupedItems) {
+const ungroupItems = function (items, setSelectedItems, onUpdateSvg) {
+    if (items.length === 0) {
+        return;
+    }
     const emptyGroups = [];
     for (let i = 0; i < items.length; i++) {
         const item = items[i];
         if (isGroup(item) && !item.data.isPGTextItem) {
-            ungroupLoop(item, false /* recursive */, selectUngroupedItems /* selectUngroupedItems */);
+            ungroupLoop(item, false /* recursive */, setSelectedItems);
 
             if (!item.hasChildren()) {
                 emptyGroups.push(item);
             }
         }
     }
-
+    if (setSelectedItems) {
+        setSelectedItems();
+    }
     // remove all empty groups after ungrouping
     for (let j = 0; j < emptyGroups.length; j++) {
         emptyGroups[j].remove();
     }
     // @todo: Set selection bounds; enable/disable grouping icons
-    // @todo add back undo
-    // pg.undo.snapshot('ungroupItems');
+    if (onUpdateSvg) {
+        onUpdateSvg();
+    }
 };
 
-const ungroupSelection = function (clearSelectedItems) {
+const ungroupSelection = function (clearSelectedItems, setSelectedItems, onUpdateSvg) {
     const items = getSelectedRootItems();
     clearSelection(clearSelectedItems);
-    ungroupItems(items, true /* selectUngroupedItems */);
-};
-
-
-const groupItems = function (items) {
-    if (items.length > 0) {
-        const group = new paper.Group(items);
-        // @todo: Set selection bounds; enable/disable grouping icons
-        // @todo add back undo
-        // pg.undo.snapshot('groupItems');
-        return group;
-    }
-    return false;
+    ungroupItems(items, setSelectedItems, onUpdateSvg);
 };
 
 const getItemsGroup = function (item) {

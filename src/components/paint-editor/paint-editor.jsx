@@ -113,7 +113,7 @@ class PaintEditorComponent extends React.Component {
                                 imgAlt="Ungroup Icon"
                                 imgSrc={ungroupIcon}
                                 title="Ungroup"
-                                onClick={function () {}}
+                                onClick={this.props.onUngroup}
                             />
                         </InputGroup>
 
