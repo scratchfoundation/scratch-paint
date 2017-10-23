@@ -19034,6 +19034,10 @@ var applyFillColorToSelection = function applyFillColorToSelection(colorString, 
     }
 };
 
+var _strokeColorMatch = function _strokeColorMatch(item, incomingColor) {
+    return !item.strokeColor && !incomingColor || item.strokeColor && incomingColor && item.strokeColor.toCSS() === new _paper2.default.Color(incomingColor).toCSS();
+};
+
 /**
  * Called when setting stroke color
  * @param {string} colorString New color, css format
@@ -19070,7 +19074,7 @@ var applyStrokeColorToSelection = function applyStrokeColorToSelection(colorStri
                                         var path = _step6.value;
 
                                         if (!path.data.isPGGlyphRect) {
-                                            if (path.strokeColor === null && colorString || path.strokeColor.toCSS() !== new _paper2.default.Color(colorString).toCSS()) {
+                                            if (!_strokeColorMatch(path, colorString)) {
                                                 changed = true;
                                                 path.strokeColor = colorString;
                                             }
@@ -19112,12 +19116,12 @@ var applyStrokeColorToSelection = function applyStrokeColorToSelection(colorStri
                         }
                     }
                 } else if (!item.data.isPGGlyphRect) {
-                    if (item.strokeColor === null && colorString || item.strokeColor.toCSS() !== new _paper2.default.Color(colorString).toCSS()) {
+                    if (!_strokeColorMatch(item, colorString)) {
                         changed = true;
                         item.strokeColor = colorString;
                     }
                 }
-            } else if (item.strokeColor === null && colorString || item.strokeColor.toCSS() !== new _paper2.default.Color(colorString).toCSS()) {
+            } else if (!_strokeColorMatch(item, colorString)) {
                 changed = true;
                 item.strokeColor = colorString;
             }
