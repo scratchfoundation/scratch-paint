@@ -150,14 +150,14 @@ class PaintEditorComponent extends React.Component {
                         </InputGroup>
 
                         {/* To be rotation point */}
-                        <InputGroup>
+                        {/* <InputGroup>
                             <EditFieldButton
                                 imgAlt="Rotation Point Icon"
                                 imgSrc={rotationPointIcon}
                                 title="Rotation Point"
                                 onClick={function () {}}
                             />
-                        </InputGroup>
+                        </InputGroup> */}
                     </div>
 
                     {/* Second Row */}
