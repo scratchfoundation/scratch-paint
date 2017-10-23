@@ -6,6 +6,14 @@ const isGroup = function (item) {
     return isGroupItem(item);
 };
 
+/**
+ * Groups the given items. Other things are then deselected and the new group is selected.
+ * @param {!Array<paper.Item>} items Root level items to group
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @return {paper.Group} the group if one is created, otherwise false.
+ */
 const groupItems = function (items, clearSelectedItems, setSelectedItems, onUpdateSvg) {
     if (items.length > 0) {
         const group = new paper.Group(items);
@@ -15,19 +23,26 @@ const groupItems = function (items, clearSelectedItems, setSelectedItems, onUpda
             group.children[i].selected = true;
         }
         setSelectedItems();
-        // @todo: Set selection bounds; enable/disable grouping icons
+        // @todo: enable/disable grouping icons
         onUpdateSvg();
         return group;
     }
     return false;
 };
 
+/**
+ * Groups the selected items. Other things are then deselected and the new group is selected.
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @return {paper.Group} the group if one is created, otherwise false.
+ */
 const groupSelection = function (clearSelectedItems, setSelectedItems, onUpdateSvg) {
     const items = getSelectedRootItems();
     return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg);
 };
 
-const ungroupLoop = function (group, recursive, setSelectedItems) {
+const _ungroupLoop = function (group, recursive, setSelectedItems) {
     // Can't ungroup items that are not groups
     if (!group || !group.children || !isGroup(group)) return;
             
@@ -38,7 +53,7 @@ const ungroupLoop = function (group, recursive, setSelectedItems) {
         if (groupChild.hasChildren()) {
             // recursion (groups can contain groups, ie. from SVG import)
             if (recursive) {
-                ungroupLoop(groupChild, recursive, setSelectedItems);
+                _ungroupLoop(groupChild, recursive, setSelectedItems);
                 continue;
             }
             if (groupChild.children.length === 1) {
@@ -55,7 +70,16 @@ const ungroupLoop = function (group, recursive, setSelectedItems) {
     }
 };
 
-// ungroup items (only top hierarchy)
+/**
+ * Ungroups the given items. The new group is selected only if setSelectedItems is passed in.
+ * onUpdateSvg is called to notify listeners of a change on the SVG only if onUpdateSvg is passed in.
+ * The reason these arguments are optional on ungroupItems is because ungroupItems is used for parts of
+ * SVG import, which shouldn't change the selection or undo state.
+ *
+ * @param {!Array<paper.Item>} items Items to ungroup if they are groups
+ * @param {?function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {?function} onUpdateSvg Function to let listeners know that SVG has changed.
+ */
 const ungroupItems = function (items, setSelectedItems, onUpdateSvg) {
     if (items.length === 0) {
         return;
@@ -64,7 +88,7 @@ const ungroupItems = function (items, setSelectedItems, onUpdateSvg) {
     for (let i = 0; i < items.length; i++) {
         const item = items[i];
         if (isGroup(item) && !item.data.isPGTextItem) {
-            ungroupLoop(item, false /* recursive */, setSelectedItems);
+            _ungroupLoop(item, false /* recursive */, setSelectedItems);
 
             if (!item.hasChildren()) {
                 emptyGroups.push(item);
@@ -78,12 +102,19 @@ const ungroupItems = function (items, setSelectedItems, onUpdateSvg) {
     for (let j = 0; j < emptyGroups.length; j++) {
         emptyGroups[j].remove();
     }
-    // @todo: Set selection bounds; enable/disable grouping icons
+    // @todo: enable/disable grouping icons
     if (onUpdateSvg) {
         onUpdateSvg();
     }
 };
 
+/**
+ * Ungroups the selected items. Other items are deselected and the ungrouped items are selected.
+ *
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ */
 const ungroupSelection = function (clearSelectedItems, setSelectedItems, onUpdateSvg) {
     const items = getSelectedRootItems();
     clearSelection(clearSelectedItems);
