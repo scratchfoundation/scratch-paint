@@ -18850,7 +18850,7 @@ bind.placeholder = {};
 
 module.exports = bindAll;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(30)))
 
 /***/ }),
 /* 6 */
@@ -22718,6 +22718,33 @@ if(false) {
 
 /***/ }),
 /* 30 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22733,7 +22760,7 @@ if(false) {
 if (process.env.NODE_ENV !== 'production') {
   var invariant = __webpack_require__(17);
   var warning = __webpack_require__(25);
-  var ReactPropTypesSecret = __webpack_require__(31);
+  var ReactPropTypesSecret = __webpack_require__(32);
   var loggedTypeFailures = {};
 }
 
@@ -22784,7 +22811,7 @@ module.exports = checkPropTypes;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22803,7 +22830,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22840,33 +22867,6 @@ var ExecutionEnvironment = {
 };
 
 module.exports = ExecutionEnvironment;
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
 
 /***/ }),
 /* 34 */
@@ -26806,6 +26806,14 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)(_reactIntl.IntlProvi
 "use strict";
 
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _lodash = __webpack_require__(5);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
@@ -26830,26 +26838,68 @@ var _intl = __webpack_require__(81);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 var appTarget = document.createElement('div');
 document.body.appendChild(appTarget);
 var store = (0, _redux.createStore)(_combineReducers2.default, _intl.intlInitialState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 var svgString = '<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"' + ' x="0px" y="0px" width="32px" height="32px" viewBox="0.5 384.5 32 32"' + ' enable-background="new 0.5 384.5 32 32" xml:space="preserve">' + '<path fill="none" stroke="#000000" stroke-width="3" stroke-miterlimit="10" d="M7.5,392.241h7.269' + 'c4.571,0,8.231,5.555,8.231,10.123v7.377"/>' + '<polyline points="10.689,399.492 3.193,391.997 10.689,384.5 "/>' + '<polyline points="30.185,405.995 22.689,413.491 15.192,405.995 "/>' + '</svg>';
-var onUpdateSvg = function onUpdateSvg(newSvgString, rotationCenterX, rotationCenterY) {
-    console.log(newSvgString);
-    console.log('rotationCenterX: ' + rotationCenterX + '    rotationCenterY: ' + rotationCenterY);
-};
+
+var Playground = function (_React$Component) {
+    _inherits(Playground, _React$Component);
+
+    function Playground(props) {
+        _classCallCheck(this, Playground);
+
+        var _this = _possibleConstructorReturn(this, (Playground.__proto__ || Object.getPrototypeOf(Playground)).call(this, props));
+
+        (0, _lodash2.default)(_this, ['handleUpdateName', 'handleUpdateSvg']);
+        _this.state = {
+            name: 'meow',
+            rotationCenterX: 0,
+            rotationCenterY: 0,
+            svg: svgString
+        };
+        return _this;
+    }
+
+    _createClass(Playground, [{
+        key: 'handleUpdateName',
+        value: function handleUpdateName(name) {
+            this.setState({ name: name });
+        }
+    }, {
+        key: 'handleUpdateSvg',
+        value: function handleUpdateSvg(svg, rotationCenterX, rotationCenterY) {
+            console.log(svg);
+            console.log('rotationCenterX: ' + rotationCenterX + '    rotationCenterY: ' + rotationCenterY);
+            this.setState({ svg: svg, rotationCenterX: rotationCenterX, rotationCenterY: rotationCenterY });
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(_2.default, _extends({}, this.state, {
+                svgId: 'meow',
+                onUpdateName: this.handleUpdateName,
+                onUpdateSvg: this.handleUpdateSvg
+            }));
+        }
+    }]);
+
+    return Playground;
+}(_react2.default.Component);
+
 _reactDom2.default.render(_react2.default.createElement(
     _reactRedux.Provider,
     { store: store },
     _react2.default.createElement(
         _intl.IntlProvider,
         null,
-        _react2.default.createElement(_2.default, {
-            rotationCenterX: 0,
-            rotationCenterY: 0,
-            svg: svgString,
-            onUpdateSvg: onUpdateSvg
-        })
+        _react2.default.createElement(Playground, null)
     )
 ), appTarget);
 
@@ -26909,7 +26959,7 @@ var require$$0 = __webpack_require__(25);
 var emptyObject = __webpack_require__(24);
 var invariant = __webpack_require__(17);
 var emptyFunction = __webpack_require__(14);
-var checkPropTypes = __webpack_require__(30);
+var checkPropTypes = __webpack_require__(31);
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -28604,7 +28654,7 @@ module.exports = ReactEntry;
  LICENSE file in the root directory of this source tree.
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0);__webpack_require__(17);var l=__webpack_require__(32),n=__webpack_require__(20),ba=__webpack_require__(48),ca=__webpack_require__(14),da=__webpack_require__(24),ea=__webpack_require__(49),fa=__webpack_require__(50),ha=__webpack_require__(51),ia=__webpack_require__(52);
+var aa=__webpack_require__(0);__webpack_require__(17);var l=__webpack_require__(33),n=__webpack_require__(20),ba=__webpack_require__(48),ca=__webpack_require__(14),da=__webpack_require__(24),ea=__webpack_require__(49),fa=__webpack_require__(50),ha=__webpack_require__(51),ia=__webpack_require__(52);
 function w(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:w("227");
 function ja(a){switch(a){case "svg":return"http://www.w3.org/2000/svg";case "math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}
 var ka={Namespaces:{html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"},getIntrinsicNamespace:ja,getChildNamespace:function(a,b){return null==a||"http://www.w3.org/1999/xhtml"===a?ja(b):"http://www.w3.org/2000/svg"===a&&"foreignObject"===b?"http://www.w3.org/1999/xhtml":a}},la=null,oa={};
@@ -28931,7 +28981,7 @@ if (process.env.NODE_ENV !== "production") {
 
 var react = __webpack_require__(0);
 var invariant = __webpack_require__(17);
-var ExecutionEnvironment = __webpack_require__(32);
+var ExecutionEnvironment = __webpack_require__(33);
 var _assign = __webpack_require__(20);
 var EventListener = __webpack_require__(48);
 var require$$0 = __webpack_require__(25);
@@ -28941,7 +28991,7 @@ var camelizeStyleName = __webpack_require__(92);
 var performanceNow = __webpack_require__(94);
 var propTypes = __webpack_require__(1);
 var emptyObject = __webpack_require__(24);
-var checkPropTypes = __webpack_require__(30);
+var checkPropTypes = __webpack_require__(31);
 var shallowEqual = __webpack_require__(49);
 var containsNode = __webpack_require__(50);
 var focusNode = __webpack_require__(51);
@@ -46346,7 +46396,7 @@ module.exports = performanceNow;
 
 
 
-var ExecutionEnvironment = __webpack_require__(32);
+var ExecutionEnvironment = __webpack_require__(33);
 
 var performance;
 
@@ -46375,8 +46425,8 @@ var invariant = __webpack_require__(17);
 var warning = __webpack_require__(25);
 var assign = __webpack_require__(20);
 
-var ReactPropTypesSecret = __webpack_require__(31);
-var checkPropTypes = __webpack_require__(30);
+var ReactPropTypesSecret = __webpack_require__(32);
+var checkPropTypes = __webpack_require__(31);
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -46922,7 +46972,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 var emptyFunction = __webpack_require__(14);
 var invariant = __webpack_require__(17);
-var ReactPropTypesSecret = __webpack_require__(31);
+var ReactPropTypesSecret = __webpack_require__(32);
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -47078,11 +47128,14 @@ var PaintEditor = function (_React$Component) {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(_paintEditor2.default, {
+                name: this.props.name,
                 rotationCenterX: this.props.rotationCenterX,
                 rotationCenterY: this.props.rotationCenterY,
                 svg: this.props.svg,
+                svgId: this.props.svgId,
                 onRedo: this.handleRedo,
                 onUndo: this.handleUndo,
+                onUpdateName: this.props.onUpdateName,
                 onUpdateSvg: this.handleUpdateSvg
             });
         }
@@ -47092,13 +47145,16 @@ var PaintEditor = function (_React$Component) {
 }(_react2.default.Component);
 
 PaintEditor.propTypes = {
+    name: _propTypes2.default.string,
     onKeyPress: _propTypes2.default.func.isRequired,
     onRedo: _propTypes2.default.func.isRequired,
     onUndo: _propTypes2.default.func.isRequired,
+    onUpdateName: _propTypes2.default.func.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
     rotationCenterX: _propTypes2.default.number,
     rotationCenterY: _propTypes2.default.number,
     svg: _propTypes2.default.string,
+    svgId: _propTypes2.default.string,
     undoSnapshot: _propTypes2.default.func.isRequired,
     undoState: _propTypes2.default.shape({
         stack: _propTypes2.default.arrayOf(_propTypes2.default.object).isRequired,
@@ -47280,7 +47336,8 @@ var PaintEditorComponent = function (_React$Component) {
                             { text: this.props.intl.formatMessage(messages.costume) },
                             _react2.default.createElement(BufferedInput, {
                                 type: 'text',
-                                value: 'meow'
+                                value: this.props.name,
+                                onSubmit: this.props.onUpdateName
                             })
                         )
                     ),
@@ -47405,7 +47462,8 @@ var PaintEditorComponent = function (_React$Component) {
                             canvasRef: this.setCanvas,
                             rotationCenterX: this.props.rotationCenterX,
                             rotationCenterY: this.props.rotationCenterY,
-                            svg: this.props.svg
+                            svg: this.props.svg,
+                            svgId: this.props.svgId
                         })
                     )
                 )
@@ -47418,12 +47476,15 @@ var PaintEditorComponent = function (_React$Component) {
 
 PaintEditorComponent.propTypes = {
     intl: _reactIntl.intlShape,
+    name: _propTypes2.default.string,
     onRedo: _propTypes2.default.func.isRequired,
     onUndo: _propTypes2.default.func.isRequired,
+    onUpdateName: _propTypes2.default.func.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
     rotationCenterX: _propTypes2.default.number,
     rotationCenterY: _propTypes2.default.number,
-    svg: _propTypes2.default.string
+    svg: _propTypes2.default.string,
+    svgId: _propTypes2.default.string
 };
 
 exports.default = (0, _reactIntl.injectIntl)(PaintEditorComponent);
@@ -47504,6 +47565,7 @@ var PaperCanvas = function (_React$Component) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(newProps) {
+            if (this.props.svgId === newProps.svgId) return;
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -47633,6 +47695,7 @@ PaperCanvas.propTypes = {
     rotationCenterX: _propTypes2.default.number,
     rotationCenterY: _propTypes2.default.number,
     svg: _propTypes2.default.string,
+    svgId: _propTypes2.default.string,
     undoSnapshot: _propTypes2.default.func.isRequired
 };
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -48137,7 +48200,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(33)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(30)))
 
 /***/ }),
 /* 110 */
@@ -48335,7 +48398,7 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33), __webpack_require__(117)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(30), __webpack_require__(117)(module)))
 
 /***/ }),
 /* 117 */
