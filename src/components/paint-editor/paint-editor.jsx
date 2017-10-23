@@ -117,35 +117,35 @@ class PaintEditorComponent extends React.Component {
                             />
                         </InputGroup>
 
-                        {/* To be Forward/Backward */}
+                        {/* Forward/Backward */}
                         <InputGroup className={styles.modDashedBorder}>
                             <EditFieldButton
                                 imgAlt="Send Forward Icon"
                                 imgSrc={sendForwardIcon}
                                 title="Forward"
-                                onClick={function () {}}
+                                onClick={this.props.onSendForward}
                             />
                             <EditFieldButton
                                 imgAlt="Send Backward Icon"
                                 imgSrc={sendBackwardIcon}
                                 title="Backward"
-                                onClick={function () {}}
+                                onClick={this.props.onSendBackward}
                             />
                         </InputGroup>
 
-                        {/* To be Front/back */}
+                        {/* Front/Back */}
                         <InputGroup>
                             <EditFieldButton
                                 imgAlt="Send to Front Icon"
                                 imgSrc={sendFrontIcon}
                                 title="Front"
-                                onClick={function () {}}
+                                onClick={this.props.onSendToFront}
                             />
                             <EditFieldButton
                                 imgAlt="Send to Back Icon"
                                 imgSrc={sendBackIcon}
                                 title="Back"
-                                onClick={function () {}}
+                                onClick={this.props.onSendToBack}
                             />
                         </InputGroup>
 
@@ -237,6 +237,10 @@ PaintEditorComponent.propTypes = {
     intl: intlShape,
     name: PropTypes.string,
     onRedo: PropTypes.func.isRequired,
+    onSendBackward: PropTypes.func.isRequired,
+    onSendForward: PropTypes.func.isRequired,
+    onSendToBack: PropTypes.func.isRequired,
+    onSendToFront: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
