@@ -7,6 +7,7 @@ import {undo, redo, undoSnapshot} from '../reducers/undo';
 
 import {getGuideLayer} from '../helper/layer';
 import {performUndo, performRedo, performSnapshot} from '../helper/undo';
+import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 
 import Modes from '../modes/modes';
 import {connect} from 'react-redux';
@@ -19,7 +20,11 @@ class PaintEditor extends React.Component {
         bindAll(this, [
             'handleUpdateSvg',
             'handleUndo',
-            'handleRedo'
+            'handleRedo',
+            'handleSendBackward',
+            'handleSendForward',
+            'handleSendToBack',
+            'handleSendToFront'
         ]);
     }
     componentDidMount () {
@@ -51,6 +56,18 @@ class PaintEditor extends React.Component {
     handleRedo () {
         performRedo(this.props.undoState, this.props.onRedo, this.handleUpdateSvg);
     }
+    handleSendBackward () {
+        sendBackward(this.handleUpdateSvg);
+    }
+    handleSendForward () {
+        bringForward(this.handleUpdateSvg);
+    }
+    handleSendToBack () {
+        sendToBack(this.handleUpdateSvg);
+    }
+    handleSendToFront () {
+        bringToFront(this.handleUpdateSvg);
+    }
     render () {
         return (
             <PaintEditorComponent
@@ -60,6 +77,10 @@ class PaintEditor extends React.Component {
                 svg={this.props.svg}
                 svgId={this.props.svgId}
                 onRedo={this.handleRedo}
+                onSendBackward={this.handleSendBackward}
+                onSendForward={this.handleSendForward}
+                onSendToBack={this.handleSendToBack}
+                onSendToFront={this.handleSendToFront}
                 onUndo={this.handleUndo}
                 onUpdateName={this.props.onUpdateName}
                 onUpdateSvg={this.handleUpdateSvg}
