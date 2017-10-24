@@ -1,3 +1,4 @@
+import paper from '@scratch/paper';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -28,6 +29,9 @@ class SelectMode extends React.Component {
     componentWillReceiveProps (nextProps) {
         if (this.tool && nextProps.hoveredItemId !== this.props.hoveredItemId) {
             this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
+        }
+        if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
+            this.tool.onSelectionChanged(nextProps.selectedItems);
         }
 
         if (nextProps.isSelectModeActive && !this.props.isSelectModeActive) {
@@ -71,13 +75,15 @@ SelectMode.propTypes = {
     hoveredItemId: PropTypes.number,
     isSelectModeActive: PropTypes.bool.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
+    selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setHoveredItem: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     isSelectModeActive: state.scratchPaint.mode === Modes.SELECT,
-    hoveredItemId: state.scratchPaint.hoveredItemId
+    hoveredItemId: state.scratchPaint.hoveredItemId,
+    selectedItems: state.scratchPaint.selectedItems
 });
 const mapDispatchToProps = dispatch => ({
     setHoveredItem: hoveredItemId => {

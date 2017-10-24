@@ -1,3 +1,4 @@
+import paper from '@scratch/paper';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -27,6 +28,9 @@ class OvalMode extends React.Component {
     componentWillReceiveProps (nextProps) {
         if (this.tool && nextProps.colorState !== this.props.colorState) {
             this.tool.setColorState(nextProps.colorState);
+        }
+        if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
+            this.tool.onSelectionChanged(nextProps.selectedItems);
         }
 
         if (nextProps.isOvalModeActive && !this.props.isOvalModeActive) {
@@ -73,12 +77,14 @@ OvalMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isOvalModeActive: PropTypes.bool.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
+    selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setSelectedItems: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     colorState: state.scratchPaint.color,
-    isOvalModeActive: state.scratchPaint.mode === Modes.OVAL
+    isOvalModeActive: state.scratchPaint.mode === Modes.OVAL,
+    selectedItems: state.scratchPaint.selectedItems
 });
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
@@ -89,8 +95,6 @@ const mapDispatchToProps = dispatch => ({
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.OVAL));
-    },
-    deactivateTool () {
     }
 });
 

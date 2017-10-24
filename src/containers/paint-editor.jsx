@@ -4,10 +4,13 @@ import PaintEditorComponent from '../components/paint-editor/paint-editor.jsx';
 
 import {changeMode} from '../reducers/modes';
 import {undo, redo, undoSnapshot} from '../reducers/undo';
+import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 
 import {getGuideLayer} from '../helper/layer';
 import {performUndo, performRedo, performSnapshot} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
+import {groupSelection, ungroupSelection} from '../helper/group';
+import {getSelectedLeafItems} from '../helper/selection';
 
 import Modes from '../modes/modes';
 import {connect} from 'react-redux';
@@ -24,7 +27,9 @@ class PaintEditor extends React.Component {
             'handleSendBackward',
             'handleSendForward',
             'handleSendToBack',
-            'handleSendToFront'
+            'handleSendToFront',
+            'handleGroup',
+            'handleUngroup'
         ]);
     }
     componentDidMount () {
@@ -51,10 +56,16 @@ class PaintEditor extends React.Component {
         paper.project.addLayer(guideLayer);
     }
     handleUndo () {
-        performUndo(this.props.undoState, this.props.onUndo, this.handleUpdateSvg);
+        performUndo(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateSvg);
     }
     handleRedo () {
-        performRedo(this.props.undoState, this.props.onRedo, this.handleUpdateSvg);
+        performRedo(this.props.undoState, this.props.onRedo, this.props.setSelectedItems, this.handleUpdateSvg);
+    }
+    handleGroup () {
+        groupSelection(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateSvg);
+    }
+    handleUngroup () {
+        ungroupSelection(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateSvg);
     }
     handleSendBackward () {
         sendBackward(this.handleUpdateSvg);
@@ -76,12 +87,14 @@ class PaintEditor extends React.Component {
                 rotationCenterY={this.props.rotationCenterY}
                 svg={this.props.svg}
                 svgId={this.props.svgId}
+                onGroup={this.handleGroup}
                 onRedo={this.handleRedo}
                 onSendBackward={this.handleSendBackward}
                 onSendForward={this.handleSendForward}
                 onSendToBack={this.handleSendToBack}
                 onSendToFront={this.handleSendToFront}
                 onUndo={this.handleUndo}
+                onUngroup={this.handleUngroup}
                 onUpdateName={this.props.onUpdateName}
                 onUpdateSvg={this.handleUpdateSvg}
             />
@@ -90,6 +103,7 @@ class PaintEditor extends React.Component {
 }
 
 PaintEditor.propTypes = {
+    clearSelectedItems: PropTypes.func.isRequired,
     name: PropTypes.string,
     onKeyPress: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
@@ -98,6 +112,7 @@ PaintEditor.propTypes = {
     onUpdateSvg: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
+    setSelectedItems: PropTypes.func.isRequired,
     svg: PropTypes.string,
     svgId: PropTypes.string,
     undoSnapshot: PropTypes.func.isRequired,
@@ -121,6 +136,12 @@ const mapDispatchToProps = dispatch => ({
         } else if (event.key === 's') {
             dispatch(changeMode(Modes.SELECT));
         }
+    },
+    clearSelectedItems: () => {
+        dispatch(clearSelectedItems());
+    },
+    setSelectedItems: () => {
+        dispatch(setSelectedItems(getSelectedLeafItems()));
     },
     onUndo: () => {
         dispatch(undo());

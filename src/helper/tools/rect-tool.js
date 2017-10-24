@@ -47,6 +47,13 @@ class RectTool extends paper.Tool {
             tolerance: RectTool.TOLERANCE / paper.view.zoom
         };
     }
+    /**
+     * Should be called if the selection changes to update the bounds of the bounding box.
+     * @param {Array<paper.Item>} selectedItems Array of selected items.
+     */
+    onSelectionChanged (selectedItems) {
+        this.boundingBoxTool.onSelectionChanged(selectedItems);
+    }
     setColorState (colorState) {
         this.colorState = colorState;
     }
