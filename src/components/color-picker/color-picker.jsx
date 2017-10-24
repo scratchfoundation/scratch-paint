@@ -111,7 +111,7 @@ class ColorPickerComponent extends React.Component {
                     <div className={styles.rowHeader}>
                         <span className={styles.labelName}>
                             <FormattedMessage
-                                defaultMessage="Hue"
+                                defaultMessage="Color"
                                 description="Label for the hue component in the color picker"
                                 id="paint.paintEditor.hue"
                             />
