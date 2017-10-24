@@ -1,11 +1,20 @@
 // undo functionality
 // modifed from https://github.com/memononen/stylii
 import paper from '@scratch/paper';
+import {getBackgroundGuideLayer} from '../helper/layer';
 
 const performSnapshot = function (dispatchPerformSnapshot) {
+    const backgroundGuideLayer = getBackgroundGuideLayer();
+    if (backgroundGuideLayer) {
+        backgroundGuideLayer.remove();
+    }
     dispatchPerformSnapshot({
         json: paper.project.exportJSON({asString: false})
     });
+    if (backgroundGuideLayer) {
+        paper.project.addLayer(backgroundGuideLayer);
+        backgroundGuideLayer.sendToBack();
+    }
 
     // @todo enable/disable buttons
     // updateButtonVisibility();
@@ -13,9 +22,11 @@ const performSnapshot = function (dispatchPerformSnapshot) {
 
 const _restore = function (entry, setSelectedItems, onUpdateSvg) {
     for (const layer of paper.project.layers) {
-        layer.removeChildren();
+        if (!layer.data.isBackgroundGuideLayer) {
+            layer.removeChildren();
+            layer.remove();
+        }
     }
-    paper.project.clear();
     paper.project.importJSON(entry.json);
     paper.view.update();
 
