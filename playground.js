@@ -24175,11 +24175,11 @@ var _paintEditor = __webpack_require__(99);
 
 var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
-var _selectionHoc = __webpack_require__(254);
+var _selectionHoc = __webpack_require__(255);
 
 var _selectionHoc2 = _interopRequireDefault(_selectionHoc);
 
-var _scratchPaintReducer = __webpack_require__(255);
+var _scratchPaintReducer = __webpack_require__(256);
 
 var _scratchPaintReducer2 = _interopRequireDefault(_scratchPaintReducer);
 
@@ -26801,13 +26801,13 @@ exports.updateIntl = exports.intlInitialState = exports.IntlProvider = exports.d
 
 var _reactIntl = __webpack_require__(19);
 
-var _reactIntlRedux = __webpack_require__(258);
+var _reactIntlRedux = __webpack_require__(259);
 
-var _scratchL10n = __webpack_require__(261);
+var _scratchL10n = __webpack_require__(262);
 
 var _scratchL10n2 = _interopRequireDefault(_scratchL10n);
 
-var _paintMsgs = __webpack_require__(262);
+var _paintMsgs = __webpack_require__(263);
 
 var _paintMsgs2 = _interopRequireDefault(_paintMsgs);
 
@@ -26902,7 +26902,7 @@ var _reactRedux = __webpack_require__(6);
 
 var _redux = __webpack_require__(22);
 
-var _combineReducers = __webpack_require__(257);
+var _combineReducers = __webpack_require__(258);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
@@ -47126,6 +47126,8 @@ var _layer = __webpack_require__(27);
 
 var _undo2 = __webpack_require__(63);
 
+var _order = __webpack_require__(254);
+
 var _modes2 = __webpack_require__(7);
 
 var _modes3 = _interopRequireDefault(_modes2);
@@ -47156,7 +47158,7 @@ var PaintEditor = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaintEditor.__proto__ || Object.getPrototypeOf(PaintEditor)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['handleUpdateSvg', 'handleUndo', 'handleRedo']);
+        (0, _lodash2.default)(_this, ['handleUpdateSvg', 'handleUndo', 'handleRedo', 'handleSendBackward', 'handleSendForward', 'handleSendToBack', 'handleSendToFront']);
         return _this;
     }
 
@@ -47197,6 +47199,26 @@ var PaintEditor = function (_React$Component) {
             (0, _undo2.performRedo)(this.props.undoState, this.props.onRedo, this.handleUpdateSvg);
         }
     }, {
+        key: 'handleSendBackward',
+        value: function handleSendBackward() {
+            (0, _order.sendBackward)(this.handleUpdateSvg);
+        }
+    }, {
+        key: 'handleSendForward',
+        value: function handleSendForward() {
+            (0, _order.bringForward)(this.handleUpdateSvg);
+        }
+    }, {
+        key: 'handleSendToBack',
+        value: function handleSendToBack() {
+            (0, _order.sendToBack)(this.handleUpdateSvg);
+        }
+    }, {
+        key: 'handleSendToFront',
+        value: function handleSendToFront() {
+            (0, _order.bringToFront)(this.handleUpdateSvg);
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(_paintEditor2.default, {
@@ -47206,6 +47228,10 @@ var PaintEditor = function (_React$Component) {
                 svg: this.props.svg,
                 svgId: this.props.svgId,
                 onRedo: this.handleRedo,
+                onSendBackward: this.handleSendBackward,
+                onSendForward: this.handleSendForward,
+                onSendToBack: this.handleSendToBack,
+                onSendToFront: this.handleSendToFront,
                 onUndo: this.handleUndo,
                 onUpdateName: this.props.onUpdateName,
                 onUpdateSvg: this.handleUpdateSvg
@@ -47523,13 +47549,13 @@ var PaintEditorComponent = function (_React$Component) {
                                 imgAlt: 'Send Forward Icon',
                                 imgSrc: _sendForward2.default,
                                 title: 'Forward',
-                                onClick: function onClick() {}
+                                onClick: this.props.onSendForward
                             }),
                             _react2.default.createElement(_editFieldButton2.default, {
                                 imgAlt: 'Send Backward Icon',
                                 imgSrc: _sendBackward2.default,
                                 title: 'Backward',
-                                onClick: function onClick() {}
+                                onClick: this.props.onSendBackward
                             })
                         ),
                         _react2.default.createElement(
@@ -47539,13 +47565,13 @@ var PaintEditorComponent = function (_React$Component) {
                                 imgAlt: 'Send to Front Icon',
                                 imgSrc: _sendFront2.default,
                                 title: 'Front',
-                                onClick: function onClick() {}
+                                onClick: this.props.onSendToFront
                             }),
                             _react2.default.createElement(_editFieldButton2.default, {
                                 imgAlt: 'Send to Back Icon',
                                 imgSrc: _sendBack2.default,
                                 title: 'Back',
-                                onClick: function onClick() {}
+                                onClick: this.props.onSendToBack
                             })
                         )
                     ),
@@ -47630,6 +47656,10 @@ PaintEditorComponent.propTypes = {
     intl: _reactIntl.intlShape,
     name: _propTypes2.default.string,
     onRedo: _propTypes2.default.func.isRequired,
+    onSendBackward: _propTypes2.default.func.isRequired,
+    onSendForward: _propTypes2.default.func.isRequired,
+    onSendToBack: _propTypes2.default.func.isRequired,
+    onSendToFront: _propTypes2.default.func.isRequired,
     onUndo: _propTypes2.default.func.isRequired,
     onUpdateName: _propTypes2.default.func.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
@@ -64835,6 +64865,131 @@ module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' stan
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.shouldShowSendBackward = exports.shouldShowBringForward = exports.sendBackward = exports.bringForward = exports.sendToBack = exports.bringToFront = undefined;
+
+var _selection = __webpack_require__(4);
+
+var bringToFront = function bringToFront(onUpdateSvg) {
+    var items = (0, _selection.getSelectedRootItems)();
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var item = _step.value;
+
+            item.bringToFront();
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    onUpdateSvg();
+};
+
+var sendToBack = function sendToBack(onUpdateSvg) {
+    var items = (0, _selection.getSelectedRootItems)();
+    for (var i = items.length - 1; i >= 0; i--) {
+        items[i].sendToBack();
+    }
+    onUpdateSvg();
+};
+
+var bringForward = function bringForward(onUpdateSvg) {
+    var items = (0, _selection.getSelectedRootItems)();
+    // Already at front
+    if (items.length === 0 || !items[items.length - 1].nextSibling) {
+        return;
+    }
+
+    var nextSibling = items[items.length - 1].nextSibling;
+    for (var i = items.length - 1; i >= 0; i--) {
+        items[i].insertAbove(nextSibling);
+    }
+    onUpdateSvg();
+};
+
+var sendBackward = function sendBackward(onUpdateSvg) {
+    var items = (0, _selection.getSelectedRootItems)();
+    // Already at front
+    if (items.length === 0 || !items[0].previousSibling) {
+        return;
+    }
+
+    var previousSibling = items[0].previousSibling;
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+        for (var _iterator2 = items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var item = _step2.value;
+
+            item.insertBelow(previousSibling);
+        }
+    } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+            }
+        } finally {
+            if (_didIteratorError2) {
+                throw _iteratorError2;
+            }
+        }
+    }
+
+    onUpdateSvg();
+};
+
+var shouldShowSendBackward = function shouldShowSendBackward() {
+    var items = (0, _selection.getSelectedRootItems)();
+    if (items.length === 0 || !items[0].previousSibling) {
+        return false;
+    }
+    return true;
+};
+
+var shouldShowBringForward = function shouldShowBringForward() {
+    var items = (0, _selection.getSelectedRootItems)();
+    if (items.length === 0 || !items[items.length - 1].nextSibling) {
+        return false;
+    }
+    return true;
+};
+
+exports.bringToFront = bringToFront;
+exports.sendToBack = sendToBack;
+exports.bringForward = bringForward;
+exports.sendBackward = sendBackward;
+exports.shouldShowBringForward = shouldShowBringForward;
+exports.shouldShowSendBackward = shouldShowSendBackward;
+
+/***/ }),
+/* 255 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -64938,7 +65093,7 @@ var SelectionHOC = function SelectionHOC(WrappedComponent) {
 exports.default = SelectionHOC;
 
 /***/ }),
-/* 255 */
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64962,7 +65117,7 @@ var _eraserMode = __webpack_require__(69);
 
 var _eraserMode2 = _interopRequireDefault(_eraserMode);
 
-var _color = __webpack_require__(256);
+var _color = __webpack_require__(257);
 
 var _color2 = _interopRequireDefault(_color);
 
@@ -64996,7 +65151,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 256 */
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65029,7 +65184,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 257 */
+/* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65055,7 +65210,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 258 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65070,7 +65225,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.intlReducer = intlReducer;
 
-var _warning = __webpack_require__(259);
+var _warning = __webpack_require__(260);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -65078,7 +65233,7 @@ var _IntlProvider2 = __webpack_require__(83);
 
 var _IntlProvider3 = _interopRequireDefault(_IntlProvider2);
 
-var _Provider2 = __webpack_require__(260);
+var _Provider2 = __webpack_require__(261);
 
 var _Provider3 = _interopRequireDefault(_Provider2);
 
@@ -65121,7 +65276,7 @@ function intlReducer() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 259 */
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65189,7 +65344,7 @@ module.exports = warning;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 260 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -65238,7 +65393,7 @@ exports.default = Provider;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 261 */
+/* 262 */
 /***/ (function(module, exports) {
 
 module.exports =
@@ -65419,7 +65574,7 @@ exports.default = locales;
 //# sourceMappingURL=l10n.js.map
 
 /***/ }),
-/* 262 */
+/* 263 */
 /***/ (function(module, exports) {
 
 // GENERATED FILE:
