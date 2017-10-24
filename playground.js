@@ -26451,7 +26451,7 @@ var ColorPickerComponent = function (_React$Component) {
                             'span',
                             { className: _colorPicker2.default.labelName },
                             _react2.default.createElement(_reactIntl.FormattedMessage, {
-                                defaultMessage: 'Hue',
+                                defaultMessage: 'Color',
 
                                 id: 'paint.paintEditor.hue'
                             })
