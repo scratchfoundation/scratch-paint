@@ -19931,7 +19931,7 @@ var _log2 = _interopRequireDefault(_log);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var CHANGE_MODE = 'scratch-paint/modes/CHANGE_MODE';
-var initialState = _modes2.default.BRUSH;
+var initialState = _modes2.default.SELECT;
 
 var reducer = function reducer(state, action) {
     if (typeof state === 'undefined') state = initialState;
@@ -47677,6 +47677,12 @@ var PaintEditorComponent = function (_React$Component) {
                     this.state.canvas ? _react2.default.createElement(
                         'div',
                         { className: _paintEditor2.default.modeSelector },
+                        _react2.default.createElement(_selectMode2.default, {
+                            onUpdateSvg: this.props.onUpdateSvg
+                        }),
+                        _react2.default.createElement(_reshapeMode2.default, {
+                            onUpdateSvg: this.props.onUpdateSvg
+                        }),
                         _react2.default.createElement(_brushMode2.default, {
                             canvas: this.state.canvas,
                             onUpdateSvg: this.props.onUpdateSvg
@@ -47691,12 +47697,6 @@ var PaintEditorComponent = function (_React$Component) {
                         }),
                         _react2.default.createElement(_lineMode2.default, {
                             canvas: this.state.canvas,
-                            onUpdateSvg: this.props.onUpdateSvg
-                        }),
-                        _react2.default.createElement(_selectMode2.default, {
-                            onUpdateSvg: this.props.onUpdateSvg
-                        }),
-                        _react2.default.createElement(_reshapeMode2.default, {
                             onUpdateSvg: this.props.onUpdateSvg
                         }),
                         _react2.default.createElement(_ovalMode2.default, {
