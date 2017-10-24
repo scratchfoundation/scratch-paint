@@ -3,7 +3,7 @@ import log from '../../log/log';
 import BroadBrushHelper from './broad-brush-helper';
 import SegmentBrushHelper from './segment-brush-helper';
 import {MIXED, styleCursorPreview} from '../../helper/style-path';
-import {clearSelection} from '../../helper/selection';
+import {clearSelection, getItems} from '../../helper/selection';
 import {getGuideLayer} from '../../helper/layer';
 
 /**
@@ -193,7 +193,7 @@ class Blobbiness {
         const blob = this;
 
         // Get all path items to merge with
-        const paths = paper.project.getItems({
+        const paths = getItems({
             match: function (item) {
                 return blob.isMergeable(lastPath, item) &&
                     item.parent instanceof paper.Layer; // don't merge with nested in group
@@ -245,7 +245,7 @@ class Blobbiness {
 
         // Get all path items to merge with
         // If there are selected items, try to erase from amongst those.
-        let items = paper.project.getItems({
+        let items = getItems({
             match: function (item) {
                 return item.selected && blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);
             }
@@ -254,7 +254,7 @@ class Blobbiness {
         // and deselect the selection
         if (items.length === 0) {
             clearSelection(this.clearSelectedItems);
-            items = paper.project.getItems({
+            items = getItems({
                 match: function (item) {
                     return blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);
                 }
