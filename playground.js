@@ -16830,9 +16830,9 @@ var _modes = __webpack_require__(7);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(23);
+var _group = __webpack_require__(20);
 
-var _item = __webpack_require__(20);
+var _item = __webpack_require__(21);
 
 var _compoundPath = __webpack_require__(140);
 
@@ -18920,9 +18920,9 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _selection = __webpack_require__(4);
 
-var _item = __webpack_require__(20);
+var _item = __webpack_require__(21);
 
-var _group = __webpack_require__(23);
+var _group = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19379,6 +19379,75 @@ exports.styleCursorPreview = styleCursorPreview;
 
 /***/ }),
 /* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.CHANGE_SELECTED_ITEMS = exports.clearSelectedItems = exports.setSelectedItems = exports.default = undefined;
+
+var _log = __webpack_require__(12);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_SELECTED_ITEMS = 'scratch-paint/select/CHANGE_SELECTED_ITEMS';
+var initialState = [];
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_SELECTED_ITEMS:
+            if (!action.selectedItems || !(action.selectedItems instanceof Array)) {
+                _log2.default.warn('No selected items or wrong format provided: ' + action.selectedItems);
+                return state;
+            }
+            // If they are not equal, return the new list of items. Else return old list
+            if (action.selectedItems.length !== state.length) {
+                return action.selectedItems;
+            }
+            // Shallow equality check (we may need to update this later for more granularity)
+            for (var i = 0; i < action.selectedItems.length; i++) {
+                if (action.selectedItems[i] !== state[i]) {
+                    return action.selectedItems;
+                }
+            }
+            return state;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+/**
+ * Set the selected item state to the given array of items
+ * @param {Array<paper.Item>} selectedItems from paper.project.selectedItems
+ * @return {object} Redux action to change the selected items.
+ */
+var setSelectedItems = function setSelectedItems(selectedItems) {
+    return {
+        type: CHANGE_SELECTED_ITEMS,
+        selectedItems: selectedItems
+    };
+};
+var clearSelectedItems = function clearSelectedItems() {
+    return {
+        type: CHANGE_SELECTED_ITEMS,
+        selectedItems: []
+    };
+};
+
+exports.default = reducer;
+exports.setSelectedItems = setSelectedItems;
+exports.clearSelectedItems = clearSelectedItems;
+exports.CHANGE_SELECTED_ITEMS = CHANGE_SELECTED_ITEMS;
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports) {
 
 /*
@@ -19460,7 +19529,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -19817,75 +19886,6 @@ function updateLink (link, options, obj) {
 	if(oldSrc) URL.revokeObjectURL(oldSrc);
 }
 
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.CHANGE_SELECTED_ITEMS = exports.clearSelectedItems = exports.setSelectedItems = exports.default = undefined;
-
-var _log = __webpack_require__(12);
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_SELECTED_ITEMS = 'scratch-paint/select/CHANGE_SELECTED_ITEMS';
-var initialState = [];
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_SELECTED_ITEMS:
-            if (!action.selectedItems || !(action.selectedItems instanceof Array)) {
-                _log2.default.warn('No selected items or wrong format provided: ' + action.selectedItems);
-                return state;
-            }
-            // If they are not equal, return the new list of items. Else return old list
-            if (action.selectedItems.length !== state.length) {
-                return action.selectedItems;
-            }
-            // Shallow equality check (we may need to update this later for more granularity)
-            for (var i = 0; i < action.selectedItems.length; i++) {
-                if (action.selectedItems[i] !== state[i]) {
-                    return action.selectedItems;
-                }
-            }
-            return state;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-/**
- * Set the selected item state to the given array of items
- * @param {Array<paper.Item>} selectedItems from paper.project.selectedItems
- * @return {object} Redux action to change the selected items.
- */
-var setSelectedItems = function setSelectedItems(selectedItems) {
-    return {
-        type: CHANGE_SELECTED_ITEMS,
-        selectedItems: selectedItems
-    };
-};
-var clearSelectedItems = function clearSelectedItems() {
-    return {
-        type: CHANGE_SELECTED_ITEMS,
-        selectedItems: []
-    };
-};
-
-exports.default = reducer;
-exports.setSelectedItems = setSelectedItems;
-exports.clearSelectedItems = clearSelectedItems;
-exports.CHANGE_SELECTED_ITEMS = CHANGE_SELECTED_ITEMS;
 
 /***/ }),
 /* 12 */
@@ -21952,6 +21952,187 @@ addLocaleData(__WEBPACK_IMPORTED_MODULE_0__locale_data_index_js___default.a);
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.shouldShowUngroup = exports.shouldShowGroup = exports.isGroupChild = exports.isGroup = exports.getItemsGroup = exports.ungroupItems = exports.groupItems = exports.ungroupSelection = exports.groupSelection = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _item = __webpack_require__(21);
+
+var _selection = __webpack_require__(4);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var isGroup = function isGroup(item) {
+    return (0, _item.isGroupItem)(item);
+};
+
+/**
+ * Groups the given items. Other things are then deselected and the new group is selected.
+ * @param {!Array<paper.Item>} items Root level items to group
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @return {paper.Group} the group if one is created, otherwise false.
+ */
+var groupItems = function groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg) {
+    if (items.length > 0) {
+        var group = new _paper2.default.Group(items);
+        (0, _selection.clearSelection)(clearSelectedItems);
+        (0, _selection.setItemSelection)(group, true);
+        for (var i = 0; i < group.children.length; i++) {
+            group.children[i].selected = true;
+        }
+        setSelectedItems();
+        // @todo: enable/disable grouping icons
+        onUpdateSvg();
+        return group;
+    }
+    return false;
+};
+
+/**
+ * Groups the selected items. Other things are then deselected and the new group is selected.
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @return {paper.Group} the group if one is created, otherwise false.
+ */
+var groupSelection = function groupSelection(clearSelectedItems, setSelectedItems, onUpdateSvg) {
+    var items = (0, _selection.getSelectedRootItems)();
+    return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg);
+};
+
+var _ungroupLoop = function _ungroupLoop(group, recursive, setSelectedItems) {
+    // Can't ungroup items that are not groups
+    if (!group || !group.children || !isGroup(group)) return;
+
+    group.applyMatrix = true;
+    // iterate over group children recursively
+    for (var i = 0; i < group.children.length; i++) {
+        var groupChild = group.children[i];
+        if (groupChild.hasChildren()) {
+            // recursion (groups can contain groups, ie. from SVG import)
+            if (recursive) {
+                _ungroupLoop(groupChild, recursive, setSelectedItems);
+                continue;
+            }
+            if (groupChild.children.length === 1) {
+                groupChild = groupChild.reduce();
+            }
+        }
+        groupChild.applyMatrix = true;
+        // move items from the group to the activeLayer (ungrouping)
+        groupChild.insertBelow(group);
+        if (setSelectedItems) {
+            groupChild.selected = true;
+        }
+        i--;
+    }
+};
+
+/**
+ * Ungroups the given items. The new group is selected only if setSelectedItems is passed in.
+ * onUpdateSvg is called to notify listeners of a change on the SVG only if onUpdateSvg is passed in.
+ * The reason these arguments are optional on ungroupItems is because ungroupItems is used for parts of
+ * SVG import, which shouldn't change the selection or undo state.
+ *
+ * @param {!Array<paper.Item>} items Items to ungroup if they are groups
+ * @param {?function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {?function} onUpdateSvg Function to let listeners know that SVG has changed.
+ */
+var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateSvg) {
+    if (items.length === 0) {
+        return;
+    }
+    var emptyGroups = [];
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (isGroup(item) && !item.data.isPGTextItem) {
+            _ungroupLoop(item, false /* recursive */, setSelectedItems);
+
+            if (!item.hasChildren()) {
+                emptyGroups.push(item);
+            }
+        }
+    }
+    if (setSelectedItems) {
+        setSelectedItems();
+    }
+    // remove all empty groups after ungrouping
+    for (var j = 0; j < emptyGroups.length; j++) {
+        emptyGroups[j].remove();
+    }
+    // @todo: enable/disable grouping icons
+    if (onUpdateSvg) {
+        onUpdateSvg();
+    }
+};
+
+/**
+ * Ungroups the selected items. Other items are deselected and the ungrouped items are selected.
+ *
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ */
+var ungroupSelection = function ungroupSelection(clearSelectedItems, setSelectedItems, onUpdateSvg) {
+    var items = (0, _selection.getSelectedRootItems)();
+    (0, _selection.clearSelection)(clearSelectedItems);
+    ungroupItems(items, setSelectedItems, onUpdateSvg);
+};
+
+var getItemsGroup = function getItemsGroup(item) {
+    var itemParent = item.parent;
+
+    if (isGroup(itemParent)) {
+        return itemParent;
+    }
+    return null;
+};
+
+var isGroupChild = function isGroupChild(item) {
+    var rootItem = (0, _item.getRootItem)(item);
+    return isGroup(rootItem);
+};
+
+var shouldShowGroup = function shouldShowGroup() {
+    var items = (0, _selection.getSelectedRootItems)();
+    return items.length > 1;
+};
+
+var shouldShowUngroup = function shouldShowUngroup() {
+    var items = (0, _selection.getSelectedRootItems)();
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (isGroup(item) && !item.data.isPGTextItem && item.children && item.children.length > 0) {
+            return true;
+        }
+    }
+    return false;
+};
+
+exports.groupSelection = groupSelection;
+exports.ungroupSelection = ungroupSelection;
+exports.groupItems = groupItems;
+exports.ungroupItems = ungroupItems;
+exports.getItemsGroup = getItemsGroup;
+exports.isGroup = isGroup;
+exports.isGroupChild = isGroupChild;
+exports.shouldShowGroup = shouldShowGroup;
+exports.shouldShowUngroup = shouldShowUngroup;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.getRootItem = exports.setPositionInView = exports.getPositionInView = exports.setPivot = exports.isPGTextItem = exports.isPointTextItem = exports.isGroupItem = exports.isCompoundPathItem = exports.isPathItem = exports.isBoundsItem = undefined;
 
 var _paper = __webpack_require__(2);
@@ -22026,7 +22207,7 @@ exports.setPositionInView = setPositionInView;
 exports.getRootItem = getRootItem;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22123,7 +22304,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22158,157 +22339,6 @@ if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' 
 
 
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.shouldShowUngroup = exports.shouldShowGroup = exports.isGroupChild = exports.isGroup = exports.getItemsGroup = exports.ungroupItems = exports.groupItems = exports.ungroupSelection = exports.groupSelection = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _item = __webpack_require__(20);
-
-var _selection = __webpack_require__(4);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var isGroup = function isGroup(item) {
-    return (0, _item.isGroupItem)(item);
-};
-
-var groupSelection = function groupSelection(clearSelectedItems) {
-    var items = (0, _selection.getSelectedRootItems)();
-    if (items.length > 0) {
-        var group = new _paper2.default.Group(items);
-        (0, _selection.clearSelection)(clearSelectedItems);
-        (0, _selection.setItemSelection)(group, true);
-        for (var i = 0; i < group.children.length; i++) {
-            group.children[i].selected = true;
-        }
-        // @todo: Set selection bounds; enable/disable grouping icons
-        // @todo add back undo
-        // pg.undo.snapshot('groupSelection');
-        return group;
-    }
-    return false;
-};
-
-var ungroupLoop = function ungroupLoop(group, recursive, selectUngroupedItems) {
-    // Can't ungroup items that are not groups
-    if (!group || !group.children || !isGroup(group)) return;
-
-    group.applyMatrix = true;
-    // iterate over group children recursively
-    for (var i = 0; i < group.children.length; i++) {
-        var groupChild = group.children[i];
-        if (groupChild.hasChildren()) {
-            // recursion (groups can contain groups, ie. from SVG import)
-            if (recursive) {
-                ungroupLoop(groupChild, recursive, selectUngroupedItems);
-                continue;
-            }
-            if (groupChild.children.length === 1) {
-                groupChild = groupChild.reduce();
-            }
-        }
-        groupChild.applyMatrix = true;
-        // move items from the group to the activeLayer (ungrouping)
-        groupChild.insertBelow(group);
-        if (selectUngroupedItems) {
-            groupChild.selected = true;
-        }
-        i--;
-    }
-};
-
-// ungroup items (only top hierarchy)
-var ungroupItems = function ungroupItems(items, selectUngroupedItems) {
-    var emptyGroups = [];
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (isGroup(item) && !item.data.isPGTextItem) {
-            ungroupLoop(item, false /* recursive */, selectUngroupedItems /* selectUngroupedItems */);
-
-            if (!item.hasChildren()) {
-                emptyGroups.push(item);
-            }
-        }
-    }
-
-    // remove all empty groups after ungrouping
-    for (var j = 0; j < emptyGroups.length; j++) {
-        emptyGroups[j].remove();
-    }
-    // @todo: Set selection bounds; enable/disable grouping icons
-    // @todo add back undo
-    // pg.undo.snapshot('ungroupItems');
-};
-
-var ungroupSelection = function ungroupSelection(clearSelectedItems) {
-    var items = (0, _selection.getSelectedRootItems)();
-    (0, _selection.clearSelection)(clearSelectedItems);
-    ungroupItems(items, true /* selectUngroupedItems */);
-};
-
-var groupItems = function groupItems(items) {
-    if (items.length > 0) {
-        var group = new _paper2.default.Group(items);
-        // @todo: Set selection bounds; enable/disable grouping icons
-        // @todo add back undo
-        // pg.undo.snapshot('groupItems');
-        return group;
-    }
-    return false;
-};
-
-var getItemsGroup = function getItemsGroup(item) {
-    var itemParent = item.parent;
-
-    if (isGroup(itemParent)) {
-        return itemParent;
-    }
-    return null;
-};
-
-var isGroupChild = function isGroupChild(item) {
-    var rootItem = (0, _item.getRootItem)(item);
-    return isGroup(rootItem);
-};
-
-var shouldShowGroup = function shouldShowGroup() {
-    var items = (0, _selection.getSelectedRootItems)();
-    return items.length > 1;
-};
-
-var shouldShowUngroup = function shouldShowUngroup() {
-    var items = (0, _selection.getSelectedRootItems)();
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (isGroup(item) && !item.data.isPGTextItem && item.children && item.children.length > 0) {
-            return true;
-        }
-    }
-    return false;
-};
-
-exports.groupSelection = groupSelection;
-exports.ungroupSelection = ungroupSelection;
-exports.groupItems = groupItems;
-exports.ungroupItems = ungroupItems;
-exports.getItemsGroup = getItemsGroup;
-exports.isGroup = isGroup;
-exports.isGroupChild = isGroupChild;
-exports.shouldShowGroup = shouldShowGroup;
-exports.shouldShowUngroup = shouldShowUngroup;
 
 /***/ }),
 /* 24 */
@@ -23304,16 +23334,31 @@ var BoundingBoxTool = function () {
     }
 
     /**
-     * @param {!MouseEvent} event The mouse event
-     * @param {boolean} clone Whether to clone on mouse down (e.g. alt key held)
-     * @param {boolean} multiselect Whether to multiselect on mouse down (e.g. shift key held)
-     * @param {paper.hitOptions} hitOptions The options with which to detect whether mouse down has hit
-     *     anything editable
-     * @return {boolean} True if there was a hit, false otherwise
+     * Should be called if the selection changes to update the bounds of the bounding box.
+     * @param {Array<paper.Item>} selectedItems Array of selected items.
      */
 
 
     _createClass(BoundingBoxTool, [{
+        key: 'onSelectionChanged',
+        value: function onSelectionChanged(selectedItems) {
+            if (selectedItems) {
+                this.setSelectionBounds();
+            } else {
+                this.removeBoundsPath();
+            }
+        }
+
+        /**
+         * @param {!MouseEvent} event The mouse event
+         * @param {boolean} clone Whether to clone on mouse down (e.g. alt key held)
+         * @param {boolean} multiselect Whether to multiselect on mouse down (e.g. shift key held)
+         * @param {paper.hitOptions} hitOptions The options with which to detect whether mouse down has hit
+         *     anything editable
+         * @return {boolean} True if there was a hit, false otherwise
+         */
+
+    }, {
         key: 'onMouseDown',
         value: function onMouseDown(event, clone, multiselect, hitOptions) {
             var hitResults = _paper2.default.project.hitTestAll(event.point, hitOptions);
@@ -23804,7 +23849,7 @@ var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _stylePath = __webpack_require__(8);
 
@@ -24997,7 +25042,7 @@ var performSnapshot = function performSnapshot(dispatchPerformSnapshot) {
 // modifed from https://github.com/memononen/stylii
 
 
-var _restore = function _restore(entry, onUpdateSvg) {
+var _restore = function _restore(entry, setSelectedItems, onUpdateSvg) {
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
@@ -25026,12 +25071,14 @@ var _restore = function _restore(entry, onUpdateSvg) {
     _paper2.default.project.clear();
     _paper2.default.project.importJSON(entry.json);
     _paper2.default.view.update();
+
+    setSelectedItems();
     onUpdateSvg(true /* skipSnapshot */);
 };
 
-var performUndo = function performUndo(undoState, dispatchPerformUndo, onUpdateSvg) {
+var performUndo = function performUndo(undoState, dispatchPerformUndo, setSelectedItems, onUpdateSvg) {
     if (undoState.pointer > 0) {
-        _restore(undoState.stack[undoState.pointer - 1], onUpdateSvg);
+        _restore(undoState.stack[undoState.pointer - 1], setSelectedItems, onUpdateSvg);
         dispatchPerformUndo();
 
         // @todo enable/disable buttons
@@ -25039,9 +25086,9 @@ var performUndo = function performUndo(undoState, dispatchPerformUndo, onUpdateS
     }
 };
 
-var performRedo = function performRedo(undoState, dispatchPerformRedo, onUpdateSvg) {
+var performRedo = function performRedo(undoState, dispatchPerformRedo, setSelectedItems, onUpdateSvg) {
     if (undoState.pointer >= 0 && undoState.pointer < undoState.stack.length - 1) {
-        _restore(undoState.stack[undoState.pointer + 1], onUpdateSvg);
+        _restore(undoState.stack[undoState.pointer + 1], setSelectedItems, onUpdateSvg);
         dispatchPerformRedo();
 
         // @todo enable/disable buttons
@@ -25780,9 +25827,9 @@ var _modes = __webpack_require__(7);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(23);
+var _group = __webpack_require__(20);
 
-var _item = __webpack_require__(20);
+var _item = __webpack_require__(21);
 
 var _math = __webpack_require__(72);
 
@@ -26028,11 +26075,11 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _item = __webpack_require__(20);
+var _item = __webpack_require__(21);
 
 var _guides = __webpack_require__(24);
 
-var _group = __webpack_require__(23);
+var _group = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26179,7 +26226,7 @@ var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _stylePath = __webpack_require__(8);
 
@@ -26583,7 +26630,7 @@ var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _stylePath = __webpack_require__(8);
 
@@ -26900,7 +26947,7 @@ var _2 = _interopRequireDefault(_);
 
 var _reactRedux = __webpack_require__(6);
 
-var _redux = __webpack_require__(22);
+var _redux = __webpack_require__(23);
 
 var _combineReducers = __webpack_require__(258);
 
@@ -26989,7 +27036,7 @@ _reactDom2.default.render(_react2.default.createElement(
  This source code is licensed under the MIT license found in the
  LICENSE file in the root directory of this source tree.
 */
-var f=__webpack_require__(21),p=__webpack_require__(25);__webpack_require__(18);var r=__webpack_require__(14);
+var f=__webpack_require__(22),p=__webpack_require__(25);__webpack_require__(18);var r=__webpack_require__(14);
 function t(a){for(var b=arguments.length-1,d="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,e=0;e<b;e++)d+="\x26args[]\x3d"+encodeURIComponent(arguments[e+1]);b=Error(d+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var u={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function v(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}v.prototype.isReactComponent={};v.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?t("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};v.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function w(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}function x(){}x.prototype=v.prototype;var y=w.prototype=new x;y.constructor=w;f(y,v.prototype);y.isPureReactComponent=!0;function z(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}var A=z.prototype=new x;A.constructor=z;f(A,v.prototype);A.unstable_isAsyncReactComponent=!0;A.render=function(){return this.props.children};
@@ -27026,7 +27073,7 @@ if (process.env.NODE_ENV !== "production") {
 
 'use strict';
 
-var objectAssign$1 = __webpack_require__(21);
+var objectAssign$1 = __webpack_require__(22);
 var require$$0 = __webpack_require__(26);
 var emptyObject = __webpack_require__(25);
 var invariant = __webpack_require__(18);
@@ -28726,7 +28773,7 @@ module.exports = ReactEntry;
  LICENSE file in the root directory of this source tree.
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0);__webpack_require__(18);var l=__webpack_require__(33),n=__webpack_require__(21),ba=__webpack_require__(49),ca=__webpack_require__(14),da=__webpack_require__(25),ea=__webpack_require__(50),fa=__webpack_require__(51),ha=__webpack_require__(52),ia=__webpack_require__(53);
+var aa=__webpack_require__(0);__webpack_require__(18);var l=__webpack_require__(33),n=__webpack_require__(22),ba=__webpack_require__(49),ca=__webpack_require__(14),da=__webpack_require__(25),ea=__webpack_require__(50),fa=__webpack_require__(51),ha=__webpack_require__(52),ia=__webpack_require__(53);
 function w(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:w("227");
 function ja(a){switch(a){case "svg":return"http://www.w3.org/2000/svg";case "math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}
 var ka={Namespaces:{html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"},getIntrinsicNamespace:ja,getChildNamespace:function(a,b){return null==a||"http://www.w3.org/1999/xhtml"===a?ja(b):"http://www.w3.org/2000/svg"===a&&"foreignObject"===b?"http://www.w3.org/1999/xhtml":a}},la=null,oa={};
@@ -29054,7 +29101,7 @@ if (process.env.NODE_ENV !== "production") {
 var react = __webpack_require__(0);
 var invariant = __webpack_require__(18);
 var ExecutionEnvironment = __webpack_require__(33);
-var _assign = __webpack_require__(21);
+var _assign = __webpack_require__(22);
 var EventListener = __webpack_require__(49);
 var require$$0 = __webpack_require__(26);
 var hyphenateStyleName = __webpack_require__(91);
@@ -46495,7 +46542,7 @@ module.exports = performance || {};
 var emptyFunction = __webpack_require__(14);
 var invariant = __webpack_require__(18);
 var warning = __webpack_require__(26);
-var assign = __webpack_require__(21);
+var assign = __webpack_require__(22);
 
 var ReactPropTypesSecret = __webpack_require__(32);
 var checkPropTypes = __webpack_require__(31);
@@ -47122,11 +47169,17 @@ var _modes = __webpack_require__(13);
 
 var _undo = __webpack_require__(37);
 
+var _selectedItems = __webpack_require__(9);
+
 var _layer = __webpack_require__(27);
 
 var _undo2 = __webpack_require__(63);
 
 var _order = __webpack_require__(254);
+
+var _group = __webpack_require__(20);
+
+var _selection = __webpack_require__(4);
 
 var _modes2 = __webpack_require__(7);
 
@@ -47158,7 +47211,7 @@ var PaintEditor = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaintEditor.__proto__ || Object.getPrototypeOf(PaintEditor)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['handleUpdateSvg', 'handleUndo', 'handleRedo', 'handleSendBackward', 'handleSendForward', 'handleSendToBack', 'handleSendToFront']);
+        (0, _lodash2.default)(_this, ['handleUpdateSvg', 'handleUndo', 'handleRedo', 'handleSendBackward', 'handleSendForward', 'handleSendToBack', 'handleSendToFront', 'handleGroup', 'handleUngroup']);
         return _this;
     }
 
@@ -47191,12 +47244,22 @@ var PaintEditor = function (_React$Component) {
     }, {
         key: 'handleUndo',
         value: function handleUndo() {
-            (0, _undo2.performUndo)(this.props.undoState, this.props.onUndo, this.handleUpdateSvg);
+            (0, _undo2.performUndo)(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateSvg);
         }
     }, {
         key: 'handleRedo',
         value: function handleRedo() {
-            (0, _undo2.performRedo)(this.props.undoState, this.props.onRedo, this.handleUpdateSvg);
+            (0, _undo2.performRedo)(this.props.undoState, this.props.onRedo, this.props.setSelectedItems, this.handleUpdateSvg);
+        }
+    }, {
+        key: 'handleGroup',
+        value: function handleGroup() {
+            (0, _group.groupSelection)(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateSvg);
+        }
+    }, {
+        key: 'handleUngroup',
+        value: function handleUngroup() {
+            (0, _group.ungroupSelection)(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateSvg);
         }
     }, {
         key: 'handleSendBackward',
@@ -47227,12 +47290,14 @@ var PaintEditor = function (_React$Component) {
                 rotationCenterY: this.props.rotationCenterY,
                 svg: this.props.svg,
                 svgId: this.props.svgId,
+                onGroup: this.handleGroup,
                 onRedo: this.handleRedo,
                 onSendBackward: this.handleSendBackward,
                 onSendForward: this.handleSendForward,
                 onSendToBack: this.handleSendToBack,
                 onSendToFront: this.handleSendToFront,
                 onUndo: this.handleUndo,
+                onUngroup: this.handleUngroup,
                 onUpdateName: this.props.onUpdateName,
                 onUpdateSvg: this.handleUpdateSvg
             });
@@ -47243,6 +47308,7 @@ var PaintEditor = function (_React$Component) {
 }(_react2.default.Component);
 
 PaintEditor.propTypes = {
+    clearSelectedItems: _propTypes2.default.func.isRequired,
     name: _propTypes2.default.string,
     onKeyPress: _propTypes2.default.func.isRequired,
     onRedo: _propTypes2.default.func.isRequired,
@@ -47251,6 +47317,7 @@ PaintEditor.propTypes = {
     onUpdateSvg: _propTypes2.default.func.isRequired,
     rotationCenterX: _propTypes2.default.number,
     rotationCenterY: _propTypes2.default.number,
+    setSelectedItems: _propTypes2.default.func.isRequired,
     svg: _propTypes2.default.string,
     svgId: _propTypes2.default.string,
     undoSnapshot: _propTypes2.default.func.isRequired,
@@ -47277,6 +47344,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
             } else if (event.key === 's') {
                 dispatch((0, _modes.changeMode)(_modes3.default.SELECT));
             }
+        },
+        clearSelectedItems: function clearSelectedItems() {
+            dispatch((0, _selectedItems.clearSelectedItems)());
+        },
+        setSelectedItems: function setSelectedItems() {
+            dispatch((0, _selectedItems.setSelectedItems)((0, _selection.getSelectedLeafItems)()));
         },
         onUndo: function onUndo() {
             dispatch((0, _undo.undo)());
@@ -47533,13 +47606,13 @@ var PaintEditorComponent = function (_React$Component) {
                                 imgAlt: 'Group Icon',
                                 imgSrc: _group2.default,
                                 title: 'Group',
-                                onClick: function onClick() {}
+                                onClick: this.props.onGroup
                             }),
                             _react2.default.createElement(_editFieldButton2.default, {
                                 imgAlt: 'Ungroup Icon',
                                 imgSrc: _ungroup2.default,
                                 title: 'Ungroup',
-                                onClick: function onClick() {}
+                                onClick: this.props.onUngroup
                             })
                         ),
                         _react2.default.createElement(
@@ -47655,12 +47728,14 @@ var PaintEditorComponent = function (_React$Component) {
 PaintEditorComponent.propTypes = {
     intl: _reactIntl.intlShape,
     name: _propTypes2.default.string,
+    onGroup: _propTypes2.default.func.isRequired,
     onRedo: _propTypes2.default.func.isRequired,
     onSendBackward: _propTypes2.default.func.isRequired,
     onSendForward: _propTypes2.default.func.isRequired,
     onSendToBack: _propTypes2.default.func.isRequired,
     onSendToFront: _propTypes2.default.func.isRequired,
     onUndo: _propTypes2.default.func.isRequired,
+    onUngroup: _propTypes2.default.func.isRequired,
     onUpdateName: _propTypes2.default.func.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
     rotationCenterX: _propTypes2.default.number,
@@ -47706,7 +47781,7 @@ var _undo = __webpack_require__(63);
 
 var _undo2 = __webpack_require__(37);
 
-var _group = __webpack_require__(23);
+var _group = __webpack_require__(20);
 
 var _paperCanvas = __webpack_require__(141);
 
@@ -48294,7 +48369,7 @@ function shallowEqual(objA, objB) {
 /* unused harmony export whenMapDispatchToPropsIsFunction */
 /* unused harmony export whenMapDispatchToPropsIsMissing */
 /* unused harmony export whenMapDispatchToPropsIsObject */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__wrapMapToProps__ = __webpack_require__(61);
 
 
@@ -53334,7 +53409,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -53354,7 +53429,7 @@ if(false) {
 /* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -53477,7 +53552,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -53497,7 +53572,7 @@ if(false) {
 /* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -53568,7 +53643,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -53588,7 +53663,7 @@ if(false) {
 /* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -53642,7 +53717,7 @@ var _brushMode = __webpack_require__(66);
 
 var _modes3 = __webpack_require__(13);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
@@ -56765,7 +56840,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -56785,7 +56860,7 @@ if(false) {
 /* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -56886,7 +56961,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -56906,7 +56981,7 @@ if(false) {
 /* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -56962,7 +57037,7 @@ var _blob2 = _interopRequireDefault(_blob);
 
 var _eraserMode = __webpack_require__(69);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _eraserMode2 = __webpack_require__(179);
 
@@ -57156,7 +57231,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -57176,7 +57251,7 @@ if(false) {
 /* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -57234,7 +57309,7 @@ var _stylePath = __webpack_require__(8);
 
 var _modes3 = __webpack_require__(13);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _lineMode = __webpack_require__(184);
 
@@ -57564,6 +57639,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
 var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
@@ -57584,7 +57663,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(13);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
@@ -57628,6 +57707,9 @@ var OvalMode = function (_React$Component) {
         value: function componentWillReceiveProps(nextProps) {
             if (this.tool && nextProps.colorState !== this.props.colorState) {
                 this.tool.setColorState(nextProps.colorState);
+            }
+            if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
+                this.tool.onSelectionChanged(nextProps.selectedItems);
             }
 
             if (nextProps.isOvalModeActive && !this.props.isOvalModeActive) {
@@ -57679,13 +57761,15 @@ OvalMode.propTypes = {
     handleMouseDown: _propTypes2.default.func.isRequired,
     isOvalModeActive: _propTypes2.default.bool.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
+    selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setSelectedItems: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
         colorState: state.scratchPaint.color,
-        isOvalModeActive: state.scratchPaint.mode === _modes2.default.OVAL
+        isOvalModeActive: state.scratchPaint.mode === _modes2.default.OVAL,
+        selectedItems: state.scratchPaint.selectedItems
     };
 };
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -57698,8 +57782,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         },
         handleMouseDown: function handleMouseDown() {
             dispatch((0, _modes3.changeMode)(_modes2.default.OVAL));
-        },
-        deactivateTool: function deactivateTool() {}
+        }
     };
 };
 
@@ -57798,6 +57881,16 @@ var OvalTool = function (_paper$Tool) {
                 }, // Allow hits on bounding box and selected only
                 tolerance: OvalTool.TOLERANCE / _paper2.default.view.zoom
             };
+        }
+        /**
+         * Should be called if the selection changes to update the bounds of the bounding box.
+         * @param {Array<paper.Item>} selectedItems Array of selected items.
+         */
+
+    }, {
+        key: 'onSelectionChanged',
+        value: function onSelectionChanged(selectedItems) {
+            this.boundingBoxTool.onSelectionChanged(selectedItems);
         }
     }, {
         key: 'setColorState',
@@ -58407,7 +58500,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(13);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
@@ -58822,6 +58915,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
 var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
@@ -58842,7 +58939,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(13);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
@@ -58886,6 +58983,9 @@ var RectMode = function (_React$Component) {
         value: function componentWillReceiveProps(nextProps) {
             if (this.tool && nextProps.colorState !== this.props.colorState) {
                 this.tool.setColorState(nextProps.colorState);
+            }
+            if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
+                this.tool.onSelectionChanged(nextProps.selectedItems);
             }
 
             if (nextProps.isRectModeActive && !this.props.isRectModeActive) {
@@ -58937,13 +59037,15 @@ RectMode.propTypes = {
     handleMouseDown: _propTypes2.default.func.isRequired,
     isRectModeActive: _propTypes2.default.bool.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
+    selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setSelectedItems: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
         colorState: state.scratchPaint.color,
-        isRectModeActive: state.scratchPaint.mode === _modes2.default.RECT
+        isRectModeActive: state.scratchPaint.mode === _modes2.default.RECT,
+        selectedItems: state.scratchPaint.selectedItems
     };
 };
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -59056,6 +59158,16 @@ var RectTool = function (_paper$Tool) {
                 }, // Allow hits on bounding box and selected only
                 tolerance: RectTool.TOLERANCE / _paper2.default.view.zoom
             };
+        }
+        /**
+         * Should be called if the selection changes to update the bounds of the bounding box.
+         * @param {Array<paper.Item>} selectedItems Array of selected items.
+         */
+
+    }, {
+        key: 'onSelectionChanged',
+        value: function onSelectionChanged(selectedItems) {
+            this.boundingBoxTool.onSelectionChanged(selectedItems);
         }
     }, {
         key: 'setColorState',
@@ -59233,7 +59345,7 @@ var _modes3 = __webpack_require__(13);
 
 var _hover = __webpack_require__(41);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
@@ -59390,7 +59502,7 @@ var _hover = __webpack_require__(73);
 
 var _selection = __webpack_require__(4);
 
-var _item = __webpack_require__(20);
+var _item = __webpack_require__(21);
 
 var _moveTool = __webpack_require__(71);
 
@@ -60274,6 +60386,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
 var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
@@ -60296,7 +60412,7 @@ var _modes3 = __webpack_require__(13);
 
 var _hover = __webpack_require__(41);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
@@ -60340,6 +60456,9 @@ var SelectMode = function (_React$Component) {
         value: function componentWillReceiveProps(nextProps) {
             if (this.tool && nextProps.hoveredItemId !== this.props.hoveredItemId) {
                 this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
+            }
+            if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
+                this.tool.onSelectionChanged(nextProps.selectedItems);
             }
 
             if (nextProps.isSelectModeActive && !this.props.isSelectModeActive) {
@@ -60386,6 +60505,7 @@ SelectMode.propTypes = {
     hoveredItemId: _propTypes2.default.number,
     isSelectModeActive: _propTypes2.default.bool.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
+    selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setHoveredItem: _propTypes2.default.func.isRequired,
     setSelectedItems: _propTypes2.default.func.isRequired
 };
@@ -60393,7 +60513,8 @@ SelectMode.propTypes = {
 var mapStateToProps = function mapStateToProps(state) {
     return {
         isSelectModeActive: state.scratchPaint.mode === _modes2.default.SELECT,
-        hoveredItemId: state.scratchPaint.hoveredItemId
+        hoveredItemId: state.scratchPaint.hoveredItemId,
+        selectedItems: state.scratchPaint.selectedItems
     };
 };
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -60525,6 +60646,16 @@ var SelectTool = function (_paper$Tool) {
         key: 'setPrevHoveredItemId',
         value: function setPrevHoveredItemId(prevHoveredItemId) {
             this.prevHoveredItemId = prevHoveredItemId;
+        }
+        /**
+         * Should be called if the selection changes to update the bounds of the bounding box.
+         * @param {Array<paper.Item>} selectedItems Array of selected items.
+         */
+
+    }, {
+        key: 'onSelectionChanged',
+        value: function onSelectionChanged(selectedItems) {
+            this.boundingBoxTool.onSelectionChanged(selectedItems);
         }
         /**
          * Returns the hit options to use when conducting hit tests.
@@ -64151,7 +64282,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -64171,7 +64302,7 @@ if(false) {
 /* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -64199,7 +64330,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -64219,7 +64350,7 @@ if(false) {
 /* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -64256,7 +64387,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -64276,7 +64407,7 @@ if(false) {
 /* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -64308,7 +64439,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -64328,7 +64459,7 @@ if(false) {
 /* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -64707,7 +64838,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -64727,7 +64858,7 @@ if(false) {
 /* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -64757,7 +64888,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -64777,7 +64908,7 @@ if(false) {
 /* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -65103,7 +65234,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(22);
+var _redux = __webpack_require__(23);
 
 var _modes = __webpack_require__(13);
 
@@ -65129,7 +65260,7 @@ var _modals = __webpack_require__(42);
 
 var _modals2 = _interopRequireDefault(_modals);
 
-var _selectedItems = __webpack_require__(11);
+var _selectedItems = __webpack_require__(9);
 
 var _selectedItems2 = _interopRequireDefault(_selectedItems);
 
@@ -65161,7 +65292,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(22);
+var _redux = __webpack_require__(23);
 
 var _fillColor = __webpack_require__(75);
 
@@ -65194,7 +65325,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(22);
+var _redux = __webpack_require__(23);
 
 var _intl = __webpack_require__(82);
 
