@@ -51,7 +51,7 @@ const ModeToolsComponent = props => {
                 <BufferedInput
                     small
                     max={MAX_STROKE_WIDTH}
-                    min="0"
+                    min="1"
                     type="number"
                     value={props.brushValue}
                     onSubmit={props.onBrushSliderChange}
@@ -71,7 +71,7 @@ const ModeToolsComponent = props => {
                 <BufferedInput
                     small
                     max={MAX_STROKE_WIDTH}
-                    min="0"
+                    min="1"
                     type="number"
                     value={props.eraserValue}
                     onSubmit={props.onEraserSliderChange}
