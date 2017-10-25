@@ -1,4 +1,5 @@
 import paper from '@scratch/paper';
+import canvasBg from './background.png';
 
 const getGuideLayer = function () {
     for (let i = 0; i < paper.project.layers.length; i++) {
@@ -31,20 +32,18 @@ const _makePaintingLayer = function () {
 };
 
 const _makeBackgroundGuideLayer = function () {
-    const BLOCK_WIDTH = 4;
     const guideLayer = new paper.Layer();
     guideLayer.locked = true;
-    for (let i = 0; i < 500 / BLOCK_WIDTH; i += 2) {
-        for (let j = 0; j < 400 / BLOCK_WIDTH; j++) {
-            const rect = new paper.Shape.Rectangle(
-                new paper.Point((i + (j % 2)) * BLOCK_WIDTH, j * BLOCK_WIDTH),
-                new paper.Point((i + (j % 2) + 1) * BLOCK_WIDTH, (j + 1) * BLOCK_WIDTH)
-            );
-            rect.fillColor = '#E5E5E5';
-            rect.guide = true;
-            rect.locked = true;
-        }
-    }
+    const img = new Image();
+    img.src = canvasBg;
+    img.onload = () => {
+        const raster = new paper.Raster(img);
+        raster.parent = guideLayer;
+        raster.guide = true;
+        raster.locked = true;
+        raster.position = paper.view.center;
+        raster.sendToBack();
+    };
 
     const vLine = new paper.Path.Line(new paper.Point(0, -7), new paper.Point(0, 7));
     vLine.strokeWidth = 2;
