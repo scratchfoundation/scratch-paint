@@ -12,7 +12,6 @@ import {injectIntl, intlShape} from 'react-intl';
 import Input from '../forms/input.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import Modes from '../../modes/modes';
-import Slider from '../forms/slider.jsx';
 import styles from './mode-tools.css';
 
 import brushIcon from '../brush-mode/brush.svg';
