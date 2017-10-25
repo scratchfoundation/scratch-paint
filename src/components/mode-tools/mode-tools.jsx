@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import {connect} from 'react-redux';
-import Popover from 'react-popover';
 import PropTypes from 'prop-types';
 import React from 'react';
 
