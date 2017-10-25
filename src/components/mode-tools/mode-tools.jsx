@@ -56,14 +56,6 @@ const ModeToolsComponent = props => {
                     value={props.brushValue}
                     onSubmit={props.onBrushSliderChange}
                 />
-                <Popover
-                    body={
-                        <Slider
-                            value={props.brushValue}
-                            onChange={props.onBrushSliderChange}
-                        />
-                    }
-                />
             </div>
         );
     case Modes.ERASER:
@@ -83,14 +75,6 @@ const ModeToolsComponent = props => {
                     type="number"
                     value={props.eraserValue}
                     onSubmit={props.onEraserSliderChange}
-                />
-                <Popover
-                    body={
-                        <Slider
-                            value={props.eraserValue}
-                            onChange={props.onEraserSliderChange}
-                        />
-                    }
                 />
             </div>
         );
