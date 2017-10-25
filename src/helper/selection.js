@@ -6,6 +6,21 @@ import {getRootItem, isCompoundPathItem, isBoundsItem, isPathItem, isPGTextItem}
 import {getItemsCompoundPath, isCompoundPath, isCompoundPathChild} from './compound-path';
 
 /**
+ * Wrapper for paper.project.getItems that excludes our helper items
+ * @param {?object} options See paper.js docs for paper.Item.getItems
+ * @return {Array<paper.Item>} items that match options
+ */
+const getItems = function (options) {
+    const newMatcher = function (item) {
+        return !item.locked &&
+            !(item.data && item.data.isHelperItem) &&
+            (!options.match || options.match(item));
+    };
+    const newOptions = {...options, match: newMatcher};
+    return paper.project.getItems(newOptions);
+};
+
+/**
  * @param {boolean} includeGuides True if guide layer items like the bounding box should
  *     be included in the returned items.
  * @return {Array<paper.item>} all top-level (direct descendants of a paper.Layer) items
@@ -389,6 +404,7 @@ const shouldShowSelectAll = function () {
 };
 
 export {
+    getItems,
     getAllRootItems,
     selectAllItems,
     selectAllSegments,

@@ -6,7 +6,7 @@ import {changeMode} from '../reducers/modes';
 import {undo, redo, undoSnapshot} from '../reducers/undo';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 
-import {getGuideLayer} from '../helper/layer';
+import {getGuideLayer, getBackgroundGuideLayer} from '../helper/layer';
 import {performUndo, performRedo, performSnapshot} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
@@ -41,7 +41,9 @@ class PaintEditor extends React.Component {
     handleUpdateSvg (skipSnapshot) {
         // Hide guide layer
         const guideLayer = getGuideLayer();
+        const backgroundGuideLayer = getBackgroundGuideLayer();
         guideLayer.remove();
+        backgroundGuideLayer.remove();
         const bounds = paper.project.activeLayer.bounds;
         this.props.onUpdateSvg(
             paper.project.exportSVG({
@@ -53,6 +55,8 @@ class PaintEditor extends React.Component {
         if (!skipSnapshot) {
             performSnapshot(this.props.undoSnapshot);
         }
+        paper.project.addLayer(backgroundGuideLayer);
+        backgroundGuideLayer.sendToBack();
         paper.project.addLayer(guideLayer);
     }
     handleUndo () {

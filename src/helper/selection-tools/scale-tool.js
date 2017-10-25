@@ -1,4 +1,5 @@
 import paper from '@scratch/paper';
+import {getItems} from '../selection';
 
 /**
  * Tool to handle scaling items by pulling on the handles around the edges of the bounding
@@ -55,9 +56,9 @@ class ScaleTool {
         const modOrigSize = this.origSize;
 
         // get item to insert below so that scaled items stay in same z position
-        const items = paper.project.getItems({
+        const items = getItems({
             match: function (item) {
-                if (item instanceof paper.Layer || item.data.isHelperItem) {
+                if (item instanceof paper.Layer) {
                     return false;
                 }
                 for (const scaleItem of scaleTool.scaleItems) {

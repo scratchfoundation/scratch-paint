@@ -51,6 +51,10 @@ const base = {
             }]
         },
         {
+            test: /\.png$/i,
+            loader: 'url-loader'
+        },
+        {
             test: /\.svg$/,
             loader: 'svg-url-loader?noquotes'
         }]

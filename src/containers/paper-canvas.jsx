@@ -7,6 +7,7 @@ import paper from '@scratch/paper';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
+import {setupLayers} from '../helper/layer';
 
 import styles from './paper-canvas.css';
 
@@ -22,6 +23,8 @@ class PaperCanvas extends React.Component {
         paper.setup(this.canvas);
         // Don't show handles by default
         paper.settings.handleSize = 0;
+        // Make layers.
+        setupLayers();
         if (this.props.svg) {
             this.importSvg(this.props.svg, this.props.rotationCenterX, this.props.rotationCenterY);
         } else {
@@ -31,7 +34,9 @@ class PaperCanvas extends React.Component {
     componentWillReceiveProps (newProps) {
         if (this.props.svgId === newProps.svgId) return;
         for (const layer of paper.project.layers) {
-            layer.removeChildren();
+            if (!layer.data.isBackgroundGuideLayer) {
+                layer.removeChildren();
+            }
         }
         this.props.clearUndo();
         if (newProps.svg) {

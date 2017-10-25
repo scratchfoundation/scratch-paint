@@ -1,4 +1,5 @@
 import paper from '@scratch/paper';
+import {getItems} from './selection';
 
 /**
  * @param {paper.Point} point1 point 1
@@ -19,7 +20,7 @@ const touching = function (point1, point2, tolerance) {
  *     tolerance distance of the given point, or null if none exists.
  */
 const endPointHit = function (point, tolerance, excludePath) {
-    const lines = paper.project.getItems({
+    const lines = getItems({
         class: paper.Path
     });
     // Prefer more recent lines
