@@ -43,10 +43,6 @@ $border-radius: 0.25rem;
     padding: calc(2 * $grid-unit);
 }
 
-.button-group-button:active {
-    background-color: $ui-background-blue; 
-}
-
 .button-group-button:last-of-type {
     border-top-right-radius: $border-radius;
     border-bottom-right-radius: $border-radius;
