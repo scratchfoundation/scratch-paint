@@ -43,7 +43,10 @@ const ButtonComponent = ({
 ButtonComponent.propTypes = {
     children: PropTypes.node,
     className: PropTypes.string,
-    disabled: PropTypes.string,
+    disabled: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool
+    ]),
     onClick: PropTypes.func.isRequired
 };
 export default ButtonComponent;
