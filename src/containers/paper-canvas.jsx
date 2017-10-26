@@ -157,7 +157,7 @@ class PaperCanvas extends React.Component {
 PaperCanvas.propTypes = {
     canvasRef: PropTypes.func,
     clearUndo: PropTypes.func.isRequired,
-    mode: PropTypes.instanceOf(Modes),
+    mode: PropTypes.oneOf(Object.values(Modes)),
     onUpdateSvg: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
