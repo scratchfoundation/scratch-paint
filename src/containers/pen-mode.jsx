@@ -5,6 +5,7 @@ import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
 
 import {changeStrokeColor} from '../reducers/stroke-color';
+import {changeStrokeWidth} from '../reducers/stroke-width';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {MIXED} from '../helper/style-path';
@@ -51,6 +52,10 @@ class PenMode extends React.Component {
         const {strokeColor} = this.props.colorState;
         if (strokeColor === MIXED || strokeColor === null) {
             this.props.onChangeStrokeColor(PenMode.DEFAULT_COLOR)
+        }
+        // Force a minimum stroke width
+        if (!this.props.colorState.strokeWidth) {
+            this.props.onChangeStrokeWidth(1);
         }
         this.tool = new PenTool(
             this.props.clearSelectedItems,
@@ -102,6 +107,9 @@ const mapDispatchToProps = dispatch => ({
     },
     onChangeStrokeColor: strokeColor => {
         dispatch(changeStrokeColor(strokeColor));
+    },
+    onChangeStrokeWidth: strokeWidth => {
+        dispatch(changeStrokeWidth(strokeWidth));
     }
 });
 

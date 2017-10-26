@@ -9,6 +9,7 @@ import {endPointHit, touching} from '../helper/snapping';
 import {drawHitPoint, removeHitPoint} from '../helper/guides';
 import {stylePath} from '../helper/style-path';
 import {changeStrokeColor} from '../reducers/stroke-color';
+import {changeStrokeWidth} from '../reducers/stroke-width';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {MIXED} from '../helper/style-path';
@@ -57,7 +58,11 @@ class LineMode extends React.Component {
         if (strokeColor === MIXED || strokeColor === null) {
             this.props.onChangeStrokeColor(LineMode.DEFAULT_COLOR);
         }
-
+        // Force a minimum stroke width
+        console.log(this.props.colorState.strokeWidth)
+        if (!this.props.colorState.strokeWidth) {
+            this.props.onChangeStrokeWidth(1);
+        }
         this.tool = new paper.Tool();
 
         this.path = null;
@@ -248,6 +253,9 @@ const mapDispatchToProps = dispatch => ({
     },
     onChangeStrokeColor: strokeColor => {
         dispatch(changeStrokeColor(strokeColor));
+    },
+    onChangeStrokeWidth: strokeWidth => {
+        dispatch(changeStrokeWidth(strokeWidth));
     }
 });
 
