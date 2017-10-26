@@ -4,14 +4,19 @@ import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
 
+import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
+import {MIXED} from '../helper/style-path';
 
 import {clearSelection} from '../helper/selection';
 import PenTool from '../helper/tools/pen-tool';
 import PenModeComponent from '../components/pen-mode/pen-mode.jsx';
 
 class PenMode extends React.Component {
+    static get DEFAULT_COLOR () {
+        return '#000000';
+    }
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -42,6 +47,11 @@ class PenMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
+        // Force the default pen color if stroke is MIXED or transparent
+        const {strokeColor} = this.props.colorState;
+        if (strokeColor === MIXED || strokeColor === null) {
+            this.props.onChangeStrokeColor(PenMode.DEFAULT_COLOR)
+        }
         this.tool = new PenTool(
             this.props.clearSelectedItems,
             this.props.onUpdateSvg
@@ -89,6 +99,9 @@ const mapDispatchToProps = dispatch => ({
         dispatch(changeMode(Modes.PEN));
     },
     deactivateTool () {
+    },
+    onChangeStrokeColor: strokeColor => {
+        dispatch(changeStrokeColor(strokeColor));
     }
 });
 

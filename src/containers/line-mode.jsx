@@ -8,14 +8,19 @@ import {clearSelection} from '../helper/selection';
 import {endPointHit, touching} from '../helper/snapping';
 import {drawHitPoint, removeHitPoint} from '../helper/guides';
 import {stylePath} from '../helper/style-path';
+import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
+import {MIXED} from '../helper/style-path';
 
 import LineModeComponent from '../components/line-mode/line-mode.jsx';
 
 class LineMode extends React.Component {
     static get SNAP_TOLERANCE () {
         return 6;
+    }
+    static get DEFAULT_COLOR () {
+        return '#000000';
     }
     constructor (props) {
         super(props);
@@ -46,8 +51,15 @@ class LineMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
+
+        // Force the default line color if stroke is MIXED or transparent
+        const {strokeColor} = this.props.colorState;
+        if (strokeColor === MIXED || strokeColor === null) {
+            this.props.onChangeStrokeColor(LineMode.DEFAULT_COLOR);
+        }
+
         this.tool = new paper.Tool();
-        
+
         this.path = null;
         this.hitResult = null;
 
@@ -182,7 +194,7 @@ class LineMode extends React.Component {
             removeHitPoint();
             this.hitResult = null;
         }
-        
+
         if (this.path) {
             this.props.onUpdateSvg();
             this.path = null;
@@ -233,6 +245,9 @@ const mapDispatchToProps = dispatch => ({
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.LINE));
+    },
+    onChangeStrokeColor: strokeColor => {
+        dispatch(changeStrokeColor(strokeColor));
     }
 });
 
