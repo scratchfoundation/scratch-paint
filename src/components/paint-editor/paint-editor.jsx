@@ -61,6 +61,9 @@ class PaintEditorComponent extends React.Component {
         this.setState({canvas: canvas});
     }
     render () {
+        const redoDisabled = !this.props.canRedo();
+        const undoDisabled = !this.props.canUndo();
+
         return (
             <div className={styles.editorContainer}>
                 {this.state.canvas ? (
@@ -82,8 +85,15 @@ class PaintEditorComponent extends React.Component {
                             <InputGroup>
                                 <ButtonGroup>
                                     <Button
-                                        className={styles.buttonGroupButton}
-                                        disabled={!this.props.canUndo()}
+                                        className={
+                                            classNames(
+                                                styles.buttonGroupButton,
+                                                {
+                                                    [styles.modNoRightBorder]: !redoDisabled
+                                                }
+                                            )
+                                        }
+                                        disabled={undoDisabled}
                                         onClick={this.props.onUndo}
                                     >
                                         <img
@@ -93,8 +103,15 @@ class PaintEditorComponent extends React.Component {
                                         />
                                     </Button>
                                     <Button
-                                        className={styles.buttonGroupButton}
-                                        disabled={!this.props.canRedo()}
+                                        className={
+                                            classNames(
+                                                styles.buttonGroupButton,
+                                                {
+                                                    [styles.modLeftBorder]: !redoDisabled
+                                                }
+                                            )
+                                        }
+                                        disabled={redoDisabled}
                                         onClick={this.props.onRedo}
                                     >
                                         <img
