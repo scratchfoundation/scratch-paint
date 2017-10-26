@@ -9,8 +9,9 @@ import {MAX_STROKE_WIDTH} from '../reducers/stroke-width';
 
 const BufferedInput = BufferedInputHOC(Input);
 const StrokeWidthIndicatorComponent = props => (
-    <InputGroup>
+    <InputGroup disabled={props.disabled}>
         <BufferedInput
+            disabled={props.disabled}
             small
             max={MAX_STROKE_WIDTH}
             min="0"

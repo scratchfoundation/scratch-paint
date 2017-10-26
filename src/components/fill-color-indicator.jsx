@@ -17,7 +17,7 @@ const messages = defineMessages({
 });
 
 const FillColorIndicatorComponent = props => (
-    <InputGroup>
+    <InputGroup disabled={props.disabled}>
         <Popover
             body={
                 <ColorPicker
