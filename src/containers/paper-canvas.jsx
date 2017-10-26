@@ -58,7 +58,7 @@ class PaperCanvas extends React.Component {
             return;
         }
         // Backspace, delete
-        if (event.key.toLowerCase() === 'delete' || event.key.toLowerCase() === 'backspace') {
+        if (event.key === 'Delete' || event.key === 'Backspace') {
             if (deleteSelection(this.props.mode, this.props.onUpdateSvg)) {
                 this.props.setSelectedItems();
             }
