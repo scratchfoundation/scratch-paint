@@ -26191,7 +26191,7 @@ var _stylePath = __webpack_require__(9);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var CHANGE_FILL_COLOR = 'scratch-paint/fill-color/CHANGE_FILL_COLOR';
-var initialState = '#4C97FF';
+var initialState = '#9966FF';
 // Matches hex colors
 var regExp = /^#([0-9a-f]{3}){1,2}$/i;
 
