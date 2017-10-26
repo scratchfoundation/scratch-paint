@@ -9,16 +9,16 @@ import {changeBrushSize as changeEraserSize} from '../../reducers/eraser-mode';
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
 import {injectIntl, intlShape} from 'react-intl';
 import Input from '../forms/input.jsx';
-import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
+// import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import Modes from '../../modes/modes';
 import styles from './mode-tools.css';
 
 import brushIcon from '../brush-mode/brush.svg';
-import curvedPointIcon from './curved-point.svg';
+// import curvedPointIcon from './curved-point.svg';
 import eraserIcon from '../eraser-mode/eraser.svg';
-import flipHorizontalIcon from './flip-horizontal.svg';
-import flipVerticalIcon from './flip-vertical.svg';
-import straightPointIcon from './straight-point.svg';
+// import flipHorizontalIcon from './flip-horizontal.svg';
+// import flipVerticalIcon from './flip-vertical.svg';
+// import straightPointIcon from './straight-point.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
