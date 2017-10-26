@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 import {MIXED} from '../../helper/style-path';
 
@@ -17,7 +18,9 @@ const ColorButtonComponent = props => (
         onClick={props.onClick}
     >
         <div
-            className={styles.colorButtonSwatch}
+            className={classNames(styles.colorButtonSwatch, {
+                [styles.outlineSwatch]: props.outline
+            })}
             style={{
                 background: colorToBackground(props.color)
             }}
@@ -39,8 +42,13 @@ const ColorButtonComponent = props => (
 );
 
 ColorButtonComponent.propTypes = {
+    outline: PropTypes.bool.isRequired,
     color: PropTypes.string,
     onClick: PropTypes.func.isRequired
+};
+
+ColorButtonComponent.defaultProps = {
+    outline: false
 };
 
 export default ColorButtonComponent;

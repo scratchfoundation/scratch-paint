@@ -31,6 +31,7 @@ const StrokeColorIndicatorComponent = props => (
         >
             <Label text={props.intl.formatMessage(messages.stroke)}>
                 <ColorButton
+                    outline
                     color={props.strokeColor}
                     onClick={props.onOpenStrokeColor}
                 />
