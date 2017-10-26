@@ -51,7 +51,7 @@ class PenMode extends React.Component {
         // Force the default pen color if stroke is MIXED or transparent
         const {strokeColor} = this.props.colorState;
         if (strokeColor === MIXED || strokeColor === null) {
-            this.props.onChangeStrokeColor(PenMode.DEFAULT_COLOR)
+            this.props.onChangeStrokeColor(PenMode.DEFAULT_COLOR);
         }
         // Force a minimum stroke width
         if (!this.props.colorState.strokeWidth) {
@@ -88,6 +88,8 @@ PenMode.propTypes = {
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isPenModeActive: PropTypes.bool.isRequired,
+    onChangeStrokeColor: PropTypes.func.isRequired,
+    onChangeStrokeWidth: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired
 };
 

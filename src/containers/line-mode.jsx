@@ -59,7 +59,6 @@ class LineMode extends React.Component {
             this.props.onChangeStrokeColor(LineMode.DEFAULT_COLOR);
         }
         // Force a minimum stroke width
-        console.log(this.props.colorState.strokeWidth)
         if (!this.props.colorState.strokeWidth) {
             this.props.onChangeStrokeWidth(1);
         }
@@ -237,6 +236,8 @@ LineMode.propTypes = {
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isLineModeActive: PropTypes.bool.isRequired,
+    onChangeStrokeColor: PropTypes.func.isRequired,
+    onChangeStrokeWidth: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired
 };
 

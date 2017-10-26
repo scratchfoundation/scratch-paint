@@ -41,6 +41,7 @@ const StrokeColorIndicatorComponent = props => (
 );
 
 StrokeColorIndicatorComponent.propTypes = {
+    disabled: PropTypes.bool.isRequired,
     intl: intlShape,
     onChangeStrokeColor: PropTypes.func.isRequired,
     onCloseStrokeColor: PropTypes.func.isRequired,

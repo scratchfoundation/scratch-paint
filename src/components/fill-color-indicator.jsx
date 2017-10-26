@@ -40,6 +40,7 @@ const FillColorIndicatorComponent = props => (
 );
 
 FillColorIndicatorComponent.propTypes = {
+    disabled: PropTypes.bool.isRequired,
     fillColor: PropTypes.string,
     fillColorModalVisible: PropTypes.bool.isRequired,
     intl: intlShape,

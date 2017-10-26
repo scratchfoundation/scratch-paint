@@ -8,8 +8,9 @@ import noFillIcon from './no-fill.svg';
 import mixedFillIcon from './mixed-fill.svg';
 import styles from './color-button.css';
 
-const colorToBackground = (color) => {
-    return color === MIXED || color === null ? 'white' : color
+const colorToBackground = color => {
+    if (color === MIXED || color === null) return 'white';
+    return color;
 };
 
 const ColorButtonComponent = props => (
@@ -42,9 +43,9 @@ const ColorButtonComponent = props => (
 );
 
 ColorButtonComponent.propTypes = {
-    outline: PropTypes.bool.isRequired,
     color: PropTypes.string,
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    outline: PropTypes.bool.isRequired
 };
 
 ColorButtonComponent.defaultProps = {
