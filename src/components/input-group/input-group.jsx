@@ -17,7 +17,7 @@ const InputGroup = props => (
 InputGroup.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
-    disabled: PropTypes.bool.isRequired
+    disabled: PropTypes.bool
 };
 
 export default InputGroup;
