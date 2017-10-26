@@ -123,6 +123,7 @@ PaintEditor.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    selectedItems: state.scratchPaint.selectedItems,
     undoState: state.scratchPaint.undo
 });
 const mapDispatchToProps = dispatch => ({
