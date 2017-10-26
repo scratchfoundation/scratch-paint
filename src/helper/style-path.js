@@ -105,14 +105,18 @@ const applyStrokeColorToSelection = function (colorString, onUpdateSvg) {
  * @param {!function} onUpdateSvg A callback to call when the image visibly changes
  */
 const applyStrokeWidthToSelection = function (value, onUpdateSvg) {
+    let changed = false;
     const items = getSelectedLeafItems();
     for (const item of items) {
         if (isGroup(item)) {
             continue;
         } else if (item.strokeWidth !== value) {
             item.strokeWidth = value;
-            onUpdateSvg();
+            changed = true;
         }
+    }
+    if (changed) {
+        onUpdateSvg();
     }
 };
 
