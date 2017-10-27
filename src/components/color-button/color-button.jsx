@@ -20,7 +20,7 @@ const ColorButtonComponent = props => (
     >
         <div
             className={classNames(styles.colorButtonSwatch, {
-                [styles.outlineSwatch]: props.outline
+                [styles.outlineSwatch]: props.outline && !(props.color === MIXED)
             })}
             style={{
                 background: colorToBackground(props.color)
