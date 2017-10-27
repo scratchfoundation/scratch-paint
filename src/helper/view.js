@@ -17,6 +17,21 @@ const clampViewBounds = () => {
     }
 };
 
+// Zoom keeping a project-space point fixed.
+// This article was helpful http://matthiasberth.com/tech/stable-zoom-and-pan-in-paperjs
+const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
+    const {view} = paper.project;
+    const preZoomCenter = view.center;
+    const newZoom = Math.max(1, view.zoom + deltaZoom);
+    const scaling = view.zoom / newZoom;
+    const preZoomOffset = fixedPoint.subtract(preZoomCenter);
+    const postZoomOffset = fixedPoint.subtract(preZoomOffset.multiply(scaling))
+        .subtract(preZoomCenter);
+    view.zoom = newZoom;
+    view.translate(postZoomOffset.multiply(-1));
+    clampViewBounds();
+};
+
 // Zoom keeping the selection center (if any) fixed.
 const zoomOnSelection = deltaZoom => {
     let fixedPoint;
@@ -35,21 +50,6 @@ const zoomOnSelection = deltaZoom => {
         fixedPoint = paper.project.view.center;
     }
     zoomOnFixedPoint(deltaZoom, fixedPoint);
-};
-
-// Zoom keeping a project-space point fixed.
-// This article was helpful http://matthiasberth.com/tech/stable-zoom-and-pan-in-paperjs
-const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
-    const {view} = paper.project;
-    const preZoomCenter = view.center;
-    const newZoom = Math.max(1, view.zoom + deltaZoom);
-    const scaling = view.zoom / newZoom;
-    const preZoomOffset = fixedPoint.subtract(preZoomCenter);
-    const postZoomOffset = fixedPoint.subtract(preZoomOffset.multiply(scaling))
-        .subtract(preZoomCenter);
-    view.zoom = newZoom;
-    view.translate(postZoomOffset.multiply(-1));
-    clampViewBounds();
 };
 
 const resetZoom = () => {
