@@ -225,20 +225,16 @@ class PaintEditorComponent extends React.Component {
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             <BrushMode
-                                canvas={this.state.canvas}
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             <EraserMode
-                                canvas={this.state.canvas}
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             <PenMode
-                                canvas={this.state.canvas}
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             {/* Text mode will go here */}
                             <LineMode
-                                canvas={this.state.canvas}
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             <OvalMode

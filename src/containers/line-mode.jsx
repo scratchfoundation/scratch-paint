@@ -47,7 +47,7 @@ class LineMode extends React.Component {
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
         this.tool = new paper.Tool();
-        
+
         this.path = null;
         this.hitResult = null;
 
@@ -182,14 +182,13 @@ class LineMode extends React.Component {
             removeHitPoint();
             this.hitResult = null;
         }
-        
+
         if (this.path) {
             this.props.onUpdateSvg();
             this.path = null;
         }
     }
     deactivateTool () {
-        this.props.canvas.removeEventListener('mousewheel', this.onScroll);
         this.tool.remove();
         this.tool = null;
         if (this.hitResult) {
@@ -211,7 +210,6 @@ class LineMode extends React.Component {
 }
 
 LineMode.propTypes = {
-    canvas: PropTypes.instanceOf(Element).isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,

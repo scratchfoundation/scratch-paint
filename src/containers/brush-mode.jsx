@@ -70,8 +70,6 @@ BrushMode.propTypes = {
     brushModeState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
     }),
-    canvas: PropTypes.instanceOf(Element).isRequired,
-    changeBrushSize: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,
