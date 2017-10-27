@@ -7,6 +7,7 @@
 .color-button-swatch {
     position: relative;
     display: flex;
+    cursor: pointer;
     flex-basis: 2rem;
     flex-shrink: 0;
     height: 100%;
@@ -17,6 +18,8 @@
 
 .color-button-arrow {
     display: flex;
+    user-select: none;
+    cursor: pointer;
     flex-basis: 1rem;
     flex-shrink: 0;
     height: 100%;
