@@ -11,6 +11,7 @@ import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRed
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
 import {getSelectedLeafItems} from '../helper/selection';
+import {resetZoom, zoomOnSelection} from '../helper/view';
 
 import Modes from '../modes/modes';
 import {connect} from 'react-redux';
@@ -18,6 +19,9 @@ import bindAll from 'lodash.bindall';
 import paper from '@scratch/paper';
 
 class PaintEditor extends React.Component {
+    static get ZOOM_INCREMENT () {
+        return 0.5;
+    }
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -41,6 +45,11 @@ class PaintEditor extends React.Component {
         document.removeEventListener('keydown', this.props.onKeyPress);
     }
     handleUpdateSvg (skipSnapshot) {
+        // Store the zoom/pan and restore it after snapshotting
+        // TODO Only doing this because snapshotting at zoom/pan makes export wrong
+        const oldZoom = paper.project.view.zoom;
+        const oldCenter = paper.project.view.center.clone();
+        resetZoom();
         // Hide guide layer
         const guideLayer = getGuideLayer();
         const backgroundGuideLayer = getBackgroundGuideLayer();
@@ -60,6 +69,10 @@ class PaintEditor extends React.Component {
         paper.project.addLayer(backgroundGuideLayer);
         backgroundGuideLayer.sendToBack();
         paper.project.addLayer(guideLayer);
+        // Restore old zoom
+        paper.project.view.zoom = oldZoom;
+        paper.project.view.center = oldCenter;
+        paper.project.view.update();
     }
     handleUndo () {
         performUndo(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateSvg);
@@ -91,6 +104,15 @@ class PaintEditor extends React.Component {
     canRedo () {
         return shouldShowRedo(this.props.undoState);
     }
+    handleZoomIn () {
+        zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
+    }
+    handleZoomOut () {
+        zoomOnSelection(-PaintEditor.ZOOM_INCREMENT);
+    }
+    handleZoomReset () {
+        resetZoom();
+    }
     render () {
         return (
             <PaintEditorComponent
@@ -111,6 +133,9 @@ class PaintEditor extends React.Component {
                 onUngroup={this.handleUngroup}
                 onUpdateName={this.props.onUpdateName}
                 onUpdateSvg={this.handleUpdateSvg}
+                onZoomIn={this.handleZoomIn}
+                onZoomOut={this.handleZoomOut}
+                onZoomReset={this.handleZoomReset}
             />
         );
     }

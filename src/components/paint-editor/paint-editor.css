@@ -19,7 +19,7 @@
 }
 
 .top-align-row {
-    display: flex; 
+    display: flex;
     padding-top: calc(5 * $grid-unit);
     flex-direction: row;
 }
@@ -29,7 +29,7 @@
 }
 
 .mod-dashed-border {
-    border-right: 1px dashed $ui-pane-border; 
+    border-right: 1px dashed $ui-pane-border;
     padding-right: calc(3 * $grid-unit);
 }
 
@@ -91,4 +91,9 @@ $border-radius: 0.25rem;
     align-items: flex-start;
     align-content: flex-start;
     justify-content: space-between;
+}
+
+.zoom-controls {
+    display: flex;
+    flex-direction: row-reverse;
 }

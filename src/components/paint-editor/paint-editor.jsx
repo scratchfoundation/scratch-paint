@@ -39,6 +39,9 @@ import sendForwardIcon from './send-forward.svg';
 import sendFrontIcon from './send-front.svg';
 import undoIcon from './undo.svg';
 import ungroupIcon from './ungroup.svg';
+import zoomInIcon from './zoom-in.svg';
+import zoomOutIcon from './zoom-out.svg';
+import zoomResetIcon from './zoom-reset.svg';
 
 const BufferedInput = BufferedInputHOC(Input);
 const messages = defineMessages({
@@ -97,7 +100,7 @@ class PaintEditorComponent extends React.Component {
                                         onClick={this.props.onUndo}
                                     >
                                         <img
-                                            alt="Undo Icon"
+                                            alt="Undo"
                                             className={styles.buttonGroupButtonIcon}
                                             src={undoIcon}
                                         />
@@ -115,7 +118,7 @@ class PaintEditorComponent extends React.Component {
                                         onClick={this.props.onRedo}
                                     >
                                         <img
-                                            alt="Redo Icon"
+                                            alt="Redo"
                                             className={styles.buttonGroupButtonIcon}
                                             src={redoIcon}
                                         />
@@ -127,14 +130,14 @@ class PaintEditorComponent extends React.Component {
                             <InputGroup className={styles.modDashedBorder}>
                                 <LabeledIconButton
                                     disabled={!shouldShowGroup()}
-                                    imgAlt="Group Icon"
+                                    imgAlt="Group"
                                     imgSrc={groupIcon}
                                     title="Group"
                                     onClick={this.props.onGroup}
                                 />
                                 <LabeledIconButton
                                     disabled={!shouldShowUngroup()}
-                                    imgAlt="Ungroup Icon"
+                                    imgAlt="Ungroup"
                                     imgSrc={ungroupIcon}
                                     title="Ungroup"
                                     onClick={this.props.onUngroup}
@@ -145,14 +148,14 @@ class PaintEditorComponent extends React.Component {
                             <InputGroup className={styles.modDashedBorder}>
                                 <LabeledIconButton
                                     disabled={!shouldShowBringForward()}
-                                    imgAlt="Send Forward Icon"
+                                    imgAlt="Send Forward"
                                     imgSrc={sendForwardIcon}
                                     title="Forward"
                                     onClick={this.props.onSendForward}
                                 />
                                 <LabeledIconButton
                                     disabled={!shouldShowSendBackward()}
-                                    imgAlt="Send Backward Icon"
+                                    imgAlt="Send Backward"
                                     imgSrc={sendBackwardIcon}
                                     title="Backward"
                                     onClick={this.props.onSendBackward}
@@ -163,14 +166,14 @@ class PaintEditorComponent extends React.Component {
                             <InputGroup>
                                 <LabeledIconButton
                                     disabled={!shouldShowBringForward()}
-                                    imgAlt="Send to Front Icon"
+                                    imgAlt="Send to Front"
                                     imgSrc={sendFrontIcon}
                                     title="Front"
                                     onClick={this.props.onSendToFront}
                                 />
                                 <LabeledIconButton
                                     disabled={!shouldShowSendBackward()}
-                                    imgAlt="Send to Back Icon"
+                                    imgAlt="Send to Back"
                                     imgSrc={sendBackIcon}
                                     title="Back"
                                     onClick={this.props.onSendToBack}
@@ -180,7 +183,7 @@ class PaintEditorComponent extends React.Component {
                             {/* To be rotation point */}
                             {/* <InputGroup>
                                 <LabeledIconButton
-                                    imgAlt="Rotation Point Icon"
+                                    imgAlt="Rotation Point"
                                     imgSrc={rotationPointIcon}
                                     title="Rotation Point"
                                     onClick={function () {}}
@@ -222,20 +225,16 @@ class PaintEditorComponent extends React.Component {
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             <BrushMode
-                                canvas={this.state.canvas}
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             <EraserMode
-                                canvas={this.state.canvas}
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             <PenMode
-                                canvas={this.state.canvas}
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             {/* Text mode will go here */}
                             <LineMode
-                                canvas={this.state.canvas}
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             <OvalMode
@@ -257,6 +256,41 @@ class PaintEditorComponent extends React.Component {
                             svgId={this.props.svgId}
                             onUpdateSvg={this.props.onUpdateSvg}
                         />
+                        {/* Zoom controls */}
+                        <InputGroup className={styles.zoomControls}>
+                            <ButtonGroup>
+                                <Button
+                                    className={styles.buttonGroupButton}
+                                    onClick={this.props.onZoomIn}
+                                >
+                                    <img
+                                        alt="Zoom In"
+                                        className={styles.buttonGroupButtonIcon}
+                                        src={zoomInIcon}
+                                    />
+                                </Button>
+                                <Button
+                                    className={styles.buttonGroupButton}
+                                    onClick={this.props.onZoomReset}
+                                >
+                                    <img
+                                        alt="Zoom Reset"
+                                        className={styles.buttonGroupButtonIcon}
+                                        src={zoomResetIcon}
+                                    />
+                                </Button>
+                                <Button
+                                    className={styles.buttonGroupButton}
+                                    onClick={this.props.onZoomOut}
+                                >
+                                    <img
+                                        alt="Zoom Out"
+                                        className={styles.buttonGroupButtonIcon}
+                                        src={zoomOutIcon}
+                                    />
+                                </Button>
+                            </ButtonGroup>
+                        </InputGroup>
                     </div>
                 </div>
             </div>
@@ -279,6 +313,9 @@ PaintEditorComponent.propTypes = {
     onUngroup: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
+    onZoomIn: PropTypes.func.isRequired,
+    onZoomOut: PropTypes.func.isRequired,
+    onZoomReset: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     svg: PropTypes.string,

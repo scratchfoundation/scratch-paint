@@ -14,8 +14,7 @@ class EraserMode extends React.Component {
         super(props);
         bindAll(this, [
             'activateTool',
-            'deactivateTool',
-            'onScroll'
+            'deactivateTool'
         ]);
         this.blob = new Blobbiness(
             this.props.onUpdateSvg, this.props.clearSelectedItems);
@@ -41,21 +40,10 @@ class EraserMode extends React.Component {
         return nextProps.isEraserModeActive !== this.props.isEraserModeActive;
     }
     activateTool () {
-        this.props.canvas.addEventListener('mousewheel', this.onScroll);
-
         this.blob.activateTool({isEraser: true, ...this.props.eraserModeState});
     }
     deactivateTool () {
-        this.props.canvas.removeEventListener('mousewheel', this.onScroll);
         this.blob.deactivateTool();
-    }
-    onScroll (event) {
-        event.preventDefault();
-        if (event.deltaY < 0) {
-            this.props.changeBrushSize(this.props.eraserModeState.brushSize + 1);
-        } else if (event.deltaY > 0 && this.props.eraserModeState.brushSize > 1) {
-            this.props.changeBrushSize(this.props.eraserModeState.brushSize - 1);
-        }
     }
     render () {
         return (
@@ -68,8 +56,6 @@ class EraserMode extends React.Component {
 }
 
 EraserMode.propTypes = {
-    canvas: PropTypes.instanceOf(Element).isRequired,
-    changeBrushSize: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     eraserModeState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired

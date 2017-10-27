@@ -205,7 +205,6 @@ class LineMode extends React.Component {
         }
     }
     deactivateTool () {
-        this.props.canvas.removeEventListener('mousewheel', this.onScroll);
         this.tool.remove();
         this.tool = null;
         if (this.hitResult) {
@@ -227,7 +226,6 @@ class LineMode extends React.Component {
 }
 
 LineMode.propTypes = {
-    canvas: PropTypes.instanceOf(Element).isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,
