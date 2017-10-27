@@ -19,6 +19,9 @@ import bindAll from 'lodash.bindall';
 import paper from '@scratch/paper';
 
 class PaintEditor extends React.Component {
+    static get ZOOM_INCREMENT () {
+        return 0.5;
+    }
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -102,10 +105,10 @@ class PaintEditor extends React.Component {
         return shouldShowRedo(this.props.undoState);
     }
     handleZoomIn () {
-        zoomOnSelection(0.25);
+        zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
     }
     handleZoomOut () {
-        zoomOnSelection(-0.25);
+        zoomOnSelection(-PaintEditor.ZOOM_INCREMENT);
     }
     handleZoomReset () {
         resetZoom();
