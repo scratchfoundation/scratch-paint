@@ -39,6 +39,9 @@ import sendForwardIcon from './send-forward.svg';
 import sendFrontIcon from './send-front.svg';
 import undoIcon from './undo.svg';
 import ungroupIcon from './ungroup.svg';
+import zoomInIcon from './zoom-in.svg';
+import zoomOutIcon from './zoom-out.svg';
+import zoomResetIcon from './zoom-reset.svg';
 
 const BufferedInput = BufferedInputHOC(Input);
 const messages = defineMessages({
@@ -257,6 +260,41 @@ class PaintEditorComponent extends React.Component {
                             svgId={this.props.svgId}
                             onUpdateSvg={this.props.onUpdateSvg}
                         />
+                        {/* Zoom controls */}
+                        <InputGroup className={styles.zoomControls}>
+                            <ButtonGroup>
+                                <Button
+                                    className={styles.buttonGroupButton}
+                                    onClick={this.props.onZoomIn}
+                                >
+                                    <img
+                                        alt="Zoom In Icon"
+                                        className={styles.buttonGroupButtonIcon}
+                                        src={zoomInIcon}
+                                    />
+                                </Button>
+                                <Button
+                                    className={styles.buttonGroupButton}
+                                    onClick={this.props.onZoomReset}
+                                >
+                                    <img
+                                        alt="Zoom Reset Icon"
+                                        className={styles.buttonGroupButtonIcon}
+                                        src={zoomResetIcon}
+                                    />
+                                </Button>
+                                <Button
+                                    className={styles.buttonGroupButton}
+                                    onClick={this.props.onZoomOut}
+                                >
+                                    <img
+                                        alt="Zoom Out Icon"
+                                        className={styles.buttonGroupButtonIcon}
+                                        src={zoomOutIcon}
+                                    />
+                                </Button>
+                            </ButtonGroup>
+                        </InputGroup>
                     </div>
                 </div>
             </div>
@@ -279,6 +317,9 @@ PaintEditorComponent.propTypes = {
     onUngroup: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
+    onZoomIn: PropTypes.func.isRequired,
+    onZoomOut: PropTypes.func.isRequired,
+    onZoomReset: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     svg: PropTypes.string,

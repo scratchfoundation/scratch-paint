@@ -11,6 +11,7 @@ import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRed
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
 import {getSelectedLeafItems} from '../helper/selection';
+import {resetZoom, zoomOnSelection} from '../helper/view';
 
 import Modes from '../modes/modes';
 import {connect} from 'react-redux';
@@ -91,6 +92,15 @@ class PaintEditor extends React.Component {
     canRedo () {
         return shouldShowRedo(this.props.undoState);
     }
+    handleZoomIn () {
+        zoomOnSelection(0.25);
+    }
+    handleZoomOut () {
+        zoomOnSelection(-0.25);
+    }
+    handleZoomReset () {
+        resetZoom();
+    }
     render () {
         return (
             <PaintEditorComponent
@@ -111,6 +121,9 @@ class PaintEditor extends React.Component {
                 onUngroup={this.handleUngroup}
                 onUpdateName={this.props.onUpdateName}
                 onUpdateSvg={this.handleUpdateSvg}
+                onZoomIn={this.handleZoomIn}
+                onZoomOut={this.handleZoomOut}
+                onZoomReset={this.handleZoomReset}
             />
         );
     }

@@ -10,6 +10,8 @@ import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
 import {setupLayers} from '../helper/layer';
 import {deleteSelection, getSelectedLeafItems} from '../helper/selection';
+import {pan, zoomOnFixedPoint} from '../helper/view';
+
 import {setSelectedItems} from '../reducers/selected-items';
 
 import styles from './paper-canvas.css';
@@ -20,7 +22,8 @@ class PaperCanvas extends React.Component {
         bindAll(this, [
             'setCanvas',
             'importSvg',
-            'handleKeyDown'
+            'handleKeyDown',
+            'handleWheel'
         ]);
     }
     componentDidMount () {
@@ -84,7 +87,7 @@ class PaperCanvas extends React.Component {
                     item.clipped = false;
                     mask.remove();
                 }
-                
+
                 // Reduce single item nested in groups
                 if (item.children && item.children.length === 1) {
                     item = item.reduce();
@@ -114,6 +117,23 @@ class PaperCanvas extends React.Component {
             this.props.canvasRef(canvas);
         }
     }
+    handleWheel (event) {
+        if (event.metaKey) {
+            // Zoom keeping mouse location fixed
+            const canvasRect = this.canvas.getBoundingClientRect();
+            const offsetX = event.clientX - canvasRect.left;
+            const offsetY = event.clientY - canvasRect.top;
+            const fixedPoint = paper.project.view.viewToProject(
+                new paper.Point(offsetX, offsetY)
+            );
+            zoomOnFixedPoint(-event.deltaY / 100, fixedPoint);
+        } else {
+            const dx = event.deltaX / paper.project.view.zoom;
+            const dy = event.deltaY / paper.project.view.zoom;
+            pan(dx, dy);
+        }
+        event.preventDefault();
+    }
     render () {
         return (
             <canvas
@@ -121,6 +141,7 @@ class PaperCanvas extends React.Component {
                 height="400px"
                 ref={this.setCanvas}
                 width="500px"
+                onWheel={this.handleWheel}
             />
         );
     }
