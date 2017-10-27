@@ -125,7 +125,7 @@ class PaperCanvas extends React.Component {
         }
     }
     handleWheel (event) {
-        if (event.metaKey) {
+        if (event.metaKey || event.ctrlKey) {
             // Zoom keeping mouse location fixed
             const canvasRect = this.canvas.getBoundingClientRect();
             const offsetX = event.clientX - canvasRect.left;
