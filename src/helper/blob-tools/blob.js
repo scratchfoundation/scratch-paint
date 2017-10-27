@@ -290,6 +290,7 @@ class Blobbiness {
                 lastPath.remove();
                 continue;
             }
+
             // Erase
             const newPath = items[i].subtract(lastPath);
             newPath.insertBelow(items[i]);
@@ -329,6 +330,9 @@ class Blobbiness {
     }
 
     separateCompoundPath (compoundPath) {
+        if (!compoundPath.isClockwise()) {
+            compoundPath.reverse();
+        }
         // Divide topologically separate shapes into their own compound paths, instead of
         // everything being stuck together.
         // Assume that result of erase operation returns clockwise paths for positive shapes
@@ -342,6 +346,11 @@ class Blobbiness {
                 ccwChildren.push(child);
             }
         }
+
+        // Sort by area smallest to largest
+        clockwiseChildren.sort((a, b) => a.area - b.area);
+        ccwChildren.sort((a, b) => Math.abs(a.area) - Math.abs(b.area));
+        // Go smallest to largest non-hole, so larger non-holes don't get the smaller pieces' holes
         for (let j = 0; j < clockwiseChildren.length; j++) {
             const cw = clockwiseChildren[j];
             cw.copyAttributes(compoundPath);
@@ -350,7 +359,7 @@ class Blobbiness {
             cw.strokeWidth = compoundPath.strokeWidth;
             cw.insertAbove(compoundPath);
 
-            // Go backward since we are deleting elements
+            // Go backward since we are deleting elements. Backwards is largest to smallest hole.
             let newCw = cw;
             for (let k = ccwChildren.length - 1; k >= 0; k--) {
                 const ccw = ccwChildren[k];
