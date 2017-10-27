@@ -51201,7 +51201,7 @@ var PaperCanvas = function (_React$Component) {
     }, {
         key: 'handleWheel',
         value: function handleWheel(event) {
-            if (event.metaKey) {
+            if (event.metaKey || event.ctrlKey) {
                 // Zoom keeping mouse location fixed
                 var canvasRect = this.canvas.getBoundingClientRect();
                 var offsetX = event.clientX - canvasRect.left;
