@@ -261,12 +261,12 @@ class PaintEditorComponent extends React.Component {
                             <ButtonGroup>
                                 <Button
                                     className={styles.buttonGroupButton}
-                                    onClick={this.props.onZoomIn}
+                                    onClick={this.props.onZoomOut}
                                 >
                                     <img
-                                        alt="Zoom In"
+                                        alt="Zoom Out"
                                         className={styles.buttonGroupButtonIcon}
-                                        src={zoomInIcon}
+                                        src={zoomOutIcon}
                                     />
                                 </Button>
                                 <Button
@@ -281,12 +281,12 @@ class PaintEditorComponent extends React.Component {
                                 </Button>
                                 <Button
                                     className={styles.buttonGroupButton}
-                                    onClick={this.props.onZoomOut}
+                                    onClick={this.props.onZoomIn}
                                 >
                                     <img
-                                        alt="Zoom Out"
+                                        alt="Zoom In"
                                         className={styles.buttonGroupButtonIcon}
-                                        src={zoomOutIcon}
+                                        src={zoomInIcon}
                                     />
                                 </Button>
                             </ButtonGroup>
