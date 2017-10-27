@@ -100,7 +100,7 @@ class PaintEditorComponent extends React.Component {
                                         onClick={this.props.onUndo}
                                     >
                                         <img
-                                            alt="Undo Icon"
+                                            alt="Undo"
                                             className={styles.buttonGroupButtonIcon}
                                             src={undoIcon}
                                         />
@@ -118,7 +118,7 @@ class PaintEditorComponent extends React.Component {
                                         onClick={this.props.onRedo}
                                     >
                                         <img
-                                            alt="Redo Icon"
+                                            alt="Redo"
                                             className={styles.buttonGroupButtonIcon}
                                             src={redoIcon}
                                         />
@@ -130,14 +130,14 @@ class PaintEditorComponent extends React.Component {
                             <InputGroup className={styles.modDashedBorder}>
                                 <LabeledIconButton
                                     disabled={!shouldShowGroup()}
-                                    imgAlt="Group Icon"
+                                    imgAlt="Group"
                                     imgSrc={groupIcon}
                                     title="Group"
                                     onClick={this.props.onGroup}
                                 />
                                 <LabeledIconButton
                                     disabled={!shouldShowUngroup()}
-                                    imgAlt="Ungroup Icon"
+                                    imgAlt="Ungroup"
                                     imgSrc={ungroupIcon}
                                     title="Ungroup"
                                     onClick={this.props.onUngroup}
@@ -148,14 +148,14 @@ class PaintEditorComponent extends React.Component {
                             <InputGroup className={styles.modDashedBorder}>
                                 <LabeledIconButton
                                     disabled={!shouldShowBringForward()}
-                                    imgAlt="Send Forward Icon"
+                                    imgAlt="Send Forward"
                                     imgSrc={sendForwardIcon}
                                     title="Forward"
                                     onClick={this.props.onSendForward}
                                 />
                                 <LabeledIconButton
                                     disabled={!shouldShowSendBackward()}
-                                    imgAlt="Send Backward Icon"
+                                    imgAlt="Send Backward"
                                     imgSrc={sendBackwardIcon}
                                     title="Backward"
                                     onClick={this.props.onSendBackward}
@@ -166,14 +166,14 @@ class PaintEditorComponent extends React.Component {
                             <InputGroup>
                                 <LabeledIconButton
                                     disabled={!shouldShowBringForward()}
-                                    imgAlt="Send to Front Icon"
+                                    imgAlt="Send to Front"
                                     imgSrc={sendFrontIcon}
                                     title="Front"
                                     onClick={this.props.onSendToFront}
                                 />
                                 <LabeledIconButton
                                     disabled={!shouldShowSendBackward()}
-                                    imgAlt="Send to Back Icon"
+                                    imgAlt="Send to Back"
                                     imgSrc={sendBackIcon}
                                     title="Back"
                                     onClick={this.props.onSendToBack}
@@ -183,7 +183,7 @@ class PaintEditorComponent extends React.Component {
                             {/* To be rotation point */}
                             {/* <InputGroup>
                                 <LabeledIconButton
-                                    imgAlt="Rotation Point Icon"
+                                    imgAlt="Rotation Point"
                                     imgSrc={rotationPointIcon}
                                     title="Rotation Point"
                                     onClick={function () {}}
@@ -264,7 +264,7 @@ class PaintEditorComponent extends React.Component {
                                     onClick={this.props.onZoomIn}
                                 >
                                     <img
-                                        alt="Zoom In Icon"
+                                        alt="Zoom In"
                                         className={styles.buttonGroupButtonIcon}
                                         src={zoomInIcon}
                                     />
@@ -274,7 +274,7 @@ class PaintEditorComponent extends React.Component {
                                     onClick={this.props.onZoomReset}
                                 >
                                     <img
-                                        alt="Zoom Reset Icon"
+                                        alt="Zoom Reset"
                                         className={styles.buttonGroupButtonIcon}
                                         src={zoomResetIcon}
                                     />
@@ -284,7 +284,7 @@ class PaintEditorComponent extends React.Component {
                                     onClick={this.props.onZoomOut}
                                 >
                                     <img
-                                        alt="Zoom Out Icon"
+                                        alt="Zoom Out"
                                         className={styles.buttonGroupButtonIcon}
                                         src={zoomOutIcon}
                                     />
