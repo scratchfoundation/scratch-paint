@@ -17,8 +17,7 @@ class BrushMode extends React.Component {
         super(props);
         bindAll(this, [
             'activateTool',
-            'deactivateTool',
-            'onScroll'
+            'deactivateTool'
         ]);
         this.blob = new Blobbiness(
             this.props.onUpdateSvg, this.props.clearSelectedItems);
@@ -48,9 +47,6 @@ class BrushMode extends React.Component {
         // TODO: Instead of clearing selection, consider a kind of "draw inside"
         // analogous to how selection works with eraser
         clearSelection(this.props.clearSelectedItems);
-
-        // TODO: This is temporary until a component that provides the brush size is hooked up
-        this.props.canvas.addEventListener('mousewheel', this.onScroll);
         this.blob.activateTool({
             isEraser: false,
             ...this.props.colorState,
@@ -58,16 +54,7 @@ class BrushMode extends React.Component {
         });
     }
     deactivateTool () {
-        this.props.canvas.removeEventListener('mousewheel', this.onScroll);
         this.blob.deactivateTool();
-    }
-    onScroll (event) {
-        if (event.deltaY < 0) {
-            this.props.changeBrushSize(this.props.brushModeState.brushSize + 1);
-        } else if (event.deltaY > 0 && this.props.brushModeState.brushSize > 1) {
-            this.props.changeBrushSize(this.props.brushModeState.brushSize - 1);
-        }
-        return true;
     }
     render () {
         return (
