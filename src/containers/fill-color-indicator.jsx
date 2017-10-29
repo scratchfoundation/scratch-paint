@@ -15,9 +15,24 @@ class FillColorIndicator extends React.Component {
         bindAll(this, [
             'handleChangeFillColor'
         ]);
+
+        // Flag to track whether an svg-update-worthy change has been made
+        this._hasChanged = false;
+    }
+    componentWillReceiveProps (newProps) {
+        const {fillColorModalVisible, onUpdateSvg} = this.props;
+        if (fillColorModalVisible && !newProps.fillColorModalVisible) {
+            // Submit the new SVG, which also stores a single undo/redo action.
+            if (this._hasChanged) onUpdateSvg();
+        } else if (newProps.fillColorModalVisible && !fillColorModalVisible) {
+            // If modal is opening, reset the _hasChanged flag to false;
+            this._hasChanged = false;
+        }
     }
     handleChangeFillColor (newColor) {
-        applyFillColorToSelection(newColor, this.props.onUpdateSvg);
+        // Apply color and update redux, but do not update svg until picker closes.
+        const isDifferent = applyFillColorToSelection(newColor);
+        this._hasChanged = this._hasChanged || isDifferent;
         this.props.onChangeFillColor(newColor);
     }
     render () {
@@ -51,6 +66,7 @@ const mapDispatchToProps = dispatch => ({
 FillColorIndicator.propTypes = {
     disabled: PropTypes.bool.isRequired,
     fillColor: PropTypes.string,
+    fillColorModalVisible: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired
 };

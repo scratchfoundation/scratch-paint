@@ -15,9 +15,24 @@ class StrokeColorIndicator extends React.Component {
         bindAll(this, [
             'handleChangeStrokeColor'
         ]);
+
+        // Flag to track whether an svg-update-worthy change has been made
+        this._hasChanged = false;
+    }
+    componentWillReceiveProps (newProps) {
+        const {strokeColorModalVisible, onUpdateSvg} = this.props;
+        if (strokeColorModalVisible && !newProps.strokeColorModalVisible) {
+            // Submit the new SVG, which also stores a single undo/redo action.
+            if (this._hasChanged) onUpdateSvg();
+        } else if (newProps.strokeColorModalVisible && !strokeColorModalVisible) {
+            // If modal is opening, reset the _hasChanged flag to false;
+            this._hasChanged = false;
+        }
     }
     handleChangeStrokeColor (newColor) {
-        applyStrokeColorToSelection(newColor, this.props.onUpdateSvg);
+        // Apply color and update redux, but do not update svg until picker closes.
+        const isDifferent = applyStrokeColorToSelection(newColor);
+        this._hasChanged = this._hasChanged || isDifferent;
         this.props.onChangeStrokeColor(newColor);
     }
     render () {
@@ -52,7 +67,8 @@ StrokeColorIndicator.propTypes = {
     disabled: PropTypes.bool.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
-    strokeColor: PropTypes.string
+    strokeColor: PropTypes.string,
+    strokeColorModalVisible: PropTypes.bool.isRequired
 };
 
 export default connect(
