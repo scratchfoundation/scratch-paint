@@ -45,8 +45,8 @@
 .outline-swatch:after {
     content: "";
     position: absolute;
-    top: calc(0.5rem + 1px);
-    left: calc(0.5rem + 1px);
+    top: calc(0.5rem);
+    left: calc(0.5rem);
     width: 0.75rem;
     height: 0.75rem;
     background: white;
