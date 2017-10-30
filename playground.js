@@ -48248,12 +48248,12 @@ var PaintEditorComponent = function (_React$Component) {
                                     _button2.default,
                                     {
                                         className: _paintEditor2.default.buttonGroupButton,
-                                        onClick: this.props.onZoomIn
+                                        onClick: this.props.onZoomOut
                                     },
                                     _react2.default.createElement('img', {
-                                        alt: 'Zoom In',
+                                        alt: 'Zoom Out',
                                         className: _paintEditor2.default.buttonGroupButtonIcon,
-                                        src: _zoomIn2.default
+                                        src: _zoomOut2.default
                                     })
                                 ),
                                 _react2.default.createElement(
@@ -48272,12 +48272,12 @@ var PaintEditorComponent = function (_React$Component) {
                                     _button2.default,
                                     {
                                         className: _paintEditor2.default.buttonGroupButton,
-                                        onClick: this.props.onZoomOut
+                                        onClick: this.props.onZoomIn
                                     },
                                     _react2.default.createElement('img', {
-                                        alt: 'Zoom Out',
+                                        alt: 'Zoom In',
                                         className: _paintEditor2.default.buttonGroupButtonIcon,
-                                        src: _zoomOut2.default
+                                        src: _zoomIn2.default
                                     })
                                 )
                             )
