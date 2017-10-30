@@ -32,7 +32,7 @@ class SliderComponent extends React.Component {
         event.preventDefault();
         const backgroundBBox = this.background.getBoundingClientRect();
         const x = event.clientX - backgroundBBox.left;
-        this.props.onChange(Math.max(1, Math.min(99, 100 * x / backgroundBBox.width)));
+        this.props.onChange(Math.max(0, Math.min(100, 100 * x / backgroundBBox.width)));
     }
 
     setBackground (ref) {
