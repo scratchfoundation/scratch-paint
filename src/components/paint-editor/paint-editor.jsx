@@ -22,7 +22,6 @@ import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import LineMode from '../../containers/line-mode.jsx';
 import ModeToolsComponent from '../mode-tools/mode-tools.jsx';
 import OvalMode from '../../containers/oval-mode.jsx';
-import PenMode from '../../containers/pen-mode.jsx';
 import RectMode from '../../containers/rect-mode.jsx';
 import ReshapeMode from '../../containers/reshape-mode.jsx';
 import SelectMode from '../../containers/select-mode.jsx';
@@ -228,9 +227,6 @@ class PaintEditorComponent extends React.Component {
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             <EraserMode
-                                onUpdateSvg={this.props.onUpdateSvg}
-                            />
-                            <PenMode
                                 onUpdateSvg={this.props.onUpdateSvg}
                             />
                             {/* Text mode will go here */}
