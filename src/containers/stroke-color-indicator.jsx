@@ -24,8 +24,6 @@ class StrokeColorIndicator extends React.Component {
         if (strokeColorModalVisible && !newProps.strokeColorModalVisible) {
             // Submit the new SVG, which also stores a single undo/redo action.
             if (this._hasChanged) onUpdateSvg();
-        } else if (newProps.strokeColorModalVisible && !strokeColorModalVisible) {
-            // If modal is opening, reset the _hasChanged flag to false;
             this._hasChanged = false;
         }
     }

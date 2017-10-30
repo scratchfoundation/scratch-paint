@@ -24,8 +24,6 @@ class FillColorIndicator extends React.Component {
         if (fillColorModalVisible && !newProps.fillColorModalVisible) {
             // Submit the new SVG, which also stores a single undo/redo action.
             if (this._hasChanged) onUpdateSvg();
-        } else if (newProps.fillColorModalVisible && !fillColorModalVisible) {
-            // If modal is opening, reset the _hasChanged flag to false;
             this._hasChanged = false;
         }
     }

@@ -8,7 +8,7 @@ const MIXED = 'scratch-paint/style-path/mixed';
 /**
  * Called when setting fill color
  * @param {string} colorString New color, css format
- * @return {boolean} Whether the color application actually changed anything.
+ * @return {boolean} Whether the color application actually changed visibly.
  */
 const applyFillColorToSelection = function (colorString) {
     const items = getSelectedLeafItems();
@@ -56,7 +56,7 @@ const _strokeColorMatch = function (item, incomingColor) {
 /**
  * Called when setting stroke color
  * @param {string} colorString New color, css format
- * @return {boolean} Whether the color application actually changed anything.
+ * @return {boolean} Whether the color application actually changed visibly.
  */
 const applyStrokeColorToSelection = function (colorString) {
     const items = getSelectedLeafItems();
