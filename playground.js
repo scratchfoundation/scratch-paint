@@ -18950,9 +18950,9 @@ var MIXED = 'scratch-paint/style-path/mixed';
 /**
  * Called when setting fill color
  * @param {string} colorString New color, css format
- * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+ * @return {boolean} Whether the color application actually changed visibly.
  */
-var applyFillColorToSelection = function applyFillColorToSelection(colorString, onUpdateSvg) {
+var applyFillColorToSelection = function applyFillColorToSelection(colorString) {
     var items = (0, _selection.getSelectedLeafItems)();
     var changed = false;
     var _iteratorNormalCompletion = true;
@@ -19048,9 +19048,7 @@ var applyFillColorToSelection = function applyFillColorToSelection(colorString, 
         }
     }
 
-    if (changed) {
-        onUpdateSvg();
-    }
+    return changed;
 };
 
 var _strokeColorMatch = function _strokeColorMatch(item, incomingColor) {
@@ -19060,9 +19058,9 @@ var _strokeColorMatch = function _strokeColorMatch(item, incomingColor) {
 /**
  * Called when setting stroke color
  * @param {string} colorString New color, css format
- * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+ * @return {boolean} Whether the color application actually changed visibly.
  */
-var applyStrokeColorToSelection = function applyStrokeColorToSelection(colorString, onUpdateSvg) {
+var applyStrokeColorToSelection = function applyStrokeColorToSelection(colorString) {
     var items = (0, _selection.getSelectedLeafItems)();
     var changed = false;
     var _iteratorNormalCompletion4 = true;
@@ -19160,9 +19158,7 @@ var applyStrokeColorToSelection = function applyStrokeColorToSelection(colorStri
         }
     }
 
-    if (changed) {
-        onUpdateSvg();
-    }
+    return changed;
 };
 
 /**
@@ -26765,7 +26761,7 @@ var ColorButtonComponent = function ColorButtonComponent(props) {
         _react2.default.createElement(
             'div',
             {
-                className: (0, _classnames2.default)(_colorButton2.default.colorButtonSwatch, _defineProperty({}, _colorButton2.default.outlineSwatch, props.outline)),
+                className: (0, _classnames2.default)(_colorButton2.default.colorButtonSwatch, _defineProperty({}, _colorButton2.default.outlineSwatch, props.outline && !(props.color === _stylePath.MIXED))),
                 style: {
                     background: colorToBackground(props.color)
                 }
@@ -57786,13 +57782,31 @@ var FillColorIndicator = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (FillColorIndicator.__proto__ || Object.getPrototypeOf(FillColorIndicator)).call(this, props));
 
         (0, _lodash2.default)(_this, ['handleChangeFillColor']);
+
+        // Flag to track whether an svg-update-worthy change has been made
+        _this._hasChanged = false;
         return _this;
     }
 
     _createClass(FillColorIndicator, [{
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(newProps) {
+            var _props = this.props,
+                fillColorModalVisible = _props.fillColorModalVisible,
+                onUpdateSvg = _props.onUpdateSvg;
+
+            if (fillColorModalVisible && !newProps.fillColorModalVisible) {
+                // Submit the new SVG, which also stores a single undo/redo action.
+                if (this._hasChanged) onUpdateSvg();
+                this._hasChanged = false;
+            }
+        }
+    }, {
         key: 'handleChangeFillColor',
         value: function handleChangeFillColor(newColor) {
-            (0, _stylePath.applyFillColorToSelection)(newColor, this.props.onUpdateSvg);
+            // Apply color and update redux, but do not update svg until picker closes.
+            var isDifferent = (0, _stylePath.applyFillColorToSelection)(newColor);
+            this._hasChanged = this._hasChanged || isDifferent;
             this.props.onChangeFillColor(newColor);
         }
     }, {
@@ -57832,6 +57846,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 FillColorIndicator.propTypes = {
     disabled: _propTypes2.default.bool.isRequired,
     fillColor: _propTypes2.default.string,
+    fillColorModalVisible: _propTypes2.default.bool.isRequired,
     onChangeFillColor: _propTypes2.default.func.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired
 };
@@ -65475,13 +65490,31 @@ var StrokeColorIndicator = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (StrokeColorIndicator.__proto__ || Object.getPrototypeOf(StrokeColorIndicator)).call(this, props));
 
         (0, _lodash2.default)(_this, ['handleChangeStrokeColor']);
+
+        // Flag to track whether an svg-update-worthy change has been made
+        _this._hasChanged = false;
         return _this;
     }
 
     _createClass(StrokeColorIndicator, [{
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(newProps) {
+            var _props = this.props,
+                strokeColorModalVisible = _props.strokeColorModalVisible,
+                onUpdateSvg = _props.onUpdateSvg;
+
+            if (strokeColorModalVisible && !newProps.strokeColorModalVisible) {
+                // Submit the new SVG, which also stores a single undo/redo action.
+                if (this._hasChanged) onUpdateSvg();
+                this._hasChanged = false;
+            }
+        }
+    }, {
         key: 'handleChangeStrokeColor',
         value: function handleChangeStrokeColor(newColor) {
-            (0, _stylePath.applyStrokeColorToSelection)(newColor, this.props.onUpdateSvg);
+            // Apply color and update redux, but do not update svg until picker closes.
+            var isDifferent = (0, _stylePath.applyStrokeColorToSelection)(newColor);
+            this._hasChanged = this._hasChanged || isDifferent;
             this.props.onChangeStrokeColor(newColor);
         }
     }, {
@@ -65522,7 +65555,8 @@ StrokeColorIndicator.propTypes = {
     disabled: _propTypes2.default.bool.isRequired,
     onChangeStrokeColor: _propTypes2.default.func.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
-    strokeColor: _propTypes2.default.string
+    strokeColor: _propTypes2.default.string,
+    strokeColorModalVisible: _propTypes2.default.bool.isRequired
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(StrokeColorIndicator);
