@@ -8,9 +8,9 @@ const MIXED = 'scratch-paint/style-path/mixed';
 /**
  * Called when setting fill color
  * @param {string} colorString New color, css format
- * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+ * @return {boolean} Whether the color application actually changed visibly.
  */
-const applyFillColorToSelection = function (colorString, onUpdateSvg) {
+const applyFillColorToSelection = function (colorString) {
     const items = getSelectedLeafItems();
     let changed = false;
     for (const item of items) {
@@ -45,9 +45,7 @@ const applyFillColorToSelection = function (colorString, onUpdateSvg) {
             }
         }
     }
-    if (changed) {
-        onUpdateSvg();
-    }
+    return changed;
 };
 
 const _strokeColorMatch = function (item, incomingColor) {
@@ -58,9 +56,9 @@ const _strokeColorMatch = function (item, incomingColor) {
 /**
  * Called when setting stroke color
  * @param {string} colorString New color, css format
- * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+ * @return {boolean} Whether the color application actually changed visibly.
  */
-const applyStrokeColorToSelection = function (colorString, onUpdateSvg) {
+const applyStrokeColorToSelection = function (colorString) {
     const items = getSelectedLeafItems();
     let changed = false;
     for (const item of items) {
@@ -94,9 +92,7 @@ const applyStrokeColorToSelection = function (colorString, onUpdateSvg) {
             item.strokeColor = colorString;
         }
     }
-    if (changed) {
-        onUpdateSvg();
-    }
+    return changed;
 };
 
 /**
@@ -132,11 +128,11 @@ const getColorsFromSelection = function (selectedItems) {
     let selectionStrokeColorString;
     let selectionStrokeWidth;
     let firstChild = true;
-    
+
     for (const item of selectedItems) {
         let itemFillColorString;
         let itemStrokeColorString;
-        
+
         // handle pgTextItems differently by going through their children
         if (isPGTextItem(item)) {
             for (const child of item.children) {
