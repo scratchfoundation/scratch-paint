@@ -3,7 +3,8 @@ import {CHANGE_SELECTED_ITEMS} from './selected-items';
 import {getColorsFromSelection} from '../helper/style-path';
 
 const CHANGE_FILL_COLOR = 'scratch-paint/fill-color/CHANGE_FILL_COLOR';
-const initialState = '#9966FF';
+const DEFAULT_COLOR = '#9966FF';
+const initialState = DEFAULT_COLOR;
 // Matches hex colors
 const regExp = /^#([0-9a-f]{3}){1,2}$/i;
 
@@ -37,5 +38,6 @@ const changeFillColor = function (fillColor) {
 
 export {
     reducer as default,
-    changeFillColor
+    changeFillColor,
+    DEFAULT_COLOR
 };
