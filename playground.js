@@ -17365,7 +17365,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _keymirror = __webpack_require__(38);
+var _keymirror = __webpack_require__(40);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -18899,7 +18899,7 @@ bind.placeholder = {};
 
 module.exports = bindAll;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)))
 
 /***/ }),
 /* 7 */
@@ -22096,7 +22096,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactIntl = __webpack_require__(16);
 
-var _button = __webpack_require__(40);
+var _button = __webpack_require__(42);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -22434,7 +22434,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(144);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(145);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(39);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
@@ -22462,6 +22462,124 @@ if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' 
 
 /***/ }),
 /* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.DEFAULT_COLOR = exports.changeFillColor = exports.default = undefined;
+
+var _log = __webpack_require__(12);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _selectedItems = __webpack_require__(9);
+
+var _stylePath = __webpack_require__(8);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_FILL_COLOR = 'scratch-paint/fill-color/CHANGE_FILL_COLOR';
+var DEFAULT_COLOR = '#9966FF';
+var initialState = DEFAULT_COLOR;
+// Matches hex colors
+var regExp = /^#([0-9a-f]{3}){1,2}$/i;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_FILL_COLOR:
+            if (!regExp.test(action.fillColor) && action.fillColor !== null) {
+                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
+                return state;
+            }
+            return action.fillColor;
+        case _selectedItems.CHANGE_SELECTED_ITEMS:
+            // Don't change state if no selection
+            if (!action.selectedItems || !action.selectedItems.length) {
+                return state;
+            }
+            return (0, _stylePath.getColorsFromSelection)(action.selectedItems).fillColor;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeFillColor = function changeFillColor(fillColor) {
+    return {
+        type: CHANGE_FILL_COLOR,
+        fillColor: fillColor
+    };
+};
+
+exports.default = reducer;
+exports.changeFillColor = changeFillColor;
+exports.DEFAULT_COLOR = DEFAULT_COLOR;
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.changeStrokeColor = exports.default = undefined;
+
+var _log = __webpack_require__(12);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _selectedItems = __webpack_require__(9);
+
+var _stylePath = __webpack_require__(8);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_STROKE_COLOR = 'scratch-paint/stroke-color/CHANGE_STROKE_COLOR';
+var initialState = '#000';
+// Matches hex colors
+var regExp = /^#([0-9a-f]{3}){1,2}$/i;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_STROKE_COLOR:
+            if (!regExp.test(action.strokeColor) && action.strokeColor !== null) {
+                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
+                return state;
+            }
+            return action.strokeColor;
+        case _selectedItems.CHANGE_SELECTED_ITEMS:
+            // Don't change state if no selection
+            if (!action.selectedItems || !action.selectedItems.length) {
+                return state;
+            }
+            return (0, _stylePath.getColorsFromSelection)(action.selectedItems).strokeColor;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeStrokeColor = function changeStrokeColor(strokeColor) {
+    return {
+        type: CHANGE_STROKE_COLOR,
+        strokeColor: strokeColor
+    };
+};
+
+exports.default = reducer;
+exports.changeStrokeColor = changeStrokeColor;
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22519,7 +22637,7 @@ exports.changeStrokeWidth = changeStrokeWidth;
 exports.MAX_STROKE_WIDTH = MAX_STROKE_WIDTH;
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22543,7 +22661,7 @@ module.exports = emptyObject;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22612,7 +22730,7 @@ module.exports = warning;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22639,7 +22757,7 @@ exports.window = WINDOW;
 exports.document = DOCUMENT;
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22688,7 +22806,7 @@ InputGroup.propTypes = {
 exports.default = InputGroup;
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22908,7 +23026,7 @@ exports.getGuideColor = getGuideColor;
 exports.setDefaultGuideStyle = setDefaultGuideStyle;
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports) {
 
 var g;
@@ -22935,7 +23053,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22950,8 +23068,8 @@ module.exports = g;
 
 if (process.env.NODE_ENV !== 'production') {
   var invariant = __webpack_require__(18);
-  var warning = __webpack_require__(27);
-  var ReactPropTypesSecret = __webpack_require__(33);
+  var warning = __webpack_require__(29);
+  var ReactPropTypesSecret = __webpack_require__(35);
   var loggedTypeFailures = {};
 }
 
@@ -23002,7 +23120,7 @@ module.exports = checkPropTypes;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23021,7 +23139,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23060,7 +23178,7 @@ var ExecutionEnvironment = {
 module.exports = ExecutionEnvironment;
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23088,7 +23206,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23160,7 +23278,7 @@ function isPlainObject(value) {
 
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23188,7 +23306,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23248,7 +23366,7 @@ module.exports = keyMirror;
 
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23342,7 +23460,7 @@ exports.undoSnapshot = undoSnapshot;
 exports.clearUndoState = clearUndoState;
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23412,65 +23530,7 @@ ButtonComponent.propTypes = {
 exports.default = ButtonComponent;
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.changeFillColor = exports.default = undefined;
-
-var _log = __webpack_require__(12);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _selectedItems = __webpack_require__(9);
-
-var _stylePath = __webpack_require__(8);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_FILL_COLOR = 'scratch-paint/fill-color/CHANGE_FILL_COLOR';
-var initialState = '#9966FF';
-// Matches hex colors
-var regExp = /^#([0-9a-f]{3}){1,2}$/i;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_FILL_COLOR:
-            if (!regExp.test(action.fillColor) && action.fillColor !== null) {
-                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
-                return state;
-            }
-            return action.fillColor;
-        case _selectedItems.CHANGE_SELECTED_ITEMS:
-            // Don't change state if no selection
-            if (!action.selectedItems || !action.selectedItems.length) {
-                return state;
-            }
-            return (0, _stylePath.getColorsFromSelection)(action.selectedItems).fillColor;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var changeFillColor = function changeFillColor(fillColor) {
-    return {
-        type: CHANGE_FILL_COLOR,
-        fillColor: fillColor
-    };
-};
-
-exports.default = reducer;
-exports.changeFillColor = changeFillColor;
-
-/***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23516,7 +23576,7 @@ exports.default = reducer;
 exports.changeBrushSize = changeBrushSize;
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23631,7 +23691,7 @@ brush/eraser sizes change immediately on a numeric input*/
  */
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23677,7 +23737,7 @@ exports.default = reducer;
 exports.changeBrushSize = changeBrushSize;
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23750,7 +23810,7 @@ exports.closeFillColor = closeFillColor;
 exports.closeStrokeColor = closeStrokeColor;
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23760,7 +23820,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _isInBrowser = __webpack_require__(47);
+var _isInBrowser = __webpack_require__(48);
 
 var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
 
@@ -23805,7 +23865,7 @@ if (_isInBrowser2['default']) {
 exports['default'] = { js: js, css: css };
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23819,7 +23879,7 @@ var isBrowser = (typeof window === "undefined" ? "undefined" : _typeof(window)) 
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23830,7 +23890,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clientOnly = exports.noop = exports.equalRecords = exports.find = undefined;
 
-var _platform = __webpack_require__(28);
+var _platform = __webpack_require__(30);
 
 var find = function find(f, xs) {
   return xs.reduce(function (b, x) {
@@ -23864,7 +23924,7 @@ exports.noop = noop;
 exports.clientOnly = clientOnly;
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23916,7 +23976,7 @@ Label.defaultProps = {
 exports.default = Label;
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23972,64 +24032,6 @@ Input.defaultProps = {
 exports.default = Input;
 
 /***/ }),
-/* 51 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.changeStrokeColor = exports.default = undefined;
-
-var _log = __webpack_require__(12);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _selectedItems = __webpack_require__(9);
-
-var _stylePath = __webpack_require__(8);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_STROKE_COLOR = 'scratch-paint/stroke-color/CHANGE_STROKE_COLOR';
-var initialState = '#000';
-// Matches hex colors
-var regExp = /^#([0-9a-f]{3}){1,2}$/i;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_STROKE_COLOR:
-            if (!regExp.test(action.strokeColor) && action.strokeColor !== null) {
-                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
-                return state;
-            }
-            return action.strokeColor;
-        case _selectedItems.CHANGE_SELECTED_ITEMS:
-            // Don't change state if no selection
-            if (!action.selectedItems || !action.selectedItems.length) {
-                return state;
-            }
-            return (0, _stylePath.getColorsFromSelection)(action.selectedItems).strokeColor;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var changeStrokeColor = function changeStrokeColor(strokeColor) {
-    return {
-        type: CHANGE_STROKE_COLOR,
-        strokeColor: strokeColor
-    };
-};
-
-exports.default = reducer;
-exports.changeStrokeColor = changeStrokeColor;
-
-/***/ }),
 /* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -24046,13 +24048,13 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _keymirror = __webpack_require__(38);
+var _keymirror = __webpack_require__(40);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
 var _selection = __webpack_require__(4);
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(32);
 
 var _layer = __webpack_require__(21);
 
@@ -25153,7 +25155,7 @@ selectorFactory) {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActionTypes; });
 /* harmony export (immutable) */ __webpack_exports__["b"] = createStore;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(139);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
 
@@ -25542,8 +25544,8 @@ function wrapMapToPropsFunc(mapToProps, methodName) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = verifyPlainObject;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warning__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warning__ = __webpack_require__(37);
 
 
 
@@ -27060,7 +27062,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _item = __webpack_require__(22);
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(32);
 
 var _group = __webpack_require__(19);
 
@@ -27135,7 +27137,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(32);
 
 var _selection = __webpack_require__(4);
 
@@ -27395,7 +27397,7 @@ _reactDom2.default.render(_react2.default.createElement(
  This source code is licensed under the MIT license found in the
  LICENSE file in the root directory of this source tree.
 */
-var f=__webpack_require__(23),p=__webpack_require__(26);__webpack_require__(18);var r=__webpack_require__(15);
+var f=__webpack_require__(23),p=__webpack_require__(28);__webpack_require__(18);var r=__webpack_require__(15);
 function t(a){for(var b=arguments.length-1,d="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,e=0;e<b;e++)d+="\x26args[]\x3d"+encodeURIComponent(arguments[e+1]);b=Error(d+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var u={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function v(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}v.prototype.isReactComponent={};v.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?t("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};v.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function w(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}function x(){}x.prototype=v.prototype;var y=w.prototype=new x;y.constructor=w;f(y,v.prototype);y.isPureReactComponent=!0;function z(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}var A=z.prototype=new x;A.constructor=z;f(A,v.prototype);A.unstable_isAsyncReactComponent=!0;A.render=function(){return this.props.children};
@@ -27433,11 +27435,11 @@ if (process.env.NODE_ENV !== "production") {
 'use strict';
 
 var objectAssign$1 = __webpack_require__(23);
-var require$$0 = __webpack_require__(27);
-var emptyObject = __webpack_require__(26);
+var require$$0 = __webpack_require__(29);
+var emptyObject = __webpack_require__(28);
 var invariant = __webpack_require__(18);
 var emptyFunction = __webpack_require__(15);
-var checkPropTypes = __webpack_require__(32);
+var checkPropTypes = __webpack_require__(34);
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -29132,7 +29134,7 @@ module.exports = ReactEntry;
  LICENSE file in the root directory of this source tree.
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0);__webpack_require__(18);var l=__webpack_require__(34),n=__webpack_require__(23),ba=__webpack_require__(55),ca=__webpack_require__(15),da=__webpack_require__(26),ea=__webpack_require__(56),fa=__webpack_require__(57),ha=__webpack_require__(58),ia=__webpack_require__(59);
+var aa=__webpack_require__(0);__webpack_require__(18);var l=__webpack_require__(36),n=__webpack_require__(23),ba=__webpack_require__(55),ca=__webpack_require__(15),da=__webpack_require__(28),ea=__webpack_require__(56),fa=__webpack_require__(57),ha=__webpack_require__(58),ia=__webpack_require__(59);
 function w(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:w("227");
 function ja(a){switch(a){case "svg":return"http://www.w3.org/2000/svg";case "math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}
 var ka={Namespaces:{html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"},getIntrinsicNamespace:ja,getChildNamespace:function(a,b){return null==a||"http://www.w3.org/1999/xhtml"===a?ja(b):"http://www.w3.org/2000/svg"===a&&"foreignObject"===b?"http://www.w3.org/1999/xhtml":a}},la=null,oa={};
@@ -29459,17 +29461,17 @@ if (process.env.NODE_ENV !== "production") {
 
 var react = __webpack_require__(0);
 var invariant = __webpack_require__(18);
-var ExecutionEnvironment = __webpack_require__(34);
+var ExecutionEnvironment = __webpack_require__(36);
 var _assign = __webpack_require__(23);
 var EventListener = __webpack_require__(55);
-var require$$0 = __webpack_require__(27);
+var require$$0 = __webpack_require__(29);
 var hyphenateStyleName = __webpack_require__(95);
 var emptyFunction = __webpack_require__(15);
 var camelizeStyleName = __webpack_require__(97);
 var performanceNow = __webpack_require__(99);
 var propTypes = __webpack_require__(1);
-var emptyObject = __webpack_require__(26);
-var checkPropTypes = __webpack_require__(32);
+var emptyObject = __webpack_require__(28);
+var checkPropTypes = __webpack_require__(34);
 var shallowEqual = __webpack_require__(56);
 var containsNode = __webpack_require__(57);
 var focusNode = __webpack_require__(58);
@@ -46874,7 +46876,7 @@ module.exports = performanceNow;
 
 
 
-var ExecutionEnvironment = __webpack_require__(34);
+var ExecutionEnvironment = __webpack_require__(36);
 
 var performance;
 
@@ -46900,11 +46902,11 @@ module.exports = performance || {};
 
 var emptyFunction = __webpack_require__(15);
 var invariant = __webpack_require__(18);
-var warning = __webpack_require__(27);
+var warning = __webpack_require__(29);
 var assign = __webpack_require__(23);
 
-var ReactPropTypesSecret = __webpack_require__(33);
-var checkPropTypes = __webpack_require__(32);
+var ReactPropTypesSecret = __webpack_require__(35);
+var checkPropTypes = __webpack_require__(34);
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -47450,7 +47452,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 var emptyFunction = __webpack_require__(15);
 var invariant = __webpack_require__(18);
-var ReactPropTypesSecret = __webpack_require__(33);
+var ReactPropTypesSecret = __webpack_require__(35);
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -47526,7 +47528,7 @@ var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
 var _modes = __webpack_require__(14);
 
-var _undo = __webpack_require__(39);
+var _undo = __webpack_require__(41);
 
 var _selectedItems = __webpack_require__(9);
 
@@ -47816,7 +47818,7 @@ var _group = __webpack_require__(19);
 
 var _order = __webpack_require__(74);
 
-var _button = __webpack_require__(40);
+var _button = __webpack_require__(42);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -47828,7 +47830,7 @@ var _brushMode = __webpack_require__(173);
 
 var _brushMode2 = _interopRequireDefault(_brushMode);
 
-var _bufferedInputHoc = __webpack_require__(43);
+var _bufferedInputHoc = __webpack_require__(44);
 
 var _bufferedInputHoc2 = _interopRequireDefault(_bufferedInputHoc);
 
@@ -47840,15 +47842,15 @@ var _fillColorIndicator = __webpack_require__(181);
 
 var _fillColorIndicator2 = _interopRequireDefault(_fillColorIndicator);
 
-var _input = __webpack_require__(50);
+var _input = __webpack_require__(51);
 
 var _input2 = _interopRequireDefault(_input);
 
-var _inputGroup = __webpack_require__(29);
+var _inputGroup = __webpack_require__(31);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(49);
+var _label = __webpack_require__(50);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -50924,7 +50926,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _undo = __webpack_require__(71);
 
-var _undo2 = __webpack_require__(39);
+var _undo2 = __webpack_require__(41);
 
 var _group = __webpack_require__(19);
 
@@ -51188,7 +51190,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_PropTypes__ = __webpack_require__(64);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_warning__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_warning__ = __webpack_require__(37);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -51666,7 +51668,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(31)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(33)))
 
 /***/ }),
 /* 134 */
@@ -51864,7 +51866,7 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31), __webpack_require__(141)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33), __webpack_require__(141)(module)))
 
 /***/ }),
 /* 141 */
@@ -51930,8 +51932,8 @@ function symbolObservablePonyfill(root) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = combineReducers;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(39);
 
 
 
@@ -52070,7 +52072,7 @@ function combineReducers(reducers) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = bindActionCreators;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_warning__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_warning__ = __webpack_require__(39);
 
 
 function bindActionCreator(actionCreator, dispatch) {
@@ -52377,7 +52379,7 @@ function finalPropsSelectorFactory(dispatch, _ref2) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = verifySubselectors;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_warning__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_warning__ = __webpack_require__(37);
 
 
 function verify(selector, methodName, displayName) {
@@ -56932,9 +56934,9 @@ var _blob2 = _interopRequireDefault(_blob);
 
 var _stylePath = __webpack_require__(8);
 
-var _fillColor = __webpack_require__(41);
+var _fillColor = __webpack_require__(25);
 
-var _brushMode = __webpack_require__(42);
+var _brushMode = __webpack_require__(43);
 
 var _modes3 = __webpack_require__(14);
 
@@ -56956,13 +56958,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var BrushMode = function (_React$Component) {
     _inherits(BrushMode, _React$Component);
-
-    _createClass(BrushMode, null, [{
-        key: 'DEFAULT_COLOR',
-        get: function get() {
-            return '#9966FF';
-        }
-    }]);
 
     function BrushMode(props) {
         _classCallCheck(this, BrushMode);
@@ -57009,7 +57004,7 @@ var BrushMode = function (_React$Component) {
             var fillColor = this.props.colorState.fillColor;
 
             if (fillColor === _stylePath.MIXED || fillColor === null) {
-                this.props.onChangeFillColor(BrushMode.DEFAULT_COLOR);
+                this.props.onChangeFillColor(_fillColor.DEFAULT_COLOR);
             }
             this.blob.activateTool(_extends({
                 isEraser: false
@@ -57479,7 +57474,7 @@ var _blob = __webpack_require__(75);
 
 var _blob2 = _interopRequireDefault(_blob);
 
-var _eraserMode = __webpack_require__(44);
+var _eraserMode = __webpack_require__(45);
 
 var _selectedItems = __webpack_require__(9);
 
@@ -57668,9 +57663,9 @@ var _lodash = __webpack_require__(6);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _fillColor = __webpack_require__(41);
+var _fillColor = __webpack_require__(25);
 
-var _modals = __webpack_require__(45);
+var _modals = __webpack_require__(46);
 
 var _modes = __webpack_require__(5);
 
@@ -57803,11 +57798,11 @@ var _colorButton = __webpack_require__(81);
 
 var _colorButton2 = _interopRequireDefault(_colorButton);
 
-var _inputGroup = __webpack_require__(29);
+var _inputGroup = __webpack_require__(31);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(49);
+var _label = __webpack_require__(50);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -57906,11 +57901,11 @@ var _layout = __webpack_require__(195);
 
 var _layout2 = _interopRequireDefault(_layout);
 
-var _platform = __webpack_require__(28);
+var _platform = __webpack_require__(30);
 
 var _platform2 = _interopRequireDefault(_platform);
 
-var _utils = __webpack_require__(48);
+var _utils = __webpack_require__(49);
 
 var _utils2 = _interopRequireDefault(_utils);
 
@@ -59481,7 +59476,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.supportedValue = exports.supportedProperty = exports.prefix = undefined;
 
-var _prefix = __webpack_require__(46);
+var _prefix = __webpack_require__(47);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
@@ -59523,11 +59518,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports['default'] = supportedProperty;
 
-var _isInBrowser = __webpack_require__(47);
+var _isInBrowser = __webpack_require__(48);
 
 var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
 
-var _prefix = __webpack_require__(46);
+var _prefix = __webpack_require__(47);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
@@ -59628,11 +59623,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports['default'] = supportedValue;
 
-var _isInBrowser = __webpack_require__(47);
+var _isInBrowser = __webpack_require__(48);
 
 var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
 
-var _prefix = __webpack_require__(46);
+var _prefix = __webpack_require__(47);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
@@ -59708,9 +59703,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.removeEventListener = exports.addEventListener = exports.off = exports.on = undefined;
 
-var _platform = __webpack_require__(28);
+var _platform = __webpack_require__(30);
 
-var _utils = __webpack_require__(48);
+var _utils = __webpack_require__(49);
 
 /* eslint no-param-reassign: 0 */
 
@@ -59833,9 +59828,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.equalCoords = exports.doesFitWithin = exports.centerOfBoundsFromBounds = exports.centerOfBounds = exports.centerOfSize = exports.axes = exports.pickZone = exports.place = exports.calcRelPos = exports.validTypeValues = exports.types = exports.El = undefined;
 
-var _platform = __webpack_require__(28);
+var _platform = __webpack_require__(30);
 
-var _utils = __webpack_require__(48);
+var _utils = __webpack_require__(49);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -61463,7 +61458,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _button = __webpack_require__(40);
+var _button = __webpack_require__(42);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -61605,13 +61600,13 @@ var _selection = __webpack_require__(4);
 
 var _snapping = __webpack_require__(218);
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(32);
 
 var _stylePath = __webpack_require__(8);
 
-var _strokeColor = __webpack_require__(51);
+var _strokeColor = __webpack_require__(26);
 
-var _strokeWidth = __webpack_require__(25);
+var _strokeWidth = __webpack_require__(27);
 
 var _modes3 = __webpack_require__(14);
 
@@ -62054,17 +62049,17 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _brushMode = __webpack_require__(42);
+var _brushMode = __webpack_require__(43);
 
-var _eraserMode = __webpack_require__(44);
+var _eraserMode = __webpack_require__(45);
 
-var _bufferedInputHoc = __webpack_require__(43);
+var _bufferedInputHoc = __webpack_require__(44);
 
 var _bufferedInputHoc2 = _interopRequireDefault(_bufferedInputHoc);
 
 var _reactIntl = __webpack_require__(16);
 
-var _input = __webpack_require__(50);
+var _input = __webpack_require__(51);
 
 var _input2 = _interopRequireDefault(_input);
 
@@ -62084,7 +62079,7 @@ var _eraser = __webpack_require__(77);
 
 var _eraser2 = _interopRequireDefault(_eraser);
 
-var _strokeWidth = __webpack_require__(25);
+var _strokeWidth = __webpack_require__(27);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62278,6 +62273,12 @@ var _modes = __webpack_require__(5);
 
 var _modes2 = _interopRequireDefault(_modes);
 
+var _stylePath = __webpack_require__(8);
+
+var _fillColor = __webpack_require__(25);
+
+var _strokeColor = __webpack_require__(26);
+
 var _modes3 = __webpack_require__(14);
 
 var _selectedItems = __webpack_require__(9);
@@ -62344,6 +62345,24 @@ var OvalMode = function (_React$Component) {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
+            // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
+            // If exactly one of fill or stroke color is set, set the other one to transparent.
+            // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
+            var _props$colorState = this.props.colorState,
+                fillColor = _props$colorState.fillColor,
+                strokeColor = _props$colorState.strokeColor,
+                strokeWidth = _props$colorState.strokeWidth;
+
+            var fillColorPresent = fillColor !== _stylePath.MIXED && fillColor !== null;
+            var strokeColorPresent = strokeColor !== _stylePath.MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
+            if (!fillColorPresent && !strokeColorPresent) {
+                this.props.onChangeFillColor(_fillColor.DEFAULT_COLOR);
+                this.props.onChangeStrokeColor(null);
+            } else if (!fillColorPresent && strokeColorPresent) {
+                this.props.onChangeFillColor(null);
+            } else if (fillColorPresent && !strokeColorPresent) {
+                this.props.onChangeStrokeColor(null);
+            }
             this.tool = new _ovalTool2.default(this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateSvg);
             this.tool.setColorState(this.props.colorState);
             this.tool.activate();
@@ -62377,6 +62396,8 @@ OvalMode.propTypes = {
     }).isRequired,
     handleMouseDown: _propTypes2.default.func.isRequired,
     isOvalModeActive: _propTypes2.default.bool.isRequired,
+    onChangeFillColor: _propTypes2.default.func.isRequired,
+    onChangeStrokeColor: _propTypes2.default.func.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
     selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setSelectedItems: _propTypes2.default.func.isRequired
@@ -62399,6 +62420,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         },
         handleMouseDown: function handleMouseDown() {
             dispatch((0, _modes3.changeMode)(_modes2.default.OVAL));
+        },
+        onChangeFillColor: function onChangeFillColor(fillColor) {
+            dispatch((0, _fillColor.changeFillColor)(fillColor));
+        },
+        onChangeStrokeColor: function onChangeStrokeColor(strokeColor) {
+            dispatch((0, _strokeColor.changeStrokeColor)(strokeColor));
         }
     };
 };
@@ -63112,6 +63139,12 @@ var _modes = __webpack_require__(5);
 
 var _modes2 = _interopRequireDefault(_modes);
 
+var _stylePath = __webpack_require__(8);
+
+var _fillColor = __webpack_require__(25);
+
+var _strokeColor = __webpack_require__(26);
+
 var _modes3 = __webpack_require__(14);
 
 var _selectedItems = __webpack_require__(9);
@@ -63178,6 +63211,24 @@ var RectMode = function (_React$Component) {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
+            // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
+            // If exactly one of fill or stroke color is set, set the other one to transparent.
+            // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
+            var _props$colorState = this.props.colorState,
+                fillColor = _props$colorState.fillColor,
+                strokeColor = _props$colorState.strokeColor,
+                strokeWidth = _props$colorState.strokeWidth;
+
+            var fillColorPresent = fillColor !== _stylePath.MIXED && fillColor !== null;
+            var strokeColorPresent = strokeColor !== _stylePath.MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
+            if (!fillColorPresent && !strokeColorPresent) {
+                this.props.onChangeFillColor(_fillColor.DEFAULT_COLOR);
+                this.props.onChangeStrokeColor(null);
+            } else if (!fillColorPresent && strokeColorPresent) {
+                this.props.onChangeFillColor(null);
+            } else if (fillColorPresent && !strokeColorPresent) {
+                this.props.onChangeStrokeColor(null);
+            }
             this.tool = new _rectTool2.default(this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateSvg);
             this.tool.setColorState(this.props.colorState);
             this.tool.activate();
@@ -63211,6 +63262,8 @@ RectMode.propTypes = {
     }).isRequired,
     handleMouseDown: _propTypes2.default.func.isRequired,
     isRectModeActive: _propTypes2.default.bool.isRequired,
+    onChangeFillColor: _propTypes2.default.func.isRequired,
+    onChangeStrokeColor: _propTypes2.default.func.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
     selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setSelectedItems: _propTypes2.default.func.isRequired
@@ -63234,7 +63287,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         handleMouseDown: function handleMouseDown() {
             dispatch((0, _modes3.changeMode)(_modes2.default.RECT));
         },
-        deactivateTool: function deactivateTool() {}
+        onChangeFillColor: function onChangeFillColor(fillColor) {
+            dispatch((0, _fillColor.changeFillColor)(fillColor));
+        },
+        onChangeStrokeColor: function onChangeStrokeColor(strokeColor) {
+            dispatch((0, _strokeColor.changeStrokeColor)(strokeColor));
+        }
     };
 };
 
@@ -63655,7 +63713,7 @@ var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _keymirror = __webpack_require__(38);
+var _keymirror = __webpack_require__(40);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -64984,9 +65042,9 @@ var _lodash = __webpack_require__(6);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _strokeColor = __webpack_require__(51);
+var _strokeColor = __webpack_require__(26);
 
-var _modals = __webpack_require__(45);
+var _modals = __webpack_require__(46);
 
 var _modes = __webpack_require__(5);
 
@@ -65119,11 +65177,11 @@ var _colorButton = __webpack_require__(81);
 
 var _colorButton2 = _interopRequireDefault(_colorButton);
 
-var _inputGroup = __webpack_require__(29);
+var _inputGroup = __webpack_require__(31);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(49);
+var _label = __webpack_require__(50);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -65203,7 +65261,7 @@ var _lodash = __webpack_require__(6);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _strokeWidth = __webpack_require__(25);
+var _strokeWidth = __webpack_require__(27);
 
 var _strokeWidthIndicator = __webpack_require__(247);
 
@@ -65297,19 +65355,19 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _bufferedInputHoc = __webpack_require__(43);
+var _bufferedInputHoc = __webpack_require__(44);
 
 var _bufferedInputHoc2 = _interopRequireDefault(_bufferedInputHoc);
 
-var _input = __webpack_require__(50);
+var _input = __webpack_require__(51);
 
 var _input2 = _interopRequireDefault(_input);
 
-var _inputGroup = __webpack_require__(29);
+var _inputGroup = __webpack_require__(31);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _strokeWidth = __webpack_require__(25);
+var _strokeWidth = __webpack_require__(27);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -65604,11 +65662,11 @@ var _modes = __webpack_require__(14);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _brushMode = __webpack_require__(42);
+var _brushMode = __webpack_require__(43);
 
 var _brushMode2 = _interopRequireDefault(_brushMode);
 
-var _eraserMode = __webpack_require__(44);
+var _eraserMode = __webpack_require__(45);
 
 var _eraserMode2 = _interopRequireDefault(_eraserMode);
 
@@ -65620,7 +65678,7 @@ var _hover = __webpack_require__(53);
 
 var _hover2 = _interopRequireDefault(_hover);
 
-var _modals = __webpack_require__(45);
+var _modals = __webpack_require__(46);
 
 var _modals2 = _interopRequireDefault(_modals);
 
@@ -65628,7 +65686,7 @@ var _selectedItems = __webpack_require__(9);
 
 var _selectedItems2 = _interopRequireDefault(_selectedItems);
 
-var _undo = __webpack_require__(39);
+var _undo = __webpack_require__(41);
 
 var _undo2 = _interopRequireDefault(_undo);
 
@@ -65658,15 +65716,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(24);
 
-var _fillColor = __webpack_require__(41);
+var _fillColor = __webpack_require__(25);
 
 var _fillColor2 = _interopRequireDefault(_fillColor);
 
-var _strokeColor = __webpack_require__(51);
+var _strokeColor = __webpack_require__(26);
 
 var _strokeColor2 = _interopRequireDefault(_strokeColor);
 
-var _strokeWidth = __webpack_require__(25);
+var _strokeWidth = __webpack_require__(27);
 
 var _strokeWidth2 = _interopRequireDefault(_strokeWidth);
 
