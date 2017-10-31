@@ -68,7 +68,7 @@ const messages = defineMessages({
     },
     redo: {
         defaultMessage: 'Redo',
-        description: 'Alt to image for the button to undo an action',
+        description: 'Alt to image for the button to redo an action',
         id: 'paint.paintEditor.redo'
     },
     forward: {
