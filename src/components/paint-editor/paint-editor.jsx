@@ -30,17 +30,19 @@ import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicat
 
 import styles from './paint-editor.css';
 
-import groupIcon from './group.svg';
-import redoIcon from './redo.svg';
-import sendBackIcon from './send-back.svg';
-import sendBackwardIcon from './send-backward.svg';
-import sendForwardIcon from './send-forward.svg';
-import sendFrontIcon from './send-front.svg';
-import undoIcon from './undo.svg';
-import ungroupIcon from './ungroup.svg';
-import zoomInIcon from './zoom-in.svg';
-import zoomOutIcon from './zoom-out.svg';
-import zoomResetIcon from './zoom-reset.svg';
+import copyIcon from './icons/copy.svg';
+import groupIcon from './icons/group.svg';
+import pasteIcon from './icons/paste.svg';
+import redoIcon from './icons/redo.svg';
+import sendBackIcon from './icons/send-back.svg';
+import sendBackwardIcon from './icons/send-backward.svg';
+import sendForwardIcon from './icons/send-forward.svg';
+import sendFrontIcon from './icons/send-front.svg';
+import undoIcon from './icons/undo.svg';
+import ungroupIcon from './icons/ungroup.svg';
+import zoomInIcon from './icons/zoom-in.svg';
+import zoomOutIcon from './icons/zoom-out.svg';
+import zoomResetIcon from './icons/zoom-reset.svg';
 
 const BufferedInput = BufferedInputHOC(Input);
 const messages = defineMessages({
@@ -48,6 +50,56 @@ const messages = defineMessages({
         id: 'paint.paintEditor.costume',
         description: 'Label for the name of a sound',
         defaultMessage: 'Costume'
+    },
+    group: {
+        defaultMessage: 'Group',
+        description: 'Label for the button to group shapes',
+        id: 'paint.paintEditor.group'
+    },
+    ungroup: {
+        defaultMessage: 'Ungroup',
+        description: 'Label for the button to ungroup shapes',
+        id: 'paint.paintEditor.ungroup'
+    },
+    undo: {
+        defaultMessage: 'Undo',
+        description: 'Alt to image for the button to undo an action',
+        id: 'paint.paintEditor.undo'
+    },
+    redo: {
+        defaultMessage: 'Redo',
+        description: 'Alt to image for the button to redo an action',
+        id: 'paint.paintEditor.redo'
+    },
+    forward: {
+        defaultMessage: 'Forward',
+        description: 'Label for the `Send forward on canvas` button',
+        id: 'paint.paintEditor.forward'
+    },
+    backward: {
+        defaultMessage: 'Backward',
+        description: 'Label for the `Send backward on canvas` button',
+        id: 'paint.paintEditor.backward'
+    },
+    front: {
+        defaultMessage: 'Front',
+        description: 'Label for the `Send to front of canvas` button',
+        id: 'paint.paintEditor.front'
+    },
+    back: {
+        defaultMessage: 'Back',
+        description: 'Label for the `Send to back of canvas` button',
+        id: 'paint.paintEditor.back'
+    },
+    copy: {
+        defaultMessage: 'Copy',
+        description: 'Label for the copy button',
+        id: 'paint.paintEditor.copy'
+    },
+    paste: {
+        defaultMessage: 'Paste',
+        description: 'Label for the paste button',
+        id: 'paint.paintEditor.paste'
     }
 });
 
@@ -99,7 +151,7 @@ class PaintEditorComponent extends React.Component {
                                         onClick={this.props.onUndo}
                                     >
                                         <img
-                                            alt="Undo"
+                                            alt={this.props.intl.formatMessage(messages.undo)}
                                             className={styles.buttonGroupButtonIcon}
                                             src={undoIcon}
                                         />
@@ -117,7 +169,7 @@ class PaintEditorComponent extends React.Component {
                                         onClick={this.props.onRedo}
                                     >
                                         <img
-                                            alt="Redo"
+                                            alt={this.props.intl.formatMessage(messages.redo)}
                                             className={styles.buttonGroupButtonIcon}
                                             src={redoIcon}
                                         />
@@ -129,16 +181,14 @@ class PaintEditorComponent extends React.Component {
                             <InputGroup className={styles.modDashedBorder}>
                                 <LabeledIconButton
                                     disabled={!shouldShowGroup()}
-                                    imgAlt="Group"
                                     imgSrc={groupIcon}
-                                    title="Group"
+                                    title={this.props.intl.formatMessage(messages.group)}
                                     onClick={this.props.onGroup}
                                 />
                                 <LabeledIconButton
                                     disabled={!shouldShowUngroup()}
-                                    imgAlt="Ungroup"
                                     imgSrc={ungroupIcon}
-                                    title="Ungroup"
+                                    title={this.props.intl.formatMessage(messages.ungroup)}
                                     onClick={this.props.onUngroup}
                                 />
                             </InputGroup>
@@ -147,16 +197,14 @@ class PaintEditorComponent extends React.Component {
                             <InputGroup className={styles.modDashedBorder}>
                                 <LabeledIconButton
                                     disabled={!shouldShowBringForward()}
-                                    imgAlt="Send Forward"
                                     imgSrc={sendForwardIcon}
-                                    title="Forward"
+                                    title={this.props.intl.formatMessage(messages.forward)}
                                     onClick={this.props.onSendForward}
                                 />
                                 <LabeledIconButton
                                     disabled={!shouldShowSendBackward()}
-                                    imgAlt="Send Backward"
                                     imgSrc={sendBackwardIcon}
-                                    title="Backward"
+                                    title={this.props.intl.formatMessage(messages.backward)}
                                     onClick={this.props.onSendBackward}
                                 />
                             </InputGroup>
@@ -165,16 +213,14 @@ class PaintEditorComponent extends React.Component {
                             <InputGroup>
                                 <LabeledIconButton
                                     disabled={!shouldShowBringForward()}
-                                    imgAlt="Send to Front"
                                     imgSrc={sendFrontIcon}
-                                    title="Front"
+                                    title={this.props.intl.formatMessage(messages.front)}
                                     onClick={this.props.onSendToFront}
                                 />
                                 <LabeledIconButton
                                     disabled={!shouldShowSendBackward()}
-                                    imgAlt="Send to Back"
                                     imgSrc={sendBackIcon}
-                                    title="Back"
+                                    title={this.props.intl.formatMessage(messages.back)}
                                     onClick={this.props.onSendToBack}
                                 />
                             </InputGroup>
@@ -192,7 +238,13 @@ class PaintEditorComponent extends React.Component {
 
                         {/* Second Row */}
                         <div className={styles.row}>
-                            <div className={classNames(styles.row, styles.modDashedBorder)}>
+                            <InputGroup
+                                className={classNames(
+                                    styles.row,
+                                    styles.modDashedBorder,
+                                    styles.modLabeledIconHeight
+                                )}
+                            >
                                 {/* fill */}
                                 <FillColorIndicatorComponent
                                     onUpdateSvg={this.props.onUpdateSvg}
@@ -205,7 +257,21 @@ class PaintEditorComponent extends React.Component {
                                 <StrokeWidthIndicatorComponent
                                     onUpdateSvg={this.props.onUpdateSvg}
                                 />
-                            </div>
+                            </InputGroup>
+                            <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
+                                <LabeledIconButton
+                                    disabled
+                                    imgSrc={copyIcon}
+                                    title={this.props.intl.formatMessage(messages.copy)}
+                                    onClick={function () {}}
+                                />
+                                <LabeledIconButton
+                                    disabled
+                                    imgSrc={pasteIcon}
+                                    title={this.props.intl.formatMessage(messages.paste)}
+                                    onClick={function () {}}
+                                />
+                            </InputGroup>
                             <InputGroup className={styles.modModeTools}>
                                 <ModeToolsComponent />
                             </InputGroup>
