@@ -4,7 +4,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../modes/modes';
+import {MIXED} from '../helper/style-path';
 
+import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
+import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 
@@ -44,6 +47,21 @@ class OvalMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
+        // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
+        // If exactly one of fill or stroke color is set, set the other one to transparent.
+        // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
+        const {fillColor, strokeColor, strokeWidth} = this.props.colorState;
+        const fillColorPresent = fillColor !== MIXED && fillColor !== null;
+        const strokeColorPresent =
+            strokeColor !== MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
+        if (!fillColorPresent && !strokeColorPresent) {
+            this.props.onChangeFillColor(DEFAULT_COLOR);
+            this.props.onChangeStrokeColor(null);
+        } else if (!fillColorPresent && strokeColorPresent) {
+            this.props.onChangeFillColor(null);
+        } else if (fillColorPresent && !strokeColorPresent) {
+            this.props.onChangeStrokeColor(null);
+        }
         this.tool = new OvalTool(
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
@@ -76,6 +94,8 @@ OvalMode.propTypes = {
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isOvalModeActive: PropTypes.bool.isRequired,
+    onChangeFillColor: PropTypes.func.isRequired,
+    onChangeStrokeColor: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setSelectedItems: PropTypes.func.isRequired
@@ -95,6 +115,12 @@ const mapDispatchToProps = dispatch => ({
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.OVAL));
+    },
+    onChangeFillColor: fillColor => {
+        dispatch(changeFillColor(fillColor));
+    },
+    onChangeStrokeColor: strokeColor => {
+        dispatch(changeStrokeColor(strokeColor));
     }
 });
 

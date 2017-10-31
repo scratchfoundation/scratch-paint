@@ -6,7 +6,7 @@ import Modes from '../modes/modes';
 import Blobbiness from '../helper/blob-tools/blob';
 import {MIXED} from '../helper/style-path';
 
-import {changeFillColor} from '../reducers/fill-color';
+import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
 import {changeBrushSize} from '../reducers/brush-mode';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
@@ -15,9 +15,6 @@ import {clearSelection} from '../helper/selection';
 import BrushModeComponent from '../components/brush-mode/brush-mode.jsx';
 
 class BrushMode extends React.Component {
-    static get DEFAULT_COLOR () {
-        return '#9966FF';
-    }
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -55,7 +52,7 @@ class BrushMode extends React.Component {
         // Force the default brush color if fill is MIXED or transparent
         const {fillColor} = this.props.colorState;
         if (fillColor === MIXED || fillColor === null) {
-            this.props.onChangeFillColor(BrushMode.DEFAULT_COLOR);
+            this.props.onChangeFillColor(DEFAULT_COLOR);
         }
         this.blob.activateTool({
             isEraser: false,
