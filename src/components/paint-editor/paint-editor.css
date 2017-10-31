@@ -33,6 +33,10 @@
     padding-right: calc(3 * $grid-unit);
 }
 
+.mod-labeled-icon-height {
+    height: 2.85rem; /* for the second row so the dashed borders are equal in size */
+}
+
 $border-radius: 0.25rem;
 
 .button-group-button {
