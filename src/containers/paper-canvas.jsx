@@ -10,9 +10,10 @@ import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
 import {setupLayers} from '../helper/layer';
 import {deleteSelection, getSelectedLeafItems} from '../helper/selection';
+import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {pan, resetZoom, zoomOnFixedPoint} from '../helper/view';
+import {clearHoveredItem} from '../reducers/hover';
 
-import {setSelectedItems} from '../reducers/selected-items';
 
 import styles from './paper-canvas.css';
 
@@ -47,6 +48,8 @@ class PaperCanvas extends React.Component {
             }
         }
         this.props.clearUndo();
+        this.props.clearSelectedItems();
+        this.props.clearHoveredItem();
         if (newProps.svg) {
             // Store the zoom/pan and restore it after importing a new SVG
             const oldZoom = paper.project.view.zoom;
@@ -156,6 +159,8 @@ class PaperCanvas extends React.Component {
 
 PaperCanvas.propTypes = {
     canvasRef: PropTypes.func,
+    clearHoveredItem: PropTypes.func.isRequired,
+    clearSelectedItems: PropTypes.func.isRequired,
     clearUndo: PropTypes.func.isRequired,
     mode: PropTypes.oneOf(Object.values(Modes)),
     onUpdateSvg: PropTypes.func.isRequired,
@@ -178,6 +183,12 @@ const mapDispatchToProps = dispatch => ({
     },
     setSelectedItems: () => {
         dispatch(setSelectedItems(getSelectedLeafItems()));
+    },
+    clearSelectedItems: () => {
+        dispatch(clearSelectedItems());
+    },
+    clearHoveredItem: () => {
+        dispatch(clearHoveredItem());
     }
 });
 
