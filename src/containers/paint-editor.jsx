@@ -5,12 +5,13 @@ import PaintEditorComponent from '../components/paint-editor/paint-editor.jsx';
 import {changeMode} from '../reducers/modes';
 import {undo, redo, undoSnapshot} from '../reducers/undo';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
+import {setClipboardItems} from '../reducers/clipboard';
 
 import {getGuideLayer, getBackgroundGuideLayer} from '../helper/layer';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
-import {getSelectedLeafItems} from '../helper/selection';
+import {clearSelection, getSelectedLeafItems, getSelectedRootItems} from '../helper/selection';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 
 import Modes from '../modes/modes';
@@ -35,7 +36,9 @@ class PaintEditor extends React.Component {
             'handleGroup',
             'handleUngroup',
             'canRedo',
-            'canUndo'
+            'canUndo',
+            'handleCopyToClipboard',
+            'handlePasteFromClipboard'
         ]);
     }
     componentDidMount () {
@@ -98,6 +101,33 @@ class PaintEditor extends React.Component {
     handleSendToFront () {
         bringToFront(this.handleUpdateSvg);
     }
+    handleCopyToClipboard () {
+        const selectedItems = getSelectedRootItems();
+        if (selectedItems.length > 0) {
+            const clipboardItems = [];
+            for (let i = 0; i < selectedItems.length; i++) {
+                const jsonItem = selectedItems[i].exportJSON({asString: false});
+                clipboardItems.push(jsonItem);
+            }
+            this.props.setClipboardItems(clipboardItems);
+        }
+    }
+    handlePasteFromClipboard () {
+        clearSelection(this.props.clearSelectedItems);
+
+        if (this.props.clipboard.length > 0) {
+            for (let i = 0; i < this.props.clipboard.length; i++) {
+                const item = paper.Base.importJSON(this.props.clipboard[i]);
+                if (item) {
+                    item.selected = true;
+                }
+                paper.project.getActiveLayer().addChild(item);
+            }
+            this.props.setSelectedItems();
+            paper.project.view.update();
+            this.handleUpdateSvg();
+        }
+    }
     canUndo () {
         return shouldShowUndo(this.props.undoState);
     }
@@ -123,7 +153,9 @@ class PaintEditor extends React.Component {
                 rotationCenterY={this.props.rotationCenterY}
                 svg={this.props.svg}
                 svgId={this.props.svgId}
+                onCopyToClipboard={this.handleCopyToClipboard}
                 onGroup={this.handleGroup}
+                onPasteFromClipboard={this.handlePasteFromClipboard}
                 onRedo={this.handleRedo}
                 onSendBackward={this.handleSendBackward}
                 onSendForward={this.handleSendForward}
@@ -143,6 +175,7 @@ class PaintEditor extends React.Component {
 
 PaintEditor.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
+    clipboard: PropTypes.arrayOf(PropTypes.array),
     name: PropTypes.string,
     onKeyPress: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
@@ -151,6 +184,7 @@ PaintEditor.propTypes = {
     onUpdateSvg: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
+    setClipboardItems: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
     svg: PropTypes.string,
     svgId: PropTypes.string,
@@ -163,7 +197,8 @@ PaintEditor.propTypes = {
 
 const mapStateToProps = state => ({
     selectedItems: state.scratchPaint.selectedItems,
-    undoState: state.scratchPaint.undo
+    undoState: state.scratchPaint.undo,
+    clipboard: state.scratchPaint.clipboard
 });
 const mapDispatchToProps = dispatch => ({
     onKeyPress: event => {
@@ -191,6 +226,9 @@ const mapDispatchToProps = dispatch => ({
     },
     undoSnapshot: snapshot => {
         dispatch(undoSnapshot(snapshot));
+    },
+    setClipboardItems: items => {
+        dispatch(setClipboardItems(items));
     }
 });
 

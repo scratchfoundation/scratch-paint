@@ -1,3 +1,4 @@
+import paper from '@scratch/paper';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
@@ -115,16 +116,16 @@ const ModeToolsComponent = props => {
             <div className={classNames(props.className, styles.modeTools)}>
                 <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
                     <LabeledIconButton
-                        disabled
+                        disabled={!props.selectedItems.length}
                         imgSrc={copyIcon}
                         title={props.intl.formatMessage(messages.copy)}
-                        onClick={function () {}}
+                        onClick={props.onCopyToClipboard}
                     />
                     <LabeledIconButton
-                        disabled
+                        disabled={!(props.clipboard.length > 0)}
                         imgSrc={pasteIcon}
                         title={props.intl.formatMessage(messages.paste)}
-                        onClick={function () {}}
+                        onClick={props.onPasteFromClipboard}
                     />
                 </InputGroup>
                 {/* <LabeledIconButton
@@ -152,17 +153,23 @@ const ModeToolsComponent = props => {
 ModeToolsComponent.propTypes = {
     brushValue: PropTypes.number,
     className: PropTypes.string,
+    clipboard: PropTypes.arrayOf(PropTypes.array),
     eraserValue: PropTypes.number,
     intl: intlShape.isRequired,
     mode: PropTypes.string.isRequired,
     onBrushSliderChange: PropTypes.func,
-    onEraserSliderChange: PropTypes.func
+    onCopyToClipboard: PropTypes.func.isRequired,
+    onEraserSliderChange: PropTypes.func,
+    onPasteFromClipboard: PropTypes.func.isRequired,
+    selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item))
 };
 
 const mapStateToProps = state => ({
     mode: state.scratchPaint.mode,
     brushValue: state.scratchPaint.brushMode.brushSize,
-    eraserValue: state.scratchPaint.eraserMode.brushSize
+    clipboard: state.scratchPaint.clipboard,
+    eraserValue: state.scratchPaint.eraserMode.brushSize,
+    selectedItems: state.scratchPaint.selectedItems
 });
 const mapDispatchToProps = dispatch => ({
     onBrushSliderChange: brushSize => {

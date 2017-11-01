@@ -394,14 +394,6 @@ const selectRootItem = function () {
     }
 };
 
-const shouldShowIfSelection = function () {
-    return getSelectedRootItems().length > 0;
-};
-
-const shouldShowIfSelectionRecursive = function () {
-    return getSelectedRootItems().length > 0;
-};
-
 const shouldShowSelectAll = function () {
     return paper.project.getItems({class: paper.PathItem}).length > 0;
 };
@@ -419,7 +411,5 @@ export {
     getSelectedRootItems,
     processRectangularSelection,
     selectRootItem,
-    shouldShowIfSelection,
-    shouldShowIfSelectionRecursive,
     shouldShowSelectAll
 };
