@@ -6,6 +6,7 @@ import React from 'react';
 import {changeBrushSize} from '../../reducers/brush-mode';
 import {changeBrushSize as changeEraserSize} from '../../reducers/eraser-mode';
 
+import LiveInputHOC from '../forms/live-input-hoc.jsx';
 import {injectIntl, intlShape} from 'react-intl';
 import Input from '../forms/input.jsx';
 // import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
@@ -21,6 +22,7 @@ import eraserIcon from '../eraser-mode/eraser.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
+const LiveInput = LiveInputHOC(Input);
 const ModeToolsComponent = props => {
     const brushMessage = props.intl.formatMessage({
         defaultMessage: 'Brush',
@@ -44,17 +46,12 @@ const ModeToolsComponent = props => {
                         src={brushIcon}
                     />
                 </div>
-                <Input
+                <LiveInput
                     small
                     max={MAX_STROKE_WIDTH}
                     min="1"
                     type="number"
                     value={props.brushValue}
-                    onChange={function (e) {
-                        if (e.target.value !== null && !isNaN(e.target.value)) {
-                            props.onBrushSliderChange(Number(e.target.value));
-                        }
-                    }}
                     onSubmit={props.onBrushSliderChange}
                 />
             </div>
@@ -69,17 +66,12 @@ const ModeToolsComponent = props => {
                         src={eraserIcon}
                     />
                 </div>
-                <Input
+                <LiveInput
                     small
                     max={MAX_STROKE_WIDTH}
                     min="1"
                     type="number"
                     value={props.eraserValue}
-                    onChange={function (e) {
-                        if (e.target.value !== null && !isNaN(e.target.value)) {
-                            props.onEraserSliderChange(Number(e.target.value));
-                        }
-                    }}
                     onSubmit={props.onEraserSliderChange}
                 />
             </div>
