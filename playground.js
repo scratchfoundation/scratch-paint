@@ -26296,7 +26296,8 @@ var Blobbiness = function () {
             var items = (0, _selection.getItems)({
                 match: function match(item) {
                     return item.selected && blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);
-                }
+                },
+                class: _paper2.default.PathItem
             });
             // Eraser didn't hit anything selected, so assume they meant to erase from all instead of from subset
             // and deselect the selection
@@ -26305,7 +26306,8 @@ var Blobbiness = function () {
                 items = (0, _selection.getItems)({
                     match: function match(item) {
                         return blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);
-                    }
+                    },
+                    class: _paper2.default.PathItem
                 });
             }
 
@@ -26336,6 +26338,7 @@ var Blobbiness = function () {
                     lastPath.remove();
                     continue;
                 }
+
                 // Erase
                 var newPath = items[i].subtract(lastPath);
                 newPath.insertBelow(items[i]);
@@ -26365,47 +26368,63 @@ var Blobbiness = function () {
                     }
                 }
 
-                // Divide topologically separate shapes into their own compound paths, instead of
-                // everything being stuck together.
-                // Assume that result of erase operation returns clockwise paths for positive shapes
-                var clockwiseChildren = [];
-                var ccwChildren = [];
                 if (newPath.children) {
-                    for (var _j2 = newPath.children.length - 1; _j2 >= 0; _j2--) {
-                        var child = newPath.children[_j2];
-                        if (child.isClockwise()) {
-                            clockwiseChildren.push(child);
-                        } else {
-                            ccwChildren.push(child);
-                        }
-                    }
-                    for (var _j3 = 0; _j3 < clockwiseChildren.length; _j3++) {
-                        var cw = clockwiseChildren[_j3];
-                        cw.copyAttributes(newPath);
-                        cw.fillColor = newPath.fillColor;
-                        cw.strokeColor = newPath.strokeColor;
-                        cw.strokeWidth = newPath.strokeWidth;
-                        cw.insertAbove(items[i]);
-
-                        // Go backward since we are deleting elements
-                        var newCw = cw;
-                        for (var _k2 = ccwChildren.length - 1; _k2 >= 0; _k2--) {
-                            var ccw = ccwChildren[_k2];
-                            if (this.firstEnclosesSecond(ccw, cw) || this.firstEnclosesSecond(cw, ccw)) {
-                                var temp = newCw.subtract(ccw);
-                                temp.insertAbove(newCw);
-                                newCw.remove();
-                                newCw = temp;
-                                ccw.remove();
-                                ccwChildren.splice(_k2, 1);
-                            }
-                        }
-                    }
+                    this.separateCompoundPath(newPath);
                     newPath.remove();
                 }
                 items[i].remove();
             }
             lastPath.remove();
+        }
+    }, {
+        key: 'separateCompoundPath',
+        value: function separateCompoundPath(compoundPath) {
+            if (!compoundPath.isClockwise()) {
+                compoundPath.reverse();
+            }
+            // Divide topologically separate shapes into their own compound paths, instead of
+            // everything being stuck together.
+            var clockwiseChildren = [];
+            var ccwChildren = [];
+            for (var j = compoundPath.children.length - 1; j >= 0; j--) {
+                var child = compoundPath.children[j];
+                if (child.isClockwise()) {
+                    clockwiseChildren.push(child);
+                } else {
+                    ccwChildren.push(child);
+                }
+            }
+
+            // Sort by area smallest to largest
+            clockwiseChildren.sort(function (a, b) {
+                return a.area - b.area;
+            });
+            ccwChildren.sort(function (a, b) {
+                return Math.abs(a.area) - Math.abs(b.area);
+            });
+            // Go smallest to largest non-hole, so larger non-holes don't get the smaller pieces' holes
+            for (var _j2 = 0; _j2 < clockwiseChildren.length; _j2++) {
+                var cw = clockwiseChildren[_j2];
+                cw.copyAttributes(compoundPath);
+                cw.fillColor = compoundPath.fillColor;
+                cw.strokeColor = compoundPath.strokeColor;
+                cw.strokeWidth = compoundPath.strokeWidth;
+                cw.insertAbove(compoundPath);
+
+                // Go backward since we are deleting elements. Backwards is largest to smallest hole.
+                var newCw = cw;
+                for (var k = ccwChildren.length - 1; k >= 0; k--) {
+                    var ccw = ccwChildren[k];
+                    if (this.firstEnclosesSecond(cw, ccw)) {
+                        var temp = newCw.subtract(ccw);
+                        temp.insertAbove(compoundPath);
+                        newCw.remove();
+                        newCw = temp;
+                        ccw.remove();
+                        ccwChildren.splice(k, 1);
+                    }
+                }
+            }
         }
     }, {
         key: 'colorMatch',
@@ -26434,11 +26453,54 @@ var Blobbiness = function () {
             return false;
         }
     }, {
+        key: 'matchesAnyChild',
+        value: function matchesAnyChild(group, path) {
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = group.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var child = _step.value;
+
+                    if (child.children && this.matchesAnyChild(path, child)) {
+                        return true;
+                    }
+                    if (path === child) {
+                        return true;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }, {
         key: 'isMergeable',
         value: function isMergeable(newPath, existingPath) {
-            return existingPath instanceof _paper2.default.PathItem && // path or compound path
-            existingPath !== this.cursorPreview && // don't merge with the mouse preview
-            existingPath !== newPath; // don't merge with self
+            // Path or compound path
+            if (!(existingPath instanceof _paper2.default.PathItem)) {
+                return;
+            }
+            if (newPath.children) {
+                if (this.matchesAnyChild(newPath, existingPath)) {
+                    // Don't merge with children of self
+                    return false;
+                }
+            }
+            return existingPath !== newPath; // don't merge with self
         }
     }, {
         key: 'deactivateTool',
