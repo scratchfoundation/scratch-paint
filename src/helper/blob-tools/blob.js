@@ -248,7 +248,8 @@ class Blobbiness {
         let items = getItems({
             match: function (item) {
                 return item.selected && blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);
-            }
+            },
+            class: paper.PathItem
         });
         // Eraser didn't hit anything selected, so assume they meant to erase from all instead of from subset
         // and deselect the selection
@@ -257,7 +258,8 @@ class Blobbiness {
             items = getItems({
                 match: function (item) {
                     return blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);
-                }
+                },
+                class: paper.PathItem
             });
         }
         
@@ -288,6 +290,7 @@ class Blobbiness {
                 lastPath.remove();
                 continue;
             }
+
             // Erase
             const newPath = items[i].subtract(lastPath);
             newPath.insertBelow(items[i]);
@@ -317,47 +320,58 @@ class Blobbiness {
                 }
             }
 
-            // Divide topologically separate shapes into their own compound paths, instead of
-            // everything being stuck together.
-            // Assume that result of erase operation returns clockwise paths for positive shapes
-            const clockwiseChildren = [];
-            const ccwChildren = [];
             if (newPath.children) {
-                for (let j = newPath.children.length - 1; j >= 0; j--) {
-                    const child = newPath.children[j];
-                    if (child.isClockwise()) {
-                        clockwiseChildren.push(child);
-                    } else {
-                        ccwChildren.push(child);
-                    }
-                }
-                for (let j = 0; j < clockwiseChildren.length; j++) {
-                    const cw = clockwiseChildren[j];
-                    cw.copyAttributes(newPath);
-                    cw.fillColor = newPath.fillColor;
-                    cw.strokeColor = newPath.strokeColor;
-                    cw.strokeWidth = newPath.strokeWidth;
-                    cw.insertAbove(items[i]);
-                    
-                    // Go backward since we are deleting elements
-                    let newCw = cw;
-                    for (let k = ccwChildren.length - 1; k >= 0; k--) {
-                        const ccw = ccwChildren[k];
-                        if (this.firstEnclosesSecond(ccw, cw) || this.firstEnclosesSecond(cw, ccw)) {
-                            const temp = newCw.subtract(ccw);
-                            temp.insertAbove(newCw);
-                            newCw.remove();
-                            newCw = temp;
-                            ccw.remove();
-                            ccwChildren.splice(k, 1);
-                        }
-                    }
-                }
+                this.separateCompoundPath(newPath);
                 newPath.remove();
             }
             items[i].remove();
         }
         lastPath.remove();
+    }
+
+    separateCompoundPath (compoundPath) {
+        if (!compoundPath.isClockwise()) {
+            compoundPath.reverse();
+        }
+        // Divide topologically separate shapes into their own compound paths, instead of
+        // everything being stuck together.
+        const clockwiseChildren = [];
+        const ccwChildren = [];
+        for (let j = compoundPath.children.length - 1; j >= 0; j--) {
+            const child = compoundPath.children[j];
+            if (child.isClockwise()) {
+                clockwiseChildren.push(child);
+            } else {
+                ccwChildren.push(child);
+            }
+        }
+
+        // Sort by area smallest to largest
+        clockwiseChildren.sort((a, b) => a.area - b.area);
+        ccwChildren.sort((a, b) => Math.abs(a.area) - Math.abs(b.area));
+        // Go smallest to largest non-hole, so larger non-holes don't get the smaller pieces' holes
+        for (let j = 0; j < clockwiseChildren.length; j++) {
+            const cw = clockwiseChildren[j];
+            cw.copyAttributes(compoundPath);
+            cw.fillColor = compoundPath.fillColor;
+            cw.strokeColor = compoundPath.strokeColor;
+            cw.strokeWidth = compoundPath.strokeWidth;
+            cw.insertAbove(compoundPath);
+
+            // Go backward since we are deleting elements. Backwards is largest to smallest hole.
+            let newCw = cw;
+            for (let k = ccwChildren.length - 1; k >= 0; k--) {
+                const ccw = ccwChildren[k];
+                if (this.firstEnclosesSecond(cw, ccw)) {
+                    const temp = newCw.subtract(ccw);
+                    temp.insertAbove(compoundPath);
+                    newCw.remove();
+                    newCw = temp;
+                    ccw.remove();
+                    ccwChildren.splice(k, 1);
+                }
+            }
+        }
     }
 
     colorMatch (existingPath, addedPath) {
@@ -388,10 +402,29 @@ class Blobbiness {
         return false;
     }
 
+    matchesAnyChild (group, path) {
+        for (const child of group.children) {
+            if (child.children && this.matchesAnyChild(path, child)) {
+                return true;
+            }
+            if (path === child) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     isMergeable (newPath, existingPath) {
-        return existingPath instanceof paper.PathItem && // path or compound path
-            existingPath !== this.cursorPreview && // don't merge with the mouse preview
-            existingPath !== newPath; // don't merge with self
+        // Path or compound path
+        if (!(existingPath instanceof paper.PathItem)) {
+            return;
+        }
+        if (newPath.children) {
+            if (this.matchesAnyChild(newPath, existingPath)) { // Don't merge with children of self
+                return false;
+            }
+        }
+        return existingPath !== newPath; // don't merge with self
     }
 
     deactivateTool () {
