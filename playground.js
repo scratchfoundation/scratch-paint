@@ -19394,11 +19394,32 @@ exports.styleCursorPreview = styleCursorPreview;
 
 
 Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _minilog = __webpack_require__(156);
+
+var _minilog2 = _interopRequireDefault(_minilog);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_minilog2.default.enable();
+
+exports.default = (0, _minilog2.default)('scratch-paint');
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.CHANGE_SELECTED_ITEMS = exports.clearSelectedItems = exports.setSelectedItems = exports.default = undefined;
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -19456,7 +19477,7 @@ exports.clearSelectedItems = clearSelectedItems;
 exports.CHANGE_SELECTED_ITEMS = CHANGE_SELECTED_ITEMS;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /*
@@ -19538,7 +19559,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -19897,27 +19918,6 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _minilog = __webpack_require__(156);
-
-var _minilog2 = _interopRequireDefault(_minilog);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_minilog2.default.enable();
-
-exports.default = (0, _minilog2.default)('scratch-paint');
-
-/***/ }),
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -19988,7 +19988,7 @@ var _modes = __webpack_require__(5);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -22142,7 +22142,7 @@ exports.default = (0, _reactIntl.injectIntl)(ToolSelectComponent);
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.setupLayers = exports.getBackgroundGuideLayer = exports.getGuideLayer = undefined;
+exports.setupLayers = exports.getGuideLayer = exports.showGuideLayers = exports.hideGuideLayers = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -22152,30 +22152,96 @@ var _background = __webpack_require__(155);
 
 var _background2 = _interopRequireDefault(_background);
 
+var _log = __webpack_require__(9);
+
+var _log2 = _interopRequireDefault(_log);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var getGuideLayer = function getGuideLayer() {
-    for (var i = 0; i < _paper2.default.project.layers.length; i++) {
-        var layer = _paper2.default.project.layers[i];
-        if (layer.data && layer.data.isGuideLayer) {
-            return layer;
+var _getLayer = function _getLayer(layerString) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = _paper2.default.project.layers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var layer = _step.value;
+
+            if (layer.data && layer.data[layerString]) {
+                return layer;
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
         }
     }
 
-    // Create if it doesn't exist
-    var guideLayer = new _paper2.default.Layer();
-    guideLayer.data.isGuideLayer = true;
-    guideLayer.bringToFront();
-    return guideLayer;
+    _log2.default.error('Didn\'t find layer ' + layerString);
 };
 
-var getBackgroundGuideLayer = function getBackgroundGuideLayer() {
-    for (var i = 0; i < _paper2.default.project.layers.length; i++) {
-        var layer = _paper2.default.project.layers[i];
-        if (layer.data && layer.data.isBackgroundGuideLayer) {
-            return layer;
-        }
+var _getPaintingLayer = function _getPaintingLayer() {
+    return _getLayer('isPaintingLayer');
+};
+
+var _getBackgroundGuideLayer = function _getBackgroundGuideLayer() {
+    return _getLayer('isBackgroundGuideLayer');
+};
+
+var getGuideLayer = function getGuideLayer() {
+    return _getLayer('isGuideLayer');
+};
+
+/**
+ * Removes the guide layers, e.g. for purposes of exporting the image. Must call showGuideLayers to re-add them.
+ * @return {object} an object of the removed layers, which should be passed to showGuideLayers to re-add them.
+ */
+var hideGuideLayers = function hideGuideLayers() {
+    var backgroundGuideLayer = _getBackgroundGuideLayer();
+    var guideLayer = getGuideLayer();
+    guideLayer.remove();
+    backgroundGuideLayer.remove();
+    return {
+        guideLayer: guideLayer,
+        backgroundGuideLayer: backgroundGuideLayer
+    };
+};
+
+/**
+ * Add back the guide layers removed by calling hideGuideLayers. This must be done before any editing operations are
+ * taken in the paint editor.
+ * @param {!object} guideLayers object of the removed layers, which was returned by hideGuideLayers
+ */
+var showGuideLayers = function showGuideLayers(guideLayers) {
+    var backgroundGuideLayer = guideLayers.backgroundGuideLayer;
+    var guideLayer = guideLayers.guideLayer;
+    if (!backgroundGuideLayer.index) {
+        _paper2.default.project.addLayer(backgroundGuideLayer);
+        backgroundGuideLayer.sendToBack();
     }
+    if (!guideLayer.index) {
+        _paper2.default.project.addLayer(guideLayer);
+        guideLayer.bringToFront();
+    }
+    if (_paper2.default.project.activeLayer !== _getPaintingLayer()) {
+        _log2.default.error('Wrong active layer');
+        _log2.default.error(_paper2.default.project.activeLayer.data);
+    }
+};
+
+var _makeGuideLayer = function _makeGuideLayer() {
+    var guideLayer = new _paper2.default.Layer();
+    guideLayer.data.isGuideLayer = true;
+    return guideLayer;
 };
 
 var _makePaintingLayer = function _makePaintingLayer() {
@@ -22220,17 +22286,21 @@ var _makeBackgroundGuideLayer = function _makeBackgroundGuideLayer() {
     circle.locked = true;
 
     guideLayer.data.isBackgroundGuideLayer = true;
-    guideLayer.sendToBack();
     return guideLayer;
 };
 
 var setupLayers = function setupLayers() {
-    _makeBackgroundGuideLayer();
-    _makePaintingLayer().activate();
+    var backgroundGuideLayer = _makeBackgroundGuideLayer();
+    var paintLayer = _makePaintingLayer();
+    var guideLayer = _makeGuideLayer();
+    backgroundGuideLayer.sendToBack();
+    guideLayer.bringToFront();
+    paintLayer.activate();
 };
 
+exports.hideGuideLayers = hideGuideLayers;
+exports.showGuideLayers = showGuideLayers;
 exports.getGuideLayer = getGuideLayer;
-exports.getBackgroundGuideLayer = getBackgroundGuideLayer;
 exports.setupLayers = setupLayers;
 
 /***/ }),
@@ -22462,11 +22532,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.DEFAULT_COLOR = exports.changeFillColor = exports.default = undefined;
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _stylePath = __webpack_require__(8);
 
@@ -22571,11 +22641,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeStrokeColor = exports.default = undefined;
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _stylePath = __webpack_require__(8);
 
@@ -22629,11 +22699,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.MAX_STROKE_WIDTH = exports.changeStrokeWidth = exports.default = undefined;
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _stylePath = __webpack_require__(8);
 
@@ -22780,7 +22850,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clearHoveredItem = exports.setHoveredItem = exports.default = undefined;
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -23429,7 +23499,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clearUndoState = exports.undoSnapshot = exports.redo = exports.undo = exports.default = undefined;
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -23523,7 +23593,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clearPasteOffset = exports.incrementPasteOffset = exports.setClipboardItems = exports.default = undefined;
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -23671,7 +23741,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeBrushSize = exports.default = undefined;
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -23832,7 +23902,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeBrushSize = exports.default = undefined;
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -25646,20 +25716,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // undo functionality
 // modifed from https://github.com/memononen/stylii
 var performSnapshot = function performSnapshot(dispatchPerformSnapshot) {
-    var backgroundGuideLayer = (0, _layer.getBackgroundGuideLayer)();
-    if (backgroundGuideLayer) {
-        backgroundGuideLayer.remove();
-    }
+    var guideLayers = (0, _layer.hideGuideLayers)();
     dispatchPerformSnapshot({
         json: _paper2.default.project.exportJSON({ asString: false })
     });
-    if (backgroundGuideLayer) {
-        _paper2.default.project.addLayer(backgroundGuideLayer);
-        backgroundGuideLayer.sendToBack();
-    }
-
-    // @todo enable/disable buttons
-    // updateButtonVisibility();
+    (0, _layer.showGuideLayers)(guideLayers);
 };
 
 var _restore = function _restore(entry, setSelectedItems, onUpdateSvg) {
@@ -25702,9 +25763,6 @@ var performUndo = function performUndo(undoState, dispatchPerformUndo, setSelect
     if (undoState.pointer > 0) {
         _restore(undoState.stack[undoState.pointer - 1], setSelectedItems, onUpdateSvg);
         dispatchPerformUndo();
-
-        // @todo enable/disable buttons
-        // updateButtonVisibility();
     }
 };
 
@@ -25712,9 +25770,6 @@ var performRedo = function performRedo(undoState, dispatchPerformRedo, setSelect
     if (undoState.pointer >= 0 && undoState.pointer < undoState.stack.length - 1) {
         _restore(undoState.stack[undoState.pointer + 1], setSelectedItems, onUpdateSvg);
         dispatchPerformRedo();
-
-        // @todo enable/disable buttons
-        // updateButtonVisibility();
     }
 };
 
@@ -26015,7 +26070,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -47736,7 +47791,7 @@ var _modes = __webpack_require__(14);
 
 var _undo = __webpack_require__(42);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _clipboard = __webpack_require__(43);
 
@@ -47811,22 +47866,21 @@ var PaintEditor = function (_React$Component) {
             var oldZoom = _paper2.default.project.view.zoom;
             var oldCenter = _paper2.default.project.view.center.clone();
             (0, _view.resetZoom)();
-            // Hide guide layer
-            var guideLayer = (0, _layer.getGuideLayer)();
-            var backgroundGuideLayer = (0, _layer.getBackgroundGuideLayer)();
-            guideLayer.remove();
-            backgroundGuideLayer.remove();
+
+            var guideLayers = (0, _layer.hideGuideLayers)();
+
             var bounds = _paper2.default.project.activeLayer.bounds;
             this.props.onUpdateSvg(_paper2.default.project.exportSVG({
                 asString: true,
                 matrix: new _paper2.default.Matrix().translate(-bounds.x, -bounds.y)
             }), _paper2.default.project.view.center.x - bounds.x, _paper2.default.project.view.center.y - bounds.y);
+
+            (0, _layer.showGuideLayers)(guideLayers);
+
             if (!skipSnapshot) {
                 (0, _undo2.performSnapshot)(this.props.undoSnapshot);
             }
-            _paper2.default.project.addLayer(backgroundGuideLayer);
-            backgroundGuideLayer.sendToBack();
-            _paper2.default.project.addLayer(guideLayer);
+
             // Restore old zoom
             _paper2.default.project.view.zoom = oldZoom;
             _paper2.default.project.view.center = oldCenter;
@@ -51223,7 +51277,7 @@ var _layer = __webpack_require__(21);
 
 var _selection = __webpack_require__(4);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _view = __webpack_require__(74);
 
@@ -56934,7 +56988,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -56954,7 +57008,7 @@ if(false) {
 /* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -57077,7 +57131,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -57097,7 +57151,7 @@ if(false) {
 /* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -57170,7 +57224,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -57190,7 +57244,7 @@ if(false) {
 /* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -57248,7 +57302,7 @@ var _brushMode = __webpack_require__(45);
 
 var _modes3 = __webpack_require__(14);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _selection = __webpack_require__(4);
 
@@ -57708,7 +57762,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -57728,7 +57782,7 @@ if(false) {
 /* 180 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -57784,7 +57838,7 @@ var _blob2 = _interopRequireDefault(_blob);
 
 var _eraserMode = __webpack_require__(47);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _eraserMode2 = __webpack_require__(182);
 
@@ -61438,7 +61492,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -61458,7 +61512,7 @@ if(false) {
 /* 204 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -61486,7 +61540,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -61506,7 +61560,7 @@ if(false) {
 /* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -61549,7 +61603,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -61569,7 +61623,7 @@ if(false) {
 /* 209 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -61605,7 +61659,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -61625,7 +61679,7 @@ if(false) {
 /* 211 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -61654,7 +61708,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -61674,7 +61728,7 @@ if(false) {
 /* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -61706,7 +61760,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -61726,7 +61780,7 @@ if(false) {
 /* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -61756,7 +61810,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -61776,7 +61830,7 @@ if(false) {
 /* 217 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -61842,7 +61896,7 @@ var _strokeWidth = __webpack_require__(28);
 
 var _modes3 = __webpack_require__(14);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _lineMode = __webpack_require__(220);
 
@@ -62488,7 +62542,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -62508,7 +62562,7 @@ if(false) {
 /* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -62582,7 +62636,7 @@ var _strokeColor = __webpack_require__(27);
 
 var _modes3 = __webpack_require__(14);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _selection = __webpack_require__(4);
 
@@ -63448,7 +63502,7 @@ var _strokeColor = __webpack_require__(27);
 
 var _modes3 = __webpack_require__(14);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _selection = __webpack_require__(4);
 
@@ -63869,7 +63923,7 @@ var _modes3 = __webpack_require__(14);
 
 var _hover = __webpack_require__(31);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _selection = __webpack_require__(4);
 
@@ -64010,7 +64064,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _log = __webpack_require__(12);
+var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -64925,7 +64979,7 @@ var _modes3 = __webpack_require__(14);
 
 var _hover = __webpack_require__(31);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _selection = __webpack_require__(4);
 
@@ -65712,7 +65766,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(11)(content, options);
+var update = __webpack_require__(12)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -65732,7 +65786,7 @@ if(false) {
 /* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(10)(undefined);
+exports = module.exports = __webpack_require__(11)(undefined);
 // imports
 
 
@@ -65989,7 +66043,7 @@ var _modals = __webpack_require__(48);
 
 var _modals2 = _interopRequireDefault(_modals);
 
-var _selectedItems = __webpack_require__(9);
+var _selectedItems = __webpack_require__(10);
 
 var _selectedItems2 = _interopRequireDefault(_selectedItems);
 
