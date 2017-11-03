@@ -32,8 +32,12 @@ export default function (Input) {
         handleChange (e) {
             const isNumeric = typeof this.props.value === 'number';
             const validatesNumeric = isNumeric ? !isNaN(e.target.value) : true;
-            if (e.target.value !== null && validatesNumeric) {
-                this.props.onSubmit(Number(e.target.value));
+            if (e.target.value !== null && validatesNumeric ) {
+                let val = Number(e.target.value);
+                if (typeof this.props.max !== 'undefined' && val > this.props.max) {
+                    val = this.props.max;
+                }
+                this.props.onSubmit(val);
             }
             this.setState({value: e.target.value});
         }
@@ -52,6 +56,7 @@ export default function (Input) {
     }
 
     LiveInput.propTypes = {
+        max: PropTypes.number,
         onSubmit: PropTypes.func.isRequired,
         value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     };
