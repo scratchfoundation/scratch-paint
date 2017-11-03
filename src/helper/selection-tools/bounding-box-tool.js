@@ -70,6 +70,7 @@ class BoundingBoxTool {
      * @return {boolean} True if there was a hit, false otherwise
      */
     onMouseDown (event, clone, multiselect, hitOptions) {
+        if (event.event.button > 0) return; // only first mouse button
         const hitResults = paper.project.hitTestAll(event.point, hitOptions);
         if (!hitResults || hitResults.length === 0) {
             if (!multiselect) {
@@ -113,11 +114,11 @@ class BoundingBoxTool {
         return true;
     }
     onMouseDrag (event) {
-        if (event.event.button > 0) return; // only first mouse button
+        if (event.event.button > 0 || !this.mode) return; // only first mouse button
         this._modeMap[this.mode].onMouseDrag(event);
     }
     onMouseUp (event) {
-        if (event.event.button > 0) return; // only first mouse button
+        if (event.event.button > 0 || !this.mode) return; // only first mouse button
         this._modeMap[this.mode].onMouseUp(event);
 
         this.mode = null;

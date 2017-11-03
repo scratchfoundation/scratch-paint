@@ -24,11 +24,13 @@ class SelectionBoxTool {
         }
     }
     onMouseDrag (event) {
+        if (event.event.button > 0) return; // only first mouse button
         this.selectionRect = rectSelect(event);
         // Remove this rect on the next drag and up event
         this.selectionRect.removeOnDrag();
     }
     onMouseUp (event) {
+        if (event.event.button > 0) return; // only first mouse button
         if (this.selectionRect) {
             processRectangularSelection(event, this.selectionRect, this.mode);
             this.selectionRect.remove();
