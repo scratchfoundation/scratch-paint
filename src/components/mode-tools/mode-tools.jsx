@@ -7,7 +7,7 @@ import React from 'react';
 import {changeBrushSize} from '../../reducers/brush-mode';
 import {changeBrushSize as changeEraserSize} from '../../reducers/eraser-mode';
 
-import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
+import LiveInputHOC from '../forms/live-input-hoc.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Input from '../forms/input.jsx';
 import InputGroup from '../input-group/input-group.jsx';
@@ -28,7 +28,7 @@ import eraserIcon from '../eraser-mode/eraser.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
-const BufferedInput = BufferedInputHOC(Input);
+const LiveInput = LiveInputHOC(Input);
 const ModeToolsComponent = props => {
     const messages = defineMessages({
         brushSize: {
@@ -64,7 +64,7 @@ const ModeToolsComponent = props => {
                         src={brushIcon}
                     />
                 </div>
-                <BufferedInput
+                <LiveInput
                     small
                     max={MAX_STROKE_WIDTH}
                     min="1"
@@ -84,7 +84,7 @@ const ModeToolsComponent = props => {
                         src={eraserIcon}
                     />
                 </div>
-                <BufferedInput
+                <LiveInput
                     small
                     max={MAX_STROKE_WIDTH}
                     min="1"

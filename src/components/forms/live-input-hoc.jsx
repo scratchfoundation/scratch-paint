@@ -1,18 +1,14 @@
-/* DO NOT EDIT
-@todo This file is copied from GUI and should be pulled out into a shared library.
-See https://github.com/LLK/scratch-paint/issues/13 */
-
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 /**
- * Higher Order Component to manage inputs that submit on blur and <enter>
+ * Higher Order Component to manage inputs that submit on change and <enter>
  * @param {React.Component} Input text input that consumes onChange, onBlur, onKeyPress
- * @returns {React.Component} Buffered input that calls onSubmit on blur and <enter>
+ * @returns {React.Component} Live input that calls onSubmit on change and <enter>
  */
 export default function (Input) {
-    class BufferedInput extends React.Component {
+    class LiveInput extends React.Component {
         constructor (props) {
             super(props);
             bindAll(this, [
@@ -26,27 +22,34 @@ export default function (Input) {
         }
         handleKeyPress (e) {
             if (e.key === 'Enter') {
-                this.handleFlush();
+                this.handleChange(e);
                 e.target.blur();
             }
         }
         handleFlush () {
-            const isNumeric = typeof this.props.value === 'number';
-            const validatesNumeric = isNumeric ? !isNaN(this.state.value) : true;
-            if (this.state.value !== null && validatesNumeric) {
-                this.props.onSubmit(isNumeric ? Number(this.state.value) : this.state.value);
-            }
             this.setState({value: null});
         }
         handleChange (e) {
+            const isNumeric = typeof this.props.value === 'number';
+            const validatesNumeric = isNumeric ? !isNaN(e.target.value) : true;
+            if (e.target.value !== null && validatesNumeric ) {
+                let val = Number(e.target.value);
+                if (typeof this.props.max !== 'undefined' && val > Number(this.props.max)) {
+                    val = this.props.max;
+                }
+                if (typeof this.props.min !== 'undefined' && val < Number(this.props.min)) {
+                    val = this.props.min;
+                }
+                this.props.onSubmit(val);
+            }
             this.setState({value: e.target.value});
         }
         render () {
-            const bufferedValue = this.state.value === null ? this.props.value : this.state.value;
+            const liveValue = this.state.value === null ? this.props.value : this.state.value;
             return (
                 <Input
                     {...this.props}
-                    value={bufferedValue}
+                    value={liveValue}
                     onBlur={this.handleFlush}
                     onChange={this.handleChange}
                     onKeyPress={this.handleKeyPress}
@@ -55,10 +58,12 @@ export default function (Input) {
         }
     }
 
-    BufferedInput.propTypes = {
+    LiveInput.propTypes = {
+        max: PropTypes.number,
+        min: PropTypes.number,
         onSubmit: PropTypes.func.isRequired,
         value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     };
 
-    return BufferedInput;
+    return LiveInput;
 }
