@@ -168,12 +168,18 @@ const getColorsFromSelection = function (selectedItems) {
                 // hack bc text items with null fill can't be detected by fill-hitTest anymore
                 if (isPointTextItem(item) && item.fillColor.toCSS() === 'rgba(0,0,0,0)') {
                     itemFillColorString = null;
+                } else if (item.fillColor.type === 'gradient') {
+                    itemFillColorString = MIXED;
                 } else {
                     itemFillColorString = item.fillColor.toCSS();
                 }
             }
             if (item.strokeColor) {
-                itemStrokeColorString = item.strokeColor.toCSS();
+                if (item.strokeColor.type === 'gradient') {
+                    itemStrokeColorString = MIXED;
+                } else {
+                    itemStrokeColorString = item.strokeColor.toCSS();
+                }
             }
             // check every style against the first of the items
             if (firstChild) {
