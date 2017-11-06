@@ -49,8 +49,18 @@ const sortItemsByZIndex = function (a, b) {
     return null;
 };
 
+// Expand the size of the path by approx one pixel all around
+const expandByOne = function (path) {
+    const center = path.position;
+    for (const seg of path.segments) {
+        const norm = seg.point.subtract(center).normalize();
+        seg.point = seg.point.add(norm);
+    }
+};
+
 export {
     checkPointsClose,
+    expandByOne,
     getRandomInt,
     getRandomBoolean,
     snapDeltaToAngle,

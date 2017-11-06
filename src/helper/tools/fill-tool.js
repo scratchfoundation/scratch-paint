@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
 import {getHoveredItem} from '../hover';
+import {expandByOne} from '../math';
 
 class FillTool extends paper.Tool {
     static get TOLERANCE () {
@@ -86,6 +87,8 @@ class FillTool extends paper.Tool {
             this.fillItem = item;
             if (item.parent instanceof paper.CompoundPath && item.area < 0) { // hole
                 this.addedFillItem = item.clone();
+                // This usually fixes it so there isn't a teeny tiny gap in between the fill and the outline
+                expandByOne(this.addedFillItem);
                 this.addedFillItem.insertAbove(item.parent);
             } else if (this.fillItem.parent instanceof paper.CompoundPath) {
                 this.fillItemOrigColor = item.parent.fillColor;
@@ -100,6 +103,8 @@ class FillTool extends paper.Tool {
         if (this.fillItem) {
             // if the hole we're filling in is the same color as the parent, remove the hole
             if (this.addedFillItem &&
+                    this.addedFillItem.fillColor !== null &&
+                    this.addedFillItem.fillColor.type !== 'gradient' &&
                     this.fillItem.parent.fillColor.toCSS() === this.addedFillItem.fillColor.toCSS()) {
                 this.addedFillItem.remove();
                 this.fillItem.remove();
