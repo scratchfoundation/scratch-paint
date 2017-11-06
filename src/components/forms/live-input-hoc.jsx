@@ -32,7 +32,7 @@ export default function (Input) {
         handleChange (e) {
             const isNumeric = typeof this.props.value === 'number';
             const validatesNumeric = isNumeric ? !isNaN(e.target.value) : true;
-            if (e.target.value !== null && validatesNumeric ) {
+            if (e.target.value !== null && validatesNumeric) {
                 let val = Number(e.target.value);
                 if (typeof this.props.max !== 'undefined' && val > Number(this.props.max)) {
                     val = this.props.max;
