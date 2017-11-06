@@ -121,7 +121,6 @@ class BoundingBoxTool {
         this._modeMap[this.mode].onMouseUp(event);
 
         this.mode = null;
-        this.setSelectionBounds();
     }
     setSelectionBounds () {
         this.removeBoundsPath();

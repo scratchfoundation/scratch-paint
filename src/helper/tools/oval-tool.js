@@ -18,6 +18,7 @@ class OvalTool extends paper.Tool {
      */
     constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
         super();
+        this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateSvg = onUpdateSvg;
         this.prevHoveredItemId = null;
@@ -116,7 +117,7 @@ class OvalTool extends paper.Tool {
                 this.oval = null;
 
                 ovalPath.selected = true;
-                this.boundingBoxTool.setSelectionBounds();
+                this.setSelectedItems();
                 this.onUpdateSvg();
             }
         }
