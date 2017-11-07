@@ -26072,6 +26072,7 @@ var Blobbiness = function () {
             this.tool = new _paper2.default.Tool();
             this.cursorPreviewLastPoint = new _paper2.default.Point(-10000, -10000);
             this.setOptions(options);
+            this.tool.active = false;
             this.tool.fixedDistance = 1;
 
             var blob = this;
@@ -26085,6 +26086,7 @@ var Blobbiness = function () {
             this.tool.onMouseDown = function (event) {
                 blob.resizeCursorIfNeeded(event.point);
                 if (event.event.button > 0) return; // only first mouse button
+                this.active = true;
 
                 if (blob.options.brushSize < Blobbiness.THRESHOLD) {
                     blob.brush = Blobbiness.BROAD;
@@ -26100,7 +26102,7 @@ var Blobbiness = function () {
 
             this.tool.onMouseDrag = function (event) {
                 blob.resizeCursorIfNeeded(event.point);
-                if (event.event.button > 0) return; // only first mouse button
+                if (event.event.button > 0 || !this.active) return; // only first mouse button
                 if (blob.brush === Blobbiness.BROAD) {
                     blob.broadBrushHelper.onBroadMouseDrag(event, blob.tool, blob.options);
                 } else if (blob.brush === Blobbiness.SEGMENT) {
@@ -26116,7 +26118,7 @@ var Blobbiness = function () {
 
             this.tool.onMouseUp = function (event) {
                 blob.resizeCursorIfNeeded(event.point);
-                if (event.event.button > 0) return; // only first mouse button
+                if (event.event.button > 0 || !this.active) return; // only first mouse button
 
                 var lastPath = void 0;
                 if (blob.brush === Blobbiness.BROAD) {
@@ -26142,6 +26144,7 @@ var Blobbiness = function () {
                 // Reset
                 blob.brush = null;
                 this.fixedDistance = 1;
+                this.active = false;
             };
             this.tool.activate();
         }
@@ -62159,6 +62162,7 @@ var LineMode = function (_React$Component) {
                 this.props.onChangeStrokeWidth(1);
             }
             this.tool = new _paper2.default.Tool();
+            this.active = false;
 
             this.path = null;
             this.hitResult = null;
@@ -62186,6 +62190,7 @@ var LineMode = function (_React$Component) {
         key: 'onMouseDown',
         value: function onMouseDown(event) {
             if (event.event.button > 0) return; // only first mouse button
+            this.active = true;
 
             // If you click near a point, continue that line instead of making a new line
             this.hitResult = (0, _snapping.endPointHit)(event.point, LineMode.SNAP_TOLERANCE);
@@ -62235,7 +62240,7 @@ var LineMode = function (_React$Component) {
     }, {
         key: 'onMouseDrag',
         value: function onMouseDrag(event) {
-            if (event.event.button > 0) return; // only first mouse button
+            if (event.event.button > 0 || !this.active) return; // only first mouse button
 
             // If near another path's endpoint, or this path's beginpoint, clip to it to suggest
             // joining/closing the paths.
@@ -62265,7 +62270,7 @@ var LineMode = function (_React$Component) {
     }, {
         key: 'onMouseUp',
         value: function onMouseUp(event) {
-            if (event.event.button > 0) return; // only first mouse button
+            if (event.event.button > 0 || !this.active) return; // only first mouse button
 
             // If I single clicked, don't do anything
             if (this.path.segments.length < 2 || this.path.segments.length === 2 && (0, _snapping.touching)(this.path.firstSegment.point, event.point, LineMode.SNAP_TOLERANCE) && !this.hitResult) {
@@ -62302,6 +62307,7 @@ var LineMode = function (_React$Component) {
                 this.props.onUpdateSvg();
                 this.path = null;
             }
+            this.active = false;
         }
     }, {
         key: 'deactivateTool',
@@ -63051,6 +63057,7 @@ var OvalTool = function (_paper$Tool) {
         _this.oval = null;
         _this.colorState = null;
         _this.isBoundingBoxMode = null;
+        _this.active = false;
         return _this;
     }
 
@@ -63087,6 +63094,9 @@ var OvalTool = function (_paper$Tool) {
     }, {
         key: 'handleMouseDown',
         value: function handleMouseDown(event) {
+            if (event.event.button > 0) return; // only first mouse button
+            this.active = true;
+
             if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions())) {
                 this.isBoundingBoxMode = true;
             } else {
@@ -63102,7 +63112,7 @@ var OvalTool = function (_paper$Tool) {
     }, {
         key: 'handleMouseDrag',
         value: function handleMouseDrag(event) {
-            if (event.event.button > 0) return; // only first mouse button
+            if (event.event.button > 0 || !this.active) return; // only first mouse button
 
             if (this.isBoundingBoxMode) {
                 this.boundingBoxTool.onMouseDrag(event);
@@ -63125,7 +63135,7 @@ var OvalTool = function (_paper$Tool) {
     }, {
         key: 'handleMouseUp',
         value: function handleMouseUp(event) {
-            if (event.event.button > 0) return; // only first mouse button
+            if (event.event.button > 0 || !this.active) return; // only first mouse button
 
             if (this.isBoundingBoxMode) {
                 this.boundingBoxTool.onMouseUp(event);
@@ -63148,6 +63158,7 @@ var OvalTool = function (_paper$Tool) {
                     this.onUpdateSvg();
                 }
             }
+            this.active = false;
         }
     }, {
         key: 'deactivateTool',
@@ -63916,6 +63927,7 @@ var RectTool = function (_paper$Tool) {
         _this.rect = null;
         _this.colorState = null;
         _this.isBoundingBoxMode = null;
+        _this.active = false;
         return _this;
     }
 
@@ -63952,6 +63964,9 @@ var RectTool = function (_paper$Tool) {
     }, {
         key: 'handleMouseDown',
         value: function handleMouseDown(event) {
+            if (event.event.button > 0) return; // only first mouse button
+            this.active = true;
+
             if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions())) {
                 this.isBoundingBoxMode = true;
             } else {
@@ -63962,7 +63977,7 @@ var RectTool = function (_paper$Tool) {
     }, {
         key: 'handleMouseDrag',
         value: function handleMouseDrag(event) {
-            if (event.event.button > 0) return; // only first mouse button
+            if (event.event.button > 0 || !this.active) return; // only first mouse button
 
             if (this.isBoundingBoxMode) {
                 this.boundingBoxTool.onMouseDrag(event);
@@ -63988,7 +64003,7 @@ var RectTool = function (_paper$Tool) {
     }, {
         key: 'handleMouseUp',
         value: function handleMouseUp(event) {
-            if (event.event.button > 0) return; // only first mouse button
+            if (event.event.button > 0 || !this.active) return; // only first mouse button
 
             if (this.isBoundingBoxMode) {
                 this.boundingBoxTool.onMouseUp(event);
@@ -64008,6 +64023,7 @@ var RectTool = function (_paper$Tool) {
                     this.rect = null;
                 }
             }
+            this.active = false;
         }
     }, {
         key: 'deactivateTool',
@@ -64348,6 +64364,7 @@ var ReshapeTool = function (_paper$Tool) {
         _this.onUpdateSvg = onUpdateSvg;
         _this.prevHoveredItemId = null;
         _this.lastEvent = null;
+        _this.active = false;
         _this.mode = ReshapeModes.SELECTION_BOX;
         _this._modeMap = {};
         _this._modeMap[ReshapeModes.FILL] = new _moveTool2.default(_modes2.default.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateSvg);
@@ -64436,6 +64453,7 @@ var ReshapeTool = function (_paper$Tool) {
         key: 'handleMouseDown',
         value: function handleMouseDown(event) {
             if (event.event.button > 0) return; // only first mouse button
+            this.active = true;
             this.clearHoveredItem();
 
             // Check if double clicked
@@ -64519,15 +64537,16 @@ var ReshapeTool = function (_paper$Tool) {
     }, {
         key: 'handleMouseDrag',
         value: function handleMouseDrag(event) {
-            if (event.event.button > 0 || !this.mode) return; // only first mouse button
+            if (event.event.button > 0 || !this.active) return; // only first mouse button
             this._modeMap[this.mode].onMouseDrag(event);
         }
     }, {
         key: 'handleMouseUp',
         value: function handleMouseUp(event) {
-            if (event.event.button > 0 || !this.mode) return; // only first mouse button
+            if (event.event.button > 0 || !this.active) return; // only first mouse button
             this._modeMap[this.mode].onMouseUp(event);
             this.mode = ReshapeModes.SELECTION_BOX;
+            this.active = false;
         }
     }, {
         key: 'deactivateTool',
@@ -65374,6 +65393,7 @@ var SelectTool = function (_paper$Tool) {
         _this.selectionBoxTool = new _selectionBoxTool2.default(_modes2.default.SELECT, setSelectedItems, clearSelectedItems);
         _this.selectionBoxMode = false;
         _this.prevHoveredItemId = null;
+        _this.active = false;
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -65440,6 +65460,7 @@ var SelectTool = function (_paper$Tool) {
         key: 'handleMouseDown',
         value: function handleMouseDown(event) {
             if (event.event.button > 0) return; // only first mouse button
+            this.active = true;
 
             // If bounding box tool does not find an item that was hit, use selection box tool.
             this.clearHoveredItem();
@@ -65462,7 +65483,7 @@ var SelectTool = function (_paper$Tool) {
     }, {
         key: 'handleMouseDrag',
         value: function handleMouseDrag(event) {
-            if (event.event.button > 0) return; // only first mouse button
+            if (event.event.button > 0 || !this.active) return; // only first mouse button
 
             if (this.selectionBoxMode) {
                 this.selectionBoxTool.onMouseDrag(event);
@@ -65473,7 +65494,7 @@ var SelectTool = function (_paper$Tool) {
     }, {
         key: 'handleMouseUp',
         value: function handleMouseUp(event) {
-            if (event.event.button > 0) return; // only first mouse button
+            if (event.event.button > 0 || !this.active) return; // only first mouse button
 
             if (this.selectionBoxMode) {
                 this.selectionBoxTool.onMouseUp(event);
@@ -65482,6 +65503,7 @@ var SelectTool = function (_paper$Tool) {
                 this.boundingBoxTool.onMouseUp(event);
             }
             this.selectionBoxMode = false;
+            this.active = false;
         }
     }, {
         key: 'deactivateTool',
