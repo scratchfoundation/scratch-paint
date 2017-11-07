@@ -33,6 +33,10 @@
     padding-right: calc(3 * $grid-unit);
 }
 
+.mod-unselect {
+    user-select: none;
+}
+
 .mod-labeled-icon-height {
     height: 2.85rem; /* for the second row so the dashed borders are equal in size */
 }
@@ -72,6 +76,42 @@ $border-radius: 0.25rem;
     vertical-align: middle;
 }
 
+.mod-context-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.mod-top-divider {
+    border-top: 1px solid $ui-pane-border;
+}
+
+.mod-menu-item {
+    display: flex;
+    margin: 0 -$grid-unit;
+    min-width: 6.25rem;
+    padding: calc(3 * $grid-unit);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: 0.1s ease;
+    align-items: center;
+}
+
+.mod-disabled {
+    cursor: auto;
+}
+
+.mod-menu-item:hover {
+    background: $motion-transparent;
+}
+
+.mod-disabled:hover {
+    background-color: transparent;
+}
+
+.menu-item-icon {
+    margin-right: calc(2* $grid-unit);
+}
+
 .mod-mode-tools {
     margin-left: calc(3 * $grid-unit);
 }
@@ -89,7 +129,7 @@ $border-radius: 0.25rem;
 .mode-selector {
     display: flex;
     margin-right: calc(2 * $grid-unit);
-    max-width: 5.5rem;
+    max-width: 6rem;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
@@ -100,4 +140,11 @@ $border-radius: 0.25rem;
 .zoom-controls {
     display: flex;
     flex-direction: row-reverse;
+}
+
+@media only screen and (max-width: 1095px) {
+    .mode-selector {
+        flex-direction: column;
+        justify-content: flex-start;
+    }
 }
