@@ -2,7 +2,7 @@ import paper from '@scratch/paper';
 import log from '../../log/log';
 import keyMirror from 'keymirror';
 
-import Modes from '../../modes/modes';
+import Modes from '../../lib/modes';
 import {getHoveredItem} from '../hover';
 import {getRootItem, isPGTextItem} from '../item';
 import MoveTool from './move-tool';

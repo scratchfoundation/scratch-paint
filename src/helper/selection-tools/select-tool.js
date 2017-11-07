@@ -1,4 +1,4 @@
-import Modes from '../../modes/modes';
+import Modes from '../../lib/modes';
 
 import {getHoveredItem} from '../hover';
 import {selectRootItem} from '../selection';

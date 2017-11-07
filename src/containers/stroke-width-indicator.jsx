@@ -5,7 +5,7 @@ import bindAll from 'lodash.bindall';
 import {changeStrokeWidth} from '../reducers/stroke-width';
 import StrokeWidthIndicatorComponent from '../components/stroke-width-indicator.jsx';
 import {applyStrokeWidthToSelection} from '../helper/style-path';
-import Modes from '../modes/modes';
+import Modes from '../lib/modes';
 
 class StrokeWidthIndicator extends React.Component {
     constructor (props) {
