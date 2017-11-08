@@ -11,7 +11,6 @@ const LiveInput = LiveInputHOC(Input);
 const StrokeWidthIndicatorComponent = props => (
     <InputGroup disabled={props.disabled}>
         <LiveInput
-            small
             disabled={props.disabled}
             max={MAX_STROKE_WIDTH}
             min="0"
