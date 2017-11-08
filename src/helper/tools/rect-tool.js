@@ -18,6 +18,7 @@ class RectTool extends paper.Tool {
      */
     constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
         super();
+        this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateSvg = onUpdateSvg;
         this.prevHoveredItemId = null;
@@ -108,7 +109,7 @@ class RectTool extends paper.Tool {
                 this.rect = null;
             } else {
                 this.rect.selected = true;
-                this.boundingBoxTool.setSelectionBounds();
+                this.setSelectedItems();
                 this.onUpdateSvg();
                 this.rect = null;
             }
