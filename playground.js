@@ -51554,7 +51554,7 @@ PaperCanvas.propTypes = {
     clearPasteOffset: _propTypes2.default.func.isRequired,
     clearSelectedItems: _propTypes2.default.func.isRequired,
     clearUndo: _propTypes2.default.func.isRequired,
-    mode: _propTypes2.default.oneOf(Object.values(_modes2.default)),
+    mode: _propTypes2.default.oneOf(Object.keys(_modes2.default)),
     onUpdateSvg: _propTypes2.default.func.isRequired,
     rotationCenterX: _propTypes2.default.number,
     rotationCenterY: _propTypes2.default.number,
