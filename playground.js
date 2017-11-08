@@ -24286,7 +24286,6 @@ var BoundingBoxTool = function () {
             this._modeMap[this.mode].onMouseUp(event);
 
             this.mode = null;
-            this.setSelectionBounds();
         }
     }, {
         key: 'setSelectionBounds',
@@ -63045,6 +63044,7 @@ var OvalTool = function (_paper$Tool) {
 
         var _this = _possibleConstructorReturn(this, (OvalTool.__proto__ || Object.getPrototypeOf(OvalTool)).call(this));
 
+        _this.setSelectedItems = setSelectedItems;
         _this.clearSelectedItems = clearSelectedItems;
         _this.onUpdateSvg = onUpdateSvg;
         _this.prevHoveredItemId = null;
@@ -63157,7 +63157,7 @@ var OvalTool = function (_paper$Tool) {
                     this.oval = null;
 
                     ovalPath.selected = true;
-                    this.boundingBoxTool.setSelectionBounds();
+                    this.setSelectedItems();
                     this.onUpdateSvg();
                 }
             }
@@ -63868,6 +63868,7 @@ var RectTool = function (_paper$Tool) {
 
         var _this = _possibleConstructorReturn(this, (RectTool.__proto__ || Object.getPrototypeOf(RectTool)).call(this));
 
+        _this.setSelectedItems = setSelectedItems;
         _this.clearSelectedItems = clearSelectedItems;
         _this.onUpdateSvg = onUpdateSvg;
         _this.prevHoveredItemId = null;
@@ -63973,7 +63974,7 @@ var RectTool = function (_paper$Tool) {
                     this.rect = null;
                 } else {
                     this.rect.selected = true;
-                    this.boundingBoxTool.setSelectionBounds();
+                    this.setSelectedItems();
                     this.onUpdateSvg();
                     this.rect = null;
                 }
@@ -65359,7 +65360,6 @@ var SelectTool = function (_paper$Tool) {
 
         (0, _selection.selectRootItem)();
         setSelectedItems();
-        _this.boundingBoxTool.setSelectionBounds();
         return _this;
     }
     /**
@@ -65453,7 +65453,6 @@ var SelectTool = function (_paper$Tool) {
 
             if (this.selectionBoxMode) {
                 this.selectionBoxTool.onMouseUp(event);
-                this.boundingBoxTool.setSelectionBounds();
             } else {
                 this.boundingBoxTool.onMouseUp(event);
             }
