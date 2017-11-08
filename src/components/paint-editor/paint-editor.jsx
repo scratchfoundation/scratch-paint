@@ -307,7 +307,10 @@ class PaintEditorComponent extends React.Component {
                                 />
                             </InputGroup>
                             <InputGroup className={styles.modModeTools}>
-                                <ModeToolsComponent />
+                                <ModeToolsComponent
+                                    onCopyToClipboard={this.props.onCopyToClipboard}        
+                                    onPasteFromClipboard={this.props.onPasteFromClipboard}
+                                />
                             </InputGroup>
                         </div>
                     </div>
