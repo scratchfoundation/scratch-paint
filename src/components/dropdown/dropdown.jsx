@@ -4,8 +4,6 @@ import Popover from 'react-popover';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Button from '../button/button.jsx';
-
 import styles from './dropdown.css';
 
 import dropdownIcon from './dropdown-caret.svg';
@@ -14,19 +12,19 @@ class Dropdown extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'closePopover',
-            'toggleOpenState'
+            'handleClosePopover',
+            'handleToggleOpenState'
         ]);
         this.state = {
             isOpen: false
         };
     }
-    closePopover () {
+    handleClosePopover () {
         this.setState({
             isOpen: false
         });
     }
-    toggleOpenState () {
+    handleToggleOpenState () {
         this.setState({
             isOpen: !this.state.isOpen
         });
@@ -37,7 +35,7 @@ class Dropdown extends React.Component {
                 body={this.props.popoverContent}
                 isOpen={this.state.isOpen}
                 preferPlace="below"
-                onOuterAction={this.closePopover}
+                onOuterAction={this.handleClosePopover}
                 {...this.props}
             >
                 <div
@@ -45,7 +43,7 @@ class Dropdown extends React.Component {
                         [styles.modOpen]: this.state.isOpen,
                         [styles.modClosed]: !this.state.isOpen
                     })}
-                    onClick={this.toggleOpenState}
+                    onClick={this.handleToggleOpenState}
                 >
                     {this.props.children}
                     <img
