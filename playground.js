@@ -16847,7 +16847,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var getItems = function getItems(options) {
     var newMatcher = function newMatcher(item) {
-        return !item.locked && !(item.data && item.data.isHelperItem) && (!options.match || options.match(item));
+        return !(item instanceof _paper2.default.Layer) && !item.locked && !(item.data && item.data.isHelperItem) && (!options.match || options.match(item));
     };
     var newOptions = _extends({}, options, { match: newMatcher });
     return _paper2.default.project.getItems(newOptions);
@@ -22943,7 +22943,7 @@ exports.document = DOCUMENT;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.setDefaultGuideStyle = exports.getGuideColor = exports.removeHitPoint = exports.drawHitPoint = exports.removeHelperItems = exports.removeAllGuides = exports.rectSelect = exports.hoverBounds = exports.hoverItem = undefined;
+exports.setDefaultGuideStyle = exports.getGuideColor = exports.removeHitPoint = exports.drawHitPoint = exports.removeBoundsPath = exports.removeAllGuides = exports.rectSelect = exports.hoverBounds = exports.hoverItem = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -23119,8 +23119,8 @@ var _removePaperItemsByTags = function _removePaperItemsByTags(tags) {
     }
 };
 
-var removeHelperItems = function removeHelperItems() {
-    _removePaperItemsByDataTags(['isHelperItem']);
+var removeBoundsPath = function removeBoundsPath() {
+    _removePaperItemsByDataTags(['isSelectionBound', 'isRotHandle', 'isScaleHandle']);
 };
 
 var removeAllGuides = function removeAllGuides() {
@@ -23147,7 +23147,7 @@ exports.hoverItem = hoverItem;
 exports.hoverBounds = hoverBounds;
 exports.rectSelect = rectSelect;
 exports.removeAllGuides = removeAllGuides;
-exports.removeHelperItems = removeHelperItems;
+exports.removeBoundsPath = removeBoundsPath;
 exports.drawHitPoint = drawHitPoint;
 exports.removeHitPoint = removeHitPoint;
 exports.getGuideColor = getGuideColor;
@@ -24264,12 +24264,12 @@ var BoundingBoxTool = function () {
             if (this.mode === BoundingBoxModes.MOVE) {
                 this._modeMap[this.mode].onMouseDown(hitProperties);
             } else if (this.mode === BoundingBoxModes.SCALE) {
-                this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, this.boundsScaleHandles, this.boundsRotHandles, (0, _selection.getSelectedRootItems)());
+                this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, (0, _selection.getSelectedRootItems)());
             } else if (this.mode === BoundingBoxModes.ROTATE) {
                 this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, (0, _selection.getSelectedRootItems)());
             }
 
-            // while transforming object, never show the bounds stuff
+            // while transforming, don't show bounds
             this.removeBoundsPath();
             return true;
         }
@@ -24337,7 +24337,6 @@ var BoundingBoxTool = function () {
             this.boundsPath.data.isSelectionBound = true;
             this.boundsPath.data.isHelperItem = true;
             this.boundsPath.fillColor = null;
-            this.boundsPath.strokeScaling = false;
             this.boundsPath.fullySelected = true;
             this.boundsPath.parent = (0, _layer.getGuideLayer)();
 
@@ -24391,7 +24390,7 @@ var BoundingBoxTool = function () {
     }, {
         key: 'removeBoundsPath',
         value: function removeBoundsPath() {
-            (0, _guides.removeHelperItems)();
+            (0, _guides.removeBoundsPath)();
             this.boundsPath = null;
             this.boundsScaleHandles.length = 0;
             this.boundsRotHandles.length = 0;
@@ -63216,101 +63215,58 @@ var ScaleTool = function () {
         this.origSize = null;
         this.origCenter = null;
         this.itemGroup = null;
-        this.boundsPath = null;
         // Lowest item above all scale items in z index
         this.itemToInsertBelow = null;
-        this.scaleItems = [];
-        this.boundsScaleHandles = [];
-        this.boundsRotHandles = [];
         this.onUpdateSvg = onUpdateSvg;
     }
 
     /**
      * @param {!paper.HitResult} hitResult Data about the location of the mouse click
      * @param {!object} boundsPath Where the boundaries of the hit item are
-     * @param {!object} boundsScaleHandles Bounding box scale handles
-     * @param {!object} boundsRotHandles Bounding box rotation handle
      * @param {!Array.<paper.Item>} selectedItems Set of selected paper.Items
-     * @param {boolean} clone Whether to clone on mouse down (e.g. alt key held)
-     * @param {boolean} multiselect Whether to multiselect on mouse down (e.g. shift key held)
      */
 
 
     _createClass(ScaleTool, [{
         key: 'onMouseDown',
-        value: function onMouseDown(hitResult, boundsPath, boundsScaleHandles, boundsRotHandles, selectedItems) {
+        value: function onMouseDown(hitResult, boundsPath, selectedItems) {
             var index = hitResult.item.data.index;
-            this.boundsPath = boundsPath;
-            this.boundsScaleHandles = boundsScaleHandles;
-            this.boundsRotHandles = boundsRotHandles;
-            this.pivot = this.boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
-            this.origPivot = this.boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
-            this.corner = this.boundsPath.bounds[this._getRectCornerNameByIndex(index)].clone();
+            this.pivot = boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
+            this.origPivot = boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
+            this.corner = boundsPath.bounds[this._getRectCornerNameByIndex(index)].clone();
             this.origSize = this.corner.subtract(this.pivot);
-            this.origCenter = this.boundsPath.bounds.center;
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            this.origCenter = boundsPath.bounds.center;
+            this.centered = false;
+            this.lastSx = 1;
+            this.lastSy = 1;
 
-            try {
-                for (var _iterator = selectedItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var item = _step.value;
-
-                    // Scale only root items
-                    if (item.parent instanceof _paper2.default.Layer) {
-                        this.scaleItems.push(item);
-                    }
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-        }
-    }, {
-        key: 'onMouseDrag',
-        value: function onMouseDrag(event) {
-            var scaleTool = this;
-            var modOrigSize = this.origSize;
-
+            // Set itemGroup
             // get item to insert below so that scaled items stay in same z position
             var items = (0, _selection.getItems)({
                 match: function match(item) {
-                    if (item instanceof _paper2.default.Layer) {
-                        return false;
-                    }
-                    var _iteratorNormalCompletion2 = true;
-                    var _didIteratorError2 = false;
-                    var _iteratorError2 = undefined;
+                    var _iteratorNormalCompletion = true;
+                    var _didIteratorError = false;
+                    var _iteratorError = undefined;
 
                     try {
-                        for (var _iterator2 = scaleTool.scaleItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                            var scaleItem = _step2.value;
+                        for (var _iterator = selectedItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                            var scaleItem = _step.value;
 
                             if (!scaleItem.isBelow(item)) {
                                 return false;
                             }
                         }
                     } catch (err) {
-                        _didIteratorError2 = true;
-                        _iteratorError2 = err;
+                        _didIteratorError = true;
+                        _iteratorError = err;
                     } finally {
                         try {
-                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                                _iterator2.return();
+                            if (!_iteratorNormalCompletion && _iterator.return) {
+                                _iterator.return();
                             }
                         } finally {
-                            if (_didIteratorError2) {
-                                throw _iteratorError2;
+                            if (_didIteratorError) {
+                                throw _iteratorError;
                             }
                         }
                     }
@@ -63322,17 +63278,28 @@ var ScaleTool = function () {
                 this.itemToInsertBelow = items[0];
             }
 
-            this.itemGroup = new _paper2.default.Group(this.scaleItems);
+            this.itemGroup = new _paper2.default.Group(selectedItems);
             this.itemGroup.insertBelow(this.itemToInsertBelow);
-            this.itemGroup.addChild(this.boundsPath);
             this.itemGroup.data.isHelperItem = true;
-            this.itemGroup.strokeScaling = false;
-            this.itemGroup.applyMatrix = false;
+        }
+    }, {
+        key: 'onMouseDrag',
+        value: function onMouseDrag(event) {
+            var modOrigSize = this.origSize;
 
             if (event.modifiers.alt) {
+                this.centered = true;
+                this.itemGroup.position = this.origCenter;
                 this.pivot = this.origCenter;
                 this.modOrigSize = this.origSize * 0.5;
             } else {
+                if (this.centered) {
+                    // Reset position if we were just in alt
+                    this.centered = false;
+                    this.itemGroup.scale(1 / this.lastSx, 1 / this.lastSy, this.pivot);
+                    this.lastSx = 1;
+                    this.lastSy = 1;
+                }
                 this.pivot = this.origPivot;
             }
 
@@ -63354,22 +63321,9 @@ var ScaleTool = function () {
                 sx *= signx;
                 sy *= signy;
             }
-
-            this.itemGroup.scale(sx, sy, this.pivot);
-
-            for (var i = 0; i < this.boundsScaleHandles.length; i++) {
-                var handle = this.boundsScaleHandles[i];
-                handle.position = this.itemGroup.bounds[this._getRectCornerNameByIndex(i)];
-                handle.bringToFront();
-            }
-
-            for (var _i = 0; _i < this.boundsRotHandles.length; _i++) {
-                var _handle = this.boundsRotHandles[_i];
-                if (_handle) {
-                    _handle.position = this.itemGroup.bounds[this._getRectCornerNameByIndex(_i)] + _handle.data.offset;
-                    _handle.bringToFront();
-                }
-            }
+            this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
+            this.lastSx = sx;
+            this.lastSy = sy;
         }
     }, {
         key: 'onMouseUp',
@@ -63379,16 +63333,13 @@ var ScaleTool = function () {
             this.corner = null;
             this.origSize = null;
             this.origCenter = null;
-            this.scaleItems.length = 0;
-            this.boundsPath = null;
-            this.boundsScaleHandles = [];
-            this.boundsRotHandles = [];
+            this.lastSx = 1;
+            this.lastSy = 1;
+            this.centered = false;
 
             if (!this.itemGroup) {
                 return;
             }
-
-            this.itemGroup.applyMatrix = true;
 
             // mark text items as scaled (for later use on font size calc)
             for (var i = 0; i < this.itemGroup.children.length; i++) {
@@ -63400,8 +63351,8 @@ var ScaleTool = function () {
 
             if (this.itemToInsertBelow) {
                 // No increment step because itemGroup.children is getting depleted
-                for (var _i2 = 0; _i2 < this.itemGroup.children.length;) {
-                    this.itemGroup.children[_i2].insertBelow(this.itemToInsertBelow);
+                for (var _i = 0; _i < this.itemGroup.children.length;) {
+                    this.itemGroup.children[_i].insertBelow(this.itemToInsertBelow);
                 }
                 this.itemToInsertBelow = null;
             } else if (this.itemGroup.layer) {
