@@ -26158,29 +26158,26 @@ var Blobbiness = function () {
             if (!this.options) {
                 return;
             }
-
-            if (typeof point === 'undefined') {
-                point = this.cursorPreviewLastPoint;
-            } else {
+            if (this.cursorPreview && this.cursorPreview.parent && this.brushSize === this.options.brushSize && this.fillColor === this.options.fillColor && this.strokeColor === this.options.strokeColor && this.cursorPreviewLastPoint.equals(point)) {
+                return;
+            }
+            if (typeof point !== 'undefined') {
                 this.cursorPreviewLastPoint = point;
             }
 
-            if (this.cursorPreview && this.cursorPreview.parent && this.brushSize === this.options.brushSize && this.fillColor === this.options.fillColor && this.strokeColor === this.options.strokeColor) {
-                return;
+            if (!this.cursorPreview) {
+                this.cursorPreview = new _paper2.default.Shape.Ellipse({
+                    point: this.cursorPreviewLastPoint,
+                    size: this.options.brushSize / 2
+                });
+                this.cursorPreview.parent = (0, _layer.getGuideLayer)();
+                this.cursorPreview.data.isHelperItem = true;
             }
-            var newPreview = new _paper2.default.Path.Circle({
-                center: point,
-                radius: this.options.brushSize / 2
-            });
-            newPreview.parent = (0, _layer.getGuideLayer)();
-            newPreview.data.isHelperItem = true;
-            if (this.cursorPreview) {
-                this.cursorPreview.remove();
-            }
+            this.cursorPreview.position = this.cursorPreviewLastPoint;
+            this.cursorPreview.radius = this.options.brushSize / 2;
             this.brushSize = this.options.brushSize;
             this.fillColor = this.options.fillColor;
             this.strokeColor = this.options.strokeColor;
-            this.cursorPreview = newPreview;
             (0, _stylePath.styleCursorPreview)(this.cursorPreview, this.options);
         }
     }, {
