@@ -94,6 +94,7 @@ $border-radius: 0.25rem;
     cursor: pointer;
     transition: 0.1s ease;
     align-items: center;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 
 .mod-disabled {
