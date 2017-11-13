@@ -150,9 +150,9 @@ class PaperCanvas extends React.Component {
         return (
             <canvas
                 className={styles.paperCanvas}
-                height="400px"
+                height="360px"
                 ref={this.setCanvas}
-                width="500px"
+                width="480px"
                 onWheel={this.handleWheel}
             />
         );

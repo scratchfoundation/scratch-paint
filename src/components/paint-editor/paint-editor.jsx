@@ -122,13 +122,22 @@ class PaintEditorComponent extends React.Component {
                         <div className={styles.row}>
                             {/* Name field */}
                             <InputGroup>
-                                <Label text={this.props.intl.formatMessage(messages.costume)}>
+                                <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
+                                    <Label text={this.props.intl.formatMessage(messages.costume)}>
+                                        <BufferedInput
+                                            type="text"
+                                            value={this.props.name}
+                                            onSubmit={this.props.onUpdateName}
+                                        />
+                                    </Label>
+                                </MediaQuery>
+                                <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
                                     <BufferedInput
                                         type="text"
                                         value={this.props.name}
                                         onSubmit={this.props.onUpdateName}
                                     />
-                                </Label>
+                                </MediaQuery>
                             </InputGroup>
 
                             {/* Undo/Redo */}
@@ -205,20 +214,22 @@ class PaintEditorComponent extends React.Component {
                                 />
                             </InputGroup>
 
-                            <InputGroup>
-                                <MediaQuery minWidth={layout.fullSizeMinWidth}>
-                                    <LabeledIconButton
-                                        disabled={!shouldShowBringForward()}
-                                        imgSrc={sendFrontIcon}
-                                        title={this.props.intl.formatMessage(messages.front)}
-                                        onClick={this.props.onSendToFront}
-                                    />
-                                    <LabeledIconButton
-                                        disabled={!shouldShowSendBackward()}
-                                        imgSrc={sendBackIcon}
-                                        title={this.props.intl.formatMessage(messages.back)}
-                                        onClick={this.props.onSendToBack}
-                                    />
+                            <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
+                                <div className={styles.row}>
+                                    <InputGroup>
+                                        <LabeledIconButton
+                                            disabled={!shouldShowBringForward()}
+                                            imgSrc={sendFrontIcon}
+                                            title={this.props.intl.formatMessage(messages.front)}
+                                            onClick={this.props.onSendToFront}
+                                        />
+                                        <LabeledIconButton
+                                            disabled={!shouldShowSendBackward()}
+                                            imgSrc={sendBackIcon}
+                                            title={this.props.intl.formatMessage(messages.back)}
+                                            onClick={this.props.onSendToBack}
+                                        />
+                                    </InputGroup>
 
                                     {/* To be rotation point */}
                                     {/* <InputGroup>
@@ -229,8 +240,10 @@ class PaintEditorComponent extends React.Component {
                                             onClick={function () {}}
                                         />
                                     </InputGroup> */}
-                                </MediaQuery>
-                                <MediaQuery maxWidth={layout.fullSizeMinWidth - 1}>
+                                </div>
+                            </MediaQuery>
+                            <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
+                                <InputGroup>
                                     <Dropdown
                                         className={styles.modUnselect}
                                         enterExitTransitionDurationMs={0}
@@ -280,8 +293,8 @@ class PaintEditorComponent extends React.Component {
                                     >
                                         {this.props.intl.formatMessage(messages.more)}
                                     </Dropdown>
-                                </MediaQuery>
-                            </InputGroup>
+                                </InputGroup>
+                            </MediaQuery>
                         </div>
 
                         {/* Second Row */}

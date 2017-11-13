@@ -4,7 +4,7 @@
 .editor-container {
     display: flex;
     flex-direction: column;
-    padding: calc(4 * $grid-unit);
+    padding: calc(3 * $grid-unit);
 }
 
 .row {
@@ -30,7 +30,7 @@
 
 .mod-dashed-border {
     border-right: 1px dashed $ui-pane-border;
-    padding-right: calc(3 * $grid-unit);
+    padding-right: calc(2 * $grid-unit);
 }
 
 .mod-unselect {
@@ -48,7 +48,7 @@ $border-radius: 0.25rem;
     border: 1px solid $ui-pane-border;
     border-radius: 0;
     border-left: none;
-    padding: calc(2 * $grid-unit);
+    padding: .35rem;
 }
 
 .button-group-button:last-of-type {
@@ -110,16 +110,16 @@ $border-radius: 0.25rem;
 }
 
 .menu-item-icon {
-    margin-right: calc(2* $grid-unit);
+    margin-right: calc(2 * $grid-unit);
 }
 
 .mod-mode-tools {
-    margin-left: calc(3 * $grid-unit);
+    margin-left: calc(2 * $grid-unit);
 }
 
 .canvas-container {
-    width: 500px;
-    height: 400px;
+    width: 480px;
+    height: 360px;
     box-sizing: content-box;
     border: 1px solid #e8edf1;
     border-radius: .25rem;
@@ -143,13 +143,14 @@ $border-radius: 0.25rem;
     flex-direction: row-reverse;
 }
 
-@media only screen and (max-width: 1095px) {
-    .mode-selector {
-        flex-direction: column;
-        justify-content: flex-start;
+@media only screen and (max-width: $full-size-paint) {
+    .editor-container {
+        padding: calc(3 * $grid-unit) $grid-unit;
     }
 
-    .mod-dashed-border {
-        padding-right: calc(2 * $grid-unit);
+    .mode-selector {
+        margin-right: $grid-unit;
+        flex-direction: column;
+        justify-content: flex-start;
     }
 }
