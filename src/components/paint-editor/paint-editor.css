@@ -148,4 +148,8 @@ $border-radius: 0.25rem;
         flex-direction: column;
         justify-content: flex-start;
     }
+
+    .mod-dashed-border {
+        padding-right: calc(2 * $grid-unit);
+    }
 }

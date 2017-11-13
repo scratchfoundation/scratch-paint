@@ -9,3 +9,9 @@
     /* Prevent any user actions */
     pointer-events: none;
 }
+
+@media only screen and (max-width: 1095px) {
+    .input-group + .input-group {
+        margin-left: calc(2 * $grid-unit);
+    }
+}
