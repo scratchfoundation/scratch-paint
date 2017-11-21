@@ -1,7 +1,7 @@
 @import '../../css/units.css';
 
 .input-group + .input-group {
-    margin-left: calc(3 * $grid-unit);
+    margin-left: calc(2 * $grid-unit);
 }
 
 .disabled {

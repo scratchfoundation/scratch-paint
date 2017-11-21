@@ -4,7 +4,7 @@ import React from 'react';
 import bindAll from 'lodash.bindall';
 import {changeFillColor} from '../reducers/fill-color';
 import {openFillColor, closeFillColor} from '../reducers/modals';
-import Modes from '../modes/modes';
+import Modes from '../lib/modes';
 
 import FillColorIndicatorComponent from '../components/fill-color-indicator.jsx';
 import {applyFillColorToSelection} from '../helper/style-path';

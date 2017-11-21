@@ -14,7 +14,7 @@ import {groupSelection, ungroupSelection} from '../helper/group';
 import {clearSelection, getSelectedLeafItems, getSelectedRootItems} from '../helper/selection';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 
-import Modes from '../modes/modes';
+import Modes from '../lib/modes';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import paper from '@scratch/paper';

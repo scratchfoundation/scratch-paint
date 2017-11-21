@@ -1,6 +1,7 @@
 import bindAll from 'lodash.bindall';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import MediaQuery from 'react-responsive';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -13,6 +14,7 @@ import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
 import BrushMode from '../../containers/brush-mode.jsx';
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
+import Dropdown from '../dropdown/dropdown.jsx';
 import EraserMode from '../../containers/eraser-mode.jsx';
 import FillColorIndicatorComponent from '../../containers/fill-color-indicator.jsx';
 import Input from '../forms/input.jsx';
@@ -28,6 +30,7 @@ import SelectMode from '../../containers/select-mode.jsx';
 import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicator.jsx';
 import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicator.jsx';
 
+import layout from '../../lib/layout-constants';
 import styles from './paint-editor.css';
 
 import groupIcon from './icons/group.svg';
@@ -88,6 +91,11 @@ const messages = defineMessages({
         defaultMessage: 'Back',
         description: 'Label for the `Send to back of canvas` button',
         id: 'paint.paintEditor.back'
+    },
+    more: {
+        defaultMessage: 'More',
+        description: 'Label for dropdown to access more action buttons',
+        id: 'paint.paintEditor.more'
     }
 });
 
@@ -114,13 +122,22 @@ class PaintEditorComponent extends React.Component {
                         <div className={styles.row}>
                             {/* Name field */}
                             <InputGroup>
-                                <Label text={this.props.intl.formatMessage(messages.costume)}>
+                                <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
+                                    <Label text={this.props.intl.formatMessage(messages.costume)}>
+                                        <BufferedInput
+                                            type="text"
+                                            value={this.props.name}
+                                            onSubmit={this.props.onUpdateName}
+                                        />
+                                    </Label>
+                                </MediaQuery>
+                                <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
                                     <BufferedInput
                                         type="text"
                                         value={this.props.name}
                                         onSubmit={this.props.onUpdateName}
                                     />
-                                </Label>
+                                </MediaQuery>
                             </InputGroup>
 
                             {/* Undo/Redo */}
@@ -197,31 +214,87 @@ class PaintEditorComponent extends React.Component {
                                 />
                             </InputGroup>
 
-                            {/* Front/Back */}
-                            <InputGroup>
-                                <LabeledIconButton
-                                    disabled={!shouldShowBringForward()}
-                                    imgSrc={sendFrontIcon}
-                                    title={this.props.intl.formatMessage(messages.front)}
-                                    onClick={this.props.onSendToFront}
-                                />
-                                <LabeledIconButton
-                                    disabled={!shouldShowSendBackward()}
-                                    imgSrc={sendBackIcon}
-                                    title={this.props.intl.formatMessage(messages.back)}
-                                    onClick={this.props.onSendToBack}
-                                />
-                            </InputGroup>
+                            <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
+                                <div className={styles.row}>
+                                    <InputGroup>
+                                        <LabeledIconButton
+                                            disabled={!shouldShowBringForward()}
+                                            imgSrc={sendFrontIcon}
+                                            title={this.props.intl.formatMessage(messages.front)}
+                                            onClick={this.props.onSendToFront}
+                                        />
+                                        <LabeledIconButton
+                                            disabled={!shouldShowSendBackward()}
+                                            imgSrc={sendBackIcon}
+                                            title={this.props.intl.formatMessage(messages.back)}
+                                            onClick={this.props.onSendToBack}
+                                        />
+                                    </InputGroup>
 
-                            {/* To be rotation point */}
-                            {/* <InputGroup>
-                                <LabeledIconButton
-                                    imgAlt="Rotation Point"
-                                    imgSrc={rotationPointIcon}
-                                    title="Rotation Point"
-                                    onClick={function () {}}
-                                />
-                            </InputGroup> */}
+                                    {/* To be rotation point */}
+                                    {/* <InputGroup>
+                                        <LabeledIconButton
+                                            imgAlt="Rotation Point"
+                                            imgSrc={rotationPointIcon}
+                                            title="Rotation Point"
+                                            onClick={function () {}}
+                                        />
+                                    </InputGroup> */}
+                                </div>
+                            </MediaQuery>
+                            <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
+                                <InputGroup>
+                                    <Dropdown
+                                        className={styles.modUnselect}
+                                        enterExitTransitionDurationMs={0}
+                                        popoverContent={
+                                            <InputGroup className={styles.modContextMenu}>
+                                                <Button
+                                                    className={classNames(styles.modMenuItem, {
+                                                        [styles.modDisabled]: !shouldShowBringForward()
+                                                    })}
+                                                    disabled={!shouldShowBringForward()}
+                                                    onClick={this.props.onSendToFront}
+                                                >
+                                                    <img
+                                                        className={styles.menuItemIcon}
+                                                        src={sendFrontIcon}
+                                                    />
+                                                    <span>{this.props.intl.formatMessage(messages.front)}</span>
+                                                </Button>
+                                                <Button
+                                                    className={classNames(styles.modMenuItem, {
+                                                        [styles.modDisabled]: !shouldShowSendBackward()
+                                                    })}
+                                                    disabled={!shouldShowSendBackward()}
+                                                    onClick={this.props.onSendToBack}
+                                                >
+                                                    <img
+                                                        className={styles.menuItemIcon}
+                                                        src={sendBackIcon}
+                                                    />
+                                                    <span>{this.props.intl.formatMessage(messages.back)}</span>
+                                                </Button>
+
+                                                {/* To be rotation point */}
+                                                {/* <Button
+                                                    className={classNames(styles.modMenuItem, styles.modTopDivider)}
+                                                    onClick={function () {}}
+                                                >
+                                                    <img
+                                                        className={styles.menuItemIcon}
+                                                        src={rotationPointIcon}
+                                                    />
+                                                    <span>{'Rotation Point'}</span>
+                                                </Button> */}
+                                            </InputGroup>
+                                        }
+                                        tipSize={.01}
+                                    >
+                                        {this.props.intl.formatMessage(messages.more)}
+                                    </Dropdown>
+                                </InputGroup>
+                            </MediaQuery>
                         </div>
 
                         {/* Second Row */}

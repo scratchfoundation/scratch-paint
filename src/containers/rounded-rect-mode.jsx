@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
-import Modes from '../modes/modes';
+import Modes from '../lib/modes';
 
 import {changeMode} from '../reducers/modes';
 import {clearHoveredItem, setHoveredItem} from '../reducers/hover';

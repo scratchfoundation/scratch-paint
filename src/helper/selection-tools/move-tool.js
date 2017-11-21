@@ -1,4 +1,4 @@
-import Modes from '../../modes/modes';
+import Modes from '../../lib/modes';
 import {isGroup} from '../group';
 import {isCompoundPathItem, getRootItem} from '../item';
 import {snapDeltaToAngle} from '../math';

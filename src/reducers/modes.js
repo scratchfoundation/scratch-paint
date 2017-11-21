@@ -1,4 +1,4 @@
-import Modes from '../modes/modes';
+import Modes from '../lib/modes';
 import log from '../log/log';
 
 const CHANGE_MODE = 'scratch-paint/modes/CHANGE_MODE';

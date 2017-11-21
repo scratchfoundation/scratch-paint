@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import paper from '@scratch/paper';
-import Modes from '../modes/modes';
+import Modes from '../lib/modes';
 
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
@@ -150,9 +150,9 @@ class PaperCanvas extends React.Component {
         return (
             <canvas
                 className={styles.paperCanvas}
-                height="400px"
+                height="360px"
                 ref={this.setCanvas}
-                width="500px"
+                width="480px"
                 onWheel={this.handleWheel}
             />
         );

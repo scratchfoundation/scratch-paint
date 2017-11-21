@@ -1,5 +1,5 @@
 import paper from '@scratch/paper';
-import Modes from '../../modes/modes';
+import Modes from '../../lib/modes';
 import {styleShape} from '../style-path';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';

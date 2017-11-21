@@ -1,14 +1,16 @@
 @import '../../css/colors.css';
+@import "../../css/units.css";
 
 $border-radius: .25rem;
 
 .mod-tool-select {
     display: inline-block;
+    margin: $grid-unit;
     border: none;
     border-radius: $border-radius;
     outline: none;
     background: none;
-    padding: 0.25rem;
+    padding: $grid-unit;
     font-size: 0.85rem;
     transition: 0.2s;
 }
@@ -26,4 +28,10 @@ img.tool-select-icon {
     height: 2rem;
     flex-grow: 1;
     vertical-align: middle;
+}
+
+@media only screen and (max-width: $full-size-paint) {
+    .mod-tool-select {
+        margin: 0;
+    }
 }
