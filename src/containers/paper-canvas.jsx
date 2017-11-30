@@ -4,6 +4,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import paper from '@scratch/paper';
 import Modes from '../lib/modes';
+import log from '../log/log';
 
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
@@ -84,6 +85,12 @@ class PaperCanvas extends React.Component {
         paper.project.importSVG(svg, {
             expandShapes: true,
             onLoad: function (item) {
+                if (!item) {
+                    log.error('SVG import failed:');
+                    log.info(svg);
+                    performSnapshot(paperCanvas.props.undoSnapshot);
+                    return;
+                }
                 const itemWidth = item.bounds.width;
                 const itemHeight = item.bounds.height;
 
