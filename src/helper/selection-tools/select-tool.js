@@ -45,6 +45,7 @@ class SelectTool extends paper.Tool {
 
         selectRootItem();
         setSelectedItems();
+        this.boundingBoxTool.setSelectionBounds();
     }
     /**
      * To be called when the hovered item changes. When the select tool hovers over a
