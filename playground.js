@@ -118,7 +118,7 @@ if (process.env.NODE_ENV !== 'production') {
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
- * Paper.js v0.11.3 - The Swiss Army Knife of Vector Graphics Scripting.
+ * Paper.js v0.11.5 - The Swiss Army Knife of Vector Graphics Scripting.
  * http://paperjs.org/
  *
  * Copyright (c) 2011 - 2016, Juerg Lehni & Jonathan Puckey
@@ -128,7 +128,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Sat Apr 22 20:01:34 2017 +0200
+ * Date: Mon Dec 4 17:19:35 2017 -0500
  *
  ***
  *
@@ -152,7 +152,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 var paper = function(self, undefined) {
 
 self = self || __webpack_require__(153);
-var window = self.window,
+var window = self.window ? self.window : self,
 	document = self.document;
 
 var Base = new function() {
@@ -897,7 +897,7 @@ var PaperScope = Base.extend({
 		}
 	},
 
-	version: "0.11.3",
+	version: "0.11.5",
 
 	getView: function() {
 		var project = this.project;
@@ -1640,7 +1640,7 @@ var LinkedPoint = Point.extend({
 	},
 
 	setSelected: function(selected) {
-		this._owner.changeSelection(this._getSelection(), selected);
+		this._owner._changeSelection(this._getSelection(), selected);
 	},
 
 	_getSelection: function() {
@@ -2216,8 +2216,8 @@ new function() {
 
 			setSelected: function(selected) {
 				var owner = this._owner;
-				if (owner.changeSelection) {
-					owner.changeSelection(2, selected);
+				if (owner._changeSelection) {
+					owner._changeSelection(2, selected);
 				}
 			}
 		})
@@ -3251,7 +3251,7 @@ new function() {
 		}
 	},
 
-	changeSelection: function(flag, selected) {
+	_changeSelection: function(flag, selected) {
 		var selection = this._selection;
 		this.setSelection(selected ? selection | flag : selection & ~flag);
 	},
@@ -3272,7 +3272,7 @@ new function() {
 			for (var i = 0, l = children.length; i < l; i++)
 				children[i].setSelected(selected);
 		}
-		this.changeSelection(1, selected);
+		this._changeSelection(1, selected);
 	},
 
 	isFullySelected: function() {
@@ -3293,7 +3293,7 @@ new function() {
 			for (var i = 0, l = children.length; i < l; i++)
 				children[i].setFullySelected(selected);
 		}
-		this.changeSelection(1, selected);
+		this._changeSelection(1, selected);
 	},
 
 	isClipMask: function() {
@@ -5794,7 +5794,7 @@ var Segment = Base.extend({
 		}
 	},
 
-	changeSelection: function(flag, selected) {
+	_changeSelection: function(flag, selected) {
 		var selection = this._selection;
 		this.setSelection(selected ? selection | flag : selection & ~flag);
 	},
@@ -5804,7 +5804,7 @@ var Segment = Base.extend({
 	},
 
 	setSelected: function(selected) {
-		this.changeSelection(7, selected);
+		this._changeSelection(7, selected);
 	},
 
 	getIndex: function() {
@@ -6078,7 +6078,7 @@ var SegmentPoint = Point.extend({
 	},
 
 	setSelected: function(selected) {
-		this._owner.changeSelection(this._getSelection(), selected);
+		this._owner._changeSelection(this._getSelection(), selected);
 	},
 
 	_getSelection: function() {
@@ -6253,7 +6253,7 @@ var Curve = Base.extend({
 
 	isSelected: function() {
 		return this.getPoint1().isSelected()
-				&& this.getHandle2().isSelected()
+				&& this.getHandle1().isSelected()
 				&& this.getHandle2().isSelected()
 				&& this.getPoint2().isSelected();
 	},
@@ -9009,9 +9009,6 @@ var Path = PathItem.extend({
 new function() {
 
 	function drawHandles(ctx, segments, matrix, size, isFullySelected) {
-		if (size === 0) {
-			return;
-		}
 		var half = size / 2,
 			coords = new Array(6),
 			pX, pY;
@@ -9027,7 +9024,7 @@ new function() {
 				ctx.lineTo(hX, hY + half);
 				ctx.lineTo(hX + half, hY);
 				ctx.lineTo(hX, hY - half);
-				ctx.lineTo(hX - half, hY);
+				ctx.closePath();
 				ctx.stroke();
 			}
 		}
@@ -9171,7 +9168,7 @@ new function() {
 			ctx.beginPath();
 			drawSegments(ctx, this, matrix);
 			ctx.stroke();
-			drawHandles(ctx, this._segments, matrix, paper.settings.handleSize, this.isFullySelected());
+			drawHandles(ctx, this._segments, matrix, paper.settings.handleSize);
 		}
 	};
 },
@@ -10477,16 +10474,20 @@ PathItem.inject(new function() {
 			function collect(inter, end) {
 				while (inter && inter !== end) {
 					var other = inter._segment,
-						path = other._path,
-						next = other.getNext() || path && path.getFirstSegment(),
-						nextInter = next && next._intersection;
-					if (other !== segment && (isStart(other) || isStart(next)
-						|| next && (isValid(other) && (isValid(next)
-							|| nextInter && isValid(nextInter._segment))))) {
-						crossings.push(other);
+						path = other && other._path;
+					if (path) {
+						var next = other.getNext() || path.getFirstSegment(),
+							nextInter = next._intersection;
+						if (other !== segment && (isStart(other)
+							|| isStart(next)
+							|| next && (isValid(other) && (isValid(next)
+								|| nextInter && isValid(nextInter._segment))))
+						) {
+							crossings.push(other);
+						}
+						if (collectStarts)
+							starts.push(other);
 					}
-					if (collectStarts)
-						starts.push(other);
 					inter = inter._next;
 				}
 			}
@@ -10577,7 +10578,8 @@ PathItem.inject(new function() {
 					visited.length = 0;
 					do {
 						seg = branch && branch.crossings.shift();
-						if (!seg) {
+						if (!seg || !seg._path) {
+							seg = null;
 							branch = branches.pop();
 							if (branch) {
 								visited = branch.visited;
@@ -10598,7 +10600,7 @@ PathItem.inject(new function() {
 			}
 			if (finished) {
 				if (closed) {
-					path.firstSegment.setHandleIn(handleIn);
+					path.getFirstSegment().setHandleIn(handleIn);
 					path.setClosed(closed);
 				}
 				if (path.getArea() !== 0) {
@@ -10643,9 +10645,9 @@ PathItem.inject(new function() {
 			var children = this._children,
 				paths = children || [this];
 
-			function hasOverlap(seg) {
+			function hasOverlap(seg, path) {
 				var inter = seg && seg._intersection;
-				return inter && inter._overlap;
+				return inter && inter._overlap && inter._path === path;
 			}
 
 			var hasOverlaps = false,
@@ -10661,10 +10663,12 @@ PathItem.inject(new function() {
 					return inter.hasOverlap();
 				}, clearCurves);
 				for (var i = overlaps.length - 1; i >= 0; i--) {
-					var seg = overlaps[i]._segment,
+					var overlap = overlaps[i],
+						path = overlap._path,
+						seg = overlap._segment,
 						prev = seg.getPrevious(),
 						next = seg.getNext();
-					if (hasOverlap(prev) && hasOverlap(next)) {
+					if (hasOverlap(prev, path) && hasOverlap(next, path)) {
 						seg.remove();
 						prev._handleOut._set(0, 0);
 						next._handleIn._set(0, 0);
@@ -13210,8 +13214,9 @@ var Key = new function() {
 		key = /^U\+/.test(key)
 				? String.fromCharCode(parseInt(key.substr(2), 16))
 				: /^Arrow[A-Z]/.test(key) ? key.substr(5)
-				: key === 'Unidentified' ? String.fromCharCode(event.keyCode)
-				: key;
+				: key === 'Unidentified'  || key === undefined
+					? String.fromCharCode(event.keyCode)
+					: key;
 		return keyLookup[key] ||
 				(key.length > 1 ? Base.hyphenate(key) : key.toLowerCase());
 	}
@@ -24279,7 +24284,7 @@ var BoundingBoxTool = function () {
                 this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, (0, _selection.getSelectedRootItems)());
             }
 
-            // while transforming, don't show bounds
+            // While transforming, don't show bounds
             this.removeBoundsPath();
             return true;
         }
@@ -24295,6 +24300,8 @@ var BoundingBoxTool = function () {
             if (event.event.button > 0 || !this.mode) return; // only first mouse button
             this._modeMap[this.mode].onMouseUp(event);
 
+            // After transforming, show bounds again
+            this.setSelectionBounds();
             this.mode = null;
         }
     }, {
@@ -67260,6 +67267,7 @@ var SelectTool = function (_paper$Tool) {
 
         (0, _selection.selectRootItem)();
         setSelectedItems();
+        _this.boundingBoxTool.setSelectionBounds();
         return _this;
     }
     /**
