@@ -108,7 +108,7 @@ class BoundingBoxTool {
             this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedRootItems());
         }
 
-        // while transforming, don't show bounds
+        // While transforming, don't show bounds
         this.removeBoundsPath();
         return true;
     }
@@ -120,6 +120,8 @@ class BoundingBoxTool {
         if (event.event.button > 0 || !this.mode) return; // only first mouse button
         this._modeMap[this.mode].onMouseUp(event);
 
+        // After transforming, show bounds again
+        this.setSelectionBounds();
         this.mode = null;
     }
     setSelectionBounds () {
