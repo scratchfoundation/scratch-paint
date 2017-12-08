@@ -17,31 +17,26 @@ const getHoveredItem = function (event, hitOptions, subselect) {
     if (hitResults.length === 0) {
         return null;
     }
-
-    // sort items by index
+    // sort items by z-index
     const items = [];
     for (const hitResult of hitResults) {
-        items.push(hitResult.item);
+        if (!(hitResult.item.data && hitResult.item.data.noHover) && !hitResult.item.selected) {
+            items.push(hitResult.item);
+        }
     }
     items.sort(sortItemsByZIndex);
 
-    let hitResult;
-    for (const result of hitResults) {
-        if (!(result.item.data && result.item.data.noHover) && !result.item.selected) {
-            hitResult = result;
-            break;
-        }
-    }
-    if (!hitResult) {
+    const item = items[items.length - 1];
+    if (!item) {
         return null;
     }
 
-    if (isBoundsItem(hitResult.item)) {
-        return hoverBounds(hitResult.item);
-    } else if (!subselect && isGroupChild(hitResult.item)) {
-        return hoverBounds(getRootItem(hitResult.item));
+    if (isBoundsItem(item)) {
+        return hoverBounds(item);
+    } else if (!subselect && isGroupChild(item)) {
+        return hoverBounds(getRootItem(item));
     }
-    return hoverItem(hitResult);
+    return hoverItem(item);
 };
 
 export {
