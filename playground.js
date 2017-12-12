@@ -128,7 +128,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Mon Dec 4 17:19:35 2017 -0500
+ * Date: Mon Dec 11 13:18:22 2017 -0500
  *
  ***
  *
@@ -53164,6 +53164,18 @@ var PaperCanvas = function (_React$Component) {
         key: 'importSvg',
         value: function importSvg(svg, rotationCenterX, rotationCenterY) {
             var paperCanvas = this;
+            // Pre-process SVG to prevent parsing errors (discussion from #213)
+            // 1. Remove newlines and tab characters, chrome will not load urls with them.
+            //      https://www.chromestatus.com/feature/5735596811091968
+            svg = svg.split(/[\n|\r|\t]/).join('');
+            // 2. Remove svg: namespace on elements.
+            svg = svg.split(/<\s*svg:/).join('<');
+            svg = svg.split(/<\/\s*svg:/).join('</');
+            // 3. Add root svg namespace if it does not exist.
+            var svgAttrs = svg.match(/<svg [^>]*>/);
+            if (svgAttrs && svgAttrs[0].indexOf('xmlns=') === -1) {
+                svg = svg.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+            }
             _paper2.default.project.importSVG(svg, {
                 expandShapes: true,
                 onLoad: function onLoad(item) {
@@ -68573,7 +68585,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var locales = {
     en: { name: 'English' },
-    ar: { name: 'العربية' },
+    ar: { name: 'الْعَرَبِيَّة' },
     de: { name: 'Deutsch' },
     es: { name: 'Español' },
     he: { name: 'עִבְרִית' }
