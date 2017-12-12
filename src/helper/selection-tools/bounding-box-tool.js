@@ -103,9 +103,9 @@ class BoundingBoxTool {
         if (this.mode === BoundingBoxModes.MOVE) {
             this._modeMap[this.mode].onMouseDown(hitProperties);
         } else if (this.mode === BoundingBoxModes.SCALE) {
-            this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedRootItems());
+            this._modeMap[this.mode].onMouseDown(hitResult, this._getBounds(), getSelectedRootItems());
         } else if (this.mode === BoundingBoxModes.ROTATE) {
-            this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedRootItems());
+            this._modeMap[this.mode].onMouseDown(hitResult, this._getBounds(), getSelectedRootItems());
         }
 
         // While transforming, don't show bounds
@@ -124,13 +124,10 @@ class BoundingBoxTool {
         this.setSelectionBounds();
         this.mode = null;
     }
-    setSelectionBounds () {
-        this.removeBoundsPath();
-        
-        const items = getSelectedRootItems();
-        if (items.length <= 0) return;
-        
+    _getBounds () {
         let rect = null;
+        const items = getSelectedRootItems();
+        if (items.length <= 0) return null;
         for (const item of items) {
             if (rect) {
                 rect = rect.unite(item.bounds);
@@ -138,9 +135,15 @@ class BoundingBoxTool {
                 rect = item.bounds;
             }
         }
-        
+        return rect;
+    }
+    setSelectionBounds () {
+        this.removeBoundsPath();
+
+        const bounds = this._getBounds();
+        if (!bounds) return;
         if (!this.boundsPath) {
-            this.boundsPath = new paper.Path.Rectangle(rect);
+            this.boundsPath = new paper.Path.Rectangle(bounds);
             this.boundsPath.curves[0].divideAtTime(0.5);
             this.boundsPath.curves[2].divideAtTime(0.5);
             this.boundsPath.curves[4].divideAtTime(0.5);

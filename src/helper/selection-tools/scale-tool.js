@@ -23,16 +23,16 @@ class ScaleTool {
 
     /**
      * @param {!paper.HitResult} hitResult Data about the location of the mouse click
-     * @param {!object} boundsPath Where the boundaries of the hit item are
+     * @param {!object} bounds Where the boundaries of the hit item are, or null if no hit item.
      * @param {!Array.<paper.Item>} selectedItems Set of selected paper.Items
      */
-    onMouseDown (hitResult, boundsPath, selectedItems) {
+    onMouseDown (hitResult, bounds, selectedItems) {
         const index = hitResult.item.data.index;
-        this.pivot = boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
-        this.origPivot = boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
-        this.corner = boundsPath.bounds[this._getRectCornerNameByIndex(index)].clone();
+        this.pivot = bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
+        this.origPivot = bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
+        this.corner = bounds[this._getRectCornerNameByIndex(index)].clone();
         this.origSize = this.corner.subtract(this.pivot);
-        this.origCenter = boundsPath.bounds.center;
+        this.origCenter = bounds.center;
         this.centered = false;
         this.lastSx = 1;
         this.lastSy = 1;
