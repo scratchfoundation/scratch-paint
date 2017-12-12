@@ -150,16 +150,39 @@ class BoundingBoxTool {
         this.boundsPath.data.isSelectionBound = true;
         this.boundsPath.data.isHelperItem = true;
         this.boundsPath.fillColor = null;
-        this.boundsPath.fullySelected = true;
         this.boundsPath.parent = getGuideLayer();
+        this.boundsPath.strokeWidth = 1 / paper.view.zoom;
+        this.boundsPath.strokeColor = getGuideColor();
         
+        const boundsScaleCircleShadow =
+            new paper.Path.Circle({
+                center: new paper.Point(0, 0),
+                radius: 5.5 / paper.view.zoom,
+                fillColor: 'black',
+                opacity: .12,
+                data: {
+                    isHelperItem: true,
+                    noSelect: true,
+                    noHover: true
+                }
+            });
+        const boundsScaleCircle =
+            new paper.Path.Circle({
+                center: new paper.Point(0, 0),
+                radius: 4 / paper.view.zoom,
+                fillColor: getGuideColor(),
+                data: {
+                    isScaleHandle: true,
+                    isHelperItem: true,
+                    noSelect: true,
+                    noHover: true
+                }
+            });
+        const boundsScaleHandle = new paper.Group([boundsScaleCircleShadow, boundsScaleCircle]);
+        boundsScaleHandle.parent = getGuideLayer();
+
         for (let index = 0; index < this.boundsPath.segments.length; index++) {
             const segment = this.boundsPath.segments[index];
-            let size = 4;
-            
-            if (index % 2 === 0) {
-                size = 6;
-            }
             
             if (index === 7) {
                 const offset = new paper.Point(0, 20);
@@ -187,20 +210,18 @@ class BoundingBoxTool {
                 this.boundsRotHandles[index] = rotHandle;
             }
             
-            this.boundsScaleHandles[index] =
-                new paper.Path.Rectangle({
-                    center: segment.point,
-                    data: {
-                        index: index,
-                        isScaleHandle: true,
-                        isHelperItem: true,
-                        noSelect: true,
-                        noHover: true
-                    },
-                    size: [size / paper.view.zoom, size / paper.view.zoom],
-                    fillColor: getGuideColor(),
-                    parent: getGuideLayer()
-                });
+            this.boundsScaleHandles[index] = boundsScaleHandle.clone();
+            this.boundsScaleHandles[index].position = segment.point;
+            for (const child of this.boundsScaleHandles[index].children) {
+                child.data.index = index;
+            }
+            this.boundsScaleHandles[index].data = {
+                index: index,
+                isScaleHandle: true,
+                isHelperItem: true,
+                noSelect: true,
+                noHover: true
+            };
         }
     }
     removeBoundsPath () {
