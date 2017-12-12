@@ -154,6 +154,7 @@ class BoundingBoxTool {
         this.boundsPath.strokeWidth = 1 / paper.view.zoom;
         this.boundsPath.strokeColor = getGuideColor();
         
+        // Make a template to copy
         const boundsScaleCircleShadow =
             new paper.Path.Circle({
                 center: new paper.Point(0, 0),
@@ -223,6 +224,8 @@ class BoundingBoxTool {
                 noHover: true
             };
         }
+        // Remove the template
+        boundsScaleHandle.remove();
     }
     removeBoundsPath () {
         removeBoundsPath();
