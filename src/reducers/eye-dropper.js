@@ -4,7 +4,7 @@ const DEACTIVATE_EYE_DROPPER = 'scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKE
 const initialState = {
     active: false,
     callback: () => {}, // this will either be `onChangeFillColor` or `onChangeOutlineColor`
-    previousMode: null // the previous mode that was active to go back to
+    previousTool: null // the tool that was previously active before eye dropper
 };
 
 const reducer = function (state, action) {
@@ -17,7 +17,7 @@ const reducer = function (state, action) {
             {
                 active: true,
                 callback: action.callback,
-                previousMode: action.previousMode
+                previousTool: action.previousMode
             }
         );
     case DEACTIVATE_EYE_DROPPER:
@@ -27,7 +27,7 @@ const reducer = function (state, action) {
             {
                 active: false,
                 callback: () => {},
-                previousMode: null
+                previousTool: null
             }
         );
     default:

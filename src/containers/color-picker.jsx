@@ -1,16 +1,15 @@
 import bindAll from 'lodash.bindall';
 import {connect} from 'react-redux';
+import paper from '@scratch/paper';
 import parseColor from 'parse-color';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import {clearSelectedItems} from '../reducers/selected-items';
 import {activateEyeDropper} from '../reducers/eye-dropper';
-import {changeMode} from '../reducers/modes';
 
 import ColorPickerComponent from '../components/color-picker/color-picker.jsx';
 import {MIXED} from '../helper/style-path';
-import Modes from '../lib/modes';
 
 const colorStringToHsv = hexString => {
     const hsv = parseColor(hexString).hsv;
@@ -80,7 +79,7 @@ class ColorPicker extends React.Component {
     }
     handleActivateEyeDropper () {
         this.props.onActivateEyeDropper(
-            this.props.currentMode,
+            paper.tool, // get the currently active tool from paper
             this.props.onChangeColor
         );
     }
@@ -105,14 +104,12 @@ class ColorPicker extends React.Component {
 
 ColorPicker.propTypes = {
     color: PropTypes.string,
-    currentMode: PropTypes.string,
     isEyeDropping: PropTypes.bool.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onChangeColor: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-    currentMode: state.scratchPaint.mode,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active
 });
 
@@ -120,9 +117,8 @@ const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
-    onActivateEyeDropper: (currentMode, callback) => {
-        dispatch(changeMode(Modes.EYE_DROPPER));
-        dispatch(activateEyeDropper(currentMode, callback));
+    onActivateEyeDropper: (currentTool, callback) => {
+        dispatch(activateEyeDropper(currentTool, callback));
     }
 });
 

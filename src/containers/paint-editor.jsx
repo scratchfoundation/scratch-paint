@@ -179,8 +179,10 @@ class PaintEditor extends React.Component {
         if (this.props.isEyeDropping) {
             const colorString = this.eyeDropper.colorString;
             const callback = this.props.changeColorToEyeDropper;
-            
-            this.props.onDeactivateEyeDropper(this.props.previousMode);
+
+            this.eyeDropper.remove();
+            this.props.previousTool.activate();
+            this.props.onDeactivateEyeDropper();
             this.stopEyeDroppingLoop();
             if (!this.eyeDropper.hideLoupe) {
                 // If not hide loupe, that means the click is inside the canvas,
@@ -262,7 +264,7 @@ PaintEditor.propTypes = {
     onUpdateName: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     pasteOffset: PropTypes.number,
-    previousMode: PropTypes.string,
+    previousTool: PropTypes.object,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     selectedItems: PropTypes.arrayOf(PropTypes.object),
@@ -282,8 +284,7 @@ const mapStateToProps = state => ({
     clipboardItems: state.scratchPaint.clipboard.items,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
-    previousItems: state.scratchPaint.color.eyeDropper.previousItems,
-    previousMode: state.scratchPaint.color.eyeDropper.previousMode,
+    previousTool: state.scratchPaint.color.eyeDropper.previousTool,
     selectedItems: state.scratchPaint.selectedItems,
     undoState: state.scratchPaint.undo
 });
@@ -320,10 +321,9 @@ const mapDispatchToProps = dispatch => ({
     incrementPasteOffset: () => {
         dispatch(incrementPasteOffset());
     },
-    onDeactivateEyeDropper: previousMode => {
-        // deactivate the eye dropper, reset to previously selected mode
+    onDeactivateEyeDropper: () => {
+        // set redux values to default for eye dropper reducer
         dispatch(deactivateEyeDropper());
-        dispatch(changeMode(previousMode));
     }
 });
 
