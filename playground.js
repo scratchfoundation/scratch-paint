@@ -128,7 +128,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Mon Dec 11 13:18:22 2017 -0500
+ * Date: Tue Dec 12 15:00:07 2017 -0500
  *
  ***
  *
@@ -9009,6 +9009,9 @@ var Path = PathItem.extend({
 new function() {
 
 	function drawHandles(ctx, segments, matrix, size, isFullySelected) {
+		if (size === 0) {
+			return;
+		}
 		var half = size / 2,
 			coords = new Array(6),
 			pX, pY;
@@ -24353,16 +24356,38 @@ var BoundingBoxTool = function () {
             this.boundsPath.data.isSelectionBound = true;
             this.boundsPath.data.isHelperItem = true;
             this.boundsPath.fillColor = null;
-            this.boundsPath.fullySelected = true;
             this.boundsPath.parent = (0, _layer.getGuideLayer)();
+            this.boundsPath.strokeWidth = 1 / _paper2.default.view.zoom;
+            this.boundsPath.strokeColor = (0, _guides.getGuideColor)();
+
+            // Make a template to copy
+            var boundsScaleCircleShadow = new _paper2.default.Path.Circle({
+                center: new _paper2.default.Point(0, 0),
+                radius: 5.5 / _paper2.default.view.zoom,
+                fillColor: 'black',
+                opacity: .12,
+                data: {
+                    isHelperItem: true,
+                    noSelect: true,
+                    noHover: true
+                }
+            });
+            var boundsScaleCircle = new _paper2.default.Path.Circle({
+                center: new _paper2.default.Point(0, 0),
+                radius: 4 / _paper2.default.view.zoom,
+                fillColor: (0, _guides.getGuideColor)(),
+                data: {
+                    isScaleHandle: true,
+                    isHelperItem: true,
+                    noSelect: true,
+                    noHover: true
+                }
+            });
+            var boundsScaleHandle = new _paper2.default.Group([boundsScaleCircleShadow, boundsScaleCircle]);
+            boundsScaleHandle.parent = (0, _layer.getGuideLayer)();
 
             for (var index = 0; index < this.boundsPath.segments.length; index++) {
                 var segment = this.boundsPath.segments[index];
-                var size = 4;
-
-                if (index % 2 === 0) {
-                    size = 6;
-                }
 
                 if (index === 7) {
                     var offset = new _paper2.default.Point(0, 20);
@@ -24388,20 +24413,43 @@ var BoundingBoxTool = function () {
                     this.boundsRotHandles[index] = rotHandle;
                 }
 
-                this.boundsScaleHandles[index] = new _paper2.default.Path.Rectangle({
-                    center: segment.point,
-                    data: {
-                        index: index,
-                        isScaleHandle: true,
-                        isHelperItem: true,
-                        noSelect: true,
-                        noHover: true
-                    },
-                    size: [size / _paper2.default.view.zoom, size / _paper2.default.view.zoom],
-                    fillColor: (0, _guides.getGuideColor)(),
-                    parent: (0, _layer.getGuideLayer)()
-                });
+                this.boundsScaleHandles[index] = boundsScaleHandle.clone();
+                this.boundsScaleHandles[index].position = segment.point;
+                var _iteratorNormalCompletion2 = true;
+                var _didIteratorError2 = false;
+                var _iteratorError2 = undefined;
+
+                try {
+                    for (var _iterator2 = this.boundsScaleHandles[index].children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        var child = _step2.value;
+
+                        child.data.index = index;
+                    }
+                } catch (err) {
+                    _didIteratorError2 = true;
+                    _iteratorError2 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                            _iterator2.return();
+                        }
+                    } finally {
+                        if (_didIteratorError2) {
+                            throw _iteratorError2;
+                        }
+                    }
+                }
+
+                this.boundsScaleHandles[index].data = {
+                    index: index,
+                    isScaleHandle: true,
+                    isHelperItem: true,
+                    noSelect: true,
+                    noHover: true
+                };
             }
+            // Remove the template
+            boundsScaleHandle.remove();
         }
     }, {
         key: 'removeBoundsPath',
@@ -27347,6 +27395,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @return {paper.Item} the hovered item or null if there is none
  */
 var getHoveredItem = function getHoveredItem(event, hitOptions, subselect) {
+    // @todo make hit test only hit painting layer
     var hitResults = _paper2.default.project.hitTestAll(event.point, hitOptions);
     if (hitResults.length === 0) {
         return null;
