@@ -11,6 +11,7 @@ import {isGroupChild} from './group';
  * @return {paper.Item} the hovered item or null if there is none
  */
 const getHoveredItem = function (event, hitOptions, subselect) {
+    // @todo make hit test only hit painting layer
     const hitResults = paper.project.hitTestAll(event.point, hitOptions);
     if (hitResults.length === 0) {
         return null;
