@@ -187,9 +187,12 @@ class PaintEditor extends React.Component {
     startEyeDroppingLoop () {
         this.eyeDropper = new EyeDropperTool(
             this.canvas,
-            paper.project.view.size.width,
-            paper.project.view.size.height,
-            paper.project.view.pixelRatio
+            paper.project.view.bounds.width,
+            paper.project.view.bounds.height,
+            paper.project.view.pixelRatio,
+            paper.view.zoom,
+            paper.project.view.bounds.x,
+            paper.project.view.bounds.y
         );
         this.eyeDropper.activate();
 

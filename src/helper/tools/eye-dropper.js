@@ -3,7 +3,7 @@ import paper from '@scratch/paper';
 const LOUPE_RADIUS = 20;
 
 class EyeDropperTool extends paper.Tool {
-    constructor (canvas, width, height, pixelRatio) {
+    constructor (canvas, width, height, pixelRatio, zoom, offsetX, offsetY) {
         super();
 
         this.onMouseDown = this.handleMouseDown;
@@ -11,15 +11,18 @@ class EyeDropperTool extends paper.Tool {
 
         this.canvas = canvas;
         this.pixelRatio = pixelRatio;
-        this.width = width * this.pixelRatio;
-        this.height = height * this.pixelRatio;
+        this.zoom = zoom;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.width = width * this.zoom * this.pixelRatio;
+        this.height = height * this.zoom * this.pixelRatio;
         this.rect = canvas.getBoundingClientRect();
         this.colorString = '';
     }
     handleMouseMove (event) {
         // Set the pickX/Y for the color picker loop to pick up
-        this.pickX = event.point.x * this.pixelRatio;
-        this.pickY = event.point.y * this.pixelRatio;
+        this.pickX = (event.point.x - this.offsetX) * this.zoom * this.pixelRatio;
+        this.pickY = (event.point.y - this.offsetY) * this.zoom * this.pixelRatio;
 
         // check if the x/y are outside of the canvas
         this.hideLoupe = this.pickX > this.width ||
