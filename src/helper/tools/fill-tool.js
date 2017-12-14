@@ -121,9 +121,8 @@ class FillTool extends paper.Tool {
                 this.addedFillItem.remove();
                 this.addedFillItem = null;
                 this.fillItem.remove();
-            }
-            // Fill in a hole. Add it to a group with the item whose hole is being filled so they move together.
-            else if (this.addedFillItem) {
+            } else if (this.addedFillItem) {
+                // Fill in a hole. Add it to a group with the item whose hole is being filled so they move together.
                 this.addedFillItem.data.noHover = false;
 
                 // If the parent is already in a group
@@ -137,14 +136,15 @@ class FillTool extends paper.Tool {
                     group.insertAbove(this.fillItem.parent);
                     group.insertChild(0, this.fillItem.parent);
                 }
-            }
-            // Check if we're filling the space around a hole with the same color as the hole. If so, remove the hole.
-            // This only works if the hole and the shape it came from are grouped.
-            else if (this.fillItem.parent instanceof paper.CompoundPath &&
+            } else if (this.fillItem.parent instanceof paper.CompoundPath &&
                     this.fillItem.parent.parent instanceof paper.Group &&
                     !(this.fillItem.parent.parent instanceof paper.Layer)) {
+                // Check if we're filling the space around a hole with the same color as the hole.
+                // If so, remove the hole.
+                // This only works if the hole and the shape it came from are grouped.
                 const group = this.fillItem.parent.parent;
                 const compoundPath = this.fillItem.parent;
+
                 // Iterate backwards since we may remove children
                 for (let i = group.children.length - 1; i >= 0; i--) {
                     const child = group.children[i];
@@ -157,21 +157,32 @@ class FillTool extends paper.Tool {
                             child.fillColor.type !== 'gradient' &&
                             ((this._noFill(child) && this._noFill(compoundPath)) ||
                                 child.fillColor.toCSS() === compoundPath.fillColor.toCSS())) {
+                        // If the group contains a child with no stroke which was originally created by filling
+                        // a hole in the compound path, and the compound path is now being changed to the color
+                        // of the child, then the two can merge (the child and the original hole both disappear).
                         child.data.origItem.remove();
                         child.remove();
+                        // Reduce in case the compound path has only 1 child
+                        if (compoundPath.children.length === 1) {
+                            const reduced = compoundPath.reduce();
+                            reduced.copyAttributes(compoundPath);
+                            reduced.fillColor = compoundPath.fillColor;
+                            reduced.strokeColor = compoundPath.strokeColor;
+                            reduced.strokeWidth = compoundPath.strokeWidth;
+                            break;
+                        }
                     }
                 }
                 // Reduce in case group has only 1 child
                 group.reduce();
-            }
-            // Filling a hole filler with transparent returns it to being gone instead of a shape that's transparent
-            else if (!this.fillColor &&
+            } else if (!this.fillColor &&
                     this.fillItem.data &&
                     this.fillItem.data.origItem &&
                     this.fillItem.data.origItem.parent &&
                     this.fillItem.parent instanceof paper.Group &&
                     !(this.fillItem.parent instanceof paper.Layer) &&
                     this.fillItem.parent === this.fillItem.data.origItem.parent.parent) {
+                // Filling a hole filler with transparent returns it to being gone instead of a shape that's transparent
                 const group = this.fillItem.parent;
                 this.fillItem.remove();
                 group.reduce();
