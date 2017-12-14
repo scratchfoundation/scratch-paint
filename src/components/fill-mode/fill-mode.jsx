@@ -7,9 +7,9 @@ import fillIcon from './fill.svg';
 const FillModeComponent = props => (
     <ToolSelectComponent
         imgDescriptor={{
-            defaultMessage: 'Definitely not fill',
-            description: 'Label for a tool that is definitely not the fill tool',
-            id: 'paint.fillMode.definitelyNotFill'
+            defaultMessage: 'Fill',
+            description: 'Label for the fill tool',
+            id: 'paint.fillMode.fill'
         }}
         imgSrc={fillIcon}
         isSelected={props.isSelected}

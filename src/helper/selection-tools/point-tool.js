@@ -178,7 +178,6 @@ class PointTool {
                 seg.origPoint = null;
             }
         }
-        // TODO trace the shape here to make sure no overlapping paths
 
         // If no drag occurred between mouse down and mouse up, then we can go through with deselect
         // and delete
