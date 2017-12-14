@@ -35,25 +35,37 @@ class ColorPicker extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'getHsv',
             'handleHueChange',
             'handleSaturationChange',
             'handleBrightnessChange',
             'handleTransparent',
             'handleActivateEyeDropper'
         ]);
-        const isTransparent = this.props.color === null;
-        const isMixed = this.props.color === MIXED;
-        const hsv = isTransparent || isMixed ?
-            [50, 100, 100] : colorStringToHsv(props.color);
 
+        const hsv = this.getHsv(props.color);
         this.state = {
             hue: hsv[0],
             saturation: hsv[1],
             brightness: hsv[2]
         };
     }
-    componentWillReceiveProps () {
-        // Just a reminder, new props do not update the hsv state
+    componentWillReceiveProps (newProps) {
+        if (this.props.color !== newProps.color) {
+            // color set by eye dropper, so update slider states
+            const hsv = this.getHsv(newProps.color);
+            this.setState({
+                hue: hsv[0],
+                saturation: hsv[1],
+                brightness: hsv[2]
+            });
+        }
+    }
+    getHsv (color) {
+        const isTransparent = color === null;
+        const isMixed = color === MIXED;
+        return isTransparent || isMixed ?
+            [50, 100, 100] : colorStringToHsv(color);
     }
     handleHueChange (hue) {
         this.setState({hue: hue});
