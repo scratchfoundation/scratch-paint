@@ -18,6 +18,9 @@ class EyeDropperTool extends paper.Tool {
         this.height = height * this.zoom * this.pixelRatio;
         this.rect = canvas.getBoundingClientRect();
         this.colorString = '';
+        this.pickX = -1;
+        this.pickY = -1;
+        this.hideLoupe = true;
     }
     handleMouseMove (event) {
         // Set the pickX/Y for the color picker loop to pick up

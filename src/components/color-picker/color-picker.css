@@ -48,6 +48,7 @@
     height: 1.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
+    box-sizing: content-box;
 }
 
 .active-swatch {

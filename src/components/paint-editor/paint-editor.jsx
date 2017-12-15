@@ -353,7 +353,7 @@ const PaintEditorComponent = props => {
                 <div
                     className={classNames(
                         styles.canvasContainer,
-                        [styles.withEyeDropper]: props.isEyeDropping
+                        {[styles.withEyeDropper]: props.isEyeDropping}
                     )}
                 >
                     <PaperCanvas
