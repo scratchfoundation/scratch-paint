@@ -95,7 +95,7 @@ class LoupeComponent extends React.Component {
 
 LoupeComponent.propTypes = {
     colorInfo: PropTypes.shape({
-        color: PropTypes.instanceOf(Uint8ClampedArray),
+        color: PropTypes.instanceOf(Uint8ClampedArray), // this is the [r,g,b,a] array
         x: PropTypes.number,
         y: PropTypes.number,
         data: PropTypes.instanceOf(Uint8ClampedArray)
