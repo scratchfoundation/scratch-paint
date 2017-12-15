@@ -13,7 +13,8 @@ class FillColorIndicator extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleChangeFillColor'
+            'handleChangeFillColor',
+            'handleCloseFillColor'
         ]);
 
         // Flag to track whether an svg-update-worthy change has been made
@@ -33,11 +34,17 @@ class FillColorIndicator extends React.Component {
         this._hasChanged = this._hasChanged || isDifferent;
         this.props.onChangeFillColor(newColor);
     }
+    handleCloseFillColor () {
+        if (!this.props.isEyeDropping) {
+            this.props.onCloseFillColor();
+        }
+    }
     render () {
         return (
             <FillColorIndicatorComponent
                 {...this.props}
                 onChangeFillColor={this.handleChangeFillColor}
+                onCloseFillColor={this.handleCloseFillColor}
             />
         );
     }
@@ -46,7 +53,8 @@ class FillColorIndicator extends React.Component {
 const mapStateToProps = state => ({
     disabled: state.scratchPaint.mode === Modes.LINE,
     fillColor: state.scratchPaint.color.fillColor,
-    fillColorModalVisible: state.scratchPaint.modals.fillColor
+    fillColorModalVisible: state.scratchPaint.modals.fillColor,
+    isEyeDropping: state.scratchPaint.color.eyeDropper.active
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -65,7 +73,9 @@ FillColorIndicator.propTypes = {
     disabled: PropTypes.bool.isRequired,
     fillColor: PropTypes.string,
     fillColorModalVisible: PropTypes.bool.isRequired,
+    isEyeDropping: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
+    onCloseFillColor: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired
 };
 

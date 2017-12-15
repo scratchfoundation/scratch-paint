@@ -13,6 +13,12 @@
     stroke: #ddd;
 }
 
+.swatch-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .row-header {
     font-family: "Helvetica Neue", Helvetica, sans-serif;
     font-size: 0.65rem;
@@ -38,10 +44,11 @@
 }
 
 .swatch {
-    width: 1rem;
-    height: 1rem;
+    width: 1.5rem;
+    height: 1.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
+    box-sizing: content-box;
 }
 
 .active-swatch {
@@ -50,5 +57,6 @@
 }
 
 .swatch > img {
-    max-width: 100%;
+    width: 1.5rem;
+    height: 1.5rem;
 }

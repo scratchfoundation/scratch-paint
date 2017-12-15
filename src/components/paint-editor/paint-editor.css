@@ -127,6 +127,10 @@ $border-radius: 0.25rem;
     overflow: visible;
 }
 
+.with-eye-dropper {
+    cursor: none;
+}
+
 .mode-selector {
     display: flex;
     margin-right: calc(2 * $grid-unit);
@@ -141,6 +145,16 @@ $border-radius: 0.25rem;
 .zoom-controls {
     display: flex;
     flex-direction: row-reverse;
+}
+
+.color-picker-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
 }
 
 @media only screen and (max-width: $full-size-paint) {
