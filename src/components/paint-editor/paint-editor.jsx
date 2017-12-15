@@ -350,7 +350,12 @@ const PaintEditorComponent = props => {
                 ) : null}
 
                 {/* Canvas */}
-                <div className={styles.canvasContainer}>
+                <div
+                    className={classNames(
+                        styles.canvasContainer,
+                        [styles.withEyeDropper]: props.isEyeDropping
+                    )}
+                >
                     <PaperCanvas
                         canvasRef={props.setCanvas}
                         rotationCenterX={props.rotationCenterX}

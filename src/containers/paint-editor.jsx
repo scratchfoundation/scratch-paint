@@ -194,6 +194,8 @@ class PaintEditor extends React.Component {
             paper.project.view.bounds.x,
             paper.project.view.bounds.y
         );
+        this.eyeDropper.pickX = -1;
+        this.eyeDropper.pickY = -1;
         this.eyeDropper.activate();
 
         // document listeners used to detect if a mouse is down outside of the
