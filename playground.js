@@ -69987,7 +69987,7 @@ var StrokeColorIndicator = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (StrokeColorIndicator.__proto__ || Object.getPrototypeOf(StrokeColorIndicator)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['handleChangeStrokeColor']);
+        (0, _lodash2.default)(_this, ['handleChangeStrokeColor', 'handleCloseStrokeColor']);
 
         // Flag to track whether an svg-update-worthy change has been made
         _this._hasChanged = false;
@@ -70016,10 +70016,18 @@ var StrokeColorIndicator = function (_React$Component) {
             this.props.onChangeStrokeColor(newColor);
         }
     }, {
+        key: 'handleCloseStrokeColor',
+        value: function handleCloseStrokeColor() {
+            if (!this.props.isEyeDropping) {
+                this.props.onCloseStrokeColor();
+            }
+        }
+    }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(_strokeColorIndicator2.default, _extends({}, this.props, {
-                onChangeStrokeColor: this.handleChangeStrokeColor
+                onChangeStrokeColor: this.handleChangeStrokeColor,
+                onCloseStrokeColor: this.handleCloseStrokeColor
             }));
         }
     }]);
@@ -70030,6 +70038,7 @@ var StrokeColorIndicator = function (_React$Component) {
 var mapStateToProps = function mapStateToProps(state) {
     return {
         disabled: state.scratchPaint.mode === _modes2.default.BRUSH,
+        isEyeDropping: state.scratchPaint.color.eyeDropper.active,
         strokeColor: state.scratchPaint.color.strokeColor,
         strokeColorModalVisible: state.scratchPaint.modals.strokeColor
     };
@@ -70051,7 +70060,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 StrokeColorIndicator.propTypes = {
     disabled: _propTypes2.default.bool.isRequired,
+    isEyeDropping: _propTypes2.default.bool.isRequired,
     onChangeStrokeColor: _propTypes2.default.func.isRequired,
+    onCloseStrokeColor: _propTypes2.default.func.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
     strokeColor: _propTypes2.default.string,
     strokeColorModalVisible: _propTypes2.default.bool.isRequired
