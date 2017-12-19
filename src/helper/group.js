@@ -23,7 +23,6 @@ const groupItems = function (items, clearSelectedItems, setSelectedItems, onUpda
             group.children[i].selected = true;
         }
         setSelectedItems();
-        // @todo: enable/disable grouping icons
         onUpdateSvg();
         return group;
     }

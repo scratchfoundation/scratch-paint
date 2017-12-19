@@ -2,6 +2,7 @@ import paper from '@scratch/paper';
 import {isBoundsItem, getRootItem} from './item';
 import {hoverBounds, hoverItem} from './guides';
 import {isGroupChild} from './group';
+import {sortItemsByZIndex} from './math';
 
 /**
  * @param {!MouseEvent} event mouse event
@@ -16,24 +17,26 @@ const getHoveredItem = function (event, hitOptions, subselect) {
     if (hitResults.length === 0) {
         return null;
     }
-
-    let hitResult;
-    for (const result of hitResults) {
-        if (!(result.item.data && result.item.data.noHover) && !result.item.selected) {
-            hitResult = result;
-            break;
+    // sort items by z-index
+    const items = [];
+    for (const hitResult of hitResults) {
+        if (!(hitResult.item.data && hitResult.item.data.noHover) && !hitResult.item.selected) {
+            items.push(hitResult.item);
         }
     }
-    if (!hitResult) {
+    items.sort(sortItemsByZIndex);
+
+    const item = items[items.length - 1];
+    if (!item) {
         return null;
     }
 
-    if (isBoundsItem(hitResult.item)) {
-        return hoverBounds(hitResult.item);
-    } else if (!subselect && isGroupChild(hitResult.item)) {
-        return hoverBounds(getRootItem(hitResult.item));
+    if (isBoundsItem(item)) {
+        return hoverBounds(item);
+    } else if (!subselect && isGroupChild(item)) {
+        return hoverBounds(getRootItem(item));
     }
-    return hoverItem(hitResult);
+    return hoverItem(item);
 };
 
 export {
