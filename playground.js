@@ -16842,11 +16842,13 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 var _item = __webpack_require__(22);
 
 var _compoundPath = __webpack_require__(171);
+
+var _math = __webpack_require__(26);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17099,11 +17101,7 @@ var getSelectedLeafItems = function getSelectedLeafItems() {
             items.push(item);
         }
     }
-
-    // sort items by index (0 at bottom)
-    items.sort(function (a, b) {
-        return parseFloat(a.index) - parseFloat(b.index);
-    });
+    items.sort(_math.sortItemsByZIndex);
     return items;
 };
 
@@ -18869,7 +18867,7 @@ bind.placeholder = {};
 
 module.exports = bindAll;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(35)))
 
 /***/ }),
 /* 6 */
@@ -18882,7 +18880,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _keymirror = __webpack_require__(41);
+var _keymirror = __webpack_require__(42);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -18892,6 +18890,7 @@ var Modes = (0, _keymirror2.default)({
     BRUSH: null,
     ERASER: null,
     LINE: null,
+    FILL: null,
     SELECT: null,
     RESHAPE: null,
     OVAL: null,
@@ -18908,7 +18907,7 @@ exports.default = Modes;
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Provider__ = __webpack_require__(135);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_connectAdvanced__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_connectAdvanced__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__connect_connect__ = __webpack_require__(138);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Provider", function() { return __WEBPACK_IMPORTED_MODULE_0__components_Provider__["b"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createProvider", function() { return __WEBPACK_IMPORTED_MODULE_0__components_Provider__["a"]; });
@@ -18940,7 +18939,7 @@ var _selection = __webpack_require__(4);
 
 var _item = __webpack_require__(22);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19422,6 +19421,75 @@ exports.styleCursorPreview = styleCursorPreview;
 
 /***/ }),
 /* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.CHANGE_SELECTED_ITEMS = exports.clearSelectedItems = exports.setSelectedItems = exports.default = undefined;
+
+var _log = __webpack_require__(12);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_SELECTED_ITEMS = 'scratch-paint/select/CHANGE_SELECTED_ITEMS';
+var initialState = [];
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_SELECTED_ITEMS:
+            if (!action.selectedItems || !(action.selectedItems instanceof Array)) {
+                _log2.default.warn('No selected items or wrong format provided: ' + action.selectedItems);
+                return state;
+            }
+            // If they are not equal, return the new list of items. Else return old list
+            if (action.selectedItems.length !== state.length) {
+                return action.selectedItems;
+            }
+            // Shallow equality check (we may need to update this later for more granularity)
+            for (var i = 0; i < action.selectedItems.length; i++) {
+                if (action.selectedItems[i] !== state[i]) {
+                    return action.selectedItems;
+                }
+            }
+            return state;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+/**
+ * Set the selected item state to the given array of items
+ * @param {Array<paper.Item>} selectedItems from paper.project.selectedItems
+ * @return {object} Redux action to change the selected items.
+ */
+var setSelectedItems = function setSelectedItems(selectedItems) {
+    return {
+        type: CHANGE_SELECTED_ITEMS,
+        selectedItems: selectedItems
+    };
+};
+var clearSelectedItems = function clearSelectedItems() {
+    return {
+        type: CHANGE_SELECTED_ITEMS,
+        selectedItems: []
+    };
+};
+
+exports.default = reducer;
+exports.setSelectedItems = setSelectedItems;
+exports.clearSelectedItems = clearSelectedItems;
+exports.CHANGE_SELECTED_ITEMS = CHANGE_SELECTED_ITEMS;
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports) {
 
 /*
@@ -19503,7 +19571,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -19862,7 +19930,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19881,75 +19949,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 _minilog2.default.enable();
 
 exports.default = (0, _minilog2.default)('scratch-paint');
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.CHANGE_SELECTED_ITEMS = exports.clearSelectedItems = exports.setSelectedItems = exports.default = undefined;
-
-var _log = __webpack_require__(11);
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_SELECTED_ITEMS = 'scratch-paint/select/CHANGE_SELECTED_ITEMS';
-var initialState = [];
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_SELECTED_ITEMS:
-            if (!action.selectedItems || !(action.selectedItems instanceof Array)) {
-                _log2.default.warn('No selected items or wrong format provided: ' + action.selectedItems);
-                return state;
-            }
-            // If they are not equal, return the new list of items. Else return old list
-            if (action.selectedItems.length !== state.length) {
-                return action.selectedItems;
-            }
-            // Shallow equality check (we may need to update this later for more granularity)
-            for (var i = 0; i < action.selectedItems.length; i++) {
-                if (action.selectedItems[i] !== state[i]) {
-                    return action.selectedItems;
-                }
-            }
-            return state;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-/**
- * Set the selected item state to the given array of items
- * @param {Array<paper.Item>} selectedItems from paper.project.selectedItems
- * @return {object} Redux action to change the selected items.
- */
-var setSelectedItems = function setSelectedItems(selectedItems) {
-    return {
-        type: CHANGE_SELECTED_ITEMS,
-        selectedItems: selectedItems
-    };
-};
-var clearSelectedItems = function clearSelectedItems() {
-    return {
-        type: CHANGE_SELECTED_ITEMS,
-        selectedItems: []
-    };
-};
-
-exports.default = reducer;
-exports.setSelectedItems = setSelectedItems;
-exports.clearSelectedItems = clearSelectedItems;
-exports.CHANGE_SELECTED_ITEMS = CHANGE_SELECTED_ITEMS;
 
 /***/ }),
 /* 13 */
@@ -20022,7 +20021,7 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -20118,7 +20117,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedHTMLMessage", function() { return FormattedHTMLMessage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__locale_data_index_js__ = __webpack_require__(111);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__locale_data_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__locale_data_index_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_intl_messageformat__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_intl_messageformat__ = __webpack_require__(65);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_intl_messageformat___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_intl_messageformat__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_intl_relativeformat__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_intl_relativeformat___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_intl_relativeformat__);
@@ -20126,7 +20125,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_prop_types__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_invariant__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_invariant__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_intl_format_cache__ = __webpack_require__(127);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_intl_format_cache___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_intl_format_cache__);
@@ -21859,6 +21858,77 @@ module.exports = Transform;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _classnames = __webpack_require__(13);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactIntl = __webpack_require__(16);
+
+var _button = __webpack_require__(45);
+
+var _button2 = _interopRequireDefault(_button);
+
+var _toolSelectBase = __webpack_require__(186);
+
+var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var ToolSelectComponent = function ToolSelectComponent(props) {
+    return _react2.default.createElement(
+        _button2.default,
+        {
+            className: (0, _classnames2.default)(props.className, _toolSelectBase2.default.modToolSelect, _defineProperty({}, _toolSelectBase2.default.isSelected, props.isSelected)),
+            onClick: props.onMouseDown
+        },
+        _react2.default.createElement('img', {
+            alt: props.intl.formatMessage({
+                defaultMessage: props.imgDescriptor.defaultMessage,
+                description: props.imgDescriptor.description,
+                id: props.imgDescriptor.id
+            }),
+            className: _toolSelectBase2.default.toolSelectIcon,
+            src: props.imgSrc
+        })
+    );
+};
+
+ToolSelectComponent.propTypes = {
+    className: _propTypes2.default.string,
+    imgDescriptor: _propTypes2.default.shape({
+        defaultMessage: _propTypes2.default.string,
+        description: _propTypes2.default.string,
+        id: _propTypes2.default.string
+    }).isRequired,
+    imgSrc: _propTypes2.default.string.isRequired,
+    intl: _reactIntl.intlShape.isRequired,
+    isSelected: _propTypes2.default.bool.isRequired,
+    onMouseDown: _propTypes2.default.func.isRequired
+};
+
+exports.default = (0, _reactIntl.injectIntl)(ToolSelectComponent);
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -21915,7 +21985,7 @@ module.exports = invariant;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21957,7 +22027,6 @@ var groupItems = function groupItems(items, clearSelectedItems, setSelectedItems
             group.children[i].selected = true;
         }
         setSelectedItems();
-        // @todo: enable/disable grouping icons
         onUpdateSvg();
         return group;
     }
@@ -22096,77 +22165,6 @@ exports.shouldShowGroup = shouldShowGroup;
 exports.shouldShowUngroup = shouldShowUngroup;
 
 /***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _classnames = __webpack_require__(13);
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(1);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactIntl = __webpack_require__(16);
-
-var _button = __webpack_require__(44);
-
-var _button2 = _interopRequireDefault(_button);
-
-var _toolSelectBase = __webpack_require__(186);
-
-var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var ToolSelectComponent = function ToolSelectComponent(props) {
-    return _react2.default.createElement(
-        _button2.default,
-        {
-            className: (0, _classnames2.default)(props.className, _toolSelectBase2.default.modToolSelect, _defineProperty({}, _toolSelectBase2.default.isSelected, props.isSelected)),
-            onClick: props.onMouseDown
-        },
-        _react2.default.createElement('img', {
-            alt: props.intl.formatMessage({
-                defaultMessage: props.imgDescriptor.defaultMessage,
-                description: props.imgDescriptor.description,
-                id: props.imgDescriptor.id
-            }),
-            className: _toolSelectBase2.default.toolSelectIcon,
-            src: props.imgSrc
-        })
-    );
-};
-
-ToolSelectComponent.propTypes = {
-    className: _propTypes2.default.string,
-    imgDescriptor: _propTypes2.default.shape({
-        defaultMessage: _propTypes2.default.string,
-        description: _propTypes2.default.string,
-        id: _propTypes2.default.string
-    }).isRequired,
-    imgSrc: _propTypes2.default.string.isRequired,
-    intl: _reactIntl.intlShape.isRequired,
-    isSelected: _propTypes2.default.bool.isRequired,
-    onMouseDown: _propTypes2.default.func.isRequired
-};
-
-exports.default = (0, _reactIntl.injectIntl)(ToolSelectComponent);
-
-/***/ }),
 /* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -22186,7 +22184,7 @@ var _background = __webpack_require__(170);
 
 var _background2 = _interopRequireDefault(_background);
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -22425,6 +22423,66 @@ exports.getRootItem = getRootItem;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.DEFAULT_COLOR = exports.changeFillColor = exports.default = undefined;
+
+var _log = __webpack_require__(12);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _selectedItems = __webpack_require__(9);
+
+var _stylePath = __webpack_require__(8);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_FILL_COLOR = 'scratch-paint/fill-color/CHANGE_FILL_COLOR';
+var DEFAULT_COLOR = '#9966FF';
+var initialState = DEFAULT_COLOR;
+// Matches hex colors
+var regExp = /^#([0-9a-f]{3}){1,2}$/i;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_FILL_COLOR:
+            if (!regExp.test(action.fillColor) && action.fillColor !== null) {
+                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
+                return state;
+            }
+            return action.fillColor;
+        case _selectedItems.CHANGE_SELECTED_ITEMS:
+            // Don't change state if no selection
+            if (!action.selectedItems || !action.selectedItems.length) {
+                return state;
+            }
+            return (0, _stylePath.getColorsFromSelection)(action.selectedItems).fillColor;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeFillColor = function changeFillColor(fillColor) {
+    return {
+        type: CHANGE_FILL_COLOR,
+        fillColor: fillColor
+    };
+};
+
+exports.default = reducer;
+exports.changeFillColor = changeFillColor;
+exports.DEFAULT_COLOR = DEFAULT_COLOR;
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /*
 object-assign
 (c) Sindre Sorhus
@@ -22518,17 +22576,17 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(68);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__combineReducers__ = __webpack_require__(153);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__ = __webpack_require__(154);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__applyMiddleware__ = __webpack_require__(155);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(70);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__compose__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_warning__ = __webpack_require__(41);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return __WEBPACK_IMPORTED_MODULE_0__createStore__["b"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return __WEBPACK_IMPORTED_MODULE_1__combineReducers__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return __WEBPACK_IMPORTED_MODULE_2__bindActionCreators__["a"]; });
@@ -22555,7 +22613,7 @@ if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' 
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22564,58 +22622,198 @@ if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.DEFAULT_COLOR = exports.changeFillColor = exports.default = undefined;
+exports.sortItemsByZIndex = exports.snapDeltaToAngle = exports.getRandomBoolean = exports.getRandomInt = exports.expandByOne = exports.checkPointsClose = undefined;
 
-var _log = __webpack_require__(11);
+var _paper = __webpack_require__(2);
 
-var _log2 = _interopRequireDefault(_log);
-
-var _selectedItems = __webpack_require__(12);
-
-var _stylePath = __webpack_require__(8);
+var _paper2 = _interopRequireDefault(_paper);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var CHANGE_FILL_COLOR = 'scratch-paint/fill-color/CHANGE_FILL_COLOR';
-var DEFAULT_COLOR = '#9966FF';
-var initialState = DEFAULT_COLOR;
-// Matches hex colors
-var regExp = /^#([0-9a-f]{3}){1,2}$/i;
+var checkPointsClose = function checkPointsClose(startPos, eventPoint, threshold) {
+    var xOff = Math.abs(startPos.x - eventPoint.x);
+    var yOff = Math.abs(startPos.y - eventPoint.y);
+    if (xOff < threshold && yOff < threshold) {
+        return true;
+    }
+    return false;
+};
+
+var getRandomInt = function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+};
+
+var getRandomBoolean = function getRandomBoolean() {
+    return getRandomInt(0, 2) === 1;
+};
+
+// Thanks Mikko Mononen! https://github.com/memononen/stylii
+var snapDeltaToAngle = function snapDeltaToAngle(delta, snapAngle) {
+    var angle = Math.atan2(delta.y, delta.x);
+    angle = Math.round(angle / snapAngle) * snapAngle;
+    var dirx = Math.cos(angle);
+    var diry = Math.sin(angle);
+    var d = dirx * delta.x + diry * delta.y;
+    return new _paper2.default.Point(dirx * d, diry * d);
+};
+
+var _getDepth = function _getDepth(item) {
+    var temp = item;
+    var depth = 0;
+    while (!(temp instanceof _paper2.default.Layer)) {
+        depth++;
+        if (temp.parent === null) {
+            // This item isn't attached to a layer, so it's not on the canvas and can't be compared.
+            return null;
+        }
+        temp = temp.parent;
+    }
+    return depth;
+};
+
+var sortItemsByZIndex = function sortItemsByZIndex(a, b) {
+    if (a === null || b === null) {
+        return null;
+    }
+
+    // Get to the same depth in the project tree
+    var tempA = a;
+    var tempB = b;
+    var aDepth = _getDepth(a);
+    var bDepth = _getDepth(b);
+    while (bDepth > aDepth) {
+        tempB = tempB.parent;
+        bDepth--;
+    }
+    while (aDepth > bDepth) {
+        tempA = tempA.parent;
+        aDepth--;
+    }
+
+    // Step up until they share parents. When they share parents, compare indices.
+    while (tempA && tempB) {
+        if (tempB === tempA) {
+            return 0;
+        } else if (tempB.parent === tempA.parent) {
+            if (tempB.parent instanceof _paper2.default.CompoundPath) {
+                // Neither is on top of the other in a compound path. Return in order of decreasing size.
+                return Math.abs(tempB.area) - Math.abs(tempA.area);
+            }
+            return parseFloat(tempA.index) - parseFloat(tempB.index);
+        }
+        tempB = tempB.parent;
+        tempA = tempA.parent;
+    }
+
+    // No shared hierarchy
+    return null;
+};
+
+// Expand the size of the path by approx one pixel all around
+var expandByOne = function expandByOne(path) {
+    var center = path.position;
+    var pathArea = path.area;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = path.segments[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var seg = _step.value;
+
+            var halfNorm = seg.point.subtract(center).normalize().divide(2);
+            seg.point = seg.point.add(halfNorm);
+            // If that made the path area smaller, go the other way.
+            if (path.area < pathArea) seg.point = seg.point.subtract(halfNorm.multiply(2));
+            pathArea = path.area;
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+};
+
+exports.checkPointsClose = checkPointsClose;
+exports.expandByOne = expandByOne;
+exports.getRandomInt = getRandomInt;
+exports.getRandomBoolean = getRandomBoolean;
+exports.snapDeltaToAngle = snapDeltaToAngle;
+exports.sortItemsByZIndex = sortItemsByZIndex;
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.clearHoveredItem = exports.setHoveredItem = exports.default = undefined;
+
+var _log = __webpack_require__(12);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_HOVERED = 'scratch-paint/hover/CHANGE_HOVERED';
+var initialState = null;
 
 var reducer = function reducer(state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
-        case CHANGE_FILL_COLOR:
-            if (!regExp.test(action.fillColor) && action.fillColor !== null) {
-                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
+        case CHANGE_HOVERED:
+            if (typeof action.hoveredItemId === 'undefined') {
+                _log2.default.warn('Hovered item should not be set to undefined. Use null.');
+                return state;
+            } else if (typeof action.hoveredItemId === 'undefined' || isNaN(action.hoveredItemId)) {
+                _log2.default.warn('Hovered item should be an item ID number. Got: ' + action.hoveredItemId);
                 return state;
             }
-            return action.fillColor;
-        case _selectedItems.CHANGE_SELECTED_ITEMS:
-            // Don't change state if no selection
-            if (!action.selectedItems || !action.selectedItems.length) {
-                return state;
-            }
-            return (0, _stylePath.getColorsFromSelection)(action.selectedItems).fillColor;
+            return action.hoveredItemId;
         default:
             return state;
     }
 };
 
 // Action creators ==================================
-var changeFillColor = function changeFillColor(fillColor) {
+/**
+ * Set the hovered item state to the given item ID
+ * @param {number} hoveredItemId The paper.Item ID of the hover indicator item.
+ * @return {object} Redux action to change the hovered item.
+ */
+var setHoveredItem = function setHoveredItem(hoveredItemId) {
     return {
-        type: CHANGE_FILL_COLOR,
-        fillColor: fillColor
+        type: CHANGE_HOVERED,
+        hoveredItemId: hoveredItemId
+    };
+};
+
+var clearHoveredItem = function clearHoveredItem() {
+    return {
+        type: CHANGE_HOVERED,
+        hoveredItemId: null
     };
 };
 
 exports.default = reducer;
-exports.changeFillColor = changeFillColor;
-exports.DEFAULT_COLOR = DEFAULT_COLOR;
+exports.setHoveredItem = setHoveredItem;
+exports.clearHoveredItem = clearHoveredItem;
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22664,7 +22862,7 @@ InputGroup.propTypes = {
 exports.default = InputGroup;
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22675,11 +22873,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeStrokeColor = exports.default = undefined;
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
 var _stylePath = __webpack_require__(8);
 
@@ -22722,7 +22920,7 @@ exports.default = reducer;
 exports.changeStrokeColor = changeStrokeColor;
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22733,11 +22931,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.MAX_STROKE_WIDTH = exports.changeStrokeWidth = exports.default = undefined;
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
 var _stylePath = __webpack_require__(8);
 
@@ -22780,7 +22978,7 @@ exports.changeStrokeWidth = changeStrokeWidth;
 exports.MAX_STROKE_WIDTH = MAX_STROKE_WIDTH;
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22804,7 +23002,7 @@ module.exports = emptyObject;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22873,69 +23071,7 @@ module.exports = warning;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.clearHoveredItem = exports.setHoveredItem = exports.default = undefined;
-
-var _log = __webpack_require__(11);
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_HOVERED = 'scratch-paint/hover/CHANGE_HOVERED';
-var initialState = null;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_HOVERED:
-            if (typeof action.hoveredItemId === 'undefined') {
-                _log2.default.warn('Hovered item should not be set to undefined. Use null.');
-                return state;
-            } else if (typeof action.hoveredItemId === 'undefined' || isNaN(action.hoveredItemId)) {
-                _log2.default.warn('Hovered item should be an item ID number. Got: ' + action.hoveredItemId);
-                return state;
-            }
-            return action.hoveredItemId;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-/**
- * Set the hovered item state to the given item ID
- * @param {number} hoveredItemId The paper.Item ID of the hover indicator item.
- * @return {object} Redux action to change the hovered item.
- */
-var setHoveredItem = function setHoveredItem(hoveredItemId) {
-    return {
-        type: CHANGE_HOVERED,
-        hoveredItemId: hoveredItemId
-    };
-};
-
-var clearHoveredItem = function clearHoveredItem() {
-    return {
-        type: CHANGE_HOVERED,
-        hoveredItemId: null
-    };
-};
-
-exports.default = reducer;
-exports.setHoveredItem = setHoveredItem;
-exports.clearHoveredItem = clearHoveredItem;
-
-/***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22962,7 +23098,7 @@ exports.window = WINDOW;
 exports.document = DOCUMENT;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22993,18 +23129,19 @@ var setDefaultGuideStyle = function setDefaultGuideStyle(item) {
     item.guide = true;
 };
 
-var hoverItem = function hoverItem(hitResult) {
-    var segments = hitResult.item.segments;
+var hoverItem = function hoverItem(item) {
+    var segments = item.segments;
     var clone = new _paper2.default.Path(segments);
     setDefaultGuideStyle(clone);
-    if (hitResult.item.closed) {
+    if (item.closed) {
         clone.closed = true;
     }
     clone.parent = (0, _layer.getGuideLayer)();
-    clone.position = hitResult.item.position;
+    clone.position = item.position;
     clone.strokeColor = GUIDE_BLUE;
     clone.fillColor = null;
     clone.data.isHelperItem = true;
+    clone.data.origItem = item;
     clone.bringToFront();
 
     return clone;
@@ -23187,7 +23324,7 @@ exports.getGuideColor = getGuideColor;
 exports.setDefaultGuideStyle = setDefaultGuideStyle;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 var g;
@@ -23214,7 +23351,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23228,9 +23365,9 @@ module.exports = g;
 
 
 if (process.env.NODE_ENV !== 'production') {
-  var invariant = __webpack_require__(18);
-  var warning = __webpack_require__(30);
-  var ReactPropTypesSecret = __webpack_require__(36);
+  var invariant = __webpack_require__(19);
+  var warning = __webpack_require__(32);
+  var ReactPropTypesSecret = __webpack_require__(37);
   var loggedTypeFailures = {};
 }
 
@@ -23281,7 +23418,7 @@ module.exports = checkPropTypes;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23300,7 +23437,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23339,7 +23476,7 @@ var ExecutionEnvironment = {
 module.exports = ExecutionEnvironment;
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23367,7 +23504,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23439,7 +23576,7 @@ function isPlainObject(value) {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23467,7 +23604,7 @@ function warning(message) {
 }
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23527,7 +23664,7 @@ module.exports = keyMirror;
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23538,7 +23675,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clearUndoState = exports.undoSnapshot = exports.redo = exports.undo = exports.default = undefined;
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -23621,7 +23758,7 @@ exports.undoSnapshot = undoSnapshot;
 exports.clearUndoState = clearUndoState;
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23632,7 +23769,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clearPasteOffset = exports.incrementPasteOffset = exports.setClipboardItems = exports.default = undefined;
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -23699,7 +23836,7 @@ exports.incrementPasteOffset = incrementPasteOffset;
 exports.clearPasteOffset = clearPasteOffset;
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23769,7 +23906,7 @@ ButtonComponent.propTypes = {
 exports.default = ButtonComponent;
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23780,7 +23917,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeBrushSize = exports.default = undefined;
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -23815,7 +23952,7 @@ exports.default = reducer;
 exports.changeBrushSize = changeBrushSize;
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // http://stackoverflow.com/questions/33505992/babel-6-changes-how-it-exports-default
@@ -23825,7 +23962,7 @@ module.exports = lib.default
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23835,7 +23972,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _isInBrowser = __webpack_require__(48);
+var _isInBrowser = __webpack_require__(49);
 
 var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
 
@@ -23880,7 +24017,7 @@ if (_isInBrowser2['default']) {
 exports['default'] = { js: js, css: css };
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -23894,7 +24031,7 @@ var isBrowser = (typeof window === "undefined" ? "undefined" : _typeof(window)) 
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23905,7 +24042,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clientOnly = exports.noop = exports.equalRecords = exports.find = undefined;
 
-var _platform = __webpack_require__(32);
+var _platform = __webpack_require__(33);
 
 var find = function find(f, xs) {
   return xs.reduce(function (b, x) {
@@ -23939,7 +24076,7 @@ exports.noop = noop;
 exports.clientOnly = clientOnly;
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23950,7 +24087,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeBrushSize = exports.default = undefined;
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -23985,7 +24122,7 @@ exports.default = reducer;
 exports.changeBrushSize = changeBrushSize;
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24058,7 +24195,7 @@ exports.closeFillColor = closeFillColor;
 exports.closeStrokeColor = closeStrokeColor;
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24114,7 +24251,7 @@ exports.activateEyeDropper = activateEyeDropper;
 exports.deactivateEyeDropper = deactivateEyeDropper;
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24166,7 +24303,92 @@ Label.defaultProps = {
 exports.default = Label;
 
 /***/ }),
-/* 54 */
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getHoveredItem = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _item = __webpack_require__(22);
+
+var _guides = __webpack_require__(34);
+
+var _group = __webpack_require__(20);
+
+var _math = __webpack_require__(26);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @param {!MouseEvent} event mouse event
+ * @param {?object} hitOptions hit options to use
+ * @param {?boolean} subselect Whether items within groups can be hovered. If false, the
+ *    entire group should be hovered.
+ * @return {paper.Item} the hovered item or null if there is none
+ */
+var getHoveredItem = function getHoveredItem(event, hitOptions, subselect) {
+    // @todo make hit test only hit painting layer
+    var hitResults = _paper2.default.project.hitTestAll(event.point, hitOptions);
+    if (hitResults.length === 0) {
+        return null;
+    }
+    // sort items by z-index
+    var items = [];
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = hitResults[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var hitResult = _step.value;
+
+            if (!(hitResult.item.data && hitResult.item.data.noHover) && !hitResult.item.selected) {
+                items.push(hitResult.item);
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    items.sort(_math.sortItemsByZIndex);
+
+    var item = items[items.length - 1];
+    if (!item) {
+        return null;
+    }
+
+    if ((0, _item.isBoundsItem)(item)) {
+        return (0, _guides.hoverBounds)(item);
+    } else if (!subselect && (0, _group.isGroupChild)(item)) {
+        return (0, _guides.hoverBounds)((0, _item.getRootItem)(item));
+    }
+    return (0, _guides.hoverItem)(item);
+};
+
+exports.getHoveredItem = getHoveredItem;
+
+/***/ }),
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24190,7 +24412,7 @@ var _classnames = __webpack_require__(13);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _input = __webpack_require__(227);
+var _input = __webpack_require__(231);
 
 var _input2 = _interopRequireDefault(_input);
 
@@ -24222,7 +24444,7 @@ Input.defaultProps = {
 exports.default = Input;
 
 /***/ }),
-/* 55 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24238,25 +24460,25 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _keymirror = __webpack_require__(41);
+var _keymirror = __webpack_require__(42);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
 var _selection = __webpack_require__(4);
 
-var _guides = __webpack_require__(33);
+var _guides = __webpack_require__(34);
 
 var _layer = __webpack_require__(21);
 
-var _scaleTool = __webpack_require__(245);
+var _scaleTool = __webpack_require__(249);
 
 var _scaleTool2 = _interopRequireDefault(_scaleTool);
 
-var _rotateTool = __webpack_require__(246);
+var _rotateTool = __webpack_require__(250);
 
 var _rotateTool2 = _interopRequireDefault(_rotateTool);
 
-var _moveTool = __webpack_require__(88);
+var _moveTool = __webpack_require__(90);
 
 var _moveTool2 = _interopRequireDefault(_moveTool);
 
@@ -24558,7 +24780,7 @@ var BoundingBoxTool = function () {
 exports.default = BoundingBoxTool;
 
 /***/ }),
-/* 56 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24604,7 +24826,7 @@ if (process.env.NODE_ENV === 'production') {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 57 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24685,7 +24907,7 @@ module.exports = EventListener;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 58 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24756,7 +24978,7 @@ function shallowEqual(objA, objB) {
 module.exports = shallowEqual;
 
 /***/ }),
-/* 59 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24799,7 +25021,7 @@ function containsNode(outerNode, innerNode) {
 module.exports = containsNode;
 
 /***/ }),
-/* 60 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24829,7 +25051,7 @@ function focusNode(node) {
 module.exports = focusNode;
 
 /***/ }),
-/* 61 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24871,7 +25093,7 @@ function getActiveElement(doc) /*?DOMElement*/{
 module.exports = getActiveElement;
 
 /***/ }),
-/* 62 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24886,11 +25108,11 @@ var _paintEditor = __webpack_require__(109);
 
 var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
-var _selectionHoc = __webpack_require__(281);
+var _selectionHoc = __webpack_require__(285);
 
 var _selectionHoc2 = _interopRequireDefault(_selectionHoc);
 
-var _scratchPaintReducer = __webpack_require__(282);
+var _scratchPaintReducer = __webpack_require__(286);
 
 var _scratchPaintReducer2 = _interopRequireDefault(_scratchPaintReducer);
 
@@ -24902,7 +25124,7 @@ exports.default = Wrapped;
 exports.ScratchPaintReducer = _scratchPaintReducer2.default;
 
 /***/ }),
-/* 63 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24924,7 +25146,7 @@ exports['default'] = exports;
 
 
 /***/ }),
-/* 64 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24962,7 +25184,7 @@ exports.hop = hop;
 //# sourceMappingURL=utils.js.map
 
 /***/ }),
-/* 65 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25021,7 +25243,7 @@ module.exports = invariant;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 66 */
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25045,19 +25267,19 @@ var storeShape = __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.shape({
 });
 
 /***/ }),
-/* 67 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = connectAdvanced;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics__ = __webpack_require__(136);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_Subscription__ = __webpack_require__(137);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_PropTypes__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_PropTypes__ = __webpack_require__(68);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -25333,13 +25555,13 @@ selectorFactory) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
 
 /***/ }),
-/* 68 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ActionTypes; });
 /* harmony export (immutable) */ __webpack_exports__["b"] = createStore;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable__ = __webpack_require__(149);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_symbol_observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_symbol_observable__);
 
@@ -25592,7 +25814,7 @@ var ActionTypes = {
 }
 
 /***/ }),
-/* 69 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25606,7 +25828,7 @@ var Symbol = __WEBPACK_IMPORTED_MODULE_0__root_js__["a" /* default */].Symbol;
 
 
 /***/ }),
-/* 70 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -25645,14 +25867,14 @@ function compose() {
 }
 
 /***/ }),
-/* 71 */
+/* 73 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = wrapMapToPropsConstant;
 /* unused harmony export getDependsOnOwnProps */
 /* harmony export (immutable) */ __webpack_exports__["b"] = wrapMapToPropsFunc;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_verifyPlainObject__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_verifyPlainObject__ = __webpack_require__(74);
 
 
 function wrapMapToPropsConstant(getConstant) {
@@ -25723,13 +25945,13 @@ function wrapMapToPropsFunc(mapToProps, methodName) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
 
 /***/ }),
-/* 72 */
+/* 74 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = verifyPlainObject;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warning__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash_es_isPlainObject__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__warning__ = __webpack_require__(39);
 
 
 
@@ -25740,7 +25962,7 @@ function verifyPlainObject(value, displayName, methodName) {
 }
 
 /***/ }),
-/* 73 */
+/* 75 */
 /***/ (function(module, exports) {
 
 var hex = {
@@ -25766,7 +25988,7 @@ module.exports = color;
 
 
 /***/ }),
-/* 74 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25860,7 +26082,7 @@ exports.shouldShowUndo = shouldShowUndo;
 exports.shouldShowRedo = shouldShowRedo;
 
 /***/ }),
-/* 75 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25973,7 +26195,7 @@ exports.zoomOnSelection = zoomOnSelection;
 exports.zoomOnFixedPoint = zoomOnFixedPoint;
 
 /***/ }),
-/* 76 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26098,7 +26320,7 @@ exports.shouldShowBringForward = shouldShowBringForward;
 exports.shouldShowSendBackward = shouldShowSendBackward;
 
 /***/ }),
-/* 77 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26237,7 +26459,7 @@ exports.default = Box;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 78 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26255,7 +26477,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
@@ -26758,19 +26980,19 @@ var Blobbiness = function () {
 exports.default = Blobbiness;
 
 /***/ }),
-/* 79 */
+/* 81 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ebrush%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E %3Cg id='brush' stroke='%23575E75' stroke-width='0.5' fill='%23575E75'%3E %3Cpath d='M12.5787225,11.2102026 C11.6196284,12.1692967 10.9129274,12.6614634 10.3576624,12.8507583 C10.1936069,12.3459719 9.91597437,11.8790445 9.52476494,11.4878351 C9.12093585,11.0966257 8.65400846,10.8189932 8.14922209,10.6423179 C8.35113664,10.0870529 8.84330335,9.38035203 9.78977778,8.43387759 C12.0613164,6.14971929 16.0996074,3.36077461 16.8694066,4.13057382 C17.6392058,4.90037303 14.8502611,8.93866396 12.5787225,11.2102026 Z M8.39124334,15.4120104 C8.01569197,15.7748657 7.53110955,15.9621459 7.04652713,15.9855559 L7.04652713,15.9972609 L6.92538153,15.9972609 C3.67867934,16.114311 2.26127577,12.4389379 3.37581533,12.8252032 C4.84167714,13.3285186 5.43650205,12.602808 5.45951972,12.579398 C6.27119527,11.8068673 7.57956779,11.8068673 8.39124334,12.579398 C9.20291889,13.3636337 9.20291889,14.6394798 8.39124334,15.4120104 Z' id='bursh-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eeraser%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='eraser' fill='%23575E75'%3E %3Cpath d='M13.5370061,14.8291597 L10.9660545,14.8291597 L8.3016138,12.164719 L11.1686144,9.29771842 L15.1263216,13.2554257 L13.5370061,14.8291597 Z M16.7779633,12.6944908 L11.1686144,7.10072343 L8.3016138,4.23372287 C8.00556483,3.92209238 7.50695604,3.92209238 7.19532554,4.23372287 L3.22203673,8.20701169 C2.92598776,8.50306066 2.92598776,9.00166945 3.22203673,9.29771842 L6.10461881,12.164719 L10.0934891,16.1535893 C10.2337229,16.3094046 10.4362827,16.3873122 10.6388425,16.3873122 L13.8642181,16.3873122 C14.066778,16.3873122 14.2693378,16.3094046 14.4095715,16.1535893 L16.7779633,13.8007791 C17.0740122,13.5047301 17.0740122,13.0061213 16.7779633,12.6944908 L16.7779633,12.6944908 Z' id='eraser-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26794,7 +27016,7 @@ var _classnames2 = _interopRequireDefault(_classnames);
 
 var _stylePath = __webpack_require__(8);
 
-var _noFill = __webpack_require__(82);
+var _noFill = __webpack_require__(84);
 
 var _noFill2 = _interopRequireDefault(_noFill);
 
@@ -26859,13 +27081,13 @@ ColorButtonComponent.defaultProps = {
 exports.default = ColorButtonComponent;
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eno-fill%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='square'%3E %3Cg id='no-fill' stroke='%23FF661A' stroke-width='2'%3E %3Cpath d='M3,17 L17,3' id='Line'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 83 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26887,7 +27109,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _parseColor = __webpack_require__(84);
+var _parseColor = __webpack_require__(86);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -26899,9 +27121,9 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
-var _eyeDropper = __webpack_require__(52);
+var _eyeDropper = __webpack_require__(53);
 
 var _colorPicker = __webpack_require__(216);
 
@@ -27062,7 +27284,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ColorPicker);
 
 /***/ }),
-/* 84 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var convert = __webpack_require__(214);
@@ -27151,7 +27373,7 @@ module.exports = function (cstr) {
 
 
 /***/ }),
-/* 85 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27175,11 +27397,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _button = __webpack_require__(44);
+var _button = __webpack_require__(45);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _labeledIconButton = __webpack_require__(229);
+var _labeledIconButton = __webpack_require__(233);
 
 var _labeledIconButton2 = _interopRequireDefault(_labeledIconButton);
 
@@ -27227,7 +27449,7 @@ LabeledIconButton.propTypes = {
 exports.default = LabeledIconButton;
 
 /***/ }),
-/* 86 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27331,7 +27553,7 @@ exports.default = EyeDropperTool;
 exports.LOUPE_RADIUS = LOUPE_RADIUS;
 
 /***/ }),
-/* 87 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27444,7 +27666,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 
 /***/ }),
-/* 88 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27460,11 +27682,11 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 var _item = __webpack_require__(22);
 
-var _math = __webpack_require__(89);
+var _math = __webpack_require__(26);
 
 var _selection = __webpack_require__(4);
 
@@ -27652,137 +27874,6 @@ var MoveTool = function () {
 exports.default = MoveTool;
 
 /***/ }),
-/* 89 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.snapDeltaToAngle = exports.getRandomBoolean = exports.getRandomInt = exports.checkPointsClose = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var checkPointsClose = function checkPointsClose(startPos, eventPoint, threshold) {
-    var xOff = Math.abs(startPos.x - eventPoint.x);
-    var yOff = Math.abs(startPos.y - eventPoint.y);
-    if (xOff < threshold && yOff < threshold) {
-        return true;
-    }
-    return false;
-};
-
-var getRandomInt = function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-};
-
-var getRandomBoolean = function getRandomBoolean() {
-    return getRandomInt(0, 2) === 1;
-};
-
-// Thanks Mikko Mononen! https://github.com/memononen/stylii
-var snapDeltaToAngle = function snapDeltaToAngle(delta, snapAngle) {
-    var angle = Math.atan2(delta.y, delta.x);
-    angle = Math.round(angle / snapAngle) * snapAngle;
-    var dirx = Math.cos(angle);
-    var diry = Math.sin(angle);
-    var d = dirx * delta.x + diry * delta.y;
-    return new _paper2.default.Point(dirx * d, diry * d);
-};
-
-exports.checkPointsClose = checkPointsClose;
-exports.getRandomInt = getRandomInt;
-exports.getRandomBoolean = getRandomBoolean;
-exports.snapDeltaToAngle = snapDeltaToAngle;
-
-/***/ }),
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.getHoveredItem = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _item = __webpack_require__(22);
-
-var _guides = __webpack_require__(33);
-
-var _group = __webpack_require__(19);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @param {!MouseEvent} event mouse event
- * @param {?object} hitOptions hit options to use
- * @param {?boolean} subselect Whether items within groups can be hovered. If false, the
- *    entire group should be hovered.
- * @return {paper.Item} the hovered item or null if there is none
- */
-var getHoveredItem = function getHoveredItem(event, hitOptions, subselect) {
-    // @todo make hit test only hit painting layer
-    var hitResults = _paper2.default.project.hitTestAll(event.point, hitOptions);
-    if (hitResults.length === 0) {
-        return null;
-    }
-
-    var hitResult = void 0;
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = hitResults[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var result = _step.value;
-
-            if (!(result.item.data && result.item.data.noHover) && !result.item.selected) {
-                hitResult = result;
-                break;
-            }
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
-    }
-
-    if (!hitResult) {
-        return null;
-    }
-
-    if ((0, _item.isBoundsItem)(hitResult.item)) {
-        return (0, _guides.hoverBounds)(hitResult.item);
-    } else if (!subselect && (0, _group.isGroupChild)(hitResult.item)) {
-        return (0, _guides.hoverBounds)((0, _item.getRootItem)(hitResult.item));
-    }
-    return (0, _guides.hoverItem)(hitResult);
-};
-
-exports.getHoveredItem = getHoveredItem;
-
-/***/ }),
 /* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -27795,7 +27886,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _guides = __webpack_require__(33);
+var _guides = __webpack_require__(34);
 
 var _selection = __webpack_require__(4);
 
@@ -27869,13 +27960,13 @@ exports.updateIntl = exports.intlInitialState = exports.IntlProvider = exports.d
 
 var _reactIntl = __webpack_require__(16);
 
-var _reactIntlRedux = __webpack_require__(285);
+var _reactIntlRedux = __webpack_require__(289);
 
-var _scratchL10n = __webpack_require__(288);
+var _scratchL10n = __webpack_require__(292);
 
 var _scratchL10n2 = _interopRequireDefault(_scratchL10n);
 
-var _paintMsgs = __webpack_require__(289);
+var _paintMsgs = __webpack_require__(293);
 
 var _paintMsgs2 = _interopRequireDefault(_paintMsgs);
 
@@ -27958,19 +28049,19 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(56);
+var _reactDom = __webpack_require__(58);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _ = __webpack_require__(62);
+var _ = __webpack_require__(64);
 
 var _2 = _interopRequireDefault(_);
 
 var _reactRedux = __webpack_require__(7);
 
-var _redux = __webpack_require__(24);
+var _redux = __webpack_require__(25);
 
-var _combineReducers = __webpack_require__(284);
+var _combineReducers = __webpack_require__(288);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
@@ -28057,7 +28148,7 @@ _reactDom2.default.render(_react2.default.createElement(
  This source code is licensed under the MIT license found in the
  LICENSE file in the root directory of this source tree.
 */
-var f=__webpack_require__(23),p=__webpack_require__(29);__webpack_require__(18);var r=__webpack_require__(15);
+var f=__webpack_require__(24),p=__webpack_require__(31);__webpack_require__(19);var r=__webpack_require__(15);
 function t(a){for(var b=arguments.length-1,d="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,e=0;e<b;e++)d+="\x26args[]\x3d"+encodeURIComponent(arguments[e+1]);b=Error(d+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var u={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function v(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}v.prototype.isReactComponent={};v.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?t("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};v.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function w(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}function x(){}x.prototype=v.prototype;var y=w.prototype=new x;y.constructor=w;f(y,v.prototype);y.isPureReactComponent=!0;function z(a,b,d){this.props=a;this.context=b;this.refs=p;this.updater=d||u}var A=z.prototype=new x;A.constructor=z;f(A,v.prototype);A.unstable_isAsyncReactComponent=!0;A.render=function(){return this.props.children};
@@ -28094,12 +28185,12 @@ if (process.env.NODE_ENV !== "production") {
 
 'use strict';
 
-var objectAssign$1 = __webpack_require__(23);
-var require$$0 = __webpack_require__(30);
-var emptyObject = __webpack_require__(29);
-var invariant = __webpack_require__(18);
+var objectAssign$1 = __webpack_require__(24);
+var require$$0 = __webpack_require__(32);
+var emptyObject = __webpack_require__(31);
+var invariant = __webpack_require__(19);
 var emptyFunction = __webpack_require__(15);
-var checkPropTypes = __webpack_require__(35);
+var checkPropTypes = __webpack_require__(36);
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -29794,7 +29885,7 @@ module.exports = ReactEntry;
  LICENSE file in the root directory of this source tree.
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0);__webpack_require__(18);var l=__webpack_require__(37),n=__webpack_require__(23),ba=__webpack_require__(57),ca=__webpack_require__(15),da=__webpack_require__(29),ea=__webpack_require__(58),fa=__webpack_require__(59),ha=__webpack_require__(60),ia=__webpack_require__(61);
+var aa=__webpack_require__(0);__webpack_require__(19);var l=__webpack_require__(38),n=__webpack_require__(24),ba=__webpack_require__(59),ca=__webpack_require__(15),da=__webpack_require__(31),ea=__webpack_require__(60),fa=__webpack_require__(61),ha=__webpack_require__(62),ia=__webpack_require__(63);
 function w(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:w("227");
 function ja(a){switch(a){case "svg":return"http://www.w3.org/2000/svg";case "math":return"http://www.w3.org/1998/Math/MathML";default:return"http://www.w3.org/1999/xhtml"}}
 var ka={Namespaces:{html:"http://www.w3.org/1999/xhtml",mathml:"http://www.w3.org/1998/Math/MathML",svg:"http://www.w3.org/2000/svg"},getIntrinsicNamespace:ja,getChildNamespace:function(a,b){return null==a||"http://www.w3.org/1999/xhtml"===a?ja(b):"http://www.w3.org/2000/svg"===a&&"foreignObject"===b?"http://www.w3.org/1999/xhtml":a}},la=null,oa={};
@@ -30120,22 +30211,22 @@ if (process.env.NODE_ENV !== "production") {
 'use strict';
 
 var react = __webpack_require__(0);
-var invariant = __webpack_require__(18);
-var ExecutionEnvironment = __webpack_require__(37);
-var _assign = __webpack_require__(23);
-var EventListener = __webpack_require__(57);
-var require$$0 = __webpack_require__(30);
+var invariant = __webpack_require__(19);
+var ExecutionEnvironment = __webpack_require__(38);
+var _assign = __webpack_require__(24);
+var EventListener = __webpack_require__(59);
+var require$$0 = __webpack_require__(32);
 var hyphenateStyleName = __webpack_require__(101);
 var emptyFunction = __webpack_require__(15);
 var camelizeStyleName = __webpack_require__(103);
 var performanceNow = __webpack_require__(105);
 var propTypes = __webpack_require__(1);
-var emptyObject = __webpack_require__(29);
-var checkPropTypes = __webpack_require__(35);
-var shallowEqual = __webpack_require__(58);
-var containsNode = __webpack_require__(59);
-var focusNode = __webpack_require__(60);
-var getActiveElement = __webpack_require__(61);
+var emptyObject = __webpack_require__(31);
+var checkPropTypes = __webpack_require__(36);
+var shallowEqual = __webpack_require__(60);
+var containsNode = __webpack_require__(61);
+var focusNode = __webpack_require__(62);
+var getActiveElement = __webpack_require__(63);
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
@@ -47536,7 +47627,7 @@ module.exports = performanceNow;
 
 
 
-var ExecutionEnvironment = __webpack_require__(37);
+var ExecutionEnvironment = __webpack_require__(38);
 
 var performance;
 
@@ -47561,12 +47652,12 @@ module.exports = performance || {};
 
 
 var emptyFunction = __webpack_require__(15);
-var invariant = __webpack_require__(18);
-var warning = __webpack_require__(30);
-var assign = __webpack_require__(23);
+var invariant = __webpack_require__(19);
+var warning = __webpack_require__(32);
+var assign = __webpack_require__(24);
 
-var ReactPropTypesSecret = __webpack_require__(36);
-var checkPropTypes = __webpack_require__(35);
+var ReactPropTypesSecret = __webpack_require__(37);
+var checkPropTypes = __webpack_require__(36);
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -48111,8 +48202,8 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 
 var emptyFunction = __webpack_require__(15);
-var invariant = __webpack_require__(18);
-var ReactPropTypesSecret = __webpack_require__(36);
+var invariant = __webpack_require__(19);
+var ReactPropTypesSecret = __webpack_require__(37);
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -48188,27 +48279,27 @@ var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
 var _modes = __webpack_require__(14);
 
-var _undo = __webpack_require__(42);
+var _undo = __webpack_require__(43);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
-var _clipboard = __webpack_require__(43);
+var _clipboard = __webpack_require__(44);
 
-var _eyeDropper = __webpack_require__(52);
+var _eyeDropper = __webpack_require__(53);
 
 var _layer = __webpack_require__(21);
 
-var _undo2 = __webpack_require__(74);
+var _undo2 = __webpack_require__(76);
 
-var _order = __webpack_require__(76);
+var _order = __webpack_require__(78);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 var _selection = __webpack_require__(4);
 
-var _view = __webpack_require__(75);
+var _view = __webpack_require__(77);
 
-var _eyeDropper2 = __webpack_require__(86);
+var _eyeDropper2 = __webpack_require__(88);
 
 var _eyeDropper3 = _interopRequireDefault(_eyeDropper2);
 
@@ -48619,15 +48710,15 @@ var _paperCanvas = __webpack_require__(134);
 
 var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
-var _order = __webpack_require__(76);
+var _order = __webpack_require__(78);
 
-var _box = __webpack_require__(77);
+var _box = __webpack_require__(79);
 
 var _box2 = _interopRequireDefault(_box);
 
-var _button = __webpack_require__(44);
+var _button = __webpack_require__(45);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -48655,107 +48746,111 @@ var _fillColorIndicator = __webpack_require__(209);
 
 var _fillColorIndicator2 = _interopRequireDefault(_fillColorIndicator);
 
-var _input = __webpack_require__(54);
+var _fillMode = __webpack_require__(227);
+
+var _fillMode2 = _interopRequireDefault(_fillMode);
+
+var _input = __webpack_require__(56);
 
 var _input2 = _interopRequireDefault(_input);
 
-var _inputGroup = __webpack_require__(26);
+var _inputGroup = __webpack_require__(28);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(54);
 
 var _label2 = _interopRequireDefault(_label);
 
-var _labeledIconButton = __webpack_require__(85);
+var _labeledIconButton = __webpack_require__(87);
 
 var _labeledIconButton2 = _interopRequireDefault(_labeledIconButton);
 
-var _lineMode = __webpack_require__(231);
+var _lineMode = __webpack_require__(235);
 
 var _lineMode2 = _interopRequireDefault(_lineMode);
 
-var _loupe = __webpack_require__(235);
+var _loupe = __webpack_require__(239);
 
 var _loupe2 = _interopRequireDefault(_loupe);
 
-var _modeTools = __webpack_require__(238);
+var _modeTools = __webpack_require__(242);
 
 var _modeTools2 = _interopRequireDefault(_modeTools);
 
-var _ovalMode = __webpack_require__(243);
+var _ovalMode = __webpack_require__(247);
 
 var _ovalMode2 = _interopRequireDefault(_ovalMode);
 
-var _rectMode = __webpack_require__(249);
+var _rectMode = __webpack_require__(253);
 
 var _rectMode2 = _interopRequireDefault(_rectMode);
 
-var _reshapeMode = __webpack_require__(253);
+var _reshapeMode = __webpack_require__(257);
 
 var _reshapeMode2 = _interopRequireDefault(_reshapeMode);
 
-var _selectMode = __webpack_require__(259);
+var _selectMode = __webpack_require__(263);
 
 var _selectMode2 = _interopRequireDefault(_selectMode);
 
-var _strokeColorIndicator = __webpack_require__(263);
+var _strokeColorIndicator = __webpack_require__(267);
 
 var _strokeColorIndicator2 = _interopRequireDefault(_strokeColorIndicator);
 
-var _strokeWidthIndicator = __webpack_require__(265);
+var _strokeWidthIndicator = __webpack_require__(269);
 
 var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
 
-var _layoutConstants = __webpack_require__(267);
+var _layoutConstants = __webpack_require__(271);
 
 var _layoutConstants2 = _interopRequireDefault(_layoutConstants);
 
-var _paintEditor = __webpack_require__(268);
+var _paintEditor = __webpack_require__(272);
 
 var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
-var _group2 = __webpack_require__(270);
+var _group2 = __webpack_require__(274);
 
 var _group3 = _interopRequireDefault(_group2);
 
-var _redo = __webpack_require__(271);
+var _redo = __webpack_require__(275);
 
 var _redo2 = _interopRequireDefault(_redo);
 
-var _sendBack = __webpack_require__(272);
+var _sendBack = __webpack_require__(276);
 
 var _sendBack2 = _interopRequireDefault(_sendBack);
 
-var _sendBackward = __webpack_require__(273);
+var _sendBackward = __webpack_require__(277);
 
 var _sendBackward2 = _interopRequireDefault(_sendBackward);
 
-var _sendForward = __webpack_require__(274);
+var _sendForward = __webpack_require__(278);
 
 var _sendForward2 = _interopRequireDefault(_sendForward);
 
-var _sendFront = __webpack_require__(275);
+var _sendFront = __webpack_require__(279);
 
 var _sendFront2 = _interopRequireDefault(_sendFront);
 
-var _undo = __webpack_require__(276);
+var _undo = __webpack_require__(280);
 
 var _undo2 = _interopRequireDefault(_undo);
 
-var _ungroup = __webpack_require__(277);
+var _ungroup = __webpack_require__(281);
 
 var _ungroup2 = _interopRequireDefault(_ungroup);
 
-var _zoomIn = __webpack_require__(278);
+var _zoomIn = __webpack_require__(282);
 
 var _zoomIn2 = _interopRequireDefault(_zoomIn);
 
-var _zoomOut = __webpack_require__(279);
+var _zoomOut = __webpack_require__(283);
 
 var _zoomOut2 = _interopRequireDefault(_zoomOut);
 
-var _zoomReset = __webpack_require__(280);
+var _zoomReset = __webpack_require__(284);
 
 var _zoomReset2 = _interopRequireDefault(_zoomReset);
 
@@ -49043,6 +49138,9 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                 _react2.default.createElement(_lineMode2.default, {
                     onUpdateSvg: props.onUpdateSvg
                 }),
+                _react2.default.createElement(_fillMode2.default, {
+                    onUpdateSvg: props.onUpdateSvg
+                }),
                 _react2.default.createElement(_ovalMode2.default, {
                     onUpdateSvg: props.onUpdateSvg
                 }),
@@ -49189,7 +49287,7 @@ See the accompanying LICENSE file for terms.
 /* jslint esnext: true */
 
 
-var src$utils$$ = __webpack_require__(64), src$es5$$ = __webpack_require__(114), src$compiler$$ = __webpack_require__(115), intl$messageformat$parser$$ = __webpack_require__(116);
+var src$utils$$ = __webpack_require__(66), src$es5$$ = __webpack_require__(114), src$compiler$$ = __webpack_require__(115), intl$messageformat$parser$$ = __webpack_require__(116);
 exports["default"] = MessageFormat;
 
 // -- MessageFormat --------------------------------------------------------
@@ -49472,7 +49570,7 @@ See the accompanying LICENSE file for terms.
 /* jslint esnext: true */
 
 
-var src$utils$$ = __webpack_require__(64);
+var src$utils$$ = __webpack_require__(66);
 
 // Purposely using the same implementation as the Intl.js `Intl` polyfill.
 // Copyright 2013 Andy Earnshaw, MIT License
@@ -51217,7 +51315,7 @@ See the accompanying LICENSE file for terms.
 /* jslint esnext: true */
 
 
-var intl$messageformat$$ = __webpack_require__(63), src$diff$$ = __webpack_require__(123), src$es5$$ = __webpack_require__(124);
+var intl$messageformat$$ = __webpack_require__(65), src$diff$$ = __webpack_require__(123), src$es5$$ = __webpack_require__(124);
 exports["default"] = RelativeFormat;
 
 // -----------------------------------------------------------------------------
@@ -57287,27 +57385,27 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _undo = __webpack_require__(74);
+var _undo = __webpack_require__(76);
 
-var _undo2 = __webpack_require__(42);
+var _undo2 = __webpack_require__(43);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 var _layer = __webpack_require__(21);
 
 var _selection = __webpack_require__(4);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
-var _view = __webpack_require__(75);
+var _view = __webpack_require__(77);
 
-var _hover = __webpack_require__(31);
+var _hover = __webpack_require__(27);
 
-var _clipboard = __webpack_require__(43);
+var _clipboard = __webpack_require__(44);
 
 var _paperCanvas = __webpack_require__(172);
 
@@ -57329,7 +57427,7 @@ var PaperCanvas = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaperCanvas.__proto__ || Object.getPrototypeOf(PaperCanvas)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['setCanvas', 'importSvg', 'handleKeyDown', 'handleWheel']);
+        (0, _lodash2.default)(_this, ['setCanvas', 'importSvg', 'handleKeyDown', 'handleWheel', '_ensureClockwise']);
         return _this;
     }
 
@@ -57482,6 +57580,8 @@ var PaperCanvas = function (_React$Component) {
                         item = item.reduce();
                     }
 
+                    paperCanvas._ensureClockwise(item);
+
                     if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
                         item.position = _paper2.default.project.view.center.add(itemWidth / 2, itemHeight / 2).subtract(rotationCenterX, rotationCenterY);
                     } else {
@@ -57496,6 +57596,38 @@ var PaperCanvas = function (_React$Component) {
                     _paper2.default.project.view.update();
                 }
             });
+        }
+    }, {
+        key: '_ensureClockwise',
+        value: function _ensureClockwise(item) {
+            if (item instanceof _paper2.default.Group) {
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
+
+                try {
+                    for (var _iterator3 = item.children[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                        var child = _step3.value;
+
+                        this._ensureClockwise(child);
+                    }
+                } catch (err) {
+                    _didIteratorError3 = true;
+                    _iteratorError3 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                            _iterator3.return();
+                        }
+                    } finally {
+                        if (_didIteratorError3) {
+                            throw _iteratorError3;
+                        }
+                    }
+                }
+            } else if (item instanceof _paper2.default.PathItem) {
+                item.clockwise = true;
+            }
         }
     }, {
         key: 'setCanvas',
@@ -57593,8 +57725,8 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_prop_types__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_PropTypes__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_warning__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_PropTypes__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_warning__ = __webpack_require__(39);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -57829,7 +57961,7 @@ var Subscription = function () {
 
 "use strict";
 /* unused harmony export createConnect */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_connectAdvanced__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_connectAdvanced__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_shallowEqual__ = __webpack_require__(139);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mapDispatchToProps__ = __webpack_require__(140);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mapStateToProps__ = __webpack_require__(156);
@@ -57984,8 +58116,8 @@ function shallowEqual(objA, objB) {
 /* unused harmony export whenMapDispatchToPropsIsFunction */
 /* unused harmony export whenMapDispatchToPropsIsMissing */
 /* unused harmony export whenMapDispatchToPropsIsObject */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__wrapMapToProps__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_redux__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__wrapMapToProps__ = __webpack_require__(73);
 
 
 
@@ -58012,7 +58144,7 @@ function whenMapDispatchToPropsIsObject(mapDispatchToProps) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getRawTag_js__ = __webpack_require__(144);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__objectToString_js__ = __webpack_require__(145);
 
@@ -58072,14 +58204,14 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(34)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(35)))
 
 /***/ }),
 /* 144 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Symbol_js__ = __webpack_require__(71);
 
 
 /** Used for built-in method references. */
@@ -58270,7 +58402,7 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(34), __webpack_require__(151)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(35), __webpack_require__(151)(module)))
 
 /***/ }),
 /* 151 */
@@ -58335,9 +58467,9 @@ function symbolObservablePonyfill(root) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony export (immutable) */ __webpack_exports__["a"] = combineReducers;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(68);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__createStore__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash_es_isPlainObject__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_warning__ = __webpack_require__(41);
 
 
 
@@ -58476,7 +58608,7 @@ function combineReducers(reducers) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = bindActionCreators;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_warning__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_warning__ = __webpack_require__(41);
 
 
 function bindActionCreator(actionCreator, dispatch) {
@@ -58535,7 +58667,7 @@ function bindActionCreators(actionCreators, dispatch) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = applyMiddleware;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__compose__ = __webpack_require__(72);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -58592,7 +58724,7 @@ function applyMiddleware() {
 "use strict";
 /* unused harmony export whenMapStateToPropsIsFunction */
 /* unused harmony export whenMapStateToPropsIsMissing */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__wrapMapToProps__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__wrapMapToProps__ = __webpack_require__(73);
 
 
 function whenMapStateToPropsIsFunction(mapStateToProps) {
@@ -58616,7 +58748,7 @@ function whenMapStateToPropsIsMissing(mapStateToProps) {
 /* unused harmony export wrapMergePropsFunc */
 /* unused harmony export whenMergePropsIsFunction */
 /* unused harmony export whenMergePropsIsOmitted */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_verifyPlainObject__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_verifyPlainObject__ = __webpack_require__(74);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -58783,7 +58915,7 @@ function finalPropsSelectorFactory(dispatch, _ref2) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = verifySubselectors;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_warning__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils_warning__ = __webpack_require__(39);
 
 
 function verify(selector, methodName, displayName) {
@@ -59062,7 +59194,7 @@ module.exports = logger;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Transform = __webpack_require__(17),
-    color = __webpack_require__(73);
+    color = __webpack_require__(75);
 
 var colors = { debug: ['cyan'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
     logger = new Transform();
@@ -59086,7 +59218,7 @@ module.exports = logger;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Transform = __webpack_require__(17),
-    color = __webpack_require__(73),
+    color = __webpack_require__(75),
     colors = { debug: ['gray'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
     logger = new Transform();
 
@@ -59288,7 +59420,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -59308,7 +59440,7 @@ if(false) {
 /* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -61057,7 +61189,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -61077,7 +61209,7 @@ if(false) {
 /* 178 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -61150,7 +61282,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -61170,7 +61302,7 @@ if(false) {
 /* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -61216,19 +61348,19 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _blob = __webpack_require__(78);
+var _blob = __webpack_require__(80);
 
 var _blob2 = _interopRequireDefault(_blob);
 
 var _stylePath = __webpack_require__(8);
 
-var _fillColor = __webpack_require__(25);
+var _fillColor = __webpack_require__(23);
 
-var _brushMode = __webpack_require__(45);
+var _brushMode = __webpack_require__(46);
 
 var _modes3 = __webpack_require__(14);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
@@ -61643,11 +61775,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(20);
+var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _brush = __webpack_require__(79);
+var _brush = __webpack_require__(81);
 
 var _brush2 = _interopRequireDefault(_brush);
 
@@ -61688,7 +61820,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -61708,7 +61840,7 @@ if(false) {
 /* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -61854,7 +61986,7 @@ var _classnames = __webpack_require__(13);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _reactPopover = __webpack_require__(46);
+var _reactPopover = __webpack_require__(47);
 
 var _reactPopover2 = _interopRequireDefault(_reactPopover);
 
@@ -61976,7 +62108,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactDom = __webpack_require__(56);
+var _reactDom = __webpack_require__(58);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
@@ -62000,11 +62132,11 @@ var _layout = __webpack_require__(202);
 
 var _layout2 = _interopRequireDefault(_layout);
 
-var _platform = __webpack_require__(32);
+var _platform = __webpack_require__(33);
 
 var _platform2 = _interopRequireDefault(_platform);
 
-var _utils = __webpack_require__(49);
+var _utils = __webpack_require__(50);
 
 var _utils2 = _interopRequireDefault(_utils);
 
@@ -63575,7 +63707,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.supportedValue = exports.supportedProperty = exports.prefix = undefined;
 
-var _prefix = __webpack_require__(47);
+var _prefix = __webpack_require__(48);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
@@ -63617,11 +63749,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports['default'] = supportedProperty;
 
-var _isInBrowser = __webpack_require__(48);
+var _isInBrowser = __webpack_require__(49);
 
 var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
 
-var _prefix = __webpack_require__(47);
+var _prefix = __webpack_require__(48);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
@@ -63722,11 +63854,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports['default'] = supportedValue;
 
-var _isInBrowser = __webpack_require__(48);
+var _isInBrowser = __webpack_require__(49);
 
 var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
 
-var _prefix = __webpack_require__(47);
+var _prefix = __webpack_require__(48);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
@@ -63802,9 +63934,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.removeEventListener = exports.addEventListener = exports.off = exports.on = undefined;
 
-var _platform = __webpack_require__(32);
+var _platform = __webpack_require__(33);
 
-var _utils = __webpack_require__(49);
+var _utils = __webpack_require__(50);
 
 /* eslint no-param-reassign: 0 */
 
@@ -63927,9 +64059,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.equalCoords = exports.doesFitWithin = exports.centerOfBoundsFromBounds = exports.centerOfBounds = exports.centerOfSize = exports.axes = exports.pickZone = exports.place = exports.calcRelPos = exports.validTypeValues = exports.types = exports.El = undefined;
 
-var _platform = __webpack_require__(32);
+var _platform = __webpack_require__(33);
 
-var _utils = __webpack_require__(49);
+var _utils = __webpack_require__(50);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -64220,7 +64352,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -64240,7 +64372,7 @@ if(false) {
 /* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -64297,13 +64429,13 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _blob = __webpack_require__(78);
+var _blob = __webpack_require__(80);
 
 var _blob2 = _interopRequireDefault(_blob);
 
-var _eraserMode = __webpack_require__(50);
+var _eraserMode = __webpack_require__(51);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
 var _eraserMode2 = __webpack_require__(208);
 
@@ -64431,11 +64563,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(20);
+var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _eraser = __webpack_require__(80);
+var _eraser = __webpack_require__(82);
 
 var _eraser2 = _interopRequireDefault(_eraser);
 
@@ -64490,9 +64622,9 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _fillColor = __webpack_require__(25);
+var _fillColor = __webpack_require__(23);
 
-var _modals = __webpack_require__(51);
+var _modals = __webpack_require__(52);
 
 var _modes = __webpack_require__(6);
 
@@ -64622,25 +64754,25 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactPopover = __webpack_require__(46);
+var _reactPopover = __webpack_require__(47);
 
 var _reactPopover2 = _interopRequireDefault(_reactPopover);
 
 var _reactIntl = __webpack_require__(16);
 
-var _colorButton = __webpack_require__(81);
+var _colorButton = __webpack_require__(83);
 
 var _colorButton2 = _interopRequireDefault(_colorButton);
 
-var _colorPicker = __webpack_require__(83);
+var _colorPicker = __webpack_require__(85);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
-var _inputGroup = __webpack_require__(26);
+var _inputGroup = __webpack_require__(28);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(54);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -64713,7 +64845,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -64733,7 +64865,7 @@ if(false) {
 /* 213 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -65582,7 +65714,7 @@ var _classnames = __webpack_require__(13);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _parseColor = __webpack_require__(84);
+var _parseColor = __webpack_require__(86);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -65598,7 +65730,7 @@ var _eyeDropper = __webpack_require__(222);
 
 var _eyeDropper2 = _interopRequireDefault(_eyeDropper);
 
-var _noFill = __webpack_require__(82);
+var _noFill = __webpack_require__(84);
 
 var _noFill2 = _interopRequireDefault(_noFill);
 
@@ -65937,7 +66069,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -65957,7 +66089,7 @@ if(false) {
 /* 219 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -65985,7 +66117,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -66005,7 +66137,7 @@ if(false) {
 /* 221 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -66050,7 +66182,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -66070,7 +66202,7 @@ if(false) {
 /* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -66099,7 +66231,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -66119,7 +66251,7 @@ if(false) {
 /* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -66140,10 +66272,464 @@ exports.locals = {
 /* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(7);
+
+var _lodash = __webpack_require__(5);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _modes = __webpack_require__(6);
+
+var _modes2 = _interopRequireDefault(_modes);
+
+var _fillTool = __webpack_require__(228);
+
+var _fillTool2 = _interopRequireDefault(_fillTool);
+
+var _stylePath = __webpack_require__(8);
+
+var _fillColor = __webpack_require__(23);
+
+var _modes3 = __webpack_require__(14);
+
+var _selectedItems = __webpack_require__(9);
+
+var _selection = __webpack_require__(4);
+
+var _hover = __webpack_require__(27);
+
+var _fillMode = __webpack_require__(229);
+
+var _fillMode2 = _interopRequireDefault(_fillMode);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FillMode = function (_React$Component) {
+    _inherits(FillMode, _React$Component);
+
+    function FillMode(props) {
+        _classCallCheck(this, FillMode);
+
+        var _this = _possibleConstructorReturn(this, (FillMode.__proto__ || Object.getPrototypeOf(FillMode)).call(this, props));
+
+        (0, _lodash2.default)(_this, ['activateTool', 'deactivateTool']);
+        return _this;
+    }
+
+    _createClass(FillMode, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            if (this.props.isFillModeActive) {
+                this.activateTool(this.props);
+            }
+        }
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            if (this.tool && nextProps.fillColor !== this.props.fillColor) {
+                this.tool.setFillColor(nextProps.fillColor);
+            }
+            if (this.tool && nextProps.hoveredItemId !== this.props.hoveredItemId) {
+                this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
+            }
+
+            if (nextProps.isFillModeActive && !this.props.isFillModeActive) {
+                this.activateTool();
+            } else if (!nextProps.isFillModeActive && this.props.isFillModeActive) {
+                this.deactivateTool();
+            }
+        }
+    }, {
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate(nextProps) {
+            return nextProps.isFillModeActive !== this.props.isFillModeActive;
+        }
+    }, {
+        key: 'activateTool',
+        value: function activateTool() {
+            (0, _selection.clearSelection)(this.props.clearSelectedItems);
+            // Force the default fill color if fill is MIXED
+            if (this.props.fillColor === _stylePath.MIXED) {
+                this.props.onChangeFillColor(_fillColor.DEFAULT_COLOR);
+            }
+            this.tool = new _fillTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.onUpdateSvg);
+            this.tool.setFillColor(this.props.fillColor === _stylePath.MIXED ? _fillColor.DEFAULT_COLOR : this.props.fillColor);
+            this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
+            this.tool.activate();
+        }
+    }, {
+        key: 'deactivateTool',
+        value: function deactivateTool() {
+            this.tool.deactivateTool();
+            this.tool.remove();
+            this.tool = null;
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(_fillMode2.default, {
+                isSelected: this.props.isFillModeActive,
+                onMouseDown: this.props.handleMouseDown
+            });
+        }
+    }]);
+
+    return FillMode;
+}(_react2.default.Component);
+
+FillMode.propTypes = {
+    clearHoveredItem: _propTypes2.default.func.isRequired,
+    clearSelectedItems: _propTypes2.default.func.isRequired,
+    fillColor: _propTypes2.default.string,
+    handleMouseDown: _propTypes2.default.func.isRequired,
+    hoveredItemId: _propTypes2.default.number,
+    isFillModeActive: _propTypes2.default.bool.isRequired,
+    onChangeFillColor: _propTypes2.default.func.isRequired,
+    onUpdateSvg: _propTypes2.default.func.isRequired,
+    setHoveredItem: _propTypes2.default.func.isRequired
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        fillModeState: state.scratchPaint.fillMode,
+        fillColor: state.scratchPaint.color.fillColor,
+        hoveredItemId: state.scratchPaint.hoveredItemId,
+        isFillModeActive: state.scratchPaint.mode === _modes2.default.FILL
+    };
+};
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        setHoveredItem: function setHoveredItem(hoveredItemId) {
+            dispatch((0, _hover.setHoveredItem)(hoveredItemId));
+        },
+        clearHoveredItem: function clearHoveredItem() {
+            dispatch((0, _hover.clearHoveredItem)());
+        },
+        clearSelectedItems: function clearSelectedItems() {
+            dispatch((0, _selectedItems.clearSelectedItems)());
+        },
+        handleMouseDown: function handleMouseDown() {
+            dispatch((0, _modes3.changeMode)(_modes2.default.FILL));
+        },
+        onChangeFillColor: function onChangeFillColor(fillColor) {
+            dispatch((0, _fillColor.changeFillColor)(fillColor));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(FillMode);
+
+/***/ }),
+/* 228 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _hover = __webpack_require__(55);
+
+var _math = __webpack_require__(26);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var FillTool = function (_paper$Tool) {
+    _inherits(FillTool, _paper$Tool);
+
+    _createClass(FillTool, null, [{
+        key: 'TOLERANCE',
+        get: function get() {
+            return 2;
+        }
+        /**
+         * @param {function} setHoveredItem Callback to set the hovered item
+         * @param {function} clearHoveredItem Callback to clear the hovered item
+         * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+         */
+
+    }]);
+
+    function FillTool(setHoveredItem, clearHoveredItem, onUpdateSvg) {
+        _classCallCheck(this, FillTool);
+
+        var _this = _possibleConstructorReturn(this, (FillTool.__proto__ || Object.getPrototypeOf(FillTool)).call(this));
+
+        _this.setHoveredItem = setHoveredItem;
+        _this.clearHoveredItem = clearHoveredItem;
+        _this.onUpdateSvg = onUpdateSvg;
+
+        // We have to set these functions instead of just declaring them because
+        // paper.js tools hook up the listeners in the setter functions.
+        _this.onMouseMove = _this.handleMouseMove;
+        _this.onMouseUp = _this.handleMouseUp;
+
+        // Color to fill with
+        _this.fillColor = null;
+        // The path that's being hovered over.
+        _this.fillItem = null;
+        // If we're hovering over a hole in a compound path, we can't just recolor it. This is the
+        // added item that's the same shape as the hole that's drawn over the hole when we fill a hole.
+        _this.addedFillItem = null;
+        _this.fillItemOrigColor = null;
+        _this.prevHoveredItemId = null;
+        return _this;
+    }
+
+    _createClass(FillTool, [{
+        key: 'getHitOptions',
+        value: function getHitOptions() {
+            var isAlmostClosedPath = function isAlmostClosedPath(item) {
+                return item instanceof _paper2.default.Path && item.segments.length > 2 && item.lastSegment.point.getDistance(item.firstSegment.point) < 8;
+            };
+            return {
+                class: _paper2.default.Path,
+                segments: true,
+                stroke: true,
+                curves: true,
+                fill: true,
+                guide: false,
+                match: function match(hitResult) {
+                    return hitResult.item.hasFill() || hitResult.item.closed || isAlmostClosedPath(hitResult.item);
+                },
+                hitUnfilledPaths: true,
+                tolerance: FillTool.TOLERANCE / _paper2.default.view.zoom
+            };
+        }
+    }, {
+        key: 'setFillColor',
+        value: function setFillColor(fillColor) {
+            this.fillColor = fillColor;
+        }
+        /**
+         * To be called when the hovered item changes. When the select tool hovers over a
+         * new item, it compares against this to see if a hover item change event needs to
+         * be fired.
+         * @param {paper.Item} prevHoveredItemId ID of the highlight item that indicates the mouse is
+         *     over a given item currently
+         */
+
+    }, {
+        key: 'setPrevHoveredItemId',
+        value: function setPrevHoveredItemId(prevHoveredItemId) {
+            this.prevHoveredItemId = prevHoveredItemId;
+        }
+    }, {
+        key: 'handleMouseMove',
+        value: function handleMouseMove(event) {
+            var hoveredItem = (0, _hover.getHoveredItem)(event, this.getHitOptions(), true /* subselect */);
+            if (!hoveredItem && this.prevHoveredItemId || // There is no longer a hovered item
+            hoveredItem && !this.prevHoveredItemId || // There is now a hovered item
+            hoveredItem && this.prevHoveredItemId && hoveredItem.id !== this.prevHoveredItemId) {
+                // hovered item changed
+                this.setHoveredItem(hoveredItem ? hoveredItem.id : null);
+            }
+            var hitItem = hoveredItem ? hoveredItem.data.origItem : null;
+            // Still hitting the same thing
+            if (!hitItem && !this.fillItem || this.fillItem === hitItem) {
+                return;
+            }
+            if (this.fillItem) {
+                if (this.addedFillItem) {
+                    this.addedFillItem.remove();
+                    this.addedFillItem = null;
+                } else {
+                    this._setFillItemColor(this.fillItemOrigColor);
+                }
+                this.fillItemOrigColor = null;
+                this.fillItem = null;
+            }
+            if (hitItem) {
+                this.fillItem = hitItem;
+                this.fillItemOrigColor = hitItem.fillColor;
+                if (hitItem.parent instanceof _paper2.default.CompoundPath && hitItem.area < 0) {
+                    // hole
+                    if (!this.fillColor) {
+                        // Hole filled with transparent is no-op
+                        this.fillItem = null;
+                        this.fillItemOrigColor = null;
+                        return;
+                    }
+                    // Make an item to fill the hole
+                    this.addedFillItem = hitItem.clone();
+                    this.addedFillItem.setClockwise(true);
+                    this.addedFillItem.data.noHover = true;
+                    this.addedFillItem.data.origItem = hitItem;
+                    // This usually fixes it so there isn't a teeny tiny gap in between the fill and the outline
+                    // when filling in a hole
+                    (0, _math.expandByOne)(this.addedFillItem);
+                    this.addedFillItem.insertAbove(hitItem.parent);
+                } else if (this.fillItem.parent instanceof _paper2.default.CompoundPath) {
+                    this.fillItemOrigColor = hitItem.parent.fillColor;
+                }
+                this._setFillItemColor(this.fillColor);
+            }
+        }
+    }, {
+        key: 'handleMouseUp',
+        value: function handleMouseUp(event) {
+            if (event.event.button > 0) return; // only first mouse button
+            if (this.fillItem) {
+                // If the hole we're filling in is the same color as the parent, and parent has no outline, remove the hole
+                if (this.addedFillItem && this._noStroke(this.fillItem.parent) && this.addedFillItem.fillColor.type !== 'gradient' && this.fillItem.parent.fillColor.toCSS() === this.addedFillItem.fillColor.toCSS()) {
+                    this.addedFillItem.remove();
+                    this.addedFillItem = null;
+                    this.fillItem.remove();
+                } else if (this.addedFillItem) {
+                    // Fill in a hole.
+                    this.addedFillItem.data.noHover = false;
+                } else if (!this.fillColor && this.fillItem.data && this.fillItem.data.origItem) {
+                    // Filling a hole filler with transparent returns it to being gone
+                    // instead of making a shape that's transparent
+                    var group = this.fillItem.parent;
+                    this.fillItem.remove();
+                    if (!(group instanceof _paper2.default.Layer) && group.children.length === 1) {
+                        group.reduce();
+                    }
+                }
+
+                this.clearHoveredItem();
+                this.fillItem = null;
+                this.addedFillItem = null;
+                this.fillItemOrigColor = null;
+                this.onUpdateSvg();
+            }
+        }
+    }, {
+        key: '_noStroke',
+        value: function _noStroke(item) {
+            return !item.strokeColor || item.strokeColor.alpha === 0 || item.strokeWidth === 0;
+        }
+    }, {
+        key: '_setFillItemColor',
+        value: function _setFillItemColor(color) {
+            if (this.addedFillItem) {
+                this.addedFillItem.fillColor = color;
+            } else if (this.fillItem.parent instanceof _paper2.default.CompoundPath) {
+                this.fillItem.parent.fillColor = color;
+            } else {
+                this.fillItem.fillColor = color;
+            }
+        }
+    }, {
+        key: 'deactivateTool',
+        value: function deactivateTool() {
+            if (this.fillItem) {
+                this._setFillItemColor(this.fillItemOrigColor);
+                this.fillItemOrigColor = null;
+                this.fillItem = null;
+            }
+            this.clearHoveredItem();
+            this.setHoveredItem = null;
+            this.clearHoveredItem = null;
+        }
+    }]);
+
+    return FillTool;
+}(_paper2.default.Tool);
+
+exports.default = FillTool;
+
+/***/ }),
+/* 229 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _toolSelectBase = __webpack_require__(18);
+
+var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
+
+var _fill = __webpack_require__(230);
+
+var _fill2 = _interopRequireDefault(_fill);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var FillModeComponent = function FillModeComponent(props) {
+    return _react2.default.createElement(_toolSelectBase2.default, {
+        imgDescriptor: {
+            defaultMessage: 'Fill',
+            description: 'Label for the fill tool',
+            id: 'paint.fillMode.fill'
+        },
+        imgSrc: _fill2.default,
+        isSelected: props.isSelected,
+        onMouseDown: props.onMouseDown
+    });
+};
+
+FillModeComponent.propTypes = {
+    isSelected: _propTypes2.default.bool.isRequired,
+    onMouseDown: _propTypes2.default.func.isRequired
+};
+
+exports.default = FillModeComponent;
+
+/***/ }),
+/* 230 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 48.1 (47250) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='fill' fill='%23575E75'%3E %3Cpath d='M14.0450969,9.69349504 L14.0306818,9.67916207 C13.4396629,9.36383682 12.5170968,8.69018743 11.4215496,7.60088203 C11.0900024,7.27122381 10.7872854,6.95589857 10.5422288,6.65490628 C10.71521,6.4399118 10.8881911,6.22491731 11.0611722,6.00992282 C11.3783043,6.26791621 11.7242666,6.58324146 12.084644,6.9415656 C12.3152855,7.17089305 12.5026817,7.37155458 12.690078,7.5722161 C12.7189081,7.61521499 12.7621534,7.65821389 12.8198138,7.70121279 C13.6270591,8.6185226 14.1027573,9.36383682 14.3189837,9.7938258 C14.3189837,9.80815877 14.3333988,9.82249173 14.3333988,9.8368247 C14.2469082,9.7938258 14.1460025,9.7508269 14.0450969,9.69349504 M10.5998892,10.0661521 C9.7349835,10.53914 8.91332309,10.983462 7.61596455,10.6824697 C6.17445506,10.3528115 5.4825305,9.76515987 5.19422861,9.42116869 L8.3078891,5.40793826 C8.52411553,5.83792723 8.84124762,6.28224917 9.1727948,6.69790518 C8.82683252,7.21389195 8.55294572,7.64388093 8.42320986,7.84454245 C8.27905891,8.08820287 8.35113439,8.41786108 8.6106061,8.5755237 C8.69709667,8.63285557 8.79800233,8.6615215 8.8844929,8.6615215 C9.07188913,8.6615215 9.24487027,8.56119074 9.34577594,8.40352811 C9.50434198,8.13120176 9.69173821,7.84454245 9.89354954,7.55788313 C10.1962665,7.90187431 10.4701533,8.17420066 10.6575496,8.36052922 C11.0755873,8.77618523 11.4936251,9.14884234 11.8972477,9.47850055 C11.4215496,9.60749724 11.0035119,9.85115766 10.5998892,10.0661521 M10.2106816,5.33627343 C10.0953609,5.49393605 9.96562502,5.65159868 9.85030426,5.79492834 C9.50434198,5.33627343 9.28811556,4.96361632 9.1727948,4.70562293 C9.41785141,4.80595369 9.76381369,5.02094818 10.2106816,5.33627343 M13.5117384,4.07497244 C13.6703044,4.07497244 13.8432855,4.10363837 13.8721157,4.1753032 C14.0450969,4.49062845 13.6270591,5.49393605 13.0648704,6.3969129 L12.848644,6.18191841 C12.6180025,5.95259096 12.2287949,5.59426681 11.781927,5.20727674 C12.4450213,4.53362734 13.0504553,4.07497244 13.5117384,4.07497244 M16.5533234,12.1587652 C16.337097,11.5997795 15.9911347,11.0981257 15.587512,10.6681367 C15.5442667,10.6108049 15.4866064,10.567806 15.428946,10.5248071 C15.6740026,9.99448732 15.2703799,9.23484013 14.9244177,8.69018743 C14.6505309,8.24586549 14.2757384,7.74421169 13.8288705,7.24255788 C14.3910592,6.38257993 15.3568705,4.676957 14.8379271,3.67364939 C14.679361,3.37265711 14.3189837,3 13.5117384,3 L13.4973233,3 C12.6756629,3 11.7675119,3.65931643 10.9458515,4.51929438 C10.0232854,3.84564498 9.01422875,3.31532525 8.40879477,3.65931643 C8.35113439,3.68798236 8.27905891,3.71664829 8.23581363,3.77398015 C8.22139853,3.78831312 8.19256835,3.80264609 8.17815325,3.83131202 C8.16373816,3.84564498 8.14932306,3.85997795 8.13490797,3.88864388 L8.12049287,3.91730981 L4.12751158,9.04851158 C4.11309649,9.04851158 4.11309649,9.04851158 4.09868139,9.06284454 L3.20494551,10.2238148 L3.16170023,10.2668137 C3.11845494,10.3098126 3.08962475,10.3671444 3.07520966,10.4101433 L3.07520966,10.4244763 C2.62834171,11.3417861 4.28607763,13.1334068 5.06449275,13.92172 C5.75641731,14.6097023 7.28441737,16 8.23581363,16 C8.43762496,16 8.596191,15.9426681 8.74034195,15.8136714 L14.2613233,11.5567806 C14.2901535,11.5424476 14.3045686,11.5137817 14.3333988,11.4851158 C14.362229,11.5137817 14.3766441,11.5567806 14.3910592,11.5854465 C14.5640403,11.9294377 14.679361,12.2877619 14.6937761,12.6747519 C14.7370214,13.061742 14.7081912,13.463065 14.6505309,13.8500551 L14.6505309,13.8643881 C14.6361158,13.9790518 14.6361158,14.0793826 14.6505309,14.1940463 C14.7514365,14.8390298 15.3568705,15.2833517 15.9911347,15.1830209 C16.639814,15.0826902 17.0866819,14.4807056 16.9857762,13.8357222 C16.8992857,13.2767365 16.7839649,12.7034179 16.5533234,12.1587652' id='Fill-1'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
+
+/***/ }),
+/* 231 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(228);
+var content = __webpack_require__(232);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -66151,7 +66737,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -66168,10 +66754,10 @@ if(false) {
 }
 
 /***/ }),
-/* 228 */
+/* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -66187,13 +66773,13 @@ exports.locals = {
 };
 
 /***/ }),
-/* 229 */
+/* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(230);
+var content = __webpack_require__(234);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -66201,7 +66787,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -66218,10 +66804,10 @@ if(false) {
 }
 
 /***/ }),
-/* 230 */
+/* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -66239,7 +66825,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 231 */
+/* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66275,21 +66861,21 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _selection = __webpack_require__(4);
 
-var _snapping = __webpack_require__(232);
+var _snapping = __webpack_require__(236);
 
-var _guides = __webpack_require__(33);
+var _guides = __webpack_require__(34);
 
 var _stylePath = __webpack_require__(8);
 
-var _strokeColor = __webpack_require__(27);
+var _strokeColor = __webpack_require__(29);
 
-var _strokeWidth = __webpack_require__(28);
+var _strokeWidth = __webpack_require__(30);
 
 var _modes3 = __webpack_require__(14);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
-var _lineMode = __webpack_require__(233);
+var _lineMode = __webpack_require__(237);
 
 var _lineMode2 = _interopRequireDefault(_lineMode);
 
@@ -66575,7 +67161,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LineMode);
 
 /***/ }),
-/* 232 */
+/* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66650,7 +67236,7 @@ exports.endPointHit = endPointHit;
 exports.touching = touching;
 
 /***/ }),
-/* 233 */
+/* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66668,11 +67254,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(20);
+var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _line = __webpack_require__(234);
+var _line = __webpack_require__(238);
 
 var _line2 = _interopRequireDefault(_line);
 
@@ -66699,13 +67285,13 @@ LineModeComponent.propTypes = {
 exports.default = LineModeComponent;
 
 /***/ }),
-/* 234 */
+/* 238 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eline%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='square'%3E %3Cg id='line' stroke='%23575E75' stroke-width='2'%3E %3Cpath d='M5,15 L15,5' id='Line'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 235 */
+/* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66731,13 +67317,13 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _box = __webpack_require__(77);
+var _box = __webpack_require__(79);
 
 var _box2 = _interopRequireDefault(_box);
 
-var _eyeDropper = __webpack_require__(86);
+var _eyeDropper = __webpack_require__(88);
 
-var _loupe = __webpack_require__(236);
+var _loupe = __webpack_require__(240);
 
 var _loupe2 = _interopRequireDefault(_loupe);
 
@@ -66860,13 +67446,13 @@ LoupeComponent.propTypes = {
 exports.default = LoupeComponent;
 
 /***/ }),
-/* 236 */
+/* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(237);
+var content = __webpack_require__(241);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -66874,7 +67460,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -66891,10 +67477,10 @@ if(false) {
 }
 
 /***/ }),
-/* 237 */
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -66908,7 +67494,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 238 */
+/* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -66936,25 +67522,25 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _brushMode = __webpack_require__(45);
+var _brushMode = __webpack_require__(46);
 
-var _eraserMode = __webpack_require__(50);
+var _eraserMode = __webpack_require__(51);
 
-var _liveInputHoc = __webpack_require__(87);
+var _liveInputHoc = __webpack_require__(89);
 
 var _liveInputHoc2 = _interopRequireDefault(_liveInputHoc);
 
 var _reactIntl = __webpack_require__(16);
 
-var _input = __webpack_require__(54);
+var _input = __webpack_require__(56);
 
 var _input2 = _interopRequireDefault(_input);
 
-var _inputGroup = __webpack_require__(26);
+var _inputGroup = __webpack_require__(28);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _labeledIconButton = __webpack_require__(85);
+var _labeledIconButton = __webpack_require__(87);
 
 var _labeledIconButton2 = _interopRequireDefault(_labeledIconButton);
 
@@ -66962,27 +67548,27 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _modeTools = __webpack_require__(239);
+var _modeTools = __webpack_require__(243);
 
 var _modeTools2 = _interopRequireDefault(_modeTools);
 
-var _copy = __webpack_require__(241);
+var _copy = __webpack_require__(245);
 
 var _copy2 = _interopRequireDefault(_copy);
 
-var _paste = __webpack_require__(242);
+var _paste = __webpack_require__(246);
 
 var _paste2 = _interopRequireDefault(_paste);
 
-var _brush = __webpack_require__(79);
+var _brush = __webpack_require__(81);
 
 var _brush2 = _interopRequireDefault(_brush);
 
-var _eraser = __webpack_require__(80);
+var _eraser = __webpack_require__(82);
 
 var _eraser2 = _interopRequireDefault(_eraser);
 
-var _strokeWidth = __webpack_require__(28);
+var _strokeWidth = __webpack_require__(30);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -67123,13 +67709,13 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)((0, _reactIntl.injectIntl)(ModeToolsComponent));
 
 /***/ }),
-/* 239 */
+/* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(240);
+var content = __webpack_require__(244);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -67137,7 +67723,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -67154,10 +67740,10 @@ if(false) {
 }
 
 /***/ }),
-/* 240 */
+/* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -67177,19 +67763,19 @@ exports.locals = {
 };
 
 /***/ }),
-/* 241 */
+/* 245 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ecopy%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='copy'%3E %3Cg transform='translate(3.000000, 2.000000)'%3E %3Cpath d='M2,1.00684547 C2,0.450780073 2.45303631,0 2.99703014,0 L10,0 L10,2.34995317 C10,3.26124887 10.7336617,4 11.6500468,4 L14,4 L14,13.0046024 C14,13.5543453 13.544239,14 12.9975267,14 L3.00247329,14 C2.44882258,14 2,13.5500512 2,12.9931545 L2,1.00684547 Z' id='Rectangle-4' fill='%234C97FF'%3E%3C/path%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='0.5' cy='3.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy' fill='%23575E75' opacity='0.5' cx='0.5' cy='5.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-2' fill='%23575E75' opacity='0.5' cx='0.5' cy='7.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-3' fill='%23575E75' opacity='0.5' cx='0.5' cy='9.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-4' fill='%23575E75' opacity='0.5' cx='0.5' cy='11.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-5' fill='%23575E75' opacity='0.5' cx='0.5' cy='13.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-6' fill='%23575E75' opacity='0.5' cx='0.5' cy='15.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-7' fill='%23575E75' opacity='0.5' cx='2.5' cy='15.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-8' fill='%23575E75' opacity='0.5' cx='4.5' cy='15.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-9' fill='%23575E75' opacity='0.5' cx='6.5' cy='15.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-10' fill='%23575E75' opacity='0.5' cx='8.5' cy='15.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-11' fill='%23575E75' opacity='0.5' cx='10.5' cy='15.5' r='1'%3E%3C/circle%3E %3Cpath d='M11,0 L14,3 L11.9989566,3 C11.4472481,3 11,2.55733967 11,2.00104344 L11,0 Z' id='Rectangle-5' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M9.8115942,9.1884058 L8.6884058,9.1884058 L8.6884058,10.3115942 C8.6884058,10.6859903 8.38647343,11 8,11 C7.61352657,11 7.3115942,10.6859903 7.3115942,10.3115942 L7.3115942,9.1884058 L6.1884058,9.1884058 C5.81400966,9.1884058 5.5,8.88647343 5.5,8.5 C5.5,8.11352657 5.81400966,7.8115942 6.1884058,7.8115942 L7.3115942,7.8115942 L7.3115942,6.6884058 C7.3115942,6.31280193 7.61352657,6 8,6 C8.38647343,6 8.6884058,6.31280193 8.6884058,6.6884058 L8.6884058,7.8115942 L9.8115942,7.8115942 C10.1859903,7.8115942 10.5,8.11352657 10.5,8.5 C10.5,8.88647343 10.1859903,9.1884058 9.8115942,9.1884058 Z' id='Fill-1' stroke='%23FFFFFF' stroke-width='0.25' fill='%23FFFFFF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 242 */
+/* 246 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Epaste%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='paste'%3E %3Cg transform='translate(3.000000, 2.000000)'%3E %3Cpath d='M2,3.00684547 C2,2.45078007 2.45303631,2 2.99703014,2 L10,2 L10,4.34995317 C10,5.26124887 10.7336617,6 11.6500468,6 L14,6 L14,15.0046024 C14,15.5543453 13.544239,16 12.9975267,16 L3.00247329,16 C2.44882258,16 2,15.5500512 2,14.9931545 L2,3.00684547 Z' id='Rectangle-4' fill='%234C97FF'%3E%3C/path%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='0.5' cy='2.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy' fill='%23575E75' opacity='0.5' cx='0.5' cy='4.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-2' fill='%23575E75' opacity='0.5' cx='0.5' cy='6.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-3' fill='%23575E75' opacity='0.5' cx='0.5' cy='8.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-4' fill='%23575E75' opacity='0.5' cx='0.5' cy='10.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-5' fill='%23575E75' opacity='0.5' cx='0.5' cy='12.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-6' fill='%23575E75' opacity='0.5' cx='0.5' cy='0.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-7' fill='%23575E75' opacity='0.5' cx='2.5' cy='0.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-8' fill='%23575E75' opacity='0.5' cx='4.5' cy='0.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-9' fill='%23575E75' opacity='0.5' cx='6.5' cy='0.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-10' fill='%23575E75' opacity='0.5' cx='8.5' cy='0.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-11' fill='%23575E75' opacity='0.5' cx='10.5' cy='0.5' r='1'%3E%3C/circle%3E %3Cpath d='M11,2 L14,5 L11.9989566,5 C11.4472481,5 11,4.55733967 11,4.00104344 L11,2 Z' id='Rectangle-5' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M8.34791833,12.8771885 C8.26180668,12.9633001 8.14699113,13.0063559 8.03217559,13.0063559 C7.9030081,13.0063559 7.78819256,12.9633001 7.70208091,12.8771885 L5.86503222,11.0401398 C5.73586474,10.8966203 5.69280891,10.7100451 5.76456862,10.5378218 C5.83632834,10.3655985 5.99419971,10.2651349 6.18077497,10.2651349 L6.92707599,10.2651349 L7.28587456,7.66743321 C7.31457845,7.46650601 7.41504205,7.27993075 7.57291342,7.16511521 C7.73078479,7.03594773 7.94606393,6.97853995 8.13263919,7.00724384 C8.47708582,7.06321642 8.74977273,7.33733852 8.79282856,7.66743321 L9.16597907,10.2651349 L9.86922427,10.2651349 C10.0557995,10.2651349 10.2136709,10.3799504 10.2854306,10.5521737 C10.3571903,10.7100451 10.3141345,10.9109723 10.184967,11.0401398 L8.34791833,12.8771885 Z' id='Fill-1' fill='%23FFFFFF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 243 */
+/* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67225,21 +67811,21 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(8);
 
-var _fillColor = __webpack_require__(25);
+var _fillColor = __webpack_require__(23);
 
-var _strokeColor = __webpack_require__(27);
+var _strokeColor = __webpack_require__(29);
 
 var _modes3 = __webpack_require__(14);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
-var _ovalTool = __webpack_require__(244);
+var _ovalTool = __webpack_require__(248);
 
 var _ovalTool2 = _interopRequireDefault(_ovalTool);
 
-var _ovalMode = __webpack_require__(247);
+var _ovalMode = __webpack_require__(251);
 
 var _ovalMode2 = _interopRequireDefault(_ovalMode);
 
@@ -67383,7 +67969,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(OvalMode);
 
 /***/ }),
-/* 244 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67407,7 +67993,7 @@ var _stylePath = __webpack_require__(8);
 
 var _selection = __webpack_require__(4);
 
-var _boundingBoxTool = __webpack_require__(55);
+var _boundingBoxTool = __webpack_require__(57);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
 
@@ -67446,7 +68032,6 @@ var OvalTool = function (_paper$Tool) {
         _this.setSelectedItems = setSelectedItems;
         _this.clearSelectedItems = clearSelectedItems;
         _this.onUpdateSvg = onUpdateSvg;
-        _this.prevHoveredItemId = null;
         _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.OVAL, setSelectedItems, clearSelectedItems, onUpdateSvg);
 
         // We have to set these functions instead of just declaring them because
@@ -67575,7 +68160,7 @@ var OvalTool = function (_paper$Tool) {
 exports.default = OvalTool;
 
 /***/ }),
-/* 245 */
+/* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67814,7 +68399,7 @@ var ScaleTool = function () {
 exports.default = ScaleTool;
 
 /***/ }),
-/* 246 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67959,7 +68544,7 @@ var RotateTool = function () {
 exports.default = RotateTool;
 
 /***/ }),
-/* 247 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67977,11 +68562,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(20);
+var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _oval = __webpack_require__(248);
+var _oval = __webpack_require__(252);
 
 var _oval2 = _interopRequireDefault(_oval);
 
@@ -68008,13 +68593,13 @@ OvalModeComponent.propTypes = {
 exports.default = OvalModeComponent;
 
 /***/ }),
-/* 248 */
+/* 252 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eoval%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='oval' stroke-width='1.5' stroke='%23575E75'%3E %3Ccircle id='oval-icon' cx='10' cy='10' r='5'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 249 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68050,21 +68635,21 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(8);
 
-var _fillColor = __webpack_require__(25);
+var _fillColor = __webpack_require__(23);
 
-var _strokeColor = __webpack_require__(27);
+var _strokeColor = __webpack_require__(29);
 
 var _modes3 = __webpack_require__(14);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
-var _rectTool = __webpack_require__(250);
+var _rectTool = __webpack_require__(254);
 
 var _rectTool2 = _interopRequireDefault(_rectTool);
 
-var _rectMode = __webpack_require__(251);
+var _rectMode = __webpack_require__(255);
 
 var _rectMode2 = _interopRequireDefault(_rectMode);
 
@@ -68208,7 +68793,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(RectMode);
 
 /***/ }),
-/* 250 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68232,7 +68817,7 @@ var _stylePath = __webpack_require__(8);
 
 var _selection = __webpack_require__(4);
 
-var _boundingBoxTool = __webpack_require__(55);
+var _boundingBoxTool = __webpack_require__(57);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
 
@@ -68271,7 +68856,6 @@ var RectTool = function (_paper$Tool) {
         _this.setSelectedItems = setSelectedItems;
         _this.clearSelectedItems = clearSelectedItems;
         _this.onUpdateSvg = onUpdateSvg;
-        _this.prevHoveredItemId = null;
         _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.RECT, setSelectedItems, clearSelectedItems, onUpdateSvg);
 
         // We have to set these functions instead of just declaring them because
@@ -68394,7 +68978,7 @@ var RectTool = function (_paper$Tool) {
 exports.default = RectTool;
 
 /***/ }),
-/* 251 */
+/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68412,11 +68996,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(20);
+var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _rectangle = __webpack_require__(252);
+var _rectangle = __webpack_require__(256);
 
 var _rectangle2 = _interopRequireDefault(_rectangle);
 
@@ -68443,13 +69027,13 @@ RectModeComponent.propTypes = {
 exports.default = RectModeComponent;
 
 /***/ }),
-/* 252 */
+/* 256 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Erectangle%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E %3Cg id='rectangle' stroke='%23575E75' stroke-width='1.5'%3E %3Crect id='rectangle-icon' x='5' y='5' width='10' height='10'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 253 */
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68481,17 +69065,17 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(14);
 
-var _hover = __webpack_require__(31);
+var _hover = __webpack_require__(27);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
-var _reshapeTool = __webpack_require__(254);
+var _reshapeTool = __webpack_require__(258);
 
 var _reshapeTool2 = _interopRequireDefault(_reshapeTool);
 
-var _reshapeMode = __webpack_require__(257);
+var _reshapeMode = __webpack_require__(261);
 
 var _reshapeMode2 = _interopRequireDefault(_reshapeMode);
 
@@ -68608,7 +69192,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ReshapeMode);
 
 /***/ }),
-/* 254 */
+/* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68624,11 +69208,11 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _log = __webpack_require__(11);
+var _log = __webpack_require__(12);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _keymirror = __webpack_require__(41);
+var _keymirror = __webpack_require__(42);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -68636,19 +69220,19 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _hover = __webpack_require__(90);
+var _hover = __webpack_require__(55);
 
 var _item = __webpack_require__(22);
 
-var _moveTool = __webpack_require__(88);
+var _moveTool = __webpack_require__(90);
 
 var _moveTool2 = _interopRequireDefault(_moveTool);
 
-var _pointTool = __webpack_require__(255);
+var _pointTool = __webpack_require__(259);
 
 var _pointTool2 = _interopRequireDefault(_pointTool);
 
-var _handleTool = __webpack_require__(256);
+var _handleTool = __webpack_require__(260);
 
 var _handleTool2 = _interopRequireDefault(_handleTool);
 
@@ -68922,7 +69506,7 @@ var ReshapeTool = function (_paper$Tool) {
 exports.default = ReshapeTool;
 
 /***/ }),
-/* 255 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68938,7 +69522,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _math = __webpack_require__(89);
+var _math = __webpack_require__(26);
 
 var _selection = __webpack_require__(4);
 
@@ -69249,7 +69833,7 @@ var PointTool = function () {
 exports.default = PointTool;
 
 /***/ }),
-/* 256 */
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69449,7 +70033,7 @@ var HandleTool = function () {
 exports.default = HandleTool;
 
 /***/ }),
-/* 257 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69467,11 +70051,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(20);
+var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _reshape = __webpack_require__(258);
+var _reshape = __webpack_require__(262);
 
 var _reshape2 = _interopRequireDefault(_reshape);
 
@@ -69498,13 +70082,13 @@ ReshapeModeComponent.propTypes = {
 exports.default = ReshapeModeComponent;
 
 /***/ }),
-/* 258 */
+/* 262 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ereshape%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='reshape'%3E %3Cg id='reshape-icon' transform='translate(3.000000, 2.000000)'%3E %3Cpath d='M6.3718,4e-05 C6.3718,1.20298846 6.03840639,2.32811001 5.45898306,3.28804076 C5.31876362,3.52034235 4.30079812,3.15107034 3.82818604,3.61859131 C3.35557395,4.08611228 3.47873759,5.34529147 3.26181884,5.47482181 C2.30759304,6.04462589 1.19191205,6.37204 -0.0002,6.37204' id='Stroke-1' stroke='%23575E75' stroke-width='0.75'%3E%3C/path%3E %3Cpath d='M4,6.94999094 C2.85887984,6.71835578 2,5.70947896 2,4.5 C2,3.11928813 3.11928813,2 4.5,2 C5.88071187,2 7,3.11928813 7,4.5 C7,4.56854233 6.99724162,4.63644042 6.99182982,4.70358929 L6.68137747,4.42017327 C5.65792772,3.48493325 4,4.20484091 4,5.595932 L4,6.94999094 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3Cpath d='M4,7.96455557 C2.30385293,7.72194074 1,6.26323595 1,4.5 C1,2.56700338 2.56700338,1 4.5,1 C6.43299662,1 8,2.56700338 8,4.5 C8,4.84508345 7.95005914,5.1785026 7.85701065,5.4934242 L6.68137747,4.42017327 C5.65792772,3.48493325 4,4.20484091 4,5.595932 L4,7.96455557 Z' id='Oval-2' fill-opacity='0.15' fill='%23575E75'%3E%3C/path%3E %3Cpath d='M7.87915329,13.1684522 L8.98467414,15.6316703 C9.20235954,16.1186581 9.76980913,16.3337238 10.2516521,16.1137141 C10.7334951,15.8924683 10.9462887,15.3189598 10.7286032,14.833208 L9.63583183,12.3973461 L12.3974628,12.3973461 C12.945512,12.3973461 13.207518,11.7313818 12.8048941,11.3644462 L6.00716065,5.15870674 C5.6225647,4.80725864 5,5.07769498 5,5.595932 L5,14.8026807 C5,15.3507015 5.68145595,15.608033 6.04802397,15.1994001 L7.87915329,13.1684522 Z' id='select-icon' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 259 */
+/* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69540,17 +70124,17 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(14);
 
-var _hover = __webpack_require__(31);
+var _hover = __webpack_require__(27);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(4);
 
-var _selectTool = __webpack_require__(260);
+var _selectTool = __webpack_require__(264);
 
 var _selectTool2 = _interopRequireDefault(_selectTool);
 
-var _selectMode = __webpack_require__(261);
+var _selectMode = __webpack_require__(265);
 
 var _selectMode2 = _interopRequireDefault(_selectMode);
 
@@ -69670,7 +70254,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SelectMode);
 
 /***/ }),
-/* 260 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69686,11 +70270,11 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _hover = __webpack_require__(90);
+var _hover = __webpack_require__(55);
 
 var _selection = __webpack_require__(4);
 
-var _boundingBoxTool = __webpack_require__(55);
+var _boundingBoxTool = __webpack_require__(57);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
 
@@ -69879,7 +70463,7 @@ var SelectTool = function (_paper$Tool) {
 exports.default = SelectTool;
 
 /***/ }),
-/* 261 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69897,11 +70481,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(20);
+var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _select = __webpack_require__(262);
+var _select = __webpack_require__(266);
 
 var _select2 = _interopRequireDefault(_select);
 
@@ -69928,13 +70512,13 @@ SelectModeComponent.propTypes = {
 exports.default = SelectModeComponent;
 
 /***/ }),
-/* 262 */
+/* 266 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eselect%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='select' fill='%23575E75'%3E %3Cpath d='M9.08480709,12.7519131 L10.2692937,15.3910753 C10.5025281,15.912848 11.1105098,16.1432755 11.6267701,15.9075508 C12.1430304,15.6705018 12.3710236,15.0560284 12.1377892,14.53558 L10.9669627,11.925728 L13.925853,11.925728 C14.5130486,11.925728 14.7937693,11.2121948 14.3623865,10.8190495 L7.0791007,4.17004294 C6.6670336,3.7934914 6,4.08324462 6,4.63849857 L6,14.5028722 C6,15.0900373 6.73013138,15.3657496 7.12288282,14.9279287 L9.08480709,12.7519131 Z' id='select-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 263 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69962,15 +70546,15 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _strokeColor = __webpack_require__(27);
+var _strokeColor = __webpack_require__(29);
 
-var _modals = __webpack_require__(51);
+var _modals = __webpack_require__(52);
 
 var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _strokeColorIndicator = __webpack_require__(264);
+var _strokeColorIndicator = __webpack_require__(268);
 
 var _strokeColorIndicator2 = _interopRequireDefault(_strokeColorIndicator);
 
@@ -70076,7 +70660,7 @@ StrokeColorIndicator.propTypes = {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(StrokeColorIndicator);
 
 /***/ }),
-/* 264 */
+/* 268 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70094,25 +70678,25 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactPopover = __webpack_require__(46);
+var _reactPopover = __webpack_require__(47);
 
 var _reactPopover2 = _interopRequireDefault(_reactPopover);
 
 var _reactIntl = __webpack_require__(16);
 
-var _colorButton = __webpack_require__(81);
+var _colorButton = __webpack_require__(83);
 
 var _colorButton2 = _interopRequireDefault(_colorButton);
 
-var _colorPicker = __webpack_require__(83);
+var _colorPicker = __webpack_require__(85);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
-var _inputGroup = __webpack_require__(26);
+var _inputGroup = __webpack_require__(28);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(54);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -70166,7 +70750,7 @@ StrokeColorIndicatorComponent.propTypes = {
 exports.default = (0, _reactIntl.injectIntl)(StrokeColorIndicatorComponent);
 
 /***/ }),
-/* 265 */
+/* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70192,9 +70776,9 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _strokeWidth = __webpack_require__(28);
+var _strokeWidth = __webpack_require__(30);
 
-var _strokeWidthIndicator = __webpack_require__(266);
+var _strokeWidthIndicator = __webpack_require__(270);
 
 var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
 
@@ -70268,7 +70852,7 @@ StrokeWidthIndicator.propTypes = {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(StrokeWidthIndicator);
 
 /***/ }),
-/* 266 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70286,19 +70870,19 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _input = __webpack_require__(54);
+var _input = __webpack_require__(56);
 
 var _input2 = _interopRequireDefault(_input);
 
-var _inputGroup = __webpack_require__(26);
+var _inputGroup = __webpack_require__(28);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _liveInputHoc = __webpack_require__(87);
+var _liveInputHoc = __webpack_require__(89);
 
 var _liveInputHoc2 = _interopRequireDefault(_liveInputHoc);
 
-var _strokeWidth = __webpack_require__(28);
+var _strokeWidth = __webpack_require__(30);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -70327,7 +70911,7 @@ StrokeWidthIndicatorComponent.propTypes = {
 exports.default = StrokeWidthIndicatorComponent;
 
 /***/ }),
-/* 267 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70341,13 +70925,13 @@ exports.default = {
 };
 
 /***/ }),
-/* 268 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(269);
+var content = __webpack_require__(273);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -70355,7 +70939,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(10)(content, options);
+var update = __webpack_require__(11)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -70372,10 +70956,10 @@ if(false) {
 }
 
 /***/ }),
-/* 269 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(undefined);
+exports = module.exports = __webpack_require__(10)(undefined);
 // imports
 
 
@@ -70430,73 +71014,73 @@ exports.locals = {
 };
 
 /***/ }),
-/* 270 */
+/* 274 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Egroup%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='group' stroke-width='0.75'%3E %3Cg id='group-icon' transform='translate(2.000000, 2.000000)'%3E %3Crect id='Rectangle-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='13' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-3' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='13' width='3' height='3'%3E%3C/rect%3E %3Cpath d='M1.5,3 L1.5,13' id='Line' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M14.5,3 L14.5,13' id='Line-Copy' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M13,1.5 L3,1.5' id='Line-Copy-2' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M13,14.5 L3,14.5' id='Line-Copy-3' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cg id='Group' transform='translate(8.000000, 8.000000) rotate(180.000000) translate(-8.000000, -8.000000) translate(4.000000, 4.000000)' stroke='%23575E75'%3E %3Crect id='Rectangle-3-Copy' fill='%23FFFFFF' transform='translate(5.500000, 5.500000) rotate(180.000000) translate(-5.500000, -5.500000) ' x='3' y='3' width='5' height='5' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-3' fill='%23575E75' transform='translate(2.500000, 2.500000) rotate(180.000000) translate(-2.500000, -2.500000) ' x='0' y='0' width='5' height='5' rx='0.5'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 271 */
+/* 275 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eredo%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='redo' fill='%234C97FF'%3E %3Cpath d='M17.5581635,12.7700651 L13.8403972,16.4941315 C13.5610922,16.7671364 13.1830854,16.9211391 12.7903784,16.9211391 C12.3990715,16.9211391 12.0210647,16.7671364 11.7403597,16.4941315 L8.02399342,12.7700651 C7.5969858,12.3430574 7.47098355,11.7060461 7.70198767,11.1530362 C7.93299179,10.6000263 8.46500128,10.24302 9.06701202,10.24302 L10.4040359,10.24302 C10.3690352,9.92101423 10.2780336,9.55700774 10.1240309,9.17200087 C10.07573,9.05999887 10.0260291,8.94799688 9.97002813,8.83599488 C9.89302676,8.70999263 9.90072689,8.67499201 9.79502501,8.52098926 C9.62702201,8.26898476 9.47301926,8.07998139 9.29031601,7.86297752 C8.9200094,7.4639704 8.47200141,7.12096429 7.99599292,6.86895979 C7.5129843,6.6169553 7.00897531,6.46295255 6.56096732,6.37895105 C6.11995945,6.30194968 5.71395221,6.29494955 5.47594796,6.29494955 C5.35694584,6.28794943 5.2029431,6.31594993 5.12594172,6.32295005 C5.04194022,6.32995018 4.99293935,6.3369503 4.99293935,6.3369503 C4.49593048,6.38595117 4.04792249,6.02194468 3.99892162,5.52493582 C3.95692087,5.10492832 4.20192524,4.72692158 4.57293186,4.58691908 C4.57293186,4.58691908 4.62193273,4.56591871 4.6989341,4.53791821 C4.78993573,4.50991771 4.87393723,4.46091684 5.06994072,4.40491584 C5.46194772,4.28591371 5.95895658,4.15991147 6.60996819,4.09691034 C7.25397968,4.04090934 8.03099354,4.05490959 8.85070816,4.22291259 C9.66902276,4.39791571 10.5300381,4.72692158 11.3280524,5.20293007 C11.7060591,5.44793444 12.1120663,5.73493956 12.427072,6.01494456 C12.5670745,6.11994643 12.8050787,6.35795068 12.9450812,6.5049533 C13.1060841,6.67295629 13.2530867,6.84095929 13.4007893,7.01596241 C13.9670994,7.7159749 14.3871069,8.47198839 14.6601118,9.15800062 C14.8211147,9.55000762 14.9331167,9.92101423 15.0171182,10.24302 L16.5151449,10.24302 C17.1171556,10.24302 17.6491651,10.6000263 17.8801692,11.1530362 C18.1111734,11.7060461 17.9851711,12.3430574 17.5581635,12.7700651' id='Fill-1' transform='translate(10.994247, 10.494247) rotate(-45.000000) translate(-10.994247, -10.494247) '%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 272 */
+/* 276 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-back%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-back'%3E %3Cg transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,10 L15,10' id='Stroke-6-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,12 L14,12' id='Stroke-6-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M1,10 L4,10' id='Stroke-10-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M2,12 L4,12' id='Stroke-10-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 273 */
+/* 277 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-backward%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-backward'%3E %3Cg id='send-forward' transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 274 */
+/* 278 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-forward%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-forward'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 275 */
+/* 279 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-front%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-front'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,10 L15,10' id='Stroke-6-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,12 L14,12' id='Stroke-6-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M1,10 L4,10' id='Stroke-10-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M2,12 L4,12' id='Stroke-10-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 276 */
+/* 280 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eundo%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='undo' fill='%234C97FF'%3E %3Cpath d='M15.5581635,12.7700651 L11.8403972,16.4941315 C11.5610922,16.7671364 11.1830854,16.9211391 10.7903784,16.9211391 C10.3990715,16.9211391 10.0210647,16.7671364 9.74035971,16.4941315 L6.02399342,12.7700651 C5.5969858,12.3430574 5.47098355,11.7060461 5.70198767,11.1530362 C5.93299179,10.6000263 6.46500128,10.24302 7.06701202,10.24302 L8.40403587,10.24302 C8.36903525,9.92101423 8.27803362,9.55700774 8.12403088,9.17200087 C8.07573002,9.05999887 8.02602913,8.94799688 7.97002813,8.83599488 C7.89302676,8.70999263 7.90072689,8.67499201 7.79502501,8.52098926 C7.62702201,8.26898476 7.47301926,8.07998139 7.29031601,7.86297752 C6.9200094,7.4639704 6.47200141,7.12096429 5.99599292,6.86895979 C5.5129843,6.6169553 5.00897531,6.46295255 4.56096732,6.37895105 C4.11995945,6.30194968 3.71395221,6.29494955 3.47594796,6.29494955 C3.35694584,6.28794943 3.2029431,6.31594993 3.12594172,6.32295005 C3.04194022,6.32995018 2.99293935,6.3369503 2.99293935,6.3369503 C2.49593048,6.38595117 2.04792249,6.02194468 1.99892162,5.52493582 C1.95692087,5.10492832 2.20192524,4.72692158 2.57293186,4.58691908 C2.57293186,4.58691908 2.62193273,4.56591871 2.6989341,4.53791821 C2.78993573,4.50991771 2.87393723,4.46091684 3.06994072,4.40491584 C3.46194772,4.28591371 3.95895658,4.15991147 4.60996819,4.09691034 C5.25397968,4.04090934 6.03099354,4.05490959 6.85070816,4.22291259 C7.66902276,4.39791571 8.53003812,4.72692158 9.32805235,5.20293007 C9.7060591,5.44793444 10.1120663,5.73493956 10.427072,6.01494456 C10.5670745,6.11994643 10.8050787,6.35795068 10.9450812,6.5049533 C11.1060841,6.67295629 11.2530867,6.84095929 11.4007893,7.01596241 C11.9670994,7.7159749 12.3871069,8.47198839 12.6601118,9.15800062 C12.8211147,9.55000762 12.9331167,9.92101423 13.0171182,10.24302 L14.5151449,10.24302 C15.1171556,10.24302 15.6491651,10.6000263 15.8801692,11.1530362 C16.1111734,11.7060461 15.9851711,12.3430574 15.5581635,12.7700651' id='Fill-1' transform='translate(8.994247, 10.494247) scale(-1, 1) rotate(-45.000000) translate(-8.994247, -10.494247) '%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 277 */
+/* 281 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eungroup%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='ungroup' stroke-width='0.75'%3E %3Cg id='ungroup-icon' transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 2.000000)'%3E %3Crect id='Rectangle-3-Copy' stroke='%23575E75' fill='%23FFFFFF' x='6.5' y='6.5' width='8' height='8' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-3' stroke='%23575E75' fill='%23575E75' x='1.5' y='1.5' width='8' height='8' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='8' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='8' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-3' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='8' y='8' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-4' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='5' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-5' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='13' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-6' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='5' y='13' width='3' height='3'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 278 */
+/* 282 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:none;stroke:%23575e75;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-in%3C/title%3E %3Cg class='cls-3'%3E %3Ccircle class='cls-4' cx='18' cy='18' r='7'/%3E %3Cline class='cls-4' x1='23' y1='23' x2='26' y2='26'/%3E %3Cline class='cls-4' x1='16' y1='18' x2='20' y2='18'/%3E %3Cline class='cls-4' x1='18' y1='16' x2='18' y2='20'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 279 */
+/* 283 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:none;stroke:%23575e75;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-out%3C/title%3E %3Cg class='cls-3'%3E %3Ccircle class='cls-4' cx='18' cy='18' r='7'/%3E %3Cline class='cls-4' x1='23' y1='23' x2='26' y2='26'/%3E %3Cline class='cls-4' x1='16' y1='18' x2='20' y2='18'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 280 */
+/* 284 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:%23575e75;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-reset%3C/title%3E %3Cg class='cls-3'%3E %3Crect class='cls-4' x='13' y='14' width='10' height='2' rx='1' ry='1'/%3E %3Crect class='cls-4' x='13' y='20' width='10' height='2' rx='1' ry='1'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 281 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70608,7 +71192,7 @@ var SelectionHOC = function SelectionHOC(WrappedComponent) {
 exports.default = SelectionHOC;
 
 /***/ }),
-/* 282 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70618,41 +71202,41 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(24);
+var _redux = __webpack_require__(25);
 
 var _modes = __webpack_require__(14);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _brushMode = __webpack_require__(45);
+var _brushMode = __webpack_require__(46);
 
 var _brushMode2 = _interopRequireDefault(_brushMode);
 
-var _eraserMode = __webpack_require__(50);
+var _eraserMode = __webpack_require__(51);
 
 var _eraserMode2 = _interopRequireDefault(_eraserMode);
 
-var _color = __webpack_require__(283);
+var _color = __webpack_require__(287);
 
 var _color2 = _interopRequireDefault(_color);
 
-var _clipboard = __webpack_require__(43);
+var _clipboard = __webpack_require__(44);
 
 var _clipboard2 = _interopRequireDefault(_clipboard);
 
-var _hover = __webpack_require__(31);
+var _hover = __webpack_require__(27);
 
 var _hover2 = _interopRequireDefault(_hover);
 
-var _modals = __webpack_require__(51);
+var _modals = __webpack_require__(52);
 
 var _modals2 = _interopRequireDefault(_modals);
 
-var _selectedItems = __webpack_require__(12);
+var _selectedItems = __webpack_require__(9);
 
 var _selectedItems2 = _interopRequireDefault(_selectedItems);
 
-var _undo = __webpack_require__(42);
+var _undo = __webpack_require__(43);
 
 var _undo2 = _interopRequireDefault(_undo);
 
@@ -70671,7 +71255,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 283 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70681,21 +71265,21 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(24);
+var _redux = __webpack_require__(25);
 
-var _eyeDropper = __webpack_require__(52);
+var _eyeDropper = __webpack_require__(53);
 
 var _eyeDropper2 = _interopRequireDefault(_eyeDropper);
 
-var _fillColor = __webpack_require__(25);
+var _fillColor = __webpack_require__(23);
 
 var _fillColor2 = _interopRequireDefault(_fillColor);
 
-var _strokeColor = __webpack_require__(27);
+var _strokeColor = __webpack_require__(29);
 
 var _strokeColor2 = _interopRequireDefault(_strokeColor);
 
-var _strokeWidth = __webpack_require__(28);
+var _strokeWidth = __webpack_require__(30);
 
 var _strokeWidth2 = _interopRequireDefault(_strokeWidth);
 
@@ -70709,7 +71293,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 284 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70719,13 +71303,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(24);
+var _redux = __webpack_require__(25);
 
 var _intl = __webpack_require__(92);
 
 var _intl2 = _interopRequireDefault(_intl);
 
-var _ = __webpack_require__(62);
+var _ = __webpack_require__(64);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -70735,7 +71319,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 285 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70750,7 +71334,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.intlReducer = intlReducer;
 
-var _warning = __webpack_require__(286);
+var _warning = __webpack_require__(290);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -70758,7 +71342,7 @@ var _IntlProvider2 = __webpack_require__(93);
 
 var _IntlProvider3 = _interopRequireDefault(_IntlProvider2);
 
-var _Provider2 = __webpack_require__(287);
+var _Provider2 = __webpack_require__(291);
 
 var _Provider3 = _interopRequireDefault(_Provider2);
 
@@ -70801,7 +71385,7 @@ function intlReducer() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 286 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70869,7 +71453,7 @@ module.exports = warning;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 287 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70918,7 +71502,7 @@ exports.default = Provider;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
-/* 288 */
+/* 292 */
 /***/ (function(module, exports) {
 
 module.exports =
@@ -71099,7 +71683,7 @@ exports.default = locales;
 //# sourceMappingURL=l10n.js.map
 
 /***/ }),
-/* 289 */
+/* 293 */
 /***/ (function(module, exports) {
 
 // GENERATED FILE:
