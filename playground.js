@@ -18946,6 +18946,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var MIXED = 'scratch-paint/style-path/mixed';
 
+// Check if the item color matches the incoming color. If the item color is a gradient, we assume
+// that the incoming color never matches, since we don't support gradients yet.
+var _colorMatch = function _colorMatch(itemColor, incomingColor) {
+    // @todo check whether the gradient has changed when we support gradients
+    if (itemColor && itemColor.type === 'gradient') return false;
+    // Either both are null or both are the same color when converted to CSS.
+    return !itemColor && !incomingColor || itemColor && incomingColor && itemColor.toCSS() === new _paper2.default.Color(incomingColor).toCSS();
+};
+
 /**
  * Called when setting fill color
  * @param {string} colorString New color, css format
@@ -18984,7 +18993,7 @@ var applyFillColorToSelection = function applyFillColorToSelection(colorString) 
                                     var path = _step3.value;
 
                                     if (!path.data.isPGGlyphRect) {
-                                        if (path.fillColor === null && colorString || path.fillColor.toCSS() !== new _paper2.default.Color(colorString).toCSS()) {
+                                        if (!_colorMatch(path.fillColor, colorString)) {
                                             changed = true;
                                             path.fillColor = colorString;
                                         }
@@ -19005,7 +19014,7 @@ var applyFillColorToSelection = function applyFillColorToSelection(colorString) 
                                 }
                             }
                         } else if (!child.data.isPGGlyphRect) {
-                            if (child.fillColor === null && colorString || child.fillColor.toCSS() !== new _paper2.default.Color(colorString).toCSS()) {
+                            if (!_colorMatch(child.fillColor, colorString)) {
                                 changed = true;
                                 child.fillColor = colorString;
                             }
@@ -19029,7 +19038,7 @@ var applyFillColorToSelection = function applyFillColorToSelection(colorString) 
                 if ((0, _item.isPointTextItem)(item) && !colorString) {
                     colorString = 'rgba(0,0,0,0)';
                 }
-                if (item.fillColor === null && colorString || item.fillColor.toCSS() !== new _paper2.default.Color(colorString).toCSS()) {
+                if (!_colorMatch(item.fillColor, colorString)) {
                     changed = true;
                     item.fillColor = colorString;
                 }
@@ -19051,10 +19060,6 @@ var applyFillColorToSelection = function applyFillColorToSelection(colorString) 
     }
 
     return changed;
-};
-
-var _strokeColorMatch = function _strokeColorMatch(item, incomingColor) {
-    return !item.strokeColor && !incomingColor || item.strokeColor && incomingColor && item.strokeColor.toCSS() === new _paper2.default.Color(incomingColor).toCSS();
 };
 
 /**
@@ -19096,7 +19101,7 @@ var applyStrokeColorToSelection = function applyStrokeColorToSelection(colorStri
                                         var path = _step6.value;
 
                                         if (!path.data.isPGGlyphRect) {
-                                            if (!_strokeColorMatch(path, colorString)) {
+                                            if (!_colorMatch(path.strokeColor, colorString)) {
                                                 changed = true;
                                                 path.strokeColor = colorString;
                                             }
@@ -19138,12 +19143,12 @@ var applyStrokeColorToSelection = function applyStrokeColorToSelection(colorStri
                         }
                     }
                 } else if (!item.data.isPGGlyphRect) {
-                    if (!_strokeColorMatch(item, colorString)) {
+                    if (!_colorMatch(item.strokeColor, colorString)) {
                         changed = true;
                         item.strokeColor = colorString;
                     }
                 }
-            } else if (!_strokeColorMatch(item, colorString)) {
+            } else if (!_colorMatch(item.strokeColor, colorString)) {
                 changed = true;
                 item.strokeColor = colorString;
             }
