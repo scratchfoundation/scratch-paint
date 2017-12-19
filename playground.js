@@ -128,7 +128,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Thu Dec 14 15:37:03 2017 -0500
+ * Date: Mon Dec 18 12:02:00 2017 -0500
  *
  ***
  *
@@ -9172,7 +9172,8 @@ new function() {
 			ctx.beginPath();
 			drawSegments(ctx, this, matrix);
 			ctx.stroke();
-			drawHandles(ctx, this._segments, matrix, paper.settings.handleSize);
+			drawHandles(ctx, this._segments, matrix, paper.settings.handleSize,
+				this.isFullySelected());
 		}
 	};
 },
@@ -18961,6 +18962,9 @@ var applyFillColorToSelection = function applyFillColorToSelection(colorString) 
         for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var item = _step.value;
 
+            if (item.parent instanceof _paper2.default.CompoundPath) {
+                item = item.parent;
+            }
             if ((0, _item.isPGTextItem)(item)) {
                 var _iteratorNormalCompletion2 = true;
                 var _didIteratorError2 = false;
@@ -19069,6 +19073,9 @@ var applyStrokeColorToSelection = function applyStrokeColorToSelection(colorStri
         for (var _iterator4 = items[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
             var item = _step4.value;
 
+            if (item.parent instanceof _paper2.default.CompoundPath) {
+                item = item.parent;
+            }
             if ((0, _item.isPGTextItem)(item)) {
                 if (item.children) {
                     var _iteratorNormalCompletion5 = true;
@@ -19175,6 +19182,9 @@ var applyStrokeWidthToSelection = function applyStrokeWidthToSelection(value, on
         for (var _iterator7 = items[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
             var item = _step7.value;
 
+            if (item.parent instanceof _paper2.default.CompoundPath) {
+                item = item.parent;
+            }
             if ((0, _group.isGroup)(item)) {
                 continue;
             } else if (item.strokeWidth !== value) {
@@ -19223,6 +19233,10 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems) {
         for (var _iterator8 = selectedItems[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
             var item = _step8.value;
 
+            if (item.parent instanceof _paper2.default.CompoundPath) {
+                // Compound path children inherit fill and stroke color from their parent.
+                item = item.parent;
+            }
             var itemFillColorString = void 0;
             var itemStrokeColorString = void 0;
 
