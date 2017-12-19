@@ -13,7 +13,8 @@ class StrokeColorIndicator extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleChangeStrokeColor'
+            'handleChangeStrokeColor',
+            'handleCloseStrokeColor'
         ]);
 
         // Flag to track whether an svg-update-worthy change has been made
@@ -33,11 +34,17 @@ class StrokeColorIndicator extends React.Component {
         this._hasChanged = this._hasChanged || isDifferent;
         this.props.onChangeStrokeColor(newColor);
     }
+    handleCloseStrokeColor () {
+        if (!this.props.isEyeDropping) {
+            this.props.onCloseStrokeColor();
+        }
+    }
     render () {
         return (
             <StrokeColorIndicatorComponent
                 {...this.props}
                 onChangeStrokeColor={this.handleChangeStrokeColor}
+                onCloseStrokeColor={this.handleCloseStrokeColor}
             />
         );
     }
@@ -45,6 +52,7 @@ class StrokeColorIndicator extends React.Component {
 
 const mapStateToProps = state => ({
     disabled: state.scratchPaint.mode === Modes.BRUSH,
+    isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     strokeColor: state.scratchPaint.color.strokeColor,
     strokeColorModalVisible: state.scratchPaint.modals.strokeColor
 });
@@ -63,7 +71,9 @@ const mapDispatchToProps = dispatch => ({
 
 StrokeColorIndicator.propTypes = {
     disabled: PropTypes.bool.isRequired,
+    isEyeDropping: PropTypes.bool.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
+    onCloseStrokeColor: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     strokeColor: PropTypes.string,
     strokeColorModalVisible: PropTypes.bool.isRequired
