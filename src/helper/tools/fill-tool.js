@@ -122,70 +122,18 @@ class FillTool extends paper.Tool {
                 this.addedFillItem = null;
                 this.fillItem.remove();
             } else if (this.addedFillItem) {
-                // Fill in a hole. Add it to a group with the item whose hole is being filled so they move together.
+                // Fill in a hole.
                 this.addedFillItem.data.noHover = false;
-
-                // If the parent is already in a group
-                if (this.fillItem.parent.parent instanceof paper.Group &&
-                        !(this.fillItem.parent.parent instanceof paper.Layer)) {
-                    // Inserted items need to be above the original compound path so that they
-                    // can get recolored instead of the holes in the compound path getting hit again.
-                    this.fillItem.parent.parent.addChild(this.addedFillItem);
-                } else {
-                    const group = new paper.Group(this.addedFillItem);
-                    group.insertAbove(this.fillItem.parent);
-                    group.insertChild(0, this.fillItem.parent);
-                }
-            } else if (this.fillItem.parent instanceof paper.CompoundPath &&
-                    this.fillItem.parent.parent instanceof paper.Group &&
-                    !(this.fillItem.parent.parent instanceof paper.Layer)) {
-                // Check if we're filling the space around a hole with the same color as the hole.
-                // If so, remove the hole.
-                // This only works if the hole and the shape it came from are grouped.
-                const group = this.fillItem.parent.parent;
-                const compoundPath = this.fillItem.parent;
-
-                // Iterate backwards since we may remove children
-                for (let i = group.children.length - 1; i >= 0; i--) {
-                    const child = group.children[i];
-                    if (!child.data.origItem) {
-                        continue;
-                    } else if (!child.data.origItem.parent) {
-                        child.data.origItem = null; // Clean up reference
-                    } else if (child.data.origItem.parent === compoundPath &&
-                            this._noStroke(child) &&
-                            child.fillColor.type !== 'gradient' &&
-                            ((this._noFill(child) && this._noFill(compoundPath)) ||
-                                child.fillColor.toCSS() === compoundPath.fillColor.toCSS())) {
-                        // If the group contains a child with no stroke which was originally created by filling
-                        // a hole in the compound path, and the compound path is now being changed to the color
-                        // of the child, then the two can merge (the child and the original hole both disappear).
-                        child.data.origItem.remove();
-                        child.remove();
-                        // Reduce in case the compound path has only 1 child
-                        if (compoundPath.children.length === 1) {
-                            const reduced = compoundPath.reduce();
-                            reduced.copyAttributes(compoundPath);
-                            reduced.fillColor = compoundPath.fillColor;
-                            reduced.strokeColor = compoundPath.strokeColor;
-                            reduced.strokeWidth = compoundPath.strokeWidth;
-                            break;
-                        }
-                    }
-                }
-                // Reduce in case group has only 1 child
-                group.reduce();
             } else if (!this.fillColor &&
                     this.fillItem.data &&
-                    this.fillItem.data.origItem &&
-                    this.fillItem.data.origItem.parent &&
-                    this.fillItem.parent instanceof paper.Group &&
-                    !(this.fillItem.parent instanceof paper.Layer) &&
-                    this.fillItem.parent === this.fillItem.data.origItem.parent.parent) {
-                // Filling a hole filler with transparent returns it to being gone instead of a shape that's transparent
+                    this.fillItem.data.origItem) {
+                // Filling a hole filler with transparent returns it to being gone
+                // instead of making a shape that's transparent
                 const group = this.fillItem.parent;
                 this.fillItem.remove();
-                group.reduce();
+                if (!(group instanceof paper.Layer) && group.children.length === 1) {
+                    group.reduce();
+                }
             }
 
             this.clearHoveredItem();
@@ -194,10 +142,6 @@ class FillTool extends paper.Tool {
             this.fillItemOrigColor = null;
             this.onUpdateSvg();
         }
-    }
-    _noFill (item) {
-        return !item.fillColor ||
-                item.fillColor.alpha === 0;
     }
     _noStroke (item) {
         return !item.strokeColor ||
