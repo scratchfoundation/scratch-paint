@@ -12,7 +12,6 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Input from '../forms/input.jsx';
 import InputGroup from '../input-group/input-group.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
-// import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import Modes from '../../lib/modes';
 import styles from './mode-tools.css';
 
@@ -20,11 +19,11 @@ import copyIcon from './icons/copy.svg';
 import pasteIcon from './icons/paste.svg';
 
 import brushIcon from '../brush-mode/brush.svg';
-// import curvedPointIcon from './curved-point.svg';
+import curvedPointIcon from './icons/curved-point.svg';
 import eraserIcon from '../eraser-mode/eraser.svg';
 // import flipHorizontalIcon from './icons/flip-horizontal.svg';
 // import flipVerticalIcon from './icons/flip-vertical.svg';
-// import straightPointIcon from './straight-point.svg';
+import straightPointIcon from './icons/straight-point.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
@@ -95,7 +94,7 @@ const ModeToolsComponent = props => {
     case Modes.RESHAPE:
         return (
             <div className={classNames(props.className, styles.modeTools)}>
-                {/* <LabeledIconButton
+                <LabeledIconButton
                     imgAlt="Curved Point Icon"
                     imgSrc={curvedPointIcon}
                     title="Curved"
@@ -106,7 +105,7 @@ const ModeToolsComponent = props => {
                     imgSrc={straightPointIcon}
                     title="Pointed"
                     onClick={function () {}}
-                /> */}
+                />
             </div>
         );
     case Modes.SELECT:
