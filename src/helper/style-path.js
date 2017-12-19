@@ -13,7 +13,10 @@ const MIXED = 'scratch-paint/style-path/mixed';
 const applyFillColorToSelection = function (colorString) {
     const items = getSelectedLeafItems();
     let changed = false;
-    for (const item of items) {
+    for (let item of items) {
+        if (item.parent instanceof paper.CompoundPath) {
+            item = item.parent;
+        }
         if (isPGTextItem(item)) {
             for (const child of item.children) {
                 if (child.children) {
@@ -61,7 +64,10 @@ const _strokeColorMatch = function (item, incomingColor) {
 const applyStrokeColorToSelection = function (colorString) {
     const items = getSelectedLeafItems();
     let changed = false;
-    for (const item of items) {
+    for (let item of items) {
+        if (item.parent instanceof paper.CompoundPath) {
+            item = item.parent;
+        }
         if (isPGTextItem(item)) {
             if (item.children) {
                 for (const child of item.children) {
@@ -103,7 +109,10 @@ const applyStrokeColorToSelection = function (colorString) {
 const applyStrokeWidthToSelection = function (value, onUpdateSvg) {
     let changed = false;
     const items = getSelectedLeafItems();
-    for (const item of items) {
+    for (let item of items) {
+        if (item.parent instanceof paper.CompoundPath) {
+            item = item.parent;
+        }
         if (isGroup(item)) {
             continue;
         } else if (item.strokeWidth !== value) {
@@ -129,7 +138,11 @@ const getColorsFromSelection = function (selectedItems) {
     let selectionStrokeWidth;
     let firstChild = true;
 
-    for (const item of selectedItems) {
+    for (let item of selectedItems) {
+        if (item.parent instanceof paper.CompoundPath) {
+            // Compound path children inherit fill and stroke color from their parent.
+            item = item.parent;
+        }
         let itemFillColorString;
         let itemStrokeColorString;
 
