@@ -22966,7 +22966,7 @@ exports.document = DOCUMENT;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.setDefaultGuideStyle = exports.getGuideColor = exports.removeHitPoint = exports.drawHitPoint = exports.removeBoundsPath = exports.removeAllGuides = exports.rectSelect = exports.hoverBounds = exports.hoverItem = undefined;
+exports.setDefaultGuideStyle = exports.getGuideColor = exports.removeHitPoint = exports.drawHitPoint = exports.removeBoundsPath = exports.removeBoundsHandles = exports.removeAllGuides = exports.rectSelect = exports.hoverBounds = exports.hoverItem = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -23146,6 +23146,10 @@ var removeBoundsPath = function removeBoundsPath() {
     _removePaperItemsByDataTags(['isSelectionBound', 'isRotHandle', 'isScaleHandle']);
 };
 
+var removeBoundsHandles = function removeBoundsHandles() {
+    _removePaperItemsByDataTags(['isRotHandle', 'isScaleHandle']);
+};
+
 var removeAllGuides = function removeAllGuides() {
     _removePaperItemsByTags(['guide']);
 };
@@ -23170,6 +23174,7 @@ exports.hoverItem = hoverItem;
 exports.hoverBounds = hoverBounds;
 exports.rectSelect = rectSelect;
 exports.removeAllGuides = removeAllGuides;
+exports.removeBoundsHandles = removeBoundsHandles;
 exports.removeBoundsPath = removeBoundsPath;
 exports.drawHitPoint = drawHitPoint;
 exports.removeHitPoint = removeHitPoint;
@@ -24352,14 +24357,16 @@ var BoundingBoxTool = function () {
             };
             if (this.mode === BoundingBoxModes.MOVE) {
                 this._modeMap[this.mode].onMouseDown(hitProperties);
+                this.removeBoundsHandles();
             } else if (this.mode === BoundingBoxModes.SCALE) {
                 this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, (0, _selection.getSelectedRootItems)());
+                this.removeBoundsHandles();
             } else if (this.mode === BoundingBoxModes.ROTATE) {
                 this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, (0, _selection.getSelectedRootItems)());
+                // While transforming, don't show bounds
+                this.removeBoundsPath();
             }
 
-            // While transforming, don't show bounds
-            this.removeBoundsPath();
             return true;
         }
     }, {
@@ -24422,6 +24429,7 @@ var BoundingBoxTool = function () {
                 this.boundsPath.curves[2].divideAtTime(0.5);
                 this.boundsPath.curves[4].divideAtTime(0.5);
                 this.boundsPath.curves[6].divideAtTime(0.5);
+                this._modeMap[BoundingBoxModes.MOVE].setBoundsPath(this.boundsPath);
             }
             this.boundsPath.guide = true;
             this.boundsPath.data.isSelectionBound = true;
@@ -24527,6 +24535,13 @@ var BoundingBoxTool = function () {
         value: function removeBoundsPath() {
             (0, _guides.removeBoundsPath)();
             this.boundsPath = null;
+            this.boundsScaleHandles.length = 0;
+            this.boundsRotHandles.length = 0;
+        }
+    }, {
+        key: 'removeBoundsHandles',
+        value: function removeBoundsHandles() {
+            (0, _guides.removeBoundsHandles)();
             this.boundsScaleHandles.length = 0;
             this.boundsRotHandles.length = 0;
         }
@@ -27470,6 +27485,7 @@ var MoveTool = function () {
         this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
         this.onUpdateSvg = onUpdateSvg;
+        this.boundsPath = null;
     }
 
     /**
@@ -27510,6 +27526,14 @@ var MoveTool = function () {
             }
             if (hitProperties.clone) (0, _selection.cloneSelection)(hitProperties.subselect, this.onUpdateSvg);
             this.selectedItems = this.mode === _modes2.default.RESHAPE ? (0, _selection.getSelectedLeafItems)() : (0, _selection.getSelectedRootItems)();
+            if (this.boundsPath) {
+                this.selectedItems.push(this.boundsPath);
+            }
+        }
+    }, {
+        key: 'setBoundsPath',
+        value: function setBoundsPath(boundsPath) {
+            this.boundsPath = boundsPath;
         }
         /**
          * Sets the selection state of an item.
@@ -27589,7 +27613,7 @@ var MoveTool = function () {
                 for (var _iterator2 = this.selectedItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                     var item = _step2.value;
 
-                    if (item.data.origPos && !item.position.equals(item.data.origPos)) {
+                    if (item.data && item.data.origPos && !item.position.equals(item.data.origPos)) {
                         moved = true;
                     }
                     item.data.origPos = null;
@@ -67649,6 +67673,7 @@ var ScaleTool = function () {
             }
 
             this.itemGroup = new _paper2.default.Group(selectedItems);
+            this.itemGroup.addChild(boundsPath);
             this.itemGroup.insertBelow(this.itemToInsertBelow);
             this.itemGroup.data.isHelperItem = true;
         }
