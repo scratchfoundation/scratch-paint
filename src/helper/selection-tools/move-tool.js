@@ -21,6 +21,7 @@ class MoveTool {
         this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
         this.onUpdateSvg = onUpdateSvg;
+        this.boundsPath = null;
     }
 
     /**
@@ -57,6 +58,12 @@ class MoveTool {
         }
         if (hitProperties.clone) cloneSelection(hitProperties.subselect, this.onUpdateSvg);
         this.selectedItems = this.mode === Modes.RESHAPE ? getSelectedLeafItems() : getSelectedRootItems();
+        if (this.boundsPath) {
+            this.selectedItems.push(this.boundsPath);
+        }
+    }
+    setBoundsPath (boundsPath) {
+        this.boundsPath = boundsPath;
     }
     /**
      * Sets the selection state of an item.
@@ -101,7 +108,7 @@ class MoveTool {
         let moved = false;
         // resetting the items origin point for the next usage
         for (const item of this.selectedItems) {
-            if (item.data.origPos && !item.position.equals(item.data.origPos)) {
+            if (item.data && item.data.origPos && !item.position.equals(item.data.origPos)) {
                 moved = true;
             }
             item.data.origPos = null;

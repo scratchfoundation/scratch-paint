@@ -54,6 +54,7 @@ class ScaleTool {
         }
 
         this.itemGroup = new paper.Group(selectedItems);
+        this.itemGroup.addChild(boundsPath);
         this.itemGroup.insertBelow(this.itemToInsertBelow);
         this.itemGroup.data.isHelperItem = true;
     }

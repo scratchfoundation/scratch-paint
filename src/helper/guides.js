@@ -88,6 +88,10 @@ const removeBoundsPath = function () {
     _removePaperItemsByDataTags(['isSelectionBound', 'isRotHandle', 'isScaleHandle']);
 };
 
+const removeBoundsHandles = function () {
+    _removePaperItemsByDataTags(['isRotHandle', 'isScaleHandle']);
+};
+
 const removeAllGuides = function () {
     _removePaperItemsByTags(['guide']);
 };
@@ -113,6 +117,7 @@ export {
     hoverBounds,
     rectSelect,
     removeAllGuides,
+    removeBoundsHandles,
     removeBoundsPath,
     drawHitPoint,
     removeHitPoint,

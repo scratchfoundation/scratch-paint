@@ -2,7 +2,7 @@ import paper from '@scratch/paper';
 import keyMirror from 'keymirror';
 
 import {getSelectedRootItems} from '../selection';
-import {getGuideColor, removeBoundsPath} from '../guides';
+import {getGuideColor, removeBoundsPath, removeBoundsHandles} from '../guides';
 import {getGuideLayer} from '../layer';
 
 import ScaleTool from './scale-tool';
@@ -102,14 +102,16 @@ class BoundingBoxTool {
         };
         if (this.mode === BoundingBoxModes.MOVE) {
             this._modeMap[this.mode].onMouseDown(hitProperties);
+            this.removeBoundsHandles();
         } else if (this.mode === BoundingBoxModes.SCALE) {
             this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedRootItems());
+            this.removeBoundsHandles();
         } else if (this.mode === BoundingBoxModes.ROTATE) {
             this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedRootItems());
+            // While transforming, don't show bounds
+            this.removeBoundsPath();
         }
 
-        // While transforming, don't show bounds
-        this.removeBoundsPath();
         return true;
     }
     onMouseDrag (event) {
@@ -145,6 +147,7 @@ class BoundingBoxTool {
             this.boundsPath.curves[2].divideAtTime(0.5);
             this.boundsPath.curves[4].divideAtTime(0.5);
             this.boundsPath.curves[6].divideAtTime(0.5);
+            this._modeMap[BoundingBoxModes.MOVE].setBoundsPath(this.boundsPath);
         }
         this.boundsPath.guide = true;
         this.boundsPath.data.isSelectionBound = true;
@@ -230,6 +233,11 @@ class BoundingBoxTool {
     removeBoundsPath () {
         removeBoundsPath();
         this.boundsPath = null;
+        this.boundsScaleHandles.length = 0;
+        this.boundsRotHandles.length = 0;
+    }
+    removeBoundsHandles () {
+        removeBoundsHandles();
         this.boundsScaleHandles.length = 0;
         this.boundsRotHandles.length = 0;
     }
