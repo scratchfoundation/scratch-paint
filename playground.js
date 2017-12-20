@@ -76,7 +76,7 @@ if (process.env.NODE_ENV === 'production') {
   module.exports = __webpack_require__(96);
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 1 */
@@ -111,7 +111,7 @@ if (process.env.NODE_ENV !== 'production') {
   module.exports = __webpack_require__(108)();
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 2 */
@@ -151,7 +151,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 var paper = function(self, undefined) {
 
-self = self || __webpack_require__(131);
+self = self || __webpack_require__(110);
 var window = self.window ? self.window : self,
 	document = self.document;
 
@@ -14903,7 +14903,7 @@ Base.exports.PaperScript = function() {
 	var global = this,
 		acorn = global.acorn;
 	if (!acorn && "function" !== 'undefined') {
-		try { acorn = __webpack_require__(132); } catch(e) {}
+		try { acorn = __webpack_require__(111); } catch(e) {}
 	}
 	if (!acorn) {
 		var exports, module;
@@ -16613,7 +16613,7 @@ paper = new (PaperScope.inject(Base.exports, {
 }))();
 
 if (paper.agent.node) {
-	__webpack_require__(133)(paper);
+	__webpack_require__(112)(paper);
 }
 
 if (true) {
@@ -16632,196 +16632,6 @@ return paper;
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17351,6 +17161,196 @@ exports.getSelectedRootItems = getSelectedRootItems;
 exports.processRectangularSelection = processRectangularSelection;
 exports.selectRootItem = selectRootItem;
 exports.shouldShowSelectAll = shouldShowSelectAll;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
 
 /***/ }),
 /* 5 */
@@ -18935,7 +18935,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _item = __webpack_require__(22);
 
@@ -20115,11 +20115,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedPlural", function() { return FormattedPlural; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedMessage", function() { return FormattedMessage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedHTMLMessage", function() { return FormattedHTMLMessage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__locale_data_index_js__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__locale_data_index_js__ = __webpack_require__(114);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__locale_data_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__locale_data_index_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_intl_messageformat__ = __webpack_require__(65);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_intl_messageformat___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_intl_messageformat__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_intl_relativeformat__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_intl_relativeformat__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_intl_relativeformat___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_intl_relativeformat__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_prop_types___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_prop_types__);
@@ -20127,7 +20127,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_invariant__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_invariant__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_intl_format_cache__ = __webpack_require__(127);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_intl_format_cache__ = __webpack_require__(130);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_intl_format_cache___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_intl_format_cache__);
 /*
  * Copyright 2017, Yahoo Inc.
@@ -21773,7 +21773,7 @@ addLocaleData(__WEBPACK_IMPORTED_MODULE_0__locale_data_index_js___default.a);
 
 
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 17 */
@@ -21982,7 +21982,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 }
 
 module.exports = invariant;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 20 */
@@ -22002,7 +22002,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _item = __webpack_require__(22);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22610,7 +22610,7 @@ if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' 
 }
 
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 26 */
@@ -22999,7 +22999,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = emptyObject;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 32 */
@@ -23068,7 +23068,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = warning;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 33 */
@@ -23115,7 +23115,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _layer = __webpack_require__(21);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -23415,7 +23415,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
 module.exports = checkPropTypes;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 37 */
@@ -24464,17 +24464,17 @@ var _keymirror = __webpack_require__(42);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _guides = __webpack_require__(34);
 
 var _layer = __webpack_require__(21);
 
-var _scaleTool = __webpack_require__(249);
+var _scaleTool = __webpack_require__(250);
 
 var _scaleTool2 = _interopRequireDefault(_scaleTool);
 
-var _rotateTool = __webpack_require__(250);
+var _rotateTool = __webpack_require__(251);
 
 var _rotateTool2 = _interopRequireDefault(_rotateTool);
 
@@ -24823,7 +24823,7 @@ if (process.env.NODE_ENV === 'production') {
   module.exports = __webpack_require__(100);
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 59 */
@@ -24904,7 +24904,7 @@ var EventListener = {
 };
 
 module.exports = EventListener;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 60 */
@@ -25108,11 +25108,11 @@ var _paintEditor = __webpack_require__(109);
 
 var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
-var _selectionHoc = __webpack_require__(285);
+var _selectionHoc = __webpack_require__(286);
 
 var _selectionHoc2 = _interopRequireDefault(_selectionHoc);
 
-var _scratchPaintReducer = __webpack_require__(286);
+var _scratchPaintReducer = __webpack_require__(287);
 
 var _scratchPaintReducer2 = _interopRequireDefault(_scratchPaintReducer);
 
@@ -25132,11 +25132,11 @@ exports.ScratchPaintReducer = _scratchPaintReducer2.default;
 
 
 
-var IntlMessageFormat = __webpack_require__(112)['default'];
+var IntlMessageFormat = __webpack_require__(115)['default'];
 
 // Add all locale data to `IntlMessageFormat`. This module will be ignored when
 // bundling for the browser with Browserify/Webpack.
-__webpack_require__(119);
+__webpack_require__(122);
 
 // Re-export `IntlMessageFormat` as the CommonJS default exports with all the
 // locale data registered, and with English set as the default locale. Define
@@ -25240,7 +25240,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 
 module.exports = invariant;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 68 */
@@ -25552,7 +25552,7 @@ selectorFactory) {
     return __WEBPACK_IMPORTED_MODULE_0_hoist_non_react_statics___default()(Connect, WrappedComponent);
   };
 }
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 70 */
@@ -25942,7 +25942,7 @@ function wrapMapToPropsFunc(mapToProps, methodName) {
     return proxy;
   };
 }
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 74 */
@@ -26097,7 +26097,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26206,7 +26206,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.shouldShowSendBackward = exports.shouldShowBringForward = exports.sendBackward = exports.bringForward = exports.sendToBack = exports.bringToFront = undefined;
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var bringToFront = function bringToFront(onUpdateSvg) {
     var items = (0, _selection.getSelectedRootItems)();
@@ -26456,7 +26456,7 @@ Box.defaultProps = {
     style: {}
 };
 exports.default = Box;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 80 */
@@ -26491,7 +26491,7 @@ var _segmentBrushHelper2 = _interopRequireDefault(_segmentBrushHelper);
 
 var _stylePath = __webpack_require__(8);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _layer = __webpack_require__(21);
 
@@ -27688,7 +27688,7 @@ var _item = __webpack_require__(22);
 
 var _math = __webpack_require__(26);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27888,7 +27888,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _guides = __webpack_require__(34);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -27960,13 +27960,13 @@ exports.updateIntl = exports.intlInitialState = exports.IntlProvider = exports.d
 
 var _reactIntl = __webpack_require__(16);
 
-var _reactIntlRedux = __webpack_require__(289);
+var _reactIntlRedux = __webpack_require__(290);
 
-var _scratchL10n = __webpack_require__(292);
+var _scratchL10n = __webpack_require__(293);
 
 var _scratchL10n2 = _interopRequireDefault(_scratchL10n);
 
-var _paintMsgs = __webpack_require__(293);
+var _paintMsgs = __webpack_require__(294);
 
 var _paintMsgs2 = _interopRequireDefault(_paintMsgs);
 
@@ -28061,7 +28061,7 @@ var _reactRedux = __webpack_require__(7);
 
 var _redux = __webpack_require__(25);
 
-var _combineReducers = __webpack_require__(288);
+var _combineReducers = __webpack_require__(289);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
@@ -29868,7 +29868,7 @@ module.exports = ReactEntry;
 })();
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 97 */
@@ -47416,7 +47416,7 @@ module.exports = ReactDOMFiberEntry;
 })();
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 101 */
@@ -48185,7 +48185,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   return ReactPropTypes;
 };
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 108 */
@@ -48265,6 +48265,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
 var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
@@ -48273,7 +48277,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _paintEditor = __webpack_require__(110);
+var _paintEditor = __webpack_require__(113);
 
 var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
@@ -48282,8 +48286,6 @@ var _modes = __webpack_require__(14);
 var _undo = __webpack_require__(43);
 
 var _selectedItems = __webpack_require__(9);
-
-var _clipboard = __webpack_require__(44);
 
 var _eyeDropper = __webpack_require__(53);
 
@@ -48295,7 +48297,7 @@ var _order = __webpack_require__(78);
 
 var _group = __webpack_require__(20);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _view = __webpack_require__(77);
 
@@ -48312,10 +48314,6 @@ var _reactRedux = __webpack_require__(7);
 var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -48340,7 +48338,7 @@ var PaintEditor = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaintEditor.__proto__ || Object.getPrototypeOf(PaintEditor)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['handleUpdateSvg', 'handleUndo', 'handleRedo', 'handleSendBackward', 'handleSendForward', 'handleSendToBack', 'handleSendToFront', 'handleGroup', 'handleUngroup', 'canRedo', 'canUndo', 'handleCopyToClipboard', 'handlePasteFromClipboard', 'onMouseDown', 'setCanvas', 'startEyeDroppingLoop', 'stopEyeDroppingLoop']);
+        (0, _lodash2.default)(_this, ['handleUpdateSvg', 'handleUndo', 'handleRedo', 'handleSendBackward', 'handleSendForward', 'handleSendToBack', 'handleSendToFront', 'handleGroup', 'handleUngroup', 'canRedo', 'canUndo', 'onMouseDown', 'setCanvas', 'startEyeDroppingLoop', 'stopEyeDroppingLoop']);
         _this.state = {
             canvas: null,
             colorInfo: null
@@ -48435,40 +48433,6 @@ var PaintEditor = function (_React$Component) {
         key: 'handleSendToFront',
         value: function handleSendToFront() {
             (0, _order.bringToFront)(this.handleUpdateSvg);
-        }
-    }, {
-        key: 'handleCopyToClipboard',
-        value: function handleCopyToClipboard() {
-            var selectedItems = (0, _selection.getSelectedRootItems)();
-            if (selectedItems.length > 0) {
-                var clipboardItems = [];
-                for (var i = 0; i < selectedItems.length; i++) {
-                    var jsonItem = selectedItems[i].exportJSON({ asString: false });
-                    clipboardItems.push(jsonItem);
-                }
-                this.props.setClipboardItems(clipboardItems);
-            }
-        }
-    }, {
-        key: 'handlePasteFromClipboard',
-        value: function handlePasteFromClipboard() {
-            (0, _selection.clearSelection)(this.props.clearSelectedItems);
-
-            if (this.props.clipboardItems.length > 0) {
-                for (var i = 0; i < this.props.clipboardItems.length; i++) {
-                    var item = _paper2.default.Base.importJSON(this.props.clipboardItems[i]);
-                    if (item) {
-                        item.selected = true;
-                    }
-                    var placedItem = _paper2.default.project.getActiveLayer().addChild(item);
-                    placedItem.position.x += 10 * this.props.pasteOffset;
-                    placedItem.position.y += 10 * this.props.pasteOffset;
-                }
-                this.props.incrementPasteOffset();
-                this.props.setSelectedItems();
-                _paper2.default.project.view.update();
-                this.handleUpdateSvg();
-            }
         }
     }, {
         key: 'canUndo',
@@ -48566,9 +48530,7 @@ var PaintEditor = function (_React$Component) {
                 setCanvas: this.setCanvas,
                 svg: this.props.svg,
                 svgId: this.props.svgId,
-                onCopyToClipboard: this.handleCopyToClipboard,
                 onGroup: this.handleGroup,
-                onPasteFromClipboard: this.handlePasteFromClipboard,
                 onRedo: this.handleRedo,
                 onSendBackward: this.handleSendBackward,
                 onSendForward: this.handleSendForward,
@@ -48591,8 +48553,6 @@ var PaintEditor = function (_React$Component) {
 PaintEditor.propTypes = {
     changeColorToEyeDropper: _propTypes2.default.func,
     clearSelectedItems: _propTypes2.default.func.isRequired,
-    clipboardItems: _propTypes2.default.arrayOf(_propTypes2.default.array),
-    incrementPasteOffset: _propTypes2.default.func.isRequired,
     isEyeDropping: _propTypes2.default.bool,
     name: _propTypes2.default.string,
     onDeactivateEyeDropper: _propTypes2.default.func.isRequired,
@@ -48601,14 +48561,12 @@ PaintEditor.propTypes = {
     onUndo: _propTypes2.default.func.isRequired,
     onUpdateName: _propTypes2.default.func.isRequired,
     onUpdateSvg: _propTypes2.default.func.isRequired,
-    pasteOffset: _propTypes2.default.number,
     previousTool: _propTypes2.default.shape({ // paper.Tool
         activate: _propTypes2.default.func.isRequired,
         remove: _propTypes2.default.func.isRequired
     }),
     rotationCenterX: _propTypes2.default.number,
     rotationCenterY: _propTypes2.default.number,
-    setClipboardItems: _propTypes2.default.func.isRequired,
     setSelectedItems: _propTypes2.default.func.isRequired,
     svg: _propTypes2.default.string,
     svgId: _propTypes2.default.string,
@@ -48658,12 +48616,6 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         undoSnapshot: function undoSnapshot(snapshot) {
             dispatch((0, _undo.undoSnapshot)(snapshot));
         },
-        setClipboardItems: function setClipboardItems(items) {
-            dispatch((0, _clipboard.setClipboardItems)(items));
-        },
-        incrementPasteOffset: function incrementPasteOffset() {
-            dispatch((0, _clipboard.incrementPasteOffset)());
-        },
         onDeactivateEyeDropper: function onDeactivateEyeDropper() {
             // set redux values to default for eye dropper reducer
             dispatch((0, _eyeDropper.deactivateEyeDropper)());
@@ -48675,4908 +48627,12 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 /***/ }),
 /* 110 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _classnames = __webpack_require__(13);
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-var _reactIntl = __webpack_require__(16);
-
-var _reactResponsive = __webpack_require__(130);
-
-var _reactResponsive2 = _interopRequireDefault(_reactResponsive);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _propTypes = __webpack_require__(1);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _paperCanvas = __webpack_require__(134);
-
-var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
-
-var _group = __webpack_require__(20);
-
-var _order = __webpack_require__(78);
-
-var _box = __webpack_require__(79);
-
-var _box2 = _interopRequireDefault(_box);
-
-var _button = __webpack_require__(45);
-
-var _button2 = _interopRequireDefault(_button);
-
-var _buttonGroup = __webpack_require__(179);
-
-var _buttonGroup2 = _interopRequireDefault(_buttonGroup);
-
-var _brushMode = __webpack_require__(182);
-
-var _brushMode2 = _interopRequireDefault(_brushMode);
-
-var _bufferedInputHoc = __webpack_require__(188);
-
-var _bufferedInputHoc2 = _interopRequireDefault(_bufferedInputHoc);
-
-var _dropdown = __webpack_require__(189);
-
-var _dropdown2 = _interopRequireDefault(_dropdown);
-
-var _eraserMode = __webpack_require__(207);
-
-var _eraserMode2 = _interopRequireDefault(_eraserMode);
-
-var _fillColorIndicator = __webpack_require__(209);
-
-var _fillColorIndicator2 = _interopRequireDefault(_fillColorIndicator);
-
-var _fillMode = __webpack_require__(227);
-
-var _fillMode2 = _interopRequireDefault(_fillMode);
-
-var _input = __webpack_require__(56);
-
-var _input2 = _interopRequireDefault(_input);
-
-var _inputGroup = __webpack_require__(28);
-
-var _inputGroup2 = _interopRequireDefault(_inputGroup);
-
-var _label = __webpack_require__(54);
-
-var _label2 = _interopRequireDefault(_label);
-
-var _labeledIconButton = __webpack_require__(87);
-
-var _labeledIconButton2 = _interopRequireDefault(_labeledIconButton);
-
-var _lineMode = __webpack_require__(235);
-
-var _lineMode2 = _interopRequireDefault(_lineMode);
-
-var _loupe = __webpack_require__(239);
-
-var _loupe2 = _interopRequireDefault(_loupe);
-
-var _modeTools = __webpack_require__(242);
-
-var _modeTools2 = _interopRequireDefault(_modeTools);
-
-var _ovalMode = __webpack_require__(247);
-
-var _ovalMode2 = _interopRequireDefault(_ovalMode);
-
-var _rectMode = __webpack_require__(253);
-
-var _rectMode2 = _interopRequireDefault(_rectMode);
-
-var _reshapeMode = __webpack_require__(257);
-
-var _reshapeMode2 = _interopRequireDefault(_reshapeMode);
-
-var _selectMode = __webpack_require__(263);
-
-var _selectMode2 = _interopRequireDefault(_selectMode);
-
-var _strokeColorIndicator = __webpack_require__(267);
-
-var _strokeColorIndicator2 = _interopRequireDefault(_strokeColorIndicator);
-
-var _strokeWidthIndicator = __webpack_require__(269);
-
-var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
-
-var _layoutConstants = __webpack_require__(271);
-
-var _layoutConstants2 = _interopRequireDefault(_layoutConstants);
-
-var _paintEditor = __webpack_require__(272);
-
-var _paintEditor2 = _interopRequireDefault(_paintEditor);
-
-var _group2 = __webpack_require__(274);
-
-var _group3 = _interopRequireDefault(_group2);
-
-var _redo = __webpack_require__(275);
-
-var _redo2 = _interopRequireDefault(_redo);
-
-var _sendBack = __webpack_require__(276);
-
-var _sendBack2 = _interopRequireDefault(_sendBack);
-
-var _sendBackward = __webpack_require__(277);
-
-var _sendBackward2 = _interopRequireDefault(_sendBackward);
-
-var _sendForward = __webpack_require__(278);
-
-var _sendForward2 = _interopRequireDefault(_sendForward);
-
-var _sendFront = __webpack_require__(279);
-
-var _sendFront2 = _interopRequireDefault(_sendFront);
-
-var _undo = __webpack_require__(280);
-
-var _undo2 = _interopRequireDefault(_undo);
-
-var _ungroup = __webpack_require__(281);
-
-var _ungroup2 = _interopRequireDefault(_ungroup);
-
-var _zoomIn = __webpack_require__(282);
-
-var _zoomIn2 = _interopRequireDefault(_zoomIn);
-
-var _zoomOut = __webpack_require__(283);
-
-var _zoomOut2 = _interopRequireDefault(_zoomOut);
-
-var _zoomReset = __webpack_require__(284);
-
-var _zoomReset2 = _interopRequireDefault(_zoomReset);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var BufferedInput = (0, _bufferedInputHoc2.default)(_input2.default);
-var messages = (0, _reactIntl.defineMessages)({
-    costume: {
-        'id': 'paint.paintEditor.costume',
-        'defaultMessage': 'Costume'
-    },
-    group: {
-        'id': 'paint.paintEditor.group',
-        'defaultMessage': 'Group'
-    },
-    ungroup: {
-        'id': 'paint.paintEditor.ungroup',
-        'defaultMessage': 'Ungroup'
-    },
-    undo: {
-        'id': 'paint.paintEditor.undo',
-        'defaultMessage': 'Undo'
-    },
-    redo: {
-        'id': 'paint.paintEditor.redo',
-        'defaultMessage': 'Redo'
-    },
-    forward: {
-        'id': 'paint.paintEditor.forward',
-        'defaultMessage': 'Forward'
-    },
-    backward: {
-        'id': 'paint.paintEditor.backward',
-        'defaultMessage': 'Backward'
-    },
-    front: {
-        'id': 'paint.paintEditor.front',
-        'defaultMessage': 'Front'
-    },
-    back: {
-        'id': 'paint.paintEditor.back',
-        'defaultMessage': 'Back'
-    },
-    more: {
-        'id': 'paint.paintEditor.more',
-        'defaultMessage': 'More'
-    }
-});
-
-var PaintEditorComponent = function PaintEditorComponent(props) {
-    var redoDisabled = !props.canRedo();
-    var undoDisabled = !props.canUndo();
-
-    return _react2.default.createElement(
-        'div',
-        { className: _paintEditor2.default.editorContainer },
-        props.canvas !== null ? // eslint-disable-line no-negated-condition
-        _react2.default.createElement(
-            'div',
-            { className: _paintEditor2.default.editorContainerTop },
-            _react2.default.createElement(
-                'div',
-                { className: _paintEditor2.default.row },
-                _react2.default.createElement(
-                    _inputGroup2.default,
-                    null,
-                    _react2.default.createElement(
-                        _reactResponsive2.default,
-                        { minWidth: _layoutConstants2.default.fullSizeEditorMinWidth },
-                        _react2.default.createElement(
-                            _label2.default,
-                            { text: props.intl.formatMessage(messages.costume) },
-                            _react2.default.createElement(BufferedInput, {
-                                type: 'text',
-                                value: props.name,
-                                onSubmit: props.onUpdateName
-                            })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        _reactResponsive2.default,
-                        { maxWidth: _layoutConstants2.default.fullSizeEditorMinWidth - 1 },
-                        _react2.default.createElement(BufferedInput, {
-                            type: 'text',
-                            value: props.name,
-                            onSubmit: props.onUpdateName
-                        })
-                    )
-                ),
-                _react2.default.createElement(
-                    _inputGroup2.default,
-                    null,
-                    _react2.default.createElement(
-                        _buttonGroup2.default,
-                        null,
-                        _react2.default.createElement(
-                            _button2.default,
-                            {
-                                className: (0, _classnames2.default)(_paintEditor2.default.buttonGroupButton, _defineProperty({}, _paintEditor2.default.modNoRightBorder, !redoDisabled)),
-                                disabled: undoDisabled,
-                                onClick: props.onUndo
-                            },
-                            _react2.default.createElement('img', {
-                                alt: props.intl.formatMessage(messages.undo),
-                                className: _paintEditor2.default.buttonGroupButtonIcon,
-                                src: _undo2.default
-                            })
-                        ),
-                        _react2.default.createElement(
-                            _button2.default,
-                            {
-                                className: (0, _classnames2.default)(_paintEditor2.default.buttonGroupButton, _defineProperty({}, _paintEditor2.default.modLeftBorder, !redoDisabled)),
-                                disabled: redoDisabled,
-                                onClick: props.onRedo
-                            },
-                            _react2.default.createElement('img', {
-                                alt: props.intl.formatMessage(messages.redo),
-                                className: _paintEditor2.default.buttonGroupButtonIcon,
-                                src: _redo2.default
-                            })
-                        )
-                    )
-                ),
-                _react2.default.createElement(
-                    _inputGroup2.default,
-                    { className: _paintEditor2.default.modDashedBorder },
-                    _react2.default.createElement(_labeledIconButton2.default, {
-                        disabled: !(0, _group.shouldShowGroup)(),
-                        imgSrc: _group3.default,
-                        title: props.intl.formatMessage(messages.group),
-                        onClick: props.onGroup
-                    }),
-                    _react2.default.createElement(_labeledIconButton2.default, {
-                        disabled: !(0, _group.shouldShowUngroup)(),
-                        imgSrc: _ungroup2.default,
-                        title: props.intl.formatMessage(messages.ungroup),
-                        onClick: props.onUngroup
-                    })
-                ),
-                _react2.default.createElement(
-                    _inputGroup2.default,
-                    { className: _paintEditor2.default.modDashedBorder },
-                    _react2.default.createElement(_labeledIconButton2.default, {
-                        disabled: !(0, _order.shouldShowBringForward)(),
-                        imgSrc: _sendForward2.default,
-                        title: props.intl.formatMessage(messages.forward),
-                        onClick: props.onSendForward
-                    }),
-                    _react2.default.createElement(_labeledIconButton2.default, {
-                        disabled: !(0, _order.shouldShowSendBackward)(),
-                        imgSrc: _sendBackward2.default,
-                        title: props.intl.formatMessage(messages.backward),
-                        onClick: props.onSendBackward
-                    })
-                ),
-                _react2.default.createElement(
-                    _reactResponsive2.default,
-                    { minWidth: _layoutConstants2.default.fullSizeEditorMinWidth },
-                    _react2.default.createElement(
-                        'div',
-                        { className: _paintEditor2.default.row },
-                        _react2.default.createElement(
-                            _inputGroup2.default,
-                            null,
-                            _react2.default.createElement(_labeledIconButton2.default, {
-                                disabled: !(0, _order.shouldShowBringForward)(),
-                                imgSrc: _sendFront2.default,
-                                title: props.intl.formatMessage(messages.front),
-                                onClick: props.onSendToFront
-                            }),
-                            _react2.default.createElement(_labeledIconButton2.default, {
-                                disabled: !(0, _order.shouldShowSendBackward)(),
-                                imgSrc: _sendBack2.default,
-                                title: props.intl.formatMessage(messages.back),
-                                onClick: props.onSendToBack
-                            })
-                        )
-                    )
-                ),
-                _react2.default.createElement(
-                    _reactResponsive2.default,
-                    { maxWidth: _layoutConstants2.default.fullSizeEditorMinWidth - 1 },
-                    _react2.default.createElement(
-                        _inputGroup2.default,
-                        null,
-                        _react2.default.createElement(
-                            _dropdown2.default,
-                            {
-                                className: _paintEditor2.default.modUnselect,
-                                enterExitTransitionDurationMs: 0,
-                                popoverContent: _react2.default.createElement(
-                                    _inputGroup2.default,
-                                    { className: _paintEditor2.default.modContextMenu },
-                                    _react2.default.createElement(
-                                        _button2.default,
-                                        {
-                                            className: (0, _classnames2.default)(_paintEditor2.default.modMenuItem, _defineProperty({}, _paintEditor2.default.modDisabled, !(0, _order.shouldShowBringForward)())),
-                                            disabled: !(0, _order.shouldShowBringForward)(),
-                                            onClick: props.onSendToFront
-                                        },
-                                        _react2.default.createElement('img', {
-                                            className: _paintEditor2.default.menuItemIcon,
-                                            src: _sendFront2.default
-                                        }),
-                                        _react2.default.createElement(
-                                            'span',
-                                            null,
-                                            props.intl.formatMessage(messages.front)
-                                        )
-                                    ),
-                                    _react2.default.createElement(
-                                        _button2.default,
-                                        {
-                                            className: (0, _classnames2.default)(_paintEditor2.default.modMenuItem, _defineProperty({}, _paintEditor2.default.modDisabled, !(0, _order.shouldShowSendBackward)())),
-                                            disabled: !(0, _order.shouldShowSendBackward)(),
-                                            onClick: props.onSendToBack
-                                        },
-                                        _react2.default.createElement('img', {
-                                            className: _paintEditor2.default.menuItemIcon,
-                                            src: _sendBack2.default
-                                        }),
-                                        _react2.default.createElement(
-                                            'span',
-                                            null,
-                                            props.intl.formatMessage(messages.back)
-                                        )
-                                    )
-                                ),
-                                tipSize: .01
-                            },
-                            props.intl.formatMessage(messages.more)
-                        )
-                    )
-                )
-            ),
-            _react2.default.createElement(
-                'div',
-                { className: _paintEditor2.default.row },
-                _react2.default.createElement(
-                    _inputGroup2.default,
-                    {
-                        className: (0, _classnames2.default)(_paintEditor2.default.row, _paintEditor2.default.modDashedBorder, _paintEditor2.default.modLabeledIconHeight)
-                    },
-                    _react2.default.createElement(_fillColorIndicator2.default, {
-                        onUpdateSvg: props.onUpdateSvg
-                    }),
-                    _react2.default.createElement(_strokeColorIndicator2.default, {
-                        onUpdateSvg: props.onUpdateSvg
-                    }),
-                    _react2.default.createElement(_strokeWidthIndicator2.default, {
-                        onUpdateSvg: props.onUpdateSvg
-                    })
-                ),
-                _react2.default.createElement(
-                    _inputGroup2.default,
-                    { className: _paintEditor2.default.modModeTools },
-                    _react2.default.createElement(_modeTools2.default, {
-                        onCopyToClipboard: props.onCopyToClipboard,
-                        onPasteFromClipboard: props.onPasteFromClipboard
-                    })
-                )
-            )
-        ) : null,
-        _react2.default.createElement(
-            'div',
-            { className: _paintEditor2.default.topAlignRow },
-            props.canvas !== null ? // eslint-disable-line no-negated-condition
-            _react2.default.createElement(
-                'div',
-                { className: _paintEditor2.default.modeSelector },
-                _react2.default.createElement(_selectMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
-                }),
-                _react2.default.createElement(_reshapeMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
-                }),
-                _react2.default.createElement(_brushMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
-                }),
-                _react2.default.createElement(_eraserMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
-                }),
-                _react2.default.createElement(_lineMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
-                }),
-                _react2.default.createElement(_fillMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
-                }),
-                _react2.default.createElement(_ovalMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
-                }),
-                _react2.default.createElement(_rectMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
-                })
-            ) : null,
-            _react2.default.createElement(
-                'div',
-                {
-                    className: (0, _classnames2.default)(_paintEditor2.default.canvasContainer, _defineProperty({}, _paintEditor2.default.withEyeDropper, props.isEyeDropping))
-                },
-                _react2.default.createElement(_paperCanvas2.default, {
-                    canvasRef: props.setCanvas,
-                    rotationCenterX: props.rotationCenterX,
-                    rotationCenterY: props.rotationCenterY,
-                    svg: props.svg,
-                    svgId: props.svgId,
-                    onUpdateSvg: props.onUpdateSvg
-                }),
-                props.isEyeDropping && props.colorInfo !== null && !props.colorInfo.hideLoupe ? _react2.default.createElement(
-                    _box2.default,
-                    { className: _paintEditor2.default.colorPickerWrapper },
-                    _react2.default.createElement(_loupe2.default, {
-                        colorInfo: props.colorInfo,
-                        pixelRatio: _paper2.default.project.view.pixelRatio
-                    })
-                ) : null,
-                _react2.default.createElement(
-                    _inputGroup2.default,
-                    { className: _paintEditor2.default.zoomControls },
-                    _react2.default.createElement(
-                        _buttonGroup2.default,
-                        null,
-                        _react2.default.createElement(
-                            _button2.default,
-                            {
-                                className: _paintEditor2.default.buttonGroupButton,
-                                onClick: props.onZoomOut
-                            },
-                            _react2.default.createElement('img', {
-                                alt: 'Zoom Out',
-                                className: _paintEditor2.default.buttonGroupButtonIcon,
-                                src: _zoomOut2.default
-                            })
-                        ),
-                        _react2.default.createElement(
-                            _button2.default,
-                            {
-                                className: _paintEditor2.default.buttonGroupButton,
-                                onClick: props.onZoomReset
-                            },
-                            _react2.default.createElement('img', {
-                                alt: 'Zoom Reset',
-                                className: _paintEditor2.default.buttonGroupButtonIcon,
-                                src: _zoomReset2.default
-                            })
-                        ),
-                        _react2.default.createElement(
-                            _button2.default,
-                            {
-                                className: _paintEditor2.default.buttonGroupButton,
-                                onClick: props.onZoomIn
-                            },
-                            _react2.default.createElement('img', {
-                                alt: 'Zoom In',
-                                className: _paintEditor2.default.buttonGroupButtonIcon,
-                                src: _zoomIn2.default
-                            })
-                        )
-                    )
-                )
-            )
-        )
-    );
-};
-
-PaintEditorComponent.propTypes = {
-    canRedo: _propTypes2.default.func.isRequired,
-    canUndo: _propTypes2.default.func.isRequired,
-    canvas: _propTypes2.default.object, // eslint-disable-line react/forbid-prop-types
-    colorInfo: _loupe2.default.propTypes.colorInfo,
-    intl: _reactIntl.intlShape,
-    isEyeDropping: _propTypes2.default.bool,
-    name: _propTypes2.default.string,
-    onCopyToClipboard: _propTypes2.default.func.isRequired,
-    onGroup: _propTypes2.default.func.isRequired,
-    onPasteFromClipboard: _propTypes2.default.func.isRequired,
-    onRedo: _propTypes2.default.func.isRequired,
-    onSendBackward: _propTypes2.default.func.isRequired,
-    onSendForward: _propTypes2.default.func.isRequired,
-    onSendToBack: _propTypes2.default.func.isRequired,
-    onSendToFront: _propTypes2.default.func.isRequired,
-    onUndo: _propTypes2.default.func.isRequired,
-    onUngroup: _propTypes2.default.func.isRequired,
-    onUpdateName: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
-    onZoomIn: _propTypes2.default.func.isRequired,
-    onZoomOut: _propTypes2.default.func.isRequired,
-    onZoomReset: _propTypes2.default.func.isRequired,
-    rotationCenterX: _propTypes2.default.number,
-    rotationCenterY: _propTypes2.default.number,
-    setCanvas: _propTypes2.default.func.isRequired,
-    svg: _propTypes2.default.string,
-    svgId: _propTypes2.default.string
-};
-
-exports.default = (0, _reactIntl.injectIntl)(PaintEditorComponent);
+/* (ignored) */
 
 /***/ }),
 /* 111 */
-/***/ (function(module, exports) {
-
-/* (ignored) */
-
-/***/ }),
-/* 112 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* jslint esnext: true */
-
-
-var src$core$$ = __webpack_require__(113), src$en$$ = __webpack_require__(118);
-
-src$core$$["default"].__addLocaleData(src$en$$["default"]);
-src$core$$["default"].defaultLocale = 'en';
-
-exports["default"] = src$core$$["default"];
-
-//# sourceMappingURL=main.js.map
-
-/***/ }),
-/* 113 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*
-Copyright (c) 2014, Yahoo! Inc. All rights reserved.
-Copyrights licensed under the New BSD License.
-See the accompanying LICENSE file for terms.
-*/
-
-/* jslint esnext: true */
-
-
-var src$utils$$ = __webpack_require__(66), src$es5$$ = __webpack_require__(114), src$compiler$$ = __webpack_require__(115), intl$messageformat$parser$$ = __webpack_require__(116);
-exports["default"] = MessageFormat;
-
-// -- MessageFormat --------------------------------------------------------
-
-function MessageFormat(message, locales, formats) {
-    // Parse string messages into an AST.
-    var ast = typeof message === 'string' ?
-            MessageFormat.__parse(message) : message;
-
-    if (!(ast && ast.type === 'messageFormatPattern')) {
-        throw new TypeError('A message must be provided as a String or AST.');
-    }
-
-    // Creates a new object with the specified `formats` merged with the default
-    // formats.
-    formats = this._mergeFormats(MessageFormat.formats, formats);
-
-    // Defined first because it's used to build the format pattern.
-    src$es5$$.defineProperty(this, '_locale',  {value: this._resolveLocale(locales)});
-
-    // Compile the `ast` to a pattern that is highly optimized for repeated
-    // `format()` invocations. **Note:** This passes the `locales` set provided
-    // to the constructor instead of just the resolved locale.
-    var pluralFn = this._findPluralRuleFunction(this._locale);
-    var pattern  = this._compilePattern(ast, locales, formats, pluralFn);
-
-    // "Bind" `format()` method to `this` so it can be passed by reference like
-    // the other `Intl` APIs.
-    var messageFormat = this;
-    this.format = function (values) {
-      try {
-        return messageFormat._format(pattern, values);
-      } catch (e) {
-        if (e.variableId) {
-          throw new Error(
-            'The intl string context variable \'' + e.variableId + '\'' +
-            ' was not provided to the string \'' + message + '\''
-          );
-        } else {
-          throw e;
-        }
-      }
-    };
-}
-
-// Default format options used as the prototype of the `formats` provided to the
-// constructor. These are used when constructing the internal Intl.NumberFormat
-// and Intl.DateTimeFormat instances.
-src$es5$$.defineProperty(MessageFormat, 'formats', {
-    enumerable: true,
-
-    value: {
-        number: {
-            'currency': {
-                style: 'currency'
-            },
-
-            'percent': {
-                style: 'percent'
-            }
-        },
-
-        date: {
-            'short': {
-                month: 'numeric',
-                day  : 'numeric',
-                year : '2-digit'
-            },
-
-            'medium': {
-                month: 'short',
-                day  : 'numeric',
-                year : 'numeric'
-            },
-
-            'long': {
-                month: 'long',
-                day  : 'numeric',
-                year : 'numeric'
-            },
-
-            'full': {
-                weekday: 'long',
-                month  : 'long',
-                day    : 'numeric',
-                year   : 'numeric'
-            }
-        },
-
-        time: {
-            'short': {
-                hour  : 'numeric',
-                minute: 'numeric'
-            },
-
-            'medium':  {
-                hour  : 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-            },
-
-            'long': {
-                hour        : 'numeric',
-                minute      : 'numeric',
-                second      : 'numeric',
-                timeZoneName: 'short'
-            },
-
-            'full': {
-                hour        : 'numeric',
-                minute      : 'numeric',
-                second      : 'numeric',
-                timeZoneName: 'short'
-            }
-        }
-    }
-});
-
-// Define internal private properties for dealing with locale data.
-src$es5$$.defineProperty(MessageFormat, '__localeData__', {value: src$es5$$.objCreate(null)});
-src$es5$$.defineProperty(MessageFormat, '__addLocaleData', {value: function (data) {
-    if (!(data && data.locale)) {
-        throw new Error(
-            'Locale data provided to IntlMessageFormat is missing a ' +
-            '`locale` property'
-        );
-    }
-
-    MessageFormat.__localeData__[data.locale.toLowerCase()] = data;
-}});
-
-// Defines `__parse()` static method as an exposed private.
-src$es5$$.defineProperty(MessageFormat, '__parse', {value: intl$messageformat$parser$$["default"].parse});
-
-// Define public `defaultLocale` property which defaults to English, but can be
-// set by the developer.
-src$es5$$.defineProperty(MessageFormat, 'defaultLocale', {
-    enumerable: true,
-    writable  : true,
-    value     : undefined
-});
-
-MessageFormat.prototype.resolvedOptions = function () {
-    // TODO: Provide anything else?
-    return {
-        locale: this._locale
-    };
-};
-
-MessageFormat.prototype._compilePattern = function (ast, locales, formats, pluralFn) {
-    var compiler = new src$compiler$$["default"](locales, formats, pluralFn);
-    return compiler.compile(ast);
-};
-
-MessageFormat.prototype._findPluralRuleFunction = function (locale) {
-    var localeData = MessageFormat.__localeData__;
-    var data       = localeData[locale.toLowerCase()];
-
-    // The locale data is de-duplicated, so we have to traverse the locale's
-    // hierarchy until we find a `pluralRuleFunction` to return.
-    while (data) {
-        if (data.pluralRuleFunction) {
-            return data.pluralRuleFunction;
-        }
-
-        data = data.parentLocale && localeData[data.parentLocale.toLowerCase()];
-    }
-
-    throw new Error(
-        'Locale data added to IntlMessageFormat is missing a ' +
-        '`pluralRuleFunction` for :' + locale
-    );
-};
-
-MessageFormat.prototype._format = function (pattern, values) {
-    var result = '',
-        i, len, part, id, value, err;
-
-    for (i = 0, len = pattern.length; i < len; i += 1) {
-        part = pattern[i];
-
-        // Exist early for string parts.
-        if (typeof part === 'string') {
-            result += part;
-            continue;
-        }
-
-        id = part.id;
-
-        // Enforce that all required values are provided by the caller.
-        if (!(values && src$utils$$.hop.call(values, id))) {
-          err = new Error('A value must be provided for: ' + id);
-          err.variableId = id;
-          throw err;
-        }
-
-        value = values[id];
-
-        // Recursively format plural and select parts' option — which can be a
-        // nested pattern structure. The choosing of the option to use is
-        // abstracted-by and delegated-to the part helper object.
-        if (part.options) {
-            result += this._format(part.getOption(value), values);
-        } else {
-            result += part.format(value);
-        }
-    }
-
-    return result;
-};
-
-MessageFormat.prototype._mergeFormats = function (defaults, formats) {
-    var mergedFormats = {},
-        type, mergedType;
-
-    for (type in defaults) {
-        if (!src$utils$$.hop.call(defaults, type)) { continue; }
-
-        mergedFormats[type] = mergedType = src$es5$$.objCreate(defaults[type]);
-
-        if (formats && src$utils$$.hop.call(formats, type)) {
-            src$utils$$.extend(mergedType, formats[type]);
-        }
-    }
-
-    return mergedFormats;
-};
-
-MessageFormat.prototype._resolveLocale = function (locales) {
-    if (typeof locales === 'string') {
-        locales = [locales];
-    }
-
-    // Create a copy of the array so we can push on the default locale.
-    locales = (locales || []).concat(MessageFormat.defaultLocale);
-
-    var localeData = MessageFormat.__localeData__;
-    var i, len, localeParts, data;
-
-    // Using the set of locales + the default locale, we look for the first one
-    // which that has been registered. When data does not exist for a locale, we
-    // traverse its ancestors to find something that's been registered within
-    // its hierarchy of locales. Since we lack the proper `parentLocale` data
-    // here, we must take a naive approach to traversal.
-    for (i = 0, len = locales.length; i < len; i += 1) {
-        localeParts = locales[i].toLowerCase().split('-');
-
-        while (localeParts.length) {
-            data = localeData[localeParts.join('-')];
-            if (data) {
-                // Return the normalized locale string; e.g., we return "en-US",
-                // instead of "en-us".
-                return data.locale;
-            }
-
-            localeParts.pop();
-        }
-    }
-
-    var defaultLocale = locales.pop();
-    throw new Error(
-        'No locale data has been added to IntlMessageFormat for: ' +
-        locales.join(', ') + ', or the default locale: ' + defaultLocale
-    );
-};
-
-//# sourceMappingURL=core.js.map
-
-/***/ }),
-/* 114 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*
-Copyright (c) 2014, Yahoo! Inc. All rights reserved.
-Copyrights licensed under the New BSD License.
-See the accompanying LICENSE file for terms.
-*/
-
-/* jslint esnext: true */
-
-
-var src$utils$$ = __webpack_require__(66);
-
-// Purposely using the same implementation as the Intl.js `Intl` polyfill.
-// Copyright 2013 Andy Earnshaw, MIT License
-
-var realDefineProp = (function () {
-    try { return !!Object.defineProperty({}, 'a', {}); }
-    catch (e) { return false; }
-})();
-
-var es3 = !realDefineProp && !Object.prototype.__defineGetter__;
-
-var defineProperty = realDefineProp ? Object.defineProperty :
-        function (obj, name, desc) {
-
-    if ('get' in desc && obj.__defineGetter__) {
-        obj.__defineGetter__(name, desc.get);
-    } else if (!src$utils$$.hop.call(obj, name) || 'value' in desc) {
-        obj[name] = desc.value;
-    }
-};
-
-var objCreate = Object.create || function (proto, props) {
-    var obj, k;
-
-    function F() {}
-    F.prototype = proto;
-    obj = new F();
-
-    for (k in props) {
-        if (src$utils$$.hop.call(props, k)) {
-            defineProperty(obj, k, props[k]);
-        }
-    }
-
-    return obj;
-};
-
-exports.defineProperty = defineProperty, exports.objCreate = objCreate;
-
-//# sourceMappingURL=es5.js.map
-
-/***/ }),
-/* 115 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*
-Copyright (c) 2014, Yahoo! Inc. All rights reserved.
-Copyrights licensed under the New BSD License.
-See the accompanying LICENSE file for terms.
-*/
-
-/* jslint esnext: true */
-
-
-exports["default"] = Compiler;
-
-function Compiler(locales, formats, pluralFn) {
-    this.locales  = locales;
-    this.formats  = formats;
-    this.pluralFn = pluralFn;
-}
-
-Compiler.prototype.compile = function (ast) {
-    this.pluralStack        = [];
-    this.currentPlural      = null;
-    this.pluralNumberFormat = null;
-
-    return this.compileMessage(ast);
-};
-
-Compiler.prototype.compileMessage = function (ast) {
-    if (!(ast && ast.type === 'messageFormatPattern')) {
-        throw new Error('Message AST is not of type: "messageFormatPattern"');
-    }
-
-    var elements = ast.elements,
-        pattern  = [];
-
-    var i, len, element;
-
-    for (i = 0, len = elements.length; i < len; i += 1) {
-        element = elements[i];
-
-        switch (element.type) {
-            case 'messageTextElement':
-                pattern.push(this.compileMessageText(element));
-                break;
-
-            case 'argumentElement':
-                pattern.push(this.compileArgument(element));
-                break;
-
-            default:
-                throw new Error('Message element does not have a valid type');
-        }
-    }
-
-    return pattern;
-};
-
-Compiler.prototype.compileMessageText = function (element) {
-    // When this `element` is part of plural sub-pattern and its value contains
-    // an unescaped '#', use a `PluralOffsetString` helper to properly output
-    // the number with the correct offset in the string.
-    if (this.currentPlural && /(^|[^\\])#/g.test(element.value)) {
-        // Create a cache a NumberFormat instance that can be reused for any
-        // PluralOffsetString instance in this message.
-        if (!this.pluralNumberFormat) {
-            this.pluralNumberFormat = new Intl.NumberFormat(this.locales);
-        }
-
-        return new PluralOffsetString(
-                this.currentPlural.id,
-                this.currentPlural.format.offset,
-                this.pluralNumberFormat,
-                element.value);
-    }
-
-    // Unescape the escaped '#'s in the message text.
-    return element.value.replace(/\\#/g, '#');
-};
-
-Compiler.prototype.compileArgument = function (element) {
-    var format = element.format;
-
-    if (!format) {
-        return new StringFormat(element.id);
-    }
-
-    var formats  = this.formats,
-        locales  = this.locales,
-        pluralFn = this.pluralFn,
-        options;
-
-    switch (format.type) {
-        case 'numberFormat':
-            options = formats.number[format.style];
-            return {
-                id    : element.id,
-                format: new Intl.NumberFormat(locales, options).format
-            };
-
-        case 'dateFormat':
-            options = formats.date[format.style];
-            return {
-                id    : element.id,
-                format: new Intl.DateTimeFormat(locales, options).format
-            };
-
-        case 'timeFormat':
-            options = formats.time[format.style];
-            return {
-                id    : element.id,
-                format: new Intl.DateTimeFormat(locales, options).format
-            };
-
-        case 'pluralFormat':
-            options = this.compileOptions(element);
-            return new PluralFormat(
-                element.id, format.ordinal, format.offset, options, pluralFn
-            );
-
-        case 'selectFormat':
-            options = this.compileOptions(element);
-            return new SelectFormat(element.id, options);
-
-        default:
-            throw new Error('Message element does not have a valid format type');
-    }
-};
-
-Compiler.prototype.compileOptions = function (element) {
-    var format      = element.format,
-        options     = format.options,
-        optionsHash = {};
-
-    // Save the current plural element, if any, then set it to a new value when
-    // compiling the options sub-patterns. This conforms the spec's algorithm
-    // for handling `"#"` syntax in message text.
-    this.pluralStack.push(this.currentPlural);
-    this.currentPlural = format.type === 'pluralFormat' ? element : null;
-
-    var i, len, option;
-
-    for (i = 0, len = options.length; i < len; i += 1) {
-        option = options[i];
-
-        // Compile the sub-pattern and save it under the options's selector.
-        optionsHash[option.selector] = this.compileMessage(option.value);
-    }
-
-    // Pop the plural stack to put back the original current plural value.
-    this.currentPlural = this.pluralStack.pop();
-
-    return optionsHash;
-};
-
-// -- Compiler Helper Classes --------------------------------------------------
-
-function StringFormat(id) {
-    this.id = id;
-}
-
-StringFormat.prototype.format = function (value) {
-    if (!value && typeof value !== 'number') {
-        return '';
-    }
-
-    return typeof value === 'string' ? value : String(value);
-};
-
-function PluralFormat(id, useOrdinal, offset, options, pluralFn) {
-    this.id         = id;
-    this.useOrdinal = useOrdinal;
-    this.offset     = offset;
-    this.options    = options;
-    this.pluralFn   = pluralFn;
-}
-
-PluralFormat.prototype.getOption = function (value) {
-    var options = this.options;
-
-    var option = options['=' + value] ||
-            options[this.pluralFn(value - this.offset, this.useOrdinal)];
-
-    return option || options.other;
-};
-
-function PluralOffsetString(id, offset, numberFormat, string) {
-    this.id           = id;
-    this.offset       = offset;
-    this.numberFormat = numberFormat;
-    this.string       = string;
-}
-
-PluralOffsetString.prototype.format = function (value) {
-    var number = this.numberFormat.format(value - this.offset);
-
-    return this.string
-            .replace(/(^|[^\\])#/g, '$1' + number)
-            .replace(/\\#/g, '#');
-};
-
-function SelectFormat(id, options) {
-    this.id      = id;
-    this.options = options;
-}
-
-SelectFormat.prototype.getOption = function (value) {
-    var options = this.options;
-    return options[value] || options.other;
-};
-
-//# sourceMappingURL=compiler.js.map
-
-/***/ }),
-/* 116 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports = module.exports = __webpack_require__(117)['default'];
-exports['default'] = exports;
-
-
-/***/ }),
-/* 117 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports["default"] = (function() {
-  "use strict";
-
-  /*
-   * Generated by PEG.js 0.9.0.
-   *
-   * http://pegjs.org/
-   */
-
-  function peg$subclass(child, parent) {
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor();
-  }
-
-  function peg$SyntaxError(message, expected, found, location) {
-    this.message  = message;
-    this.expected = expected;
-    this.found    = found;
-    this.location = location;
-    this.name     = "SyntaxError";
-
-    if (typeof Error.captureStackTrace === "function") {
-      Error.captureStackTrace(this, peg$SyntaxError);
-    }
-  }
-
-  peg$subclass(peg$SyntaxError, Error);
-
-  function peg$parse(input) {
-    var options = arguments.length > 1 ? arguments[1] : {},
-        parser  = this,
-
-        peg$FAILED = {},
-
-        peg$startRuleFunctions = { start: peg$parsestart },
-        peg$startRuleFunction  = peg$parsestart,
-
-        peg$c0 = function(elements) {
-                return {
-                    type    : 'messageFormatPattern',
-                    elements: elements,
-                    location: location()
-                };
-            },
-        peg$c1 = function(text) {
-                var string = '',
-                    i, j, outerLen, inner, innerLen;
-
-                for (i = 0, outerLen = text.length; i < outerLen; i += 1) {
-                    inner = text[i];
-
-                    for (j = 0, innerLen = inner.length; j < innerLen; j += 1) {
-                        string += inner[j];
-                    }
-                }
-
-                return string;
-            },
-        peg$c2 = function(messageText) {
-                return {
-                    type : 'messageTextElement',
-                    value: messageText,
-                    location: location()
-                };
-            },
-        peg$c3 = /^[^ \t\n\r,.+={}#]/,
-        peg$c4 = { type: "class", value: "[^ \\t\\n\\r,.+={}#]", description: "[^ \\t\\n\\r,.+={}#]" },
-        peg$c5 = "{",
-        peg$c6 = { type: "literal", value: "{", description: "\"{\"" },
-        peg$c7 = ",",
-        peg$c8 = { type: "literal", value: ",", description: "\",\"" },
-        peg$c9 = "}",
-        peg$c10 = { type: "literal", value: "}", description: "\"}\"" },
-        peg$c11 = function(id, format) {
-                return {
-                    type  : 'argumentElement',
-                    id    : id,
-                    format: format && format[2],
-                    location: location()
-                };
-            },
-        peg$c12 = "number",
-        peg$c13 = { type: "literal", value: "number", description: "\"number\"" },
-        peg$c14 = "date",
-        peg$c15 = { type: "literal", value: "date", description: "\"date\"" },
-        peg$c16 = "time",
-        peg$c17 = { type: "literal", value: "time", description: "\"time\"" },
-        peg$c18 = function(type, style) {
-                return {
-                    type : type + 'Format',
-                    style: style && style[2],
-                    location: location()
-                };
-            },
-        peg$c19 = "plural",
-        peg$c20 = { type: "literal", value: "plural", description: "\"plural\"" },
-        peg$c21 = function(pluralStyle) {
-                return {
-                    type   : pluralStyle.type,
-                    ordinal: false,
-                    offset : pluralStyle.offset || 0,
-                    options: pluralStyle.options,
-                    location: location()
-                };
-            },
-        peg$c22 = "selectordinal",
-        peg$c23 = { type: "literal", value: "selectordinal", description: "\"selectordinal\"" },
-        peg$c24 = function(pluralStyle) {
-                return {
-                    type   : pluralStyle.type,
-                    ordinal: true,
-                    offset : pluralStyle.offset || 0,
-                    options: pluralStyle.options,
-                    location: location()
-                }
-            },
-        peg$c25 = "select",
-        peg$c26 = { type: "literal", value: "select", description: "\"select\"" },
-        peg$c27 = function(options) {
-                return {
-                    type   : 'selectFormat',
-                    options: options,
-                    location: location()
-                };
-            },
-        peg$c28 = "=",
-        peg$c29 = { type: "literal", value: "=", description: "\"=\"" },
-        peg$c30 = function(selector, pattern) {
-                return {
-                    type    : 'optionalFormatPattern',
-                    selector: selector,
-                    value   : pattern,
-                    location: location()
-                };
-            },
-        peg$c31 = "offset:",
-        peg$c32 = { type: "literal", value: "offset:", description: "\"offset:\"" },
-        peg$c33 = function(number) {
-                return number;
-            },
-        peg$c34 = function(offset, options) {
-                return {
-                    type   : 'pluralFormat',
-                    offset : offset,
-                    options: options,
-                    location: location()
-                };
-            },
-        peg$c35 = { type: "other", description: "whitespace" },
-        peg$c36 = /^[ \t\n\r]/,
-        peg$c37 = { type: "class", value: "[ \\t\\n\\r]", description: "[ \\t\\n\\r]" },
-        peg$c38 = { type: "other", description: "optionalWhitespace" },
-        peg$c39 = /^[0-9]/,
-        peg$c40 = { type: "class", value: "[0-9]", description: "[0-9]" },
-        peg$c41 = /^[0-9a-f]/i,
-        peg$c42 = { type: "class", value: "[0-9a-f]i", description: "[0-9a-f]i" },
-        peg$c43 = "0",
-        peg$c44 = { type: "literal", value: "0", description: "\"0\"" },
-        peg$c45 = /^[1-9]/,
-        peg$c46 = { type: "class", value: "[1-9]", description: "[1-9]" },
-        peg$c47 = function(digits) {
-            return parseInt(digits, 10);
-        },
-        peg$c48 = /^[^{}\\\0-\x1F \t\n\r]/,
-        peg$c49 = { type: "class", value: "[^{}\\\\\\0-\\x1F\\x7f \\t\\n\\r]", description: "[^{}\\\\\\0-\\x1F\\x7f \\t\\n\\r]" },
-        peg$c50 = "\\\\",
-        peg$c51 = { type: "literal", value: "\\\\", description: "\"\\\\\\\\\"" },
-        peg$c52 = function() { return '\\'; },
-        peg$c53 = "\\#",
-        peg$c54 = { type: "literal", value: "\\#", description: "\"\\\\#\"" },
-        peg$c55 = function() { return '\\#'; },
-        peg$c56 = "\\{",
-        peg$c57 = { type: "literal", value: "\\{", description: "\"\\\\{\"" },
-        peg$c58 = function() { return '\u007B'; },
-        peg$c59 = "\\}",
-        peg$c60 = { type: "literal", value: "\\}", description: "\"\\\\}\"" },
-        peg$c61 = function() { return '\u007D'; },
-        peg$c62 = "\\u",
-        peg$c63 = { type: "literal", value: "\\u", description: "\"\\\\u\"" },
-        peg$c64 = function(digits) {
-                return String.fromCharCode(parseInt(digits, 16));
-            },
-        peg$c65 = function(chars) { return chars.join(''); },
-
-        peg$currPos          = 0,
-        peg$savedPos         = 0,
-        peg$posDetailsCache  = [{ line: 1, column: 1, seenCR: false }],
-        peg$maxFailPos       = 0,
-        peg$maxFailExpected  = [],
-        peg$silentFails      = 0,
-
-        peg$result;
-
-    if ("startRule" in options) {
-      if (!(options.startRule in peg$startRuleFunctions)) {
-        throw new Error("Can't start parsing from rule \"" + options.startRule + "\".");
-      }
-
-      peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
-    }
-
-    function text() {
-      return input.substring(peg$savedPos, peg$currPos);
-    }
-
-    function location() {
-      return peg$computeLocation(peg$savedPos, peg$currPos);
-    }
-
-    function expected(description) {
-      throw peg$buildException(
-        null,
-        [{ type: "other", description: description }],
-        input.substring(peg$savedPos, peg$currPos),
-        peg$computeLocation(peg$savedPos, peg$currPos)
-      );
-    }
-
-    function error(message) {
-      throw peg$buildException(
-        message,
-        null,
-        input.substring(peg$savedPos, peg$currPos),
-        peg$computeLocation(peg$savedPos, peg$currPos)
-      );
-    }
-
-    function peg$computePosDetails(pos) {
-      var details = peg$posDetailsCache[pos],
-          p, ch;
-
-      if (details) {
-        return details;
-      } else {
-        p = pos - 1;
-        while (!peg$posDetailsCache[p]) {
-          p--;
-        }
-
-        details = peg$posDetailsCache[p];
-        details = {
-          line:   details.line,
-          column: details.column,
-          seenCR: details.seenCR
-        };
-
-        while (p < pos) {
-          ch = input.charAt(p);
-          if (ch === "\n") {
-            if (!details.seenCR) { details.line++; }
-            details.column = 1;
-            details.seenCR = false;
-          } else if (ch === "\r" || ch === "\u2028" || ch === "\u2029") {
-            details.line++;
-            details.column = 1;
-            details.seenCR = true;
-          } else {
-            details.column++;
-            details.seenCR = false;
-          }
-
-          p++;
-        }
-
-        peg$posDetailsCache[pos] = details;
-        return details;
-      }
-    }
-
-    function peg$computeLocation(startPos, endPos) {
-      var startPosDetails = peg$computePosDetails(startPos),
-          endPosDetails   = peg$computePosDetails(endPos);
-
-      return {
-        start: {
-          offset: startPos,
-          line:   startPosDetails.line,
-          column: startPosDetails.column
-        },
-        end: {
-          offset: endPos,
-          line:   endPosDetails.line,
-          column: endPosDetails.column
-        }
-      };
-    }
-
-    function peg$fail(expected) {
-      if (peg$currPos < peg$maxFailPos) { return; }
-
-      if (peg$currPos > peg$maxFailPos) {
-        peg$maxFailPos = peg$currPos;
-        peg$maxFailExpected = [];
-      }
-
-      peg$maxFailExpected.push(expected);
-    }
-
-    function peg$buildException(message, expected, found, location) {
-      function cleanupExpected(expected) {
-        var i = 1;
-
-        expected.sort(function(a, b) {
-          if (a.description < b.description) {
-            return -1;
-          } else if (a.description > b.description) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-
-        while (i < expected.length) {
-          if (expected[i - 1] === expected[i]) {
-            expected.splice(i, 1);
-          } else {
-            i++;
-          }
-        }
-      }
-
-      function buildMessage(expected, found) {
-        function stringEscape(s) {
-          function hex(ch) { return ch.charCodeAt(0).toString(16).toUpperCase(); }
-
-          return s
-            .replace(/\\/g,   '\\\\')
-            .replace(/"/g,    '\\"')
-            .replace(/\x08/g, '\\b')
-            .replace(/\t/g,   '\\t')
-            .replace(/\n/g,   '\\n')
-            .replace(/\f/g,   '\\f')
-            .replace(/\r/g,   '\\r')
-            .replace(/[\x00-\x07\x0B\x0E\x0F]/g, function(ch) { return '\\x0' + hex(ch); })
-            .replace(/[\x10-\x1F\x80-\xFF]/g,    function(ch) { return '\\x'  + hex(ch); })
-            .replace(/[\u0100-\u0FFF]/g,         function(ch) { return '\\u0' + hex(ch); })
-            .replace(/[\u1000-\uFFFF]/g,         function(ch) { return '\\u'  + hex(ch); });
-        }
-
-        var expectedDescs = new Array(expected.length),
-            expectedDesc, foundDesc, i;
-
-        for (i = 0; i < expected.length; i++) {
-          expectedDescs[i] = expected[i].description;
-        }
-
-        expectedDesc = expected.length > 1
-          ? expectedDescs.slice(0, -1).join(", ")
-              + " or "
-              + expectedDescs[expected.length - 1]
-          : expectedDescs[0];
-
-        foundDesc = found ? "\"" + stringEscape(found) + "\"" : "end of input";
-
-        return "Expected " + expectedDesc + " but " + foundDesc + " found.";
-      }
-
-      if (expected !== null) {
-        cleanupExpected(expected);
-      }
-
-      return new peg$SyntaxError(
-        message !== null ? message : buildMessage(expected, found),
-        expected,
-        found,
-        location
-      );
-    }
-
-    function peg$parsestart() {
-      var s0;
-
-      s0 = peg$parsemessageFormatPattern();
-
-      return s0;
-    }
-
-    function peg$parsemessageFormatPattern() {
-      var s0, s1, s2;
-
-      s0 = peg$currPos;
-      s1 = [];
-      s2 = peg$parsemessageFormatElement();
-      while (s2 !== peg$FAILED) {
-        s1.push(s2);
-        s2 = peg$parsemessageFormatElement();
-      }
-      if (s1 !== peg$FAILED) {
-        peg$savedPos = s0;
-        s1 = peg$c0(s1);
-      }
-      s0 = s1;
-
-      return s0;
-    }
-
-    function peg$parsemessageFormatElement() {
-      var s0;
-
-      s0 = peg$parsemessageTextElement();
-      if (s0 === peg$FAILED) {
-        s0 = peg$parseargumentElement();
-      }
-
-      return s0;
-    }
-
-    function peg$parsemessageText() {
-      var s0, s1, s2, s3, s4, s5;
-
-      s0 = peg$currPos;
-      s1 = [];
-      s2 = peg$currPos;
-      s3 = peg$parse_();
-      if (s3 !== peg$FAILED) {
-        s4 = peg$parsechars();
-        if (s4 !== peg$FAILED) {
-          s5 = peg$parse_();
-          if (s5 !== peg$FAILED) {
-            s3 = [s3, s4, s5];
-            s2 = s3;
-          } else {
-            peg$currPos = s2;
-            s2 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s2;
-          s2 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s2;
-        s2 = peg$FAILED;
-      }
-      if (s2 !== peg$FAILED) {
-        while (s2 !== peg$FAILED) {
-          s1.push(s2);
-          s2 = peg$currPos;
-          s3 = peg$parse_();
-          if (s3 !== peg$FAILED) {
-            s4 = peg$parsechars();
-            if (s4 !== peg$FAILED) {
-              s5 = peg$parse_();
-              if (s5 !== peg$FAILED) {
-                s3 = [s3, s4, s5];
-                s2 = s3;
-              } else {
-                peg$currPos = s2;
-                s2 = peg$FAILED;
-              }
-            } else {
-              peg$currPos = s2;
-              s2 = peg$FAILED;
-            }
-          } else {
-            peg$currPos = s2;
-            s2 = peg$FAILED;
-          }
-        }
-      } else {
-        s1 = peg$FAILED;
-      }
-      if (s1 !== peg$FAILED) {
-        peg$savedPos = s0;
-        s1 = peg$c1(s1);
-      }
-      s0 = s1;
-      if (s0 === peg$FAILED) {
-        s0 = peg$currPos;
-        s1 = peg$parsews();
-        if (s1 !== peg$FAILED) {
-          s0 = input.substring(s0, peg$currPos);
-        } else {
-          s0 = s1;
-        }
-      }
-
-      return s0;
-    }
-
-    function peg$parsemessageTextElement() {
-      var s0, s1;
-
-      s0 = peg$currPos;
-      s1 = peg$parsemessageText();
-      if (s1 !== peg$FAILED) {
-        peg$savedPos = s0;
-        s1 = peg$c2(s1);
-      }
-      s0 = s1;
-
-      return s0;
-    }
-
-    function peg$parseargument() {
-      var s0, s1, s2;
-
-      s0 = peg$parsenumber();
-      if (s0 === peg$FAILED) {
-        s0 = peg$currPos;
-        s1 = [];
-        if (peg$c3.test(input.charAt(peg$currPos))) {
-          s2 = input.charAt(peg$currPos);
-          peg$currPos++;
-        } else {
-          s2 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c4); }
-        }
-        if (s2 !== peg$FAILED) {
-          while (s2 !== peg$FAILED) {
-            s1.push(s2);
-            if (peg$c3.test(input.charAt(peg$currPos))) {
-              s2 = input.charAt(peg$currPos);
-              peg$currPos++;
-            } else {
-              s2 = peg$FAILED;
-              if (peg$silentFails === 0) { peg$fail(peg$c4); }
-            }
-          }
-        } else {
-          s1 = peg$FAILED;
-        }
-        if (s1 !== peg$FAILED) {
-          s0 = input.substring(s0, peg$currPos);
-        } else {
-          s0 = s1;
-        }
-      }
-
-      return s0;
-    }
-
-    function peg$parseargumentElement() {
-      var s0, s1, s2, s3, s4, s5, s6, s7, s8;
-
-      s0 = peg$currPos;
-      if (input.charCodeAt(peg$currPos) === 123) {
-        s1 = peg$c5;
-        peg$currPos++;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c6); }
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = peg$parse_();
-        if (s2 !== peg$FAILED) {
-          s3 = peg$parseargument();
-          if (s3 !== peg$FAILED) {
-            s4 = peg$parse_();
-            if (s4 !== peg$FAILED) {
-              s5 = peg$currPos;
-              if (input.charCodeAt(peg$currPos) === 44) {
-                s6 = peg$c7;
-                peg$currPos++;
-              } else {
-                s6 = peg$FAILED;
-                if (peg$silentFails === 0) { peg$fail(peg$c8); }
-              }
-              if (s6 !== peg$FAILED) {
-                s7 = peg$parse_();
-                if (s7 !== peg$FAILED) {
-                  s8 = peg$parseelementFormat();
-                  if (s8 !== peg$FAILED) {
-                    s6 = [s6, s7, s8];
-                    s5 = s6;
-                  } else {
-                    peg$currPos = s5;
-                    s5 = peg$FAILED;
-                  }
-                } else {
-                  peg$currPos = s5;
-                  s5 = peg$FAILED;
-                }
-              } else {
-                peg$currPos = s5;
-                s5 = peg$FAILED;
-              }
-              if (s5 === peg$FAILED) {
-                s5 = null;
-              }
-              if (s5 !== peg$FAILED) {
-                s6 = peg$parse_();
-                if (s6 !== peg$FAILED) {
-                  if (input.charCodeAt(peg$currPos) === 125) {
-                    s7 = peg$c9;
-                    peg$currPos++;
-                  } else {
-                    s7 = peg$FAILED;
-                    if (peg$silentFails === 0) { peg$fail(peg$c10); }
-                  }
-                  if (s7 !== peg$FAILED) {
-                    peg$savedPos = s0;
-                    s1 = peg$c11(s3, s5);
-                    s0 = s1;
-                  } else {
-                    peg$currPos = s0;
-                    s0 = peg$FAILED;
-                  }
-                } else {
-                  peg$currPos = s0;
-                  s0 = peg$FAILED;
-                }
-              } else {
-                peg$currPos = s0;
-                s0 = peg$FAILED;
-              }
-            } else {
-              peg$currPos = s0;
-              s0 = peg$FAILED;
-            }
-          } else {
-            peg$currPos = s0;
-            s0 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
-      }
-
-      return s0;
-    }
-
-    function peg$parseelementFormat() {
-      var s0;
-
-      s0 = peg$parsesimpleFormat();
-      if (s0 === peg$FAILED) {
-        s0 = peg$parsepluralFormat();
-        if (s0 === peg$FAILED) {
-          s0 = peg$parseselectOrdinalFormat();
-          if (s0 === peg$FAILED) {
-            s0 = peg$parseselectFormat();
-          }
-        }
-      }
-
-      return s0;
-    }
-
-    function peg$parsesimpleFormat() {
-      var s0, s1, s2, s3, s4, s5, s6;
-
-      s0 = peg$currPos;
-      if (input.substr(peg$currPos, 6) === peg$c12) {
-        s1 = peg$c12;
-        peg$currPos += 6;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c13); }
-      }
-      if (s1 === peg$FAILED) {
-        if (input.substr(peg$currPos, 4) === peg$c14) {
-          s1 = peg$c14;
-          peg$currPos += 4;
-        } else {
-          s1 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c15); }
-        }
-        if (s1 === peg$FAILED) {
-          if (input.substr(peg$currPos, 4) === peg$c16) {
-            s1 = peg$c16;
-            peg$currPos += 4;
-          } else {
-            s1 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c17); }
-          }
-        }
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = peg$parse_();
-        if (s2 !== peg$FAILED) {
-          s3 = peg$currPos;
-          if (input.charCodeAt(peg$currPos) === 44) {
-            s4 = peg$c7;
-            peg$currPos++;
-          } else {
-            s4 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c8); }
-          }
-          if (s4 !== peg$FAILED) {
-            s5 = peg$parse_();
-            if (s5 !== peg$FAILED) {
-              s6 = peg$parsechars();
-              if (s6 !== peg$FAILED) {
-                s4 = [s4, s5, s6];
-                s3 = s4;
-              } else {
-                peg$currPos = s3;
-                s3 = peg$FAILED;
-              }
-            } else {
-              peg$currPos = s3;
-              s3 = peg$FAILED;
-            }
-          } else {
-            peg$currPos = s3;
-            s3 = peg$FAILED;
-          }
-          if (s3 === peg$FAILED) {
-            s3 = null;
-          }
-          if (s3 !== peg$FAILED) {
-            peg$savedPos = s0;
-            s1 = peg$c18(s1, s3);
-            s0 = s1;
-          } else {
-            peg$currPos = s0;
-            s0 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
-      }
-
-      return s0;
-    }
-
-    function peg$parsepluralFormat() {
-      var s0, s1, s2, s3, s4, s5;
-
-      s0 = peg$currPos;
-      if (input.substr(peg$currPos, 6) === peg$c19) {
-        s1 = peg$c19;
-        peg$currPos += 6;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c20); }
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = peg$parse_();
-        if (s2 !== peg$FAILED) {
-          if (input.charCodeAt(peg$currPos) === 44) {
-            s3 = peg$c7;
-            peg$currPos++;
-          } else {
-            s3 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c8); }
-          }
-          if (s3 !== peg$FAILED) {
-            s4 = peg$parse_();
-            if (s4 !== peg$FAILED) {
-              s5 = peg$parsepluralStyle();
-              if (s5 !== peg$FAILED) {
-                peg$savedPos = s0;
-                s1 = peg$c21(s5);
-                s0 = s1;
-              } else {
-                peg$currPos = s0;
-                s0 = peg$FAILED;
-              }
-            } else {
-              peg$currPos = s0;
-              s0 = peg$FAILED;
-            }
-          } else {
-            peg$currPos = s0;
-            s0 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
-      }
-
-      return s0;
-    }
-
-    function peg$parseselectOrdinalFormat() {
-      var s0, s1, s2, s3, s4, s5;
-
-      s0 = peg$currPos;
-      if (input.substr(peg$currPos, 13) === peg$c22) {
-        s1 = peg$c22;
-        peg$currPos += 13;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c23); }
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = peg$parse_();
-        if (s2 !== peg$FAILED) {
-          if (input.charCodeAt(peg$currPos) === 44) {
-            s3 = peg$c7;
-            peg$currPos++;
-          } else {
-            s3 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c8); }
-          }
-          if (s3 !== peg$FAILED) {
-            s4 = peg$parse_();
-            if (s4 !== peg$FAILED) {
-              s5 = peg$parsepluralStyle();
-              if (s5 !== peg$FAILED) {
-                peg$savedPos = s0;
-                s1 = peg$c24(s5);
-                s0 = s1;
-              } else {
-                peg$currPos = s0;
-                s0 = peg$FAILED;
-              }
-            } else {
-              peg$currPos = s0;
-              s0 = peg$FAILED;
-            }
-          } else {
-            peg$currPos = s0;
-            s0 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
-      }
-
-      return s0;
-    }
-
-    function peg$parseselectFormat() {
-      var s0, s1, s2, s3, s4, s5, s6;
-
-      s0 = peg$currPos;
-      if (input.substr(peg$currPos, 6) === peg$c25) {
-        s1 = peg$c25;
-        peg$currPos += 6;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c26); }
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = peg$parse_();
-        if (s2 !== peg$FAILED) {
-          if (input.charCodeAt(peg$currPos) === 44) {
-            s3 = peg$c7;
-            peg$currPos++;
-          } else {
-            s3 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c8); }
-          }
-          if (s3 !== peg$FAILED) {
-            s4 = peg$parse_();
-            if (s4 !== peg$FAILED) {
-              s5 = [];
-              s6 = peg$parseoptionalFormatPattern();
-              if (s6 !== peg$FAILED) {
-                while (s6 !== peg$FAILED) {
-                  s5.push(s6);
-                  s6 = peg$parseoptionalFormatPattern();
-                }
-              } else {
-                s5 = peg$FAILED;
-              }
-              if (s5 !== peg$FAILED) {
-                peg$savedPos = s0;
-                s1 = peg$c27(s5);
-                s0 = s1;
-              } else {
-                peg$currPos = s0;
-                s0 = peg$FAILED;
-              }
-            } else {
-              peg$currPos = s0;
-              s0 = peg$FAILED;
-            }
-          } else {
-            peg$currPos = s0;
-            s0 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
-      }
-
-      return s0;
-    }
-
-    function peg$parseselector() {
-      var s0, s1, s2, s3;
-
-      s0 = peg$currPos;
-      s1 = peg$currPos;
-      if (input.charCodeAt(peg$currPos) === 61) {
-        s2 = peg$c28;
-        peg$currPos++;
-      } else {
-        s2 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c29); }
-      }
-      if (s2 !== peg$FAILED) {
-        s3 = peg$parsenumber();
-        if (s3 !== peg$FAILED) {
-          s2 = [s2, s3];
-          s1 = s2;
-        } else {
-          peg$currPos = s1;
-          s1 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s1;
-        s1 = peg$FAILED;
-      }
-      if (s1 !== peg$FAILED) {
-        s0 = input.substring(s0, peg$currPos);
-      } else {
-        s0 = s1;
-      }
-      if (s0 === peg$FAILED) {
-        s0 = peg$parsechars();
-      }
-
-      return s0;
-    }
-
-    function peg$parseoptionalFormatPattern() {
-      var s0, s1, s2, s3, s4, s5, s6, s7, s8;
-
-      s0 = peg$currPos;
-      s1 = peg$parse_();
-      if (s1 !== peg$FAILED) {
-        s2 = peg$parseselector();
-        if (s2 !== peg$FAILED) {
-          s3 = peg$parse_();
-          if (s3 !== peg$FAILED) {
-            if (input.charCodeAt(peg$currPos) === 123) {
-              s4 = peg$c5;
-              peg$currPos++;
-            } else {
-              s4 = peg$FAILED;
-              if (peg$silentFails === 0) { peg$fail(peg$c6); }
-            }
-            if (s4 !== peg$FAILED) {
-              s5 = peg$parse_();
-              if (s5 !== peg$FAILED) {
-                s6 = peg$parsemessageFormatPattern();
-                if (s6 !== peg$FAILED) {
-                  s7 = peg$parse_();
-                  if (s7 !== peg$FAILED) {
-                    if (input.charCodeAt(peg$currPos) === 125) {
-                      s8 = peg$c9;
-                      peg$currPos++;
-                    } else {
-                      s8 = peg$FAILED;
-                      if (peg$silentFails === 0) { peg$fail(peg$c10); }
-                    }
-                    if (s8 !== peg$FAILED) {
-                      peg$savedPos = s0;
-                      s1 = peg$c30(s2, s6);
-                      s0 = s1;
-                    } else {
-                      peg$currPos = s0;
-                      s0 = peg$FAILED;
-                    }
-                  } else {
-                    peg$currPos = s0;
-                    s0 = peg$FAILED;
-                  }
-                } else {
-                  peg$currPos = s0;
-                  s0 = peg$FAILED;
-                }
-              } else {
-                peg$currPos = s0;
-                s0 = peg$FAILED;
-              }
-            } else {
-              peg$currPos = s0;
-              s0 = peg$FAILED;
-            }
-          } else {
-            peg$currPos = s0;
-            s0 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
-      }
-
-      return s0;
-    }
-
-    function peg$parseoffset() {
-      var s0, s1, s2, s3;
-
-      s0 = peg$currPos;
-      if (input.substr(peg$currPos, 7) === peg$c31) {
-        s1 = peg$c31;
-        peg$currPos += 7;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c32); }
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = peg$parse_();
-        if (s2 !== peg$FAILED) {
-          s3 = peg$parsenumber();
-          if (s3 !== peg$FAILED) {
-            peg$savedPos = s0;
-            s1 = peg$c33(s3);
-            s0 = s1;
-          } else {
-            peg$currPos = s0;
-            s0 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
-      }
-
-      return s0;
-    }
-
-    function peg$parsepluralStyle() {
-      var s0, s1, s2, s3, s4;
-
-      s0 = peg$currPos;
-      s1 = peg$parseoffset();
-      if (s1 === peg$FAILED) {
-        s1 = null;
-      }
-      if (s1 !== peg$FAILED) {
-        s2 = peg$parse_();
-        if (s2 !== peg$FAILED) {
-          s3 = [];
-          s4 = peg$parseoptionalFormatPattern();
-          if (s4 !== peg$FAILED) {
-            while (s4 !== peg$FAILED) {
-              s3.push(s4);
-              s4 = peg$parseoptionalFormatPattern();
-            }
-          } else {
-            s3 = peg$FAILED;
-          }
-          if (s3 !== peg$FAILED) {
-            peg$savedPos = s0;
-            s1 = peg$c34(s1, s3);
-            s0 = s1;
-          } else {
-            peg$currPos = s0;
-            s0 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s0;
-          s0 = peg$FAILED;
-        }
-      } else {
-        peg$currPos = s0;
-        s0 = peg$FAILED;
-      }
-
-      return s0;
-    }
-
-    function peg$parsews() {
-      var s0, s1;
-
-      peg$silentFails++;
-      s0 = [];
-      if (peg$c36.test(input.charAt(peg$currPos))) {
-        s1 = input.charAt(peg$currPos);
-        peg$currPos++;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c37); }
-      }
-      if (s1 !== peg$FAILED) {
-        while (s1 !== peg$FAILED) {
-          s0.push(s1);
-          if (peg$c36.test(input.charAt(peg$currPos))) {
-            s1 = input.charAt(peg$currPos);
-            peg$currPos++;
-          } else {
-            s1 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c37); }
-          }
-        }
-      } else {
-        s0 = peg$FAILED;
-      }
-      peg$silentFails--;
-      if (s0 === peg$FAILED) {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c35); }
-      }
-
-      return s0;
-    }
-
-    function peg$parse_() {
-      var s0, s1, s2;
-
-      peg$silentFails++;
-      s0 = peg$currPos;
-      s1 = [];
-      s2 = peg$parsews();
-      while (s2 !== peg$FAILED) {
-        s1.push(s2);
-        s2 = peg$parsews();
-      }
-      if (s1 !== peg$FAILED) {
-        s0 = input.substring(s0, peg$currPos);
-      } else {
-        s0 = s1;
-      }
-      peg$silentFails--;
-      if (s0 === peg$FAILED) {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c38); }
-      }
-
-      return s0;
-    }
-
-    function peg$parsedigit() {
-      var s0;
-
-      if (peg$c39.test(input.charAt(peg$currPos))) {
-        s0 = input.charAt(peg$currPos);
-        peg$currPos++;
-      } else {
-        s0 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c40); }
-      }
-
-      return s0;
-    }
-
-    function peg$parsehexDigit() {
-      var s0;
-
-      if (peg$c41.test(input.charAt(peg$currPos))) {
-        s0 = input.charAt(peg$currPos);
-        peg$currPos++;
-      } else {
-        s0 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c42); }
-      }
-
-      return s0;
-    }
-
-    function peg$parsenumber() {
-      var s0, s1, s2, s3, s4, s5;
-
-      s0 = peg$currPos;
-      if (input.charCodeAt(peg$currPos) === 48) {
-        s1 = peg$c43;
-        peg$currPos++;
-      } else {
-        s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c44); }
-      }
-      if (s1 === peg$FAILED) {
-        s1 = peg$currPos;
-        s2 = peg$currPos;
-        if (peg$c45.test(input.charAt(peg$currPos))) {
-          s3 = input.charAt(peg$currPos);
-          peg$currPos++;
-        } else {
-          s3 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c46); }
-        }
-        if (s3 !== peg$FAILED) {
-          s4 = [];
-          s5 = peg$parsedigit();
-          while (s5 !== peg$FAILED) {
-            s4.push(s5);
-            s5 = peg$parsedigit();
-          }
-          if (s4 !== peg$FAILED) {
-            s3 = [s3, s4];
-            s2 = s3;
-          } else {
-            peg$currPos = s2;
-            s2 = peg$FAILED;
-          }
-        } else {
-          peg$currPos = s2;
-          s2 = peg$FAILED;
-        }
-        if (s2 !== peg$FAILED) {
-          s1 = input.substring(s1, peg$currPos);
-        } else {
-          s1 = s2;
-        }
-      }
-      if (s1 !== peg$FAILED) {
-        peg$savedPos = s0;
-        s1 = peg$c47(s1);
-      }
-      s0 = s1;
-
-      return s0;
-    }
-
-    function peg$parsechar() {
-      var s0, s1, s2, s3, s4, s5, s6, s7;
-
-      if (peg$c48.test(input.charAt(peg$currPos))) {
-        s0 = input.charAt(peg$currPos);
-        peg$currPos++;
-      } else {
-        s0 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c49); }
-      }
-      if (s0 === peg$FAILED) {
-        s0 = peg$currPos;
-        if (input.substr(peg$currPos, 2) === peg$c50) {
-          s1 = peg$c50;
-          peg$currPos += 2;
-        } else {
-          s1 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c51); }
-        }
-        if (s1 !== peg$FAILED) {
-          peg$savedPos = s0;
-          s1 = peg$c52();
-        }
-        s0 = s1;
-        if (s0 === peg$FAILED) {
-          s0 = peg$currPos;
-          if (input.substr(peg$currPos, 2) === peg$c53) {
-            s1 = peg$c53;
-            peg$currPos += 2;
-          } else {
-            s1 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c54); }
-          }
-          if (s1 !== peg$FAILED) {
-            peg$savedPos = s0;
-            s1 = peg$c55();
-          }
-          s0 = s1;
-          if (s0 === peg$FAILED) {
-            s0 = peg$currPos;
-            if (input.substr(peg$currPos, 2) === peg$c56) {
-              s1 = peg$c56;
-              peg$currPos += 2;
-            } else {
-              s1 = peg$FAILED;
-              if (peg$silentFails === 0) { peg$fail(peg$c57); }
-            }
-            if (s1 !== peg$FAILED) {
-              peg$savedPos = s0;
-              s1 = peg$c58();
-            }
-            s0 = s1;
-            if (s0 === peg$FAILED) {
-              s0 = peg$currPos;
-              if (input.substr(peg$currPos, 2) === peg$c59) {
-                s1 = peg$c59;
-                peg$currPos += 2;
-              } else {
-                s1 = peg$FAILED;
-                if (peg$silentFails === 0) { peg$fail(peg$c60); }
-              }
-              if (s1 !== peg$FAILED) {
-                peg$savedPos = s0;
-                s1 = peg$c61();
-              }
-              s0 = s1;
-              if (s0 === peg$FAILED) {
-                s0 = peg$currPos;
-                if (input.substr(peg$currPos, 2) === peg$c62) {
-                  s1 = peg$c62;
-                  peg$currPos += 2;
-                } else {
-                  s1 = peg$FAILED;
-                  if (peg$silentFails === 0) { peg$fail(peg$c63); }
-                }
-                if (s1 !== peg$FAILED) {
-                  s2 = peg$currPos;
-                  s3 = peg$currPos;
-                  s4 = peg$parsehexDigit();
-                  if (s4 !== peg$FAILED) {
-                    s5 = peg$parsehexDigit();
-                    if (s5 !== peg$FAILED) {
-                      s6 = peg$parsehexDigit();
-                      if (s6 !== peg$FAILED) {
-                        s7 = peg$parsehexDigit();
-                        if (s7 !== peg$FAILED) {
-                          s4 = [s4, s5, s6, s7];
-                          s3 = s4;
-                        } else {
-                          peg$currPos = s3;
-                          s3 = peg$FAILED;
-                        }
-                      } else {
-                        peg$currPos = s3;
-                        s3 = peg$FAILED;
-                      }
-                    } else {
-                      peg$currPos = s3;
-                      s3 = peg$FAILED;
-                    }
-                  } else {
-                    peg$currPos = s3;
-                    s3 = peg$FAILED;
-                  }
-                  if (s3 !== peg$FAILED) {
-                    s2 = input.substring(s2, peg$currPos);
-                  } else {
-                    s2 = s3;
-                  }
-                  if (s2 !== peg$FAILED) {
-                    peg$savedPos = s0;
-                    s1 = peg$c64(s2);
-                    s0 = s1;
-                  } else {
-                    peg$currPos = s0;
-                    s0 = peg$FAILED;
-                  }
-                } else {
-                  peg$currPos = s0;
-                  s0 = peg$FAILED;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      return s0;
-    }
-
-    function peg$parsechars() {
-      var s0, s1, s2;
-
-      s0 = peg$currPos;
-      s1 = [];
-      s2 = peg$parsechar();
-      if (s2 !== peg$FAILED) {
-        while (s2 !== peg$FAILED) {
-          s1.push(s2);
-          s2 = peg$parsechar();
-        }
-      } else {
-        s1 = peg$FAILED;
-      }
-      if (s1 !== peg$FAILED) {
-        peg$savedPos = s0;
-        s1 = peg$c65(s1);
-      }
-      s0 = s1;
-
-      return s0;
-    }
-
-    peg$result = peg$startRuleFunction();
-
-    if (peg$result !== peg$FAILED && peg$currPos === input.length) {
-      return peg$result;
-    } else {
-      if (peg$result !== peg$FAILED && peg$currPos < input.length) {
-        peg$fail({ type: "end", description: "end of input" });
-      }
-
-      throw peg$buildException(
-        null,
-        peg$maxFailExpected,
-        peg$maxFailPos < input.length ? input.charAt(peg$maxFailPos) : null,
-        peg$maxFailPos < input.length
-          ? peg$computeLocation(peg$maxFailPos, peg$maxFailPos + 1)
-          : peg$computeLocation(peg$maxFailPos, peg$maxFailPos)
-      );
-    }
-  }
-
-  return {
-    SyntaxError: peg$SyntaxError,
-    parse:       peg$parse
-  };
-})();
-
-//# sourceMappingURL=parser.js.map
-
-/***/ }),
-/* 118 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// GENERATED FILE
-
-exports["default"] = {"locale":"en","pluralRuleFunction":function (n,ord){var s=String(n).split("."),v0=!s[1],t0=Number(s[0])==n,n10=t0&&s[0].slice(-1),n100=t0&&s[0].slice(-2);if(ord)return n10==1&&n100!=11?"one":n10==2&&n100!=12?"two":n10==3&&n100!=13?"few":"other";return n==1&&v0?"one":"other"}};
-
-//# sourceMappingURL=en.js.map
-
-/***/ }),
-/* 119 */
-/***/ (function(module, exports) {
-
-/* (ignored) */
-
-/***/ }),
-/* 120 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* jshint node:true */
-
-
-
-var IntlRelativeFormat = __webpack_require__(121)['default'];
-
-// Add all locale data to `IntlRelativeFormat`. This module will be ignored when
-// bundling for the browser with Browserify/Webpack.
-__webpack_require__(126);
-
-// Re-export `IntlRelativeFormat` as the CommonJS default exports with all the
-// locale data registered, and with English set as the default locale. Define
-// the `default` prop for use with other compiled ES6 Modules.
-exports = module.exports = IntlRelativeFormat;
-exports['default'] = exports;
-
-
-/***/ }),
-/* 121 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* jslint esnext: true */
-
-
-var src$core$$ = __webpack_require__(122), src$en$$ = __webpack_require__(125);
-
-src$core$$["default"].__addLocaleData(src$en$$["default"]);
-src$core$$["default"].defaultLocale = 'en';
-
-exports["default"] = src$core$$["default"];
-
-//# sourceMappingURL=main.js.map
-
-/***/ }),
-/* 122 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*
-Copyright (c) 2014, Yahoo! Inc. All rights reserved.
-Copyrights licensed under the New BSD License.
-See the accompanying LICENSE file for terms.
-*/
-
-/* jslint esnext: true */
-
-
-var intl$messageformat$$ = __webpack_require__(65), src$diff$$ = __webpack_require__(123), src$es5$$ = __webpack_require__(124);
-exports["default"] = RelativeFormat;
-
-// -----------------------------------------------------------------------------
-
-var FIELDS = [
-    'second', 'second-short',
-    'minute', 'minute-short',
-    'hour', 'hour-short',
-    'day', 'day-short',
-    'month', 'month-short',
-    'year', 'year-short'
-];
-var STYLES = ['best fit', 'numeric'];
-
-// -- RelativeFormat -----------------------------------------------------------
-
-function RelativeFormat(locales, options) {
-    options = options || {};
-
-    // Make a copy of `locales` if it's an array, so that it doesn't change
-    // since it's used lazily.
-    if (src$es5$$.isArray(locales)) {
-        locales = locales.concat();
-    }
-
-    src$es5$$.defineProperty(this, '_locale', {value: this._resolveLocale(locales)});
-    src$es5$$.defineProperty(this, '_options', {value: {
-        style: this._resolveStyle(options.style),
-        units: this._isValidUnits(options.units) && options.units
-    }});
-
-    src$es5$$.defineProperty(this, '_locales', {value: locales});
-    src$es5$$.defineProperty(this, '_fields', {value: this._findFields(this._locale)});
-    src$es5$$.defineProperty(this, '_messages', {value: src$es5$$.objCreate(null)});
-
-    // "Bind" `format()` method to `this` so it can be passed by reference like
-    // the other `Intl` APIs.
-    var relativeFormat = this;
-    this.format = function format(date, options) {
-        return relativeFormat._format(date, options);
-    };
-}
-
-// Define internal private properties for dealing with locale data.
-src$es5$$.defineProperty(RelativeFormat, '__localeData__', {value: src$es5$$.objCreate(null)});
-src$es5$$.defineProperty(RelativeFormat, '__addLocaleData', {value: function (data) {
-    if (!(data && data.locale)) {
-        throw new Error(
-            'Locale data provided to IntlRelativeFormat is missing a ' +
-            '`locale` property value'
-        );
-    }
-
-    RelativeFormat.__localeData__[data.locale.toLowerCase()] = data;
-
-    // Add data to IntlMessageFormat.
-    intl$messageformat$$["default"].__addLocaleData(data);
-}});
-
-// Define public `defaultLocale` property which can be set by the developer, or
-// it will be set when the first RelativeFormat instance is created by
-// leveraging the resolved locale from `Intl`.
-src$es5$$.defineProperty(RelativeFormat, 'defaultLocale', {
-    enumerable: true,
-    writable  : true,
-    value     : undefined
-});
-
-// Define public `thresholds` property which can be set by the developer, and
-// defaults to relative time thresholds from moment.js.
-src$es5$$.defineProperty(RelativeFormat, 'thresholds', {
-    enumerable: true,
-
-    value: {
-        second: 45, 'second-short': 45,  // seconds to minute
-        minute: 45, 'minute-short': 45, // minutes to hour
-        hour  : 22, 'hour-short': 22, // hours to day
-        day   : 26, 'day-short': 26, // days to month
-        month : 11, 'month-short': 11 // months to year
-    }
-});
-
-RelativeFormat.prototype.resolvedOptions = function () {
-    return {
-        locale: this._locale,
-        style : this._options.style,
-        units : this._options.units
-    };
-};
-
-RelativeFormat.prototype._compileMessage = function (units) {
-    // `this._locales` is the original set of locales the user specified to the
-    // constructor, while `this._locale` is the resolved root locale.
-    var locales        = this._locales;
-    var resolvedLocale = this._locale;
-
-    var field        = this._fields[units];
-    var relativeTime = field.relativeTime;
-    var future       = '';
-    var past         = '';
-    var i;
-
-    for (i in relativeTime.future) {
-        if (relativeTime.future.hasOwnProperty(i)) {
-            future += ' ' + i + ' {' +
-                relativeTime.future[i].replace('{0}', '#') + '}';
-        }
-    }
-
-    for (i in relativeTime.past) {
-        if (relativeTime.past.hasOwnProperty(i)) {
-            past += ' ' + i + ' {' +
-                relativeTime.past[i].replace('{0}', '#') + '}';
-        }
-    }
-
-    var message = '{when, select, future {{0, plural, ' + future + '}}' +
-                                 'past {{0, plural, ' + past + '}}}';
-
-    // Create the synthetic IntlMessageFormat instance using the original
-    // locales value specified by the user when constructing the the parent
-    // IntlRelativeFormat instance.
-    return new intl$messageformat$$["default"](message, locales);
-};
-
-RelativeFormat.prototype._getMessage = function (units) {
-    var messages = this._messages;
-
-    // Create a new synthetic message based on the locale data from CLDR.
-    if (!messages[units]) {
-        messages[units] = this._compileMessage(units);
-    }
-
-    return messages[units];
-};
-
-RelativeFormat.prototype._getRelativeUnits = function (diff, units) {
-    var field = this._fields[units];
-
-    if (field.relative) {
-        return field.relative[diff];
-    }
-};
-
-RelativeFormat.prototype._findFields = function (locale) {
-    var localeData = RelativeFormat.__localeData__;
-    var data       = localeData[locale.toLowerCase()];
-
-    // The locale data is de-duplicated, so we have to traverse the locale's
-    // hierarchy until we find `fields` to return.
-    while (data) {
-        if (data.fields) {
-            return data.fields;
-        }
-
-        data = data.parentLocale && localeData[data.parentLocale.toLowerCase()];
-    }
-
-    throw new Error(
-        'Locale data added to IntlRelativeFormat is missing `fields` for :' +
-        locale
-    );
-};
-
-RelativeFormat.prototype._format = function (date, options) {
-    var now = options && options.now !== undefined ? options.now : src$es5$$.dateNow();
-
-    if (date === undefined) {
-        date = now;
-    }
-
-    // Determine if the `date` and optional `now` values are valid, and throw a
-    // similar error to what `Intl.DateTimeFormat#format()` would throw.
-    if (!isFinite(now)) {
-        throw new RangeError(
-            'The `now` option provided to IntlRelativeFormat#format() is not ' +
-            'in valid range.'
-        );
-    }
-
-    if (!isFinite(date)) {
-        throw new RangeError(
-            'The date value provided to IntlRelativeFormat#format() is not ' +
-            'in valid range.'
-        );
-    }
-
-    var diffReport  = src$diff$$["default"](now, date);
-    var units       = this._options.units || this._selectUnits(diffReport);
-    var diffInUnits = diffReport[units];
-
-    if (this._options.style !== 'numeric') {
-        var relativeUnits = this._getRelativeUnits(diffInUnits, units);
-        if (relativeUnits) {
-            return relativeUnits;
-        }
-    }
-
-    return this._getMessage(units).format({
-        '0' : Math.abs(diffInUnits),
-        when: diffInUnits < 0 ? 'past' : 'future'
-    });
-};
-
-RelativeFormat.prototype._isValidUnits = function (units) {
-    if (!units || src$es5$$.arrIndexOf.call(FIELDS, units) >= 0) {
-        return true;
-    }
-
-    if (typeof units === 'string') {
-        var suggestion = /s$/.test(units) && units.substr(0, units.length - 1);
-        if (suggestion && src$es5$$.arrIndexOf.call(FIELDS, suggestion) >= 0) {
-            throw new Error(
-                '"' + units + '" is not a valid IntlRelativeFormat `units` ' +
-                'value, did you mean: ' + suggestion
-            );
-        }
-    }
-
-    throw new Error(
-        '"' + units + '" is not a valid IntlRelativeFormat `units` value, it ' +
-        'must be one of: "' + FIELDS.join('", "') + '"'
-    );
-};
-
-RelativeFormat.prototype._resolveLocale = function (locales) {
-    if (typeof locales === 'string') {
-        locales = [locales];
-    }
-
-    // Create a copy of the array so we can push on the default locale.
-    locales = (locales || []).concat(RelativeFormat.defaultLocale);
-
-    var localeData = RelativeFormat.__localeData__;
-    var i, len, localeParts, data;
-
-    // Using the set of locales + the default locale, we look for the first one
-    // which that has been registered. When data does not exist for a locale, we
-    // traverse its ancestors to find something that's been registered within
-    // its hierarchy of locales. Since we lack the proper `parentLocale` data
-    // here, we must take a naive approach to traversal.
-    for (i = 0, len = locales.length; i < len; i += 1) {
-        localeParts = locales[i].toLowerCase().split('-');
-
-        while (localeParts.length) {
-            data = localeData[localeParts.join('-')];
-            if (data) {
-                // Return the normalized locale string; e.g., we return "en-US",
-                // instead of "en-us".
-                return data.locale;
-            }
-
-            localeParts.pop();
-        }
-    }
-
-    var defaultLocale = locales.pop();
-    throw new Error(
-        'No locale data has been added to IntlRelativeFormat for: ' +
-        locales.join(', ') + ', or the default locale: ' + defaultLocale
-    );
-};
-
-RelativeFormat.prototype._resolveStyle = function (style) {
-    // Default to "best fit" style.
-    if (!style) {
-        return STYLES[0];
-    }
-
-    if (src$es5$$.arrIndexOf.call(STYLES, style) >= 0) {
-        return style;
-    }
-
-    throw new Error(
-        '"' + style + '" is not a valid IntlRelativeFormat `style` value, it ' +
-        'must be one of: "' + STYLES.join('", "') + '"'
-    );
-};
-
-RelativeFormat.prototype._selectUnits = function (diffReport) {
-    var i, l, units;
-    var fields = FIELDS.filter(function(field) {
-        return field.indexOf('-short') < 1;
-    });
-
-    for (i = 0, l = fields.length; i < l; i += 1) {
-        units = fields[i];
-
-        if (Math.abs(diffReport[units]) < RelativeFormat.thresholds[units]) {
-            break;
-        }
-    }
-
-    return units;
-};
-
-//# sourceMappingURL=core.js.map
-
-/***/ }),
-/* 123 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*
-Copyright (c) 2014, Yahoo! Inc. All rights reserved.
-Copyrights licensed under the New BSD License.
-See the accompanying LICENSE file for terms.
-*/
-
-/* jslint esnext: true */
-
-
-
-var round = Math.round;
-
-function daysToYears(days) {
-    // 400 years have 146097 days (taking into account leap year rules)
-    return days * 400 / 146097;
-}
-
-exports["default"] = function (from, to) {
-    // Convert to ms timestamps.
-    from = +from;
-    to   = +to;
-
-    var millisecond = round(to - from),
-        second      = round(millisecond / 1000),
-        minute      = round(second / 60),
-        hour        = round(minute / 60),
-        day         = round(hour / 24),
-        week        = round(day / 7);
-
-    var rawYears = daysToYears(day),
-        month    = round(rawYears * 12),
-        year     = round(rawYears);
-
-    return {
-        millisecond    : millisecond,
-        second         : second,
-        'second-short' : second,
-        minute         : minute,
-        'minute-short' : minute,
-        hour           : hour,
-        'hour-short'   : hour,
-        day            : day,
-        'day-short'    : day,
-        week           : week,
-        'week-short'   : week,
-        month          : month,
-        'month-short'  : month,
-        year           : year,
-        'year-short'   : year
-    };
-};
-
-//# sourceMappingURL=diff.js.map
-
-/***/ }),
-/* 124 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*
-Copyright (c) 2014, Yahoo! Inc. All rights reserved.
-Copyrights licensed under the New BSD License.
-See the accompanying LICENSE file for terms.
-*/
-
-/* jslint esnext: true */
-
-// Purposely using the same implementation as the Intl.js `Intl` polyfill.
-// Copyright 2013 Andy Earnshaw, MIT License
-
-
-
-var hop = Object.prototype.hasOwnProperty;
-var toString = Object.prototype.toString;
-
-var realDefineProp = (function () {
-    try { return !!Object.defineProperty({}, 'a', {}); }
-    catch (e) { return false; }
-})();
-
-var es3 = !realDefineProp && !Object.prototype.__defineGetter__;
-
-var defineProperty = realDefineProp ? Object.defineProperty :
-        function (obj, name, desc) {
-
-    if ('get' in desc && obj.__defineGetter__) {
-        obj.__defineGetter__(name, desc.get);
-    } else if (!hop.call(obj, name) || 'value' in desc) {
-        obj[name] = desc.value;
-    }
-};
-
-var objCreate = Object.create || function (proto, props) {
-    var obj, k;
-
-    function F() {}
-    F.prototype = proto;
-    obj = new F();
-
-    for (k in props) {
-        if (hop.call(props, k)) {
-            defineProperty(obj, k, props[k]);
-        }
-    }
-
-    return obj;
-};
-
-var arrIndexOf = Array.prototype.indexOf || function (search, fromIndex) {
-    /*jshint validthis:true */
-    var arr = this;
-    if (!arr.length) {
-        return -1;
-    }
-
-    for (var i = fromIndex || 0, max = arr.length; i < max; i++) {
-        if (arr[i] === search) {
-            return i;
-        }
-    }
-
-    return -1;
-};
-
-var isArray = Array.isArray || function (obj) {
-    return toString.call(obj) === '[object Array]';
-};
-
-var dateNow = Date.now || function () {
-    return new Date().getTime();
-};
-
-exports.defineProperty = defineProperty, exports.objCreate = objCreate, exports.arrIndexOf = arrIndexOf, exports.isArray = isArray, exports.dateNow = dateNow;
-
-//# sourceMappingURL=es5.js.map
-
-/***/ }),
-/* 125 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// GENERATED FILE
-
-exports["default"] = {"locale":"en","pluralRuleFunction":function (n,ord){var s=String(n).split("."),v0=!s[1],t0=Number(s[0])==n,n10=t0&&s[0].slice(-1),n100=t0&&s[0].slice(-2);if(ord)return n10==1&&n100!=11?"one":n10==2&&n100!=12?"two":n10==3&&n100!=13?"few":"other";return n==1&&v0?"one":"other"},"fields":{"year":{"displayName":"year","relative":{"0":"this year","1":"next year","-1":"last year"},"relativeTime":{"future":{"one":"in {0} year","other":"in {0} years"},"past":{"one":"{0} year ago","other":"{0} years ago"}}},"year-short":{"displayName":"yr.","relative":{"0":"this yr.","1":"next yr.","-1":"last yr."},"relativeTime":{"future":{"one":"in {0} yr.","other":"in {0} yr."},"past":{"one":"{0} yr. ago","other":"{0} yr. ago"}}},"month":{"displayName":"month","relative":{"0":"this month","1":"next month","-1":"last month"},"relativeTime":{"future":{"one":"in {0} month","other":"in {0} months"},"past":{"one":"{0} month ago","other":"{0} months ago"}}},"month-short":{"displayName":"mo.","relative":{"0":"this mo.","1":"next mo.","-1":"last mo."},"relativeTime":{"future":{"one":"in {0} mo.","other":"in {0} mo."},"past":{"one":"{0} mo. ago","other":"{0} mo. ago"}}},"day":{"displayName":"day","relative":{"0":"today","1":"tomorrow","-1":"yesterday"},"relativeTime":{"future":{"one":"in {0} day","other":"in {0} days"},"past":{"one":"{0} day ago","other":"{0} days ago"}}},"day-short":{"displayName":"day","relative":{"0":"today","1":"tomorrow","-1":"yesterday"},"relativeTime":{"future":{"one":"in {0} day","other":"in {0} days"},"past":{"one":"{0} day ago","other":"{0} days ago"}}},"hour":{"displayName":"hour","relative":{"0":"this hour"},"relativeTime":{"future":{"one":"in {0} hour","other":"in {0} hours"},"past":{"one":"{0} hour ago","other":"{0} hours ago"}}},"hour-short":{"displayName":"hr.","relative":{"0":"this hour"},"relativeTime":{"future":{"one":"in {0} hr.","other":"in {0} hr."},"past":{"one":"{0} hr. ago","other":"{0} hr. ago"}}},"minute":{"displayName":"minute","relative":{"0":"this minute"},"relativeTime":{"future":{"one":"in {0} minute","other":"in {0} minutes"},"past":{"one":"{0} minute ago","other":"{0} minutes ago"}}},"minute-short":{"displayName":"min.","relative":{"0":"this minute"},"relativeTime":{"future":{"one":"in {0} min.","other":"in {0} min."},"past":{"one":"{0} min. ago","other":"{0} min. ago"}}},"second":{"displayName":"second","relative":{"0":"now"},"relativeTime":{"future":{"one":"in {0} second","other":"in {0} seconds"},"past":{"one":"{0} second ago","other":"{0} seconds ago"}}},"second-short":{"displayName":"sec.","relative":{"0":"now"},"relativeTime":{"future":{"one":"in {0} sec.","other":"in {0} sec."},"past":{"one":"{0} sec. ago","other":"{0} sec. ago"}}}}};
-
-//# sourceMappingURL=en.js.map
-
-/***/ }),
-/* 126 */
-/***/ (function(module, exports) {
-
-/* (ignored) */
-
-/***/ }),
-/* 127 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports = module.exports = __webpack_require__(128)['default'];
-exports['default'] = exports;
-
-
-/***/ }),
-/* 128 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var src$es5$$ = __webpack_require__(129);
-exports["default"] = createFormatCache;
-
-// -----------------------------------------------------------------------------
-
-function createFormatCache(FormatConstructor) {
-    var cache = src$es5$$.objCreate(null);
-
-    return function () {
-        var args    = Array.prototype.slice.call(arguments);
-        var cacheId = getCacheId(args);
-        var format  = cacheId && cache[cacheId];
-
-        if (!format) {
-            format = new (src$es5$$.bind.apply(FormatConstructor, [null].concat(args)))();
-
-            if (cacheId) {
-                cache[cacheId] = format;
-            }
-        }
-
-        return format;
-    };
-}
-
-// -- Utilities ----------------------------------------------------------------
-
-function getCacheId(inputs) {
-    // When JSON is not available in the runtime, we will not create a cache id.
-    if (typeof JSON === 'undefined') { return; }
-
-    var cacheId = [];
-
-    var i, len, input;
-
-    for (i = 0, len = inputs.length; i < len; i += 1) {
-        input = inputs[i];
-
-        if (input && typeof input === 'object') {
-            cacheId.push(orderedProps(input));
-        } else {
-            cacheId.push(input);
-        }
-    }
-
-    return JSON.stringify(cacheId);
-}
-
-function orderedProps(obj) {
-    var props = [],
-        keys  = [];
-
-    var key, i, len, prop;
-
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            keys.push(key);
-        }
-    }
-
-    var orderedKeys = keys.sort();
-
-    for (i = 0, len = orderedKeys.length; i < len; i += 1) {
-        key  = orderedKeys[i];
-        prop = {};
-
-        prop[key] = obj[key];
-        props[i]  = prop;
-    }
-
-    return props;
-}
-
-//# sourceMappingURL=memoizer.js.map
-
-/***/ }),
-/* 129 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/*
-Copyright (c) 2014, Yahoo! Inc. All rights reserved.
-Copyrights licensed under the New BSD License.
-See the accompanying LICENSE file for terms.
-*/
-
-/* jslint esnext: true */
-
-// Function.prototype.bind implementation from Mozilla Developer Network:
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Polyfill
-
-var bind = Function.prototype.bind || function (oThis) {
-    if (typeof this !== 'function') {
-      // closest thing possible to the ECMAScript 5
-      // internal IsCallable function
-      throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
-    }
-
-    var aArgs   = Array.prototype.slice.call(arguments, 1),
-        fToBind = this,
-        fNOP    = function() {},
-        fBound  = function() {
-          return fToBind.apply(this instanceof fNOP
-                 ? this
-                 : oThis,
-                 aArgs.concat(Array.prototype.slice.call(arguments)));
-        };
-
-    if (this.prototype) {
-      // native functions don't have a prototype
-      fNOP.prototype = this.prototype;
-    }
-    fBound.prototype = new fNOP();
-
-    return fBound;
-};
-
-// Purposely using the same implementation as the Intl.js `Intl` polyfill.
-// Copyright 2013 Andy Earnshaw, MIT License
-
-var hop = Object.prototype.hasOwnProperty;
-
-var realDefineProp = (function () {
-    try { return !!Object.defineProperty({}, 'a', {}); }
-    catch (e) { return false; }
-})();
-
-var es3 = !realDefineProp && !Object.prototype.__defineGetter__;
-
-var defineProperty = realDefineProp ? Object.defineProperty :
-        function (obj, name, desc) {
-
-    if ('get' in desc && obj.__defineGetter__) {
-        obj.__defineGetter__(name, desc.get);
-    } else if (!hop.call(obj, name) || 'value' in desc) {
-        obj[name] = desc.value;
-    }
-};
-
-var objCreate = Object.create || function (proto, props) {
-    var obj, k;
-
-    function F() {}
-    F.prototype = proto;
-    obj = new F();
-
-    for (k in props) {
-        if (hop.call(props, k)) {
-            defineProperty(obj, k, props[k]);
-        }
-    }
-
-    return obj;
-};
-
-exports.bind = bind, exports.defineProperty = defineProperty, exports.objCreate = objCreate;
-
-//# sourceMappingURL=es5.js.map
-
-/***/ }),
-/* 130 */
-/***/ (function(module, exports, __webpack_require__) {
-
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(true)
-		module.exports = factory(__webpack_require__(0));
-	else if(typeof define === 'function' && define.amd)
-		define(["react"], factory);
-	else if(typeof exports === 'object')
-		exports["MediaQuery"] = factory(require("react"));
-	else
-		root["MediaQuery"] = factory(root["react"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_8__) {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-if (true) {
-  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
-    Symbol.for &&
-    Symbol.for('react.element')) ||
-    0xeac7;
-
-  var isValidElement = function(object) {
-    return typeof object === 'object' &&
-      object !== null &&
-      object.$$typeof === REACT_ELEMENT_TYPE;
-  };
-
-  // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
-  var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(9)(isValidElement, throwOnDirectAccess);
-} else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = require('./factoryWithThrowingShims')();
-}
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * 
- */
-
-function makeEmptyFunction(arg) {
-  return function () {
-    return arg;
-  };
-}
-
-/**
- * This function accepts and discards inputs; it has no side effects. This is
- * primarily useful idiomatically for overridable function endpoints which
- * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
- */
-var emptyFunction = function emptyFunction() {};
-
-emptyFunction.thatReturns = makeEmptyFunction;
-emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-emptyFunction.thatReturnsThis = function () {
-  return this;
-};
-emptyFunction.thatReturnsArgument = function (arg) {
-  return arg;
-};
-
-module.exports = emptyFunction;
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-
-
-/**
- * Use invariant() to assert state which your program assumes to be true.
- *
- * Provide sprintf-style format (only %s is supported) and arguments
- * to provide information about what broke and what you were
- * expecting.
- *
- * The invariant message will be stripped in production, but the invariant
- * will remain to ensure logic does not differ in production.
- */
-
-var validateFormat = function validateFormat(format) {};
-
-if (true) {
-  validateFormat = function validateFormat(format) {
-    if (format === undefined) {
-      throw new Error('invariant requires an error message argument');
-    }
-  };
-}
-
-function invariant(condition, format, a, b, c, d, e, f) {
-  validateFormat(format);
-
-  if (!condition) {
-    var error;
-    if (format === undefined) {
-      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-    } else {
-      var args = [a, b, c, d, e, f];
-      var argIndex = 0;
-      error = new Error(format.replace(/%s/g, function () {
-        return args[argIndex++];
-      }));
-      error.name = 'Invariant Violation';
-    }
-
-    error.framesToPop = 1; // we don't care about invariant's own frame
-    throw error;
-  }
-}
-
-module.exports = invariant;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
-
-
-var emptyFunction = __webpack_require__(1);
-
-/**
- * Similar to invariant but only logs a warning if the condition is not met.
- * This can be used to log issues in development environments in critical
- * paths. Removing the logging code for production environments will keep the
- * same logic and follow the same code paths.
- */
-
-var warning = emptyFunction;
-
-if (true) {
-  var printWarning = function printWarning(format) {
-    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
-    }
-
-    var argIndex = 0;
-    var message = 'Warning: ' + format.replace(/%s/g, function () {
-      return args[argIndex++];
-    });
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
-
-  warning = function warning(condition, format) {
-    if (format === undefined) {
-      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
-    }
-
-    if (format.indexOf('Failed Composite propType: ') === 0) {
-      return; // Ignore CompositeComponent proptype check.
-    }
-
-    if (!condition) {
-      for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-        args[_key2 - 2] = arguments[_key2];
-      }
-
-      printWarning.apply(undefined, [format].concat(args));
-    }
-  };
-}
-
-module.exports = warning;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-module.exports = ReactPropTypesSecret;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var uppercasePattern = /[A-Z]/g;
-var msPattern = /^ms-/;
-var cache = {};
-
-function hyphenateStyleName(string) {
-    return string in cache
-    ? cache[string]
-    : cache[string] = string
-      .replace(uppercasePattern, '-$&')
-      .toLowerCase()
-      .replace(msPattern, '-ms-');
-}
-
-module.exports = hyphenateStyleName;
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _propTypes = __webpack_require__(0);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var stringOrNumber = _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]);
-
-// properties that match media queries
-var matchers = {
-  orientation: _propTypes2.default.oneOf(['portrait', 'landscape']),
-
-  scan: _propTypes2.default.oneOf(['progressive', 'interlace']),
-
-  aspectRatio: _propTypes2.default.string,
-  deviceAspectRatio: _propTypes2.default.string,
-
-  height: stringOrNumber,
-  deviceHeight: stringOrNumber,
-
-  width: stringOrNumber,
-  deviceWidth: stringOrNumber,
-
-  color: _propTypes2.default.bool,
-
-  colorIndex: _propTypes2.default.bool,
-
-  monochrome: _propTypes2.default.bool,
-  resolution: stringOrNumber
-
-  // media features
-};var features = _extends({
-  minAspectRatio: _propTypes2.default.string,
-  maxAspectRatio: _propTypes2.default.string,
-  minDeviceAspectRatio: _propTypes2.default.string,
-  maxDeviceAspectRatio: _propTypes2.default.string,
-
-  minHeight: stringOrNumber,
-  maxHeight: stringOrNumber,
-  minDeviceHeight: stringOrNumber,
-  maxDeviceHeight: stringOrNumber,
-
-  minWidth: stringOrNumber,
-  maxWidth: stringOrNumber,
-  minDeviceWidth: stringOrNumber,
-  maxDeviceWidth: stringOrNumber,
-
-  minColor: _propTypes2.default.number,
-  maxColor: _propTypes2.default.number,
-
-  minColorIndex: _propTypes2.default.number,
-  maxColorIndex: _propTypes2.default.number,
-
-  minMonochrome: _propTypes2.default.number,
-  maxMonochrome: _propTypes2.default.number,
-
-  minResolution: stringOrNumber,
-  maxResolution: stringOrNumber
-
-}, matchers);
-
-// media types
-var types = {
-  all: _propTypes2.default.bool,
-  grid: _propTypes2.default.bool,
-  aural: _propTypes2.default.bool,
-  braille: _propTypes2.default.bool,
-  handheld: _propTypes2.default.bool,
-  print: _propTypes2.default.bool,
-  projection: _propTypes2.default.bool,
-  screen: _propTypes2.default.bool,
-  tty: _propTypes2.default.bool,
-  tv: _propTypes2.default.bool,
-  embossed: _propTypes2.default.bool
-};
-
-var all = _extends({}, types, features);
-
-// add the type property
-matchers.type = Object.keys(types);
-
-exports.default = {
-  all: all,
-  types: types,
-  matchers: matchers,
-  features: features
-};
-module.exports = exports['default'];
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.toQuery = exports.default = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _react = __webpack_require__(8);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(0);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _matchmediaquery = __webpack_require__(12);
-
-var _matchmediaquery2 = _interopRequireDefault(_matchmediaquery);
-
-var _hyphenateStyleName = __webpack_require__(5);
-
-var _hyphenateStyleName2 = _interopRequireDefault(_hyphenateStyleName);
-
-var _mediaQuery = __webpack_require__(6);
-
-var _mediaQuery2 = _interopRequireDefault(_mediaQuery);
-
-var _toQuery = __webpack_require__(14);
-
-var _toQuery2 = _interopRequireDefault(_toQuery);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var defaultTypes = {
-  component: _propTypes2.default.node,
-  query: _propTypes2.default.string,
-  values: _propTypes2.default.shape(_mediaQuery2.default.matchers),
-  children: _propTypes2.default.oneOfType([_propTypes2.default.node, _propTypes2.default.func]),
-  onChange: _propTypes2.default.func,
-  onBeforeChange: _propTypes2.default.func
-};
-var mediaKeys = Object.keys(_mediaQuery2.default.all);
-var excludedQueryKeys = Object.keys(defaultTypes);
-var excludedPropKeys = excludedQueryKeys.concat(mediaKeys);
-
-function omit(object, keys) {
-  var newObject = _extends({}, object);
-  keys.forEach(function (key) {
-    return delete newObject[key];
-  });
-  return newObject;
-}
-
-var MediaQuery = function (_React$Component) {
-  _inherits(MediaQuery, _React$Component);
-
-  function MediaQuery() {
-    var _ref;
-
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, MediaQuery);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MediaQuery.__proto__ || Object.getPrototypeOf(MediaQuery)).call.apply(_ref, [this].concat(args))), _this), _this.state = { matches: false }, _this.updateMatches = function () {
-      if (_this._mql.matches === _this.state.matches) {
-        return;
-      }
-      _this.setState({
-        matches: _this._mql.matches
-      });
-    }, _this.removeMql = function () {
-      if (_this._mql) {
-        _this._mql.removeListener(_this.updateMatches);
-        _this._mql.dispose();
-      }
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
-
-  _createClass(MediaQuery, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      this.updateQuery(this.props);
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.updateQuery(nextProps);
-    }
-  }, {
-    key: 'updateQuery',
-    value: function updateQuery(props) {
-      var values = void 0;
-      if (props.query) {
-        this.query = props.query;
-      } else {
-        this.query = (0, _toQuery2.default)(omit(props, excludedQueryKeys));
-      }
-
-      if (!this.query) {
-        throw new Error('Invalid or missing MediaQuery!');
-      }
-
-      if (props.values) {
-        values = Object.keys(props.values).reduce(function (result, key) {
-          result[(0, _hyphenateStyleName2.default)(key)] = props.values[key];
-          return result;
-        }, {});
-      }
-
-      this.removeMql();
-
-      this._mql = (0, _matchmediaquery2.default)(this.query, values);
-      this._mql.addListener(this.updateMatches);
-      this.updateMatches();
-    }
-  }, {
-    key: 'componentWillUpdate',
-    value: function componentWillUpdate(_, nextState) {
-      if (this.props.onBeforeChange && this.state.matches !== nextState.matches) {
-        this.props.onBeforeChange(this.state.matches);
-      }
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(_, prevState) {
-      if (this.props.onChange && prevState.matches !== this.state.matches) {
-        this.props.onChange(this.state.matches);
-      }
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      this.removeMql();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      if (typeof this.props.children === 'function') {
-        return this.props.children(this.state.matches);
-      }
-
-      if (this.state.matches === false) {
-        return null;
-      }
-      var props = omit(this.props, excludedPropKeys);
-      var hasMergeProps = Object.keys(props).length > 0;
-      var childrenCount = _react2.default.Children.count(this.props.children);
-      var wrapChildren = this.props.component || childrenCount > 1 || typeof this.props.children === 'string' || Array.isArray(this.props.children) && childrenCount == 1 || this.props.children === undefined;
-      if (wrapChildren) {
-        return _react2.default.createElement(this.props.component || 'div', props, this.props.children);
-      } else if (hasMergeProps) {
-        return _react2.default.cloneElement(this.props.children, props);
-      } else if (childrenCount) {
-        return this.props.children;
-      } else {
-        return null;
-      }
-    }
-  }]);
-
-  return MediaQuery;
-}(_react2.default.Component);
-
-MediaQuery.displayName = 'MediaQuery';
-MediaQuery.defaultProps = {
-  values: {}
-};
-exports.default = MediaQuery;
-exports.toQuery = _toQuery2.default;
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-var emptyFunction = __webpack_require__(1);
-var invariant = __webpack_require__(2);
-var warning = __webpack_require__(3);
-var assign = __webpack_require__(10);
-
-var ReactPropTypesSecret = __webpack_require__(4);
-var checkPropTypes = __webpack_require__(11);
-
-module.exports = function(isValidElement, throwOnDirectAccess) {
-  /* global Symbol */
-  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
-
-  /**
-   * Returns the iterator method function contained on the iterable object.
-   *
-   * Be sure to invoke the function with the iterable as context:
-   *
-   *     var iteratorFn = getIteratorFn(myIterable);
-   *     if (iteratorFn) {
-   *       var iterator = iteratorFn.call(myIterable);
-   *       ...
-   *     }
-   *
-   * @param {?object} maybeIterable
-   * @return {?function}
-   */
-  function getIteratorFn(maybeIterable) {
-    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-    if (typeof iteratorFn === 'function') {
-      return iteratorFn;
-    }
-  }
-
-  /**
-   * Collection of methods that allow declaration and validation of props that are
-   * supplied to React components. Example usage:
-   *
-   *   var Props = require('ReactPropTypes');
-   *   var MyArticle = React.createClass({
-   *     propTypes: {
-   *       // An optional string prop named "description".
-   *       description: Props.string,
-   *
-   *       // A required enum prop named "category".
-   *       category: Props.oneOf(['News','Photos']).isRequired,
-   *
-   *       // A prop named "dialog" that requires an instance of Dialog.
-   *       dialog: Props.instanceOf(Dialog).isRequired
-   *     },
-   *     render: function() { ... }
-   *   });
-   *
-   * A more formal specification of how these methods are used:
-   *
-   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
-   *   decl := ReactPropTypes.{type}(.isRequired)?
-   *
-   * Each and every declaration produces a function with the same signature. This
-   * allows the creation of custom validation functions. For example:
-   *
-   *  var MyLink = React.createClass({
-   *    propTypes: {
-   *      // An optional string or URI prop named "href".
-   *      href: function(props, propName, componentName) {
-   *        var propValue = props[propName];
-   *        if (propValue != null && typeof propValue !== 'string' &&
-   *            !(propValue instanceof URI)) {
-   *          return new Error(
-   *            'Expected a string or an URI for ' + propName + ' in ' +
-   *            componentName
-   *          );
-   *        }
-   *      }
-   *    },
-   *    render: function() {...}
-   *  });
-   *
-   * @internal
-   */
-
-  var ANONYMOUS = '<<anonymous>>';
-
-  // Important!
-  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
-  var ReactPropTypes = {
-    array: createPrimitiveTypeChecker('array'),
-    bool: createPrimitiveTypeChecker('boolean'),
-    func: createPrimitiveTypeChecker('function'),
-    number: createPrimitiveTypeChecker('number'),
-    object: createPrimitiveTypeChecker('object'),
-    string: createPrimitiveTypeChecker('string'),
-    symbol: createPrimitiveTypeChecker('symbol'),
-
-    any: createAnyTypeChecker(),
-    arrayOf: createArrayOfTypeChecker,
-    element: createElementTypeChecker(),
-    instanceOf: createInstanceTypeChecker,
-    node: createNodeChecker(),
-    objectOf: createObjectOfTypeChecker,
-    oneOf: createEnumTypeChecker,
-    oneOfType: createUnionTypeChecker,
-    shape: createShapeTypeChecker,
-    exact: createStrictShapeTypeChecker,
-  };
-
-  /**
-   * inlined Object.is polyfill to avoid requiring consumers ship their own
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-   */
-  /*eslint-disable no-self-compare*/
-  function is(x, y) {
-    // SameValue algorithm
-    if (x === y) {
-      // Steps 1-5, 7-10
-      // Steps 6.b-6.e: +0 != -0
-      return x !== 0 || 1 / x === 1 / y;
-    } else {
-      // Step 6.a: NaN == NaN
-      return x !== x && y !== y;
-    }
-  }
-  /*eslint-enable no-self-compare*/
-
-  /**
-   * We use an Error-like object for backward compatibility as people may call
-   * PropTypes directly and inspect their output. However, we don't use real
-   * Errors anymore. We don't inspect their stack anyway, and creating them
-   * is prohibitively expensive if they are created too often, such as what
-   * happens in oneOfType() for any type before the one that matched.
-   */
-  function PropTypeError(message) {
-    this.message = message;
-    this.stack = '';
-  }
-  // Make `instanceof Error` still work for returned errors.
-  PropTypeError.prototype = Error.prototype;
-
-  function createChainableTypeChecker(validate) {
-    if (true) {
-      var manualPropTypeCallCache = {};
-      var manualPropTypeWarningCount = 0;
-    }
-    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
-      componentName = componentName || ANONYMOUS;
-      propFullName = propFullName || propName;
-
-      if (secret !== ReactPropTypesSecret) {
-        if (throwOnDirectAccess) {
-          // New behavior only for users of `prop-types` package
-          invariant(
-            false,
-            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
-            'Use `PropTypes.checkPropTypes()` to call them. ' +
-            'Read more at http://fb.me/use-check-prop-types'
-          );
-        } else if ("development" !== 'production' && typeof console !== 'undefined') {
-          // Old behavior for people using React.PropTypes
-          var cacheKey = componentName + ':' + propName;
-          if (
-            !manualPropTypeCallCache[cacheKey] &&
-            // Avoid spamming the console because they are often not actionable except for lib authors
-            manualPropTypeWarningCount < 3
-          ) {
-            warning(
-              false,
-              'You are manually calling a React.PropTypes validation ' +
-              'function for the `%s` prop on `%s`. This is deprecated ' +
-              'and will throw in the standalone `prop-types` package. ' +
-              'You may be seeing this warning due to a third-party PropTypes ' +
-              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.',
-              propFullName,
-              componentName
-            );
-            manualPropTypeCallCache[cacheKey] = true;
-            manualPropTypeWarningCount++;
-          }
-        }
-      }
-      if (props[propName] == null) {
-        if (isRequired) {
-          if (props[propName] === null) {
-            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
-          }
-          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
-        }
-        return null;
-      } else {
-        return validate(props, propName, componentName, location, propFullName);
-      }
-    }
-
-    var chainedCheckType = checkType.bind(null, false);
-    chainedCheckType.isRequired = checkType.bind(null, true);
-
-    return chainedCheckType;
-  }
-
-  function createPrimitiveTypeChecker(expectedType) {
-    function validate(props, propName, componentName, location, propFullName, secret) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== expectedType) {
-        // `propValue` being instance of, say, date/regexp, pass the 'object'
-        // check, but we can offer a more precise error message here rather than
-        // 'of type `object`'.
-        var preciseType = getPreciseType(propValue);
-
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createAnyTypeChecker() {
-    return createChainableTypeChecker(emptyFunction.thatReturnsNull);
-  }
-
-  function createArrayOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
-      }
-      var propValue = props[propName];
-      if (!Array.isArray(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
-      }
-      for (var i = 0; i < propValue.length; i++) {
-        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
-        if (error instanceof Error) {
-          return error;
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createElementTypeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      if (!isValidElement(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createInstanceTypeChecker(expectedClass) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!(props[propName] instanceof expectedClass)) {
-        var expectedClassName = expectedClass.name || ANONYMOUS;
-        var actualClassName = getClassName(props[propName]);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createEnumTypeChecker(expectedValues) {
-    if (!Array.isArray(expectedValues)) {
-       true ? warning(false, 'Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
-      return emptyFunction.thatReturnsNull;
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      for (var i = 0; i < expectedValues.length; i++) {
-        if (is(propValue, expectedValues[i])) {
-          return null;
-        }
-      }
-
-      var valuesString = JSON.stringify(expectedValues);
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createObjectOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
-      }
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
-      }
-      for (var key in propValue) {
-        if (propValue.hasOwnProperty(key)) {
-          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-          if (error instanceof Error) {
-            return error;
-          }
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createUnionTypeChecker(arrayOfTypeCheckers) {
-    if (!Array.isArray(arrayOfTypeCheckers)) {
-       true ? warning(false, 'Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
-      return emptyFunction.thatReturnsNull;
-    }
-
-    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-      var checker = arrayOfTypeCheckers[i];
-      if (typeof checker !== 'function') {
-        warning(
-          false,
-          'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
-          'received %s at index %s.',
-          getPostfixForTypeWarning(checker),
-          i
-        );
-        return emptyFunction.thatReturnsNull;
-      }
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-        var checker = arrayOfTypeCheckers[i];
-        if (checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret) == null) {
-          return null;
-        }
-      }
-
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`.'));
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createNodeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!isNode(props[propName])) {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-      for (var key in shapeTypes) {
-        var checker = shapeTypes[key];
-        if (!checker) {
-          continue;
-        }
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-        if (error) {
-          return error;
-        }
-      }
-      return null;
-    }
-    return createChainableTypeChecker(validate);
-  }
-
-  function createStrictShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-      // We need to check all keys in case some are required but missing from
-      // props.
-      var allKeys = assign({}, props[propName], shapeTypes);
-      for (var key in allKeys) {
-        var checker = shapeTypes[key];
-        if (!checker) {
-          return new PropTypeError(
-            'Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' +
-            '\nBad object: ' + JSON.stringify(props[propName], null, '  ') +
-            '\nValid keys: ' +  JSON.stringify(Object.keys(shapeTypes), null, '  ')
-          );
-        }
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-        if (error) {
-          return error;
-        }
-      }
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function isNode(propValue) {
-    switch (typeof propValue) {
-      case 'number':
-      case 'string':
-      case 'undefined':
-        return true;
-      case 'boolean':
-        return !propValue;
-      case 'object':
-        if (Array.isArray(propValue)) {
-          return propValue.every(isNode);
-        }
-        if (propValue === null || isValidElement(propValue)) {
-          return true;
-        }
-
-        var iteratorFn = getIteratorFn(propValue);
-        if (iteratorFn) {
-          var iterator = iteratorFn.call(propValue);
-          var step;
-          if (iteratorFn !== propValue.entries) {
-            while (!(step = iterator.next()).done) {
-              if (!isNode(step.value)) {
-                return false;
-              }
-            }
-          } else {
-            // Iterator will provide entry [k,v] tuples rather than values.
-            while (!(step = iterator.next()).done) {
-              var entry = step.value;
-              if (entry) {
-                if (!isNode(entry[1])) {
-                  return false;
-                }
-              }
-            }
-          }
-        } else {
-          return false;
-        }
-
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  function isSymbol(propType, propValue) {
-    // Native Symbol.
-    if (propType === 'symbol') {
-      return true;
-    }
-
-    // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
-    if (propValue['@@toStringTag'] === 'Symbol') {
-      return true;
-    }
-
-    // Fallback for non-spec compliant Symbols which are polyfilled.
-    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
-      return true;
-    }
-
-    return false;
-  }
-
-  // Equivalent of `typeof` but with special handling for array and regexp.
-  function getPropType(propValue) {
-    var propType = typeof propValue;
-    if (Array.isArray(propValue)) {
-      return 'array';
-    }
-    if (propValue instanceof RegExp) {
-      // Old webkits (at least until Android 4.0) return 'function' rather than
-      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
-      // passes PropTypes.object.
-      return 'object';
-    }
-    if (isSymbol(propType, propValue)) {
-      return 'symbol';
-    }
-    return propType;
-  }
-
-  // This handles more types than `getPropType`. Only used for error messages.
-  // See `createPrimitiveTypeChecker`.
-  function getPreciseType(propValue) {
-    if (typeof propValue === 'undefined' || propValue === null) {
-      return '' + propValue;
-    }
-    var propType = getPropType(propValue);
-    if (propType === 'object') {
-      if (propValue instanceof Date) {
-        return 'date';
-      } else if (propValue instanceof RegExp) {
-        return 'regexp';
-      }
-    }
-    return propType;
-  }
-
-  // Returns a string that is postfixed to a warning about an invalid type.
-  // For example, "undefined" or "of type array"
-  function getPostfixForTypeWarning(value) {
-    var type = getPreciseType(value);
-    switch (type) {
-      case 'array':
-      case 'object':
-        return 'an ' + type;
-      case 'boolean':
-      case 'date':
-      case 'regexp':
-        return 'a ' + type;
-      default:
-        return type;
-    }
-  }
-
-  // Returns class name of the object, if any.
-  function getClassName(propValue) {
-    if (!propValue.constructor || !propValue.constructor.name) {
-      return ANONYMOUS;
-    }
-    return propValue.constructor.name;
-  }
-
-  ReactPropTypes.checkPropTypes = checkPropTypes;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-
-  return ReactPropTypes;
-};
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*
-object-assign
-(c) Sindre Sorhus
-@license MIT
-*/
-
-
-/* eslint-disable no-unused-vars */
-var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-var hasOwnProperty = Object.prototype.hasOwnProperty;
-var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-
-function toObject(val) {
-	if (val === null || val === undefined) {
-		throw new TypeError('Object.assign cannot be called with null or undefined');
-	}
-
-	return Object(val);
-}
-
-function shouldUseNative() {
-	try {
-		if (!Object.assign) {
-			return false;
-		}
-
-		// Detect buggy property enumeration order in older V8 versions.
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
-		test1[5] = 'de';
-		if (Object.getOwnPropertyNames(test1)[0] === '5') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test2 = {};
-		for (var i = 0; i < 10; i++) {
-			test2['_' + String.fromCharCode(i)] = i;
-		}
-		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
-			return test2[n];
-		});
-		if (order2.join('') !== '0123456789') {
-			return false;
-		}
-
-		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
-		var test3 = {};
-		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
-			test3[letter] = letter;
-		});
-		if (Object.keys(Object.assign({}, test3)).join('') !==
-				'abcdefghijklmnopqrst') {
-			return false;
-		}
-
-		return true;
-	} catch (err) {
-		// We don't expect any of the above to throw, but better to be safe.
-		return false;
-	}
-}
-
-module.exports = shouldUseNative() ? Object.assign : function (target, source) {
-	var from;
-	var to = toObject(target);
-	var symbols;
-
-	for (var s = 1; s < arguments.length; s++) {
-		from = Object(arguments[s]);
-
-		for (var key in from) {
-			if (hasOwnProperty.call(from, key)) {
-				to[key] = from[key];
-			}
-		}
-
-		if (getOwnPropertySymbols) {
-			symbols = getOwnPropertySymbols(from);
-			for (var i = 0; i < symbols.length; i++) {
-				if (propIsEnumerable.call(from, symbols[i])) {
-					to[symbols[i]] = from[symbols[i]];
-				}
-			}
-		}
-	}
-
-	return to;
-};
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-
-
-if (true) {
-  var invariant = __webpack_require__(2);
-  var warning = __webpack_require__(3);
-  var ReactPropTypesSecret = __webpack_require__(4);
-  var loggedTypeFailures = {};
-}
-
-/**
- * Assert that the values match with the type specs.
- * Error messages are memorized and will only be shown once.
- *
- * @param {object} typeSpecs Map of name to a ReactPropType
- * @param {object} values Runtime values that need to be type-checked
- * @param {string} location e.g. "prop", "context", "child context"
- * @param {string} componentName Name of the component for error messages.
- * @param {?Function} getStack Returns the component stack.
- * @private
- */
-function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
-  if (true) {
-    for (var typeSpecName in typeSpecs) {
-      if (typeSpecs.hasOwnProperty(typeSpecName)) {
-        var error;
-        // Prop type validation may throw. In case they do, we don't want to
-        // fail the render phase where it didn't fail before. So we log it.
-        // After these have been cleaned up, we'll let them throw.
-        try {
-          // This is intentionally an invariant that gets caught. It's the same
-          // behavior as without this statement except with a better message.
-          invariant(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'the `prop-types` package, but received `%s`.', componentName || 'React class', location, typeSpecName, typeof typeSpecs[typeSpecName]);
-          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
-        } catch (ex) {
-          error = ex;
-        }
-        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error);
-        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
-          // Only monitor this failure once because there tends to be a lot of the
-          // same error.
-          loggedTypeFailures[error.message] = true;
-
-          var stack = getStack ? getStack() : '';
-
-          warning(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
-        }
-      }
-    }
-  }
-}
-
-module.exports = checkPropTypes;
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var staticMatch = __webpack_require__(13).match;
-var dynamicMatch = typeof window !== 'undefined' ? window.matchMedia : null;
-
-// our fake MediaQueryList
-function Mql(query, values){
-  var self = this;
-  if(dynamicMatch){
-    var mql = dynamicMatch.call(window, query);
-    this.matches = mql.matches;
-    this.media = mql.media;
-    // TODO: is there a time it makes sense to remove this listener?
-    mql.addListener(update);
-  } else {
-    this.matches = staticMatch(query, values);
-    this.media = query;
-  }
-
-  this.addListener = addListener;
-  this.removeListener = removeListener;
-  this.dispose = dispose;
-
-  function addListener(listener){
-    if(mql){
-      mql.addListener(listener);
-    }
-  }
-
-  function removeListener(listener){
-    if(mql){
-      mql.removeListener(listener);
-    }
-  }
-
-  // update ourselves!
-  function update(evt){
-    self.matches = evt.matches;
-    self.media = evt.media;
-  }
-
-  function dispose(){
-    if(mql){
-      mql.removeListener(update);
-    }
-  }
-}
-
-function matchMedia(query, values){
-  return new Mql(query, values);
-}
-
-module.exports = matchMedia;
-
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/*
-Copyright (c) 2014, Yahoo! Inc. All rights reserved.
-Copyrights licensed under the New BSD License.
-See the accompanying LICENSE file for terms.
-*/
-
-
-
-exports.match = matchQuery;
-exports.parse = parseQuery;
-
-// -----------------------------------------------------------------------------
-
-var RE_MEDIA_QUERY     = /(?:(only|not)?\s*([^\s\(\)]+)(?:\s*and)?\s*)?(.+)?/i,
-    RE_MQ_EXPRESSION   = /\(\s*([^\s\:\)]+)\s*(?:\:\s*([^\s\)]+))?\s*\)/,
-    RE_MQ_FEATURE      = /^(?:(min|max)-)?(.+)/,
-    RE_LENGTH_UNIT     = /(em|rem|px|cm|mm|in|pt|pc)?$/,
-    RE_RESOLUTION_UNIT = /(dpi|dpcm|dppx)?$/;
-
-function matchQuery(mediaQuery, values) {
-    return parseQuery(mediaQuery).some(function (query) {
-        var inverse = query.inverse;
-
-        // Either the parsed or specified `type` is "all", or the types must be
-        // equal for a match.
-        var typeMatch = query.type === 'all' || values.type === query.type;
-
-        // Quit early when `type` doesn't match, but take "not" into account.
-        if ((typeMatch && inverse) || !(typeMatch || inverse)) {
-            return false;
-        }
-
-        var expressionsMatch = query.expressions.every(function (expression) {
-            var feature  = expression.feature,
-                modifier = expression.modifier,
-                expValue = expression.value,
-                value    = values[feature];
-
-            // Missing or falsy values don't match.
-            if (!value) { return false; }
-
-            switch (feature) {
-                case 'orientation':
-                case 'scan':
-                    return value.toLowerCase() === expValue.toLowerCase();
-
-                case 'width':
-                case 'height':
-                case 'device-width':
-                case 'device-height':
-                    expValue = toPx(expValue);
-                    value    = toPx(value);
-                    break;
-
-                case 'resolution':
-                    expValue = toDpi(expValue);
-                    value    = toDpi(value);
-                    break;
-
-                case 'aspect-ratio':
-                case 'device-aspect-ratio':
-                case /* Deprecated */ 'device-pixel-ratio':
-                    expValue = toDecimal(expValue);
-                    value    = toDecimal(value);
-                    break;
-
-                case 'grid':
-                case 'color':
-                case 'color-index':
-                case 'monochrome':
-                    expValue = parseInt(expValue, 10) || 1;
-                    value    = parseInt(value, 10) || 0;
-                    break;
-            }
-
-            switch (modifier) {
-                case 'min': return value >= expValue;
-                case 'max': return value <= expValue;
-                default   : return value === expValue;
-            }
-        });
-
-        return (expressionsMatch && !inverse) || (!expressionsMatch && inverse);
-    });
-}
-
-function parseQuery(mediaQuery) {
-    return mediaQuery.split(',').map(function (query) {
-        query = query.trim();
-
-        var captures    = query.match(RE_MEDIA_QUERY),
-            modifier    = captures[1],
-            type        = captures[2],
-            expressions = captures[3] || '',
-            parsed      = {};
-
-        parsed.inverse = !!modifier && modifier.toLowerCase() === 'not';
-        parsed.type    = type ? type.toLowerCase() : 'all';
-
-        // Split expressions into a list.
-        expressions = expressions.match(/\([^\)]+\)/g) || [];
-
-        parsed.expressions = expressions.map(function (expression) {
-            var captures = expression.match(RE_MQ_EXPRESSION),
-                feature  = captures[1].toLowerCase().match(RE_MQ_FEATURE);
-
-            return {
-                modifier: feature[1],
-                feature : feature[2],
-                value   : captures[2]
-            };
-        });
-
-        return parsed;
-    });
-}
-
-// -- Utilities ----------------------------------------------------------------
-
-function toDecimal(ratio) {
-    var decimal = Number(ratio),
-        numbers;
-
-    if (!decimal) {
-        numbers = ratio.match(/^(\d+)\s*\/\s*(\d+)$/);
-        decimal = numbers[1] / numbers[2];
-    }
-
-    return decimal;
-}
-
-function toDpi(resolution) {
-    var value = parseFloat(resolution),
-        units = String(resolution).match(RE_RESOLUTION_UNIT)[1];
-
-    switch (units) {
-        case 'dpcm': return value / 2.54;
-        case 'dppx': return value * 96;
-        default    : return value;
-    }
-}
-
-function toPx(length) {
-    var value = parseFloat(length),
-        units = String(length).match(RE_LENGTH_UNIT)[1];
-
-    switch (units) {
-        case 'em' : return value * 16;
-        case 'rem': return value * 16;
-        case 'cm' : return value * 96 / 2.54;
-        case 'mm' : return value * 96 / 2.54 / 10;
-        case 'in' : return value * 96;
-        case 'pt' : return value * 72;
-        case 'pc' : return value * 72 / 12;
-        default   : return value;
-    }
-}
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (obj) {
-  var rules = [];
-  Object.keys(_mediaQuery2.default.all).forEach(function (k) {
-    var v = obj[k];
-    if (v != null) {
-      rules.push(keyVal(k, v));
-    }
-  });
-  return join(rules);
-};
-
-var _hyphenateStyleName = __webpack_require__(5);
-
-var _hyphenateStyleName2 = _interopRequireDefault(_hyphenateStyleName);
-
-var _mediaQuery = __webpack_require__(6);
-
-var _mediaQuery2 = _interopRequireDefault(_mediaQuery);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var negate = function negate(cond) {
-  return 'not ' + cond;
-};
-
-function keyVal(k, v) {
-  var realKey = (0, _hyphenateStyleName2.default)(k);
-
-  // px shorthand
-  if (typeof v === 'number') {
-    v = v + 'px';
-  }
-  if (v === true) {
-    return k;
-  }
-  if (v === false) {
-    return negate(k);
-  }
-  return '(' + realKey + ': ' + v + ')';
-}
-
-function join(conds) {
-  return conds.join(' and ');
-}
-
-module.exports = exports['default'];
-
-/***/ })
-/******/ ]);
-});
-//# sourceMappingURL=react-responsive.js.map
-
-/***/ }),
-/* 131 */
-/***/ (function(module, exports) {
-
-/* (ignored) */
-
-/***/ }),
-/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -57345,10 +52401,4903 @@ function addLooseExports(parse, Parser$$1, plugins$$1) {
 
 
 /***/ }),
-/* 133 */
+/* 112 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _classnames = __webpack_require__(13);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _reactIntl = __webpack_require__(16);
+
+var _reactResponsive = __webpack_require__(133);
+
+var _reactResponsive2 = _interopRequireDefault(_reactResponsive);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _paperCanvas = __webpack_require__(134);
+
+var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
+
+var _group = __webpack_require__(20);
+
+var _order = __webpack_require__(78);
+
+var _box = __webpack_require__(79);
+
+var _box2 = _interopRequireDefault(_box);
+
+var _button = __webpack_require__(45);
+
+var _button2 = _interopRequireDefault(_button);
+
+var _buttonGroup = __webpack_require__(179);
+
+var _buttonGroup2 = _interopRequireDefault(_buttonGroup);
+
+var _brushMode = __webpack_require__(182);
+
+var _brushMode2 = _interopRequireDefault(_brushMode);
+
+var _bufferedInputHoc = __webpack_require__(188);
+
+var _bufferedInputHoc2 = _interopRequireDefault(_bufferedInputHoc);
+
+var _dropdown = __webpack_require__(189);
+
+var _dropdown2 = _interopRequireDefault(_dropdown);
+
+var _eraserMode = __webpack_require__(207);
+
+var _eraserMode2 = _interopRequireDefault(_eraserMode);
+
+var _fillColorIndicator = __webpack_require__(209);
+
+var _fillColorIndicator2 = _interopRequireDefault(_fillColorIndicator);
+
+var _fillMode = __webpack_require__(227);
+
+var _fillMode2 = _interopRequireDefault(_fillMode);
+
+var _input = __webpack_require__(56);
+
+var _input2 = _interopRequireDefault(_input);
+
+var _inputGroup = __webpack_require__(28);
+
+var _inputGroup2 = _interopRequireDefault(_inputGroup);
+
+var _label = __webpack_require__(54);
+
+var _label2 = _interopRequireDefault(_label);
+
+var _labeledIconButton = __webpack_require__(87);
+
+var _labeledIconButton2 = _interopRequireDefault(_labeledIconButton);
+
+var _lineMode = __webpack_require__(235);
+
+var _lineMode2 = _interopRequireDefault(_lineMode);
+
+var _loupe = __webpack_require__(239);
+
+var _loupe2 = _interopRequireDefault(_loupe);
+
+var _modeTools = __webpack_require__(242);
+
+var _modeTools2 = _interopRequireDefault(_modeTools);
+
+var _ovalMode = __webpack_require__(248);
+
+var _ovalMode2 = _interopRequireDefault(_ovalMode);
+
+var _rectMode = __webpack_require__(254);
+
+var _rectMode2 = _interopRequireDefault(_rectMode);
+
+var _reshapeMode = __webpack_require__(258);
+
+var _reshapeMode2 = _interopRequireDefault(_reshapeMode);
+
+var _selectMode = __webpack_require__(264);
+
+var _selectMode2 = _interopRequireDefault(_selectMode);
+
+var _strokeColorIndicator = __webpack_require__(268);
+
+var _strokeColorIndicator2 = _interopRequireDefault(_strokeColorIndicator);
+
+var _strokeWidthIndicator = __webpack_require__(270);
+
+var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
+
+var _layoutConstants = __webpack_require__(272);
+
+var _layoutConstants2 = _interopRequireDefault(_layoutConstants);
+
+var _paintEditor = __webpack_require__(273);
+
+var _paintEditor2 = _interopRequireDefault(_paintEditor);
+
+var _group2 = __webpack_require__(275);
+
+var _group3 = _interopRequireDefault(_group2);
+
+var _redo = __webpack_require__(276);
+
+var _redo2 = _interopRequireDefault(_redo);
+
+var _sendBack = __webpack_require__(277);
+
+var _sendBack2 = _interopRequireDefault(_sendBack);
+
+var _sendBackward = __webpack_require__(278);
+
+var _sendBackward2 = _interopRequireDefault(_sendBackward);
+
+var _sendForward = __webpack_require__(279);
+
+var _sendForward2 = _interopRequireDefault(_sendForward);
+
+var _sendFront = __webpack_require__(280);
+
+var _sendFront2 = _interopRequireDefault(_sendFront);
+
+var _undo = __webpack_require__(281);
+
+var _undo2 = _interopRequireDefault(_undo);
+
+var _ungroup = __webpack_require__(282);
+
+var _ungroup2 = _interopRequireDefault(_ungroup);
+
+var _zoomIn = __webpack_require__(283);
+
+var _zoomIn2 = _interopRequireDefault(_zoomIn);
+
+var _zoomOut = __webpack_require__(284);
+
+var _zoomOut2 = _interopRequireDefault(_zoomOut);
+
+var _zoomReset = __webpack_require__(285);
+
+var _zoomReset2 = _interopRequireDefault(_zoomReset);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var BufferedInput = (0, _bufferedInputHoc2.default)(_input2.default);
+var messages = (0, _reactIntl.defineMessages)({
+    costume: {
+        'id': 'paint.paintEditor.costume',
+        'defaultMessage': 'Costume'
+    },
+    group: {
+        'id': 'paint.paintEditor.group',
+        'defaultMessage': 'Group'
+    },
+    ungroup: {
+        'id': 'paint.paintEditor.ungroup',
+        'defaultMessage': 'Ungroup'
+    },
+    undo: {
+        'id': 'paint.paintEditor.undo',
+        'defaultMessage': 'Undo'
+    },
+    redo: {
+        'id': 'paint.paintEditor.redo',
+        'defaultMessage': 'Redo'
+    },
+    forward: {
+        'id': 'paint.paintEditor.forward',
+        'defaultMessage': 'Forward'
+    },
+    backward: {
+        'id': 'paint.paintEditor.backward',
+        'defaultMessage': 'Backward'
+    },
+    front: {
+        'id': 'paint.paintEditor.front',
+        'defaultMessage': 'Front'
+    },
+    back: {
+        'id': 'paint.paintEditor.back',
+        'defaultMessage': 'Back'
+    },
+    more: {
+        'id': 'paint.paintEditor.more',
+        'defaultMessage': 'More'
+    }
+});
+
+var PaintEditorComponent = function PaintEditorComponent(props) {
+    var redoDisabled = !props.canRedo();
+    var undoDisabled = !props.canUndo();
+
+    return _react2.default.createElement(
+        'div',
+        { className: _paintEditor2.default.editorContainer },
+        props.canvas !== null ? // eslint-disable-line no-negated-condition
+        _react2.default.createElement(
+            'div',
+            { className: _paintEditor2.default.editorContainerTop },
+            _react2.default.createElement(
+                'div',
+                { className: _paintEditor2.default.row },
+                _react2.default.createElement(
+                    _inputGroup2.default,
+                    null,
+                    _react2.default.createElement(
+                        _reactResponsive2.default,
+                        { minWidth: _layoutConstants2.default.fullSizeEditorMinWidth },
+                        _react2.default.createElement(
+                            _label2.default,
+                            { text: props.intl.formatMessage(messages.costume) },
+                            _react2.default.createElement(BufferedInput, {
+                                type: 'text',
+                                value: props.name,
+                                onSubmit: props.onUpdateName
+                            })
+                        )
+                    ),
+                    _react2.default.createElement(
+                        _reactResponsive2.default,
+                        { maxWidth: _layoutConstants2.default.fullSizeEditorMinWidth - 1 },
+                        _react2.default.createElement(BufferedInput, {
+                            type: 'text',
+                            value: props.name,
+                            onSubmit: props.onUpdateName
+                        })
+                    )
+                ),
+                _react2.default.createElement(
+                    _inputGroup2.default,
+                    null,
+                    _react2.default.createElement(
+                        _buttonGroup2.default,
+                        null,
+                        _react2.default.createElement(
+                            _button2.default,
+                            {
+                                className: (0, _classnames2.default)(_paintEditor2.default.buttonGroupButton, _defineProperty({}, _paintEditor2.default.modNoRightBorder, !redoDisabled)),
+                                disabled: undoDisabled,
+                                onClick: props.onUndo
+                            },
+                            _react2.default.createElement('img', {
+                                alt: props.intl.formatMessage(messages.undo),
+                                className: _paintEditor2.default.buttonGroupButtonIcon,
+                                src: _undo2.default
+                            })
+                        ),
+                        _react2.default.createElement(
+                            _button2.default,
+                            {
+                                className: (0, _classnames2.default)(_paintEditor2.default.buttonGroupButton, _defineProperty({}, _paintEditor2.default.modLeftBorder, !redoDisabled)),
+                                disabled: redoDisabled,
+                                onClick: props.onRedo
+                            },
+                            _react2.default.createElement('img', {
+                                alt: props.intl.formatMessage(messages.redo),
+                                className: _paintEditor2.default.buttonGroupButtonIcon,
+                                src: _redo2.default
+                            })
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _inputGroup2.default,
+                    { className: _paintEditor2.default.modDashedBorder },
+                    _react2.default.createElement(_labeledIconButton2.default, {
+                        disabled: !(0, _group.shouldShowGroup)(),
+                        imgSrc: _group3.default,
+                        title: props.intl.formatMessage(messages.group),
+                        onClick: props.onGroup
+                    }),
+                    _react2.default.createElement(_labeledIconButton2.default, {
+                        disabled: !(0, _group.shouldShowUngroup)(),
+                        imgSrc: _ungroup2.default,
+                        title: props.intl.formatMessage(messages.ungroup),
+                        onClick: props.onUngroup
+                    })
+                ),
+                _react2.default.createElement(
+                    _inputGroup2.default,
+                    { className: _paintEditor2.default.modDashedBorder },
+                    _react2.default.createElement(_labeledIconButton2.default, {
+                        disabled: !(0, _order.shouldShowBringForward)(),
+                        imgSrc: _sendForward2.default,
+                        title: props.intl.formatMessage(messages.forward),
+                        onClick: props.onSendForward
+                    }),
+                    _react2.default.createElement(_labeledIconButton2.default, {
+                        disabled: !(0, _order.shouldShowSendBackward)(),
+                        imgSrc: _sendBackward2.default,
+                        title: props.intl.formatMessage(messages.backward),
+                        onClick: props.onSendBackward
+                    })
+                ),
+                _react2.default.createElement(
+                    _reactResponsive2.default,
+                    { minWidth: _layoutConstants2.default.fullSizeEditorMinWidth },
+                    _react2.default.createElement(
+                        'div',
+                        { className: _paintEditor2.default.row },
+                        _react2.default.createElement(
+                            _inputGroup2.default,
+                            null,
+                            _react2.default.createElement(_labeledIconButton2.default, {
+                                disabled: !(0, _order.shouldShowBringForward)(),
+                                imgSrc: _sendFront2.default,
+                                title: props.intl.formatMessage(messages.front),
+                                onClick: props.onSendToFront
+                            }),
+                            _react2.default.createElement(_labeledIconButton2.default, {
+                                disabled: !(0, _order.shouldShowSendBackward)(),
+                                imgSrc: _sendBack2.default,
+                                title: props.intl.formatMessage(messages.back),
+                                onClick: props.onSendToBack
+                            })
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    _reactResponsive2.default,
+                    { maxWidth: _layoutConstants2.default.fullSizeEditorMinWidth - 1 },
+                    _react2.default.createElement(
+                        _inputGroup2.default,
+                        null,
+                        _react2.default.createElement(
+                            _dropdown2.default,
+                            {
+                                className: _paintEditor2.default.modUnselect,
+                                enterExitTransitionDurationMs: 0,
+                                popoverContent: _react2.default.createElement(
+                                    _inputGroup2.default,
+                                    { className: _paintEditor2.default.modContextMenu },
+                                    _react2.default.createElement(
+                                        _button2.default,
+                                        {
+                                            className: (0, _classnames2.default)(_paintEditor2.default.modMenuItem, _defineProperty({}, _paintEditor2.default.modDisabled, !(0, _order.shouldShowBringForward)())),
+                                            disabled: !(0, _order.shouldShowBringForward)(),
+                                            onClick: props.onSendToFront
+                                        },
+                                        _react2.default.createElement('img', {
+                                            className: _paintEditor2.default.menuItemIcon,
+                                            src: _sendFront2.default
+                                        }),
+                                        _react2.default.createElement(
+                                            'span',
+                                            null,
+                                            props.intl.formatMessage(messages.front)
+                                        )
+                                    ),
+                                    _react2.default.createElement(
+                                        _button2.default,
+                                        {
+                                            className: (0, _classnames2.default)(_paintEditor2.default.modMenuItem, _defineProperty({}, _paintEditor2.default.modDisabled, !(0, _order.shouldShowSendBackward)())),
+                                            disabled: !(0, _order.shouldShowSendBackward)(),
+                                            onClick: props.onSendToBack
+                                        },
+                                        _react2.default.createElement('img', {
+                                            className: _paintEditor2.default.menuItemIcon,
+                                            src: _sendBack2.default
+                                        }),
+                                        _react2.default.createElement(
+                                            'span',
+                                            null,
+                                            props.intl.formatMessage(messages.back)
+                                        )
+                                    )
+                                ),
+                                tipSize: .01
+                            },
+                            props.intl.formatMessage(messages.more)
+                        )
+                    )
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: _paintEditor2.default.row },
+                _react2.default.createElement(
+                    _inputGroup2.default,
+                    {
+                        className: (0, _classnames2.default)(_paintEditor2.default.row, _paintEditor2.default.modDashedBorder, _paintEditor2.default.modLabeledIconHeight)
+                    },
+                    _react2.default.createElement(_fillColorIndicator2.default, {
+                        onUpdateSvg: props.onUpdateSvg
+                    }),
+                    _react2.default.createElement(_strokeColorIndicator2.default, {
+                        onUpdateSvg: props.onUpdateSvg
+                    }),
+                    _react2.default.createElement(_strokeWidthIndicator2.default, {
+                        onUpdateSvg: props.onUpdateSvg
+                    })
+                ),
+                _react2.default.createElement(
+                    _inputGroup2.default,
+                    { className: _paintEditor2.default.modModeTools },
+                    _react2.default.createElement(_modeTools2.default, {
+                        onUpdateSvg: props.onUpdateSvg
+                    })
+                )
+            )
+        ) : null,
+        _react2.default.createElement(
+            'div',
+            { className: _paintEditor2.default.topAlignRow },
+            props.canvas !== null ? // eslint-disable-line no-negated-condition
+            _react2.default.createElement(
+                'div',
+                { className: _paintEditor2.default.modeSelector },
+                _react2.default.createElement(_selectMode2.default, {
+                    onUpdateSvg: props.onUpdateSvg
+                }),
+                _react2.default.createElement(_reshapeMode2.default, {
+                    onUpdateSvg: props.onUpdateSvg
+                }),
+                _react2.default.createElement(_brushMode2.default, {
+                    onUpdateSvg: props.onUpdateSvg
+                }),
+                _react2.default.createElement(_eraserMode2.default, {
+                    onUpdateSvg: props.onUpdateSvg
+                }),
+                _react2.default.createElement(_lineMode2.default, {
+                    onUpdateSvg: props.onUpdateSvg
+                }),
+                _react2.default.createElement(_fillMode2.default, {
+                    onUpdateSvg: props.onUpdateSvg
+                }),
+                _react2.default.createElement(_ovalMode2.default, {
+                    onUpdateSvg: props.onUpdateSvg
+                }),
+                _react2.default.createElement(_rectMode2.default, {
+                    onUpdateSvg: props.onUpdateSvg
+                })
+            ) : null,
+            _react2.default.createElement(
+                'div',
+                {
+                    className: (0, _classnames2.default)(_paintEditor2.default.canvasContainer, _defineProperty({}, _paintEditor2.default.withEyeDropper, props.isEyeDropping))
+                },
+                _react2.default.createElement(_paperCanvas2.default, {
+                    canvasRef: props.setCanvas,
+                    rotationCenterX: props.rotationCenterX,
+                    rotationCenterY: props.rotationCenterY,
+                    svg: props.svg,
+                    svgId: props.svgId,
+                    onUpdateSvg: props.onUpdateSvg
+                }),
+                props.isEyeDropping && props.colorInfo !== null && !props.colorInfo.hideLoupe ? _react2.default.createElement(
+                    _box2.default,
+                    { className: _paintEditor2.default.colorPickerWrapper },
+                    _react2.default.createElement(_loupe2.default, {
+                        colorInfo: props.colorInfo,
+                        pixelRatio: _paper2.default.project.view.pixelRatio
+                    })
+                ) : null,
+                _react2.default.createElement(
+                    _inputGroup2.default,
+                    { className: _paintEditor2.default.zoomControls },
+                    _react2.default.createElement(
+                        _buttonGroup2.default,
+                        null,
+                        _react2.default.createElement(
+                            _button2.default,
+                            {
+                                className: _paintEditor2.default.buttonGroupButton,
+                                onClick: props.onZoomOut
+                            },
+                            _react2.default.createElement('img', {
+                                alt: 'Zoom Out',
+                                className: _paintEditor2.default.buttonGroupButtonIcon,
+                                src: _zoomOut2.default
+                            })
+                        ),
+                        _react2.default.createElement(
+                            _button2.default,
+                            {
+                                className: _paintEditor2.default.buttonGroupButton,
+                                onClick: props.onZoomReset
+                            },
+                            _react2.default.createElement('img', {
+                                alt: 'Zoom Reset',
+                                className: _paintEditor2.default.buttonGroupButtonIcon,
+                                src: _zoomReset2.default
+                            })
+                        ),
+                        _react2.default.createElement(
+                            _button2.default,
+                            {
+                                className: _paintEditor2.default.buttonGroupButton,
+                                onClick: props.onZoomIn
+                            },
+                            _react2.default.createElement('img', {
+                                alt: 'Zoom In',
+                                className: _paintEditor2.default.buttonGroupButtonIcon,
+                                src: _zoomIn2.default
+                            })
+                        )
+                    )
+                )
+            )
+        )
+    );
+};
+
+PaintEditorComponent.propTypes = {
+    canRedo: _propTypes2.default.func.isRequired,
+    canUndo: _propTypes2.default.func.isRequired,
+    canvas: _propTypes2.default.object, // eslint-disable-line react/forbid-prop-types
+    colorInfo: _loupe2.default.propTypes.colorInfo,
+    intl: _reactIntl.intlShape,
+    isEyeDropping: _propTypes2.default.bool,
+    name: _propTypes2.default.string,
+    onGroup: _propTypes2.default.func.isRequired,
+    onRedo: _propTypes2.default.func.isRequired,
+    onSendBackward: _propTypes2.default.func.isRequired,
+    onSendForward: _propTypes2.default.func.isRequired,
+    onSendToBack: _propTypes2.default.func.isRequired,
+    onSendToFront: _propTypes2.default.func.isRequired,
+    onUndo: _propTypes2.default.func.isRequired,
+    onUngroup: _propTypes2.default.func.isRequired,
+    onUpdateName: _propTypes2.default.func.isRequired,
+    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onZoomIn: _propTypes2.default.func.isRequired,
+    onZoomOut: _propTypes2.default.func.isRequired,
+    onZoomReset: _propTypes2.default.func.isRequired,
+    rotationCenterX: _propTypes2.default.number,
+    rotationCenterY: _propTypes2.default.number,
+    setCanvas: _propTypes2.default.func.isRequired,
+    svg: _propTypes2.default.string,
+    svgId: _propTypes2.default.string
+};
+
+exports.default = (0, _reactIntl.injectIntl)(PaintEditorComponent);
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* jslint esnext: true */
+
+
+var src$core$$ = __webpack_require__(116), src$en$$ = __webpack_require__(121);
+
+src$core$$["default"].__addLocaleData(src$en$$["default"]);
+src$core$$["default"].defaultLocale = 'en';
+
+exports["default"] = src$core$$["default"];
+
+//# sourceMappingURL=main.js.map
+
+/***/ }),
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*
+Copyright (c) 2014, Yahoo! Inc. All rights reserved.
+Copyrights licensed under the New BSD License.
+See the accompanying LICENSE file for terms.
+*/
+
+/* jslint esnext: true */
+
+
+var src$utils$$ = __webpack_require__(66), src$es5$$ = __webpack_require__(117), src$compiler$$ = __webpack_require__(118), intl$messageformat$parser$$ = __webpack_require__(119);
+exports["default"] = MessageFormat;
+
+// -- MessageFormat --------------------------------------------------------
+
+function MessageFormat(message, locales, formats) {
+    // Parse string messages into an AST.
+    var ast = typeof message === 'string' ?
+            MessageFormat.__parse(message) : message;
+
+    if (!(ast && ast.type === 'messageFormatPattern')) {
+        throw new TypeError('A message must be provided as a String or AST.');
+    }
+
+    // Creates a new object with the specified `formats` merged with the default
+    // formats.
+    formats = this._mergeFormats(MessageFormat.formats, formats);
+
+    // Defined first because it's used to build the format pattern.
+    src$es5$$.defineProperty(this, '_locale',  {value: this._resolveLocale(locales)});
+
+    // Compile the `ast` to a pattern that is highly optimized for repeated
+    // `format()` invocations. **Note:** This passes the `locales` set provided
+    // to the constructor instead of just the resolved locale.
+    var pluralFn = this._findPluralRuleFunction(this._locale);
+    var pattern  = this._compilePattern(ast, locales, formats, pluralFn);
+
+    // "Bind" `format()` method to `this` so it can be passed by reference like
+    // the other `Intl` APIs.
+    var messageFormat = this;
+    this.format = function (values) {
+      try {
+        return messageFormat._format(pattern, values);
+      } catch (e) {
+        if (e.variableId) {
+          throw new Error(
+            'The intl string context variable \'' + e.variableId + '\'' +
+            ' was not provided to the string \'' + message + '\''
+          );
+        } else {
+          throw e;
+        }
+      }
+    };
+}
+
+// Default format options used as the prototype of the `formats` provided to the
+// constructor. These are used when constructing the internal Intl.NumberFormat
+// and Intl.DateTimeFormat instances.
+src$es5$$.defineProperty(MessageFormat, 'formats', {
+    enumerable: true,
+
+    value: {
+        number: {
+            'currency': {
+                style: 'currency'
+            },
+
+            'percent': {
+                style: 'percent'
+            }
+        },
+
+        date: {
+            'short': {
+                month: 'numeric',
+                day  : 'numeric',
+                year : '2-digit'
+            },
+
+            'medium': {
+                month: 'short',
+                day  : 'numeric',
+                year : 'numeric'
+            },
+
+            'long': {
+                month: 'long',
+                day  : 'numeric',
+                year : 'numeric'
+            },
+
+            'full': {
+                weekday: 'long',
+                month  : 'long',
+                day    : 'numeric',
+                year   : 'numeric'
+            }
+        },
+
+        time: {
+            'short': {
+                hour  : 'numeric',
+                minute: 'numeric'
+            },
+
+            'medium':  {
+                hour  : 'numeric',
+                minute: 'numeric',
+                second: 'numeric'
+            },
+
+            'long': {
+                hour        : 'numeric',
+                minute      : 'numeric',
+                second      : 'numeric',
+                timeZoneName: 'short'
+            },
+
+            'full': {
+                hour        : 'numeric',
+                minute      : 'numeric',
+                second      : 'numeric',
+                timeZoneName: 'short'
+            }
+        }
+    }
+});
+
+// Define internal private properties for dealing with locale data.
+src$es5$$.defineProperty(MessageFormat, '__localeData__', {value: src$es5$$.objCreate(null)});
+src$es5$$.defineProperty(MessageFormat, '__addLocaleData', {value: function (data) {
+    if (!(data && data.locale)) {
+        throw new Error(
+            'Locale data provided to IntlMessageFormat is missing a ' +
+            '`locale` property'
+        );
+    }
+
+    MessageFormat.__localeData__[data.locale.toLowerCase()] = data;
+}});
+
+// Defines `__parse()` static method as an exposed private.
+src$es5$$.defineProperty(MessageFormat, '__parse', {value: intl$messageformat$parser$$["default"].parse});
+
+// Define public `defaultLocale` property which defaults to English, but can be
+// set by the developer.
+src$es5$$.defineProperty(MessageFormat, 'defaultLocale', {
+    enumerable: true,
+    writable  : true,
+    value     : undefined
+});
+
+MessageFormat.prototype.resolvedOptions = function () {
+    // TODO: Provide anything else?
+    return {
+        locale: this._locale
+    };
+};
+
+MessageFormat.prototype._compilePattern = function (ast, locales, formats, pluralFn) {
+    var compiler = new src$compiler$$["default"](locales, formats, pluralFn);
+    return compiler.compile(ast);
+};
+
+MessageFormat.prototype._findPluralRuleFunction = function (locale) {
+    var localeData = MessageFormat.__localeData__;
+    var data       = localeData[locale.toLowerCase()];
+
+    // The locale data is de-duplicated, so we have to traverse the locale's
+    // hierarchy until we find a `pluralRuleFunction` to return.
+    while (data) {
+        if (data.pluralRuleFunction) {
+            return data.pluralRuleFunction;
+        }
+
+        data = data.parentLocale && localeData[data.parentLocale.toLowerCase()];
+    }
+
+    throw new Error(
+        'Locale data added to IntlMessageFormat is missing a ' +
+        '`pluralRuleFunction` for :' + locale
+    );
+};
+
+MessageFormat.prototype._format = function (pattern, values) {
+    var result = '',
+        i, len, part, id, value, err;
+
+    for (i = 0, len = pattern.length; i < len; i += 1) {
+        part = pattern[i];
+
+        // Exist early for string parts.
+        if (typeof part === 'string') {
+            result += part;
+            continue;
+        }
+
+        id = part.id;
+
+        // Enforce that all required values are provided by the caller.
+        if (!(values && src$utils$$.hop.call(values, id))) {
+          err = new Error('A value must be provided for: ' + id);
+          err.variableId = id;
+          throw err;
+        }
+
+        value = values[id];
+
+        // Recursively format plural and select parts' option — which can be a
+        // nested pattern structure. The choosing of the option to use is
+        // abstracted-by and delegated-to the part helper object.
+        if (part.options) {
+            result += this._format(part.getOption(value), values);
+        } else {
+            result += part.format(value);
+        }
+    }
+
+    return result;
+};
+
+MessageFormat.prototype._mergeFormats = function (defaults, formats) {
+    var mergedFormats = {},
+        type, mergedType;
+
+    for (type in defaults) {
+        if (!src$utils$$.hop.call(defaults, type)) { continue; }
+
+        mergedFormats[type] = mergedType = src$es5$$.objCreate(defaults[type]);
+
+        if (formats && src$utils$$.hop.call(formats, type)) {
+            src$utils$$.extend(mergedType, formats[type]);
+        }
+    }
+
+    return mergedFormats;
+};
+
+MessageFormat.prototype._resolveLocale = function (locales) {
+    if (typeof locales === 'string') {
+        locales = [locales];
+    }
+
+    // Create a copy of the array so we can push on the default locale.
+    locales = (locales || []).concat(MessageFormat.defaultLocale);
+
+    var localeData = MessageFormat.__localeData__;
+    var i, len, localeParts, data;
+
+    // Using the set of locales + the default locale, we look for the first one
+    // which that has been registered. When data does not exist for a locale, we
+    // traverse its ancestors to find something that's been registered within
+    // its hierarchy of locales. Since we lack the proper `parentLocale` data
+    // here, we must take a naive approach to traversal.
+    for (i = 0, len = locales.length; i < len; i += 1) {
+        localeParts = locales[i].toLowerCase().split('-');
+
+        while (localeParts.length) {
+            data = localeData[localeParts.join('-')];
+            if (data) {
+                // Return the normalized locale string; e.g., we return "en-US",
+                // instead of "en-us".
+                return data.locale;
+            }
+
+            localeParts.pop();
+        }
+    }
+
+    var defaultLocale = locales.pop();
+    throw new Error(
+        'No locale data has been added to IntlMessageFormat for: ' +
+        locales.join(', ') + ', or the default locale: ' + defaultLocale
+    );
+};
+
+//# sourceMappingURL=core.js.map
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*
+Copyright (c) 2014, Yahoo! Inc. All rights reserved.
+Copyrights licensed under the New BSD License.
+See the accompanying LICENSE file for terms.
+*/
+
+/* jslint esnext: true */
+
+
+var src$utils$$ = __webpack_require__(66);
+
+// Purposely using the same implementation as the Intl.js `Intl` polyfill.
+// Copyright 2013 Andy Earnshaw, MIT License
+
+var realDefineProp = (function () {
+    try { return !!Object.defineProperty({}, 'a', {}); }
+    catch (e) { return false; }
+})();
+
+var es3 = !realDefineProp && !Object.prototype.__defineGetter__;
+
+var defineProperty = realDefineProp ? Object.defineProperty :
+        function (obj, name, desc) {
+
+    if ('get' in desc && obj.__defineGetter__) {
+        obj.__defineGetter__(name, desc.get);
+    } else if (!src$utils$$.hop.call(obj, name) || 'value' in desc) {
+        obj[name] = desc.value;
+    }
+};
+
+var objCreate = Object.create || function (proto, props) {
+    var obj, k;
+
+    function F() {}
+    F.prototype = proto;
+    obj = new F();
+
+    for (k in props) {
+        if (src$utils$$.hop.call(props, k)) {
+            defineProperty(obj, k, props[k]);
+        }
+    }
+
+    return obj;
+};
+
+exports.defineProperty = defineProperty, exports.objCreate = objCreate;
+
+//# sourceMappingURL=es5.js.map
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*
+Copyright (c) 2014, Yahoo! Inc. All rights reserved.
+Copyrights licensed under the New BSD License.
+See the accompanying LICENSE file for terms.
+*/
+
+/* jslint esnext: true */
+
+
+exports["default"] = Compiler;
+
+function Compiler(locales, formats, pluralFn) {
+    this.locales  = locales;
+    this.formats  = formats;
+    this.pluralFn = pluralFn;
+}
+
+Compiler.prototype.compile = function (ast) {
+    this.pluralStack        = [];
+    this.currentPlural      = null;
+    this.pluralNumberFormat = null;
+
+    return this.compileMessage(ast);
+};
+
+Compiler.prototype.compileMessage = function (ast) {
+    if (!(ast && ast.type === 'messageFormatPattern')) {
+        throw new Error('Message AST is not of type: "messageFormatPattern"');
+    }
+
+    var elements = ast.elements,
+        pattern  = [];
+
+    var i, len, element;
+
+    for (i = 0, len = elements.length; i < len; i += 1) {
+        element = elements[i];
+
+        switch (element.type) {
+            case 'messageTextElement':
+                pattern.push(this.compileMessageText(element));
+                break;
+
+            case 'argumentElement':
+                pattern.push(this.compileArgument(element));
+                break;
+
+            default:
+                throw new Error('Message element does not have a valid type');
+        }
+    }
+
+    return pattern;
+};
+
+Compiler.prototype.compileMessageText = function (element) {
+    // When this `element` is part of plural sub-pattern and its value contains
+    // an unescaped '#', use a `PluralOffsetString` helper to properly output
+    // the number with the correct offset in the string.
+    if (this.currentPlural && /(^|[^\\])#/g.test(element.value)) {
+        // Create a cache a NumberFormat instance that can be reused for any
+        // PluralOffsetString instance in this message.
+        if (!this.pluralNumberFormat) {
+            this.pluralNumberFormat = new Intl.NumberFormat(this.locales);
+        }
+
+        return new PluralOffsetString(
+                this.currentPlural.id,
+                this.currentPlural.format.offset,
+                this.pluralNumberFormat,
+                element.value);
+    }
+
+    // Unescape the escaped '#'s in the message text.
+    return element.value.replace(/\\#/g, '#');
+};
+
+Compiler.prototype.compileArgument = function (element) {
+    var format = element.format;
+
+    if (!format) {
+        return new StringFormat(element.id);
+    }
+
+    var formats  = this.formats,
+        locales  = this.locales,
+        pluralFn = this.pluralFn,
+        options;
+
+    switch (format.type) {
+        case 'numberFormat':
+            options = formats.number[format.style];
+            return {
+                id    : element.id,
+                format: new Intl.NumberFormat(locales, options).format
+            };
+
+        case 'dateFormat':
+            options = formats.date[format.style];
+            return {
+                id    : element.id,
+                format: new Intl.DateTimeFormat(locales, options).format
+            };
+
+        case 'timeFormat':
+            options = formats.time[format.style];
+            return {
+                id    : element.id,
+                format: new Intl.DateTimeFormat(locales, options).format
+            };
+
+        case 'pluralFormat':
+            options = this.compileOptions(element);
+            return new PluralFormat(
+                element.id, format.ordinal, format.offset, options, pluralFn
+            );
+
+        case 'selectFormat':
+            options = this.compileOptions(element);
+            return new SelectFormat(element.id, options);
+
+        default:
+            throw new Error('Message element does not have a valid format type');
+    }
+};
+
+Compiler.prototype.compileOptions = function (element) {
+    var format      = element.format,
+        options     = format.options,
+        optionsHash = {};
+
+    // Save the current plural element, if any, then set it to a new value when
+    // compiling the options sub-patterns. This conforms the spec's algorithm
+    // for handling `"#"` syntax in message text.
+    this.pluralStack.push(this.currentPlural);
+    this.currentPlural = format.type === 'pluralFormat' ? element : null;
+
+    var i, len, option;
+
+    for (i = 0, len = options.length; i < len; i += 1) {
+        option = options[i];
+
+        // Compile the sub-pattern and save it under the options's selector.
+        optionsHash[option.selector] = this.compileMessage(option.value);
+    }
+
+    // Pop the plural stack to put back the original current plural value.
+    this.currentPlural = this.pluralStack.pop();
+
+    return optionsHash;
+};
+
+// -- Compiler Helper Classes --------------------------------------------------
+
+function StringFormat(id) {
+    this.id = id;
+}
+
+StringFormat.prototype.format = function (value) {
+    if (!value && typeof value !== 'number') {
+        return '';
+    }
+
+    return typeof value === 'string' ? value : String(value);
+};
+
+function PluralFormat(id, useOrdinal, offset, options, pluralFn) {
+    this.id         = id;
+    this.useOrdinal = useOrdinal;
+    this.offset     = offset;
+    this.options    = options;
+    this.pluralFn   = pluralFn;
+}
+
+PluralFormat.prototype.getOption = function (value) {
+    var options = this.options;
+
+    var option = options['=' + value] ||
+            options[this.pluralFn(value - this.offset, this.useOrdinal)];
+
+    return option || options.other;
+};
+
+function PluralOffsetString(id, offset, numberFormat, string) {
+    this.id           = id;
+    this.offset       = offset;
+    this.numberFormat = numberFormat;
+    this.string       = string;
+}
+
+PluralOffsetString.prototype.format = function (value) {
+    var number = this.numberFormat.format(value - this.offset);
+
+    return this.string
+            .replace(/(^|[^\\])#/g, '$1' + number)
+            .replace(/\\#/g, '#');
+};
+
+function SelectFormat(id, options) {
+    this.id      = id;
+    this.options = options;
+}
+
+SelectFormat.prototype.getOption = function (value) {
+    var options = this.options;
+    return options[value] || options.other;
+};
+
+//# sourceMappingURL=compiler.js.map
+
+/***/ }),
+/* 119 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports = module.exports = __webpack_require__(120)['default'];
+exports['default'] = exports;
+
+
+/***/ }),
+/* 120 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports["default"] = (function() {
+  "use strict";
+
+  /*
+   * Generated by PEG.js 0.9.0.
+   *
+   * http://pegjs.org/
+   */
+
+  function peg$subclass(child, parent) {
+    function ctor() { this.constructor = child; }
+    ctor.prototype = parent.prototype;
+    child.prototype = new ctor();
+  }
+
+  function peg$SyntaxError(message, expected, found, location) {
+    this.message  = message;
+    this.expected = expected;
+    this.found    = found;
+    this.location = location;
+    this.name     = "SyntaxError";
+
+    if (typeof Error.captureStackTrace === "function") {
+      Error.captureStackTrace(this, peg$SyntaxError);
+    }
+  }
+
+  peg$subclass(peg$SyntaxError, Error);
+
+  function peg$parse(input) {
+    var options = arguments.length > 1 ? arguments[1] : {},
+        parser  = this,
+
+        peg$FAILED = {},
+
+        peg$startRuleFunctions = { start: peg$parsestart },
+        peg$startRuleFunction  = peg$parsestart,
+
+        peg$c0 = function(elements) {
+                return {
+                    type    : 'messageFormatPattern',
+                    elements: elements,
+                    location: location()
+                };
+            },
+        peg$c1 = function(text) {
+                var string = '',
+                    i, j, outerLen, inner, innerLen;
+
+                for (i = 0, outerLen = text.length; i < outerLen; i += 1) {
+                    inner = text[i];
+
+                    for (j = 0, innerLen = inner.length; j < innerLen; j += 1) {
+                        string += inner[j];
+                    }
+                }
+
+                return string;
+            },
+        peg$c2 = function(messageText) {
+                return {
+                    type : 'messageTextElement',
+                    value: messageText,
+                    location: location()
+                };
+            },
+        peg$c3 = /^[^ \t\n\r,.+={}#]/,
+        peg$c4 = { type: "class", value: "[^ \\t\\n\\r,.+={}#]", description: "[^ \\t\\n\\r,.+={}#]" },
+        peg$c5 = "{",
+        peg$c6 = { type: "literal", value: "{", description: "\"{\"" },
+        peg$c7 = ",",
+        peg$c8 = { type: "literal", value: ",", description: "\",\"" },
+        peg$c9 = "}",
+        peg$c10 = { type: "literal", value: "}", description: "\"}\"" },
+        peg$c11 = function(id, format) {
+                return {
+                    type  : 'argumentElement',
+                    id    : id,
+                    format: format && format[2],
+                    location: location()
+                };
+            },
+        peg$c12 = "number",
+        peg$c13 = { type: "literal", value: "number", description: "\"number\"" },
+        peg$c14 = "date",
+        peg$c15 = { type: "literal", value: "date", description: "\"date\"" },
+        peg$c16 = "time",
+        peg$c17 = { type: "literal", value: "time", description: "\"time\"" },
+        peg$c18 = function(type, style) {
+                return {
+                    type : type + 'Format',
+                    style: style && style[2],
+                    location: location()
+                };
+            },
+        peg$c19 = "plural",
+        peg$c20 = { type: "literal", value: "plural", description: "\"plural\"" },
+        peg$c21 = function(pluralStyle) {
+                return {
+                    type   : pluralStyle.type,
+                    ordinal: false,
+                    offset : pluralStyle.offset || 0,
+                    options: pluralStyle.options,
+                    location: location()
+                };
+            },
+        peg$c22 = "selectordinal",
+        peg$c23 = { type: "literal", value: "selectordinal", description: "\"selectordinal\"" },
+        peg$c24 = function(pluralStyle) {
+                return {
+                    type   : pluralStyle.type,
+                    ordinal: true,
+                    offset : pluralStyle.offset || 0,
+                    options: pluralStyle.options,
+                    location: location()
+                }
+            },
+        peg$c25 = "select",
+        peg$c26 = { type: "literal", value: "select", description: "\"select\"" },
+        peg$c27 = function(options) {
+                return {
+                    type   : 'selectFormat',
+                    options: options,
+                    location: location()
+                };
+            },
+        peg$c28 = "=",
+        peg$c29 = { type: "literal", value: "=", description: "\"=\"" },
+        peg$c30 = function(selector, pattern) {
+                return {
+                    type    : 'optionalFormatPattern',
+                    selector: selector,
+                    value   : pattern,
+                    location: location()
+                };
+            },
+        peg$c31 = "offset:",
+        peg$c32 = { type: "literal", value: "offset:", description: "\"offset:\"" },
+        peg$c33 = function(number) {
+                return number;
+            },
+        peg$c34 = function(offset, options) {
+                return {
+                    type   : 'pluralFormat',
+                    offset : offset,
+                    options: options,
+                    location: location()
+                };
+            },
+        peg$c35 = { type: "other", description: "whitespace" },
+        peg$c36 = /^[ \t\n\r]/,
+        peg$c37 = { type: "class", value: "[ \\t\\n\\r]", description: "[ \\t\\n\\r]" },
+        peg$c38 = { type: "other", description: "optionalWhitespace" },
+        peg$c39 = /^[0-9]/,
+        peg$c40 = { type: "class", value: "[0-9]", description: "[0-9]" },
+        peg$c41 = /^[0-9a-f]/i,
+        peg$c42 = { type: "class", value: "[0-9a-f]i", description: "[0-9a-f]i" },
+        peg$c43 = "0",
+        peg$c44 = { type: "literal", value: "0", description: "\"0\"" },
+        peg$c45 = /^[1-9]/,
+        peg$c46 = { type: "class", value: "[1-9]", description: "[1-9]" },
+        peg$c47 = function(digits) {
+            return parseInt(digits, 10);
+        },
+        peg$c48 = /^[^{}\\\0-\x1F \t\n\r]/,
+        peg$c49 = { type: "class", value: "[^{}\\\\\\0-\\x1F\\x7f \\t\\n\\r]", description: "[^{}\\\\\\0-\\x1F\\x7f \\t\\n\\r]" },
+        peg$c50 = "\\\\",
+        peg$c51 = { type: "literal", value: "\\\\", description: "\"\\\\\\\\\"" },
+        peg$c52 = function() { return '\\'; },
+        peg$c53 = "\\#",
+        peg$c54 = { type: "literal", value: "\\#", description: "\"\\\\#\"" },
+        peg$c55 = function() { return '\\#'; },
+        peg$c56 = "\\{",
+        peg$c57 = { type: "literal", value: "\\{", description: "\"\\\\{\"" },
+        peg$c58 = function() { return '\u007B'; },
+        peg$c59 = "\\}",
+        peg$c60 = { type: "literal", value: "\\}", description: "\"\\\\}\"" },
+        peg$c61 = function() { return '\u007D'; },
+        peg$c62 = "\\u",
+        peg$c63 = { type: "literal", value: "\\u", description: "\"\\\\u\"" },
+        peg$c64 = function(digits) {
+                return String.fromCharCode(parseInt(digits, 16));
+            },
+        peg$c65 = function(chars) { return chars.join(''); },
+
+        peg$currPos          = 0,
+        peg$savedPos         = 0,
+        peg$posDetailsCache  = [{ line: 1, column: 1, seenCR: false }],
+        peg$maxFailPos       = 0,
+        peg$maxFailExpected  = [],
+        peg$silentFails      = 0,
+
+        peg$result;
+
+    if ("startRule" in options) {
+      if (!(options.startRule in peg$startRuleFunctions)) {
+        throw new Error("Can't start parsing from rule \"" + options.startRule + "\".");
+      }
+
+      peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
+    }
+
+    function text() {
+      return input.substring(peg$savedPos, peg$currPos);
+    }
+
+    function location() {
+      return peg$computeLocation(peg$savedPos, peg$currPos);
+    }
+
+    function expected(description) {
+      throw peg$buildException(
+        null,
+        [{ type: "other", description: description }],
+        input.substring(peg$savedPos, peg$currPos),
+        peg$computeLocation(peg$savedPos, peg$currPos)
+      );
+    }
+
+    function error(message) {
+      throw peg$buildException(
+        message,
+        null,
+        input.substring(peg$savedPos, peg$currPos),
+        peg$computeLocation(peg$savedPos, peg$currPos)
+      );
+    }
+
+    function peg$computePosDetails(pos) {
+      var details = peg$posDetailsCache[pos],
+          p, ch;
+
+      if (details) {
+        return details;
+      } else {
+        p = pos - 1;
+        while (!peg$posDetailsCache[p]) {
+          p--;
+        }
+
+        details = peg$posDetailsCache[p];
+        details = {
+          line:   details.line,
+          column: details.column,
+          seenCR: details.seenCR
+        };
+
+        while (p < pos) {
+          ch = input.charAt(p);
+          if (ch === "\n") {
+            if (!details.seenCR) { details.line++; }
+            details.column = 1;
+            details.seenCR = false;
+          } else if (ch === "\r" || ch === "\u2028" || ch === "\u2029") {
+            details.line++;
+            details.column = 1;
+            details.seenCR = true;
+          } else {
+            details.column++;
+            details.seenCR = false;
+          }
+
+          p++;
+        }
+
+        peg$posDetailsCache[pos] = details;
+        return details;
+      }
+    }
+
+    function peg$computeLocation(startPos, endPos) {
+      var startPosDetails = peg$computePosDetails(startPos),
+          endPosDetails   = peg$computePosDetails(endPos);
+
+      return {
+        start: {
+          offset: startPos,
+          line:   startPosDetails.line,
+          column: startPosDetails.column
+        },
+        end: {
+          offset: endPos,
+          line:   endPosDetails.line,
+          column: endPosDetails.column
+        }
+      };
+    }
+
+    function peg$fail(expected) {
+      if (peg$currPos < peg$maxFailPos) { return; }
+
+      if (peg$currPos > peg$maxFailPos) {
+        peg$maxFailPos = peg$currPos;
+        peg$maxFailExpected = [];
+      }
+
+      peg$maxFailExpected.push(expected);
+    }
+
+    function peg$buildException(message, expected, found, location) {
+      function cleanupExpected(expected) {
+        var i = 1;
+
+        expected.sort(function(a, b) {
+          if (a.description < b.description) {
+            return -1;
+          } else if (a.description > b.description) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
+        while (i < expected.length) {
+          if (expected[i - 1] === expected[i]) {
+            expected.splice(i, 1);
+          } else {
+            i++;
+          }
+        }
+      }
+
+      function buildMessage(expected, found) {
+        function stringEscape(s) {
+          function hex(ch) { return ch.charCodeAt(0).toString(16).toUpperCase(); }
+
+          return s
+            .replace(/\\/g,   '\\\\')
+            .replace(/"/g,    '\\"')
+            .replace(/\x08/g, '\\b')
+            .replace(/\t/g,   '\\t')
+            .replace(/\n/g,   '\\n')
+            .replace(/\f/g,   '\\f')
+            .replace(/\r/g,   '\\r')
+            .replace(/[\x00-\x07\x0B\x0E\x0F]/g, function(ch) { return '\\x0' + hex(ch); })
+            .replace(/[\x10-\x1F\x80-\xFF]/g,    function(ch) { return '\\x'  + hex(ch); })
+            .replace(/[\u0100-\u0FFF]/g,         function(ch) { return '\\u0' + hex(ch); })
+            .replace(/[\u1000-\uFFFF]/g,         function(ch) { return '\\u'  + hex(ch); });
+        }
+
+        var expectedDescs = new Array(expected.length),
+            expectedDesc, foundDesc, i;
+
+        for (i = 0; i < expected.length; i++) {
+          expectedDescs[i] = expected[i].description;
+        }
+
+        expectedDesc = expected.length > 1
+          ? expectedDescs.slice(0, -1).join(", ")
+              + " or "
+              + expectedDescs[expected.length - 1]
+          : expectedDescs[0];
+
+        foundDesc = found ? "\"" + stringEscape(found) + "\"" : "end of input";
+
+        return "Expected " + expectedDesc + " but " + foundDesc + " found.";
+      }
+
+      if (expected !== null) {
+        cleanupExpected(expected);
+      }
+
+      return new peg$SyntaxError(
+        message !== null ? message : buildMessage(expected, found),
+        expected,
+        found,
+        location
+      );
+    }
+
+    function peg$parsestart() {
+      var s0;
+
+      s0 = peg$parsemessageFormatPattern();
+
+      return s0;
+    }
+
+    function peg$parsemessageFormatPattern() {
+      var s0, s1, s2;
+
+      s0 = peg$currPos;
+      s1 = [];
+      s2 = peg$parsemessageFormatElement();
+      while (s2 !== peg$FAILED) {
+        s1.push(s2);
+        s2 = peg$parsemessageFormatElement();
+      }
+      if (s1 !== peg$FAILED) {
+        peg$savedPos = s0;
+        s1 = peg$c0(s1);
+      }
+      s0 = s1;
+
+      return s0;
+    }
+
+    function peg$parsemessageFormatElement() {
+      var s0;
+
+      s0 = peg$parsemessageTextElement();
+      if (s0 === peg$FAILED) {
+        s0 = peg$parseargumentElement();
+      }
+
+      return s0;
+    }
+
+    function peg$parsemessageText() {
+      var s0, s1, s2, s3, s4, s5;
+
+      s0 = peg$currPos;
+      s1 = [];
+      s2 = peg$currPos;
+      s3 = peg$parse_();
+      if (s3 !== peg$FAILED) {
+        s4 = peg$parsechars();
+        if (s4 !== peg$FAILED) {
+          s5 = peg$parse_();
+          if (s5 !== peg$FAILED) {
+            s3 = [s3, s4, s5];
+            s2 = s3;
+          } else {
+            peg$currPos = s2;
+            s2 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s2;
+          s2 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s2;
+        s2 = peg$FAILED;
+      }
+      if (s2 !== peg$FAILED) {
+        while (s2 !== peg$FAILED) {
+          s1.push(s2);
+          s2 = peg$currPos;
+          s3 = peg$parse_();
+          if (s3 !== peg$FAILED) {
+            s4 = peg$parsechars();
+            if (s4 !== peg$FAILED) {
+              s5 = peg$parse_();
+              if (s5 !== peg$FAILED) {
+                s3 = [s3, s4, s5];
+                s2 = s3;
+              } else {
+                peg$currPos = s2;
+                s2 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s2;
+              s2 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s2;
+            s2 = peg$FAILED;
+          }
+        }
+      } else {
+        s1 = peg$FAILED;
+      }
+      if (s1 !== peg$FAILED) {
+        peg$savedPos = s0;
+        s1 = peg$c1(s1);
+      }
+      s0 = s1;
+      if (s0 === peg$FAILED) {
+        s0 = peg$currPos;
+        s1 = peg$parsews();
+        if (s1 !== peg$FAILED) {
+          s0 = input.substring(s0, peg$currPos);
+        } else {
+          s0 = s1;
+        }
+      }
+
+      return s0;
+    }
+
+    function peg$parsemessageTextElement() {
+      var s0, s1;
+
+      s0 = peg$currPos;
+      s1 = peg$parsemessageText();
+      if (s1 !== peg$FAILED) {
+        peg$savedPos = s0;
+        s1 = peg$c2(s1);
+      }
+      s0 = s1;
+
+      return s0;
+    }
+
+    function peg$parseargument() {
+      var s0, s1, s2;
+
+      s0 = peg$parsenumber();
+      if (s0 === peg$FAILED) {
+        s0 = peg$currPos;
+        s1 = [];
+        if (peg$c3.test(input.charAt(peg$currPos))) {
+          s2 = input.charAt(peg$currPos);
+          peg$currPos++;
+        } else {
+          s2 = peg$FAILED;
+          if (peg$silentFails === 0) { peg$fail(peg$c4); }
+        }
+        if (s2 !== peg$FAILED) {
+          while (s2 !== peg$FAILED) {
+            s1.push(s2);
+            if (peg$c3.test(input.charAt(peg$currPos))) {
+              s2 = input.charAt(peg$currPos);
+              peg$currPos++;
+            } else {
+              s2 = peg$FAILED;
+              if (peg$silentFails === 0) { peg$fail(peg$c4); }
+            }
+          }
+        } else {
+          s1 = peg$FAILED;
+        }
+        if (s1 !== peg$FAILED) {
+          s0 = input.substring(s0, peg$currPos);
+        } else {
+          s0 = s1;
+        }
+      }
+
+      return s0;
+    }
+
+    function peg$parseargumentElement() {
+      var s0, s1, s2, s3, s4, s5, s6, s7, s8;
+
+      s0 = peg$currPos;
+      if (input.charCodeAt(peg$currPos) === 123) {
+        s1 = peg$c5;
+        peg$currPos++;
+      } else {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c6); }
+      }
+      if (s1 !== peg$FAILED) {
+        s2 = peg$parse_();
+        if (s2 !== peg$FAILED) {
+          s3 = peg$parseargument();
+          if (s3 !== peg$FAILED) {
+            s4 = peg$parse_();
+            if (s4 !== peg$FAILED) {
+              s5 = peg$currPos;
+              if (input.charCodeAt(peg$currPos) === 44) {
+                s6 = peg$c7;
+                peg$currPos++;
+              } else {
+                s6 = peg$FAILED;
+                if (peg$silentFails === 0) { peg$fail(peg$c8); }
+              }
+              if (s6 !== peg$FAILED) {
+                s7 = peg$parse_();
+                if (s7 !== peg$FAILED) {
+                  s8 = peg$parseelementFormat();
+                  if (s8 !== peg$FAILED) {
+                    s6 = [s6, s7, s8];
+                    s5 = s6;
+                  } else {
+                    peg$currPos = s5;
+                    s5 = peg$FAILED;
+                  }
+                } else {
+                  peg$currPos = s5;
+                  s5 = peg$FAILED;
+                }
+              } else {
+                peg$currPos = s5;
+                s5 = peg$FAILED;
+              }
+              if (s5 === peg$FAILED) {
+                s5 = null;
+              }
+              if (s5 !== peg$FAILED) {
+                s6 = peg$parse_();
+                if (s6 !== peg$FAILED) {
+                  if (input.charCodeAt(peg$currPos) === 125) {
+                    s7 = peg$c9;
+                    peg$currPos++;
+                  } else {
+                    s7 = peg$FAILED;
+                    if (peg$silentFails === 0) { peg$fail(peg$c10); }
+                  }
+                  if (s7 !== peg$FAILED) {
+                    peg$savedPos = s0;
+                    s1 = peg$c11(s3, s5);
+                    s0 = s1;
+                  } else {
+                    peg$currPos = s0;
+                    s0 = peg$FAILED;
+                  }
+                } else {
+                  peg$currPos = s0;
+                  s0 = peg$FAILED;
+                }
+              } else {
+                peg$currPos = s0;
+                s0 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s0;
+              s0 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+
+      return s0;
+    }
+
+    function peg$parseelementFormat() {
+      var s0;
+
+      s0 = peg$parsesimpleFormat();
+      if (s0 === peg$FAILED) {
+        s0 = peg$parsepluralFormat();
+        if (s0 === peg$FAILED) {
+          s0 = peg$parseselectOrdinalFormat();
+          if (s0 === peg$FAILED) {
+            s0 = peg$parseselectFormat();
+          }
+        }
+      }
+
+      return s0;
+    }
+
+    function peg$parsesimpleFormat() {
+      var s0, s1, s2, s3, s4, s5, s6;
+
+      s0 = peg$currPos;
+      if (input.substr(peg$currPos, 6) === peg$c12) {
+        s1 = peg$c12;
+        peg$currPos += 6;
+      } else {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c13); }
+      }
+      if (s1 === peg$FAILED) {
+        if (input.substr(peg$currPos, 4) === peg$c14) {
+          s1 = peg$c14;
+          peg$currPos += 4;
+        } else {
+          s1 = peg$FAILED;
+          if (peg$silentFails === 0) { peg$fail(peg$c15); }
+        }
+        if (s1 === peg$FAILED) {
+          if (input.substr(peg$currPos, 4) === peg$c16) {
+            s1 = peg$c16;
+            peg$currPos += 4;
+          } else {
+            s1 = peg$FAILED;
+            if (peg$silentFails === 0) { peg$fail(peg$c17); }
+          }
+        }
+      }
+      if (s1 !== peg$FAILED) {
+        s2 = peg$parse_();
+        if (s2 !== peg$FAILED) {
+          s3 = peg$currPos;
+          if (input.charCodeAt(peg$currPos) === 44) {
+            s4 = peg$c7;
+            peg$currPos++;
+          } else {
+            s4 = peg$FAILED;
+            if (peg$silentFails === 0) { peg$fail(peg$c8); }
+          }
+          if (s4 !== peg$FAILED) {
+            s5 = peg$parse_();
+            if (s5 !== peg$FAILED) {
+              s6 = peg$parsechars();
+              if (s6 !== peg$FAILED) {
+                s4 = [s4, s5, s6];
+                s3 = s4;
+              } else {
+                peg$currPos = s3;
+                s3 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s3;
+              s3 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s3;
+            s3 = peg$FAILED;
+          }
+          if (s3 === peg$FAILED) {
+            s3 = null;
+          }
+          if (s3 !== peg$FAILED) {
+            peg$savedPos = s0;
+            s1 = peg$c18(s1, s3);
+            s0 = s1;
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+
+      return s0;
+    }
+
+    function peg$parsepluralFormat() {
+      var s0, s1, s2, s3, s4, s5;
+
+      s0 = peg$currPos;
+      if (input.substr(peg$currPos, 6) === peg$c19) {
+        s1 = peg$c19;
+        peg$currPos += 6;
+      } else {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c20); }
+      }
+      if (s1 !== peg$FAILED) {
+        s2 = peg$parse_();
+        if (s2 !== peg$FAILED) {
+          if (input.charCodeAt(peg$currPos) === 44) {
+            s3 = peg$c7;
+            peg$currPos++;
+          } else {
+            s3 = peg$FAILED;
+            if (peg$silentFails === 0) { peg$fail(peg$c8); }
+          }
+          if (s3 !== peg$FAILED) {
+            s4 = peg$parse_();
+            if (s4 !== peg$FAILED) {
+              s5 = peg$parsepluralStyle();
+              if (s5 !== peg$FAILED) {
+                peg$savedPos = s0;
+                s1 = peg$c21(s5);
+                s0 = s1;
+              } else {
+                peg$currPos = s0;
+                s0 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s0;
+              s0 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+
+      return s0;
+    }
+
+    function peg$parseselectOrdinalFormat() {
+      var s0, s1, s2, s3, s4, s5;
+
+      s0 = peg$currPos;
+      if (input.substr(peg$currPos, 13) === peg$c22) {
+        s1 = peg$c22;
+        peg$currPos += 13;
+      } else {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c23); }
+      }
+      if (s1 !== peg$FAILED) {
+        s2 = peg$parse_();
+        if (s2 !== peg$FAILED) {
+          if (input.charCodeAt(peg$currPos) === 44) {
+            s3 = peg$c7;
+            peg$currPos++;
+          } else {
+            s3 = peg$FAILED;
+            if (peg$silentFails === 0) { peg$fail(peg$c8); }
+          }
+          if (s3 !== peg$FAILED) {
+            s4 = peg$parse_();
+            if (s4 !== peg$FAILED) {
+              s5 = peg$parsepluralStyle();
+              if (s5 !== peg$FAILED) {
+                peg$savedPos = s0;
+                s1 = peg$c24(s5);
+                s0 = s1;
+              } else {
+                peg$currPos = s0;
+                s0 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s0;
+              s0 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+
+      return s0;
+    }
+
+    function peg$parseselectFormat() {
+      var s0, s1, s2, s3, s4, s5, s6;
+
+      s0 = peg$currPos;
+      if (input.substr(peg$currPos, 6) === peg$c25) {
+        s1 = peg$c25;
+        peg$currPos += 6;
+      } else {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c26); }
+      }
+      if (s1 !== peg$FAILED) {
+        s2 = peg$parse_();
+        if (s2 !== peg$FAILED) {
+          if (input.charCodeAt(peg$currPos) === 44) {
+            s3 = peg$c7;
+            peg$currPos++;
+          } else {
+            s3 = peg$FAILED;
+            if (peg$silentFails === 0) { peg$fail(peg$c8); }
+          }
+          if (s3 !== peg$FAILED) {
+            s4 = peg$parse_();
+            if (s4 !== peg$FAILED) {
+              s5 = [];
+              s6 = peg$parseoptionalFormatPattern();
+              if (s6 !== peg$FAILED) {
+                while (s6 !== peg$FAILED) {
+                  s5.push(s6);
+                  s6 = peg$parseoptionalFormatPattern();
+                }
+              } else {
+                s5 = peg$FAILED;
+              }
+              if (s5 !== peg$FAILED) {
+                peg$savedPos = s0;
+                s1 = peg$c27(s5);
+                s0 = s1;
+              } else {
+                peg$currPos = s0;
+                s0 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s0;
+              s0 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+
+      return s0;
+    }
+
+    function peg$parseselector() {
+      var s0, s1, s2, s3;
+
+      s0 = peg$currPos;
+      s1 = peg$currPos;
+      if (input.charCodeAt(peg$currPos) === 61) {
+        s2 = peg$c28;
+        peg$currPos++;
+      } else {
+        s2 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c29); }
+      }
+      if (s2 !== peg$FAILED) {
+        s3 = peg$parsenumber();
+        if (s3 !== peg$FAILED) {
+          s2 = [s2, s3];
+          s1 = s2;
+        } else {
+          peg$currPos = s1;
+          s1 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s1;
+        s1 = peg$FAILED;
+      }
+      if (s1 !== peg$FAILED) {
+        s0 = input.substring(s0, peg$currPos);
+      } else {
+        s0 = s1;
+      }
+      if (s0 === peg$FAILED) {
+        s0 = peg$parsechars();
+      }
+
+      return s0;
+    }
+
+    function peg$parseoptionalFormatPattern() {
+      var s0, s1, s2, s3, s4, s5, s6, s7, s8;
+
+      s0 = peg$currPos;
+      s1 = peg$parse_();
+      if (s1 !== peg$FAILED) {
+        s2 = peg$parseselector();
+        if (s2 !== peg$FAILED) {
+          s3 = peg$parse_();
+          if (s3 !== peg$FAILED) {
+            if (input.charCodeAt(peg$currPos) === 123) {
+              s4 = peg$c5;
+              peg$currPos++;
+            } else {
+              s4 = peg$FAILED;
+              if (peg$silentFails === 0) { peg$fail(peg$c6); }
+            }
+            if (s4 !== peg$FAILED) {
+              s5 = peg$parse_();
+              if (s5 !== peg$FAILED) {
+                s6 = peg$parsemessageFormatPattern();
+                if (s6 !== peg$FAILED) {
+                  s7 = peg$parse_();
+                  if (s7 !== peg$FAILED) {
+                    if (input.charCodeAt(peg$currPos) === 125) {
+                      s8 = peg$c9;
+                      peg$currPos++;
+                    } else {
+                      s8 = peg$FAILED;
+                      if (peg$silentFails === 0) { peg$fail(peg$c10); }
+                    }
+                    if (s8 !== peg$FAILED) {
+                      peg$savedPos = s0;
+                      s1 = peg$c30(s2, s6);
+                      s0 = s1;
+                    } else {
+                      peg$currPos = s0;
+                      s0 = peg$FAILED;
+                    }
+                  } else {
+                    peg$currPos = s0;
+                    s0 = peg$FAILED;
+                  }
+                } else {
+                  peg$currPos = s0;
+                  s0 = peg$FAILED;
+                }
+              } else {
+                peg$currPos = s0;
+                s0 = peg$FAILED;
+              }
+            } else {
+              peg$currPos = s0;
+              s0 = peg$FAILED;
+            }
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+
+      return s0;
+    }
+
+    function peg$parseoffset() {
+      var s0, s1, s2, s3;
+
+      s0 = peg$currPos;
+      if (input.substr(peg$currPos, 7) === peg$c31) {
+        s1 = peg$c31;
+        peg$currPos += 7;
+      } else {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c32); }
+      }
+      if (s1 !== peg$FAILED) {
+        s2 = peg$parse_();
+        if (s2 !== peg$FAILED) {
+          s3 = peg$parsenumber();
+          if (s3 !== peg$FAILED) {
+            peg$savedPos = s0;
+            s1 = peg$c33(s3);
+            s0 = s1;
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+
+      return s0;
+    }
+
+    function peg$parsepluralStyle() {
+      var s0, s1, s2, s3, s4;
+
+      s0 = peg$currPos;
+      s1 = peg$parseoffset();
+      if (s1 === peg$FAILED) {
+        s1 = null;
+      }
+      if (s1 !== peg$FAILED) {
+        s2 = peg$parse_();
+        if (s2 !== peg$FAILED) {
+          s3 = [];
+          s4 = peg$parseoptionalFormatPattern();
+          if (s4 !== peg$FAILED) {
+            while (s4 !== peg$FAILED) {
+              s3.push(s4);
+              s4 = peg$parseoptionalFormatPattern();
+            }
+          } else {
+            s3 = peg$FAILED;
+          }
+          if (s3 !== peg$FAILED) {
+            peg$savedPos = s0;
+            s1 = peg$c34(s1, s3);
+            s0 = s1;
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s0;
+          s0 = peg$FAILED;
+        }
+      } else {
+        peg$currPos = s0;
+        s0 = peg$FAILED;
+      }
+
+      return s0;
+    }
+
+    function peg$parsews() {
+      var s0, s1;
+
+      peg$silentFails++;
+      s0 = [];
+      if (peg$c36.test(input.charAt(peg$currPos))) {
+        s1 = input.charAt(peg$currPos);
+        peg$currPos++;
+      } else {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c37); }
+      }
+      if (s1 !== peg$FAILED) {
+        while (s1 !== peg$FAILED) {
+          s0.push(s1);
+          if (peg$c36.test(input.charAt(peg$currPos))) {
+            s1 = input.charAt(peg$currPos);
+            peg$currPos++;
+          } else {
+            s1 = peg$FAILED;
+            if (peg$silentFails === 0) { peg$fail(peg$c37); }
+          }
+        }
+      } else {
+        s0 = peg$FAILED;
+      }
+      peg$silentFails--;
+      if (s0 === peg$FAILED) {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c35); }
+      }
+
+      return s0;
+    }
+
+    function peg$parse_() {
+      var s0, s1, s2;
+
+      peg$silentFails++;
+      s0 = peg$currPos;
+      s1 = [];
+      s2 = peg$parsews();
+      while (s2 !== peg$FAILED) {
+        s1.push(s2);
+        s2 = peg$parsews();
+      }
+      if (s1 !== peg$FAILED) {
+        s0 = input.substring(s0, peg$currPos);
+      } else {
+        s0 = s1;
+      }
+      peg$silentFails--;
+      if (s0 === peg$FAILED) {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c38); }
+      }
+
+      return s0;
+    }
+
+    function peg$parsedigit() {
+      var s0;
+
+      if (peg$c39.test(input.charAt(peg$currPos))) {
+        s0 = input.charAt(peg$currPos);
+        peg$currPos++;
+      } else {
+        s0 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c40); }
+      }
+
+      return s0;
+    }
+
+    function peg$parsehexDigit() {
+      var s0;
+
+      if (peg$c41.test(input.charAt(peg$currPos))) {
+        s0 = input.charAt(peg$currPos);
+        peg$currPos++;
+      } else {
+        s0 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c42); }
+      }
+
+      return s0;
+    }
+
+    function peg$parsenumber() {
+      var s0, s1, s2, s3, s4, s5;
+
+      s0 = peg$currPos;
+      if (input.charCodeAt(peg$currPos) === 48) {
+        s1 = peg$c43;
+        peg$currPos++;
+      } else {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c44); }
+      }
+      if (s1 === peg$FAILED) {
+        s1 = peg$currPos;
+        s2 = peg$currPos;
+        if (peg$c45.test(input.charAt(peg$currPos))) {
+          s3 = input.charAt(peg$currPos);
+          peg$currPos++;
+        } else {
+          s3 = peg$FAILED;
+          if (peg$silentFails === 0) { peg$fail(peg$c46); }
+        }
+        if (s3 !== peg$FAILED) {
+          s4 = [];
+          s5 = peg$parsedigit();
+          while (s5 !== peg$FAILED) {
+            s4.push(s5);
+            s5 = peg$parsedigit();
+          }
+          if (s4 !== peg$FAILED) {
+            s3 = [s3, s4];
+            s2 = s3;
+          } else {
+            peg$currPos = s2;
+            s2 = peg$FAILED;
+          }
+        } else {
+          peg$currPos = s2;
+          s2 = peg$FAILED;
+        }
+        if (s2 !== peg$FAILED) {
+          s1 = input.substring(s1, peg$currPos);
+        } else {
+          s1 = s2;
+        }
+      }
+      if (s1 !== peg$FAILED) {
+        peg$savedPos = s0;
+        s1 = peg$c47(s1);
+      }
+      s0 = s1;
+
+      return s0;
+    }
+
+    function peg$parsechar() {
+      var s0, s1, s2, s3, s4, s5, s6, s7;
+
+      if (peg$c48.test(input.charAt(peg$currPos))) {
+        s0 = input.charAt(peg$currPos);
+        peg$currPos++;
+      } else {
+        s0 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c49); }
+      }
+      if (s0 === peg$FAILED) {
+        s0 = peg$currPos;
+        if (input.substr(peg$currPos, 2) === peg$c50) {
+          s1 = peg$c50;
+          peg$currPos += 2;
+        } else {
+          s1 = peg$FAILED;
+          if (peg$silentFails === 0) { peg$fail(peg$c51); }
+        }
+        if (s1 !== peg$FAILED) {
+          peg$savedPos = s0;
+          s1 = peg$c52();
+        }
+        s0 = s1;
+        if (s0 === peg$FAILED) {
+          s0 = peg$currPos;
+          if (input.substr(peg$currPos, 2) === peg$c53) {
+            s1 = peg$c53;
+            peg$currPos += 2;
+          } else {
+            s1 = peg$FAILED;
+            if (peg$silentFails === 0) { peg$fail(peg$c54); }
+          }
+          if (s1 !== peg$FAILED) {
+            peg$savedPos = s0;
+            s1 = peg$c55();
+          }
+          s0 = s1;
+          if (s0 === peg$FAILED) {
+            s0 = peg$currPos;
+            if (input.substr(peg$currPos, 2) === peg$c56) {
+              s1 = peg$c56;
+              peg$currPos += 2;
+            } else {
+              s1 = peg$FAILED;
+              if (peg$silentFails === 0) { peg$fail(peg$c57); }
+            }
+            if (s1 !== peg$FAILED) {
+              peg$savedPos = s0;
+              s1 = peg$c58();
+            }
+            s0 = s1;
+            if (s0 === peg$FAILED) {
+              s0 = peg$currPos;
+              if (input.substr(peg$currPos, 2) === peg$c59) {
+                s1 = peg$c59;
+                peg$currPos += 2;
+              } else {
+                s1 = peg$FAILED;
+                if (peg$silentFails === 0) { peg$fail(peg$c60); }
+              }
+              if (s1 !== peg$FAILED) {
+                peg$savedPos = s0;
+                s1 = peg$c61();
+              }
+              s0 = s1;
+              if (s0 === peg$FAILED) {
+                s0 = peg$currPos;
+                if (input.substr(peg$currPos, 2) === peg$c62) {
+                  s1 = peg$c62;
+                  peg$currPos += 2;
+                } else {
+                  s1 = peg$FAILED;
+                  if (peg$silentFails === 0) { peg$fail(peg$c63); }
+                }
+                if (s1 !== peg$FAILED) {
+                  s2 = peg$currPos;
+                  s3 = peg$currPos;
+                  s4 = peg$parsehexDigit();
+                  if (s4 !== peg$FAILED) {
+                    s5 = peg$parsehexDigit();
+                    if (s5 !== peg$FAILED) {
+                      s6 = peg$parsehexDigit();
+                      if (s6 !== peg$FAILED) {
+                        s7 = peg$parsehexDigit();
+                        if (s7 !== peg$FAILED) {
+                          s4 = [s4, s5, s6, s7];
+                          s3 = s4;
+                        } else {
+                          peg$currPos = s3;
+                          s3 = peg$FAILED;
+                        }
+                      } else {
+                        peg$currPos = s3;
+                        s3 = peg$FAILED;
+                      }
+                    } else {
+                      peg$currPos = s3;
+                      s3 = peg$FAILED;
+                    }
+                  } else {
+                    peg$currPos = s3;
+                    s3 = peg$FAILED;
+                  }
+                  if (s3 !== peg$FAILED) {
+                    s2 = input.substring(s2, peg$currPos);
+                  } else {
+                    s2 = s3;
+                  }
+                  if (s2 !== peg$FAILED) {
+                    peg$savedPos = s0;
+                    s1 = peg$c64(s2);
+                    s0 = s1;
+                  } else {
+                    peg$currPos = s0;
+                    s0 = peg$FAILED;
+                  }
+                } else {
+                  peg$currPos = s0;
+                  s0 = peg$FAILED;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      return s0;
+    }
+
+    function peg$parsechars() {
+      var s0, s1, s2;
+
+      s0 = peg$currPos;
+      s1 = [];
+      s2 = peg$parsechar();
+      if (s2 !== peg$FAILED) {
+        while (s2 !== peg$FAILED) {
+          s1.push(s2);
+          s2 = peg$parsechar();
+        }
+      } else {
+        s1 = peg$FAILED;
+      }
+      if (s1 !== peg$FAILED) {
+        peg$savedPos = s0;
+        s1 = peg$c65(s1);
+      }
+      s0 = s1;
+
+      return s0;
+    }
+
+    peg$result = peg$startRuleFunction();
+
+    if (peg$result !== peg$FAILED && peg$currPos === input.length) {
+      return peg$result;
+    } else {
+      if (peg$result !== peg$FAILED && peg$currPos < input.length) {
+        peg$fail({ type: "end", description: "end of input" });
+      }
+
+      throw peg$buildException(
+        null,
+        peg$maxFailExpected,
+        peg$maxFailPos < input.length ? input.charAt(peg$maxFailPos) : null,
+        peg$maxFailPos < input.length
+          ? peg$computeLocation(peg$maxFailPos, peg$maxFailPos + 1)
+          : peg$computeLocation(peg$maxFailPos, peg$maxFailPos)
+      );
+    }
+  }
+
+  return {
+    SyntaxError: peg$SyntaxError,
+    parse:       peg$parse
+  };
+})();
+
+//# sourceMappingURL=parser.js.map
+
+/***/ }),
+/* 121 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// GENERATED FILE
+
+exports["default"] = {"locale":"en","pluralRuleFunction":function (n,ord){var s=String(n).split("."),v0=!s[1],t0=Number(s[0])==n,n10=t0&&s[0].slice(-1),n100=t0&&s[0].slice(-2);if(ord)return n10==1&&n100!=11?"one":n10==2&&n100!=12?"two":n10==3&&n100!=13?"few":"other";return n==1&&v0?"one":"other"}};
+
+//# sourceMappingURL=en.js.map
+
+/***/ }),
+/* 122 */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+/* 123 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* jshint node:true */
+
+
+
+var IntlRelativeFormat = __webpack_require__(124)['default'];
+
+// Add all locale data to `IntlRelativeFormat`. This module will be ignored when
+// bundling for the browser with Browserify/Webpack.
+__webpack_require__(129);
+
+// Re-export `IntlRelativeFormat` as the CommonJS default exports with all the
+// locale data registered, and with English set as the default locale. Define
+// the `default` prop for use with other compiled ES6 Modules.
+exports = module.exports = IntlRelativeFormat;
+exports['default'] = exports;
+
+
+/***/ }),
+/* 124 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* jslint esnext: true */
+
+
+var src$core$$ = __webpack_require__(125), src$en$$ = __webpack_require__(128);
+
+src$core$$["default"].__addLocaleData(src$en$$["default"]);
+src$core$$["default"].defaultLocale = 'en';
+
+exports["default"] = src$core$$["default"];
+
+//# sourceMappingURL=main.js.map
+
+/***/ }),
+/* 125 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*
+Copyright (c) 2014, Yahoo! Inc. All rights reserved.
+Copyrights licensed under the New BSD License.
+See the accompanying LICENSE file for terms.
+*/
+
+/* jslint esnext: true */
+
+
+var intl$messageformat$$ = __webpack_require__(65), src$diff$$ = __webpack_require__(126), src$es5$$ = __webpack_require__(127);
+exports["default"] = RelativeFormat;
+
+// -----------------------------------------------------------------------------
+
+var FIELDS = [
+    'second', 'second-short',
+    'minute', 'minute-short',
+    'hour', 'hour-short',
+    'day', 'day-short',
+    'month', 'month-short',
+    'year', 'year-short'
+];
+var STYLES = ['best fit', 'numeric'];
+
+// -- RelativeFormat -----------------------------------------------------------
+
+function RelativeFormat(locales, options) {
+    options = options || {};
+
+    // Make a copy of `locales` if it's an array, so that it doesn't change
+    // since it's used lazily.
+    if (src$es5$$.isArray(locales)) {
+        locales = locales.concat();
+    }
+
+    src$es5$$.defineProperty(this, '_locale', {value: this._resolveLocale(locales)});
+    src$es5$$.defineProperty(this, '_options', {value: {
+        style: this._resolveStyle(options.style),
+        units: this._isValidUnits(options.units) && options.units
+    }});
+
+    src$es5$$.defineProperty(this, '_locales', {value: locales});
+    src$es5$$.defineProperty(this, '_fields', {value: this._findFields(this._locale)});
+    src$es5$$.defineProperty(this, '_messages', {value: src$es5$$.objCreate(null)});
+
+    // "Bind" `format()` method to `this` so it can be passed by reference like
+    // the other `Intl` APIs.
+    var relativeFormat = this;
+    this.format = function format(date, options) {
+        return relativeFormat._format(date, options);
+    };
+}
+
+// Define internal private properties for dealing with locale data.
+src$es5$$.defineProperty(RelativeFormat, '__localeData__', {value: src$es5$$.objCreate(null)});
+src$es5$$.defineProperty(RelativeFormat, '__addLocaleData', {value: function (data) {
+    if (!(data && data.locale)) {
+        throw new Error(
+            'Locale data provided to IntlRelativeFormat is missing a ' +
+            '`locale` property value'
+        );
+    }
+
+    RelativeFormat.__localeData__[data.locale.toLowerCase()] = data;
+
+    // Add data to IntlMessageFormat.
+    intl$messageformat$$["default"].__addLocaleData(data);
+}});
+
+// Define public `defaultLocale` property which can be set by the developer, or
+// it will be set when the first RelativeFormat instance is created by
+// leveraging the resolved locale from `Intl`.
+src$es5$$.defineProperty(RelativeFormat, 'defaultLocale', {
+    enumerable: true,
+    writable  : true,
+    value     : undefined
+});
+
+// Define public `thresholds` property which can be set by the developer, and
+// defaults to relative time thresholds from moment.js.
+src$es5$$.defineProperty(RelativeFormat, 'thresholds', {
+    enumerable: true,
+
+    value: {
+        second: 45, 'second-short': 45,  // seconds to minute
+        minute: 45, 'minute-short': 45, // minutes to hour
+        hour  : 22, 'hour-short': 22, // hours to day
+        day   : 26, 'day-short': 26, // days to month
+        month : 11, 'month-short': 11 // months to year
+    }
+});
+
+RelativeFormat.prototype.resolvedOptions = function () {
+    return {
+        locale: this._locale,
+        style : this._options.style,
+        units : this._options.units
+    };
+};
+
+RelativeFormat.prototype._compileMessage = function (units) {
+    // `this._locales` is the original set of locales the user specified to the
+    // constructor, while `this._locale` is the resolved root locale.
+    var locales        = this._locales;
+    var resolvedLocale = this._locale;
+
+    var field        = this._fields[units];
+    var relativeTime = field.relativeTime;
+    var future       = '';
+    var past         = '';
+    var i;
+
+    for (i in relativeTime.future) {
+        if (relativeTime.future.hasOwnProperty(i)) {
+            future += ' ' + i + ' {' +
+                relativeTime.future[i].replace('{0}', '#') + '}';
+        }
+    }
+
+    for (i in relativeTime.past) {
+        if (relativeTime.past.hasOwnProperty(i)) {
+            past += ' ' + i + ' {' +
+                relativeTime.past[i].replace('{0}', '#') + '}';
+        }
+    }
+
+    var message = '{when, select, future {{0, plural, ' + future + '}}' +
+                                 'past {{0, plural, ' + past + '}}}';
+
+    // Create the synthetic IntlMessageFormat instance using the original
+    // locales value specified by the user when constructing the the parent
+    // IntlRelativeFormat instance.
+    return new intl$messageformat$$["default"](message, locales);
+};
+
+RelativeFormat.prototype._getMessage = function (units) {
+    var messages = this._messages;
+
+    // Create a new synthetic message based on the locale data from CLDR.
+    if (!messages[units]) {
+        messages[units] = this._compileMessage(units);
+    }
+
+    return messages[units];
+};
+
+RelativeFormat.prototype._getRelativeUnits = function (diff, units) {
+    var field = this._fields[units];
+
+    if (field.relative) {
+        return field.relative[diff];
+    }
+};
+
+RelativeFormat.prototype._findFields = function (locale) {
+    var localeData = RelativeFormat.__localeData__;
+    var data       = localeData[locale.toLowerCase()];
+
+    // The locale data is de-duplicated, so we have to traverse the locale's
+    // hierarchy until we find `fields` to return.
+    while (data) {
+        if (data.fields) {
+            return data.fields;
+        }
+
+        data = data.parentLocale && localeData[data.parentLocale.toLowerCase()];
+    }
+
+    throw new Error(
+        'Locale data added to IntlRelativeFormat is missing `fields` for :' +
+        locale
+    );
+};
+
+RelativeFormat.prototype._format = function (date, options) {
+    var now = options && options.now !== undefined ? options.now : src$es5$$.dateNow();
+
+    if (date === undefined) {
+        date = now;
+    }
+
+    // Determine if the `date` and optional `now` values are valid, and throw a
+    // similar error to what `Intl.DateTimeFormat#format()` would throw.
+    if (!isFinite(now)) {
+        throw new RangeError(
+            'The `now` option provided to IntlRelativeFormat#format() is not ' +
+            'in valid range.'
+        );
+    }
+
+    if (!isFinite(date)) {
+        throw new RangeError(
+            'The date value provided to IntlRelativeFormat#format() is not ' +
+            'in valid range.'
+        );
+    }
+
+    var diffReport  = src$diff$$["default"](now, date);
+    var units       = this._options.units || this._selectUnits(diffReport);
+    var diffInUnits = diffReport[units];
+
+    if (this._options.style !== 'numeric') {
+        var relativeUnits = this._getRelativeUnits(diffInUnits, units);
+        if (relativeUnits) {
+            return relativeUnits;
+        }
+    }
+
+    return this._getMessage(units).format({
+        '0' : Math.abs(diffInUnits),
+        when: diffInUnits < 0 ? 'past' : 'future'
+    });
+};
+
+RelativeFormat.prototype._isValidUnits = function (units) {
+    if (!units || src$es5$$.arrIndexOf.call(FIELDS, units) >= 0) {
+        return true;
+    }
+
+    if (typeof units === 'string') {
+        var suggestion = /s$/.test(units) && units.substr(0, units.length - 1);
+        if (suggestion && src$es5$$.arrIndexOf.call(FIELDS, suggestion) >= 0) {
+            throw new Error(
+                '"' + units + '" is not a valid IntlRelativeFormat `units` ' +
+                'value, did you mean: ' + suggestion
+            );
+        }
+    }
+
+    throw new Error(
+        '"' + units + '" is not a valid IntlRelativeFormat `units` value, it ' +
+        'must be one of: "' + FIELDS.join('", "') + '"'
+    );
+};
+
+RelativeFormat.prototype._resolveLocale = function (locales) {
+    if (typeof locales === 'string') {
+        locales = [locales];
+    }
+
+    // Create a copy of the array so we can push on the default locale.
+    locales = (locales || []).concat(RelativeFormat.defaultLocale);
+
+    var localeData = RelativeFormat.__localeData__;
+    var i, len, localeParts, data;
+
+    // Using the set of locales + the default locale, we look for the first one
+    // which that has been registered. When data does not exist for a locale, we
+    // traverse its ancestors to find something that's been registered within
+    // its hierarchy of locales. Since we lack the proper `parentLocale` data
+    // here, we must take a naive approach to traversal.
+    for (i = 0, len = locales.length; i < len; i += 1) {
+        localeParts = locales[i].toLowerCase().split('-');
+
+        while (localeParts.length) {
+            data = localeData[localeParts.join('-')];
+            if (data) {
+                // Return the normalized locale string; e.g., we return "en-US",
+                // instead of "en-us".
+                return data.locale;
+            }
+
+            localeParts.pop();
+        }
+    }
+
+    var defaultLocale = locales.pop();
+    throw new Error(
+        'No locale data has been added to IntlRelativeFormat for: ' +
+        locales.join(', ') + ', or the default locale: ' + defaultLocale
+    );
+};
+
+RelativeFormat.prototype._resolveStyle = function (style) {
+    // Default to "best fit" style.
+    if (!style) {
+        return STYLES[0];
+    }
+
+    if (src$es5$$.arrIndexOf.call(STYLES, style) >= 0) {
+        return style;
+    }
+
+    throw new Error(
+        '"' + style + '" is not a valid IntlRelativeFormat `style` value, it ' +
+        'must be one of: "' + STYLES.join('", "') + '"'
+    );
+};
+
+RelativeFormat.prototype._selectUnits = function (diffReport) {
+    var i, l, units;
+    var fields = FIELDS.filter(function(field) {
+        return field.indexOf('-short') < 1;
+    });
+
+    for (i = 0, l = fields.length; i < l; i += 1) {
+        units = fields[i];
+
+        if (Math.abs(diffReport[units]) < RelativeFormat.thresholds[units]) {
+            break;
+        }
+    }
+
+    return units;
+};
+
+//# sourceMappingURL=core.js.map
+
+/***/ }),
+/* 126 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*
+Copyright (c) 2014, Yahoo! Inc. All rights reserved.
+Copyrights licensed under the New BSD License.
+See the accompanying LICENSE file for terms.
+*/
+
+/* jslint esnext: true */
+
+
+
+var round = Math.round;
+
+function daysToYears(days) {
+    // 400 years have 146097 days (taking into account leap year rules)
+    return days * 400 / 146097;
+}
+
+exports["default"] = function (from, to) {
+    // Convert to ms timestamps.
+    from = +from;
+    to   = +to;
+
+    var millisecond = round(to - from),
+        second      = round(millisecond / 1000),
+        minute      = round(second / 60),
+        hour        = round(minute / 60),
+        day         = round(hour / 24),
+        week        = round(day / 7);
+
+    var rawYears = daysToYears(day),
+        month    = round(rawYears * 12),
+        year     = round(rawYears);
+
+    return {
+        millisecond    : millisecond,
+        second         : second,
+        'second-short' : second,
+        minute         : minute,
+        'minute-short' : minute,
+        hour           : hour,
+        'hour-short'   : hour,
+        day            : day,
+        'day-short'    : day,
+        week           : week,
+        'week-short'   : week,
+        month          : month,
+        'month-short'  : month,
+        year           : year,
+        'year-short'   : year
+    };
+};
+
+//# sourceMappingURL=diff.js.map
+
+/***/ }),
+/* 127 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*
+Copyright (c) 2014, Yahoo! Inc. All rights reserved.
+Copyrights licensed under the New BSD License.
+See the accompanying LICENSE file for terms.
+*/
+
+/* jslint esnext: true */
+
+// Purposely using the same implementation as the Intl.js `Intl` polyfill.
+// Copyright 2013 Andy Earnshaw, MIT License
+
+
+
+var hop = Object.prototype.hasOwnProperty;
+var toString = Object.prototype.toString;
+
+var realDefineProp = (function () {
+    try { return !!Object.defineProperty({}, 'a', {}); }
+    catch (e) { return false; }
+})();
+
+var es3 = !realDefineProp && !Object.prototype.__defineGetter__;
+
+var defineProperty = realDefineProp ? Object.defineProperty :
+        function (obj, name, desc) {
+
+    if ('get' in desc && obj.__defineGetter__) {
+        obj.__defineGetter__(name, desc.get);
+    } else if (!hop.call(obj, name) || 'value' in desc) {
+        obj[name] = desc.value;
+    }
+};
+
+var objCreate = Object.create || function (proto, props) {
+    var obj, k;
+
+    function F() {}
+    F.prototype = proto;
+    obj = new F();
+
+    for (k in props) {
+        if (hop.call(props, k)) {
+            defineProperty(obj, k, props[k]);
+        }
+    }
+
+    return obj;
+};
+
+var arrIndexOf = Array.prototype.indexOf || function (search, fromIndex) {
+    /*jshint validthis:true */
+    var arr = this;
+    if (!arr.length) {
+        return -1;
+    }
+
+    for (var i = fromIndex || 0, max = arr.length; i < max; i++) {
+        if (arr[i] === search) {
+            return i;
+        }
+    }
+
+    return -1;
+};
+
+var isArray = Array.isArray || function (obj) {
+    return toString.call(obj) === '[object Array]';
+};
+
+var dateNow = Date.now || function () {
+    return new Date().getTime();
+};
+
+exports.defineProperty = defineProperty, exports.objCreate = objCreate, exports.arrIndexOf = arrIndexOf, exports.isArray = isArray, exports.dateNow = dateNow;
+
+//# sourceMappingURL=es5.js.map
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// GENERATED FILE
+
+exports["default"] = {"locale":"en","pluralRuleFunction":function (n,ord){var s=String(n).split("."),v0=!s[1],t0=Number(s[0])==n,n10=t0&&s[0].slice(-1),n100=t0&&s[0].slice(-2);if(ord)return n10==1&&n100!=11?"one":n10==2&&n100!=12?"two":n10==3&&n100!=13?"few":"other";return n==1&&v0?"one":"other"},"fields":{"year":{"displayName":"year","relative":{"0":"this year","1":"next year","-1":"last year"},"relativeTime":{"future":{"one":"in {0} year","other":"in {0} years"},"past":{"one":"{0} year ago","other":"{0} years ago"}}},"year-short":{"displayName":"yr.","relative":{"0":"this yr.","1":"next yr.","-1":"last yr."},"relativeTime":{"future":{"one":"in {0} yr.","other":"in {0} yr."},"past":{"one":"{0} yr. ago","other":"{0} yr. ago"}}},"month":{"displayName":"month","relative":{"0":"this month","1":"next month","-1":"last month"},"relativeTime":{"future":{"one":"in {0} month","other":"in {0} months"},"past":{"one":"{0} month ago","other":"{0} months ago"}}},"month-short":{"displayName":"mo.","relative":{"0":"this mo.","1":"next mo.","-1":"last mo."},"relativeTime":{"future":{"one":"in {0} mo.","other":"in {0} mo."},"past":{"one":"{0} mo. ago","other":"{0} mo. ago"}}},"day":{"displayName":"day","relative":{"0":"today","1":"tomorrow","-1":"yesterday"},"relativeTime":{"future":{"one":"in {0} day","other":"in {0} days"},"past":{"one":"{0} day ago","other":"{0} days ago"}}},"day-short":{"displayName":"day","relative":{"0":"today","1":"tomorrow","-1":"yesterday"},"relativeTime":{"future":{"one":"in {0} day","other":"in {0} days"},"past":{"one":"{0} day ago","other":"{0} days ago"}}},"hour":{"displayName":"hour","relative":{"0":"this hour"},"relativeTime":{"future":{"one":"in {0} hour","other":"in {0} hours"},"past":{"one":"{0} hour ago","other":"{0} hours ago"}}},"hour-short":{"displayName":"hr.","relative":{"0":"this hour"},"relativeTime":{"future":{"one":"in {0} hr.","other":"in {0} hr."},"past":{"one":"{0} hr. ago","other":"{0} hr. ago"}}},"minute":{"displayName":"minute","relative":{"0":"this minute"},"relativeTime":{"future":{"one":"in {0} minute","other":"in {0} minutes"},"past":{"one":"{0} minute ago","other":"{0} minutes ago"}}},"minute-short":{"displayName":"min.","relative":{"0":"this minute"},"relativeTime":{"future":{"one":"in {0} min.","other":"in {0} min."},"past":{"one":"{0} min. ago","other":"{0} min. ago"}}},"second":{"displayName":"second","relative":{"0":"now"},"relativeTime":{"future":{"one":"in {0} second","other":"in {0} seconds"},"past":{"one":"{0} second ago","other":"{0} seconds ago"}}},"second-short":{"displayName":"sec.","relative":{"0":"now"},"relativeTime":{"future":{"one":"in {0} sec.","other":"in {0} sec."},"past":{"one":"{0} sec. ago","other":"{0} sec. ago"}}}}};
+
+//# sourceMappingURL=en.js.map
+
+/***/ }),
+/* 129 */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+/* 130 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports = module.exports = __webpack_require__(131)['default'];
+exports['default'] = exports;
+
+
+/***/ }),
+/* 131 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var src$es5$$ = __webpack_require__(132);
+exports["default"] = createFormatCache;
+
+// -----------------------------------------------------------------------------
+
+function createFormatCache(FormatConstructor) {
+    var cache = src$es5$$.objCreate(null);
+
+    return function () {
+        var args    = Array.prototype.slice.call(arguments);
+        var cacheId = getCacheId(args);
+        var format  = cacheId && cache[cacheId];
+
+        if (!format) {
+            format = new (src$es5$$.bind.apply(FormatConstructor, [null].concat(args)))();
+
+            if (cacheId) {
+                cache[cacheId] = format;
+            }
+        }
+
+        return format;
+    };
+}
+
+// -- Utilities ----------------------------------------------------------------
+
+function getCacheId(inputs) {
+    // When JSON is not available in the runtime, we will not create a cache id.
+    if (typeof JSON === 'undefined') { return; }
+
+    var cacheId = [];
+
+    var i, len, input;
+
+    for (i = 0, len = inputs.length; i < len; i += 1) {
+        input = inputs[i];
+
+        if (input && typeof input === 'object') {
+            cacheId.push(orderedProps(input));
+        } else {
+            cacheId.push(input);
+        }
+    }
+
+    return JSON.stringify(cacheId);
+}
+
+function orderedProps(obj) {
+    var props = [],
+        keys  = [];
+
+    var key, i, len, prop;
+
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            keys.push(key);
+        }
+    }
+
+    var orderedKeys = keys.sort();
+
+    for (i = 0, len = orderedKeys.length; i < len; i += 1) {
+        key  = orderedKeys[i];
+        prop = {};
+
+        prop[key] = obj[key];
+        props[i]  = prop;
+    }
+
+    return props;
+}
+
+//# sourceMappingURL=memoizer.js.map
+
+/***/ }),
+/* 132 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/*
+Copyright (c) 2014, Yahoo! Inc. All rights reserved.
+Copyrights licensed under the New BSD License.
+See the accompanying LICENSE file for terms.
+*/
+
+/* jslint esnext: true */
+
+// Function.prototype.bind implementation from Mozilla Developer Network:
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind#Polyfill
+
+var bind = Function.prototype.bind || function (oThis) {
+    if (typeof this !== 'function') {
+      // closest thing possible to the ECMAScript 5
+      // internal IsCallable function
+      throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+    }
+
+    var aArgs   = Array.prototype.slice.call(arguments, 1),
+        fToBind = this,
+        fNOP    = function() {},
+        fBound  = function() {
+          return fToBind.apply(this instanceof fNOP
+                 ? this
+                 : oThis,
+                 aArgs.concat(Array.prototype.slice.call(arguments)));
+        };
+
+    if (this.prototype) {
+      // native functions don't have a prototype
+      fNOP.prototype = this.prototype;
+    }
+    fBound.prototype = new fNOP();
+
+    return fBound;
+};
+
+// Purposely using the same implementation as the Intl.js `Intl` polyfill.
+// Copyright 2013 Andy Earnshaw, MIT License
+
+var hop = Object.prototype.hasOwnProperty;
+
+var realDefineProp = (function () {
+    try { return !!Object.defineProperty({}, 'a', {}); }
+    catch (e) { return false; }
+})();
+
+var es3 = !realDefineProp && !Object.prototype.__defineGetter__;
+
+var defineProperty = realDefineProp ? Object.defineProperty :
+        function (obj, name, desc) {
+
+    if ('get' in desc && obj.__defineGetter__) {
+        obj.__defineGetter__(name, desc.get);
+    } else if (!hop.call(obj, name) || 'value' in desc) {
+        obj[name] = desc.value;
+    }
+};
+
+var objCreate = Object.create || function (proto, props) {
+    var obj, k;
+
+    function F() {}
+    F.prototype = proto;
+    obj = new F();
+
+    for (k in props) {
+        if (hop.call(props, k)) {
+            defineProperty(obj, k, props[k]);
+        }
+    }
+
+    return obj;
+};
+
+exports.bind = bind, exports.defineProperty = defineProperty, exports.objCreate = objCreate;
+
+//# sourceMappingURL=es5.js.map
+
+/***/ }),
+/* 133 */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory(__webpack_require__(0));
+	else if(typeof define === 'function' && define.amd)
+		define(["react"], factory);
+	else if(typeof exports === 'object')
+		exports["MediaQuery"] = factory(require("react"));
+	else
+		root["MediaQuery"] = factory(root["react"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_8__) {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+if (true) {
+  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
+    Symbol.for &&
+    Symbol.for('react.element')) ||
+    0xeac7;
+
+  var isValidElement = function(object) {
+    return typeof object === 'object' &&
+      object !== null &&
+      object.$$typeof === REACT_ELEMENT_TYPE;
+  };
+
+  // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+  var throwOnDirectAccess = true;
+  module.exports = __webpack_require__(9)(isValidElement, throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = require('./factoryWithThrowingShims')();
+}
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * 
+ */
+
+function makeEmptyFunction(arg) {
+  return function () {
+    return arg;
+  };
+}
+
+/**
+ * This function accepts and discards inputs; it has no side effects. This is
+ * primarily useful idiomatically for overridable function endpoints which
+ * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+ */
+var emptyFunction = function emptyFunction() {};
+
+emptyFunction.thatReturns = makeEmptyFunction;
+emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+emptyFunction.thatReturnsThis = function () {
+  return this;
+};
+emptyFunction.thatReturnsArgument = function (arg) {
+  return arg;
+};
+
+module.exports = emptyFunction;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+
+/**
+ * Use invariant() to assert state which your program assumes to be true.
+ *
+ * Provide sprintf-style format (only %s is supported) and arguments
+ * to provide information about what broke and what you were
+ * expecting.
+ *
+ * The invariant message will be stripped in production, but the invariant
+ * will remain to ensure logic does not differ in production.
+ */
+
+var validateFormat = function validateFormat(format) {};
+
+if (true) {
+  validateFormat = function validateFormat(format) {
+    if (format === undefined) {
+      throw new Error('invariant requires an error message argument');
+    }
+  };
+}
+
+function invariant(condition, format, a, b, c, d, e, f) {
+  validateFormat(format);
+
+  if (!condition) {
+    var error;
+    if (format === undefined) {
+      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+    } else {
+      var args = [a, b, c, d, e, f];
+      var argIndex = 0;
+      error = new Error(format.replace(/%s/g, function () {
+        return args[argIndex++];
+      }));
+      error.name = 'Invariant Violation';
+    }
+
+    error.framesToPop = 1; // we don't care about invariant's own frame
+    throw error;
+  }
+}
+
+module.exports = invariant;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ */
+
+
+
+var emptyFunction = __webpack_require__(1);
+
+/**
+ * Similar to invariant but only logs a warning if the condition is not met.
+ * This can be used to log issues in development environments in critical
+ * paths. Removing the logging code for production environments will keep the
+ * same logic and follow the same code paths.
+ */
+
+var warning = emptyFunction;
+
+if (true) {
+  var printWarning = function printWarning(format) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    var argIndex = 0;
+    var message = 'Warning: ' + format.replace(/%s/g, function () {
+      return args[argIndex++];
+    });
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+
+  warning = function warning(condition, format) {
+    if (format === undefined) {
+      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+    }
+
+    if (format.indexOf('Failed Composite propType: ') === 0) {
+      return; // Ignore CompositeComponent proptype check.
+    }
+
+    if (!condition) {
+      for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+        args[_key2 - 2] = arguments[_key2];
+      }
+
+      printWarning.apply(undefined, [format].concat(args));
+    }
+  };
+}
+
+module.exports = warning;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+module.exports = ReactPropTypesSecret;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var uppercasePattern = /[A-Z]/g;
+var msPattern = /^ms-/;
+var cache = {};
+
+function hyphenateStyleName(string) {
+    return string in cache
+    ? cache[string]
+    : cache[string] = string
+      .replace(uppercasePattern, '-$&')
+      .toLowerCase()
+      .replace(msPattern, '-ms-');
+}
+
+module.exports = hyphenateStyleName;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _propTypes = __webpack_require__(0);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var stringOrNumber = _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]);
+
+// properties that match media queries
+var matchers = {
+  orientation: _propTypes2.default.oneOf(['portrait', 'landscape']),
+
+  scan: _propTypes2.default.oneOf(['progressive', 'interlace']),
+
+  aspectRatio: _propTypes2.default.string,
+  deviceAspectRatio: _propTypes2.default.string,
+
+  height: stringOrNumber,
+  deviceHeight: stringOrNumber,
+
+  width: stringOrNumber,
+  deviceWidth: stringOrNumber,
+
+  color: _propTypes2.default.bool,
+
+  colorIndex: _propTypes2.default.bool,
+
+  monochrome: _propTypes2.default.bool,
+  resolution: stringOrNumber
+
+  // media features
+};var features = _extends({
+  minAspectRatio: _propTypes2.default.string,
+  maxAspectRatio: _propTypes2.default.string,
+  minDeviceAspectRatio: _propTypes2.default.string,
+  maxDeviceAspectRatio: _propTypes2.default.string,
+
+  minHeight: stringOrNumber,
+  maxHeight: stringOrNumber,
+  minDeviceHeight: stringOrNumber,
+  maxDeviceHeight: stringOrNumber,
+
+  minWidth: stringOrNumber,
+  maxWidth: stringOrNumber,
+  minDeviceWidth: stringOrNumber,
+  maxDeviceWidth: stringOrNumber,
+
+  minColor: _propTypes2.default.number,
+  maxColor: _propTypes2.default.number,
+
+  minColorIndex: _propTypes2.default.number,
+  maxColorIndex: _propTypes2.default.number,
+
+  minMonochrome: _propTypes2.default.number,
+  maxMonochrome: _propTypes2.default.number,
+
+  minResolution: stringOrNumber,
+  maxResolution: stringOrNumber
+
+}, matchers);
+
+// media types
+var types = {
+  all: _propTypes2.default.bool,
+  grid: _propTypes2.default.bool,
+  aural: _propTypes2.default.bool,
+  braille: _propTypes2.default.bool,
+  handheld: _propTypes2.default.bool,
+  print: _propTypes2.default.bool,
+  projection: _propTypes2.default.bool,
+  screen: _propTypes2.default.bool,
+  tty: _propTypes2.default.bool,
+  tv: _propTypes2.default.bool,
+  embossed: _propTypes2.default.bool
+};
+
+var all = _extends({}, types, features);
+
+// add the type property
+matchers.type = Object.keys(types);
+
+exports.default = {
+  all: all,
+  types: types,
+  matchers: matchers,
+  features: features
+};
+module.exports = exports['default'];
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.toQuery = exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _react = __webpack_require__(8);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(0);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _matchmediaquery = __webpack_require__(12);
+
+var _matchmediaquery2 = _interopRequireDefault(_matchmediaquery);
+
+var _hyphenateStyleName = __webpack_require__(5);
+
+var _hyphenateStyleName2 = _interopRequireDefault(_hyphenateStyleName);
+
+var _mediaQuery = __webpack_require__(6);
+
+var _mediaQuery2 = _interopRequireDefault(_mediaQuery);
+
+var _toQuery = __webpack_require__(14);
+
+var _toQuery2 = _interopRequireDefault(_toQuery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var defaultTypes = {
+  component: _propTypes2.default.node,
+  query: _propTypes2.default.string,
+  values: _propTypes2.default.shape(_mediaQuery2.default.matchers),
+  children: _propTypes2.default.oneOfType([_propTypes2.default.node, _propTypes2.default.func]),
+  onChange: _propTypes2.default.func,
+  onBeforeChange: _propTypes2.default.func
+};
+var mediaKeys = Object.keys(_mediaQuery2.default.all);
+var excludedQueryKeys = Object.keys(defaultTypes);
+var excludedPropKeys = excludedQueryKeys.concat(mediaKeys);
+
+function omit(object, keys) {
+  var newObject = _extends({}, object);
+  keys.forEach(function (key) {
+    return delete newObject[key];
+  });
+  return newObject;
+}
+
+var MediaQuery = function (_React$Component) {
+  _inherits(MediaQuery, _React$Component);
+
+  function MediaQuery() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, MediaQuery);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = MediaQuery.__proto__ || Object.getPrototypeOf(MediaQuery)).call.apply(_ref, [this].concat(args))), _this), _this.state = { matches: false }, _this.updateMatches = function () {
+      if (_this._mql.matches === _this.state.matches) {
+        return;
+      }
+      _this.setState({
+        matches: _this._mql.matches
+      });
+    }, _this.removeMql = function () {
+      if (_this._mql) {
+        _this._mql.removeListener(_this.updateMatches);
+        _this._mql.dispose();
+      }
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(MediaQuery, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.updateQuery(this.props);
+    }
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      this.updateQuery(nextProps);
+    }
+  }, {
+    key: 'updateQuery',
+    value: function updateQuery(props) {
+      var values = void 0;
+      if (props.query) {
+        this.query = props.query;
+      } else {
+        this.query = (0, _toQuery2.default)(omit(props, excludedQueryKeys));
+      }
+
+      if (!this.query) {
+        throw new Error('Invalid or missing MediaQuery!');
+      }
+
+      if (props.values) {
+        values = Object.keys(props.values).reduce(function (result, key) {
+          result[(0, _hyphenateStyleName2.default)(key)] = props.values[key];
+          return result;
+        }, {});
+      }
+
+      this.removeMql();
+
+      this._mql = (0, _matchmediaquery2.default)(this.query, values);
+      this._mql.addListener(this.updateMatches);
+      this.updateMatches();
+    }
+  }, {
+    key: 'componentWillUpdate',
+    value: function componentWillUpdate(_, nextState) {
+      if (this.props.onBeforeChange && this.state.matches !== nextState.matches) {
+        this.props.onBeforeChange(this.state.matches);
+      }
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(_, prevState) {
+      if (this.props.onChange && prevState.matches !== this.state.matches) {
+        this.props.onChange(this.state.matches);
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.removeMql();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      if (typeof this.props.children === 'function') {
+        return this.props.children(this.state.matches);
+      }
+
+      if (this.state.matches === false) {
+        return null;
+      }
+      var props = omit(this.props, excludedPropKeys);
+      var hasMergeProps = Object.keys(props).length > 0;
+      var childrenCount = _react2.default.Children.count(this.props.children);
+      var wrapChildren = this.props.component || childrenCount > 1 || typeof this.props.children === 'string' || Array.isArray(this.props.children) && childrenCount == 1 || this.props.children === undefined;
+      if (wrapChildren) {
+        return _react2.default.createElement(this.props.component || 'div', props, this.props.children);
+      } else if (hasMergeProps) {
+        return _react2.default.cloneElement(this.props.children, props);
+      } else if (childrenCount) {
+        return this.props.children;
+      } else {
+        return null;
+      }
+    }
+  }]);
+
+  return MediaQuery;
+}(_react2.default.Component);
+
+MediaQuery.displayName = 'MediaQuery';
+MediaQuery.defaultProps = {
+  values: {}
+};
+exports.default = MediaQuery;
+exports.toQuery = _toQuery2.default;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+var emptyFunction = __webpack_require__(1);
+var invariant = __webpack_require__(2);
+var warning = __webpack_require__(3);
+var assign = __webpack_require__(10);
+
+var ReactPropTypesSecret = __webpack_require__(4);
+var checkPropTypes = __webpack_require__(11);
+
+module.exports = function(isValidElement, throwOnDirectAccess) {
+  /* global Symbol */
+  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
+
+  /**
+   * Returns the iterator method function contained on the iterable object.
+   *
+   * Be sure to invoke the function with the iterable as context:
+   *
+   *     var iteratorFn = getIteratorFn(myIterable);
+   *     if (iteratorFn) {
+   *       var iterator = iteratorFn.call(myIterable);
+   *       ...
+   *     }
+   *
+   * @param {?object} maybeIterable
+   * @return {?function}
+   */
+  function getIteratorFn(maybeIterable) {
+    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+    if (typeof iteratorFn === 'function') {
+      return iteratorFn;
+    }
+  }
+
+  /**
+   * Collection of methods that allow declaration and validation of props that are
+   * supplied to React components. Example usage:
+   *
+   *   var Props = require('ReactPropTypes');
+   *   var MyArticle = React.createClass({
+   *     propTypes: {
+   *       // An optional string prop named "description".
+   *       description: Props.string,
+   *
+   *       // A required enum prop named "category".
+   *       category: Props.oneOf(['News','Photos']).isRequired,
+   *
+   *       // A prop named "dialog" that requires an instance of Dialog.
+   *       dialog: Props.instanceOf(Dialog).isRequired
+   *     },
+   *     render: function() { ... }
+   *   });
+   *
+   * A more formal specification of how these methods are used:
+   *
+   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
+   *   decl := ReactPropTypes.{type}(.isRequired)?
+   *
+   * Each and every declaration produces a function with the same signature. This
+   * allows the creation of custom validation functions. For example:
+   *
+   *  var MyLink = React.createClass({
+   *    propTypes: {
+   *      // An optional string or URI prop named "href".
+   *      href: function(props, propName, componentName) {
+   *        var propValue = props[propName];
+   *        if (propValue != null && typeof propValue !== 'string' &&
+   *            !(propValue instanceof URI)) {
+   *          return new Error(
+   *            'Expected a string or an URI for ' + propName + ' in ' +
+   *            componentName
+   *          );
+   *        }
+   *      }
+   *    },
+   *    render: function() {...}
+   *  });
+   *
+   * @internal
+   */
+
+  var ANONYMOUS = '<<anonymous>>';
+
+  // Important!
+  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+  var ReactPropTypes = {
+    array: createPrimitiveTypeChecker('array'),
+    bool: createPrimitiveTypeChecker('boolean'),
+    func: createPrimitiveTypeChecker('function'),
+    number: createPrimitiveTypeChecker('number'),
+    object: createPrimitiveTypeChecker('object'),
+    string: createPrimitiveTypeChecker('string'),
+    symbol: createPrimitiveTypeChecker('symbol'),
+
+    any: createAnyTypeChecker(),
+    arrayOf: createArrayOfTypeChecker,
+    element: createElementTypeChecker(),
+    instanceOf: createInstanceTypeChecker,
+    node: createNodeChecker(),
+    objectOf: createObjectOfTypeChecker,
+    oneOf: createEnumTypeChecker,
+    oneOfType: createUnionTypeChecker,
+    shape: createShapeTypeChecker,
+    exact: createStrictShapeTypeChecker,
+  };
+
+  /**
+   * inlined Object.is polyfill to avoid requiring consumers ship their own
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+   */
+  /*eslint-disable no-self-compare*/
+  function is(x, y) {
+    // SameValue algorithm
+    if (x === y) {
+      // Steps 1-5, 7-10
+      // Steps 6.b-6.e: +0 != -0
+      return x !== 0 || 1 / x === 1 / y;
+    } else {
+      // Step 6.a: NaN == NaN
+      return x !== x && y !== y;
+    }
+  }
+  /*eslint-enable no-self-compare*/
+
+  /**
+   * We use an Error-like object for backward compatibility as people may call
+   * PropTypes directly and inspect their output. However, we don't use real
+   * Errors anymore. We don't inspect their stack anyway, and creating them
+   * is prohibitively expensive if they are created too often, such as what
+   * happens in oneOfType() for any type before the one that matched.
+   */
+  function PropTypeError(message) {
+    this.message = message;
+    this.stack = '';
+  }
+  // Make `instanceof Error` still work for returned errors.
+  PropTypeError.prototype = Error.prototype;
+
+  function createChainableTypeChecker(validate) {
+    if (true) {
+      var manualPropTypeCallCache = {};
+      var manualPropTypeWarningCount = 0;
+    }
+    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
+      componentName = componentName || ANONYMOUS;
+      propFullName = propFullName || propName;
+
+      if (secret !== ReactPropTypesSecret) {
+        if (throwOnDirectAccess) {
+          // New behavior only for users of `prop-types` package
+          invariant(
+            false,
+            'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +
+            'Use `PropTypes.checkPropTypes()` to call them. ' +
+            'Read more at http://fb.me/use-check-prop-types'
+          );
+        } else if ("development" !== 'production' && typeof console !== 'undefined') {
+          // Old behavior for people using React.PropTypes
+          var cacheKey = componentName + ':' + propName;
+          if (
+            !manualPropTypeCallCache[cacheKey] &&
+            // Avoid spamming the console because they are often not actionable except for lib authors
+            manualPropTypeWarningCount < 3
+          ) {
+            warning(
+              false,
+              'You are manually calling a React.PropTypes validation ' +
+              'function for the `%s` prop on `%s`. This is deprecated ' +
+              'and will throw in the standalone `prop-types` package. ' +
+              'You may be seeing this warning due to a third-party PropTypes ' +
+              'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.',
+              propFullName,
+              componentName
+            );
+            manualPropTypeCallCache[cacheKey] = true;
+            manualPropTypeWarningCount++;
+          }
+        }
+      }
+      if (props[propName] == null) {
+        if (isRequired) {
+          if (props[propName] === null) {
+            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
+          }
+          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
+        }
+        return null;
+      } else {
+        return validate(props, propName, componentName, location, propFullName);
+      }
+    }
+
+    var chainedCheckType = checkType.bind(null, false);
+    chainedCheckType.isRequired = checkType.bind(null, true);
+
+    return chainedCheckType;
+  }
+
+  function createPrimitiveTypeChecker(expectedType) {
+    function validate(props, propName, componentName, location, propFullName, secret) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== expectedType) {
+        // `propValue` being instance of, say, date/regexp, pass the 'object'
+        // check, but we can offer a more precise error message here rather than
+        // 'of type `object`'.
+        var preciseType = getPreciseType(propValue);
+
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createAnyTypeChecker() {
+    return createChainableTypeChecker(emptyFunction.thatReturnsNull);
+  }
+
+  function createArrayOfTypeChecker(typeChecker) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (typeof typeChecker !== 'function') {
+        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
+      }
+      var propValue = props[propName];
+      if (!Array.isArray(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
+      }
+      for (var i = 0; i < propValue.length; i++) {
+        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
+        if (error instanceof Error) {
+          return error;
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createElementTypeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      if (!isValidElement(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createInstanceTypeChecker(expectedClass) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (!(props[propName] instanceof expectedClass)) {
+        var expectedClassName = expectedClass.name || ANONYMOUS;
+        var actualClassName = getClassName(props[propName]);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createEnumTypeChecker(expectedValues) {
+    if (!Array.isArray(expectedValues)) {
+       true ? warning(false, 'Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
+      return emptyFunction.thatReturnsNull;
+    }
+
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      for (var i = 0; i < expectedValues.length; i++) {
+        if (is(propValue, expectedValues[i])) {
+          return null;
+        }
+      }
+
+      var valuesString = JSON.stringify(expectedValues);
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createObjectOfTypeChecker(typeChecker) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (typeof typeChecker !== 'function') {
+        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
+      }
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
+      }
+      for (var key in propValue) {
+        if (propValue.hasOwnProperty(key)) {
+          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+          if (error instanceof Error) {
+            return error;
+          }
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createUnionTypeChecker(arrayOfTypeCheckers) {
+    if (!Array.isArray(arrayOfTypeCheckers)) {
+       true ? warning(false, 'Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+      return emptyFunction.thatReturnsNull;
+    }
+
+    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+      var checker = arrayOfTypeCheckers[i];
+      if (typeof checker !== 'function') {
+        warning(
+          false,
+          'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
+          'received %s at index %s.',
+          getPostfixForTypeWarning(checker),
+          i
+        );
+        return emptyFunction.thatReturnsNull;
+      }
+    }
+
+    function validate(props, propName, componentName, location, propFullName) {
+      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+        var checker = arrayOfTypeCheckers[i];
+        if (checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret) == null) {
+          return null;
+        }
+      }
+
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`.'));
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createNodeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (!isNode(props[propName])) {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      }
+      for (var key in shapeTypes) {
+        var checker = shapeTypes[key];
+        if (!checker) {
+          continue;
+        }
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+        if (error) {
+          return error;
+        }
+      }
+      return null;
+    }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createStrictShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      }
+      // We need to check all keys in case some are required but missing from
+      // props.
+      var allKeys = assign({}, props[propName], shapeTypes);
+      for (var key in allKeys) {
+        var checker = shapeTypes[key];
+        if (!checker) {
+          return new PropTypeError(
+            'Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' +
+            '\nBad object: ' + JSON.stringify(props[propName], null, '  ') +
+            '\nValid keys: ' +  JSON.stringify(Object.keys(shapeTypes), null, '  ')
+          );
+        }
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+        if (error) {
+          return error;
+        }
+      }
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function isNode(propValue) {
+    switch (typeof propValue) {
+      case 'number':
+      case 'string':
+      case 'undefined':
+        return true;
+      case 'boolean':
+        return !propValue;
+      case 'object':
+        if (Array.isArray(propValue)) {
+          return propValue.every(isNode);
+        }
+        if (propValue === null || isValidElement(propValue)) {
+          return true;
+        }
+
+        var iteratorFn = getIteratorFn(propValue);
+        if (iteratorFn) {
+          var iterator = iteratorFn.call(propValue);
+          var step;
+          if (iteratorFn !== propValue.entries) {
+            while (!(step = iterator.next()).done) {
+              if (!isNode(step.value)) {
+                return false;
+              }
+            }
+          } else {
+            // Iterator will provide entry [k,v] tuples rather than values.
+            while (!(step = iterator.next()).done) {
+              var entry = step.value;
+              if (entry) {
+                if (!isNode(entry[1])) {
+                  return false;
+                }
+              }
+            }
+          }
+        } else {
+          return false;
+        }
+
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  function isSymbol(propType, propValue) {
+    // Native Symbol.
+    if (propType === 'symbol') {
+      return true;
+    }
+
+    // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
+    if (propValue['@@toStringTag'] === 'Symbol') {
+      return true;
+    }
+
+    // Fallback for non-spec compliant Symbols which are polyfilled.
+    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // Equivalent of `typeof` but with special handling for array and regexp.
+  function getPropType(propValue) {
+    var propType = typeof propValue;
+    if (Array.isArray(propValue)) {
+      return 'array';
+    }
+    if (propValue instanceof RegExp) {
+      // Old webkits (at least until Android 4.0) return 'function' rather than
+      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
+      // passes PropTypes.object.
+      return 'object';
+    }
+    if (isSymbol(propType, propValue)) {
+      return 'symbol';
+    }
+    return propType;
+  }
+
+  // This handles more types than `getPropType`. Only used for error messages.
+  // See `createPrimitiveTypeChecker`.
+  function getPreciseType(propValue) {
+    if (typeof propValue === 'undefined' || propValue === null) {
+      return '' + propValue;
+    }
+    var propType = getPropType(propValue);
+    if (propType === 'object') {
+      if (propValue instanceof Date) {
+        return 'date';
+      } else if (propValue instanceof RegExp) {
+        return 'regexp';
+      }
+    }
+    return propType;
+  }
+
+  // Returns a string that is postfixed to a warning about an invalid type.
+  // For example, "undefined" or "of type array"
+  function getPostfixForTypeWarning(value) {
+    var type = getPreciseType(value);
+    switch (type) {
+      case 'array':
+      case 'object':
+        return 'an ' + type;
+      case 'boolean':
+      case 'date':
+      case 'regexp':
+        return 'a ' + type;
+      default:
+        return type;
+    }
+  }
+
+  // Returns class name of the object, if any.
+  function getClassName(propValue) {
+    if (!propValue.constructor || !propValue.constructor.name) {
+      return ANONYMOUS;
+    }
+    return propValue.constructor.name;
+  }
+
+  ReactPropTypes.checkPropTypes = checkPropTypes;
+  ReactPropTypes.PropTypes = ReactPropTypes;
+
+  return ReactPropTypes;
+};
+
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
+
+/* eslint-disable no-unused-vars */
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+function toObject(val) {
+	if (val === null || val === undefined) {
+		throw new TypeError('Object.assign cannot be called with null or undefined');
+	}
+
+	return Object(val);
+}
+
+function shouldUseNative() {
+	try {
+		if (!Object.assign) {
+			return false;
+		}
+
+		// Detect buggy property enumeration order in older V8 versions.
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=4118
+		var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
+		test1[5] = 'de';
+		if (Object.getOwnPropertyNames(test1)[0] === '5') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test2 = {};
+		for (var i = 0; i < 10; i++) {
+			test2['_' + String.fromCharCode(i)] = i;
+		}
+		var order2 = Object.getOwnPropertyNames(test2).map(function (n) {
+			return test2[n];
+		});
+		if (order2.join('') !== '0123456789') {
+			return false;
+		}
+
+		// https://bugs.chromium.org/p/v8/issues/detail?id=3056
+		var test3 = {};
+		'abcdefghijklmnopqrst'.split('').forEach(function (letter) {
+			test3[letter] = letter;
+		});
+		if (Object.keys(Object.assign({}, test3)).join('') !==
+				'abcdefghijklmnopqrst') {
+			return false;
+		}
+
+		return true;
+	} catch (err) {
+		// We don't expect any of the above to throw, but better to be safe.
+		return false;
+	}
+}
+
+module.exports = shouldUseNative() ? Object.assign : function (target, source) {
+	var from;
+	var to = toObject(target);
+	var symbols;
+
+	for (var s = 1; s < arguments.length; s++) {
+		from = Object(arguments[s]);
+
+		for (var key in from) {
+			if (hasOwnProperty.call(from, key)) {
+				to[key] = from[key];
+			}
+		}
+
+		if (getOwnPropertySymbols) {
+			symbols = getOwnPropertySymbols(from);
+			for (var i = 0; i < symbols.length; i++) {
+				if (propIsEnumerable.call(from, symbols[i])) {
+					to[symbols[i]] = from[symbols[i]];
+				}
+			}
+		}
+	}
+
+	return to;
+};
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+if (true) {
+  var invariant = __webpack_require__(2);
+  var warning = __webpack_require__(3);
+  var ReactPropTypesSecret = __webpack_require__(4);
+  var loggedTypeFailures = {};
+}
+
+/**
+ * Assert that the values match with the type specs.
+ * Error messages are memorized and will only be shown once.
+ *
+ * @param {object} typeSpecs Map of name to a ReactPropType
+ * @param {object} values Runtime values that need to be type-checked
+ * @param {string} location e.g. "prop", "context", "child context"
+ * @param {string} componentName Name of the component for error messages.
+ * @param {?Function} getStack Returns the component stack.
+ * @private
+ */
+function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+  if (true) {
+    for (var typeSpecName in typeSpecs) {
+      if (typeSpecs.hasOwnProperty(typeSpecName)) {
+        var error;
+        // Prop type validation may throw. In case they do, we don't want to
+        // fail the render phase where it didn't fail before. So we log it.
+        // After these have been cleaned up, we'll let them throw.
+        try {
+          // This is intentionally an invariant that gets caught. It's the same
+          // behavior as without this statement except with a better message.
+          invariant(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'the `prop-types` package, but received `%s`.', componentName || 'React class', location, typeSpecName, typeof typeSpecs[typeSpecName]);
+          error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+        } catch (ex) {
+          error = ex;
+        }
+        warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error);
+        if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+          // Only monitor this failure once because there tends to be a lot of the
+          // same error.
+          loggedTypeFailures[error.message] = true;
+
+          var stack = getStack ? getStack() : '';
+
+          warning(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
+        }
+      }
+    }
+  }
+}
+
+module.exports = checkPropTypes;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var staticMatch = __webpack_require__(13).match;
+var dynamicMatch = typeof window !== 'undefined' ? window.matchMedia : null;
+
+// our fake MediaQueryList
+function Mql(query, values){
+  var self = this;
+  if(dynamicMatch){
+    var mql = dynamicMatch.call(window, query);
+    this.matches = mql.matches;
+    this.media = mql.media;
+    // TODO: is there a time it makes sense to remove this listener?
+    mql.addListener(update);
+  } else {
+    this.matches = staticMatch(query, values);
+    this.media = query;
+  }
+
+  this.addListener = addListener;
+  this.removeListener = removeListener;
+  this.dispose = dispose;
+
+  function addListener(listener){
+    if(mql){
+      mql.addListener(listener);
+    }
+  }
+
+  function removeListener(listener){
+    if(mql){
+      mql.removeListener(listener);
+    }
+  }
+
+  // update ourselves!
+  function update(evt){
+    self.matches = evt.matches;
+    self.media = evt.media;
+  }
+
+  function dispose(){
+    if(mql){
+      mql.removeListener(update);
+    }
+  }
+}
+
+function matchMedia(query, values){
+  return new Mql(query, values);
+}
+
+module.exports = matchMedia;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/*
+Copyright (c) 2014, Yahoo! Inc. All rights reserved.
+Copyrights licensed under the New BSD License.
+See the accompanying LICENSE file for terms.
+*/
+
+
+
+exports.match = matchQuery;
+exports.parse = parseQuery;
+
+// -----------------------------------------------------------------------------
+
+var RE_MEDIA_QUERY     = /(?:(only|not)?\s*([^\s\(\)]+)(?:\s*and)?\s*)?(.+)?/i,
+    RE_MQ_EXPRESSION   = /\(\s*([^\s\:\)]+)\s*(?:\:\s*([^\s\)]+))?\s*\)/,
+    RE_MQ_FEATURE      = /^(?:(min|max)-)?(.+)/,
+    RE_LENGTH_UNIT     = /(em|rem|px|cm|mm|in|pt|pc)?$/,
+    RE_RESOLUTION_UNIT = /(dpi|dpcm|dppx)?$/;
+
+function matchQuery(mediaQuery, values) {
+    return parseQuery(mediaQuery).some(function (query) {
+        var inverse = query.inverse;
+
+        // Either the parsed or specified `type` is "all", or the types must be
+        // equal for a match.
+        var typeMatch = query.type === 'all' || values.type === query.type;
+
+        // Quit early when `type` doesn't match, but take "not" into account.
+        if ((typeMatch && inverse) || !(typeMatch || inverse)) {
+            return false;
+        }
+
+        var expressionsMatch = query.expressions.every(function (expression) {
+            var feature  = expression.feature,
+                modifier = expression.modifier,
+                expValue = expression.value,
+                value    = values[feature];
+
+            // Missing or falsy values don't match.
+            if (!value) { return false; }
+
+            switch (feature) {
+                case 'orientation':
+                case 'scan':
+                    return value.toLowerCase() === expValue.toLowerCase();
+
+                case 'width':
+                case 'height':
+                case 'device-width':
+                case 'device-height':
+                    expValue = toPx(expValue);
+                    value    = toPx(value);
+                    break;
+
+                case 'resolution':
+                    expValue = toDpi(expValue);
+                    value    = toDpi(value);
+                    break;
+
+                case 'aspect-ratio':
+                case 'device-aspect-ratio':
+                case /* Deprecated */ 'device-pixel-ratio':
+                    expValue = toDecimal(expValue);
+                    value    = toDecimal(value);
+                    break;
+
+                case 'grid':
+                case 'color':
+                case 'color-index':
+                case 'monochrome':
+                    expValue = parseInt(expValue, 10) || 1;
+                    value    = parseInt(value, 10) || 0;
+                    break;
+            }
+
+            switch (modifier) {
+                case 'min': return value >= expValue;
+                case 'max': return value <= expValue;
+                default   : return value === expValue;
+            }
+        });
+
+        return (expressionsMatch && !inverse) || (!expressionsMatch && inverse);
+    });
+}
+
+function parseQuery(mediaQuery) {
+    return mediaQuery.split(',').map(function (query) {
+        query = query.trim();
+
+        var captures    = query.match(RE_MEDIA_QUERY),
+            modifier    = captures[1],
+            type        = captures[2],
+            expressions = captures[3] || '',
+            parsed      = {};
+
+        parsed.inverse = !!modifier && modifier.toLowerCase() === 'not';
+        parsed.type    = type ? type.toLowerCase() : 'all';
+
+        // Split expressions into a list.
+        expressions = expressions.match(/\([^\)]+\)/g) || [];
+
+        parsed.expressions = expressions.map(function (expression) {
+            var captures = expression.match(RE_MQ_EXPRESSION),
+                feature  = captures[1].toLowerCase().match(RE_MQ_FEATURE);
+
+            return {
+                modifier: feature[1],
+                feature : feature[2],
+                value   : captures[2]
+            };
+        });
+
+        return parsed;
+    });
+}
+
+// -- Utilities ----------------------------------------------------------------
+
+function toDecimal(ratio) {
+    var decimal = Number(ratio),
+        numbers;
+
+    if (!decimal) {
+        numbers = ratio.match(/^(\d+)\s*\/\s*(\d+)$/);
+        decimal = numbers[1] / numbers[2];
+    }
+
+    return decimal;
+}
+
+function toDpi(resolution) {
+    var value = parseFloat(resolution),
+        units = String(resolution).match(RE_RESOLUTION_UNIT)[1];
+
+    switch (units) {
+        case 'dpcm': return value / 2.54;
+        case 'dppx': return value * 96;
+        default    : return value;
+    }
+}
+
+function toPx(length) {
+    var value = parseFloat(length),
+        units = String(length).match(RE_LENGTH_UNIT)[1];
+
+    switch (units) {
+        case 'em' : return value * 16;
+        case 'rem': return value * 16;
+        case 'cm' : return value * 96 / 2.54;
+        case 'mm' : return value * 96 / 2.54 / 10;
+        case 'in' : return value * 96;
+        case 'pt' : return value * 72;
+        case 'pc' : return value * 72 / 12;
+        default   : return value;
+    }
+}
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (obj) {
+  var rules = [];
+  Object.keys(_mediaQuery2.default.all).forEach(function (k) {
+    var v = obj[k];
+    if (v != null) {
+      rules.push(keyVal(k, v));
+    }
+  });
+  return join(rules);
+};
+
+var _hyphenateStyleName = __webpack_require__(5);
+
+var _hyphenateStyleName2 = _interopRequireDefault(_hyphenateStyleName);
+
+var _mediaQuery = __webpack_require__(6);
+
+var _mediaQuery2 = _interopRequireDefault(_mediaQuery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var negate = function negate(cond) {
+  return 'not ' + cond;
+};
+
+function keyVal(k, v) {
+  var realKey = (0, _hyphenateStyleName2.default)(k);
+
+  // px shorthand
+  if (typeof v === 'number') {
+    v = v + 'px';
+  }
+  if (v === true) {
+    return k;
+  }
+  if (v === false) {
+    return negate(k);
+  }
+  return '(' + realKey + ': ' + v + ')';
+}
+
+function join(conds) {
+  return conds.join(' and ');
+}
+
+module.exports = exports['default'];
+
+/***/ })
+/******/ ]);
+});
+//# sourceMappingURL=react-responsive.js.map
 
 /***/ }),
 /* 134 */
@@ -57397,7 +57346,7 @@ var _group = __webpack_require__(20);
 
 var _layer = __webpack_require__(21);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _selectedItems = __webpack_require__(9);
 
@@ -57800,7 +57749,7 @@ function createProvider() {
 }
 
 /* harmony default export */ __webpack_exports__["b"] = (createProvider());
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 136 */
@@ -58600,7 +58549,7 @@ function combineReducers(reducers) {
     return hasChanged ? nextState : state;
   };
 }
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 154 */
@@ -58794,7 +58743,7 @@ function whenMergePropsIsOmitted(mergeProps) {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = ([whenMergePropsIsFunction, whenMergePropsIsOmitted]);
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 158 */
@@ -58907,7 +58856,7 @@ function finalPropsSelectorFactory(dispatch, _ref2) {
 
   return selectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, options);
 }
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
 
 /***/ }),
 /* 159 */
@@ -61362,7 +61311,7 @@ var _modes3 = __webpack_require__(14);
 
 var _selectedItems = __webpack_require__(9);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _brushMode2 = __webpack_require__(185);
 
@@ -62842,7 +62791,7 @@ function localstorage() {
   } catch (e) {}
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
 /* 192 */
@@ -66311,7 +66260,7 @@ var _modes3 = __webpack_require__(14);
 
 var _selectedItems = __webpack_require__(9);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _hover = __webpack_require__(27);
 
@@ -66859,7 +66808,7 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _snapping = __webpack_require__(236);
 
@@ -67176,7 +67125,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -67504,6 +67453,149 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactRedux = __webpack_require__(7);
+
+var _lodash = __webpack_require__(5);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _modeTools = __webpack_require__(243);
+
+var _modeTools2 = _interopRequireDefault(_modeTools);
+
+var _selectedItems = __webpack_require__(9);
+
+var _clipboard = __webpack_require__(44);
+
+var _selection = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ModeTools = function (_React$Component) {
+    _inherits(ModeTools, _React$Component);
+
+    function ModeTools(props) {
+        _classCallCheck(this, ModeTools);
+
+        var _this = _possibleConstructorReturn(this, (ModeTools.__proto__ || Object.getPrototypeOf(ModeTools)).call(this, props));
+
+        (0, _lodash2.default)(_this, ['handleCopyToClipboard', 'handlePasteFromClipboard']);
+        return _this;
+    }
+
+    _createClass(ModeTools, [{
+        key: 'handleCopyToClipboard',
+        value: function handleCopyToClipboard() {
+            var selectedItems = (0, _selection.getSelectedRootItems)();
+            if (selectedItems.length > 0) {
+                var clipboardItems = [];
+                for (var i = 0; i < selectedItems.length; i++) {
+                    var jsonItem = selectedItems[i].exportJSON({ asString: false });
+                    clipboardItems.push(jsonItem);
+                }
+                this.props.setClipboardItems(clipboardItems);
+            }
+        }
+    }, {
+        key: 'handlePasteFromClipboard',
+        value: function handlePasteFromClipboard() {
+            (0, _selection.clearSelection)(this.props.clearSelectedItems);
+
+            if (this.props.clipboardItems.length > 0) {
+                for (var i = 0; i < this.props.clipboardItems.length; i++) {
+                    var item = _paper2.default.Base.importJSON(this.props.clipboardItems[i]);
+                    if (item) {
+                        item.selected = true;
+                    }
+                    var placedItem = _paper2.default.project.getActiveLayer().addChild(item);
+                    placedItem.position.x += 10 * this.props.pasteOffset;
+                    placedItem.position.y += 10 * this.props.pasteOffset;
+                }
+                this.props.incrementPasteOffset();
+                this.props.setSelectedItems();
+                _paper2.default.project.view.update();
+                this.props.onUpdateSvg();
+            }
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(_modeTools2.default, {
+                onCopyToClipboard: this.handleCopyToClipboard,
+                onPasteFromClipboard: this.handlePasteFromClipboard
+            });
+        }
+    }]);
+
+    return ModeTools;
+}(_react2.default.Component);
+
+ModeTools.propTypes = {
+    clearSelectedItems: _propTypes2.default.func.isRequired,
+    clipboardItems: _propTypes2.default.arrayOf(_propTypes2.default.array),
+    incrementPasteOffset: _propTypes2.default.func.isRequired,
+    onUpdateSvg: _propTypes2.default.func.isRequired,
+    pasteOffset: _propTypes2.default.number,
+    setClipboardItems: _propTypes2.default.func.isRequired,
+    setSelectedItems: _propTypes2.default.func.isRequired
+};
+
+var mapStateToProps = function mapStateToProps(state) {
+    return {
+        clipboardItems: state.scratchPaint.clipboard.items,
+        pasteOffset: state.scratchPaint.clipboard.pasteOffset
+    };
+};
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+        setClipboardItems: function setClipboardItems(items) {
+            dispatch((0, _clipboard.setClipboardItems)(items));
+        },
+        incrementPasteOffset: function incrementPasteOffset() {
+            dispatch((0, _clipboard.incrementPasteOffset)());
+        },
+        clearSelectedItems: function clearSelectedItems() {
+            dispatch((0, _selectedItems.clearSelectedItems)());
+        },
+        setSelectedItems: function setSelectedItems() {
+            dispatch((0, _selectedItems.setSelectedItems)((0, _selection.getSelectedLeafItems)()));
+        }
+    };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ModeTools);
+
+/***/ }),
+/* 243 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
@@ -67548,15 +67640,15 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _modeTools = __webpack_require__(243);
+var _modeTools = __webpack_require__(244);
 
 var _modeTools2 = _interopRequireDefault(_modeTools);
 
-var _copy = __webpack_require__(245);
+var _copy = __webpack_require__(246);
 
 var _copy2 = _interopRequireDefault(_copy);
 
-var _paste = __webpack_require__(246);
+var _paste = __webpack_require__(247);
 
 var _paste2 = _interopRequireDefault(_paste);
 
@@ -67709,13 +67801,13 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)((0, _reactIntl.injectIntl)(ModeToolsComponent));
 
 /***/ }),
-/* 243 */
+/* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(244);
+var content = __webpack_require__(245);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -67740,7 +67832,7 @@ if(false) {
 }
 
 /***/ }),
-/* 244 */
+/* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(10)(undefined);
@@ -67763,19 +67855,19 @@ exports.locals = {
 };
 
 /***/ }),
-/* 245 */
+/* 246 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ecopy%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='copy'%3E %3Cg transform='translate(3.000000, 2.000000)'%3E %3Cpath d='M2,1.00684547 C2,0.450780073 2.45303631,0 2.99703014,0 L10,0 L10,2.34995317 C10,3.26124887 10.7336617,4 11.6500468,4 L14,4 L14,13.0046024 C14,13.5543453 13.544239,14 12.9975267,14 L3.00247329,14 C2.44882258,14 2,13.5500512 2,12.9931545 L2,1.00684547 Z' id='Rectangle-4' fill='%234C97FF'%3E%3C/path%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='0.5' cy='3.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy' fill='%23575E75' opacity='0.5' cx='0.5' cy='5.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-2' fill='%23575E75' opacity='0.5' cx='0.5' cy='7.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-3' fill='%23575E75' opacity='0.5' cx='0.5' cy='9.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-4' fill='%23575E75' opacity='0.5' cx='0.5' cy='11.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-5' fill='%23575E75' opacity='0.5' cx='0.5' cy='13.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-6' fill='%23575E75' opacity='0.5' cx='0.5' cy='15.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-7' fill='%23575E75' opacity='0.5' cx='2.5' cy='15.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-8' fill='%23575E75' opacity='0.5' cx='4.5' cy='15.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-9' fill='%23575E75' opacity='0.5' cx='6.5' cy='15.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-10' fill='%23575E75' opacity='0.5' cx='8.5' cy='15.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-11' fill='%23575E75' opacity='0.5' cx='10.5' cy='15.5' r='1'%3E%3C/circle%3E %3Cpath d='M11,0 L14,3 L11.9989566,3 C11.4472481,3 11,2.55733967 11,2.00104344 L11,0 Z' id='Rectangle-5' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M9.8115942,9.1884058 L8.6884058,9.1884058 L8.6884058,10.3115942 C8.6884058,10.6859903 8.38647343,11 8,11 C7.61352657,11 7.3115942,10.6859903 7.3115942,10.3115942 L7.3115942,9.1884058 L6.1884058,9.1884058 C5.81400966,9.1884058 5.5,8.88647343 5.5,8.5 C5.5,8.11352657 5.81400966,7.8115942 6.1884058,7.8115942 L7.3115942,7.8115942 L7.3115942,6.6884058 C7.3115942,6.31280193 7.61352657,6 8,6 C8.38647343,6 8.6884058,6.31280193 8.6884058,6.6884058 L8.6884058,7.8115942 L9.8115942,7.8115942 C10.1859903,7.8115942 10.5,8.11352657 10.5,8.5 C10.5,8.88647343 10.1859903,9.1884058 9.8115942,9.1884058 Z' id='Fill-1' stroke='%23FFFFFF' stroke-width='0.25' fill='%23FFFFFF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 246 */
+/* 247 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Epaste%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='paste'%3E %3Cg transform='translate(3.000000, 2.000000)'%3E %3Cpath d='M2,3.00684547 C2,2.45078007 2.45303631,2 2.99703014,2 L10,2 L10,4.34995317 C10,5.26124887 10.7336617,6 11.6500468,6 L14,6 L14,15.0046024 C14,15.5543453 13.544239,16 12.9975267,16 L3.00247329,16 C2.44882258,16 2,15.5500512 2,14.9931545 L2,3.00684547 Z' id='Rectangle-4' fill='%234C97FF'%3E%3C/path%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='0.5' cy='2.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy' fill='%23575E75' opacity='0.5' cx='0.5' cy='4.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-2' fill='%23575E75' opacity='0.5' cx='0.5' cy='6.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-3' fill='%23575E75' opacity='0.5' cx='0.5' cy='8.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-4' fill='%23575E75' opacity='0.5' cx='0.5' cy='10.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-5' fill='%23575E75' opacity='0.5' cx='0.5' cy='12.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-6' fill='%23575E75' opacity='0.5' cx='0.5' cy='0.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-7' fill='%23575E75' opacity='0.5' cx='2.5' cy='0.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-8' fill='%23575E75' opacity='0.5' cx='4.5' cy='0.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-9' fill='%23575E75' opacity='0.5' cx='6.5' cy='0.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-10' fill='%23575E75' opacity='0.5' cx='8.5' cy='0.5' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-11' fill='%23575E75' opacity='0.5' cx='10.5' cy='0.5' r='1'%3E%3C/circle%3E %3Cpath d='M11,2 L14,5 L11.9989566,5 C11.4472481,5 11,4.55733967 11,4.00104344 L11,2 Z' id='Rectangle-5' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M8.34791833,12.8771885 C8.26180668,12.9633001 8.14699113,13.0063559 8.03217559,13.0063559 C7.9030081,13.0063559 7.78819256,12.9633001 7.70208091,12.8771885 L5.86503222,11.0401398 C5.73586474,10.8966203 5.69280891,10.7100451 5.76456862,10.5378218 C5.83632834,10.3655985 5.99419971,10.2651349 6.18077497,10.2651349 L6.92707599,10.2651349 L7.28587456,7.66743321 C7.31457845,7.46650601 7.41504205,7.27993075 7.57291342,7.16511521 C7.73078479,7.03594773 7.94606393,6.97853995 8.13263919,7.00724384 C8.47708582,7.06321642 8.74977273,7.33733852 8.79282856,7.66743321 L9.16597907,10.2651349 L9.86922427,10.2651349 C10.0557995,10.2651349 10.2136709,10.3799504 10.2854306,10.5521737 C10.3571903,10.7100451 10.3141345,10.9109723 10.184967,11.0401398 L8.34791833,12.8771885 Z' id='Fill-1' fill='%23FFFFFF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 247 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67819,13 +67911,13 @@ var _modes3 = __webpack_require__(14);
 
 var _selectedItems = __webpack_require__(9);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
-var _ovalTool = __webpack_require__(248);
+var _ovalTool = __webpack_require__(249);
 
 var _ovalTool2 = _interopRequireDefault(_ovalTool);
 
-var _ovalMode = __webpack_require__(251);
+var _ovalMode = __webpack_require__(252);
 
 var _ovalMode2 = _interopRequireDefault(_ovalMode);
 
@@ -67969,7 +68061,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(OvalMode);
 
 /***/ }),
-/* 248 */
+/* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -67991,7 +68083,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(8);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _boundingBoxTool = __webpack_require__(57);
 
@@ -68160,7 +68252,7 @@ var OvalTool = function (_paper$Tool) {
 exports.default = OvalTool;
 
 /***/ }),
-/* 249 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68176,7 +68268,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68412,7 +68504,7 @@ var ScaleTool = function () {
 exports.default = ScaleTool;
 
 /***/ }),
-/* 250 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68557,7 +68649,7 @@ var RotateTool = function () {
 exports.default = RotateTool;
 
 /***/ }),
-/* 251 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68579,7 +68671,7 @@ var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _oval = __webpack_require__(252);
+var _oval = __webpack_require__(253);
 
 var _oval2 = _interopRequireDefault(_oval);
 
@@ -68606,13 +68698,13 @@ OvalModeComponent.propTypes = {
 exports.default = OvalModeComponent;
 
 /***/ }),
-/* 252 */
+/* 253 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eoval%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='oval' stroke-width='1.5' stroke='%23575E75'%3E %3Ccircle id='oval-icon' cx='10' cy='10' r='5'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 253 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68656,13 +68748,13 @@ var _modes3 = __webpack_require__(14);
 
 var _selectedItems = __webpack_require__(9);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
-var _rectTool = __webpack_require__(254);
+var _rectTool = __webpack_require__(255);
 
 var _rectTool2 = _interopRequireDefault(_rectTool);
 
-var _rectMode = __webpack_require__(255);
+var _rectMode = __webpack_require__(256);
 
 var _rectMode2 = _interopRequireDefault(_rectMode);
 
@@ -68806,7 +68898,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(RectMode);
 
 /***/ }),
-/* 254 */
+/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -68828,7 +68920,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(8);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _boundingBoxTool = __webpack_require__(57);
 
@@ -68991,7 +69083,7 @@ var RectTool = function (_paper$Tool) {
 exports.default = RectTool;
 
 /***/ }),
-/* 255 */
+/* 256 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69013,7 +69105,7 @@ var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _rectangle = __webpack_require__(256);
+var _rectangle = __webpack_require__(257);
 
 var _rectangle2 = _interopRequireDefault(_rectangle);
 
@@ -69040,13 +69132,13 @@ RectModeComponent.propTypes = {
 exports.default = RectModeComponent;
 
 /***/ }),
-/* 256 */
+/* 257 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Erectangle%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E %3Cg id='rectangle' stroke='%23575E75' stroke-width='1.5'%3E %3Crect id='rectangle-icon' x='5' y='5' width='10' height='10'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 257 */
+/* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69082,13 +69174,13 @@ var _hover = __webpack_require__(27);
 
 var _selectedItems = __webpack_require__(9);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
-var _reshapeTool = __webpack_require__(258);
+var _reshapeTool = __webpack_require__(259);
 
 var _reshapeTool2 = _interopRequireDefault(_reshapeTool);
 
-var _reshapeMode = __webpack_require__(261);
+var _reshapeMode = __webpack_require__(262);
 
 var _reshapeMode2 = _interopRequireDefault(_reshapeMode);
 
@@ -69205,7 +69297,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ReshapeMode);
 
 /***/ }),
-/* 258 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69241,11 +69333,11 @@ var _moveTool = __webpack_require__(90);
 
 var _moveTool2 = _interopRequireDefault(_moveTool);
 
-var _pointTool = __webpack_require__(259);
+var _pointTool = __webpack_require__(260);
 
 var _pointTool2 = _interopRequireDefault(_pointTool);
 
-var _handleTool = __webpack_require__(260);
+var _handleTool = __webpack_require__(261);
 
 var _handleTool2 = _interopRequireDefault(_handleTool);
 
@@ -69519,7 +69611,7 @@ var ReshapeTool = function (_paper$Tool) {
 exports.default = ReshapeTool;
 
 /***/ }),
-/* 259 */
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69537,7 +69629,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _math = __webpack_require__(26);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69846,7 +69938,7 @@ var PointTool = function () {
 exports.default = PointTool;
 
 /***/ }),
-/* 260 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69858,7 +69950,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -70044,7 +70136,7 @@ var HandleTool = function () {
 exports.default = HandleTool;
 
 /***/ }),
-/* 261 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70066,7 +70158,7 @@ var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _reshape = __webpack_require__(262);
+var _reshape = __webpack_require__(263);
 
 var _reshape2 = _interopRequireDefault(_reshape);
 
@@ -70093,13 +70185,13 @@ ReshapeModeComponent.propTypes = {
 exports.default = ReshapeModeComponent;
 
 /***/ }),
-/* 262 */
+/* 263 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ereshape%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='reshape'%3E %3Cg id='reshape-icon' transform='translate(3.000000, 2.000000)'%3E %3Cpath d='M6.3718,4e-05 C6.3718,1.20298846 6.03840639,2.32811001 5.45898306,3.28804076 C5.31876362,3.52034235 4.30079812,3.15107034 3.82818604,3.61859131 C3.35557395,4.08611228 3.47873759,5.34529147 3.26181884,5.47482181 C2.30759304,6.04462589 1.19191205,6.37204 -0.0002,6.37204' id='Stroke-1' stroke='%23575E75' stroke-width='0.75'%3E%3C/path%3E %3Cpath d='M4,6.94999094 C2.85887984,6.71835578 2,5.70947896 2,4.5 C2,3.11928813 3.11928813,2 4.5,2 C5.88071187,2 7,3.11928813 7,4.5 C7,4.56854233 6.99724162,4.63644042 6.99182982,4.70358929 L6.68137747,4.42017327 C5.65792772,3.48493325 4,4.20484091 4,5.595932 L4,6.94999094 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3Cpath d='M4,7.96455557 C2.30385293,7.72194074 1,6.26323595 1,4.5 C1,2.56700338 2.56700338,1 4.5,1 C6.43299662,1 8,2.56700338 8,4.5 C8,4.84508345 7.95005914,5.1785026 7.85701065,5.4934242 L6.68137747,4.42017327 C5.65792772,3.48493325 4,4.20484091 4,5.595932 L4,7.96455557 Z' id='Oval-2' fill-opacity='0.15' fill='%23575E75'%3E%3C/path%3E %3Cpath d='M7.87915329,13.1684522 L8.98467414,15.6316703 C9.20235954,16.1186581 9.76980913,16.3337238 10.2516521,16.1137141 C10.7334951,15.8924683 10.9462887,15.3189598 10.7286032,14.833208 L9.63583183,12.3973461 L12.3974628,12.3973461 C12.945512,12.3973461 13.207518,11.7313818 12.8048941,11.3644462 L6.00716065,5.15870674 C5.6225647,4.80725864 5,5.07769498 5,5.595932 L5,14.8026807 C5,15.3507015 5.68145595,15.608033 6.04802397,15.1994001 L7.87915329,13.1684522 Z' id='select-icon' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 263 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70139,13 +70231,13 @@ var _hover = __webpack_require__(27);
 
 var _selectedItems = __webpack_require__(9);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
-var _selectTool = __webpack_require__(264);
+var _selectTool = __webpack_require__(265);
 
 var _selectTool2 = _interopRequireDefault(_selectTool);
 
-var _selectMode = __webpack_require__(265);
+var _selectMode = __webpack_require__(266);
 
 var _selectMode2 = _interopRequireDefault(_selectMode);
 
@@ -70265,7 +70357,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SelectMode);
 
 /***/ }),
-/* 264 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70283,7 +70375,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _hover = __webpack_require__(55);
 
-var _selection = __webpack_require__(4);
+var _selection = __webpack_require__(3);
 
 var _boundingBoxTool = __webpack_require__(57);
 
@@ -70474,7 +70566,7 @@ var SelectTool = function (_paper$Tool) {
 exports.default = SelectTool;
 
 /***/ }),
-/* 265 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70496,7 +70588,7 @@ var _toolSelectBase = __webpack_require__(18);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _select = __webpack_require__(266);
+var _select = __webpack_require__(267);
 
 var _select2 = _interopRequireDefault(_select);
 
@@ -70523,13 +70615,13 @@ SelectModeComponent.propTypes = {
 exports.default = SelectModeComponent;
 
 /***/ }),
-/* 266 */
+/* 267 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eselect%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='select' fill='%23575E75'%3E %3Cpath d='M9.08480709,12.7519131 L10.2692937,15.3910753 C10.5025281,15.912848 11.1105098,16.1432755 11.6267701,15.9075508 C12.1430304,15.6705018 12.3710236,15.0560284 12.1377892,14.53558 L10.9669627,11.925728 L13.925853,11.925728 C14.5130486,11.925728 14.7937693,11.2121948 14.3623865,10.8190495 L7.0791007,4.17004294 C6.6670336,3.7934914 6,4.08324462 6,4.63849857 L6,14.5028722 C6,15.0900373 6.73013138,15.3657496 7.12288282,14.9279287 L9.08480709,12.7519131 Z' id='select-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 267 */
+/* 268 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70565,7 +70657,7 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _strokeColorIndicator = __webpack_require__(268);
+var _strokeColorIndicator = __webpack_require__(269);
 
 var _strokeColorIndicator2 = _interopRequireDefault(_strokeColorIndicator);
 
@@ -70671,7 +70763,7 @@ StrokeColorIndicator.propTypes = {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(StrokeColorIndicator);
 
 /***/ }),
-/* 268 */
+/* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70761,7 +70853,7 @@ StrokeColorIndicatorComponent.propTypes = {
 exports.default = (0, _reactIntl.injectIntl)(StrokeColorIndicatorComponent);
 
 /***/ }),
-/* 269 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70789,7 +70881,7 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _strokeWidth = __webpack_require__(30);
 
-var _strokeWidthIndicator = __webpack_require__(270);
+var _strokeWidthIndicator = __webpack_require__(271);
 
 var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
 
@@ -70863,7 +70955,7 @@ StrokeWidthIndicator.propTypes = {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(StrokeWidthIndicator);
 
 /***/ }),
-/* 270 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70922,7 +71014,7 @@ StrokeWidthIndicatorComponent.propTypes = {
 exports.default = StrokeWidthIndicatorComponent;
 
 /***/ }),
-/* 271 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70936,13 +71028,13 @@ exports.default = {
 };
 
 /***/ }),
-/* 272 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(273);
+var content = __webpack_require__(274);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -70967,7 +71059,7 @@ if(false) {
 }
 
 /***/ }),
-/* 273 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(10)(undefined);
@@ -71025,73 +71117,73 @@ exports.locals = {
 };
 
 /***/ }),
-/* 274 */
+/* 275 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Egroup%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='group' stroke-width='0.75'%3E %3Cg id='group-icon' transform='translate(2.000000, 2.000000)'%3E %3Crect id='Rectangle-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='13' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-3' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='13' width='3' height='3'%3E%3C/rect%3E %3Cpath d='M1.5,3 L1.5,13' id='Line' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M14.5,3 L14.5,13' id='Line-Copy' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M13,1.5 L3,1.5' id='Line-Copy-2' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M13,14.5 L3,14.5' id='Line-Copy-3' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cg id='Group' transform='translate(8.000000, 8.000000) rotate(180.000000) translate(-8.000000, -8.000000) translate(4.000000, 4.000000)' stroke='%23575E75'%3E %3Crect id='Rectangle-3-Copy' fill='%23FFFFFF' transform='translate(5.500000, 5.500000) rotate(180.000000) translate(-5.500000, -5.500000) ' x='3' y='3' width='5' height='5' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-3' fill='%23575E75' transform='translate(2.500000, 2.500000) rotate(180.000000) translate(-2.500000, -2.500000) ' x='0' y='0' width='5' height='5' rx='0.5'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 275 */
+/* 276 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eredo%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='redo' fill='%234C97FF'%3E %3Cpath d='M17.5581635,12.7700651 L13.8403972,16.4941315 C13.5610922,16.7671364 13.1830854,16.9211391 12.7903784,16.9211391 C12.3990715,16.9211391 12.0210647,16.7671364 11.7403597,16.4941315 L8.02399342,12.7700651 C7.5969858,12.3430574 7.47098355,11.7060461 7.70198767,11.1530362 C7.93299179,10.6000263 8.46500128,10.24302 9.06701202,10.24302 L10.4040359,10.24302 C10.3690352,9.92101423 10.2780336,9.55700774 10.1240309,9.17200087 C10.07573,9.05999887 10.0260291,8.94799688 9.97002813,8.83599488 C9.89302676,8.70999263 9.90072689,8.67499201 9.79502501,8.52098926 C9.62702201,8.26898476 9.47301926,8.07998139 9.29031601,7.86297752 C8.9200094,7.4639704 8.47200141,7.12096429 7.99599292,6.86895979 C7.5129843,6.6169553 7.00897531,6.46295255 6.56096732,6.37895105 C6.11995945,6.30194968 5.71395221,6.29494955 5.47594796,6.29494955 C5.35694584,6.28794943 5.2029431,6.31594993 5.12594172,6.32295005 C5.04194022,6.32995018 4.99293935,6.3369503 4.99293935,6.3369503 C4.49593048,6.38595117 4.04792249,6.02194468 3.99892162,5.52493582 C3.95692087,5.10492832 4.20192524,4.72692158 4.57293186,4.58691908 C4.57293186,4.58691908 4.62193273,4.56591871 4.6989341,4.53791821 C4.78993573,4.50991771 4.87393723,4.46091684 5.06994072,4.40491584 C5.46194772,4.28591371 5.95895658,4.15991147 6.60996819,4.09691034 C7.25397968,4.04090934 8.03099354,4.05490959 8.85070816,4.22291259 C9.66902276,4.39791571 10.5300381,4.72692158 11.3280524,5.20293007 C11.7060591,5.44793444 12.1120663,5.73493956 12.427072,6.01494456 C12.5670745,6.11994643 12.8050787,6.35795068 12.9450812,6.5049533 C13.1060841,6.67295629 13.2530867,6.84095929 13.4007893,7.01596241 C13.9670994,7.7159749 14.3871069,8.47198839 14.6601118,9.15800062 C14.8211147,9.55000762 14.9331167,9.92101423 15.0171182,10.24302 L16.5151449,10.24302 C17.1171556,10.24302 17.6491651,10.6000263 17.8801692,11.1530362 C18.1111734,11.7060461 17.9851711,12.3430574 17.5581635,12.7700651' id='Fill-1' transform='translate(10.994247, 10.494247) rotate(-45.000000) translate(-10.994247, -10.494247) '%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 276 */
+/* 277 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-back%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-back'%3E %3Cg transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,10 L15,10' id='Stroke-6-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,12 L14,12' id='Stroke-6-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M1,10 L4,10' id='Stroke-10-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M2,12 L4,12' id='Stroke-10-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 277 */
+/* 278 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-backward%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-backward'%3E %3Cg id='send-forward' transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 278 */
+/* 279 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-forward%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-forward'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 279 */
+/* 280 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-front%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-front'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,10 L15,10' id='Stroke-6-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,12 L14,12' id='Stroke-6-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M1,10 L4,10' id='Stroke-10-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M2,12 L4,12' id='Stroke-10-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 280 */
+/* 281 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eundo%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='undo' fill='%234C97FF'%3E %3Cpath d='M15.5581635,12.7700651 L11.8403972,16.4941315 C11.5610922,16.7671364 11.1830854,16.9211391 10.7903784,16.9211391 C10.3990715,16.9211391 10.0210647,16.7671364 9.74035971,16.4941315 L6.02399342,12.7700651 C5.5969858,12.3430574 5.47098355,11.7060461 5.70198767,11.1530362 C5.93299179,10.6000263 6.46500128,10.24302 7.06701202,10.24302 L8.40403587,10.24302 C8.36903525,9.92101423 8.27803362,9.55700774 8.12403088,9.17200087 C8.07573002,9.05999887 8.02602913,8.94799688 7.97002813,8.83599488 C7.89302676,8.70999263 7.90072689,8.67499201 7.79502501,8.52098926 C7.62702201,8.26898476 7.47301926,8.07998139 7.29031601,7.86297752 C6.9200094,7.4639704 6.47200141,7.12096429 5.99599292,6.86895979 C5.5129843,6.6169553 5.00897531,6.46295255 4.56096732,6.37895105 C4.11995945,6.30194968 3.71395221,6.29494955 3.47594796,6.29494955 C3.35694584,6.28794943 3.2029431,6.31594993 3.12594172,6.32295005 C3.04194022,6.32995018 2.99293935,6.3369503 2.99293935,6.3369503 C2.49593048,6.38595117 2.04792249,6.02194468 1.99892162,5.52493582 C1.95692087,5.10492832 2.20192524,4.72692158 2.57293186,4.58691908 C2.57293186,4.58691908 2.62193273,4.56591871 2.6989341,4.53791821 C2.78993573,4.50991771 2.87393723,4.46091684 3.06994072,4.40491584 C3.46194772,4.28591371 3.95895658,4.15991147 4.60996819,4.09691034 C5.25397968,4.04090934 6.03099354,4.05490959 6.85070816,4.22291259 C7.66902276,4.39791571 8.53003812,4.72692158 9.32805235,5.20293007 C9.7060591,5.44793444 10.1120663,5.73493956 10.427072,6.01494456 C10.5670745,6.11994643 10.8050787,6.35795068 10.9450812,6.5049533 C11.1060841,6.67295629 11.2530867,6.84095929 11.4007893,7.01596241 C11.9670994,7.7159749 12.3871069,8.47198839 12.6601118,9.15800062 C12.8211147,9.55000762 12.9331167,9.92101423 13.0171182,10.24302 L14.5151449,10.24302 C15.1171556,10.24302 15.6491651,10.6000263 15.8801692,11.1530362 C16.1111734,11.7060461 15.9851711,12.3430574 15.5581635,12.7700651' id='Fill-1' transform='translate(8.994247, 10.494247) scale(-1, 1) rotate(-45.000000) translate(-8.994247, -10.494247) '%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 281 */
+/* 282 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eungroup%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='ungroup' stroke-width='0.75'%3E %3Cg id='ungroup-icon' transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 2.000000)'%3E %3Crect id='Rectangle-3-Copy' stroke='%23575E75' fill='%23FFFFFF' x='6.5' y='6.5' width='8' height='8' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-3' stroke='%23575E75' fill='%23575E75' x='1.5' y='1.5' width='8' height='8' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='8' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='8' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-3' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='8' y='8' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-4' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='5' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-5' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='13' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-6' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='5' y='13' width='3' height='3'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 282 */
+/* 283 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:none;stroke:%23575e75;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-in%3C/title%3E %3Cg class='cls-3'%3E %3Ccircle class='cls-4' cx='18' cy='18' r='7'/%3E %3Cline class='cls-4' x1='23' y1='23' x2='26' y2='26'/%3E %3Cline class='cls-4' x1='16' y1='18' x2='20' y2='18'/%3E %3Cline class='cls-4' x1='18' y1='16' x2='18' y2='20'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 283 */
+/* 284 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:none;stroke:%23575e75;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-out%3C/title%3E %3Cg class='cls-3'%3E %3Ccircle class='cls-4' cx='18' cy='18' r='7'/%3E %3Cline class='cls-4' x1='23' y1='23' x2='26' y2='26'/%3E %3Cline class='cls-4' x1='16' y1='18' x2='20' y2='18'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 284 */
+/* 285 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:%23575e75;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-reset%3C/title%3E %3Cg class='cls-3'%3E %3Crect class='cls-4' x='13' y='14' width='10' height='2' rx='1' ry='1'/%3E %3Crect class='cls-4' x='13' y='20' width='10' height='2' rx='1' ry='1'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 285 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71203,7 +71295,7 @@ var SelectionHOC = function SelectionHOC(WrappedComponent) {
 exports.default = SelectionHOC;
 
 /***/ }),
-/* 286 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71227,7 +71319,7 @@ var _eraserMode = __webpack_require__(51);
 
 var _eraserMode2 = _interopRequireDefault(_eraserMode);
 
-var _color = __webpack_require__(287);
+var _color = __webpack_require__(288);
 
 var _color2 = _interopRequireDefault(_color);
 
@@ -71266,7 +71358,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 287 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71304,7 +71396,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 288 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71330,7 +71422,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 289 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71345,7 +71437,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.intlReducer = intlReducer;
 
-var _warning = __webpack_require__(290);
+var _warning = __webpack_require__(291);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -71353,7 +71445,7 @@ var _IntlProvider2 = __webpack_require__(93);
 
 var _IntlProvider3 = _interopRequireDefault(_IntlProvider2);
 
-var _Provider2 = __webpack_require__(291);
+var _Provider2 = __webpack_require__(292);
 
 var _Provider3 = _interopRequireDefault(_Provider2);
 
@@ -71393,10 +71485,10 @@ function intlReducer() {
 
   return _extends({}, state, action.payload);
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 290 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71461,10 +71553,10 @@ if (process.env.NODE_ENV !== 'production') {
 
 module.exports = warning;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 291 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71510,10 +71602,10 @@ Provider.propTypes = process.env.NODE_ENV !== "production" ? {
 } : {};
 
 exports.default = Provider;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 292 */
+/* 293 */
 /***/ (function(module, exports) {
 
 module.exports =
@@ -71694,7 +71786,7 @@ exports.default = locales;
 //# sourceMappingURL=l10n.js.map
 
 /***/ }),
-/* 293 */
+/* 294 */
 /***/ (function(module, exports) {
 
 // GENERATED FILE:
