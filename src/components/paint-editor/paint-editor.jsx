@@ -1,8 +1,8 @@
+import paper from '@scratch/paper';
 import classNames from 'classnames';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import MediaQuery from 'react-responsive';
 import React from 'react';
-import paper from '@scratch/paper';
 import PropTypes from 'prop-types';
 
 import PaperCanvas from '../../containers/paper-canvas.jsx';
@@ -25,7 +25,7 @@ import Label from '../forms/label.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import LineMode from '../../containers/line-mode.jsx';
 import Loupe from '../loupe/loupe.jsx';
-import ModeToolsComponent from '../mode-tools/mode-tools.jsx';
+import ModeToolsContainer from '../../containers/mode-tools.jsx';
 import OvalMode from '../../containers/oval-mode.jsx';
 import RectMode from '../../containers/rect-mode.jsx';
 import ReshapeMode from '../../containers/reshape-mode.jsx';
@@ -312,9 +312,8 @@ const PaintEditorComponent = props => {
                             />
                         </InputGroup>
                         <InputGroup className={styles.modModeTools}>
-                            <ModeToolsComponent
-                                onCopyToClipboard={props.onCopyToClipboard}
-                                onPasteFromClipboard={props.onPasteFromClipboard}
+                            <ModeToolsContainer
+                                onUpdateSvg={props.onUpdateSvg}
                             />
                         </InputGroup>
                     </div>
@@ -428,9 +427,7 @@ PaintEditorComponent.propTypes = {
     intl: intlShape,
     isEyeDropping: PropTypes.bool,
     name: PropTypes.string,
-    onCopyToClipboard: PropTypes.func.isRequired,
     onGroup: PropTypes.func.isRequired,
-    onPasteFromClipboard: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
     onSendBackward: PropTypes.func.isRequired,
     onSendForward: PropTypes.func.isRequired,
