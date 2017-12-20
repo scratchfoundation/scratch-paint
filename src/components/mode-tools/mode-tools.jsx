@@ -95,12 +95,14 @@ const ModeToolsComponent = props => {
         return (
             <div className={classNames(props.className, styles.modeTools)}>
                 <LabeledIconButton
+                    disabled={!props.hasSelectedPoints}
                     imgAlt="Curved Point Icon"
                     imgSrc={curvedPointIcon}
                     title="Curved"
                     onClick={function () {}}
                 />
                 <LabeledIconButton
+                    disabled={!props.hasSelectedPoints}
                     imgAlt="Straight Point Icon"
                     imgSrc={straightPointIcon}
                     title="Pointed"
@@ -152,6 +154,7 @@ ModeToolsComponent.propTypes = {
     className: PropTypes.string,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
     eraserValue: PropTypes.number,
+    hasSelectedPoints: PropTypes.bool,
     intl: intlShape.isRequired,
     mode: PropTypes.string.isRequired,
     onBrushSliderChange: PropTypes.func,

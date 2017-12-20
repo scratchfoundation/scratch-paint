@@ -13,9 +13,21 @@ class ModeTools extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'hasSelectedPoints',
             'handleCopyToClipboard',
             'handlePasteFromClipboard'
         ]);
+    }
+    hasSelectedPoints () {
+        const selectedItems = getSelectedLeafItems();
+        for (const item of selectedItems) {
+            for (const seg of item.segments) {
+                if (seg.selected) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     handleCopyToClipboard () {
         const selectedItems = getSelectedRootItems();
@@ -50,6 +62,7 @@ class ModeTools extends React.Component {
     render () {
         return (
             <ModeToolsComponent
+                hasSelectedPoints={this.hasSelectedPoints()}
                 onCopyToClipboard={this.handleCopyToClipboard}
                 onPasteFromClipboard={this.handlePasteFromClipboard}
             />
@@ -63,13 +76,16 @@ ModeTools.propTypes = {
     incrementPasteOffset: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     pasteOffset: PropTypes.number,
+    // Listen on selected items to update hasSelectedPoints
+    selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)), // eslint-disable-line react/no-unused-prop-types
     setClipboardItems: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     clipboardItems: state.scratchPaint.clipboard.items,
-    pasteOffset: state.scratchPaint.clipboard.pasteOffset
+    pasteOffset: state.scratchPaint.clipboard.pasteOffset,
+    selectedItems: state.scratchPaint.selectedItems
 });
 const mapDispatchToProps = dispatch => ({
     setClipboardItems: items => {
