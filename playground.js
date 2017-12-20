@@ -69928,9 +69928,8 @@ var HandleTool = function () {
                                 if (event.modifiers.option || !seg.handleOut.isColinear(seg.handleIn)) {
                                     seg.handleOut = seg.handleOut.add(event.delta);
                                 } else {
-                                    var oldLength = seg.handleOut.length;
                                     seg.handleOut = seg.handleOut.add(event.delta);
-                                    seg.handleIn = seg.handleOut.multiply(-seg.handleIn.length / oldLength);
+                                    seg.handleIn = seg.handleOut.multiply(-seg.handleIn.length / seg.handleOut.length);
                                 }
                             } else if (seg.handleIn.selected && this.hitType === 'handle-in') {
                                 // if option is pressed or handles have been split,
@@ -69938,9 +69937,8 @@ var HandleTool = function () {
                                 if (event.modifiers.option || !seg.handleOut.isColinear(seg.handleIn)) {
                                     seg.handleIn = seg.handleIn.add(event.delta);
                                 } else {
-                                    var _oldLength = seg.handleIn.length;
                                     seg.handleIn = seg.handleIn.add(event.delta);
-                                    seg.handleOut = seg.handleIn.multiply(-seg.handleOut.length / _oldLength);
+                                    seg.handleOut = seg.handleIn.multiply(-seg.handleOut.length / seg.handleIn.length);
                                 }
                             }
                         }
