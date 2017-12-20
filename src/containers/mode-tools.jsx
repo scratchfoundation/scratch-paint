@@ -58,16 +58,13 @@ class ModeTools extends React.Component {
 }
 
 ModeTools.propTypes = {
-    clipboardItems: PropTypes.arrayOf(PropTypes.array),
-    setClipboardItems: PropTypes.func.isRequired,
-
-    incrementPasteOffset: PropTypes.func.isRequired,
-    pasteOffset: PropTypes.number,
-
     clearSelectedItems: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func.isRequired,
-
-    onUpdateSvg: PropTypes.func.isRequired
+    clipboardItems: PropTypes.arrayOf(PropTypes.array),
+    incrementPasteOffset: PropTypes.func.isRequired,
+    onUpdateSvg: PropTypes.func.isRequired,
+    pasteOffset: PropTypes.number,
+    setClipboardItems: PropTypes.func.isRequired,
+    setSelectedItems: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
