@@ -68193,6 +68193,8 @@ var ScaleTool = function () {
     function ScaleTool(onUpdateSvg) {
         _classCallCheck(this, ScaleTool);
 
+        this.active = false;
+        this.boundsPath = null;
         this.pivot = null;
         this.origPivot = null;
         this.corner = null;
@@ -68214,6 +68216,9 @@ var ScaleTool = function () {
     _createClass(ScaleTool, [{
         key: 'onMouseDown',
         value: function onMouseDown(hitResult, boundsPath, selectedItems) {
+            if (this.active) return;
+            this.active = true;
+
             var index = hitResult.item.data.index;
             this.pivot = boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
             this.origPivot = boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
@@ -68223,6 +68228,7 @@ var ScaleTool = function () {
             this.centered = false;
             this.lastSx = 1;
             this.lastSy = 1;
+            this.boundsPath = boundsPath;
 
             // Set itemGroup
             // get item to insert below so that scaled items stay in same z position
@@ -68270,6 +68276,8 @@ var ScaleTool = function () {
     }, {
         key: 'onMouseDrag',
         value: function onMouseDrag(event) {
+            if (!this.active) return;
+
             var modOrigSize = this.origSize;
 
             if (event.modifiers.alt) {
@@ -68313,6 +68321,8 @@ var ScaleTool = function () {
     }, {
         key: 'onMouseUp',
         value: function onMouseUp() {
+            if (!this.active) return;
+
             this.pivot = null;
             this.origPivot = null;
             this.corner = null;
@@ -68325,6 +68335,8 @@ var ScaleTool = function () {
             if (!this.itemGroup) {
                 return;
             }
+            this.boundsPath.remove();
+            this.boundsPath = null;
 
             // mark text items as scaled (for later use on font size calc)
             for (var i = 0; i < this.itemGroup.children.length; i++) {
@@ -68346,6 +68358,7 @@ var ScaleTool = function () {
             this.itemGroup.remove();
 
             this.onUpdateSvg();
+            this.active = false;
         }
     }, {
         key: '_getRectCornerNameByIndex',
