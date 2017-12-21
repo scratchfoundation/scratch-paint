@@ -11,7 +11,7 @@
 
 :local(.mod-disabled) {
     cursor: auto;
-    opacity: .3;
+    opacity: .5;
 }
 :local(.mod-disabled:active) {
     background: none;
