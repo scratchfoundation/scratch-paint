@@ -74,19 +74,30 @@ class ModeTools extends React.Component {
             const noHandles = point.handleIn.length === 0 && point.handleOut.length === 0;
             if (!prev && !next) {
                 continue;
-            } else if (prev && (!next || noHandles)) {
-                // Point is end point or has no handles
-                // Direction is average of normal at the point and direction to prev point
+            } else if (prev && next && noHandles) {
+                // Handles are parallel to the line from prev to next
+                point.handleIn = prev.point.subtract(next.point)
+                    .normalize()
+                    .multiply(prev.getCurve().length / 2);
+            } else if (prev && !next && point.handleIn.length === 0) {
+                // Point is end point
+                // Direction is average of normal at the point and direction to prev point, using the
+                // normal that points out from the convex side
                 // Lenth is curve length / 2
+                const convexity = prev.getCurve().getCurvatureAt(.1) < 0 ? -1 : 1;
                 point.handleIn = (prev.getCurve().getNormalAtTime(1)
+                    .multiply(convexity)
                     .add(prev.point.subtract(point.point).normalize()))
                     .normalize()
                     .multiply(prev.getCurve().length / 2);
-            } else if (next && !prev) {
+            } else if (next && !prev && point.handleOut.length === 0) {
                 // Point is start point
-                // Direction is average of normal at the point and direction to next point
+                // Direction is average of normal at the point and direction to prev point, using the
+                // normal that points out from the convex side
                 // Lenth is curve length / 2
+                const convexity = point.getCurve().getCurvatureAt(.1) < 0 ? -1 : 1;
                 point.handleOut = (point.getCurve().getNormalAtTime(0)
+                    .multiply(convexity)
                     .add(next.point.subtract(point.point).normalize()))
                     .normalize()
                     .multiply(point.getCurve().length / 2);
@@ -118,7 +129,6 @@ class ModeTools extends React.Component {
             }
         }
         if (changed) {
-            debugger;
             this.props.setSelectedItems();
             this.props.onUpdateSvg();
         }
