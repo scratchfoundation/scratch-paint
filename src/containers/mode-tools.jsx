@@ -184,7 +184,8 @@ ModeTools.propTypes = {
     onUpdateSvg: PropTypes.func.isRequired,
     pasteOffset: PropTypes.number,
     // Listen on selected items to update hasSelectedPoints
-    selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)), // eslint-disable-line react/no-unused-prop-types
+    selectedItems:
+        PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)), // eslint-disable-line react/no-unused-prop-types
     setClipboardItems: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired
 };
