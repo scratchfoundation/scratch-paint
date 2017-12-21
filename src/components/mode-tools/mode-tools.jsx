@@ -95,18 +95,18 @@ const ModeToolsComponent = props => {
         return (
             <div className={classNames(props.className, styles.modeTools)}>
                 <LabeledIconButton
-                    disabled={!props.hasSelectedPoints}
+                    disabled={!props.hasSelectedUncurvedPoints}
                     imgAlt="Curved Point Icon"
                     imgSrc={curvedPointIcon}
                     title="Curved"
-                    onClick={function () {}}
+                    onClick={props.onCurvePoints}
                 />
                 <LabeledIconButton
-                    disabled={!props.hasSelectedPoints}
+                    disabled={!props.hasSelectedUnpointedPoints}
                     imgAlt="Straight Point Icon"
                     imgSrc={straightPointIcon}
                     title="Pointed"
-                    onClick={function () {}}
+                    onClick={props.onPointPoints}
                 />
             </div>
         );
@@ -154,13 +154,16 @@ ModeToolsComponent.propTypes = {
     className: PropTypes.string,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
     eraserValue: PropTypes.number,
-    hasSelectedPoints: PropTypes.bool,
+    hasSelectedUncurvedPoints: PropTypes.bool,
+    hasSelectedUnpointedPoints: PropTypes.bool,
     intl: intlShape.isRequired,
     mode: PropTypes.string.isRequired,
     onBrushSliderChange: PropTypes.func,
     onCopyToClipboard: PropTypes.func.isRequired,
+    onCurvePoints: PropTypes.func.isRequired,
     onEraserSliderChange: PropTypes.func,
     onPasteFromClipboard: PropTypes.func.isRequired,
+    onPointPoints: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item))
 };
 

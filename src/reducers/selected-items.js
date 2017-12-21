@@ -14,7 +14,7 @@ const reducer = function (state, action) {
         if (action.selectedItems.length !== state.length) {
             return action.selectedItems;
         }
-        // Shallow equality check (we may need to update this later for more granularity)
+        // Shallow equality check
         for (let i = 0; i < action.selectedItems.length; i++) {
             if (action.selectedItems[i] !== state[i]) {
                 return action.selectedItems;

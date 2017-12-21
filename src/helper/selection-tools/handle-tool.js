@@ -79,6 +79,7 @@ class HandleTool {
             }
         }
         if (moved) {
+            this.setSelectedItems();
             this.onUpdateSvg();
         }
         this.selectedItems = [];

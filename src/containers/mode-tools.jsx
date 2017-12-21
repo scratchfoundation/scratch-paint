@@ -13,21 +13,115 @@ class ModeTools extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'hasSelectedPoints',
+            '_getSelectedUncurvedPoints',
+            '_getSelectedUnpointedPoints',
+            'hasSelectedUncurvedPoints',
+            'hasSelectedUnpointedPoints',
             'handleCopyToClipboard',
-            'handlePasteFromClipboard'
+            'handleCurvePoints',
+            'handlePasteFromClipboard',
+            'handlePointPoints'
         ]);
     }
-    hasSelectedPoints () {
+    _getSelectedUncurvedPoints () {
+        const items = [];
         const selectedItems = getSelectedLeafItems();
         for (const item of selectedItems) {
+            if (!item.segments) continue;
             for (const seg of item.segments) {
                 if (seg.selected) {
-                    return true;
+                    const prev = seg.getPrevious();
+                    const next = seg.getNext();
+                    const isCurved =
+                        (!prev || seg.handleIn.length > 0) &&
+                        (!next || seg.handleOut.length > 0) &&
+                        (prev && next ? seg.handleOut.isColinear(seg.handleIn) : true);
+                    if (!isCurved) items.push(seg);
                 }
             }
         }
-        return false;
+        return items;
+    }
+    _getSelectedUnpointedPoints () {
+        const points = [];
+        const selectedItems = getSelectedLeafItems();
+        for (const item of selectedItems) {
+            if (!item.segments) continue;
+            for (const seg of item.segments) {
+                if (seg.selected) {
+                    if (seg.handleIn.length > 0 || seg.handleOut.length > 0) {
+                        points.push(seg);
+                    }
+                }
+            }
+        }
+        return points;
+    }
+    hasSelectedUncurvedPoints () {
+        const points = this._getSelectedUncurvedPoints();
+        return points.length > 0;
+    }
+    hasSelectedUnpointedPoints () {
+        const points = this._getSelectedUnpointedPoints();
+        return points.length > 0;
+    }
+    handleCurvePoints () {
+        let changed;
+        const points = this._getSelectedUncurvedPoints();
+        for (const point of points) {
+            const prev = point.getPrevious();
+            const next = point.getNext();
+            const noHandles = point.handleIn.length === 0 && point.handleOut.length === 0;
+            if (!prev && !next) {
+                continue;
+            } else if (prev && (!next || noHandles)) {
+                // Point is end point or has no handles
+                // Direction is average of normal at the point and direction to prev point
+                // Lenth is curve length / 2
+                point.handleIn = (prev.getCurve().getNormalAtTime(1)
+                    .add(prev.point.subtract(point.point).normalize()))
+                    .normalize()
+                    .multiply(prev.getCurve().length / 2);
+            } else if (next && !prev) {
+                // Point is start point
+                // Direction is average of normal at the point and direction to next point
+                // Lenth is curve length / 2
+                point.handleOut = (point.getCurve().getNormalAtTime(0)
+                    .add(next.point.subtract(point.point).normalize()))
+                    .normalize()
+                    .multiply(point.getCurve().length / 2);
+            }
+
+            // Point guaranteed to have a handle now. Make the second handle match the length and direction of first.
+            // This defines a curved point.
+            if (point.handleIn.length > 0 && next) {
+                point.handleOut = point.handleIn.multiply(-1);
+            } else if (point.handleOut.length > 0 && prev) {
+                point.handleIn = point.handleOut.multiply(-1);
+            }
+            changed = true;
+        }
+        if (changed) {
+            this.props.setSelectedItems();
+            this.props.onUpdateSvg();
+        }
+    }
+    handlePointPoints () {
+        let changed;
+        const points = this._getSelectedUnpointedPoints();
+        for (const point of points) {
+            const noHandles = point.handleIn.length === 0 && point.handleOut.length === 0;
+            if (!noHandles) {
+                point.handleIn = null;
+                point.handleOut = null;
+                changed = true;
+            }
+        }
+        if (changed) {
+            debugger;
+            this.props.setSelectedItems();
+            this.props.onUpdateSvg();
+        }
     }
     handleCopyToClipboard () {
         const selectedItems = getSelectedRootItems();
@@ -62,9 +156,12 @@ class ModeTools extends React.Component {
     render () {
         return (
             <ModeToolsComponent
-                hasSelectedPoints={this.hasSelectedPoints()}
+                hasSelectedUncurvedPoints={this.hasSelectedUncurvedPoints()}
+                hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
                 onCopyToClipboard={this.handleCopyToClipboard}
+                onCurvePoints={this.handleCurvePoints}
                 onPasteFromClipboard={this.handlePasteFromClipboard}
+                onPointPoints={this.handlePointPoints}
             />
         );
     }
