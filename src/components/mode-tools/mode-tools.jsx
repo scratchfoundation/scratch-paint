@@ -12,7 +12,6 @@ import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Input from '../forms/input.jsx';
 import InputGroup from '../input-group/input-group.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
-// import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import Modes from '../../lib/modes';
 import styles from './mode-tools.css';
 
@@ -20,11 +19,11 @@ import copyIcon from './icons/copy.svg';
 import pasteIcon from './icons/paste.svg';
 
 import brushIcon from '../brush-mode/brush.svg';
-// import curvedPointIcon from './curved-point.svg';
+import curvedPointIcon from './icons/curved-point.svg';
 import eraserIcon from '../eraser-mode/eraser.svg';
 // import flipHorizontalIcon from './icons/flip-horizontal.svg';
 // import flipVerticalIcon from './icons/flip-vertical.svg';
-// import straightPointIcon from './straight-point.svg';
+import straightPointIcon from './icons/straight-point.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
@@ -50,6 +49,16 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Paste',
             description: 'Label for the paste button',
             id: 'paint.modeTools.paste'
+        },
+        curved: {
+            defaultMessage: 'Curved',
+            description: 'Label for the button that converts selected points to curves',
+            id: 'paint.modeTools.curved'
+        },
+        pointed: {
+            defaultMessage: 'Pointed',
+            description: 'Label for the button that converts selected points to sharp points',
+            id: 'paint.modeTools.pointed'
         }
     });
 
@@ -95,18 +104,18 @@ const ModeToolsComponent = props => {
     case Modes.RESHAPE:
         return (
             <div className={classNames(props.className, styles.modeTools)}>
-                {/* <LabeledIconButton
-                    imgAlt="Curved Point Icon"
+                <LabeledIconButton
+                    disabled={!props.hasSelectedUncurvedPoints}
                     imgSrc={curvedPointIcon}
-                    title="Curved"
-                    onClick={function () {}}
+                    title={props.intl.formatMessage(messages.curved)}
+                    onClick={props.onCurvePoints}
                 />
                 <LabeledIconButton
-                    imgAlt="Straight Point Icon"
+                    disabled={!props.hasSelectedUnpointedPoints}
                     imgSrc={straightPointIcon}
-                    title="Pointed"
-                    onClick={function () {}}
-                /> */}
+                    title={props.intl.formatMessage(messages.pointed)}
+                    onClick={props.onPointPoints}
+                />
             </div>
         );
     case Modes.SELECT:
@@ -153,12 +162,16 @@ ModeToolsComponent.propTypes = {
     className: PropTypes.string,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
     eraserValue: PropTypes.number,
+    hasSelectedUncurvedPoints: PropTypes.bool,
+    hasSelectedUnpointedPoints: PropTypes.bool,
     intl: intlShape.isRequired,
     mode: PropTypes.string.isRequired,
     onBrushSliderChange: PropTypes.func,
     onCopyToClipboard: PropTypes.func.isRequired,
+    onCurvePoints: PropTypes.func.isRequired,
     onEraserSliderChange: PropTypes.func,
     onPasteFromClipboard: PropTypes.func.isRequired,
+    onPointPoints: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item))
 };
 

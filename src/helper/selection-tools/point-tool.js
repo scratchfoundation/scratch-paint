@@ -1,6 +1,7 @@
 import paper from '@scratch/paper';
 import {snapDeltaToAngle} from '../math';
 import {clearSelection, getSelectedLeafItems} from '../selection';
+import {HANDLE_RATIO} from '../math';
 
 /** Subtool of ReshapeTool for moving control points. */
 class PointTool {
@@ -72,8 +73,8 @@ class PointTool {
             hitProperties.hitResult.location.curve.length - hitProperties.hitResult.location.curveOffset;
 
         // Handle length based on curve length until next point
-        let handleIn = hitProperties.hitResult.location.tangent.multiply(-beforeCurveLength / 2);
-        let handleOut = hitProperties.hitResult.location.tangent.multiply(afterCurveLength / 2);
+        let handleIn = hitProperties.hitResult.location.tangent.multiply(-beforeCurveLength * HANDLE_RATIO);
+        let handleOut = hitProperties.hitResult.location.tangent.multiply(afterCurveLength * HANDLE_RATIO);
         // Don't let one handle overwhelm the other (results in path doubling back on itself weirdly)
         if (handleIn.length > 3 * handleOut.length) {
             handleIn = handleIn.multiply(3 * handleOut.length / handleIn.length);
@@ -98,7 +99,7 @@ class PointTool {
         if (beforeSegment && beforeSegment.handleOut) {
             if (afterSegment) {
                 beforeSegment.handleOut =
-                    beforeSegment.handleOut.multiply(beforeCurveLength / 2 / beforeSegment.handleOut.length);
+                    beforeSegment.handleOut.multiply(beforeCurveLength * HANDLE_RATIO / beforeSegment.handleOut.length);
             } else {
                 beforeSegment.handleOut = null;
             }
@@ -106,7 +107,7 @@ class PointTool {
         if (afterSegment && afterSegment.handleIn) {
             if (beforeSegment) {
                 afterSegment.handleIn =
-                    afterSegment.handleIn.multiply(afterCurveLength / 2 / afterSegment.handleIn.length);
+                    afterSegment.handleIn.multiply(afterCurveLength * HANDLE_RATIO / afterSegment.handleIn.length);
             } else {
                 afterSegment.handleIn = null;
             }
@@ -123,14 +124,15 @@ class PointTool {
         if (beforeSegment && beforeSegment.handleOut) {
             if (afterSegment) {
                 beforeSegment.handleOut =
-                    beforeSegment.handleOut.multiply(curveLength / 2 / beforeSegment.handleOut.length);
+                    beforeSegment.handleOut.multiply(curveLength * HANDLE_RATIO / beforeSegment.handleOut.length);
             } else {
                 beforeSegment.handleOut = null;
             }
         }
         if (afterSegment && afterSegment.handleIn) {
             if (beforeSegment) {
-                afterSegment.handleIn = afterSegment.handleIn.multiply(curveLength / 2 / afterSegment.handleIn.length);
+                afterSegment.handleIn =
+                    afterSegment.handleIn.multiply(curveLength * HANDLE_RATIO / afterSegment.handleIn.length);
             } else {
                 afterSegment.handleIn = null;
             }

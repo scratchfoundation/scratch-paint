@@ -10,17 +10,11 @@ const reducer = function (state, action) {
             log.warn(`No selected items or wrong format provided: ${action.selectedItems}`);
             return state;
         }
-        // If they are not equal, return the new list of items. Else return old list
-        if (action.selectedItems.length !== state.length) {
-            return action.selectedItems;
+        // If they are both empty, no change
+        if (action.selectedItems.length === 0 && state.length === 0) {
+            return state;
         }
-        // Shallow equality check (we may need to update this later for more granularity)
-        for (let i = 0; i < action.selectedItems.length; i++) {
-            if (action.selectedItems[i] !== state[i]) {
-                return action.selectedItems;
-            }
-        }
-        return state;
+        return action.selectedItems;
     default:
         return state;
     }

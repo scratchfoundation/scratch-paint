@@ -1,5 +1,8 @@
 import paper from '@scratch/paper';
 
+/** The ratio of the curve length to use for the handle length to convert squares into approximately circles. */
+const HANDLE_RATIO = 0.3902628565;
+
 const checkPointsClose = function (startPos, eventPoint, threshold) {
     const xOff = Math.abs(startPos.x - eventPoint.x);
     const yOff = Math.abs(startPos.y - eventPoint.y);
@@ -95,6 +98,7 @@ const expandByOne = function (path) {
 };
 
 export {
+    HANDLE_RATIO,
     checkPointsClose,
     expandByOne,
     getRandomInt,
