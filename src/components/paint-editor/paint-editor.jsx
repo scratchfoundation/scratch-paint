@@ -306,6 +306,7 @@ const PaintEditorComponent = props => {
                         >
                             {/* fill */}
                             <FillColorIndicatorComponent
+                                className={styles.modMarginRight}
                                 onUpdateSvg={props.onUpdateSvg}
                             />
                             {/* stroke */}

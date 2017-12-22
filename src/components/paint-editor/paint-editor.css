@@ -117,6 +117,10 @@ $border-radius: 0.25rem;
     margin-left: calc(2 * $grid-unit);
 }
 
+.mod-margin-right {
+    margin-right: calc(2 * $grid-unit);
+}
+
 .canvas-container {
     width: 480px;
     height: 360px;
