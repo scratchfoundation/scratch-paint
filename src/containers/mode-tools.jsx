@@ -8,7 +8,7 @@ import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
 import {clearSelection, getSelectedLeafItems, getSelectedRootItems} from '../helper/selection';
-import {HANDLE_RATIO} from '../helper/math';
+import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 
 class ModeTools extends React.Component {
     constructor (props) {
@@ -147,6 +147,7 @@ class ModeTools extends React.Component {
         const itemGroup = new paper.Group(selectedItems);
         // Flip
         itemGroup.scale(horizontalScale, verticalScale);
+        ensureClockwise(itemGroup);
 
         // Remove flipped item from group and insert at old index. Must insert from bottom index up.
         for (let i = 0; i < selectedItems.length; i++) {
