@@ -8,6 +8,7 @@ import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
 import {clearSelection, getSelectedLeafItems, getSelectedRootItems} from '../helper/selection';
+import {HANDLE_RATIO} from '../helper/math';
 
 class ModeTools extends React.Component {
     constructor (props) {
@@ -78,29 +79,29 @@ class ModeTools extends React.Component {
                 // Handles are parallel to the line from prev to next
                 point.handleIn = prev.point.subtract(next.point)
                     .normalize()
-                    .multiply(prev.getCurve().length / 2);
+                    .multiply(prev.getCurve().length * HANDLE_RATIO);
             } else if (prev && !next && point.handleIn.length === 0) {
                 // Point is end point
                 // Direction is average of normal at the point and direction to prev point, using the
                 // normal that points out from the convex side
-                // Lenth is curve length / 2
-                const convexity = prev.getCurve().getCurvatureAt(.1) < 0 ? -1 : 1;
+                // Lenth is curve length * HANDLE_RATIO
+                const convexity = prev.getCurve().getCurvatureAtTime(.1) < 0 ? -1 : 1;
                 point.handleIn = (prev.getCurve().getNormalAtTime(1)
                     .multiply(convexity)
                     .add(prev.point.subtract(point.point).normalize()))
                     .normalize()
-                    .multiply(prev.getCurve().length / 2);
+                    .multiply(prev.getCurve().length * HANDLE_RATIO);
             } else if (next && !prev && point.handleOut.length === 0) {
                 // Point is start point
                 // Direction is average of normal at the point and direction to prev point, using the
                 // normal that points out from the convex side
-                // Lenth is curve length / 2
-                const convexity = point.getCurve().getCurvatureAt(.1) < 0 ? -1 : 1;
+                // Lenth is curve length * HANDLE_RATIO
+                const convexity = point.getCurve().getCurvatureAtTime(.1) < 0 ? -1 : 1;
                 point.handleOut = (point.getCurve().getNormalAtTime(0)
                     .multiply(convexity)
                     .add(next.point.subtract(point.point).normalize()))
                     .normalize()
-                    .multiply(point.getCurve().length / 2);
+                    .multiply(point.getCurve().length * HANDLE_RATIO);
             }
 
             // Point guaranteed to have a handle now. Make the second handle match the length and direction of first.
