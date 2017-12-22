@@ -28,6 +28,10 @@
     margin-top: calc(2 * $grid-unit);
 }
 
+.costume-input {
+    width: 8rem;
+}
+
 .mod-dashed-border {
     border-right: 1px dashed $ui-pane-border;
     padding-right: calc(2 * $grid-unit);

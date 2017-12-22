@@ -125,6 +125,7 @@ const PaintEditorComponent = props => {
                             <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
                                 <Label text={props.intl.formatMessage(messages.costume)}>
                                     <BufferedInput
+                                        className={styles.costumeInput}
                                         type="text"
                                         value={props.name}
                                         onSubmit={props.onUpdateName}
@@ -133,6 +134,7 @@ const PaintEditorComponent = props => {
                             </MediaQuery>
                             <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
                                 <BufferedInput
+                                    className={styles.costumeInput}
                                     type="text"
                                     value={props.name}
                                     onSubmit={props.onUpdateName}
