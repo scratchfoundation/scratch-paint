@@ -21,8 +21,8 @@ import pasteIcon from './icons/paste.svg';
 import brushIcon from '../brush-mode/brush.svg';
 import curvedPointIcon from './icons/curved-point.svg';
 import eraserIcon from '../eraser-mode/eraser.svg';
-// import flipHorizontalIcon from './icons/flip-horizontal.svg';
-// import flipVerticalIcon from './icons/flip-vertical.svg';
+import flipHorizontalIcon from './icons/flip-horizontal.svg';
+import flipVerticalIcon from './icons/flip-vertical.svg';
 import straightPointIcon from './icons/straight-point.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
@@ -59,6 +59,16 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Pointed',
             description: 'Label for the button that converts selected points to sharp points',
             id: 'paint.modeTools.pointed'
+        },
+        flipHorizontal: {
+            defaultMessage: 'Flip Horizontal',
+            description: 'Label for the button to flip the image horizontally',
+            id: 'paint.modeTools.flipHorizontal'
+        },
+        flipVertical: {
+            defaultMessage: 'Flip Vertical',
+            description: 'Label for the button to flip the image vertically',
+            id: 'paint.modeTools.flipVertical'
         }
     });
 
@@ -135,18 +145,18 @@ const ModeToolsComponent = props => {
                         onClick={props.onPasteFromClipboard}
                     />
                 </InputGroup>
-                {/* <LabeledIconButton
-                    imgAlt="Flip Horizontal Icon"
+                <LabeledIconButton
+                    disabled={!props.selectedItems.length}
                     imgSrc={flipHorizontalIcon}
-                    title="Flip Horizontal"
-                    onClick={function () {}}
+                    title={props.intl.formatMessage(messages.flipHorizontal)}
+                    onClick={props.onFlipHorizontal}
                 />
                 <LabeledIconButton
-                    imgAlt="Flip Vertical Icon"
+                    disabled={!props.selectedItems.length}
                     imgSrc={flipVerticalIcon}
-                    title="Flip Vertical"
-                    onClick={function () {}}
-                /> */}
+                    title={props.intl.formatMessage(messages.flipVertical)}
+                    onClick={props.onFlipVertical}
+                />
             </div>
         );
     default:
@@ -170,6 +180,8 @@ ModeToolsComponent.propTypes = {
     onCopyToClipboard: PropTypes.func.isRequired,
     onCurvePoints: PropTypes.func.isRequired,
     onEraserSliderChange: PropTypes.func,
+    onFlipHorizontal: PropTypes.func.isRequired,
+    onFlipVertical: PropTypes.func.isRequired,
     onPasteFromClipboard: PropTypes.func.isRequired,
     onPointPoints: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item))
