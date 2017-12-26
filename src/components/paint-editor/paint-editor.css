@@ -28,6 +28,10 @@
     margin-top: calc(2 * $grid-unit);
 }
 
+.costume-input {
+    width: 8rem;
+}
+
 .mod-dashed-border {
     border-right: 1px dashed $ui-pane-border;
     padding-right: calc(2 * $grid-unit);
@@ -117,6 +121,10 @@ $border-radius: 0.25rem;
     margin-left: calc(2 * $grid-unit);
 }
 
+.mod-margin-right {
+    margin-right: calc(2 * $grid-unit);
+}
+
 .canvas-container {
     width: 480px;
     height: 360px;
@@ -155,6 +163,33 @@ $border-radius: 0.25rem;
     height: 100%;
     pointer-events: none;
     overflow: hidden;
+}
+
+.canvas-controls {
+    display: flex;
+    margin-top: .25rem;
+    justify-content: space-between;
+}
+
+.bitmap-tooltip {
+    margin-left: $grid-unit;
+    max-width: 10rem;
+}
+
+.bitmap-button {
+    display: flex;
+    border-radius: 5px;
+    background-color: hsla(0, 0%, 0%, .25);
+    padding: calc(2 * $grid-unit);
+    line-height: 1.5rem;
+    font-size: calc(3 * $grid-unit);
+    font-weight: bold;
+    justify-content: center;
+    opacity: .5;
+}
+
+.bitmap-button-icon {
+    margin-right: calc(2 * $grid-unit);
 }
 
 @media only screen and (max-width: $full-size-paint) {

@@ -13,14 +13,19 @@ const Input = props => {
     return (
         <input
             {...componentProps}
-            className={classNames(styles.inputForm, {
-                [styles.inputSmall]: small
-            })}
+            className={classNames(
+                styles.inputForm,
+                props.className,
+                {
+                    [styles.inputSmall]: small
+                }
+            )}
         />
     );
 };
 
 Input.propTypes = {
+    className: PropTypes.string,
     small: PropTypes.bool
 };
 

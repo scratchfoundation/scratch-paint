@@ -15,6 +15,7 @@ import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
 import BrushMode from '../../containers/brush-mode.jsx';
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
+import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
 import Dropdown from '../dropdown/dropdown.jsx';
 import EraserMode from '../../containers/eraser-mode.jsx';
 import FillColorIndicatorComponent from '../../containers/fill-color-indicator.jsx';
@@ -32,10 +33,12 @@ import ReshapeMode from '../../containers/reshape-mode.jsx';
 import SelectMode from '../../containers/select-mode.jsx';
 import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicator.jsx';
 import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicator.jsx';
+import TextModeComponent from '../text-mode/text-mode.jsx';
 
 import layout from '../../lib/layout-constants';
 import styles from './paint-editor.css';
 
+import bitmapIcon from './icons/bitmap.svg';
 import groupIcon from './icons/group.svg';
 import redoIcon from './icons/redo.svg';
 import sendBackIcon from './icons/send-back.svg';
@@ -99,6 +102,11 @@ const messages = defineMessages({
         defaultMessage: 'More',
         description: 'Label for dropdown to access more action buttons',
         id: 'paint.paintEditor.more'
+    },
+    bitmap: {
+        defaultMessage: 'Convert to Bitmap',
+        description: 'Label for button that converts the paint editor to bitmap mode',
+        id: 'paint.paintEditor.bitmap'
     }
 });
 
@@ -117,6 +125,7 @@ const PaintEditorComponent = props => {
                             <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
                                 <Label text={props.intl.formatMessage(messages.costume)}>
                                     <BufferedInput
+                                        className={styles.costumeInput}
                                         type="text"
                                         value={props.name}
                                         onSubmit={props.onUpdateName}
@@ -125,6 +134,7 @@ const PaintEditorComponent = props => {
                             </MediaQuery>
                             <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
                                 <BufferedInput
+                                    className={styles.costumeInput}
                                     type="text"
                                     value={props.name}
                                     onSubmit={props.onUpdateName}
@@ -207,32 +217,30 @@ const PaintEditorComponent = props => {
                         </InputGroup>
 
                         <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
-                            <div className={styles.row}>
-                                <InputGroup>
-                                    <LabeledIconButton
-                                        disabled={!shouldShowBringForward()}
-                                        imgSrc={sendFrontIcon}
-                                        title={props.intl.formatMessage(messages.front)}
-                                        onClick={props.onSendToFront}
-                                    />
-                                    <LabeledIconButton
-                                        disabled={!shouldShowSendBackward()}
-                                        imgSrc={sendBackIcon}
-                                        title={props.intl.formatMessage(messages.back)}
-                                        onClick={props.onSendToBack}
-                                    />
-                                </InputGroup>
+                            <InputGroup className={styles.row}>
+                                <LabeledIconButton
+                                    disabled={!shouldShowBringForward()}
+                                    imgSrc={sendFrontIcon}
+                                    title={props.intl.formatMessage(messages.front)}
+                                    onClick={props.onSendToFront}
+                                />
+                                <LabeledIconButton
+                                    disabled={!shouldShowSendBackward()}
+                                    imgSrc={sendBackIcon}
+                                    title={props.intl.formatMessage(messages.back)}
+                                    onClick={props.onSendToBack}
+                                />
+                            </InputGroup>
 
-                                {/* To be rotation point */}
-                                {/* <InputGroup>
-                                    <LabeledIconButton
-                                        imgAlt="Rotation Point"
-                                        imgSrc={rotationPointIcon}
-                                        title="Rotation Point"
-                                        onClick={function () {}}
-                                    />
-                                </InputGroup> */}
-                            </div>
+                            {/* To be rotation point */}
+                            {/* <InputGroup>
+                                <LabeledIconButton
+                                    imgAlt="Rotation Point"
+                                    imgSrc={rotationPointIcon}
+                                    title="Rotation Point"
+                                    onClick={function () {}}
+                                />
+                            </InputGroup> */}
                         </MediaQuery>
                         <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
                             <InputGroup>
@@ -300,6 +308,7 @@ const PaintEditorComponent = props => {
                         >
                             {/* fill */}
                             <FillColorIndicatorComponent
+                                className={styles.modMarginRight}
                                 onUpdateSvg={props.onUpdateSvg}
                             />
                             {/* stroke */}
@@ -349,6 +358,8 @@ const PaintEditorComponent = props => {
                         <RectMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
+                        {/* text tool, coming soon */}
+                        <TextModeComponent />
                     </div>
                 ) : null}
 
@@ -378,41 +389,58 @@ const PaintEditorComponent = props => {
                             </Box>
                         ) : null
                     }
-                    {/* Zoom controls */}
-                    <InputGroup className={styles.zoomControls}>
-                        <ButtonGroup>
-                            <Button
-                                className={styles.buttonGroupButton}
-                                onClick={props.onZoomOut}
-                            >
+                    <div className={styles.canvasControls}>
+                        <ComingSoonTooltip
+                            className={styles.bitmapTooltip}
+                            place="top"
+                            tooltipId="bitmap-converter"
+                        >
+                            <div className={styles.bitmapButton}>
                                 <img
-                                    alt="Zoom Out"
-                                    className={styles.buttonGroupButtonIcon}
-                                    src={zoomOutIcon}
+                                    className={styles.bitmapButtonIcon}
+                                    src={bitmapIcon}
                                 />
-                            </Button>
-                            <Button
-                                className={styles.buttonGroupButton}
-                                onClick={props.onZoomReset}
-                            >
-                                <img
-                                    alt="Zoom Reset"
-                                    className={styles.buttonGroupButtonIcon}
-                                    src={zoomResetIcon}
-                                />
-                            </Button>
-                            <Button
-                                className={styles.buttonGroupButton}
-                                onClick={props.onZoomIn}
-                            >
-                                <img
-                                    alt="Zoom In"
-                                    className={styles.buttonGroupButtonIcon}
-                                    src={zoomInIcon}
-                                />
-                            </Button>
-                        </ButtonGroup>
-                    </InputGroup>
+                                <span>
+                                    {props.intl.formatMessage(messages.bitmap)}
+                                </span>
+                            </div>
+                        </ComingSoonTooltip>
+                        {/* Zoom controls */}
+                        <InputGroup className={styles.zoomControls}>
+                            <ButtonGroup>
+                                <Button
+                                    className={styles.buttonGroupButton}
+                                    onClick={props.onZoomOut}
+                                >
+                                    <img
+                                        alt="Zoom Out"
+                                        className={styles.buttonGroupButtonIcon}
+                                        src={zoomOutIcon}
+                                    />
+                                </Button>
+                                <Button
+                                    className={styles.buttonGroupButton}
+                                    onClick={props.onZoomReset}
+                                >
+                                    <img
+                                        alt="Zoom Reset"
+                                        className={styles.buttonGroupButtonIcon}
+                                        src={zoomResetIcon}
+                                    />
+                                </Button>
+                                <Button
+                                    className={styles.buttonGroupButton}
+                                    onClick={props.onZoomIn}
+                                >
+                                    <img
+                                        alt="Zoom In"
+                                        className={styles.buttonGroupButtonIcon}
+                                        src={zoomInIcon}
+                                    />
+                                </Button>
+                            </ButtonGroup>
+                        </InputGroup>
+                    </div>
                 </div>
             </div>
         </div>

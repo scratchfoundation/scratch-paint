@@ -17,7 +17,10 @@ const messages = defineMessages({
 });
 
 const StrokeColorIndicatorComponent = props => (
-    <InputGroup disabled={props.disabled}>
+    <InputGroup
+        className={props.className}
+        disabled={props.disabled}
+    >
         <Popover
             body={
                 <ColorPicker
@@ -41,6 +44,7 @@ const StrokeColorIndicatorComponent = props => (
 );
 
 StrokeColorIndicatorComponent.propTypes = {
+    className: PropTypes.string,
     disabled: PropTypes.bool.isRequired,
     intl: intlShape,
     onChangeStrokeColor: PropTypes.func.isRequired,
