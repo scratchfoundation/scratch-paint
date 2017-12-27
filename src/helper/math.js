@@ -97,9 +97,21 @@ const expandByOne = function (path) {
     }
 };
 
+// Make item clockwise. Drill down into groups.
+const ensureClockwise = function (item) {
+    if (item instanceof paper.Group) {
+        for (const child of item.children) {
+            ensureClockwise(child);
+        }
+    } else if (item instanceof paper.PathItem) {
+        item.clockwise = true;
+    }
+};
+
 export {
     HANDLE_RATIO,
     checkPointsClose,
+    ensureClockwise,
     expandByOne,
     getRandomInt,
     getRandomBoolean,

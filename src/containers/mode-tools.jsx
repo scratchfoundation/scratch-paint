@@ -8,7 +8,7 @@ import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
 import {clearSelection, getSelectedLeafItems, getSelectedRootItems} from '../helper/selection';
-import {HANDLE_RATIO} from '../helper/math';
+import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 
 class ModeTools extends React.Component {
     constructor (props) {
@@ -20,6 +20,8 @@ class ModeTools extends React.Component {
             'hasSelectedUnpointedPoints',
             'handleCopyToClipboard',
             'handleCurvePoints',
+            'handleFlipHorizontal',
+            'handleFlipVertical',
             'handlePasteFromClipboard',
             'handlePointPoints'
         ]);
@@ -134,6 +136,34 @@ class ModeTools extends React.Component {
             this.props.onUpdateSvg();
         }
     }
+    _handleFlip (horizontalScale, verticalScale) {
+        const selectedItems = getSelectedRootItems();
+        // Record old indices
+        for (const item of selectedItems) {
+            item.data.index = item.index;
+        }
+
+        // Group items so that they flip as a unit
+        const itemGroup = new paper.Group(selectedItems);
+        // Flip
+        itemGroup.scale(horizontalScale, verticalScale);
+        ensureClockwise(itemGroup);
+
+        // Remove flipped item from group and insert at old index. Must insert from bottom index up.
+        for (let i = 0; i < selectedItems.length; i++) {
+            itemGroup.layer.insertChild(selectedItems[i].data.index, selectedItems[i]);
+            selectedItems[i].data.index = null;
+        }
+        itemGroup.remove();
+
+        this.props.onUpdateSvg();
+    }
+    handleFlipHorizontal () {
+        this._handleFlip(-1, 1);
+    }
+    handleFlipVertical () {
+        this._handleFlip(1, -1);
+    }
     handleCopyToClipboard () {
         const selectedItems = getSelectedRootItems();
         if (selectedItems.length > 0) {
@@ -171,6 +201,8 @@ class ModeTools extends React.Component {
                 hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
                 onCopyToClipboard={this.handleCopyToClipboard}
                 onCurvePoints={this.handleCurvePoints}
+                onFlipHorizontal={this.handleFlipHorizontal}
+                onFlipVertical={this.handleFlipVertical}
                 onPasteFromClipboard={this.handlePasteFromClipboard}
                 onPointPoints={this.handlePointPoints}
             />
