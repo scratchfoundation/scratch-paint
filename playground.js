@@ -16654,11 +16654,11 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _group = __webpack_require__(20);
 
-var _item = __webpack_require__(22);
+var _item = __webpack_require__(23);
 
 var _compoundPath = __webpack_require__(173);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18937,7 +18937,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _selection = __webpack_require__(3);
 
-var _item = __webpack_require__(22);
+var _item = __webpack_require__(23);
 
 var _group = __webpack_require__(20);
 
@@ -21996,7 +21996,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _item = __webpack_require__(22);
+var _item = __webpack_require__(23);
 
 var _selection = __webpack_require__(3);
 
@@ -22170,6 +22170,181 @@ exports.shouldShowUngroup = shouldShowUngroup;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.sortItemsByZIndex = exports.snapDeltaToAngle = exports.getRandomBoolean = exports.getRandomInt = exports.expandByOne = exports.ensureClockwise = exports.checkPointsClose = exports.HANDLE_RATIO = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/** The ratio of the curve length to use for the handle length to convert squares into approximately circles. */
+var HANDLE_RATIO = 0.3902628565;
+
+var checkPointsClose = function checkPointsClose(startPos, eventPoint, threshold) {
+    var xOff = Math.abs(startPos.x - eventPoint.x);
+    var yOff = Math.abs(startPos.y - eventPoint.y);
+    if (xOff < threshold && yOff < threshold) {
+        return true;
+    }
+    return false;
+};
+
+var getRandomInt = function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+};
+
+var getRandomBoolean = function getRandomBoolean() {
+    return getRandomInt(0, 2) === 1;
+};
+
+// Thanks Mikko Mononen! https://github.com/memononen/stylii
+var snapDeltaToAngle = function snapDeltaToAngle(delta, snapAngle) {
+    var angle = Math.atan2(delta.y, delta.x);
+    angle = Math.round(angle / snapAngle) * snapAngle;
+    var dirx = Math.cos(angle);
+    var diry = Math.sin(angle);
+    var d = dirx * delta.x + diry * delta.y;
+    return new _paper2.default.Point(dirx * d, diry * d);
+};
+
+var _getDepth = function _getDepth(item) {
+    var temp = item;
+    var depth = 0;
+    while (!(temp instanceof _paper2.default.Layer)) {
+        depth++;
+        if (temp.parent === null) {
+            // This item isn't attached to a layer, so it's not on the canvas and can't be compared.
+            return null;
+        }
+        temp = temp.parent;
+    }
+    return depth;
+};
+
+var sortItemsByZIndex = function sortItemsByZIndex(a, b) {
+    if (a === null || b === null) {
+        return null;
+    }
+
+    // Get to the same depth in the project tree
+    var tempA = a;
+    var tempB = b;
+    var aDepth = _getDepth(a);
+    var bDepth = _getDepth(b);
+    while (bDepth > aDepth) {
+        tempB = tempB.parent;
+        bDepth--;
+    }
+    while (aDepth > bDepth) {
+        tempA = tempA.parent;
+        aDepth--;
+    }
+
+    // Step up until they share parents. When they share parents, compare indices.
+    while (tempA && tempB) {
+        if (tempB === tempA) {
+            return 0;
+        } else if (tempB.parent === tempA.parent) {
+            if (tempB.parent instanceof _paper2.default.CompoundPath) {
+                // Neither is on top of the other in a compound path. Return in order of decreasing size.
+                return Math.abs(tempB.area) - Math.abs(tempA.area);
+            }
+            return parseFloat(tempA.index) - parseFloat(tempB.index);
+        }
+        tempB = tempB.parent;
+        tempA = tempA.parent;
+    }
+
+    // No shared hierarchy
+    return null;
+};
+
+// Expand the size of the path by approx one pixel all around
+var expandByOne = function expandByOne(path) {
+    var center = path.position;
+    var pathArea = path.area;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = path.segments[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var seg = _step.value;
+
+            var halfNorm = seg.point.subtract(center).normalize().divide(2);
+            seg.point = seg.point.add(halfNorm);
+            // If that made the path area smaller, go the other way.
+            if (path.area < pathArea) seg.point = seg.point.subtract(halfNorm.multiply(2));
+            pathArea = path.area;
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+};
+
+// Make item clockwise. Drill down into groups.
+var ensureClockwise = function ensureClockwise(item) {
+    if (item instanceof _paper2.default.Group) {
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+            for (var _iterator2 = item.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var child = _step2.value;
+
+                ensureClockwise(child);
+            }
+        } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                    _iterator2.return();
+                }
+            } finally {
+                if (_didIteratorError2) {
+                    throw _iteratorError2;
+                }
+            }
+        }
+    } else if (item instanceof _paper2.default.PathItem) {
+        item.clockwise = true;
+    }
+};
+
+exports.HANDLE_RATIO = HANDLE_RATIO;
+exports.checkPointsClose = checkPointsClose;
+exports.ensureClockwise = ensureClockwise;
+exports.expandByOne = expandByOne;
+exports.getRandomInt = getRandomInt;
+exports.getRandomBoolean = getRandomBoolean;
+exports.snapDeltaToAngle = snapDeltaToAngle;
+exports.sortItemsByZIndex = sortItemsByZIndex;
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.setupLayers = exports.getGuideLayer = exports.showGuideLayers = exports.hideGuideLayers = undefined;
 
 var _paper = __webpack_require__(2);
@@ -22332,7 +22507,7 @@ exports.getGuideLayer = getGuideLayer;
 exports.setupLayers = setupLayers;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22413,148 +22588,6 @@ exports.setPivot = setPivot;
 exports.getPositionInView = getPositionInView;
 exports.setPositionInView = setPositionInView;
 exports.getRootItem = getRootItem;
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.sortItemsByZIndex = exports.snapDeltaToAngle = exports.getRandomBoolean = exports.getRandomInt = exports.expandByOne = exports.checkPointsClose = exports.HANDLE_RATIO = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/** The ratio of the curve length to use for the handle length to convert squares into approximately circles. */
-var HANDLE_RATIO = 0.3902628565;
-
-var checkPointsClose = function checkPointsClose(startPos, eventPoint, threshold) {
-    var xOff = Math.abs(startPos.x - eventPoint.x);
-    var yOff = Math.abs(startPos.y - eventPoint.y);
-    if (xOff < threshold && yOff < threshold) {
-        return true;
-    }
-    return false;
-};
-
-var getRandomInt = function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-};
-
-var getRandomBoolean = function getRandomBoolean() {
-    return getRandomInt(0, 2) === 1;
-};
-
-// Thanks Mikko Mononen! https://github.com/memononen/stylii
-var snapDeltaToAngle = function snapDeltaToAngle(delta, snapAngle) {
-    var angle = Math.atan2(delta.y, delta.x);
-    angle = Math.round(angle / snapAngle) * snapAngle;
-    var dirx = Math.cos(angle);
-    var diry = Math.sin(angle);
-    var d = dirx * delta.x + diry * delta.y;
-    return new _paper2.default.Point(dirx * d, diry * d);
-};
-
-var _getDepth = function _getDepth(item) {
-    var temp = item;
-    var depth = 0;
-    while (!(temp instanceof _paper2.default.Layer)) {
-        depth++;
-        if (temp.parent === null) {
-            // This item isn't attached to a layer, so it's not on the canvas and can't be compared.
-            return null;
-        }
-        temp = temp.parent;
-    }
-    return depth;
-};
-
-var sortItemsByZIndex = function sortItemsByZIndex(a, b) {
-    if (a === null || b === null) {
-        return null;
-    }
-
-    // Get to the same depth in the project tree
-    var tempA = a;
-    var tempB = b;
-    var aDepth = _getDepth(a);
-    var bDepth = _getDepth(b);
-    while (bDepth > aDepth) {
-        tempB = tempB.parent;
-        bDepth--;
-    }
-    while (aDepth > bDepth) {
-        tempA = tempA.parent;
-        aDepth--;
-    }
-
-    // Step up until they share parents. When they share parents, compare indices.
-    while (tempA && tempB) {
-        if (tempB === tempA) {
-            return 0;
-        } else if (tempB.parent === tempA.parent) {
-            if (tempB.parent instanceof _paper2.default.CompoundPath) {
-                // Neither is on top of the other in a compound path. Return in order of decreasing size.
-                return Math.abs(tempB.area) - Math.abs(tempA.area);
-            }
-            return parseFloat(tempA.index) - parseFloat(tempB.index);
-        }
-        tempB = tempB.parent;
-        tempA = tempA.parent;
-    }
-
-    // No shared hierarchy
-    return null;
-};
-
-// Expand the size of the path by approx one pixel all around
-var expandByOne = function expandByOne(path) {
-    var center = path.position;
-    var pathArea = path.area;
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = path.segments[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var seg = _step.value;
-
-            var halfNorm = seg.point.subtract(center).normalize().divide(2);
-            seg.point = seg.point.add(halfNorm);
-            // If that made the path area smaller, go the other way.
-            if (path.area < pathArea) seg.point = seg.point.subtract(halfNorm.multiply(2));
-            pathArea = path.area;
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
-    }
-};
-
-exports.HANDLE_RATIO = HANDLE_RATIO;
-exports.checkPointsClose = checkPointsClose;
-exports.expandByOne = expandByOne;
-exports.getRandomInt = getRandomInt;
-exports.getRandomBoolean = getRandomBoolean;
-exports.snapDeltaToAngle = snapDeltaToAngle;
-exports.sortItemsByZIndex = sortItemsByZIndex;
 
 /***/ }),
 /* 24 */
@@ -23113,7 +23146,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _layer = __webpack_require__(21);
+var _layer = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -24364,13 +24397,13 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _item = __webpack_require__(22);
+var _item = __webpack_require__(23);
 
 var _guides = __webpack_require__(34);
 
 var _group = __webpack_require__(20);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24515,13 +24548,13 @@ var _selection = __webpack_require__(3);
 
 var _guides = __webpack_require__(34);
 
-var _layer = __webpack_require__(21);
+var _layer = __webpack_require__(22);
 
-var _scaleTool = __webpack_require__(270);
+var _scaleTool = __webpack_require__(272);
 
 var _scaleTool2 = _interopRequireDefault(_scaleTool);
 
-var _rotateTool = __webpack_require__(271);
+var _rotateTool = __webpack_require__(273);
 
 var _rotateTool2 = _interopRequireDefault(_rotateTool);
 
@@ -25109,11 +25142,11 @@ var _paintEditor = __webpack_require__(111);
 
 var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
-var _selectionHoc = __webpack_require__(309);
+var _selectionHoc = __webpack_require__(311);
 
 var _selectionHoc2 = _interopRequireDefault(_selectionHoc);
 
-var _scratchPaintReducer = __webpack_require__(310);
+var _scratchPaintReducer = __webpack_require__(312);
 
 var _scratchPaintReducer2 = _interopRequireDefault(_scratchPaintReducer);
 
@@ -26004,7 +26037,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _layer = __webpack_require__(21);
+var _layer = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26494,7 +26527,7 @@ var _stylePath = __webpack_require__(8);
 
 var _selection = __webpack_require__(3);
 
-var _layer = __webpack_require__(21);
+var _layer = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27896,9 +27929,9 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _group = __webpack_require__(20);
 
-var _item = __webpack_require__(22);
+var _item = __webpack_require__(23);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(21);
 
 var _selection = __webpack_require__(3);
 
@@ -28172,13 +28205,13 @@ exports.updateIntl = exports.intlInitialState = exports.IntlProvider = exports.d
 
 var _reactIntl = __webpack_require__(15);
 
-var _reactIntlRedux = __webpack_require__(313);
+var _reactIntlRedux = __webpack_require__(315);
 
-var _scratchL10n = __webpack_require__(316);
+var _scratchL10n = __webpack_require__(318);
 
 var _scratchL10n2 = _interopRequireDefault(_scratchL10n);
 
-var _paintMsgs = __webpack_require__(317);
+var _paintMsgs = __webpack_require__(319);
 
 var _paintMsgs2 = _interopRequireDefault(_paintMsgs);
 
@@ -28273,7 +28306,7 @@ var _reactRedux = __webpack_require__(7);
 
 var _redux = __webpack_require__(26);
 
-var _combineReducers = __webpack_require__(312);
+var _combineReducers = __webpack_require__(314);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
@@ -48501,7 +48534,7 @@ var _selectedItems = __webpack_require__(9);
 
 var _eyeDropper = __webpack_require__(54);
 
-var _layer = __webpack_require__(21);
+var _layer = __webpack_require__(22);
 
 var _undo2 = __webpack_require__(76);
 
@@ -52725,87 +52758,87 @@ var _modeTools = __webpack_require__(260);
 
 var _modeTools2 = _interopRequireDefault(_modeTools);
 
-var _ovalMode = __webpack_require__(268);
+var _ovalMode = __webpack_require__(270);
 
 var _ovalMode2 = _interopRequireDefault(_ovalMode);
 
-var _rectMode = __webpack_require__(274);
+var _rectMode = __webpack_require__(276);
 
 var _rectMode2 = _interopRequireDefault(_rectMode);
 
-var _reshapeMode = __webpack_require__(278);
+var _reshapeMode = __webpack_require__(280);
 
 var _reshapeMode2 = _interopRequireDefault(_reshapeMode);
 
-var _selectMode = __webpack_require__(284);
+var _selectMode = __webpack_require__(286);
 
 var _selectMode2 = _interopRequireDefault(_selectMode);
 
-var _strokeColorIndicator = __webpack_require__(288);
+var _strokeColorIndicator = __webpack_require__(290);
 
 var _strokeColorIndicator2 = _interopRequireDefault(_strokeColorIndicator);
 
-var _strokeWidthIndicator = __webpack_require__(290);
+var _strokeWidthIndicator = __webpack_require__(292);
 
 var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
 
-var _textMode = __webpack_require__(292);
+var _textMode = __webpack_require__(294);
 
 var _textMode2 = _interopRequireDefault(_textMode);
 
-var _layoutConstants = __webpack_require__(294);
+var _layoutConstants = __webpack_require__(296);
 
 var _layoutConstants2 = _interopRequireDefault(_layoutConstants);
 
-var _paintEditor = __webpack_require__(295);
+var _paintEditor = __webpack_require__(297);
 
 var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
-var _bitmap = __webpack_require__(297);
+var _bitmap = __webpack_require__(299);
 
 var _bitmap2 = _interopRequireDefault(_bitmap);
 
-var _group2 = __webpack_require__(298);
+var _group2 = __webpack_require__(300);
 
 var _group3 = _interopRequireDefault(_group2);
 
-var _redo = __webpack_require__(299);
+var _redo = __webpack_require__(301);
 
 var _redo2 = _interopRequireDefault(_redo);
 
-var _sendBack = __webpack_require__(300);
+var _sendBack = __webpack_require__(302);
 
 var _sendBack2 = _interopRequireDefault(_sendBack);
 
-var _sendBackward = __webpack_require__(301);
+var _sendBackward = __webpack_require__(303);
 
 var _sendBackward2 = _interopRequireDefault(_sendBackward);
 
-var _sendForward = __webpack_require__(302);
+var _sendForward = __webpack_require__(304);
 
 var _sendForward2 = _interopRequireDefault(_sendForward);
 
-var _sendFront = __webpack_require__(303);
+var _sendFront = __webpack_require__(305);
 
 var _sendFront2 = _interopRequireDefault(_sendFront);
 
-var _undo = __webpack_require__(304);
+var _undo = __webpack_require__(306);
 
 var _undo2 = _interopRequireDefault(_undo);
 
-var _ungroup = __webpack_require__(305);
+var _ungroup = __webpack_require__(307);
 
 var _ungroup2 = _interopRequireDefault(_ungroup);
 
-var _zoomIn = __webpack_require__(306);
+var _zoomIn = __webpack_require__(308);
 
 var _zoomIn2 = _interopRequireDefault(_zoomIn);
 
-var _zoomOut = __webpack_require__(307);
+var _zoomOut = __webpack_require__(309);
 
 var _zoomOut2 = _interopRequireDefault(_zoomOut);
 
-var _zoomReset = __webpack_require__(308);
+var _zoomReset = __webpack_require__(310);
 
 var _zoomReset2 = _interopRequireDefault(_zoomReset);
 
@@ -57595,13 +57628,15 @@ var _undo2 = __webpack_require__(44);
 
 var _group = __webpack_require__(20);
 
-var _layer = __webpack_require__(21);
+var _layer = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
 var _selectedItems = __webpack_require__(9);
 
 var _view = __webpack_require__(77);
+
+var _math = __webpack_require__(21);
 
 var _hover = __webpack_require__(27);
 
@@ -57627,7 +57662,7 @@ var PaperCanvas = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaperCanvas.__proto__ || Object.getPrototypeOf(PaperCanvas)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['setCanvas', 'importSvg', 'handleKeyDown', 'handleWheel', '_ensureClockwise']);
+        (0, _lodash2.default)(_this, ['setCanvas', 'importSvg', 'handleKeyDown', 'handleWheel']);
         return _this;
     }
 
@@ -57780,7 +57815,7 @@ var PaperCanvas = function (_React$Component) {
                         item = item.reduce();
                     }
 
-                    paperCanvas._ensureClockwise(item);
+                    (0, _math.ensureClockwise)(item);
 
                     if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
                         item.position = _paper2.default.project.view.center.add(itemWidth / 2, itemHeight / 2).subtract(rotationCenterX, rotationCenterY);
@@ -57796,38 +57831,6 @@ var PaperCanvas = function (_React$Component) {
                     _paper2.default.project.view.update();
                 }
             });
-        }
-    }, {
-        key: '_ensureClockwise',
-        value: function _ensureClockwise(item) {
-            if (item instanceof _paper2.default.Group) {
-                var _iteratorNormalCompletion3 = true;
-                var _didIteratorError3 = false;
-                var _iteratorError3 = undefined;
-
-                try {
-                    for (var _iterator3 = item.children[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                        var child = _step3.value;
-
-                        this._ensureClockwise(child);
-                    }
-                } catch (err) {
-                    _didIteratorError3 = true;
-                    _iteratorError3 = err;
-                } finally {
-                    try {
-                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                            _iterator3.return();
-                        }
-                    } finally {
-                        if (_didIteratorError3) {
-                            throw _iteratorError3;
-                        }
-                    }
-                }
-            } else if (item instanceof _paper2.default.PathItem) {
-                item.clockwise = true;
-            }
         }
     }, {
         key: 'setCanvas',
@@ -68113,7 +68116,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _hover = __webpack_require__(56);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69186,7 +69189,7 @@ var _clipboard = __webpack_require__(45);
 
 var _selection = __webpack_require__(3);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69204,7 +69207,7 @@ var ModeTools = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (ModeTools.__proto__ || Object.getPrototypeOf(ModeTools)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['_getSelectedUncurvedPoints', '_getSelectedUnpointedPoints', 'hasSelectedUncurvedPoints', 'hasSelectedUnpointedPoints', 'handleCopyToClipboard', 'handleCurvePoints', 'handlePasteFromClipboard', 'handlePointPoints']);
+        (0, _lodash2.default)(_this, ['_getSelectedUncurvedPoints', '_getSelectedUnpointedPoints', 'hasSelectedUncurvedPoints', 'hasSelectedUnpointedPoints', 'handleCopyToClipboard', 'handleCurvePoints', 'handleFlipHorizontal', 'handleFlipVertical', 'handlePasteFromClipboard', 'handlePointPoints']);
         return _this;
     }
 
@@ -69448,6 +69451,62 @@ var ModeTools = function (_React$Component) {
             }
         }
     }, {
+        key: '_handleFlip',
+        value: function _handleFlip(horizontalScale, verticalScale) {
+            var selectedItems = (0, _selection.getSelectedRootItems)();
+            // Record old indices
+            var _iteratorNormalCompletion7 = true;
+            var _didIteratorError7 = false;
+            var _iteratorError7 = undefined;
+
+            try {
+                for (var _iterator7 = selectedItems[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+                    var item = _step7.value;
+
+                    item.data.index = item.index;
+                }
+
+                // Group items so that they flip as a unit
+            } catch (err) {
+                _didIteratorError7 = true;
+                _iteratorError7 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion7 && _iterator7.return) {
+                        _iterator7.return();
+                    }
+                } finally {
+                    if (_didIteratorError7) {
+                        throw _iteratorError7;
+                    }
+                }
+            }
+
+            var itemGroup = new _paper2.default.Group(selectedItems);
+            // Flip
+            itemGroup.scale(horizontalScale, verticalScale);
+            (0, _math.ensureClockwise)(itemGroup);
+
+            // Remove flipped item from group and insert at old index. Must insert from bottom index up.
+            for (var i = 0; i < selectedItems.length; i++) {
+                itemGroup.layer.insertChild(selectedItems[i].data.index, selectedItems[i]);
+                selectedItems[i].data.index = null;
+            }
+            itemGroup.remove();
+
+            this.props.onUpdateSvg();
+        }
+    }, {
+        key: 'handleFlipHorizontal',
+        value: function handleFlipHorizontal() {
+            this._handleFlip(-1, 1);
+        }
+    }, {
+        key: 'handleFlipVertical',
+        value: function handleFlipVertical() {
+            this._handleFlip(1, -1);
+        }
+    }, {
         key: 'handleCopyToClipboard',
         value: function handleCopyToClipboard() {
             var selectedItems = (0, _selection.getSelectedRootItems)();
@@ -69489,6 +69548,8 @@ var ModeTools = function (_React$Component) {
                 hasSelectedUnpointedPoints: this.hasSelectedUnpointedPoints(),
                 onCopyToClipboard: this.handleCopyToClipboard,
                 onCurvePoints: this.handleCurvePoints,
+                onFlipHorizontal: this.handleFlipHorizontal,
+                onFlipVertical: this.handleFlipVertical,
                 onPasteFromClipboard: this.handlePasteFromClipboard,
                 onPointPoints: this.handlePointPoints
             });
@@ -69615,7 +69676,15 @@ var _eraser = __webpack_require__(84);
 
 var _eraser2 = _interopRequireDefault(_eraser);
 
-var _straightPoint = __webpack_require__(267);
+var _flipHorizontal = __webpack_require__(267);
+
+var _flipHorizontal2 = _interopRequireDefault(_flipHorizontal);
+
+var _flipVertical = __webpack_require__(268);
+
+var _flipVertical2 = _interopRequireDefault(_flipVertical);
+
+var _straightPoint = __webpack_require__(269);
 
 var _straightPoint2 = _interopRequireDefault(_straightPoint);
 
@@ -69623,8 +69692,6 @@ var _strokeWidth = __webpack_require__(30);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import flipHorizontalIcon from './icons/flip-horizontal.svg';
-// import flipVerticalIcon from './icons/flip-vertical.svg';
 var LiveInput = (0, _liveInputHoc2.default)(_input2.default);
 var ModeToolsComponent = function ModeToolsComponent(props) {
     var messages = (0, _reactIntl.defineMessages)({
@@ -69651,6 +69718,14 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
         pointed: {
             'id': 'paint.modeTools.pointed',
             'defaultMessage': 'Pointed'
+        },
+        flipHorizontal: {
+            'id': 'paint.modeTools.flipHorizontal',
+            'defaultMessage': 'Flip Horizontal'
+        },
+        flipVertical: {
+            'id': 'paint.modeTools.flipVertical',
+            'defaultMessage': 'Flip Vertical'
         }
     });
 
@@ -69733,6 +69808,22 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                         title: props.intl.formatMessage(messages.paste),
                         onClick: props.onPasteFromClipboard
                     })
+                ),
+                _react2.default.createElement(
+                    _inputGroup2.default,
+                    { className: (0, _classnames2.default)(_modeTools2.default.modLabeledIconHeight) },
+                    _react2.default.createElement(_labeledIconButton2.default, {
+                        disabled: !props.selectedItems.length,
+                        imgSrc: _flipHorizontal2.default,
+                        title: props.intl.formatMessage(messages.flipHorizontal),
+                        onClick: props.onFlipHorizontal
+                    }),
+                    _react2.default.createElement(_labeledIconButton2.default, {
+                        disabled: !props.selectedItems.length,
+                        imgSrc: _flipVertical2.default,
+                        title: props.intl.formatMessage(messages.flipVertical),
+                        onClick: props.onFlipVertical
+                    })
                 )
             );
         default:
@@ -69754,6 +69845,8 @@ ModeToolsComponent.propTypes = {
     onCopyToClipboard: _propTypes2.default.func.isRequired,
     onCurvePoints: _propTypes2.default.func.isRequired,
     onEraserSliderChange: _propTypes2.default.func,
+    onFlipHorizontal: _propTypes2.default.func.isRequired,
+    onFlipVertical: _propTypes2.default.func.isRequired,
     onPasteFromClipboard: _propTypes2.default.func.isRequired,
     onPointPoints: _propTypes2.default.func.isRequired,
     selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item))
@@ -69857,10 +69950,22 @@ module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' stan
 /* 267 */
 /***/ (function(module, exports) {
 
-module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Estraight-point%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='straight-point' fill='%234C97FF'%3E %3Cpolyline id='Path-2' stroke='%234C97FF' stroke-width='0.75' fill-opacity='0.25' stroke-linecap='round' stroke-linejoin='round' points='2 15 10 7 18 15'%3E%3C/polyline%3E %3Ccircle id='Oval-4' fill-opacity='0.25' cx='10' cy='7' r='3'%3E%3C/circle%3E %3Ccircle id='Oval-4' cx='10' cy='7' r='2'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
+module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eflip-horizontal%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='flip-horizontal'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='0.75' r='1'%3E%3C/circle%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='13.25' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy' fill='%23575E75' opacity='0.5' cx='8' cy='3.875' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-2' fill='%23575E75' opacity='0.5' cx='8' cy='7' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-3' fill='%23575E75' opacity='0.5' cx='8' cy='10.125' r='1'%3E%3C/circle%3E %3Cpath d='M16,3.08425423 L16,10.9157458 C16,11.4342626 15.2574491,11.6956996 14.8235798,11.3282353 L10.2019293,7.41103711 C9.93269025,7.18445835 9.93269025,6.81408922 10.2019293,6.58751046 L14.8235798,2.67176469 C15.2574491,2.30430042 16,2.56573745 16,3.08425423' id='Fill-11' fill='%234C97FF' opacity='0.5'%3E%3C/path%3E %3Cpath d='M0,10.9157458 L0,3.08425423 C0,2.56573745 0.742550911,2.30430042 1.17470525,2.67176469 L5.79807074,6.58896289 C6.06730975,6.81554165 6.06730975,7.18591078 5.79807074,7.41248954 L1.17470525,11.3282353 C0.742550911,11.6956996 0,11.4342626 0,10.9157458' id='Fill-14' fill='%234C97FF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
 /* 268 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eflip-vertical%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='flip-vertical'%3E %3Cg id='flip-horizontal' transform='translate(10.000000, 10.000000) rotate(90.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='0.75' r='1'%3E%3C/circle%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='13.25' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy' fill='%23575E75' opacity='0.5' cx='8' cy='3.875' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-2' fill='%23575E75' opacity='0.5' cx='8' cy='7' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-3' fill='%23575E75' opacity='0.5' cx='8' cy='10.125' r='1'%3E%3C/circle%3E %3Cpath d='M16,3.08425423 L16,10.9157458 C16,11.4342626 15.2574491,11.6956996 14.8235798,11.3282353 L10.2019293,7.41103711 C9.93269025,7.18445835 9.93269025,6.81408922 10.2019293,6.58751046 L14.8235798,2.67176469 C15.2574491,2.30430042 16,2.56573745 16,3.08425423' id='Fill-11' fill='%234C97FF' opacity='0.5'%3E%3C/path%3E %3Cpath d='M0,10.9157458 L0,3.08425423 C0,2.56573745 0.742550911,2.30430042 1.17470525,2.67176469 L5.79807074,6.58896289 C6.06730975,6.81554165 6.06730975,7.18591078 5.79807074,7.41248954 L1.17470525,11.3282353 C0.742550911,11.6956996 0,11.4342626 0,10.9157458' id='Fill-14' fill='%234C97FF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
+
+/***/ }),
+/* 269 */
+/***/ (function(module, exports) {
+
+module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Estraight-point%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='straight-point' fill='%234C97FF'%3E %3Cpolyline id='Path-2' stroke='%234C97FF' stroke-width='0.75' fill-opacity='0.25' stroke-linecap='round' stroke-linejoin='round' points='2 15 10 7 18 15'%3E%3C/polyline%3E %3Ccircle id='Oval-4' fill-opacity='0.25' cx='10' cy='7' r='3'%3E%3C/circle%3E %3Ccircle id='Oval-4' cx='10' cy='7' r='2'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
+
+/***/ }),
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -69906,11 +70011,11 @@ var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(3);
 
-var _ovalTool = __webpack_require__(269);
+var _ovalTool = __webpack_require__(271);
 
 var _ovalTool2 = _interopRequireDefault(_ovalTool);
 
-var _ovalMode = __webpack_require__(272);
+var _ovalMode = __webpack_require__(274);
 
 var _ovalMode2 = _interopRequireDefault(_ovalMode);
 
@@ -70054,7 +70159,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(OvalMode);
 
 /***/ }),
-/* 269 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70245,7 +70350,7 @@ var OvalTool = function (_paper$Tool) {
 exports.default = OvalTool;
 
 /***/ }),
-/* 270 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70497,7 +70602,7 @@ var ScaleTool = function () {
 exports.default = ScaleTool;
 
 /***/ }),
-/* 271 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70642,7 +70747,7 @@ var RotateTool = function () {
 exports.default = RotateTool;
 
 /***/ }),
-/* 272 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70664,7 +70769,7 @@ var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _oval = __webpack_require__(273);
+var _oval = __webpack_require__(275);
 
 var _oval2 = _interopRequireDefault(_oval);
 
@@ -70691,13 +70796,13 @@ OvalModeComponent.propTypes = {
 exports.default = OvalModeComponent;
 
 /***/ }),
-/* 273 */
+/* 275 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eoval%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='oval' stroke-width='1.5' stroke='%23575E75'%3E %3Ccircle id='oval-icon' cx='10' cy='10' r='5'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 274 */
+/* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -70743,11 +70848,11 @@ var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(3);
 
-var _rectTool = __webpack_require__(275);
+var _rectTool = __webpack_require__(277);
 
 var _rectTool2 = _interopRequireDefault(_rectTool);
 
-var _rectMode = __webpack_require__(276);
+var _rectMode = __webpack_require__(278);
 
 var _rectMode2 = _interopRequireDefault(_rectMode);
 
@@ -70891,7 +70996,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(RectMode);
 
 /***/ }),
-/* 275 */
+/* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71076,7 +71181,7 @@ var RectTool = function (_paper$Tool) {
 exports.default = RectTool;
 
 /***/ }),
-/* 276 */
+/* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71098,7 +71203,7 @@ var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _rectangle = __webpack_require__(277);
+var _rectangle = __webpack_require__(279);
 
 var _rectangle2 = _interopRequireDefault(_rectangle);
 
@@ -71125,13 +71230,13 @@ RectModeComponent.propTypes = {
 exports.default = RectModeComponent;
 
 /***/ }),
-/* 277 */
+/* 279 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Erectangle%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E %3Cg id='rectangle' stroke='%23575E75' stroke-width='1.5'%3E %3Crect id='rectangle-icon' x='5' y='5' width='10' height='10'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 278 */
+/* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71169,11 +71274,11 @@ var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(3);
 
-var _reshapeTool = __webpack_require__(279);
+var _reshapeTool = __webpack_require__(281);
 
 var _reshapeTool2 = _interopRequireDefault(_reshapeTool);
 
-var _reshapeMode = __webpack_require__(282);
+var _reshapeMode = __webpack_require__(284);
 
 var _reshapeMode2 = _interopRequireDefault(_reshapeMode);
 
@@ -71290,7 +71395,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ReshapeMode);
 
 /***/ }),
-/* 279 */
+/* 281 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71320,17 +71425,17 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _hover = __webpack_require__(56);
 
-var _item = __webpack_require__(22);
+var _item = __webpack_require__(23);
 
 var _moveTool = __webpack_require__(92);
 
 var _moveTool2 = _interopRequireDefault(_moveTool);
 
-var _pointTool = __webpack_require__(280);
+var _pointTool = __webpack_require__(282);
 
 var _pointTool2 = _interopRequireDefault(_pointTool);
 
-var _handleTool = __webpack_require__(281);
+var _handleTool = __webpack_require__(283);
 
 var _handleTool2 = _interopRequireDefault(_handleTool);
 
@@ -71604,7 +71709,7 @@ var ReshapeTool = function (_paper$Tool) {
 exports.default = ReshapeTool;
 
 /***/ }),
-/* 280 */
+/* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -71620,7 +71725,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(21);
 
 var _selection = __webpack_require__(3);
 
@@ -71931,7 +72036,7 @@ var PointTool = function () {
 exports.default = PointTool;
 
 /***/ }),
-/* 281 */
+/* 283 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72130,7 +72235,7 @@ var HandleTool = function () {
 exports.default = HandleTool;
 
 /***/ }),
-/* 282 */
+/* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72152,7 +72257,7 @@ var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _reshape = __webpack_require__(283);
+var _reshape = __webpack_require__(285);
 
 var _reshape2 = _interopRequireDefault(_reshape);
 
@@ -72179,13 +72284,13 @@ ReshapeModeComponent.propTypes = {
 exports.default = ReshapeModeComponent;
 
 /***/ }),
-/* 283 */
+/* 285 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ereshape%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='reshape'%3E %3Cg id='reshape-icon' transform='translate(3.000000, 2.000000)'%3E %3Cpath d='M6.3718,4e-05 C6.3718,1.20298846 6.03840639,2.32811001 5.45898306,3.28804076 C5.31876362,3.52034235 4.30079812,3.15107034 3.82818604,3.61859131 C3.35557395,4.08611228 3.47873759,5.34529147 3.26181884,5.47482181 C2.30759304,6.04462589 1.19191205,6.37204 -0.0002,6.37204' id='Stroke-1' stroke='%23575E75' stroke-width='0.75'%3E%3C/path%3E %3Cpath d='M4,6.94999094 C2.85887984,6.71835578 2,5.70947896 2,4.5 C2,3.11928813 3.11928813,2 4.5,2 C5.88071187,2 7,3.11928813 7,4.5 C7,4.56854233 6.99724162,4.63644042 6.99182982,4.70358929 L6.68137747,4.42017327 C5.65792772,3.48493325 4,4.20484091 4,5.595932 L4,6.94999094 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3Cpath d='M4,7.96455557 C2.30385293,7.72194074 1,6.26323595 1,4.5 C1,2.56700338 2.56700338,1 4.5,1 C6.43299662,1 8,2.56700338 8,4.5 C8,4.84508345 7.95005914,5.1785026 7.85701065,5.4934242 L6.68137747,4.42017327 C5.65792772,3.48493325 4,4.20484091 4,5.595932 L4,7.96455557 Z' id='Oval-2' fill-opacity='0.15' fill='%23575E75'%3E%3C/path%3E %3Cpath d='M7.87915329,13.1684522 L8.98467414,15.6316703 C9.20235954,16.1186581 9.76980913,16.3337238 10.2516521,16.1137141 C10.7334951,15.8924683 10.9462887,15.3189598 10.7286032,14.833208 L9.63583183,12.3973461 L12.3974628,12.3973461 C12.945512,12.3973461 13.207518,11.7313818 12.8048941,11.3644462 L6.00716065,5.15870674 C5.6225647,4.80725864 5,5.07769498 5,5.595932 L5,14.8026807 C5,15.3507015 5.68145595,15.608033 6.04802397,15.1994001 L7.87915329,13.1684522 Z' id='select-icon' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 284 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72227,11 +72332,11 @@ var _selectedItems = __webpack_require__(9);
 
 var _selection = __webpack_require__(3);
 
-var _selectTool = __webpack_require__(285);
+var _selectTool = __webpack_require__(287);
 
 var _selectTool2 = _interopRequireDefault(_selectTool);
 
-var _selectMode = __webpack_require__(286);
+var _selectMode = __webpack_require__(288);
 
 var _selectMode2 = _interopRequireDefault(_selectMode);
 
@@ -72351,7 +72456,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SelectMode);
 
 /***/ }),
-/* 285 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72560,7 +72665,7 @@ var SelectTool = function (_paper$Tool) {
 exports.default = SelectTool;
 
 /***/ }),
-/* 286 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72582,7 +72687,7 @@ var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _select = __webpack_require__(287);
+var _select = __webpack_require__(289);
 
 var _select2 = _interopRequireDefault(_select);
 
@@ -72609,13 +72714,13 @@ SelectModeComponent.propTypes = {
 exports.default = SelectModeComponent;
 
 /***/ }),
-/* 287 */
+/* 289 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eselect%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='select' fill='%23575E75'%3E %3Cpath d='M9.08480709,12.7519131 L10.2692937,15.3910753 C10.5025281,15.912848 11.1105098,16.1432755 11.6267701,15.9075508 C12.1430304,15.6705018 12.3710236,15.0560284 12.1377892,14.53558 L10.9669627,11.925728 L13.925853,11.925728 C14.5130486,11.925728 14.7937693,11.2121948 14.3623865,10.8190495 L7.0791007,4.17004294 C6.6670336,3.7934914 6,4.08324462 6,4.63849857 L6,14.5028722 C6,15.0900373 6.73013138,15.3657496 7.12288282,14.9279287 L9.08480709,12.7519131 Z' id='select-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 288 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72651,7 +72756,7 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _strokeColorIndicator = __webpack_require__(289);
+var _strokeColorIndicator = __webpack_require__(291);
 
 var _strokeColorIndicator2 = _interopRequireDefault(_strokeColorIndicator);
 
@@ -72757,7 +72862,7 @@ StrokeColorIndicator.propTypes = {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(StrokeColorIndicator);
 
 /***/ }),
-/* 289 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72851,7 +72956,7 @@ StrokeColorIndicatorComponent.propTypes = {
 exports.default = (0, _reactIntl.injectIntl)(StrokeColorIndicatorComponent);
 
 /***/ }),
-/* 290 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -72879,7 +72984,7 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _strokeWidth = __webpack_require__(30);
 
-var _strokeWidthIndicator = __webpack_require__(291);
+var _strokeWidthIndicator = __webpack_require__(293);
 
 var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
 
@@ -72953,7 +73058,7 @@ StrokeWidthIndicator.propTypes = {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(StrokeWidthIndicator);
 
 /***/ }),
-/* 291 */
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73012,7 +73117,7 @@ StrokeWidthIndicatorComponent.propTypes = {
 exports.default = StrokeWidthIndicatorComponent;
 
 /***/ }),
-/* 292 */
+/* 294 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73032,7 +73137,7 @@ var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _text = __webpack_require__(293);
+var _text = __webpack_require__(295);
 
 var _text2 = _interopRequireDefault(_text);
 
@@ -73062,13 +73167,13 @@ var TextModeComponent = function TextModeComponent() {
 exports.default = TextModeComponent;
 
 /***/ }),
-/* 293 */
+/* 295 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Etext%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='text' fill='%23575E75'%3E %3Cpath d='M16,4.35294118 L16,6.85176471 C16,7.04941176 15.8447059,7.20470588 15.6470588,7.20470588 L14.8988235,7.20470588 C14.7576471,7.20470588 14.6164706,7.12 14.5741176,6.99294118 L14.2070588,6.11764706 L11.0588235,6.11764706 L11.0588235,14.2917647 L11.92,14.6164706 C12.0611765,14.6729412 12.16,14.8 12.16,14.9552941 L12.16,15.6470588 C12.16,15.8447059 11.9905882,16 11.8070588,16 L8.20705882,16 C8.02352941,16 7.85411765,15.8447059 7.85411765,15.6470588 L7.85411765,14.9552941 C7.85411765,14.8 7.95294118,14.6729412 8.08,14.6164706 L8.94117647,14.2917647 L8.94117647,6.11764706 L5.80705882,6.11764706 L5.44,6.99294118 C5.38352941,7.12 5.25647059,7.20470588 5.11529412,7.20470588 L4.35294118,7.20470588 C4.16941176,7.20470588 4,7.04941176 4,6.85176471 L4,4.35294118 C4,4.15529412 4.16941176,4 4.35294118,4 L15.6470588,4 C15.8447059,4 16,4.15529412 16,4.35294118' id='text-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 294 */
+/* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73082,13 +73187,13 @@ exports.default = {
 };
 
 /***/ }),
-/* 295 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(296);
+var content = __webpack_require__(298);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -73113,7 +73218,7 @@ if(false) {
 }
 
 /***/ }),
-/* 296 */
+/* 298 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(10)(undefined);
@@ -73183,79 +73288,79 @@ exports.locals = {
 };
 
 /***/ }),
-/* 297 */
+/* 299 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ebitmap%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='bitmap' fill='%23575E75'%3E %3Cpath d='M4,3 L16,3 L16,4 L4,4 L4,3 Z M2,5 L3,5 L3,13 L2,13 L2,5 Z M17,5 L18,5 L18,13 L17,13 L17,5 Z M2,13 L18,13 L18,15 L2,15 L2,13 Z M4,12 L16,12 L16,13 L4,13 L4,12 Z M5,11 L8,11 L8,12 L5,12 L5,11 Z M6,10 L7,10 L7,11 L6,11 L6,10 Z M9,11 L16,11 L16,12 L9,12 L9,11 Z M10,10 L15,10 L15,11 L10,11 L10,10 Z M11,9 L14,9 L14,10 L11,10 L11,9 Z M12,8 L13,8 L13,9 L12,9 L12,8 Z M16,12 L17,12 L17,13 L16,13 L16,12 Z M3,15 L17,15 L17,16 L3,16 L3,15 Z M3,4 L4,4 L4,5 L3,5 L3,4 Z M16,4 L17,4 L17,5 L16,5 L16,4 Z M4,16 L16,16 L16,17 L4,17 L4,16 Z' id='Combined-Shape'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 298 */
+/* 300 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Egroup%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='group' stroke-width='0.75'%3E %3Cg id='group-icon' transform='translate(2.000000, 2.000000)'%3E %3Crect id='Rectangle-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='13' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-3' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='13' width='3' height='3'%3E%3C/rect%3E %3Cpath d='M1.5,3 L1.5,13' id='Line' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M14.5,3 L14.5,13' id='Line-Copy' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M13,1.5 L3,1.5' id='Line-Copy-2' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M13,14.5 L3,14.5' id='Line-Copy-3' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cg id='Group' transform='translate(8.000000, 8.000000) rotate(180.000000) translate(-8.000000, -8.000000) translate(4.000000, 4.000000)' stroke='%23575E75'%3E %3Crect id='Rectangle-3-Copy' fill='%23FFFFFF' transform='translate(5.500000, 5.500000) rotate(180.000000) translate(-5.500000, -5.500000) ' x='3' y='3' width='5' height='5' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-3' fill='%23575E75' transform='translate(2.500000, 2.500000) rotate(180.000000) translate(-2.500000, -2.500000) ' x='0' y='0' width='5' height='5' rx='0.5'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 299 */
+/* 301 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eredo%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='redo' fill='%234C97FF'%3E %3Cpath d='M17.5581635,12.7700651 L13.8403972,16.4941315 C13.5610922,16.7671364 13.1830854,16.9211391 12.7903784,16.9211391 C12.3990715,16.9211391 12.0210647,16.7671364 11.7403597,16.4941315 L8.02399342,12.7700651 C7.5969858,12.3430574 7.47098355,11.7060461 7.70198767,11.1530362 C7.93299179,10.6000263 8.46500128,10.24302 9.06701202,10.24302 L10.4040359,10.24302 C10.3690352,9.92101423 10.2780336,9.55700774 10.1240309,9.17200087 C10.07573,9.05999887 10.0260291,8.94799688 9.97002813,8.83599488 C9.89302676,8.70999263 9.90072689,8.67499201 9.79502501,8.52098926 C9.62702201,8.26898476 9.47301926,8.07998139 9.29031601,7.86297752 C8.9200094,7.4639704 8.47200141,7.12096429 7.99599292,6.86895979 C7.5129843,6.6169553 7.00897531,6.46295255 6.56096732,6.37895105 C6.11995945,6.30194968 5.71395221,6.29494955 5.47594796,6.29494955 C5.35694584,6.28794943 5.2029431,6.31594993 5.12594172,6.32295005 C5.04194022,6.32995018 4.99293935,6.3369503 4.99293935,6.3369503 C4.49593048,6.38595117 4.04792249,6.02194468 3.99892162,5.52493582 C3.95692087,5.10492832 4.20192524,4.72692158 4.57293186,4.58691908 C4.57293186,4.58691908 4.62193273,4.56591871 4.6989341,4.53791821 C4.78993573,4.50991771 4.87393723,4.46091684 5.06994072,4.40491584 C5.46194772,4.28591371 5.95895658,4.15991147 6.60996819,4.09691034 C7.25397968,4.04090934 8.03099354,4.05490959 8.85070816,4.22291259 C9.66902276,4.39791571 10.5300381,4.72692158 11.3280524,5.20293007 C11.7060591,5.44793444 12.1120663,5.73493956 12.427072,6.01494456 C12.5670745,6.11994643 12.8050787,6.35795068 12.9450812,6.5049533 C13.1060841,6.67295629 13.2530867,6.84095929 13.4007893,7.01596241 C13.9670994,7.7159749 14.3871069,8.47198839 14.6601118,9.15800062 C14.8211147,9.55000762 14.9331167,9.92101423 15.0171182,10.24302 L16.5151449,10.24302 C17.1171556,10.24302 17.6491651,10.6000263 17.8801692,11.1530362 C18.1111734,11.7060461 17.9851711,12.3430574 17.5581635,12.7700651' id='Fill-1' transform='translate(10.994247, 10.494247) rotate(-45.000000) translate(-10.994247, -10.494247) '%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 300 */
+/* 302 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-back%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-back'%3E %3Cg transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,10 L15,10' id='Stroke-6-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,12 L14,12' id='Stroke-6-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M1,10 L4,10' id='Stroke-10-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M2,12 L4,12' id='Stroke-10-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 301 */
+/* 303 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-backward%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-backward'%3E %3Cg id='send-forward' transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 302 */
+/* 304 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-forward%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-forward'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 303 */
+/* 305 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-front%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-front'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,10 L15,10' id='Stroke-6-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,12 L14,12' id='Stroke-6-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M1,10 L4,10' id='Stroke-10-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M2,12 L4,12' id='Stroke-10-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 304 */
+/* 306 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eundo%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='undo' fill='%234C97FF'%3E %3Cpath d='M15.5581635,12.7700651 L11.8403972,16.4941315 C11.5610922,16.7671364 11.1830854,16.9211391 10.7903784,16.9211391 C10.3990715,16.9211391 10.0210647,16.7671364 9.74035971,16.4941315 L6.02399342,12.7700651 C5.5969858,12.3430574 5.47098355,11.7060461 5.70198767,11.1530362 C5.93299179,10.6000263 6.46500128,10.24302 7.06701202,10.24302 L8.40403587,10.24302 C8.36903525,9.92101423 8.27803362,9.55700774 8.12403088,9.17200087 C8.07573002,9.05999887 8.02602913,8.94799688 7.97002813,8.83599488 C7.89302676,8.70999263 7.90072689,8.67499201 7.79502501,8.52098926 C7.62702201,8.26898476 7.47301926,8.07998139 7.29031601,7.86297752 C6.9200094,7.4639704 6.47200141,7.12096429 5.99599292,6.86895979 C5.5129843,6.6169553 5.00897531,6.46295255 4.56096732,6.37895105 C4.11995945,6.30194968 3.71395221,6.29494955 3.47594796,6.29494955 C3.35694584,6.28794943 3.2029431,6.31594993 3.12594172,6.32295005 C3.04194022,6.32995018 2.99293935,6.3369503 2.99293935,6.3369503 C2.49593048,6.38595117 2.04792249,6.02194468 1.99892162,5.52493582 C1.95692087,5.10492832 2.20192524,4.72692158 2.57293186,4.58691908 C2.57293186,4.58691908 2.62193273,4.56591871 2.6989341,4.53791821 C2.78993573,4.50991771 2.87393723,4.46091684 3.06994072,4.40491584 C3.46194772,4.28591371 3.95895658,4.15991147 4.60996819,4.09691034 C5.25397968,4.04090934 6.03099354,4.05490959 6.85070816,4.22291259 C7.66902276,4.39791571 8.53003812,4.72692158 9.32805235,5.20293007 C9.7060591,5.44793444 10.1120663,5.73493956 10.427072,6.01494456 C10.5670745,6.11994643 10.8050787,6.35795068 10.9450812,6.5049533 C11.1060841,6.67295629 11.2530867,6.84095929 11.4007893,7.01596241 C11.9670994,7.7159749 12.3871069,8.47198839 12.6601118,9.15800062 C12.8211147,9.55000762 12.9331167,9.92101423 13.0171182,10.24302 L14.5151449,10.24302 C15.1171556,10.24302 15.6491651,10.6000263 15.8801692,11.1530362 C16.1111734,11.7060461 15.9851711,12.3430574 15.5581635,12.7700651' id='Fill-1' transform='translate(8.994247, 10.494247) scale(-1, 1) rotate(-45.000000) translate(-8.994247, -10.494247) '%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 305 */
+/* 307 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eungroup%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='ungroup' stroke-width='0.75'%3E %3Cg id='ungroup-icon' transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 2.000000)'%3E %3Crect id='Rectangle-3-Copy' stroke='%23575E75' fill='%23FFFFFF' x='6.5' y='6.5' width='8' height='8' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-3' stroke='%23575E75' fill='%23575E75' x='1.5' y='1.5' width='8' height='8' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='8' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='8' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-3' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='8' y='8' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-4' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='5' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-5' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='13' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-6' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='5' y='13' width='3' height='3'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 306 */
+/* 308 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:none;stroke:%23575e75;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-in%3C/title%3E %3Cg class='cls-3'%3E %3Ccircle class='cls-4' cx='18' cy='18' r='7'/%3E %3Cline class='cls-4' x1='23' y1='23' x2='26' y2='26'/%3E %3Cline class='cls-4' x1='16' y1='18' x2='20' y2='18'/%3E %3Cline class='cls-4' x1='18' y1='16' x2='18' y2='20'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 307 */
+/* 309 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:none;stroke:%23575e75;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-out%3C/title%3E %3Cg class='cls-3'%3E %3Ccircle class='cls-4' cx='18' cy='18' r='7'/%3E %3Cline class='cls-4' x1='23' y1='23' x2='26' y2='26'/%3E %3Cline class='cls-4' x1='16' y1='18' x2='20' y2='18'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 308 */
+/* 310 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:%23575e75;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-reset%3C/title%3E %3Cg class='cls-3'%3E %3Crect class='cls-4' x='13' y='14' width='10' height='2' rx='1' ry='1'/%3E %3Crect class='cls-4' x='13' y='20' width='10' height='2' rx='1' ry='1'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 309 */
+/* 311 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73367,7 +73472,7 @@ var SelectionHOC = function SelectionHOC(WrappedComponent) {
 exports.default = SelectionHOC;
 
 /***/ }),
-/* 310 */
+/* 312 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73391,7 +73496,7 @@ var _eraserMode = __webpack_require__(52);
 
 var _eraserMode2 = _interopRequireDefault(_eraserMode);
 
-var _color = __webpack_require__(311);
+var _color = __webpack_require__(313);
 
 var _color2 = _interopRequireDefault(_color);
 
@@ -73430,7 +73535,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 311 */
+/* 313 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73468,7 +73573,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 312 */
+/* 314 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73494,7 +73599,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 313 */
+/* 315 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73509,7 +73614,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.intlReducer = intlReducer;
 
-var _warning = __webpack_require__(314);
+var _warning = __webpack_require__(316);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -73517,7 +73622,7 @@ var _IntlProvider2 = __webpack_require__(95);
 
 var _IntlProvider3 = _interopRequireDefault(_IntlProvider2);
 
-var _Provider2 = __webpack_require__(315);
+var _Provider2 = __webpack_require__(317);
 
 var _Provider3 = _interopRequireDefault(_Provider2);
 
@@ -73560,7 +73665,7 @@ function intlReducer() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 314 */
+/* 316 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73628,7 +73733,7 @@ module.exports = warning;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 315 */
+/* 317 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -73677,7 +73782,7 @@ exports.default = Provider;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 316 */
+/* 318 */
 /***/ (function(module, exports) {
 
 module.exports =
@@ -73858,7 +73963,7 @@ exports.default = locales;
 //# sourceMappingURL=l10n.js.map
 
 /***/ }),
-/* 317 */
+/* 319 */
 /***/ (function(module, exports) {
 
 // GENERATED FILE:
