@@ -246,7 +246,7 @@ const PaintEditorComponent = props => {
                             <InputGroup>
                                 <Dropdown
                                     className={styles.modUnselect}
-                                    enterExitTransitionDurationMs={0}
+                                    enterExitTransitionDurationMs={20}
                                     popoverContent={
                                         <InputGroup className={styles.modContextMenu}>
                                             <Button
