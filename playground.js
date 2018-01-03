@@ -53032,7 +53032,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                             _dropdown2.default,
                             {
                                 className: _paintEditor2.default.modUnselect,
-                                enterExitTransitionDurationMs: 0,
+                                enterExitTransitionDurationMs: 20,
                                 popoverContent: _react2.default.createElement(
                                     _inputGroup2.default,
                                     { className: _paintEditor2.default.modContextMenu },
