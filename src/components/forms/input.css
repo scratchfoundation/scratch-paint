@@ -2,6 +2,10 @@
 @todo This file is copied from GUI and should be pulled out into a shared library.
 See https://github.com/LLK/scratch-paint/issues/13 */
 
+/* NOTE:
+Edited to add input-range-small
+*/
+
 @import "../../css/units.css";
 @import "../../css/colors.css";
 
@@ -42,5 +46,10 @@ See https://github.com/LLK/scratch-paint/issues/13 */
 
 .input-small {
     width: 3rem; 
+    text-align: center;
+}
+
+.input-small-range {
+    width: 3.75rem;
     text-align: center;
 }

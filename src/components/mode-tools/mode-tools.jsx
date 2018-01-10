@@ -84,6 +84,8 @@ const ModeToolsComponent = props => {
                     />
                 </div>
                 <LiveInput
+                    range
+                    small
                     max={MAX_STROKE_WIDTH}
                     min="1"
                     type="number"
@@ -103,6 +105,8 @@ const ModeToolsComponent = props => {
                     />
                 </div>
                 <LiveInput
+                    range
+                    small
                     max={MAX_STROKE_WIDTH}
                     min="1"
                     type="number"
