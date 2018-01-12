@@ -57739,6 +57739,8 @@ var PaperCanvas = function (_React$Component) {
                 _paper2.default.project.view.zoom = oldZoom;
                 _paper2.default.project.view.center = oldCenter;
                 _paper2.default.project.view.update();
+            } else {
+                (0, _undo.performSnapshot)(this.props.undoSnapshot);
             }
         }
     }, {
