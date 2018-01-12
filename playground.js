@@ -26718,7 +26718,12 @@ var Blobbiness = function () {
             if (!this.options) {
                 return;
             }
-            if (this.cursorPreview && this.cursorPreview.parent && this.brushSize === this.options.brushSize && this.fillColor === this.options.fillColor && this.strokeColor === this.options.strokeColor && this.cursorPreviewLastPoint.equals(point)) {
+            // The cursor preview was unattached from the view by an outside process,
+            // such as changing costumes or undo.
+            if (this.cursorPreview && !this.cursorPreview.parent) {
+                this.cursorPreview = null;
+            }
+            if (this.cursorPreview && this.brushSize === this.options.brushSize && this.fillColor === this.options.fillColor && this.strokeColor === this.options.strokeColor && this.cursorPreviewLastPoint.equals(point)) {
                 return;
             }
             if (typeof point !== 'undefined') {
