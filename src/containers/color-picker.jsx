@@ -68,16 +68,19 @@ class ColorPicker extends React.Component {
             [50, 100, 100] : colorStringToHsv(color);
     }
     handleHueChange (hue) {
-        this.setState({hue: hue});
-        this.handleColorChange();
+        this.setState({hue: hue}, () => {
+            this.handleColorChange();
+        });
     }
     handleSaturationChange (saturation) {
-        this.setState({saturation: saturation});
-        this.handleColorChange();
+        this.setState({saturation: saturation}, () => {
+            this.handleColorChange();
+        });
     }
     handleBrightnessChange (brightness) {
-        this.setState({brightness: brightness});
-        this.handleColorChange();
+        this.setState({brightness: brightness}, () => {
+            this.handleColorChange();
+        });
     }
     handleColorChange () {
         this.props.onChangeColor(hsvToHex(
