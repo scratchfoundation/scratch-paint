@@ -132,11 +132,11 @@ class PaperCanvas extends React.Component {
 
                 if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
                     item.translate(paper.project.view.center
-                            .subtract(rotationCenterX, rotationCenterY));
+                        .subtract(rotationCenterX, rotationCenterY));
                 } else {
                     // Center
                     item.translate(paper.project.view.center
-                            .subtract(itemWidth / 2, itemHeight / 2));
+                        .subtract(itemWidth / 2, itemHeight / 2));
                 }
                 if (isGroup(item)) {
                     ungroupItems([item]);
