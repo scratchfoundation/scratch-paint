@@ -55615,10 +55615,16 @@ var PaperCanvas = function (_React$Component) {
                 var offsetY = event.clientY - canvasRect.top;
                 var fixedPoint = _paper2.default.project.view.viewToProject(new _paper2.default.Point(offsetX, offsetY));
                 (0, _view.zoomOnFixedPoint)(-event.deltaY / 100, fixedPoint);
+            } else if (event.shiftKey && event.deltaX === 0) {
+                // Scroll horizontally (based on vertical scroll delta)
+                // This is needed as for some browser/system combinations which do not set deltaX.
+                // See #156.
+                var dx = event.deltaY / _paper2.default.project.view.zoom;
+                (0, _view.pan)(dx, 0);
             } else {
-                var dx = event.deltaX / _paper2.default.project.view.zoom;
+                var _dx = event.deltaX / _paper2.default.project.view.zoom;
                 var dy = event.deltaY / _paper2.default.project.view.zoom;
-                (0, _view.pan)(dx, dy);
+                (0, _view.pan)(_dx, dy);
             }
             event.preventDefault();
         }
