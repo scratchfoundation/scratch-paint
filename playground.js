@@ -55583,10 +55583,10 @@ var PaperCanvas = function (_React$Component) {
                     (0, _math.ensureClockwise)(item);
 
                     if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
-                        item.position = _paper2.default.project.view.center.add(itemWidth / 2, itemHeight / 2).subtract(rotationCenterX, rotationCenterY);
+                        item.translate(_paper2.default.project.view.center.subtract(rotationCenterX, rotationCenterY));
                     } else {
                         // Center
-                        item.position = _paper2.default.project.view.center;
+                        item.translate(_paper2.default.project.view.center.subtract(itemWidth / 2, itemHeight / 2));
                     }
                     if ((0, _group.isGroup)(item)) {
                         (0, _group.ungroupItems)([item]);
