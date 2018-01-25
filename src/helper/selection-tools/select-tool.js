@@ -1,8 +1,9 @@
 import Modes from '../../lib/modes';
 
 import {getHoveredItem} from '../hover';
-import {getSelectedRootItems, selectRootItem} from '../selection';
+import {selectRootItem} from '../selection';
 import BoundingBoxTool from './bounding-box-tool';
+import NudgeTool from './nudge-tool';
 import SelectionBoxTool from './selection-box-tool';
 import paper from '@scratch/paper';
 
@@ -31,6 +32,7 @@ class SelectTool extends paper.Tool {
         this.clearHoveredItem = clearHoveredItem;
         this.onUpdateSvg = onUpdateSvg;
         this.boundingBoxTool = new BoundingBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems, onUpdateSvg);
+        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateSvg);
         this.selectionBoxTool = new SelectionBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems);
         this.selectionBoxMode = false;
         this.prevHoveredItemId = null;
@@ -42,8 +44,8 @@ class SelectTool extends paper.Tool {
         this.onMouseMove = this.handleMouseMove;
         this.onMouseDrag = this.handleMouseDrag;
         this.onMouseUp = this.handleMouseUp;
-        this.onKeyUp = this.handleKeyUp;
-        this.onKeyDown = this.handleKeyDown;
+        this.onKeyUp = nudgeTool.onKeyUp;
+        this.onKeyDown = nudgeTool.onKeyDown;
 
         selectRootItem();
         setSelectedItems();
@@ -132,37 +134,6 @@ class SelectTool extends paper.Tool {
         }
         this.selectionBoxMode = false;
         this.active = false;
-    }
-    handleKeyDown (event) {
-        const nudgeAmount = 1 / paper.view.zoom;
-        const selected = getSelectedRootItems();
-        if (selected.length === 0) return;
-
-        let translation;
-        if (event.key === 'up') {
-            translation = new paper.Point(0, -nudgeAmount);
-        } else if (event.key === 'down') {
-            translation = new paper.Point(0, nudgeAmount);
-        } else if (event.key === 'left') {
-            translation = new paper.Point(-nudgeAmount, 0);
-        } else if (event.key === 'right') {
-            translation = new paper.Point(nudgeAmount, 0);
-        }
-
-        if (translation) {
-            for (const item of selected) {
-                item.translate(translation);
-            }
-        }
-        this.boundingBoxTool.setSelectionBounds();
-    }
-    handleKeyUp (event) {
-        const selected = getSelectedRootItems();
-        if (selected.length === 0) return;
-
-        if (event.key === 'up' || event.key === 'down' || event.key === 'left' || event.key === 'right') {
-            this.onUpdateSvg();
-        }
     }
     deactivateTool () {
         this.clearHoveredItem();
