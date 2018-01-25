@@ -7,7 +7,7 @@ import bindAll from 'lodash.bindall';
 import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
-import {clearSelection, getSelectedLeafItems, getSelectedRootItems} from '../helper/selection';
+import {clearSelection, getSelectedLeafItems, getSelectedRootItems, getAllRootItems} from '../helper/selection';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 
 class ModeTools extends React.Component {
@@ -137,7 +137,13 @@ class ModeTools extends React.Component {
         }
     }
     _handleFlip (horizontalScale, verticalScale) {
-        const selectedItems = getSelectedRootItems();
+        let selectedItems = getSelectedRootItems();
+        let center;
+        if (selectedItems.length === 0) {
+            // If nothing is selected, flip everything over the rotation point
+            selectedItems = getAllRootItems();
+            center = paper.view.center;
+        }
         // Record old indices
         for (const item of selectedItems) {
             item.data.index = item.index;
@@ -146,7 +152,7 @@ class ModeTools extends React.Component {
         // Group items so that they flip as a unit
         const itemGroup = new paper.Group(selectedItems);
         // Flip
-        itemGroup.scale(horizontalScale, verticalScale);
+        itemGroup.scale(horizontalScale, verticalScale, center);
         ensureClockwise(itemGroup);
 
         // Remove flipped item from group and insert at old index. Must insert from bottom index up.
