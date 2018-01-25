@@ -151,11 +151,13 @@ const ModeToolsComponent = props => {
                 </InputGroup>
                 <InputGroup className={classNames(styles.modLabeledIconHeight)}>
                     <LabeledIconButton
+                        disabled={!props.hasItems}
                         imgSrc={flipHorizontalIcon}
                         title={props.intl.formatMessage(messages.flipHorizontal)}
                         onClick={props.onFlipHorizontal}
                     />
                     <LabeledIconButton
+                        disabled={!props.hasItems}
                         imgSrc={flipVerticalIcon}
                         title={props.intl.formatMessage(messages.flipVertical)}
                         onClick={props.onFlipVertical}
@@ -176,6 +178,7 @@ ModeToolsComponent.propTypes = {
     className: PropTypes.string,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
     eraserValue: PropTypes.number,
+    hasItems: PropTypes.bool,
     hasSelectedUncurvedPoints: PropTypes.bool,
     hasSelectedUnpointedPoints: PropTypes.bool,
     intl: intlShape.isRequired,

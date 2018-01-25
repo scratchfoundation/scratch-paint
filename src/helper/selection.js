@@ -400,6 +400,7 @@ const shouldShowSelectAll = function () {
 export {
     getItems,
     getAllRootItems,
+    getAllSelectableRootItems,
     selectAllItems,
     selectAllSegments,
     clearSelection,
