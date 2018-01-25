@@ -175,6 +175,26 @@ const getSelectedLeafItems = function () {
     return items;
 };
 
+/**
+ * This gets all selected path segments.
+ * @return {Array<paper.Segment>} selected segments
+ */
+const getSelectedSegments = function () {
+    const selected = getSelectedLeafItems();
+    const segments = [];
+    for (const item of selected) {
+        if (!item.segments) {
+            continue;
+        }
+        for (const seg of item.segments) {
+            if (seg.selected) {
+                segments.push(seg);
+            }
+        }
+    }
+    return segments;
+};
+
 const _deleteItemSelection = function (items, onUpdateSvg) {
     // @todo: Update toolbar state on change
     if (items.length === 0) {
@@ -408,6 +428,7 @@ export {
     setItemSelection,
     getSelectedLeafItems,
     getSelectedRootItems,
+    getSelectedSegments,
     processRectangularSelection,
     selectRootItem,
     shouldShowSelectAll

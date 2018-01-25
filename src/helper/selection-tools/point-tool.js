@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import {snapDeltaToAngle} from '../math';
-import {clearSelection, getSelectedLeafItems} from '../selection';
+import {clearSelection, getSelectedLeafItems, getSelectedSegments} from '../selection';
 import {HANDLE_RATIO} from '../math';
 
 /** Subtool of ReshapeTool for moving control points. */
@@ -146,39 +146,30 @@ class PointTool {
         
         const dragVector = event.point.subtract(event.downPoint);
         
-        for (const item of this.selectedItems) {
-            if (!item.segments) {
-                return;
+        const selectedSegments = getSelectedSegments();
+        for (const seg of selectedSegments) {
+            // add the point of the segment before the drag started
+            // for later use in the snap calculation
+            if (!seg.origPoint) {
+                seg.origPoint = seg.point.clone();
             }
-            for (const seg of item.segments) {
-                // add the point of the segment before the drag started
-                // for later use in the snap calculation
-                if (!seg.origPoint) {
-                    seg.origPoint = seg.point.clone();
-                }
-                if (seg.selected) {
-                    if (event.modifiers.shift) {
-                        seg.point = seg.origPoint.add(snapDeltaToAngle(dragVector, Math.PI / 4));
-                    } else {
-                        seg.point = seg.point.add(event.delta);
-                    }
-                }
+
+            if (event.modifiers.shift) {
+                seg.point = seg.origPoint.add(snapDeltaToAngle(dragVector, Math.PI / 4));
+            } else {
+                seg.point = seg.point.add(event.delta);
             }
         }
     }
     onMouseUp () {
         // resetting the items and segments origin points for the next usage
         let moved = false;
-        for (const item of this.selectedItems) {
-            if (!item.segments) {
-                return;
+        const selectedSegments = getSelectedSegments();
+        for (const seg of selectedSegments) {
+            if (seg.origPoint && !seg.equals(seg.origPoint)) {
+                moved = true;
             }
-            for (const seg of item.segments) {
-                if (seg.origPoint && !seg.equals(seg.origPoint)) {
-                    moved = true;
-                }
-                seg.origPoint = null;
-            }
+            seg.origPoint = null;
         }
 
         // If no drag occurred between mouse down and mouse up, then we can go through with deselect
