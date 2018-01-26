@@ -55528,6 +55528,19 @@ var PaperCanvas = function (_React$Component) {
             if (svgAttrs && svgAttrs[0].indexOf('xmlns=') === -1) {
                 svg = svg.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
             }
+
+            // Get the origin which the viewBox is defined relative to. During import, Paper will translate
+            // the viewBox to start at (0, 0), and we need to translate it back for some costumes to render
+            // correctly.
+            var parser = new DOMParser();
+            var svgDom = parser.parseFromString(svg, 'text/xml');
+            var viewBox = svgDom.documentElement.attributes.viewBox ? svgDom.documentElement.attributes.viewBox.value.match(/\S+/g) : null;
+            if (viewBox) {
+                for (var i = 0; i < viewBox.length; i++) {
+                    viewBox[i] = parseFloat(viewBox[i]);
+                }
+            }
+
             _paper2.default.project.importSVG(svg, {
                 expandShapes: true,
                 onLoad: function onLoad(item) {
@@ -55583,7 +55596,11 @@ var PaperCanvas = function (_React$Component) {
                     (0, _math.ensureClockwise)(item);
 
                     if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
-                        item.translate(_paper2.default.project.view.center.subtract(rotationCenterX, rotationCenterY));
+                        var rotationPoint = new _paper2.default.Point(rotationCenterX, rotationCenterY);
+                        if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
+                            rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
+                        }
+                        item.translate(_paper2.default.project.view.center.subtract(rotationPoint));
                     } else {
                         // Center
                         item.translate(_paper2.default.project.view.center.subtract(itemWidth / 2, itemHeight / 2));
