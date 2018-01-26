@@ -7,8 +7,7 @@ import bindAll from 'lodash.bindall';
 import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
-import {clearSelection, getSelectedLeafItems, getSelectedRootItems} from '../helper/selection';
-import {getAllRootItems, getAllSelectableRootItems} from '../helper/selection';
+import {clearSelection, getSelectedLeafItems, getSelectedRootItems, getAllRootItems} from '../helper/selection';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 
 class ModeTools extends React.Component {
@@ -17,7 +16,6 @@ class ModeTools extends React.Component {
         bindAll(this, [
             '_getSelectedUncurvedPoints',
             '_getSelectedUnpointedPoints',
-            'hasItems',
             'hasSelectedUncurvedPoints',
             'hasSelectedUnpointedPoints',
             'handleCopyToClipboard',
@@ -69,9 +67,6 @@ class ModeTools extends React.Component {
     hasSelectedUnpointedPoints () {
         const points = this._getSelectedUnpointedPoints();
         return points.length > 0;
-    }
-    hasItems () {
-        return getAllSelectableRootItems().length > 0;
     }
     handleCurvePoints () {
         let changed;
@@ -208,7 +203,6 @@ class ModeTools extends React.Component {
     render () {
         return (
             <ModeToolsComponent
-                hasItems={this.hasItems()}
                 hasSelectedUncurvedPoints={this.hasSelectedUncurvedPoints()}
                 hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
                 onCopyToClipboard={this.handleCopyToClipboard}
