@@ -16652,13 +16652,13 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 var _item = __webpack_require__(22);
 
 var _compoundPath = __webpack_require__(171);
 
-var _math = __webpack_require__(20);
+var _math = __webpack_require__(19);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18939,7 +18939,7 @@ var _selection = __webpack_require__(3);
 
 var _item = __webpack_require__(22);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21930,6 +21930,181 @@ module.exports = Transform;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.sortItemsByZIndex = exports.snapDeltaToAngle = exports.getRandomBoolean = exports.getRandomInt = exports.expandByOne = exports.ensureClockwise = exports.checkPointsClose = exports.HANDLE_RATIO = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/** The ratio of the curve length to use for the handle length to convert squares into approximately circles. */
+var HANDLE_RATIO = 0.3902628565;
+
+var checkPointsClose = function checkPointsClose(startPos, eventPoint, threshold) {
+    var xOff = Math.abs(startPos.x - eventPoint.x);
+    var yOff = Math.abs(startPos.y - eventPoint.y);
+    if (xOff < threshold && yOff < threshold) {
+        return true;
+    }
+    return false;
+};
+
+var getRandomInt = function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+};
+
+var getRandomBoolean = function getRandomBoolean() {
+    return getRandomInt(0, 2) === 1;
+};
+
+// Thanks Mikko Mononen! https://github.com/memononen/stylii
+var snapDeltaToAngle = function snapDeltaToAngle(delta, snapAngle) {
+    var angle = Math.atan2(delta.y, delta.x);
+    angle = Math.round(angle / snapAngle) * snapAngle;
+    var dirx = Math.cos(angle);
+    var diry = Math.sin(angle);
+    var d = dirx * delta.x + diry * delta.y;
+    return new _paper2.default.Point(dirx * d, diry * d);
+};
+
+var _getDepth = function _getDepth(item) {
+    var temp = item;
+    var depth = 0;
+    while (!(temp instanceof _paper2.default.Layer)) {
+        depth++;
+        if (temp.parent === null) {
+            // This item isn't attached to a layer, so it's not on the canvas and can't be compared.
+            return null;
+        }
+        temp = temp.parent;
+    }
+    return depth;
+};
+
+var sortItemsByZIndex = function sortItemsByZIndex(a, b) {
+    if (a === null || b === null) {
+        return null;
+    }
+
+    // Get to the same depth in the project tree
+    var tempA = a;
+    var tempB = b;
+    var aDepth = _getDepth(a);
+    var bDepth = _getDepth(b);
+    while (bDepth > aDepth) {
+        tempB = tempB.parent;
+        bDepth--;
+    }
+    while (aDepth > bDepth) {
+        tempA = tempA.parent;
+        aDepth--;
+    }
+
+    // Step up until they share parents. When they share parents, compare indices.
+    while (tempA && tempB) {
+        if (tempB === tempA) {
+            return 0;
+        } else if (tempB.parent === tempA.parent) {
+            if (tempB.parent instanceof _paper2.default.CompoundPath) {
+                // Neither is on top of the other in a compound path. Return in order of decreasing size.
+                return Math.abs(tempB.area) - Math.abs(tempA.area);
+            }
+            return parseFloat(tempA.index) - parseFloat(tempB.index);
+        }
+        tempB = tempB.parent;
+        tempA = tempA.parent;
+    }
+
+    // No shared hierarchy
+    return null;
+};
+
+// Expand the size of the path by approx one pixel all around
+var expandByOne = function expandByOne(path) {
+    var center = path.position;
+    var pathArea = path.area;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = path.segments[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var seg = _step.value;
+
+            var halfNorm = seg.point.subtract(center).normalize().divide(2);
+            seg.point = seg.point.add(halfNorm);
+            // If that made the path area smaller, go the other way.
+            if (path.area < pathArea) seg.point = seg.point.subtract(halfNorm.multiply(2));
+            pathArea = path.area;
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+};
+
+// Make item clockwise. Drill down into groups.
+var ensureClockwise = function ensureClockwise(item) {
+    if (item instanceof _paper2.default.Group) {
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+            for (var _iterator2 = item.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var child = _step2.value;
+
+                ensureClockwise(child);
+            }
+        } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                    _iterator2.return();
+                }
+            } finally {
+                if (_didIteratorError2) {
+                    throw _iteratorError2;
+                }
+            }
+        }
+    } else if (item instanceof _paper2.default.PathItem) {
+        item.clockwise = true;
+    }
+};
+
+exports.HANDLE_RATIO = HANDLE_RATIO;
+exports.checkPointsClose = checkPointsClose;
+exports.ensureClockwise = ensureClockwise;
+exports.expandByOne = expandByOne;
+exports.getRandomInt = getRandomInt;
+exports.getRandomBoolean = getRandomBoolean;
+exports.snapDeltaToAngle = snapDeltaToAngle;
+exports.sortItemsByZIndex = sortItemsByZIndex;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.shouldShowUngroup = exports.shouldShowGroup = exports.isGroupChild = exports.isGroup = exports.getItemsGroup = exports.ungroupItems = exports.groupItems = exports.ungroupSelection = exports.groupSelection = undefined;
 
 var _paper = __webpack_require__(2);
@@ -22099,181 +22274,6 @@ exports.isGroup = isGroup;
 exports.isGroupChild = isGroupChild;
 exports.shouldShowGroup = shouldShowGroup;
 exports.shouldShowUngroup = shouldShowUngroup;
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.sortItemsByZIndex = exports.snapDeltaToAngle = exports.getRandomBoolean = exports.getRandomInt = exports.expandByOne = exports.ensureClockwise = exports.checkPointsClose = exports.HANDLE_RATIO = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/** The ratio of the curve length to use for the handle length to convert squares into approximately circles. */
-var HANDLE_RATIO = 0.3902628565;
-
-var checkPointsClose = function checkPointsClose(startPos, eventPoint, threshold) {
-    var xOff = Math.abs(startPos.x - eventPoint.x);
-    var yOff = Math.abs(startPos.y - eventPoint.y);
-    if (xOff < threshold && yOff < threshold) {
-        return true;
-    }
-    return false;
-};
-
-var getRandomInt = function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-};
-
-var getRandomBoolean = function getRandomBoolean() {
-    return getRandomInt(0, 2) === 1;
-};
-
-// Thanks Mikko Mononen! https://github.com/memononen/stylii
-var snapDeltaToAngle = function snapDeltaToAngle(delta, snapAngle) {
-    var angle = Math.atan2(delta.y, delta.x);
-    angle = Math.round(angle / snapAngle) * snapAngle;
-    var dirx = Math.cos(angle);
-    var diry = Math.sin(angle);
-    var d = dirx * delta.x + diry * delta.y;
-    return new _paper2.default.Point(dirx * d, diry * d);
-};
-
-var _getDepth = function _getDepth(item) {
-    var temp = item;
-    var depth = 0;
-    while (!(temp instanceof _paper2.default.Layer)) {
-        depth++;
-        if (temp.parent === null) {
-            // This item isn't attached to a layer, so it's not on the canvas and can't be compared.
-            return null;
-        }
-        temp = temp.parent;
-    }
-    return depth;
-};
-
-var sortItemsByZIndex = function sortItemsByZIndex(a, b) {
-    if (a === null || b === null) {
-        return null;
-    }
-
-    // Get to the same depth in the project tree
-    var tempA = a;
-    var tempB = b;
-    var aDepth = _getDepth(a);
-    var bDepth = _getDepth(b);
-    while (bDepth > aDepth) {
-        tempB = tempB.parent;
-        bDepth--;
-    }
-    while (aDepth > bDepth) {
-        tempA = tempA.parent;
-        aDepth--;
-    }
-
-    // Step up until they share parents. When they share parents, compare indices.
-    while (tempA && tempB) {
-        if (tempB === tempA) {
-            return 0;
-        } else if (tempB.parent === tempA.parent) {
-            if (tempB.parent instanceof _paper2.default.CompoundPath) {
-                // Neither is on top of the other in a compound path. Return in order of decreasing size.
-                return Math.abs(tempB.area) - Math.abs(tempA.area);
-            }
-            return parseFloat(tempA.index) - parseFloat(tempB.index);
-        }
-        tempB = tempB.parent;
-        tempA = tempA.parent;
-    }
-
-    // No shared hierarchy
-    return null;
-};
-
-// Expand the size of the path by approx one pixel all around
-var expandByOne = function expandByOne(path) {
-    var center = path.position;
-    var pathArea = path.area;
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = path.segments[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var seg = _step.value;
-
-            var halfNorm = seg.point.subtract(center).normalize().divide(2);
-            seg.point = seg.point.add(halfNorm);
-            // If that made the path area smaller, go the other way.
-            if (path.area < pathArea) seg.point = seg.point.subtract(halfNorm.multiply(2));
-            pathArea = path.area;
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
-    }
-};
-
-// Make item clockwise. Drill down into groups.
-var ensureClockwise = function ensureClockwise(item) {
-    if (item instanceof _paper2.default.Group) {
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-            for (var _iterator2 = item.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                var child = _step2.value;
-
-                ensureClockwise(child);
-            }
-        } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                    _iterator2.return();
-                }
-            } finally {
-                if (_didIteratorError2) {
-                    throw _iteratorError2;
-                }
-            }
-        }
-    } else if (item instanceof _paper2.default.PathItem) {
-        item.clockwise = true;
-    }
-};
-
-exports.HANDLE_RATIO = HANDLE_RATIO;
-exports.checkPointsClose = checkPointsClose;
-exports.ensureClockwise = ensureClockwise;
-exports.expandByOne = expandByOne;
-exports.getRandomInt = getRandomInt;
-exports.getRandomBoolean = getRandomBoolean;
-exports.snapDeltaToAngle = snapDeltaToAngle;
-exports.sortItemsByZIndex = sortItemsByZIndex;
 
 /***/ }),
 /* 21 */
@@ -24362,9 +24362,9 @@ var _item = __webpack_require__(22);
 
 var _guides = __webpack_require__(34);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
-var _math = __webpack_require__(20);
+var _math = __webpack_require__(19);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27950,11 +27950,11 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 var _item = __webpack_require__(22);
 
-var _math = __webpack_require__(20);
+var _math = __webpack_require__(19);
 
 var _selection = __webpack_require__(3);
 
@@ -45688,7 +45688,7 @@ var _undo2 = __webpack_require__(76);
 
 var _order = __webpack_require__(78);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 var _selection = __webpack_require__(3);
 
@@ -50451,7 +50451,7 @@ var _paperCanvas = __webpack_require__(134);
 
 var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 var _order = __webpack_require__(78);
 
@@ -55389,7 +55389,7 @@ var _undo = __webpack_require__(76);
 
 var _undo2 = __webpack_require__(43);
 
-var _group = __webpack_require__(19);
+var _group = __webpack_require__(20);
 
 var _layer = __webpack_require__(21);
 
@@ -55399,7 +55399,7 @@ var _selectedItems = __webpack_require__(9);
 
 var _view = __webpack_require__(77);
 
-var _math = __webpack_require__(20);
+var _math = __webpack_require__(19);
 
 var _hover = __webpack_require__(27);
 
@@ -65950,7 +65950,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _hover = __webpack_require__(55);
 
-var _math = __webpack_require__(20);
+var _math = __webpack_require__(19);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66366,6 +66366,8 @@ var _modes3 = __webpack_require__(14);
 
 var _selectedItems = __webpack_require__(9);
 
+var _math = __webpack_require__(19);
+
 var _lineMode = __webpack_require__(254);
 
 var _lineMode2 = _interopRequireDefault(_lineMode);
@@ -66519,29 +66521,47 @@ var LineMode = function (_React$Component) {
         value: function onMouseDrag(event) {
             if (event.event.button > 0 || !this.active) return; // only first mouse button
 
-            // If near another path's endpoint, or this path's beginpoint, clip to it to suggest
-            // joining/closing the paths.
+            // Clear the last hit result
             if (this.hitResult) {
                 (0, _guides.removeHitPoint)();
                 this.hitResult = null;
             }
 
-            if (this.path && !this.path.closed && this.path.segments.length > 3 && (0, _snapping.touching)(this.path.firstSegment.point, event.point, LineMode.SNAP_TOLERANCE)) {
+            // If shift is held, act like event.point always lies on a straight or 45 degree line from the last point
+            var endPoint = event.point;
+            if (event.modifiers.shift) {
+                var line = event.point.subtract(this.path.lastSegment.previous.point);
+                endPoint = this.path.lastSegment.previous.point.add((0, _math.snapDeltaToAngle)(line, Math.PI / 4));
+            }
+
+            // Find an end point that endPoint is close to (to snap lines together)
+            if (this.path && !this.path.closed && this.path.segments.length > 3 && (0, _snapping.touching)(this.path.firstSegment.point, endPoint, LineMode.SNAP_TOLERANCE)) {
                 this.hitResult = {
                     path: this.path,
                     segment: this.path.firstSegment,
                     isFirst: true
                 };
             } else {
-                this.hitResult = (0, _snapping.endPointHit)(event.point, LineMode.SNAP_TOLERANCE, this.path);
+                this.hitResult = (0, _snapping.endPointHit)(endPoint, LineMode.SNAP_TOLERANCE, this.path);
             }
 
-            // snapping
+            // If shift is being held, we shouldn't snap to end points that change the slope by too much.
+            // In that case, clear the hit result.
+            if (this.hitResult && event.modifiers.shift) {
+                var lineToSnap = this.hitResult.segment.point.subtract(this.path.lastSegment.previous.point);
+                var lineToEndPoint = endPoint.subtract(this.path.lastSegment.previous.point);
+                if (lineToSnap.normalize().getDistance(lineToEndPoint.normalize()) > 1e-2) {
+                    this.hitResult = null;
+                }
+            }
+
+            // If near another path's endpoint, or this path's beginpoint, clip to it to suggest
+            // joining/closing the paths.
             if (this.hitResult) {
                 this.drawHitPoint(this.hitResult);
                 this.path.lastSegment.point = this.hitResult.segment.point;
             } else {
-                this.path.lastSegment.point = event.point;
+                this.path.lastSegment.point = endPoint;
             }
         }
     }, {
@@ -67025,7 +67045,7 @@ var _clipboard = __webpack_require__(44);
 
 var _selection = __webpack_require__(3);
 
-var _math = __webpack_require__(20);
+var _math = __webpack_require__(19);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69565,7 +69585,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _math = __webpack_require__(20);
+var _math = __webpack_require__(19);
 
 var _selection = __webpack_require__(3);
 
