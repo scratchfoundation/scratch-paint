@@ -3,6 +3,7 @@ import Modes from '../../lib/modes';
 import {getHoveredItem} from '../hover';
 import {selectRootItem} from '../selection';
 import BoundingBoxTool from './bounding-box-tool';
+import NudgeTool from './nudge-tool';
 import SelectionBoxTool from './selection-box-tool';
 import paper from '@scratch/paper';
 
@@ -31,6 +32,7 @@ class SelectTool extends paper.Tool {
         this.clearHoveredItem = clearHoveredItem;
         this.onUpdateSvg = onUpdateSvg;
         this.boundingBoxTool = new BoundingBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems, onUpdateSvg);
+        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateSvg);
         this.selectionBoxTool = new SelectionBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems);
         this.selectionBoxMode = false;
         this.prevHoveredItemId = null;
@@ -42,6 +44,8 @@ class SelectTool extends paper.Tool {
         this.onMouseMove = this.handleMouseMove;
         this.onMouseDrag = this.handleMouseDrag;
         this.onMouseUp = this.handleMouseUp;
+        this.onKeyUp = nudgeTool.onKeyUp;
+        this.onKeyDown = nudgeTool.onKeyDown;
 
         selectRootItem();
         setSelectedItems();

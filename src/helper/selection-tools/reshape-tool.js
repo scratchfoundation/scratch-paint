@@ -5,6 +5,7 @@ import keyMirror from 'keymirror';
 import Modes from '../../lib/modes';
 import {getHoveredItem} from '../hover';
 import {getRootItem, isPGTextItem} from '../item';
+import {getSelectedLeafItems, getSelectedSegments} from '../selection';
 import MoveTool from './move-tool';
 import PointTool from './point-tool';
 import HandleTool from './handle-tool';
@@ -67,6 +68,8 @@ class ReshapeTool extends paper.Tool {
         this.onMouseMove = this.handleMouseMove;
         this.onMouseDrag = this.handleMouseDrag;
         this.onMouseUp = this.handleMouseUp;
+        this.onKeyUp = this.handleKeyUp;
+        this.onKeyDown = this.handleKeyDown;
 
         paper.settings.handleSize = 8;
     }
@@ -227,6 +230,44 @@ class ReshapeTool extends paper.Tool {
         this._modeMap[this.mode].onMouseUp(event);
         this.mode = ReshapeModes.SELECTION_BOX;
         this.active = false;
+    }
+    handleKeyDown (event) {
+        const nudgeAmount = 1 / paper.view.zoom;
+        const selected = getSelectedLeafItems();
+        if (selected.length === 0) return;
+
+        let translation;
+        if (event.key === 'up') {
+            translation = new paper.Point(0, -nudgeAmount);
+        } else if (event.key === 'down') {
+            translation = new paper.Point(0, nudgeAmount);
+        } else if (event.key === 'left') {
+            translation = new paper.Point(-nudgeAmount, 0);
+        } else if (event.key === 'right') {
+            translation = new paper.Point(nudgeAmount, 0);
+        }
+
+        if (translation) {
+            const segments = getSelectedSegments();
+            // If no segments are selected, translate selected paths
+            if (segments.length === 0) {
+                for (const item of selected) {
+                    item.translate(translation);
+                }
+            } else { // Translate segments
+                for (const seg of segments) {
+                    seg.point = seg.point.add(translation);
+                }
+            }
+        }
+    }
+    handleKeyUp (event) {
+        const selected = getSelectedLeafItems();
+        if (selected.length === 0) return;
+
+        if (event.key === 'up' || event.key === 'down' || event.key === 'left' || event.key === 'right') {
+            this.onUpdateSvg();
+        }
     }
     deactivateTool () {
         paper.settings.handleSize = 0;
