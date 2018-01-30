@@ -67476,6 +67476,10 @@ var ModeTools = function (_React$Component) {
         key: '_handleFlip',
         value: function _handleFlip(horizontalScale, verticalScale) {
             var selectedItems = (0, _selection.getSelectedRootItems)();
+            if (selectedItems.length === 0) {
+                // If nothing is selected, select everything
+                selectedItems = (0, _selection.getAllRootItems)();
+            }
             // Record old indices
             var _iteratorNormalCompletion7 = true;
             var _didIteratorError7 = false;
@@ -67839,13 +67843,11 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _inputGroup2.default,
                     { className: (0, _classnames2.default)(_modeTools2.default.modLabeledIconHeight) },
                     _react2.default.createElement(_labeledIconButton2.default, {
-                        disabled: !props.selectedItems.length,
                         imgSrc: _flipHorizontal2.default,
                         title: props.intl.formatMessage(messages.flipHorizontal),
                         onClick: props.onFlipHorizontal
                     }),
                     _react2.default.createElement(_labeledIconButton2.default, {
-                        disabled: !props.selectedItems.length,
                         imgSrc: _flipVertical2.default,
                         title: props.intl.formatMessage(messages.flipVertical),
                         onClick: props.onFlipVertical
