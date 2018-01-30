@@ -151,13 +151,11 @@ const ModeToolsComponent = props => {
                 </InputGroup>
                 <InputGroup className={classNames(styles.modLabeledIconHeight)}>
                     <LabeledIconButton
-                        disabled={!props.selectedItems.length}
                         imgSrc={flipHorizontalIcon}
                         title={props.intl.formatMessage(messages.flipHorizontal)}
                         onClick={props.onFlipHorizontal}
                     />
                     <LabeledIconButton
-                        disabled={!props.selectedItems.length}
                         imgSrc={flipVerticalIcon}
                         title={props.intl.formatMessage(messages.flipVertical)}
                         onClick={props.onFlipVertical}

@@ -7,7 +7,7 @@ import bindAll from 'lodash.bindall';
 import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
-import {clearSelection, getSelectedLeafItems, getSelectedRootItems} from '../helper/selection';
+import {clearSelection, getSelectedLeafItems, getSelectedRootItems, getAllRootItems} from '../helper/selection';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 
 class ModeTools extends React.Component {
@@ -137,7 +137,11 @@ class ModeTools extends React.Component {
         }
     }
     _handleFlip (horizontalScale, verticalScale) {
-        const selectedItems = getSelectedRootItems();
+        let selectedItems = getSelectedRootItems();
+        if (selectedItems.length === 0) {
+            // If nothing is selected, select everything
+            selectedItems = getAllRootItems();
+        }
         // Record old indices
         for (const item of selectedItems) {
             item.data.index = item.index;
