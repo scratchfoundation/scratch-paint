@@ -23,7 +23,7 @@ class Blobbiness {
     // Segment brush has performance issues at low threshold, but broad brush has weird corners
     // which get more obvious the bigger it is
     static get THRESHOLD () {
-        return 9;
+        return 50;
     }
 
     /**
