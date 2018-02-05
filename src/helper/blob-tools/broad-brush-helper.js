@@ -123,9 +123,9 @@ class BroadBrushHelper {
         const offset = options.brushSize / 2;
         const outerPath = OffsetUtils.offsetPath(path, offset, true);
         const innerPath = OffsetUtils.offsetPath(path, -offset, true);
-        let res = OffsetUtils.joinOffsets(outerPath, innerPath, path, offset);
-        res.remove();
-        res = res.unite();
+        const res = OffsetUtils.joinOffsets(outerPath, innerPath, path, offset);
+        // res.remove();
+        // res = res.unite();
         res.insertBelow(this.finalPath);
         styleBlob(res, options);
         this.finalPath.remove();
