@@ -24935,6 +24935,11 @@ var NudgeTool = function () {
     _createClass(NudgeTool, [{
         key: 'onKeyDown',
         value: function onKeyDown(event) {
+            if (event.event.target instanceof HTMLInputElement) {
+                // Ignore nudge if a text input field is focused
+                return;
+            }
+
             var nudgeAmount = 1 / _paper2.default.view.zoom;
             var selected = (0, _selection.getSelectedRootItems)();
             if (selected.length === 0) return;
