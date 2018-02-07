@@ -27939,6 +27939,23 @@ var EyeDropperTool = function (_paper$Tool) {
         _this.pickX = -1;
         _this.pickY = -1;
         _this.hideLoupe = true;
+
+        /*
+            Chrome 64 has a bug that makes it impossible to use getImageData directly
+            a 2d canvas. Until that is resolved, copy the canvas to a buffer canvas
+            and read the data from there.
+            https://github.com/LLK/scratch-paint/issues/276
+        */
+        _this.bufferLoaded = false;
+        _this.bufferCanvas = document.createElement('canvas');
+        _this.bufferCanvas.width = canvas.width;
+        _this.bufferCanvas.height = canvas.height;
+        _this.bufferImage = new Image();
+        _this.bufferImage.onload = function () {
+            _this.bufferCanvas.getContext('2d').drawImage(_this.bufferImage, 0, 0);
+            _this.bufferLoaded = true;
+        };
+        _this.bufferImage.src = canvas.toDataURL();
         return _this;
     }
 
@@ -27957,6 +27974,7 @@ var EyeDropperTool = function (_paper$Tool) {
         value: function handleMouseDown() {
             if (!this.hideLoupe) {
                 var colorInfo = this.getColorInfo(this.pickX, this.pickY, this.hideLoupe);
+                if (!colorInfo) return;
                 var r = colorInfo.color[0];
                 var g = colorInfo.color[1];
                 var b = colorInfo.color[2];
@@ -27973,14 +27991,14 @@ var EyeDropperTool = function (_paper$Tool) {
     }, {
         key: 'getColorInfo',
         value: function getColorInfo(x, y, hideLoupe) {
-            var c = this.canvas.getContext('2d');
-            var colors = c.getImageData(x, y, 1, 1);
-
+            if (!this.bufferLoaded) return null;
+            var ctx = this.bufferCanvas.getContext('2d');
+            var colors = ctx.getImageData(x, y, 1, 1);
             return {
                 x: x,
                 y: y,
                 color: colors.data,
-                data: c.getImageData(x - LOUPE_RADIUS, y - LOUPE_RADIUS, LOUPE_RADIUS * 2, LOUPE_RADIUS * 2).data,
+                data: ctx.getImageData(x - LOUPE_RADIUS, y - LOUPE_RADIUS, LOUPE_RADIUS * 2, LOUPE_RADIUS * 2).data,
                 hideLoupe: hideLoupe
             };
         }
@@ -46066,6 +46084,7 @@ var PaintEditor = function (_React$Component) {
 
             this.intervalId = setInterval(function () {
                 var colorInfo = _this2.eyeDropper.getColorInfo(_this2.eyeDropper.pickX, _this2.eyeDropper.pickY, _this2.eyeDropper.hideLoupe);
+                if (!colorInfo) return;
                 if (_this2.state.colorInfo === null || _this2.state.colorInfo.x !== colorInfo.x || _this2.state.colorInfo.y !== colorInfo.y) {
                     _this2.setState({
                         colorInfo: colorInfo
