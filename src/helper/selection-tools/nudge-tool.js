@@ -15,8 +15,10 @@ class NudgeTool {
         this.onUpdateSvg = onUpdateSvg;
     }
     onKeyDown (event) {
-        // Bail if the real event target is an input
-        if (event.event.target.tagName === 'INPUT') return;
+        if (event.event.target instanceof HTMLInputElement) {
+            // Ignore nudge if a text input field is focused
+            return;
+        }
 
         const nudgeAmount = 1 / paper.view.zoom;
         const selected = getSelectedRootItems();
