@@ -24975,8 +24975,9 @@ var NudgeTool = function () {
                         }
                     }
                 }
+
+                this.boundingBoxTool.setSelectionBounds();
             }
-            this.boundingBoxTool.setSelectionBounds();
         }
     }, {
         key: 'onKeyUp',
