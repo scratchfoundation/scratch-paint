@@ -26329,11 +26329,11 @@ var clampViewBounds = function clampViewBounds() {
     if (top < 0) {
         _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, -top));
     }
-    if (bottom > 400) {
-        _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, 400 - bottom));
+    if (bottom > 360) {
+        _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, 360 - bottom));
     }
-    if (right > 500) {
-        _paper2.default.project.view.scrollBy(new _paper2.default.Point(500 - right, 0));
+    if (right > 480) {
+        _paper2.default.project.view.scrollBy(new _paper2.default.Point(480 - right, 0));
     }
 };
 
