@@ -50,6 +50,7 @@ class Dropdown extends React.Component {
                         className={classNames(styles.dropdownIcon, {
                             [styles.modCaretUp]: this.state.isOpen
                         })}
+                        draggable={false}
                         src={dropdownIcon}
                     />
                 </div>

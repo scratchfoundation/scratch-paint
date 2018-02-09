@@ -114,7 +114,10 @@ class ColorPickerComponent extends React.Component {
                             })}
                             onClick={this.props.onTransparent}
                         >
-                            <img src={noFillIcon} />
+                            <img
+                                draggable={false}
+                                src={noFillIcon}
+                            />
                         </div>
                     </div>
                     <div className={styles.swatches}>
@@ -125,7 +128,10 @@ class ColorPickerComponent extends React.Component {
                             })}
                             onClick={this.props.onActivateEyeDropper}
                         >
-                            <img src={eyeDropperIcon} />
+                            <img
+                                draggable={false}
+                                src={eyeDropperIcon}
+                            />
                         </div>
                     </div>
                 </div>

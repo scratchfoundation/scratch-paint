@@ -29,11 +29,13 @@ const ColorButtonComponent = props => (
             {props.color === null ? (
                 <img
                     className={styles.swatchIcon}
+                    draggable={false}
                     src={noFillIcon}
                 />
             ) : ((props.color === MIXED ? (
                 <img
                     className={styles.swatchIcon}
+                    draggable={false}
                     src={mixedFillIcon}
                 />
             ) : null))}
