@@ -21843,6 +21843,7 @@ var ToolSelectComponent = function ToolSelectComponent(props) {
                 id: props.imgDescriptor.id
             }),
             className: _toolSelectBase2.default.toolSelectIcon,
+            draggable: false,
             src: props.imgSrc
         })
     );
@@ -27485,9 +27486,11 @@ var ColorButtonComponent = function ColorButtonComponent(props) {
             },
             props.color === null ? _react2.default.createElement('img', {
                 className: _colorButton2.default.swatchIcon,
+                draggable: false,
                 src: _noFill2.default
             }) : props.color === _stylePath.MIXED ? _react2.default.createElement('img', {
                 className: _colorButton2.default.swatchIcon,
+                draggable: false,
                 src: _mixedFill2.default
             }) : null
         ),
@@ -27868,6 +27871,7 @@ var LabeledIconButton = function LabeledIconButton(_ref) {
         _react2.default.createElement('img', {
             alt: imgAlt,
             className: _labeledIconButton2.default.editFieldIcon,
+            draggable: false,
             src: imgSrc
         }),
         _react2.default.createElement(
@@ -50906,6 +50910,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                             _react2.default.createElement('img', {
                                 alt: props.intl.formatMessage(messages.undo),
                                 className: _paintEditor2.default.buttonGroupButtonIcon,
+                                draggable: false,
                                 src: _undo2.default
                             })
                         ),
@@ -50919,6 +50924,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                             _react2.default.createElement('img', {
                                 alt: props.intl.formatMessage(messages.redo),
                                 className: _paintEditor2.default.buttonGroupButtonIcon,
+                                draggable: false,
                                 src: _redo2.default
                             })
                         )
@@ -50999,6 +51005,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                                         },
                                         _react2.default.createElement('img', {
                                             className: _paintEditor2.default.menuItemIcon,
+                                            draggable: false,
                                             src: _sendFront2.default
                                         }),
                                         _react2.default.createElement(
@@ -51016,6 +51023,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                                         },
                                         _react2.default.createElement('img', {
                                             className: _paintEditor2.default.menuItemIcon,
+                                            draggable: false,
                                             src: _sendBack2.default
                                         }),
                                         _react2.default.createElement(
@@ -51129,6 +51137,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                             { className: _paintEditor2.default.bitmapButton },
                             _react2.default.createElement('img', {
                                 className: _paintEditor2.default.bitmapButtonIcon,
+                                draggable: false,
                                 src: _bitmap2.default
                             }),
                             _react2.default.createElement(
@@ -51153,6 +51162,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                                 _react2.default.createElement('img', {
                                     alt: 'Zoom Out',
                                     className: _paintEditor2.default.buttonGroupButtonIcon,
+                                    draggable: false,
                                     src: _zoomOut2.default
                                 })
                             ),
@@ -51165,6 +51175,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                                 _react2.default.createElement('img', {
                                     alt: 'Zoom Reset',
                                     className: _paintEditor2.default.buttonGroupButtonIcon,
+                                    draggable: false,
                                     src: _zoomReset2.default
                                 })
                             ),
@@ -51177,6 +51188,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                                 _react2.default.createElement('img', {
                                     alt: 'Zoom In',
                                     className: _paintEditor2.default.buttonGroupButtonIcon,
+                                    draggable: false,
                                     src: _zoomIn2.default
                                 })
                             )
@@ -61697,6 +61709,7 @@ var Dropdown = function (_React$Component) {
                     this.props.children,
                     _react2.default.createElement('img', {
                         className: (0, _classnames2.default)(_dropdown2.default.dropdownIcon, _defineProperty({}, _dropdown2.default.modCaretUp, this.state.isOpen)),
+                        draggable: false,
                         src: _dropdownCaret2.default
                     })
                 )
@@ -65531,7 +65544,10 @@ var ColorPickerComponent = function (_React$Component) {
                                 className: (0, _classnames2.default)((_classNames = {}, _defineProperty(_classNames, _colorPicker2.default.swatch, true), _defineProperty(_classNames, _colorPicker2.default.activeSwatch, this.props.color === null), _classNames)),
                                 onClick: this.props.onTransparent
                             },
-                            _react2.default.createElement('img', { src: _noFill2.default })
+                            _react2.default.createElement('img', {
+                                draggable: false,
+                                src: _noFill2.default
+                            })
                         )
                     ),
                     _react2.default.createElement(
@@ -65543,7 +65559,10 @@ var ColorPickerComponent = function (_React$Component) {
                                 className: (0, _classnames2.default)((_classNames2 = {}, _defineProperty(_classNames2, _colorPicker2.default.swatch, true), _defineProperty(_classNames2, _colorPicker2.default.activeSwatch, this.props.isEyeDropping), _classNames2)),
                                 onClick: this.props.onActivateEyeDropper
                             },
-                            _react2.default.createElement('img', { src: _eyeDropper2.default })
+                            _react2.default.createElement('img', {
+                                draggable: false,
+                                src: _eyeDropper2.default
+                            })
                         )
                     )
                 )
@@ -67791,6 +67810,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement('img', {
                         alt: props.intl.formatMessage(messages.brushSize),
                         className: _modeTools2.default.modeToolsIcon,
+                        draggable: false,
                         src: _brush2.default
                     })
                 ),
@@ -67814,6 +67834,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement('img', {
                         alt: props.intl.formatMessage(messages.eraserSize),
                         className: _modeTools2.default.modeToolsIcon,
+                        draggable: false,
                         src: _eraser2.default
                     })
                 ),
