@@ -24,6 +24,7 @@ const ToolSelectComponent = props => (
                 id: props.imgDescriptor.id
             })}
             className={styles.toolSelectIcon}
+            draggable={false}
             src={props.imgSrc}
         />
     </Button>

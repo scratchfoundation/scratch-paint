@@ -80,6 +80,7 @@ const ModeToolsComponent = props => {
                     <img
                         alt={props.intl.formatMessage(messages.brushSize)}
                         className={styles.modeToolsIcon}
+                        draggable={false}
                         src={brushIcon}
                     />
                 </div>
@@ -101,6 +102,7 @@ const ModeToolsComponent = props => {
                     <img
                         alt={props.intl.formatMessage(messages.eraserSize)}
                         className={styles.modeToolsIcon}
+                        draggable={false}
                         src={eraserIcon}
                     />
                 </div>

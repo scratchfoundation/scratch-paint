@@ -26,6 +26,7 @@ const LabeledIconButton = ({
         <img
             alt={imgAlt}
             className={styles.editFieldIcon}
+            draggable={false}
             src={imgSrc}
         />
         <span className={styles.editFieldTitle}>{title}</span>
