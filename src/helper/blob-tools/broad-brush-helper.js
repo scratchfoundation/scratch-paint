@@ -20,7 +20,6 @@ class BroadBrushHelper {
         this.finalPath = null;
         this.smoothed = 0;
         this.smoothingThreshold = 20;
-        this.smoothingOverlap = 0;
         this.steps = 0;
     }
 
@@ -57,7 +56,7 @@ class BroadBrushHelper {
             const handleVec = step.clone();
             handleVec.length = options.brushSize / 2;
             handleVec.angle += 90;
-            this.finalPath.add(new paper.Segment(removedPoint.subtract(step), -handleVec, handleVec));
+            this.finalPath.add(new paper.Segment(removedPoint.subtract(step), handleVec.multiply(-1), handleVec));
         }
         step.angle += 90;
         const top = event.middlePoint.add(step);
@@ -76,44 +75,65 @@ class BroadBrushHelper {
             // of the handles on the first point, which makes it too pointy.
             this.finalPath.flatten(Math.min(5, options.brushSize / 5));
         }
-        if (this.finalPath.segments.length > this.smoothed + (this.smoothingThreshold * 2)) {
+        if (this.steps > 3 && this.finalPath.segments.length > this.smoothed + (this.smoothingThreshold * 2)) {
             this.simplify(1);
-            console.log('flatten');
         }
         this.lastPoint = event.point;
         this.secondLastPoint = event.lastPoint;
     }
 
+    /**
+     * Simplify the path so that it looks almost the same while trying to have a reasonable number of handles.
+     * Without this, there would be 2 handles for every mouse move, which would make the path produced basically
+     * uneditable. This version of simplify keeps track of how much of the path has already been simplified to
+     * avoid repeating work.
+     * @param {number} threshold The simplify algorithm must try to stay within this distance of the actual line.
+     *     The algorithm will be faster and able to remove more points the higher this number is.
+     *     Note that 1 is about the lowest this algorithm can do (the result is about the same when 1 is
+     *     passed in as when 0 is passed in)
+     */
     simplify (threshold) {
+        // Length of the current path
         const length = this.finalPath.segments.length;
-        // this.finalPath.smooth({from: 1, to: Math.min(this.smoothingThreshold, Math.floor((length / 2) - 2))});
-        // this.finalPath.smooth({from: Math.max(length - 1 - this.smoothingThreshold, Math.floor(length / 2) + 2), to: length - 2});
-        // this.smoothed = Math.max(2, length - (this.smoothingOverlap * 2));
-        // if (Math.random() > .9) {
-            const newPoints = Math.floor((length - this.smoothed) / 2) + this.smoothingOverlap;
-            const firstCutoff =  Math.min(newPoints + 1, Math.floor((length / 2) - 1));
-            const lastCutoff = Math.max(length - 1 - newPoints, Math.floor(length / 2) + 2);
-            const tempPath1 = new paper.Path(this.finalPath.segments.slice(1, firstCutoff));
-            const tempPathMid = new paper.Path(this.finalPath.segments.slice(firstCutoff, lastCutoff));
-            const tempPath2 = new paper.Path(this.finalPath.segments.slice(lastCutoff, length - 1));
-            console.log(newPoints);
-            console.log(tempPathMid.segments.length);
-            tempPath1.simplify(threshold);
-            tempPath2.simplify(threshold);
-            this.finalPath.removeSegments(1, this.finalPath.segments.length - 1);
-            this.finalPath.insertSegments(1, tempPath1.segments.concat(tempPathMid.segments).concat(tempPath2.segments));
-            tempPath1.remove();
-            tempPath2.remove();
-            tempPathMid.remove();
-        // }
-        this.smoothed = Math.max(2, this.finalPath.segments.length - ((1 + this.smoothingOverlap) * 2));
+        // Number of new points added to front and end of path since last simplify
+        const newPoints = Math.floor((length - this.smoothed) / 2) + 1;
+
+        // Where to cut. Don't go past the rounded start of the line (so there's always a tempPathMid)
+        const firstCutoff = Math.min(newPoints + 1, Math.floor((length / 2) - 3));
+        const lastCutoff = Math.max(length - 1 - newPoints, Math.floor(length / 2) + 4);
+        // Cut the path into 3 segments: the 2 ends where the new points are, and the middle, which will be
+        // staying the same
+        const tempPath1 = new paper.Path(this.finalPath.segments.slice(1, firstCutoff));
+        const tempPathMid = new paper.Path(this.finalPath.segments.slice(firstCutoff, lastCutoff));
+        const tempPath2 = new paper.Path(this.finalPath.segments.slice(lastCutoff, length - 1));
+
+        // Run simplify on the new ends. We need to graft the old handles back onto the newly
+        // simplified paths, since simplify removes the in handle from the start of the path, and
+        // the out handle from the end of the path it's simplifying.
+        const oldPath1End = tempPath1.segments[tempPath1.segments.length - 1];
+        const oldPath2End = tempPath2.segments[0];
+        tempPath1.simplify(threshold);
+        tempPath2.simplify(threshold);
+        const newPath1End = tempPath1.segments[tempPath1.segments.length - 1];
+        const newPath2End = tempPath2.segments[0];
+        newPath1End.handleOut = oldPath1End.handleOut;
+        newPath2End.handleIn = oldPath2End.handleIn;
+
+        // Delete the old contents of finalPath and replace it with the newly simplified segments, concatenated
+        this.finalPath.removeSegments(1, this.finalPath.segments.length - 1);
+        this.finalPath.insertSegments(1, tempPath1.segments.concat(tempPathMid.segments).concat(tempPath2.segments));
+
+        // Remove temp paths
+        tempPath1.remove();
+        tempPath2.remove();
+        tempPathMid.remove();
+
+        // Update how many points have been smoothed so far so that we don't redo work when
+        // simplify is called next time.
+        this.smoothed = Math.max(2, this.finalPath.segments.length);
     }
 
     onBroadMouseUp (event, tool, options) {
-        debugger;
-        console.log(this.lastPoint);
-        console.log(event.point);
-        console.log(this.secondLastPoint);
         // If there was only a single click, draw a circle.
         if (this.steps === 0) {
             this.finalPath.remove();
