@@ -7,7 +7,7 @@
 - Or, to try it out as part of Scratch 3.0, visit [https://preview.scratch.mit.edu/](https://preview.scratch.mit.edu/)
 
 ### Installation
-It will be easiest if you develop on Mac or Linux. If you are using Windows, I recommend using Ubuntu on Windows, which will allow you to use Linux commands on Windows. You will need administrator permissions.
+It will be easiest if you develop on Mac or Linux. If you are using Windows, Ubuntu on Windows is recommended, which will allow you to use Linux commands on Windows. You will need administrator permissions.
 
 - https://docs.microsoft.com/en-us/windows/wsl/install-win10
 
@@ -34,7 +34,7 @@ In the cloned `scratch-paint` directory, run:
 npm start
 ```
 
-Then go to [http://localhost:8078/playground/](http://localhost:8078/playground/). 8078 is BLOB upside-down. The True Name of this repo is scratch-blobs.
+Then go to [http://localhost:8078/playground/](http://localhost:8078/playground/). 8078 is BLOB upside-down. The true name of this repo is scratch-blobs.
 
 ### Running locally (as part of Scratch)
 So you've tried out your edits in the playground and they look good. You should now test with the rest of Scratch, to make sure that everything hooks up right, and so that you can use your custom paint editor to make costumes and sprites!
@@ -56,7 +56,7 @@ npm link scratch-paint
 npm install
 npm start
 ```
-Then go to [http://localhost:8601](http://localhost:8601). 601 is supposed to look like GUI (it's okay, I don't really see it either.) The Costumes tab should be running your local copy of scratch-paint!
+Then go to [http://localhost:8601](http://localhost:8601). 601 is supposed to look like GUI (it's okay, others don't really see it either.) The Costumes tab should be running your local copy of scratch-paint!
 
 ### How to include in your own Node.js App
 For an example of how to use scratch-paint as a library, check out the `scratch-paint/src/playground` directory.
