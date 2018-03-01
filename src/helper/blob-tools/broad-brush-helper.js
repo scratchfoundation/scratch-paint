@@ -1,6 +1,7 @@
 // Broadbrush based on http://paperjs.org/tutorials/interaction/working-with-mouse-vectors/
 import paper from '@scratch/paper';
 import {styleBlob} from '../../helper/style-path';
+import log from '../../log/log';
 
 /**
  * Broad brush functions to add as listeners on the mouse. Call them when the corresponding mouse event happens
@@ -20,11 +21,14 @@ class BroadBrushHelper {
         this.smoothed = 0;
         this.smoothingThreshold = 20;
         this.steps = 0;
+        // End caps round out corners and are not merged into the path until the end.
+        this.endCaps = [];
     }
 
     onBroadMouseDown (event, tool, options) {
+        this.steps = 0;
         this.smoothed = 0;
-        tool.minDistance = Math.max(2, options.brushSize / 2);
+        tool.minDistance = Math.min(5, Math.max(2, options.brushSize / 2));
         tool.maxDistance = options.brushSize;
         if (event.event.button > 0) return; // only first mouse button
         
@@ -39,11 +43,18 @@ class BroadBrushHelper {
     onBroadMouseDrag (event, tool, options) {
         this.steps++;
         const step = (event.delta).normalize(options.brushSize / 2);
+
+        // Add an end cap if the mouse has changed direction very quickly
         if (this.lastVec) {
             const angle = this.lastVec.getDirectedAngle(step);
-            // If the angle is large, the broad brush tends to leave behind a flat edge.
-            // This code fills in the flat edge with a rounded shape.
             if (Math.abs(angle) > 126) {
+                // This will cause us to skip simplifying this sharp angle. Running simplify on
+                // sharp angles causes the stroke to blob outwards.
+                this.simplify(1);
+                this.smoothed++;
+
+                // If the angle is large, the broad brush tends to leave behind a flat edge.
+                // This code makes a shape to fill in that flat edge with a rounded cap.
                 const circ = new paper.Path.Circle(this.lastPoint, options.brushSize / 2);
                 circ.fillColor = options.fillColor;
                 const rect = new paper.Path.Rectangle(
@@ -58,7 +69,7 @@ class BroadBrushHelper {
                 );
                 rect2.fillColor = options.fillColor;
                 rect2.rotate(step.angle - 90, event.point);
-                this.union(circ, this.union(rect, rect2));
+                this.endCaps.push(this.union(circ, this.union(rect, rect2)));
             }
         }
         this.lastVec = event.delta;
@@ -66,9 +77,17 @@ class BroadBrushHelper {
 
         // Move the first point out away from the drag so that the end of the path is rounded
         if (this.steps === 1) {
+            // Replace circle with path
+            this.finalPath.remove();
             this.finalPath = new paper.Path();
+            const handleVec = event.delta.normalize(options.brushSize / 2);
+            this.finalPath.add(new paper.Segment(
+                this.lastPoint.subtract(handleVec),
+                handleVec.rotate(-90),
+                handleVec.rotate(90)
+            ));
             styleBlob(this.finalPath, options);
-            this.finalPath.add(new paper.Segment(this.lastPoint.subtract(step)));
+            this.finalPath.insert(0, new paper.Segment(this.lastPoint.subtract(step)));
             this.finalPath.add(new paper.Segment(this.lastPoint.add(step)));
         }
         const top = event.middlePoint.add(step);
@@ -102,7 +121,7 @@ class BroadBrushHelper {
         const newPoints = Math.floor((length - this.smoothed) / 2) + 1;
 
         // Where to cut. Don't go past the rounded start of the line (so there's always a tempPathMid)
-        const firstCutoff = Math.min(newPoints + 1, Math.floor((length / 2) - 1));
+        const firstCutoff = Math.min(newPoints + 1, Math.floor((length / 2)));
         const lastCutoff = Math.max(length - 1 - newPoints, Math.floor(length / 2) + 1);
         if (firstCutoff <= 1 || lastCutoff >= length - 1) {
             // Entire path is simplified already
@@ -147,20 +166,20 @@ class BroadBrushHelper {
         const temp = path1.unite(path2);
         path1.remove();
         path2.remove();
-        console.log(temp);
         return temp;
     }
 
     onBroadMouseUp (event, tool, options) {
         // If there was only a single click, draw a circle.
         if (this.steps === 0) {
+            this.endCaps.length = 0;
             return this.finalPath;
         }
 
         // If the mouse up is at the same point as the mouse drag event then we need
         // the second to last point to get the right direction vector for the end cap
         if (!event.point.equals(this.lastPoint)) {
-            const step = (event.point.subtract(this.lastPoint)).normalize(options.brushSize / 2);
+            const step = event.delta.normalize(options.brushSize / 2);
             step.angle += 90;
 
             const top = event.point.add(step);
@@ -171,23 +190,48 @@ class BroadBrushHelper {
 
         // Simplify before adding end cap so cap doesn't get warped
         this.simplify(1);
+        const handleVec = event.delta.normalize(options.brushSize / 2);
+        this.finalPath.add(new paper.Segment(
+            event.point.add(handleVec),
+            handleVec.rotate(90),
+            handleVec.rotate(-90)
+        ));
         this.finalPath.closePath();
 
-        // Add end cap
-        const circ = new paper.Path.Circle(event.point, options.brushSize / 2);
-        circ.fillColor = options.fillColor;
-        this.finalPath = this.union(this.finalPath, circ);
         // Resolve self-crossings
         const newPath =
             this.finalPath
                 .resolveCrossings()
                 .reorient(true /* nonZero */, true /* clockwise */)
                 .reduce({simplify: true});
-        newPath.copyAttributes(this.finalPath);
-        newPath.fillColor = this.finalPath.fillColor;
-        this.finalPath.remove();
-        this.finalPath = newPath;
-        this.steps = 0;
+        if (newPath !== this.finalPath) {
+            newPath.copyAttributes(this.finalPath);
+            newPath.fillColor = this.finalPath.fillColor;
+            this.finalPath.remove();
+            this.finalPath = newPath;
+        }
+        
+        // Try to merge end caps
+        for (const cap of this.endCaps) {
+            const temp = this.union(this.finalPath, cap);
+            if (temp.area >= this.finalPath.area &&
+                !(temp instanceof paper.CompoundPath && !(this.finalPath instanceof paper.CompoundPath))) {
+                this.finalPath = temp;
+            } else {
+                // If the union of the two shapes is smaller than the original shape,
+                // or it caused the path to become a compound path,
+                // then there must have been a glitch with paperjs's unite function.
+                // In this case, skip merging that segment. It's not great, but it's
+                // better than losing the whole path for instance. (Unfortunately, this
+                // happens reasonably often to scribbles, and this code doesn't catch
+                // all of the failures.)
+                this.finalPath.insertAbove(temp);
+                temp.remove();
+                log.warn('Skipping a merge.');
+            }
+        }
+        this.endCaps.length = 0;
+
         return this.finalPath;
     }
 }
