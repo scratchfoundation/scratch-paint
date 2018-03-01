@@ -15,11 +15,17 @@ import log from '../../log/log';
  */
 class BroadBrushHelper {
     constructor () {
+        // Direction vector of the last mouse move
         this.lastVec = null;
+        // End point of the last mouse move
         this.lastPoint = null;
+        // The path of the brush stroke we are building
         this.finalPath = null;
+        // Number of points of finalPath that have already been processed
         this.smoothed = 0;
+        // Number of steps to wait before performing another amortized smooth
         this.smoothingThreshold = 20;
+        // Mouse moves since mouse down
         this.steps = 0;
         // End caps round out corners and are not merged into the path until the end.
         this.endCaps = [];
