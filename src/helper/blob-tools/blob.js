@@ -127,7 +127,6 @@ class Blobbiness {
         };
 
         this.tool.onMouseUp = function (event) {
-            blob.resizeCursorIfNeeded(event.point);
             if (event.event.button > 0 || !this.active) return; // only first mouse button
             
             let lastPath;
@@ -145,11 +144,9 @@ class Blobbiness {
                 blob.mergeBrush(lastPath);
             }
 
-            blob.cursorPreview.visible = false;
+            blob.cursorPreview.remove();
+            blob.cursorPreview = null;
             blob.onUpdateSvg();
-            blob.cursorPreview.visible = true;
-            blob.cursorPreview.bringToFront();
-            blob.cursorPreview.position = event.point;
 
             // Reset
             blob.brush = null;
