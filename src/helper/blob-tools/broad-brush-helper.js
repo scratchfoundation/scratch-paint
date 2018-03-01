@@ -16,7 +16,6 @@ class BroadBrushHelper {
     constructor () {
         this.lastVec = null;
         this.lastPoint = null;
-        this.secondLastPoint = null;
         this.finalPath = null;
         this.smoothed = 0;
         this.smoothingThreshold = 20;
@@ -29,12 +28,12 @@ class BroadBrushHelper {
         tool.maxDistance = options.brushSize;
         if (event.event.button > 0) return; // only first mouse button
         
-        this.finalPath = new paper.Path();
+        this.finalPath = new paper.Path.Circle({
+            center: event.point,
+            radius: options.brushSize / 2
+        });
         styleBlob(this.finalPath, options);
-        this.finalPath.add(event.point);
-        // this.finalPath.selected = true;
-        // paper.settings.handleSize = 4;
-        this.lastPoint = this.secondLastPoint = event.point;
+        this.lastPoint = event.point;
     }
     
     onBroadMouseDrag (event, tool, options) {
@@ -42,44 +41,48 @@ class BroadBrushHelper {
         const step = (event.delta).normalize(options.brushSize / 2);
         if (this.lastVec) {
             const angle = this.lastVec.getDirectedAngle(step);
+            // If the angle is large, the broad brush tends to leave behind a flat edge.
+            // This code fills in the flat edge with a rounded shape.
             if (Math.abs(angle) > 126) {
                 const circ = new paper.Path.Circle(this.lastPoint, options.brushSize / 2);
                 circ.fillColor = options.fillColor;
+                const rect = new paper.Path.Rectangle(
+                    this.lastPoint.subtract(new paper.Point(-options.brushSize / 2, 0)),
+                    this.lastPoint.subtract(new paper.Point(options.brushSize / 2, this.lastVec.length))
+                );
+                rect.fillColor = options.fillColor;
+                rect.rotate(this.lastVec.angle - 90, this.lastPoint);
+                const rect2 = new paper.Path.Rectangle(
+                    event.point.subtract(new paper.Point(-options.brushSize / 2, 0)),
+                    event.point.subtract(new paper.Point(options.brushSize / 2, event.delta.length))
+                );
+                rect2.fillColor = options.fillColor;
+                rect2.rotate(step.angle - 90, event.point);
+                this.union(circ, this.union(rect, rect2));
             }
         }
-        this.lastVec = step.clone();
+        this.lastVec = event.delta;
+        step.angle += 90;
 
         // Move the first point out away from the drag so that the end of the path is rounded
-        if (this.finalPath.segments && this.steps === 1) {
-            const removedPoint = this.finalPath.removeSegment(0).point;
-            // Add handles to round the end caps
-            const handleVec = step.clone();
-            handleVec.length = options.brushSize / 2;
-            handleVec.angle += 90;
-            this.finalPath.add(new paper.Segment(removedPoint.subtract(step), handleVec.multiply(-1), handleVec));
+        if (this.steps === 1) {
+            this.finalPath = new paper.Path();
+            styleBlob(this.finalPath, options);
+            this.finalPath.add(new paper.Segment(this.lastPoint.subtract(step)));
+            this.finalPath.add(new paper.Segment(this.lastPoint.add(step)));
         }
-        step.angle += 90;
         const top = event.middlePoint.add(step);
         const bottom = event.middlePoint.subtract(step);
 
-        if (this.steps === 2) {
-            this.finalPath.removeSegment(this.finalPath.segments.length - 1);
-            this.finalPath.removeSegment(0);
-        }
         this.finalPath.add(top);
         this.finalPath.add(event.point.add(step));
         this.finalPath.insert(0, bottom);
         this.finalPath.insert(0, event.point.subtract(step));
-        if (this.steps === 3) {
-            // Flatten is necessary to prevent smooth from getting rid of the effect
-            // of the handles on the first point, which makes it too pointy.
-            this.finalPath.flatten(Math.min(5, options.brushSize / 5));
-        }
-        if (this.steps > 3 && this.finalPath.segments.length > this.smoothed + (this.smoothingThreshold * 2)) {
+
+        if (this.finalPath.segments.length > this.smoothed + (this.smoothingThreshold * 2)) {
             this.simplify(1);
         }
         this.lastPoint = event.point;
-        this.secondLastPoint = event.lastPoint;
     }
 
     /**
@@ -99,8 +102,12 @@ class BroadBrushHelper {
         const newPoints = Math.floor((length - this.smoothed) / 2) + 1;
 
         // Where to cut. Don't go past the rounded start of the line (so there's always a tempPathMid)
-        const firstCutoff = Math.min(newPoints + 1, Math.floor((length / 2) - 3));
-        const lastCutoff = Math.max(length - 1 - newPoints, Math.floor(length / 2) + 4);
+        const firstCutoff = Math.min(newPoints + 1, Math.floor((length / 2) - 1));
+        const lastCutoff = Math.max(length - 1 - newPoints, Math.floor(length / 2) + 1);
+        if (firstCutoff <= 1 || lastCutoff >= length - 1) {
+            // Entire path is simplified already
+            return;
+        }
         // Cut the path into 3 segments: the 2 ends where the new points are, and the middle, which will be
         // staying the same
         const tempPath1 = new paper.Path(this.finalPath.segments.slice(1, firstCutoff));
@@ -133,17 +140,23 @@ class BroadBrushHelper {
         this.smoothed = Math.max(2, this.finalPath.segments.length);
     }
 
+    /**
+     * Like paper.Path.unite, but it removes the original 2 paths
+     */
+    union (path1, path2) {
+        const temp = path1.unite(path2);
+        path1.remove();
+        path2.remove();
+        console.log(temp);
+        return temp;
+    }
+
     onBroadMouseUp (event, tool, options) {
         // If there was only a single click, draw a circle.
         if (this.steps === 0) {
-            this.finalPath.remove();
-            this.finalPath = new paper.Path.Circle({
-                center: event.point,
-                radius: options.brushSize / 2
-            });
-            styleBlob(this.finalPath, options);
             return this.finalPath;
         }
+
         // If the mouse up is at the same point as the mouse drag event then we need
         // the second to last point to get the right direction vector for the end cap
         if (!event.point.equals(this.lastPoint)) {
@@ -158,11 +171,12 @@ class BroadBrushHelper {
 
         // Simplify before adding end cap so cap doesn't get warped
         this.simplify(1);
+        this.finalPath.closePath();
 
         // Add end cap
         const circ = new paper.Path.Circle(event.point, options.brushSize / 2);
         circ.fillColor = options.fillColor;
-
+        this.finalPath = this.union(this.finalPath, circ);
         // Resolve self-crossings
         const newPath =
             this.finalPath
@@ -171,6 +185,7 @@ class BroadBrushHelper {
                 .reduce({simplify: true});
         newPath.copyAttributes(this.finalPath);
         newPath.fillColor = this.finalPath.fillColor;
+        this.finalPath.remove();
         this.finalPath = newPath;
         this.steps = 0;
         return this.finalPath;
