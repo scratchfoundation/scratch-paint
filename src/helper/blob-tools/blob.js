@@ -431,8 +431,10 @@ class Blobbiness {
     }
 
     deactivateTool () {
-        this.cursorPreview.remove();
-        this.cursorPreview = null;
+        if (this.cursorPreview) {
+            this.cursorPreview.remove();
+            this.cursorPreview = null;
+        }
         this.tool.remove();
         this.tool = null;
     }
