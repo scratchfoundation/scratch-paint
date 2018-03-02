@@ -167,6 +167,9 @@ class BroadBrushHelper {
 
     /**
      * Like paper.Path.unite, but it removes the original 2 paths
+     * @param {paper.Path} path1 to merge
+     * @param {paper.Path} path2 to merge
+     * @return {paper.Path} merged path. Original paths 1 and 2 will be removed from the view.
      */
     union (path1, path2) {
         const temp = path1.unite(path2);
