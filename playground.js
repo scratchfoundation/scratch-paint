@@ -16996,6 +16996,7 @@ var _removeSelectedSegments = function _removeSelectedSegments(items, onUpdateSv
     var segmentsToRemove = [];
 
     for (var i = 0; i < items.length; i++) {
+        if (!items[i].segments) continue;
         var segments = items[i].segments;
         for (var j = 0; j < segments.length; j++) {
             var seg = segments[j];
