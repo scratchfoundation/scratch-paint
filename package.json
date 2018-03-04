@@ -82,7 +82,7 @@
     "svg-url-loader": "^2.2.0",
     "tap": "^11.1.0",
     "url-loader": "^0.6.2",
-    "webpack": "^3.5.4",
+    "webpack": "^4.1.0",
     "webpack-dev-server": "^3.0.0"
   },
   "jest": {
