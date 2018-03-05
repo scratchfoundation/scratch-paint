@@ -23774,7 +23774,7 @@ module.exports = keyMirror;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.clearUndoState = exports.undoSnapshot = exports.redo = exports.undo = exports.default = undefined;
+exports.MAX_STACK_SIZE = exports.clearUndoState = exports.undoSnapshot = exports.redo = exports.undo = exports.default = undefined;
 
 var _log = __webpack_require__(12);
 
@@ -23786,6 +23786,7 @@ var UNDO = 'scratch-paint/undo/UNDO';
 var REDO = 'scratch-paint/undo/REDO';
 var SNAPSHOT = 'scratch-paint/undo/SNAPSHOT';
 var CLEAR = 'scratch-paint/undo/CLEAR';
+var MAX_STACK_SIZE = 100;
 var initialState = {
     stack: [],
     pointer: -1
@@ -23816,6 +23817,14 @@ var reducer = function reducer(state, action) {
             if (!action.snapshot) {
                 _log2.default.warn('Couldn\'t create undo snapshot, no data provided');
                 return state;
+            }
+            // Overflowed or about to overflow
+            if (state.pointer >= MAX_STACK_SIZE - 1) {
+                return {
+                    // Make a stack of size MAX_STACK_SIZE, cutting off the oldest snapshots.
+                    stack: state.stack.slice(state.pointer - MAX_STACK_SIZE + 2, state.pointer + 1).concat(action.snapshot),
+                    pointer: MAX_STACK_SIZE - 1
+                };
             }
             return {
                 // Performing an action clears the redo stack
@@ -23857,6 +23866,7 @@ exports.undo = undo;
 exports.redo = redo;
 exports.undoSnapshot = undoSnapshot;
 exports.clearUndoState = clearUndoState;
+exports.MAX_STACK_SIZE = MAX_STACK_SIZE;
 
 /***/ }),
 /* 43 */
