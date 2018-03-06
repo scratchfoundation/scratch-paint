@@ -16986,7 +16986,6 @@ var _deleteItemSelection = function _deleteItemSelection(items, onUpdateSvg) {
     for (var i = 0; i < items.length; i++) {
         items[i].remove();
     }
-    _paper2.default.project.view.update();
     onUpdateSvg();
     return true;
 };
@@ -17013,7 +17012,6 @@ var _removeSelectedSegments = function _removeSelectedSegments(items, onUpdateSv
         removedSegments = true;
     }
     if (removedSegments) {
-        _paper2.default.project.view.update();
         onUpdateSvg();
     }
     return removedSegments;
@@ -26313,7 +26311,6 @@ var _restore = function _restore(entry, setSelectedItems, onUpdateSvg) {
     }
 
     _paper2.default.project.importJSON(entry.json);
-    _paper2.default.view.update();
 
     setSelectedItems();
     onUpdateSvg(true /* skipSnapshot */);
@@ -26884,7 +26881,6 @@ var Blobbiness = function () {
                 }
                 blob.cursorPreview.bringToFront();
                 blob.cursorPreview.position = event.point;
-                _paper2.default.view.draw();
             };
 
             this.tool.onMouseDrag = function (event) {
@@ -26900,7 +26896,6 @@ var Blobbiness = function () {
 
                 blob.cursorPreview.bringToFront();
                 blob.cursorPreview.position = event.point;
-                _paper2.default.view.draw();
             };
 
             this.tool.onMouseUp = function (event) {
@@ -46024,7 +46019,6 @@ var PaintEditor = function (_React$Component) {
             // Restore old zoom
             _paper2.default.project.view.zoom = oldZoom;
             _paper2.default.project.view.center = oldCenter;
-            _paper2.default.project.view.update();
         }
     }, {
         key: 'handleUndo',
@@ -54870,7 +54864,6 @@ var PaperCanvas = function (_React$Component) {
                 this.importSvg(newProps.svg, newProps.rotationCenterX, newProps.rotationCenterY);
                 _paper2.default.project.view.zoom = oldZoom;
                 _paper2.default.project.view.center = oldCenter;
-                _paper2.default.project.view.update();
             } else {
                 (0, _undo.performSnapshot)(this.props.undoSnapshot);
             }
@@ -54993,7 +54986,6 @@ var PaperCanvas = function (_React$Component) {
                     }
 
                     (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot);
-                    _paper2.default.project.view.update();
                 }
             });
         }
@@ -66134,7 +66126,6 @@ var LineMode = function (_React$Component) {
 
                 this.path.add(event.point);
                 this.path.add(event.point); // Add second point, which is what will move when dragged
-                _paper2.default.view.draw();
             }
         }
     }, {
@@ -67058,7 +67049,6 @@ var ModeTools = function (_React$Component) {
                 }
                 this.props.incrementPasteOffset();
                 this.props.setSelectedItems();
-                _paper2.default.project.view.update();
                 this.props.onUpdateSvg();
             }
         }
@@ -71038,13 +71028,6 @@ var SelectionHOC = function SelectionHOC(WrappedComponent) {
         }
 
         _createClass(SelectionComponent, [{
-            key: 'componentDidMount',
-            value: function componentDidMount() {
-                if (this.props.hoveredItemId) {
-                    _paper2.default.view.update();
-                }
-            }
-        }, {
             key: 'componentDidUpdate',
             value: function componentDidUpdate(prevProps) {
                 // Hovered item has changed
