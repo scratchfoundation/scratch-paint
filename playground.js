@@ -26786,7 +26786,7 @@ var Blobbiness = function () {
     }, {
         key: 'THRESHOLD',
         get: function get() {
-            return 9;
+            return 30 / _paper2.default.view.zoom;
         }
 
         /**
@@ -26884,7 +26884,6 @@ var Blobbiness = function () {
             };
 
             this.tool.onMouseDrag = function (event) {
-                blob.resizeCursorIfNeeded(event.point);
                 if (event.event.button > 0 || !this.active) return; // only first mouse button
                 if (blob.brush === Blobbiness.BROAD) {
                     blob.broadBrushHelper.onBroadMouseDrag(event, blob.tool, blob.options);
@@ -26899,7 +26898,6 @@ var Blobbiness = function () {
             };
 
             this.tool.onMouseUp = function (event) {
-                blob.resizeCursorIfNeeded(event.point);
                 if (event.event.button > 0 || !this.active) return; // only first mouse button
 
                 var lastPath = void 0;
@@ -26917,11 +26915,9 @@ var Blobbiness = function () {
                     blob.mergeBrush(lastPath);
                 }
 
-                blob.cursorPreview.visible = false;
+                blob.cursorPreview.remove();
+                blob.cursorPreview = null;
                 blob.onUpdateSvg();
-                blob.cursorPreview.visible = true;
-                blob.cursorPreview.bringToFront();
-                blob.cursorPreview.position = event.point;
 
                 // Reset
                 blob.brush = null;
@@ -27233,8 +27229,10 @@ var Blobbiness = function () {
     }, {
         key: 'deactivateTool',
         value: function deactivateTool() {
-            this.cursorPreview.remove();
-            this.cursorPreview = null;
+            if (this.cursorPreview) {
+                this.cursorPreview.remove();
+                this.cursorPreview = null;
+            }
             this.tool.remove();
             this.tool = null;
         }
@@ -58939,6 +58937,10 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _stylePath = __webpack_require__(8);
 
+var _log = __webpack_require__(12);
+
+var _log2 = _interopRequireDefault(_log);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -58957,99 +58959,245 @@ var BroadBrushHelper = function () {
     function BroadBrushHelper() {
         _classCallCheck(this, BroadBrushHelper);
 
+        // Direction vector of the last mouse move
+        this.lastVec = null;
+        // End point of the last mouse move
         this.lastPoint = null;
-        this.secondLastPoint = null;
+        // The path of the brush stroke we are building
         this.finalPath = null;
+        // Number of points of finalPath that have already been processed
+        this.smoothed = 0;
+        // Number of steps to wait before performing another amortized smooth
+        this.smoothingThreshold = 20;
+        // Mouse moves since mouse down
+        this.steps = 0;
+        // End caps round out corners and are not merged into the path until the end.
+        this.endCaps = [];
     }
 
     _createClass(BroadBrushHelper, [{
         key: 'onBroadMouseDown',
         value: function onBroadMouseDown(event, tool, options) {
-            tool.minDistance = options.brushSize / 2;
+            this.steps = 0;
+            this.smoothed = 0;
+            tool.minDistance = Math.min(5, Math.max(2 / _paper2.default.view.zoom, options.brushSize / 2));
             tool.maxDistance = options.brushSize;
             if (event.event.button > 0) return; // only first mouse button
 
-            this.finalPath = new _paper2.default.Path();
+            this.finalPath = new _paper2.default.Path.Circle({
+                center: event.point,
+                radius: options.brushSize / 2
+            });
             (0, _stylePath.styleBlob)(this.finalPath, options);
-            this.finalPath.add(event.point);
-            this.lastPoint = this.secondLastPoint = event.point;
+            this.lastPoint = event.point;
         }
     }, {
         key: 'onBroadMouseDrag',
         value: function onBroadMouseDrag(event, tool, options) {
+            this.steps++;
             var step = event.delta.normalize(options.brushSize / 2);
 
-            // Move the first point out away from the drag so that the end of the path is rounded
-            if (this.finalPath.segments && this.finalPath.segments.length === 1) {
-                var removedPoint = this.finalPath.removeSegment(0).point;
-                // Add handles to round the end caps
-                var handleVec = step.clone();
-                handleVec.length = options.brushSize / 2;
-                handleVec.angle += 90;
-                this.finalPath.add(new _paper2.default.Segment(removedPoint.subtract(step), -handleVec, handleVec));
+            // Add an end cap if the mouse has changed direction very quickly
+            if (this.lastVec) {
+                var angle = this.lastVec.getDirectedAngle(step);
+                if (Math.abs(angle) > 126) {
+                    // This will cause us to skip simplifying this sharp angle. Running simplify on
+                    // sharp angles causes the stroke to blob outwards.
+                    this.simplify(1);
+                    this.smoothed++;
+
+                    // If the angle is large, the broad brush tends to leave behind a flat edge.
+                    // This code makes a shape to fill in that flat edge with a rounded cap.
+                    var circ = new _paper2.default.Path.Circle(this.lastPoint, options.brushSize / 2);
+                    circ.fillColor = options.fillColor;
+                    var rect = new _paper2.default.Path.Rectangle(this.lastPoint.subtract(new _paper2.default.Point(-options.brushSize / 2, 0)), this.lastPoint.subtract(new _paper2.default.Point(options.brushSize / 2, this.lastVec.length)));
+                    rect.fillColor = options.fillColor;
+                    rect.rotate(this.lastVec.angle - 90, this.lastPoint);
+                    var rect2 = new _paper2.default.Path.Rectangle(event.point.subtract(new _paper2.default.Point(-options.brushSize / 2, 0)), event.point.subtract(new _paper2.default.Point(options.brushSize / 2, event.delta.length)));
+                    rect2.fillColor = options.fillColor;
+                    rect2.rotate(step.angle - 90, event.point);
+                    this.endCaps.push(this.union(circ, this.union(rect, rect2)));
+                }
             }
+            this.lastVec = event.delta;
             step.angle += 90;
+
+            // Move the first point out away from the drag so that the end of the path is rounded
+            if (this.steps === 1) {
+                // Replace circle with path
+                this.finalPath.remove();
+                this.finalPath = new _paper2.default.Path();
+                var handleVec = event.delta.normalize(options.brushSize / 2);
+                this.finalPath.add(new _paper2.default.Segment(this.lastPoint.subtract(handleVec), handleVec.rotate(-90), handleVec.rotate(90)));
+                (0, _stylePath.styleBlob)(this.finalPath, options);
+                this.finalPath.insert(0, new _paper2.default.Segment(this.lastPoint.subtract(step)));
+                this.finalPath.add(new _paper2.default.Segment(this.lastPoint.add(step)));
+            }
             var top = event.middlePoint.add(step);
             var bottom = event.middlePoint.subtract(step);
 
-            if (this.finalPath.segments.length > 3) {
-                this.finalPath.removeSegment(this.finalPath.segments.length - 1);
-                this.finalPath.removeSegment(0);
-            }
             this.finalPath.add(top);
             this.finalPath.add(event.point.add(step));
             this.finalPath.insert(0, bottom);
             this.finalPath.insert(0, event.point.subtract(step));
-            if (this.finalPath.segments.length === 5) {
-                // Flatten is necessary to prevent smooth from getting rid of the effect
-                // of the handles on the first point.
-                this.finalPath.flatten(Math.min(5, options.brushSize / 5));
+
+            if (this.finalPath.segments.length > this.smoothed + this.smoothingThreshold * 2) {
+                this.simplify(1);
             }
-            this.finalPath.smooth();
             this.lastPoint = event.point;
-            this.secondLastPoint = event.lastPoint;
+        }
+
+        /**
+         * Simplify the path so that it looks almost the same while trying to have a reasonable number of handles.
+         * Without this, there would be 2 handles for every mouse move, which would make the path produced basically
+         * uneditable. This version of simplify keeps track of how much of the path has already been simplified to
+         * avoid repeating work.
+         * @param {number} threshold The simplify algorithm must try to stay within this distance of the actual line.
+         *     The algorithm will be faster and able to remove more points the higher this number is.
+         *     Note that 1 is about the lowest this algorithm can do (the result is about the same when 1 is
+         *     passed in as when 0 is passed in)
+         */
+
+    }, {
+        key: 'simplify',
+        value: function simplify(threshold) {
+            // Length of the current path
+            var length = this.finalPath.segments.length;
+            // Number of new points added to front and end of path since last simplify
+            var newPoints = Math.floor((length - this.smoothed) / 2) + 1;
+
+            // Where to cut. Don't go past the rounded start of the line (so there's always a tempPathMid)
+            var firstCutoff = Math.min(newPoints + 1, Math.floor(length / 2));
+            var lastCutoff = Math.max(length - 1 - newPoints, Math.floor(length / 2) + 1);
+            if (firstCutoff <= 1 || lastCutoff >= length - 1) {
+                // Entire path is simplified already
+                return;
+            }
+            // Cut the path into 3 segments: the 2 ends where the new points are, and the middle, which will be
+            // staying the same
+            var tempPath1 = new _paper2.default.Path(this.finalPath.segments.slice(1, firstCutoff));
+            var tempPathMid = new _paper2.default.Path(this.finalPath.segments.slice(firstCutoff, lastCutoff));
+            var tempPath2 = new _paper2.default.Path(this.finalPath.segments.slice(lastCutoff, length - 1));
+
+            // Run simplify on the new ends. We need to graft the old handles back onto the newly
+            // simplified paths, since simplify removes the in handle from the start of the path, and
+            // the out handle from the end of the path it's simplifying.
+            var oldPath1End = tempPath1.segments[tempPath1.segments.length - 1];
+            var oldPath2End = tempPath2.segments[0];
+            tempPath1.simplify(threshold);
+            tempPath2.simplify(threshold);
+            var newPath1End = tempPath1.segments[tempPath1.segments.length - 1];
+            var newPath2End = tempPath2.segments[0];
+            newPath1End.handleOut = oldPath1End.handleOut;
+            newPath2End.handleIn = oldPath2End.handleIn;
+
+            // Delete the old contents of finalPath and replace it with the newly simplified segments, concatenated
+            this.finalPath.removeSegments(1, this.finalPath.segments.length - 1);
+            this.finalPath.insertSegments(1, tempPath1.segments.concat(tempPathMid.segments).concat(tempPath2.segments));
+
+            // Remove temp paths
+            tempPath1.remove();
+            tempPath2.remove();
+            tempPathMid.remove();
+
+            // Update how many points have been smoothed so far so that we don't redo work when
+            // simplify is called next time.
+            this.smoothed = Math.max(2, this.finalPath.segments.length);
+        }
+
+        /**
+         * Like paper.Path.unite, but it removes the original 2 paths
+         * @param {paper.Path} path1 to merge
+         * @param {paper.Path} path2 to merge
+         * @return {paper.Path} merged path. Original paths 1 and 2 will be removed from the view.
+         */
+
+    }, {
+        key: 'union',
+        value: function union(path1, path2) {
+            var temp = path1.unite(path2);
+            path1.remove();
+            path2.remove();
+            return temp;
         }
     }, {
         key: 'onBroadMouseUp',
         value: function onBroadMouseUp(event, tool, options) {
+            // If there was only a single click, draw a circle.
+            if (this.steps === 0) {
+                this.endCaps.length = 0;
+                return this.finalPath;
+            }
+
             // If the mouse up is at the same point as the mouse drag event then we need
             // the second to last point to get the right direction vector for the end cap
-            if (event.point.equals(this.lastPoint)) {
-                this.lastPoint = this.secondLastPoint;
-            }
-            // If the points are still equal, then there was no drag, so just draw a circle.
-            if (event.point.equals(this.lastPoint)) {
-                this.finalPath.remove();
-                this.finalPath = new _paper2.default.Path.Circle({
-                    center: event.point,
-                    radius: options.brushSize / 2
-                });
-                (0, _stylePath.styleBlob)(this.finalPath, options);
-            } else {
-                var step = event.point.subtract(this.lastPoint).normalize(options.brushSize / 2);
+            if (!event.point.equals(this.lastPoint)) {
+                var step = event.delta.normalize(options.brushSize / 2);
                 step.angle += 90;
-                var handleVec = step.clone();
-                handleVec.length = options.brushSize / 2;
 
                 var top = event.point.add(step);
                 var bottom = event.point.subtract(step);
                 this.finalPath.add(top);
                 this.finalPath.insert(0, bottom);
-
-                // Simplify before adding end cap so cap doesn't get warped
-                this.finalPath.simplify(1);
-
-                // Add end cap
-                step.angle -= 90;
-                this.finalPath.add(new _paper2.default.Segment(event.point.add(step), handleVec, -handleVec));
-                this.finalPath.closed = true;
             }
+
+            // Simplify before adding end cap so cap doesn't get warped
+            this.simplify(1);
+            var handleVec = event.delta.normalize(options.brushSize / 2);
+            this.finalPath.add(new _paper2.default.Segment(event.point.add(handleVec), handleVec.rotate(90), handleVec.rotate(-90)));
+            this.finalPath.closePath();
 
             // Resolve self-crossings
             var newPath = this.finalPath.resolveCrossings().reorient(true /* nonZero */, true /* clockwise */).reduce({ simplify: true });
-            newPath.copyAttributes(this.finalPath);
-            newPath.fillColor = this.finalPath.fillColor;
-            this.finalPath = newPath;
+            if (newPath !== this.finalPath) {
+                newPath.copyAttributes(this.finalPath);
+                newPath.fillColor = this.finalPath.fillColor;
+                this.finalPath.remove();
+                this.finalPath = newPath;
+            }
+
+            // Try to merge end caps
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this.endCaps[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var cap = _step.value;
+
+                    var temp = this.union(this.finalPath, cap);
+                    if (temp.area >= this.finalPath.area && !(temp instanceof _paper2.default.CompoundPath && !(this.finalPath instanceof _paper2.default.CompoundPath))) {
+                        this.finalPath = temp;
+                    } else {
+                        // If the union of the two shapes is smaller than the original shape,
+                        // or it caused the path to become a compound path,
+                        // then there must have been a glitch with paperjs's unite function.
+                        // In this case, skip merging that segment. It's not great, but it's
+                        // better than losing the whole path for instance. (Unfortunately, this
+                        // happens reasonably often to scribbles, and this code doesn't catch
+                        // all of the failures.)
+                        this.finalPath.insertAbove(temp);
+                        temp.remove();
+                        _log2.default.warn('Skipping a merge.');
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            this.endCaps.length = 0;
+
             return this.finalPath;
         }
     }]);
@@ -59109,7 +59257,7 @@ var SegmentBrushHelper = function () {
         value: function onSegmentMouseDown(event, tool, options) {
             if (event.event.button > 0) return; // only first mouse button
 
-            tool.minDistance = 1;
+            tool.minDistance = 2 / _paper2.default.view.zoom;
             tool.maxDistance = options.brushSize;
 
             this.firstCircle = new _paper2.default.Path.Circle({
