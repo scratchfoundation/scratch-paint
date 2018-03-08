@@ -23,7 +23,7 @@ class Blobbiness {
     // Segment brush has performance issues at low threshold, but broad brush has weird corners
     // which get more obvious the bigger it is
     static get THRESHOLD () {
-        return 9;
+        return 30 / paper.view.zoom;
     }
 
     /**
@@ -110,7 +110,6 @@ class Blobbiness {
         };
 
         this.tool.onMouseDrag = function (event) {
-            blob.resizeCursorIfNeeded(event.point);
             if (event.event.button > 0 || !this.active) return; // only first mouse button
             if (blob.brush === Blobbiness.BROAD) {
                 blob.broadBrushHelper.onBroadMouseDrag(event, blob.tool, blob.options);
