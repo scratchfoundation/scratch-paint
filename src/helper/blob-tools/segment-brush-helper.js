@@ -20,11 +20,10 @@ class SegmentBrushHelper {
         this.finalPath = null;
         this.firstCircle = null;
     }
-
     onSegmentMouseDown (event, tool, options) {
         if (event.event.button > 0) return; // only first mouse button
 
-        tool.minDistance = 1;
+        tool.minDistance = 2 / paper.view.zoom;
         tool.maxDistance = options.brushSize;
         
         this.firstCircle = new paper.Path.Circle({
