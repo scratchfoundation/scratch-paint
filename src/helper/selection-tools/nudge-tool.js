@@ -15,6 +15,11 @@ class NudgeTool {
         this.onUpdateSvg = onUpdateSvg;
     }
     onKeyDown (event) {
+        if (event.event.target instanceof HTMLInputElement) {
+            // Ignore nudge if a text input field is focused
+            return;
+        }
+
         const nudgeAmount = 1 / paper.view.zoom;
         const selected = getSelectedRootItems();
         if (selected.length === 0) return;
@@ -34,8 +39,8 @@ class NudgeTool {
             for (const item of selected) {
                 item.translate(translation);
             }
+            this.boundingBoxTool.setSelectionBounds();
         }
-        this.boundingBoxTool.setSelectionBounds();
     }
     onKeyUp (event) {
         const selected = getSelectedRootItems();

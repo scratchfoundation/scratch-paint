@@ -9,11 +9,11 @@ const clampViewBounds = () => {
     if (top < 0) {
         paper.project.view.scrollBy(new paper.Point(0, -top));
     }
-    if (bottom > 400) {
-        paper.project.view.scrollBy(new paper.Point(0, 400 - bottom));
+    if (bottom > 360) {
+        paper.project.view.scrollBy(new paper.Point(0, 360 - bottom));
     }
-    if (right > 500) {
-        paper.project.view.scrollBy(new paper.Point(500 - right, 0));
+    if (right > 480) {
+        paper.project.view.scrollBy(new paper.Point(480 - right, 0));
     }
 };
 

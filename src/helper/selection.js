@@ -203,7 +203,6 @@ const _deleteItemSelection = function (items, onUpdateSvg) {
     for (let i = 0; i < items.length; i++) {
         items[i].remove();
     }
-    paper.project.view.update();
     onUpdateSvg();
     return true;
 };
@@ -213,6 +212,7 @@ const _removeSelectedSegments = function (items, onUpdateSvg) {
     const segmentsToRemove = [];
     
     for (let i = 0; i < items.length; i++) {
+        if (!items[i].segments) continue;
         const segments = items[i].segments;
         for (let j = 0; j < segments.length; j++) {
             const seg = segments[j];
@@ -229,7 +229,6 @@ const _removeSelectedSegments = function (items, onUpdateSvg) {
         removedSegments = true;
     }
     if (removedSegments) {
-        paper.project.view.update();
         onUpdateSvg();
     }
     return removedSegments;

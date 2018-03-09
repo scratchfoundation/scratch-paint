@@ -23,7 +23,7 @@ class Blobbiness {
     // Segment brush has performance issues at low threshold, but broad brush has weird corners
     // which get more obvious the bigger it is
     static get THRESHOLD () {
-        return 50;
+        return 30 / paper.view.zoom;
     }
 
     /**
@@ -107,13 +107,11 @@ class Blobbiness {
                 blob.brush = Blobbiness.SEGMENT;
                 blob.segmentBrushHelper.onSegmentMouseDown(event, blob.tool, blob.options);
             }
-            // blob.cursorPreview.bringToFront();
-            // blob.cursorPreview.position = event.point;
-            // paper.view.draw();
+            blob.cursorPreview.bringToFront();
+            blob.cursorPreview.position = event.point;
         };
 
         this.tool.onMouseDrag = function (event) {
-            //blob.resizeCursorIfNeeded(event.point);
             if (event.event.button > 0 || !this.active) return; // only first mouse button
             if (blob.brush === Blobbiness.BROAD) {
                 blob.broadBrushHelper.onBroadMouseDrag(event, blob.tool, blob.options);
@@ -123,13 +121,11 @@ class Blobbiness {
                 log.warn(`Brush type does not exist: ${blob.brush}`);
             }
 
-            // blob.cursorPreview.bringToFront();
-            // blob.cursorPreview.position = event.point;
-            // paper.view.draw();
+            blob.cursorPreview.bringToFront();
+            blob.cursorPreview.position = event.point;
         };
 
         this.tool.onMouseUp = function (event) {
-            blob.resizeCursorIfNeeded(event.point);
             if (event.event.button > 0 || !this.active) return; // only first mouse button
             
             let lastPath;
@@ -147,11 +143,9 @@ class Blobbiness {
                 blob.mergeBrush(lastPath);
             }
 
-            blob.cursorPreview.visible = false;
+            blob.cursorPreview.remove();
+            blob.cursorPreview = null;
             blob.onUpdateSvg();
-            blob.cursorPreview.visible = true;
-            blob.cursorPreview.bringToFront();
-            blob.cursorPreview.position = event.point;
 
             // Reset
             blob.brush = null;
@@ -436,8 +430,10 @@ class Blobbiness {
     }
 
     deactivateTool () {
-        this.cursorPreview.remove();
-        this.cursorPreview = null;
+        if (this.cursorPreview) {
+            this.cursorPreview.remove();
+            this.cursorPreview = null;
+        }
         this.tool.remove();
         this.tool = null;
     }

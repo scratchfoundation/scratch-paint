@@ -80,6 +80,7 @@ const ModeToolsComponent = props => {
                     <img
                         alt={props.intl.formatMessage(messages.brushSize)}
                         className={styles.modeToolsIcon}
+                        draggable={false}
                         src={brushIcon}
                     />
                 </div>
@@ -101,6 +102,7 @@ const ModeToolsComponent = props => {
                     <img
                         alt={props.intl.formatMessage(messages.eraserSize)}
                         className={styles.modeToolsIcon}
+                        draggable={false}
                         src={eraserIcon}
                     />
                 </div>
@@ -151,13 +153,11 @@ const ModeToolsComponent = props => {
                 </InputGroup>
                 <InputGroup className={classNames(styles.modLabeledIconHeight)}>
                     <LabeledIconButton
-                        disabled={!props.selectedItems.length}
                         imgSrc={flipHorizontalIcon}
                         title={props.intl.formatMessage(messages.flipHorizontal)}
                         onClick={props.onFlipHorizontal}
                     />
                     <LabeledIconButton
-                        disabled={!props.selectedItems.length}
                         imgSrc={flipVerticalIcon}
                         title={props.intl.formatMessage(messages.flipVertical)}
                         onClick={props.onFlipVertical}

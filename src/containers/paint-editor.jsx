@@ -75,6 +75,7 @@ class PaintEditor extends React.Component {
         this.props.onUpdateSvg(
             paper.project.exportSVG({
                 asString: true,
+                bounds: 'content',
                 matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
             }),
             paper.project.view.center.x - bounds.x,
@@ -89,7 +90,6 @@ class PaintEditor extends React.Component {
         // Restore old zoom
         paper.project.view.zoom = oldZoom;
         paper.project.view.center = oldCenter;
-        paper.project.view.update();
     }
     handleUndo () {
         performUndo(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateSvg);
@@ -176,6 +176,7 @@ class PaintEditor extends React.Component {
                 this.eyeDropper.pickY,
                 this.eyeDropper.hideLoupe
             );
+            if (!colorInfo) return;
             if (
                 this.state.colorInfo === null ||
                 this.state.colorInfo.x !== colorInfo.x ||
