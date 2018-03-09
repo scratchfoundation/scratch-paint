@@ -26,6 +26,7 @@ import flipVerticalIcon from './icons/flip-vertical.svg';
 import straightPointIcon from './icons/straight-point.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
+import {setSmooth} from '../../reducers/smooth';
 
 const LiveInput = LiveInputHOC(Input);
 const ModeToolsComponent = props => {
@@ -93,6 +94,15 @@ const ModeToolsComponent = props => {
                     value={props.brushValue}
                     onSubmit={props.onBrushSliderChange}
                 />
+                <div>
+                    <input
+                        id="smoothBox"
+                        type="checkbox"
+                        checked={props.smooth}
+                        onChange={props.setSmooth}
+                    />
+                    <label htmlFor="smoothBox">Smooth</label>
+                </div>
             </div>
         );
     case Modes.ERASER:
@@ -190,7 +200,9 @@ ModeToolsComponent.propTypes = {
     onFlipVertical: PropTypes.func.isRequired,
     onPasteFromClipboard: PropTypes.func.isRequired,
     onPointPoints: PropTypes.func.isRequired,
-    selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item))
+    selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
+    setSmooth: PropTypes.func.isRequired,
+    smooth: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
@@ -198,7 +210,8 @@ const mapStateToProps = state => ({
     brushValue: state.scratchPaint.brushMode.brushSize,
     clipboardItems: state.scratchPaint.clipboard.items,
     eraserValue: state.scratchPaint.eraserMode.brushSize,
-    selectedItems: state.scratchPaint.selectedItems
+    selectedItems: state.scratchPaint.selectedItems,
+    smooth: state.scratchPaint.smooth
 });
 const mapDispatchToProps = dispatch => ({
     onBrushSliderChange: brushSize => {
@@ -206,6 +219,9 @@ const mapDispatchToProps = dispatch => ({
     },
     onEraserSliderChange: eraserSize => {
         dispatch(changeEraserSize(eraserSize));
+    },
+    setSmooth: event => {
+        dispatch(setSmooth(event.target.checked));
     }
 });
 

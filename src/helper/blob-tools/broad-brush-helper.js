@@ -32,11 +32,12 @@ class BroadBrushHelper {
     }
 
     onBroadMouseDown (event, tool, options) {
+        if (event.event.button > 0) return; // only first mouse button
+        
         this.steps = 0;
         this.smoothed = 0;
         tool.minDistance = Math.min(5, Math.max(2 / paper.view.zoom, options.brushSize / 2));
         tool.maxDistance = options.brushSize;
-        if (event.event.button > 0) return; // only first mouse button
         
         this.finalPath = new paper.Path.Circle({
             center: event.point,
