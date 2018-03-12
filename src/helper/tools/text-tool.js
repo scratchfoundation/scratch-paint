@@ -24,17 +24,17 @@ class TextTool extends paper.Tool {
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateSvg = onUpdateSvg;
         this.boundingBoxTool = new BoundingBoxTool(Modes.TEXT, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateSvg);
+        this.nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateSvg);
         
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseDown = this.handleMouseDown;
         this.onMouseDrag = this.handleMouseDrag;
         this.onMouseUp = this.handleMouseUp;
-        this.onKeyUp = nudgeTool.onKeyUp;
-        this.onKeyDown = nudgeTool.onKeyDown;
+        this.onKeyUp = this.handleKeyUp;
+        this.onKeyDown = this.handleKeyDown;
 
-        this.oval = null;
+        this.textBox = null;
         this.colorState = null;
         this.isBoundingBoxMode = null;
         this.active = false;
@@ -66,16 +66,23 @@ class TextTool extends paper.Tool {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
 
+        if (this.textBox && this.textBox.content.trim() === '') {
+            this.textBox.remove();
+            this.textBox = null;
+        }
+        
         if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions())) {
             this.isBoundingBoxMode = true;
         } else {
             this.isBoundingBoxMode = false;
             clearSelection(this.clearSelectedItems);
-            this.oval = new paper.Shape.Ellipse({
-                point: event.downPoint,
-                size: 0
+            this.textBox = new paper.PointText({
+                point: event.point,
+                content: 'لوحة المفاتKeyboardيح العربية',
+                font: 'Times',
+                fontSize: 30
             });
-            styleShape(this.oval, this.colorState);
+            styleShape(this.textBox, this.colorState);
         }
     }
     handleMouseDrag (event) {
@@ -86,18 +93,7 @@ class TextTool extends paper.Tool {
             return;
         }
 
-        const downPoint = new paper.Point(event.downPoint.x, event.downPoint.y);
-        const point = new paper.Point(event.point.x, event.point.y);
-        if (event.modifiers.shift) {
-            this.oval.size = new paper.Point(event.downPoint.x - event.point.x, event.downPoint.x - event.point.x);
-        } else {
-            this.oval.size = downPoint.subtract(point);
-        }
-        if (event.modifiers.alt) {
-            this.oval.position = downPoint;
-        } else {
-            this.oval.position = downPoint.subtract(this.oval.size.multiply(0.5));
-        }
+        // TODO selection
         
     }
     handleMouseUp (event) {
@@ -109,25 +105,32 @@ class TextTool extends paper.Tool {
             return;
         }
 
-        if (this.oval) {
-            if (Math.abs(this.oval.size.width * this.oval.size.height) < TextTool.TOLERANCE / paper.view.zoom) {
-                // Tiny oval created unintentionally?
-                this.oval.remove();
-                this.oval = null;
-            } else {
-                const ovalPath = this.oval.toPath(true /* insert */);
-                this.oval.remove();
-                this.oval = null;
-
-                ovalPath.selected = true;
-                this.setSelectedItems();
-                this.onUpdateSvg();
+        // TODO
+        this.active = false;
+    }
+    handleKeyUp (event) {
+        if (this.isBoundingBoxMode) {
+            this.nudgeTool.onKeyUp(event);
+        }
+    }
+    handleKeyDown (event) {
+        if (this.isBoundingBoxMode) {
+            this.nudgeTool.onKeyUp(event);
+        } else {
+            if ((event.key === 'delete' || event.key === 'backspace') && this.textBox.content.length) {
+                this.textBox.content = this.textBox.content.slice(0, this.textBox.content.length - 1);
+            } else if (!(event.modifiers.alt || event.modifiers.comand || event.modifiers.control ||
+                    event.modifiers.meta || event.modifiers.option)) {
+                this.textBox.content = this.textBox.content + event.character;
             }
         }
-        this.active = false;
     }
     deactivateTool () {
         this.boundingBoxTool.removeBoundsPath();
+        if (this.textBox && this.textBox.content.trim() === '') {
+            this.textBox.remove();
+            this.textBox = null;
+        }
     }
 }
 

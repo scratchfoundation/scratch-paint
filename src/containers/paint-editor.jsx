@@ -263,15 +263,15 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     onKeyPress: event => {
-        if (event.key === 'e') {
-            dispatch(changeMode(Modes.ERASER));
-        } else if (event.key === 'b') {
-            dispatch(changeMode(Modes.BRUSH));
-        } else if (event.key === 'l') {
-            dispatch(changeMode(Modes.LINE));
-        } else if (event.key === 's') {
-            dispatch(changeMode(Modes.SELECT));
-        }
+        // if (event.key === 'e') {
+        //     dispatch(changeMode(Modes.ERASER));
+        // } else if (event.key === 'b') {
+        //     dispatch(changeMode(Modes.BRUSH));
+        // } else if (event.key === 'l') {
+        //     dispatch(changeMode(Modes.LINE));
+        // } else if (event.key === 's') {
+        //     dispatch(changeMode(Modes.SELECT));
+        // }
     },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
