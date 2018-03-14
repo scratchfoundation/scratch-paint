@@ -30,8 +30,12 @@ const hoverItem = function (item) {
     return clone;
 };
 
-const hoverBounds = function (item) {
-    const rect = new paper.Path.Rectangle(item.internalBounds);
+const hoverBounds = function (item, expandBy) {
+    let bounds = item.internalBounds;
+    if (expandBy) {
+        bounds = bounds.expand(expandBy);
+    }
+    const rect = new paper.Path.Rectangle(bounds);
     rect.matrix = item.matrix;
     setDefaultGuideStyle(rect);
     rect.parent = getGuideLayer();

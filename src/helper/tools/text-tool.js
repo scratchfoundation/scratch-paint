@@ -5,7 +5,6 @@ import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 import {hoverBounds} from '../guides';
-import {expandBy} from '../math';
 
 /**
  * Tool for adding text. Text elements have limited editability; they can't be reshaped,
@@ -130,7 +129,8 @@ class TextTool extends paper.Tool {
             clearSelection(this.clearSelectedItems);
             this.textBox = doubleClickHitTest.item;
             this.mode = TextTool.TEXT_EDIT_MODE;
-        } else if (this.boundingBoxTool.onMouseDown(
+        } else if (
+            this.boundingBoxTool.onMouseDown(
                 event, false /* clone */, false /* multiselect */, this.getBoundingBoxHitOptions())) {
             // In select mode staying in select mode
             this.mode = TextTool.SELECT_MODE;
@@ -147,16 +147,20 @@ class TextTool extends paper.Tool {
                 this.mode = TextTool.TEXT_EDIT_MODE;
             } else if (this.mode === TextTool.TEXT_EDIT_MODE) {
                 // In text mode clicking away to begin select mode
-                this.mode = TextTool.SELECT_MODE;
-                this.textBox.selected = true;
-                this.setSelectedItems();
+                if (this.textBox) {
+                    this.mode = TextTool.SELECT_MODE;
+                    this.textBox.selected = true;
+                    this.setSelectedItems();
+                } else {
+                    this.mode = null;
+                }
             } else {
                 // In no mode or select mode clicking away to begin text edit mode
                 this.mode = TextTool.TEXT_EDIT_MODE;
                 clearSelection(this.clearSelectedItems);
                 this.textBox = new paper.PointText({
                     point: event.point,
-                    content: 'لوحة المفاتKeyboardيح العربية',
+                    content: '',
                     font: 'Times',
                     fontSize: 30
                 });
@@ -165,8 +169,7 @@ class TextTool extends paper.Tool {
         }
 
         if (this.mode === TextTool.TEXT_EDIT_MODE) {
-            this.guide = hoverBounds(this.textBox);
-            expandBy(this.guide, TextTool.TEXT_PADDING);
+            this.guide = hoverBounds(this.textBox, TextTool.TEXT_PADDING);
             this.guide.dashArray = [4, 4];
         } else if (this.guide) {
             this.guide.remove();
@@ -180,9 +183,6 @@ class TextTool extends paper.Tool {
             this.boundingBoxTool.onMouseDrag(event);
             return;
         }
-
-        // TODO selection
-        
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
@@ -193,7 +193,6 @@ class TextTool extends paper.Tool {
             return;
         }
 
-        // TODO
         this.active = false;
     }
     handleKeyUp (event) {
@@ -210,11 +209,10 @@ class TextTool extends paper.Tool {
             } else if (!(event.modifiers.alt || event.modifiers.comand || event.modifiers.control ||
                     event.modifiers.meta || event.modifiers.option)) {
                 this.textBox.content = this.textBox.content + event.character;
-                if (this.guide) this.guide.remove();
-                this.guide = hoverBounds(this.textBox);
-                expandBy(this.guide, TextTool.TEXT_PADDING);
-                this.guide.dashArray = [4, 4];
             }
+            if (this.guide) this.guide.remove();
+            this.guide = hoverBounds(this.textBox, TextTool.TEXT_PADDING);
+            this.guide.dashArray = [4, 4];
         }
     }
     deactivateTool () {
