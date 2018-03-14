@@ -4,8 +4,8 @@ import {styleShape} from '../style-path';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
-import {getGuideLayer} from '../layer';
-import {getGuideColor} from '../guides';
+import {hoverBounds} from '../guides';
+import {expandBy} from '../math';
 
 /**
  * Tool for adding text. Text elements have limited editability; they can't be reshaped,
@@ -148,7 +148,6 @@ class TextTool extends paper.Tool {
             } else if (this.mode === TextTool.TEXT_EDIT_MODE) {
                 // In text mode clicking away to begin select mode
                 this.mode = TextTool.SELECT_MODE;
-                // this.guide.reomve();
                 this.textBox.selected = true;
                 this.setSelectedItems();
             } else {
@@ -166,11 +165,9 @@ class TextTool extends paper.Tool {
         }
 
         if (this.mode === TextTool.TEXT_EDIT_MODE) {
-            this.guide = new paper.Shape.Rectangle(this.textBox.bounds.expand(TextTool.TEXT_PADDING));
-            this.guide.strokeColor = getGuideColor();
+            this.guide = hoverBounds(this.textBox);
+            expandBy(this.guide, TextTool.TEXT_PADDING);
             this.guide.dashArray = [4, 4];
-            this.guide.strokeWidth = 2;
-            this.guide.parent = getGuideLayer();
         } else if (this.guide) {
             this.guide.remove();
             this.guide = null;
@@ -213,8 +210,10 @@ class TextTool extends paper.Tool {
             } else if (!(event.modifiers.alt || event.modifiers.comand || event.modifiers.control ||
                     event.modifiers.meta || event.modifiers.option)) {
                 this.textBox.content = this.textBox.content + event.character;
-                this.guide.size = this.textBox.bounds.expand(TextTool.TEXT_PADDING);
-                this.guide.position = this.textBox.position;
+                if (this.guide) this.guide.remove();
+                this.guide = hoverBounds(this.textBox);
+                expandBy(this.guide, TextTool.TEXT_PADDING);
+                this.guide.dashArray = [4, 4];
             }
         }
     }
