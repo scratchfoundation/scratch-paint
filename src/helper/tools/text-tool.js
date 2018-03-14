@@ -4,6 +4,8 @@ import {styleShape} from '../style-path';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
+import {getGuideLayer} from '../layer';
+import {getGuideColor} from '../guides';
 
 /**
  * Tool for adding text. Text elements have limited editability; they can't be reshaped,
@@ -22,6 +24,9 @@ class TextTool extends paper.Tool {
     /** Clicks registered within this amount of time are registered as double clicks */
     static get DOUBLE_CLICK_MILLIS () {
         return 250;
+    }
+    static get TEXT_PADDING () {
+        return 8;
     }
     /**
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
@@ -134,6 +139,10 @@ class TextTool extends paper.Tool {
             const hitResults = paper.project.hitTestAll(event.point, this.getTextEditHitOptions());
             if (hitResults.length) {
                 // Clicking a text item to begin text edit mode on that item
+                if (this.guide) {
+                    this.guide.remove();
+                    this.guide = null;
+                }
                 this.textBox = hitResults[0].item;
                 this.mode = TextTool.TEXT_EDIT_MODE;
             } else if (this.mode === TextTool.TEXT_EDIT_MODE) {
@@ -154,6 +163,17 @@ class TextTool extends paper.Tool {
                 });
                 styleShape(this.textBox, this.colorState);
             }
+        }
+
+        if (this.mode === TextTool.TEXT_EDIT_MODE) {
+            this.guide = new paper.Shape.Rectangle(this.textBox.bounds.expand(TextTool.TEXT_PADDING));
+            this.guide.strokeColor = getGuideColor();
+            this.guide.dashArray = [4, 4];
+            this.guide.strokeWidth = 2;
+            this.guide.parent = getGuideLayer();
+        } else if (this.guide) {
+            this.guide.remove();
+            this.guide = null;
         }
     }
     handleMouseDrag (event) {
@@ -193,6 +213,8 @@ class TextTool extends paper.Tool {
             } else if (!(event.modifiers.alt || event.modifiers.comand || event.modifiers.control ||
                     event.modifiers.meta || event.modifiers.option)) {
                 this.textBox.content = this.textBox.content + event.character;
+                this.guide.size = this.textBox.bounds.expand(TextTool.TEXT_PADDING);
+                this.guide.position = this.textBox.position;
             }
         }
     }
@@ -201,6 +223,10 @@ class TextTool extends paper.Tool {
         if (this.textBox && this.textBox.content.trim() === '') {
             this.textBox.remove();
             this.textBox = null;
+        }
+        if (this.guide) {
+            this.guide.remove();
+            this.guide = null;
         }
     }
 }
