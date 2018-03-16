@@ -28590,8 +28590,8 @@ var Playground = function (_React$Component) {
         (0, _lodash2.default)(_this, ['handleUpdateName', 'handleUpdateSvg']);
         _this.state = {
             name: 'meow',
-            rotationCenterX: 0,
-            rotationCenterY: 0,
+            rotationCenterX: 20,
+            rotationCenterY: 400,
             svg: svgString
         };
         return _this;
