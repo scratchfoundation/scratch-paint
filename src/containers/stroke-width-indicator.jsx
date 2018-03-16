@@ -47,7 +47,7 @@ StrokeWidthIndicator.propTypes = {
     onChangeStrokeWidth: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     strokeWidth: PropTypes.number,
-    textEditTarget: PropTypes.string
+    textEditTarget: PropTypes.number
 };
 
 export default connect(

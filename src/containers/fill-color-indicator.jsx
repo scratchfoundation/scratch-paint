@@ -78,7 +78,7 @@ FillColorIndicator.propTypes = {
     onChangeFillColor: PropTypes.func.isRequired,
     onCloseFillColor: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
-    textEditTarget: PropTypes.string
+    textEditTarget: PropTypes.number
 };
 
 export default connect(

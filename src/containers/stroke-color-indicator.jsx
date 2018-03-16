@@ -78,7 +78,7 @@ StrokeColorIndicator.propTypes = {
     onUpdateSvg: PropTypes.func.isRequired,
     strokeColor: PropTypes.string,
     strokeColorModalVisible: PropTypes.bool.isRequired,
-    textEditTarget: PropTypes.string
+    textEditTarget: PropTypes.number
 };
 
 export default connect(
