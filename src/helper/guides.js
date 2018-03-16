@@ -42,6 +42,7 @@ const hoverBounds = function (item, expandBy) {
     rect.strokeColor = GUIDE_BLUE;
     rect.fillColor = null;
     rect.data.isHelperItem = true;
+    rect.data.origItem = item;
     rect.bringToFront();
 
     return rect;

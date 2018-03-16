@@ -7,6 +7,7 @@ import clipboardReducer from './clipboard';
 import hoverReducer from './hover';
 import modalsReducer from './modals';
 import selectedItemReducer from './selected-items';
+import textEditTargetReducer from './text-edit-target';
 import undoReducer from './undo';
 
 export default combineReducers({
@@ -18,5 +19,6 @@ export default combineReducers({
     hoveredItemId: hoverReducer,
     modals: modalsReducer,
     selectedItems: selectedItemReducer,
+    textEditTarget: textEditTargetReducer,
     undo: undoReducer
 });

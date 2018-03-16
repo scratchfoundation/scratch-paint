@@ -30,7 +30,6 @@ const getHoveredItem = function (event, hitOptions, subselect) {
     if (!item) {
         return null;
     }
-
     if (isBoundsItem(item)) {
         return hoverBounds(item);
     } else if (!subselect && isGroupChild(item)) {

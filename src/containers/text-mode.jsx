@@ -9,6 +9,7 @@ import {MIXED} from '../helper/style-path';
 import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
 import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeMode} from '../reducers/modes';
+import {setTextEditTarget} from '../reducers/text-edit-target';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
@@ -65,7 +66,8 @@ class TextMode extends React.Component {
         this.tool = new TextTool(
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
-            this.props.onUpdateSvg
+            this.props.onUpdateSvg,
+            this.props.setTextEditTarget,
         );
         this.tool.setColorState(this.props.colorState);
         this.tool.activate();
@@ -98,7 +100,8 @@ TextMode.propTypes = {
     onChangeStrokeColor: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func.isRequired,
+    setTextEditTarget: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -112,6 +115,9 @@ const mapDispatchToProps = dispatch => ({
     },
     setSelectedItems: () => {
         dispatch(setSelectedItems(getSelectedLeafItems()));
+    },
+    setTextEditTarget: targetId => {
+        dispatch(setTextEditTarget(targetId));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.TEXT));

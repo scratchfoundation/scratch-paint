@@ -2,6 +2,7 @@ import paper from '@scratch/paper';
 import {getSelectedLeafItems} from './selection';
 import {isPGTextItem, isPointTextItem} from './item';
 import {isGroup} from './group';
+import {getItems} from './selection';
 
 const MIXED = 'scratch-paint/style-path/mixed';
 
@@ -15,44 +16,38 @@ const _colorMatch = function (itemColor, incomingColor) {
             (itemColor && incomingColor && itemColor.toCSS() === new paper.Color(incomingColor).toCSS());
 };
 
+// Selected items and currently active text edit items respond to color changes.
+const _getColorStateListeners = function (textEditTargetId) {
+    const items = getSelectedLeafItems();
+    if (textEditTargetId) {
+        const matches = getItems({
+            match: item => item.id === textEditTargetId
+        });
+        if (matches.length) {
+            items.push(matches[0]);
+        }
+    }
+    return items;
+};
+
 /**
  * Called when setting fill color
  * @param {string} colorString New color, css format
+ * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
  * @return {boolean} Whether the color application actually changed visibly.
  */
-const applyFillColorToSelection = function (colorString) {
-    const items = getSelectedLeafItems();
+const applyFillColorToSelection = function (colorString, textEditTargetId) {
+    const items = _getColorStateListeners(textEditTargetId);
     let changed = false;
     for (let item of items) {
-        if (item.parent instanceof paper.CompoundPath) {
+        if (isPointTextItem(item) && !colorString) {
+            colorString = 'rgba(0,0,0,0)';
+        } else if (item.parent instanceof paper.CompoundPath) {
             item = item.parent;
         }
-        if (isPGTextItem(item)) {
-            for (const child of item.children) {
-                if (child.children) {
-                    for (const path of child.children) {
-                        if (!path.data.isPGGlyphRect) {
-                            if (!_colorMatch(path.fillColor, colorString)) {
-                                changed = true;
-                                path.fillColor = colorString;
-                            }
-                        }
-                    }
-                } else if (!child.data.isPGGlyphRect) {
-                    if (!_colorMatch(child.fillColor, colorString)) {
-                        changed = true;
-                        child.fillColor = colorString;
-                    }
-                }
-            }
-        } else {
-            if (isPointTextItem(item) && !colorString) {
-                colorString = 'rgba(0,0,0,0)';
-            }
-            if (!_colorMatch(item.fillColor, colorString)) {
-                changed = true;
-                item.fillColor = colorString;
-            }
+        if (!_colorMatch(item.fillColor, colorString)) {
+            changed = true;
+            item.fillColor = colorString;
         }
     }
     return changed;
@@ -61,10 +56,11 @@ const applyFillColorToSelection = function (colorString) {
 /**
  * Called when setting stroke color
  * @param {string} colorString New color, css format
+ * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
  * @return {boolean} Whether the color application actually changed visibly.
  */
-const applyStrokeColorToSelection = function (colorString) {
-    const items = getSelectedLeafItems();
+const applyStrokeColorToSelection = function (colorString, textEditTargetId) {
+    const items = _getColorStateListeners(textEditTargetId);
     let changed = false;
     for (let item of items) {
         if (item.parent instanceof paper.CompoundPath) {
@@ -106,11 +102,12 @@ const applyStrokeColorToSelection = function (colorString) {
 /**
  * Called when setting stroke width
  * @param {number} value New stroke width
- * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+ * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
+ * @return {boolean} Whether the color application actually changed visibly.
  */
-const applyStrokeWidthToSelection = function (value, onUpdateSvg) {
+const applyStrokeWidthToSelection = function (value, textEditTargetId) {
     let changed = false;
-    const items = getSelectedLeafItems();
+    const items = _getColorStateListeners(textEditTargetId);
     for (let item of items) {
         if (item.parent instanceof paper.CompoundPath) {
             item = item.parent;
@@ -122,9 +119,7 @@ const applyStrokeWidthToSelection = function (value, onUpdateSvg) {
             changed = true;
         }
     }
-    if (changed) {
-        onUpdateSvg();
-    }
+    return changed;
 };
 
 /**

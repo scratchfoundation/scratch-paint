@@ -31,12 +31,14 @@ class TextTool extends paper.Tool {
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} setTextEditTarget Call to set text editing target whenever text editing is active
      */
-    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg, setTextEditTarget) {
         super();
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateSvg = onUpdateSvg;
+        this.setTextEditTarget = setTextEditTarget;
         this.boundingBoxTool = new BoundingBoxTool(Modes.TEXT, setSelectedItems, clearSelectedItems, onUpdateSvg);
         this.nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateSvg);
         this.lastEvent = null;
@@ -171,9 +173,11 @@ class TextTool extends paper.Tool {
         if (this.mode === TextTool.TEXT_EDIT_MODE) {
             this.guide = hoverBounds(this.textBox, TextTool.TEXT_PADDING);
             this.guide.dashArray = [4, 4];
+            this.setTextEditTarget(this.textBox.id);
         } else if (this.guide) {
             this.guide.remove();
             this.guide = null;
+            this.setTextEditTarget();
         }
     }
     handleMouseDrag (event) {
@@ -229,6 +233,7 @@ class TextTool extends paper.Tool {
         if (this.guide) {
             this.guide.remove();
             this.guide = null;
+            this.setTextEditTarget();
         }
     }
 }
