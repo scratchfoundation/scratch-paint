@@ -22017,7 +22017,7 @@ module.exports = Transform;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.sortItemsByZIndex = exports.snapDeltaToAngle = exports.getRandomBoolean = exports.getRandomInt = exports.expandByOne = exports.ensureClockwise = exports.checkPointsClose = exports.HANDLE_RATIO = undefined;
+exports.sortItemsByZIndex = exports.snapDeltaToAngle = exports.getRandomBoolean = exports.getRandomInt = exports.expandBy = exports.ensureClockwise = exports.checkPointsClose = exports.HANDLE_RATIO = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -22107,8 +22107,8 @@ var sortItemsByZIndex = function sortItemsByZIndex(a, b) {
     return null;
 };
 
-// Expand the size of the path by approx one pixel all around
-var expandByOne = function expandByOne(path) {
+// Expand the size of the path by amount all around
+var expandBy = function expandBy(path, amount) {
     var center = path.position;
     var pathArea = path.area;
     var _iteratorNormalCompletion = true;
@@ -22119,10 +22119,10 @@ var expandByOne = function expandByOne(path) {
         for (var _iterator = path.segments[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var seg = _step.value;
 
-            var halfNorm = seg.point.subtract(center).normalize().divide(2);
-            seg.point = seg.point.add(halfNorm);
+            var delta = seg.point.subtract(center).normalize().multiply(amount);
+            seg.point = seg.point.add(delta);
             // If that made the path area smaller, go the other way.
-            if (path.area < pathArea) seg.point = seg.point.subtract(halfNorm.multiply(2));
+            if (path.area < pathArea) seg.point = seg.point.subtract(delta.multiply(2));
             pathArea = path.area;
         }
     } catch (err) {
@@ -22176,7 +22176,7 @@ var ensureClockwise = function ensureClockwise(item) {
 exports.HANDLE_RATIO = HANDLE_RATIO;
 exports.checkPointsClose = checkPointsClose;
 exports.ensureClockwise = ensureClockwise;
-exports.expandByOne = expandByOne;
+exports.expandBy = expandBy;
 exports.getRandomInt = getRandomInt;
 exports.getRandomBoolean = getRandomBoolean;
 exports.snapDeltaToAngle = snapDeltaToAngle;
@@ -65828,7 +65828,7 @@ var FillTool = function (_paper$Tool) {
                     this.addedFillItem.data.origItem = hitItem;
                     // This usually fixes it so there isn't a teeny tiny gap in between the fill and the outline
                     // when filling in a hole
-                    (0, _math.expandByOne)(this.addedFillItem);
+                    (0, _math.expandBy)(this.addedFillItem, .1);
                     this.addedFillItem.insertAbove(hitItem.parent);
                 } else if (this.fillItem.parent instanceof _paper2.default.CompoundPath) {
                     this.fillItemOrigColor = hitItem.parent.fillColor;
