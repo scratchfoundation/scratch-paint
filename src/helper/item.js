@@ -33,15 +33,14 @@ const isGroupItem = function (item) {
 };
 
 
-const isPGTextItem = function (item) {
-    return getRootItem(item).data.isPGTextItem;
-};
-
-
 const isPointTextItem = function (item) {
     return item.className === 'PointText';
 };
 
+
+const isPGTextItem = function (item) {
+    return getRootItem(item).data.isPGTextItem;
+};
 
 const setPivot = function (item, point) {
     if (isBoundsItem(item)) {

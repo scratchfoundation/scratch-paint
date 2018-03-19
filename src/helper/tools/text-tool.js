@@ -205,7 +205,6 @@ class TextTool extends paper.Tool {
         }
     }
     handleKeyDown (event) {
-        debugger;
         if (event.event.target instanceof HTMLInputElement) {
             // Ignore nudge if a text input field is focused
             return;
