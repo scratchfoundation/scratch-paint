@@ -45974,6 +45974,10 @@ var PaintEditor = function (_React$Component) {
         key: 'componentDidMount',
         value: function componentDidMount() {
             document.addEventListener('keydown', this.props.onKeyPress);
+            // document listeners used to detect if a mouse is down outside of the
+            // canvas, and should therefore stop the eye dropper
+            document.addEventListener('mousedown', this.onMouseDown);
+            document.addEventListener('touchstart', this.onMouseDown);
         }
     }, {
         key: 'componentDidUpdate',
@@ -45989,6 +45993,8 @@ var PaintEditor = function (_React$Component) {
         value: function componentWillUnmount() {
             document.removeEventListener('keydown', this.props.onKeyPress);
             this.stopEyeDroppingLoop();
+            document.removeEventListener('mousedown', this.onMouseDown);
+            document.removeEventListener('touchstart', this.onMouseDown);
         }
     }, {
         key: 'handleUpdateSvg',
@@ -46091,7 +46097,11 @@ var PaintEditor = function (_React$Component) {
         }
     }, {
         key: 'onMouseDown',
-        value: function onMouseDown() {
+        value: function onMouseDown(event) {
+            if (event.target === _paper2.default.view.element && document.activeElement instanceof HTMLInputElement) {
+                document.activeElement.blur();
+            }
+
             if (this.props.isEyeDropping) {
                 var colorString = this.eyeDropper.colorString;
                 var callback = this.props.changeColorToEyeDropper;
@@ -46118,11 +46128,6 @@ var PaintEditor = function (_React$Component) {
             this.eyeDropper.pickY = -1;
             this.eyeDropper.activate();
 
-            // document listeners used to detect if a mouse is down outside of the
-            // canvas, and should therefore stop the eye dropper
-            document.addEventListener('mousedown', this.onMouseDown);
-            document.addEventListener('touchstart', this.onMouseDown);
-
             this.intervalId = setInterval(function () {
                 var colorInfo = _this2.eyeDropper.getColorInfo(_this2.eyeDropper.pickX, _this2.eyeDropper.pickY, _this2.eyeDropper.hideLoupe);
                 if (!colorInfo) return;
@@ -46137,8 +46142,6 @@ var PaintEditor = function (_React$Component) {
         key: 'stopEyeDroppingLoop',
         value: function stopEyeDroppingLoop() {
             clearInterval(this.intervalId);
-            document.removeEventListener('mousedown', this.onMouseDown);
-            document.removeEventListener('touchstart', this.onMouseDown);
         }
     }, {
         key: 'render',
@@ -69394,6 +69397,11 @@ var ReshapeTool = function (_paper$Tool) {
     }, {
         key: 'handleKeyDown',
         value: function handleKeyDown(event) {
+            if (event.event.target instanceof HTMLInputElement) {
+                // Ignore nudge if a text input field is focused
+                return;
+            }
+
             var nudgeAmount = 1 / _paper2.default.view.zoom;
             var selected = (0, _selection.getSelectedLeafItems)();
             if (selected.length === 0) return;
@@ -71632,7 +71640,84 @@ var locales = {
     he: { name: 'עִבְרִית' }
 };
 
+var wwwLocales = {
+    'ab': { name: 'Аҧсшәа' },
+    'ar': { name: 'العربية' },
+    'an': { name: 'Aragonés' },
+    'ast': { name: 'Asturianu' },
+    'id': { name: 'Bahasa Indonesia' },
+    'ms': { name: 'Bahasa Melayu' },
+    'be': { name: 'Беларуская' },
+    'bg': { name: 'Български' },
+    'ca': { name: 'Català' },
+    'cs': { name: 'Česky' },
+    'cy': { name: 'Cymraeg' },
+    'da': { name: 'Dansk' },
+    'de': { name: 'Deutsch' },
+    'yum': { name: 'Edible Scratch' },
+    'et': { name: 'Eesti' },
+    'el': { name: 'Ελληνικά' },
+    'en': { name: 'English' },
+    'eo': { name: 'Esperanto' },
+    'es': { name: 'Español' },
+    'eu': { name: 'Euskara' },
+    'fa': { name: 'فارسی' },
+    'fr': { name: 'Français' },
+    'fur': { name: 'Furlan' },
+    'ga': { name: 'Gaeilge' },
+    'gd': { name: 'Gàidhlig' },
+    'gl': { name: 'Galego' },
+    'ko': { name: '한국어' },
+    'hy': { name: 'Հայերեն' },
+    'he': { name: 'עִבְרִית' },
+    'hi': { name: 'हिन्दी' },
+    'hr': { name: 'Hrvatski' },
+    'zu': { name: 'isiZulu' },
+    'is': { name: 'Íslenska' },
+    'it': { name: 'Italiano' },
+    'kn': { name: 'ಭಾಷೆ-ಹೆಸರು' },
+    'rw': { name: 'Kinyarwanda' },
+    'ht': { name: 'Kreyòl' },
+    'ku': { name: 'Kurdî' },
+    'la': { name: 'Latina' },
+    'lv': { name: 'Latviešu' },
+    'lt': { name: 'Lietuvių' },
+    'mk': { name: 'Македонски' },
+    'hu': { name: 'Magyar' },
+    'ml': { name: 'മലയാളം' },
+    'mt': { name: 'Malti' },
+    'cat': { name: 'Meow' },
+    'mr': { name: 'मराठी' },
+    'mn': { name: 'Монгол хэл' },
+    'my': { name: 'မြန်မာဘာသာ' },
+    'nl': { name: 'Nederlands' },
+    'ja': { name: '日本語' },
+    'nb': { name: 'Norsk Bokmål' },
+    'nn': { name: 'Norsk Nynorsk' },
+    'uz': { name: 'Oʻzbekcha' },
+    'th': { name: 'ไทย' },
+    'pl': { name: 'Polski' },
+    'pt': { name: 'Português' },
+    'pt-br': { name: 'Português Brasileiro' },
+    'ro': { name: 'Română' },
+    'ru': { name: 'Русский' },
+    'sc': { name: 'Sardu' },
+    'sq': { name: 'Shqip' },
+    'sk': { name: 'Slovenčina' },
+    'sl': { name: 'Slovenščina' },
+    'sr': { name: 'Српски' },
+    'fi': { name: 'Suomi' },
+    'sv': { name: 'Svenska' },
+    'te': { name: 'తెలుగు' },
+    'vi': { name: 'Tiếng Việt' },
+    'tr': { name: 'Türkçe' },
+    'uk': { name: 'Українська' },
+    'zh-cn': { name: '简体中文' },
+    'zh-tw': { name: '繁體中文' }
+};
+
 exports.default = locales;
+exports.wwwLocales = wwwLocales;
 
 /***/ })
 /******/ ]);
@@ -71692,21 +71777,21 @@ const paintMsgs = {
     "messages": {
       "paint.paintEditor.redo": "Wiederherstellen",
       "paint.paintEditor.fill": "Füllen",
-      "paint.modeTools.eraserSize": "Eraser size",
-      "paint.paintEditor.backward": "Backward",
+      "paint.modeTools.eraserSize": "Radierergröße",
+      "paint.paintEditor.backward": "Zurück",
       "paint.paintEditor.group": "Gruppieren",
-      "paint.modeTools.paste": "Paste",
+      "paint.modeTools.paste": "Einfügen",
       "paint.paintEditor.saturation": "Sättigung",
-      "paint.modeTools.brushSize": "Brush size",
+      "paint.modeTools.brushSize": "Pinselgröße",
       "paint.paintEditor.undo": "Rückgängig machen",
-      "paint.paintEditor.forward": "Forward",
+      "paint.paintEditor.forward": "Nach vorne",
       "paint.paintEditor.brightness": "Helligkeit",
       "paint.paintEditor.costume": "Kostüm",
       "paint.paintEditor.back": "Zurück",
       "paint.paintEditor.ungroup": "Gruppierung aufheben",
-      "paint.paintEditor.hue": "Color",
-      "paint.modeTools.copy": "Copy",
-      "paint.paintEditor.front": "Front",
+      "paint.paintEditor.hue": "Farbe",
+      "paint.modeTools.copy": "Kopieren",
+      "paint.paintEditor.front": "Schriftart",
       "paint.paintEditor.stroke": "Umriss"
     }
   },
@@ -71734,24 +71819,24 @@ const paintMsgs = {
   },
   "he": {
     "messages": {
-      "paint.paintEditor.redo": "Redo",
-      "paint.paintEditor.fill": "Fill",
-      "paint.modeTools.eraserSize": "Eraser size",
-      "paint.paintEditor.backward": "Backward",
-      "paint.paintEditor.group": "Group",
-      "paint.modeTools.paste": "Paste",
-      "paint.paintEditor.saturation": "Saturation",
-      "paint.modeTools.brushSize": "Brush size",
-      "paint.paintEditor.undo": "Undo",
-      "paint.paintEditor.forward": "Forward",
-      "paint.paintEditor.brightness": "Brightness",
-      "paint.paintEditor.costume": "Costume",
-      "paint.paintEditor.back": "Back",
-      "paint.paintEditor.ungroup": "Ungroup",
-      "paint.paintEditor.hue": "Color",
-      "paint.modeTools.copy": "Copy",
-      "paint.paintEditor.front": "Front",
-      "paint.paintEditor.stroke": "Outline"
+      "paint.paintEditor.redo": "עשה שוב",
+      "paint.paintEditor.fill": "מילוי",
+      "paint.modeTools.eraserSize": "גודל מחק",
+      "paint.paintEditor.backward": "לאחור",
+      "paint.paintEditor.group": "קבץ",
+      "paint.modeTools.paste": "הדבק",
+      "paint.paintEditor.saturation": "סטורציה",
+      "paint.modeTools.brushSize": "גודל מברשת",
+      "paint.paintEditor.undo": " ביטול",
+      "paint.paintEditor.forward": "קדימה",
+      "paint.paintEditor.brightness": "בהירות",
+      "paint.paintEditor.costume": "תלבושת",
+      "paint.paintEditor.back": "אחורה",
+      "paint.paintEditor.ungroup": "פרק",
+      "paint.paintEditor.hue": "צבע",
+      "paint.modeTools.copy": "עותק",
+      "paint.paintEditor.front": "קידמה",
+      "paint.paintEditor.stroke": "קו מתאר"
     }
   }
 }
