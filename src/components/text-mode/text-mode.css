@@ -4,12 +4,13 @@
     display: none;
     font-family: Times;
     font-size: 30px;
-    left: 0;
+    left: 0px;
     outline: none;
     overflow: hidden;
+    padding: 0px;
     position: absolute;
     resize: none;
-    top: 0;
+    top: 0px;
     white-space: nowrap;
-    z-index: 1;
+    z-index: 1; /* TODO fix text is in front of dropdown menus */
 }

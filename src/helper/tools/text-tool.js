@@ -169,7 +169,7 @@ class TextTool extends paper.Tool {
         }
 
         if (this.mode === TextTool.TEXT_EDIT_MODE) {
-            this.beginTextEdit(event.point);
+            this.beginTextEdit(this.textBox.bounds.topLeft, this.textBox.content, this.textBox.matrix);
         } else {
             this.endTextEdit();
         }
@@ -206,19 +206,23 @@ class TextTool extends paper.Tool {
         
         if (this.mode === TextTool.SELECT_MODE) {
             this.nudgeTool.onKeyUp(event);
-        } else if (this.mode === TextTool.TEXT_EDIT_MODE) {
-            if ((event.key === 'delete' || event.key === 'backspace') && this.textBox.content.length) {
-                this.textBox.content = this.textBox.content.slice(0, this.textBox.content.length - 1);
-            } else if (!(event.modifiers.alt || event.modifiers.comand || event.modifiers.control ||
-                    event.modifiers.meta || event.modifiers.option)) {
-                this.textBox.content = this.textBox.content + event.character;
-            }
+        }
+    }
+    handleTextInput (event) {
+        if (this.mode === TextTool.TEXT_EDIT_MODE) {
+            this.textBox.content = this.element.value;
             if (this.guide) this.guide.remove();
             this.guide = hoverBounds(this.textBox, TextTool.TEXT_PADDING);
             this.guide.dashArray = [4, 4];
         }
     }
-    beginTextEdit (location) {
+    /**
+     * @param {paper.Point} location Top left point of text area
+     * @param {?string} initialText Text to initialize the text area with
+     * @param {?paper.Matrix} matrix Transform matrix for the element. Defaults
+     *     to the identity matrix.
+     */
+    beginTextEdit (location, initialText, matrix) {
         if (this.guide) {
             this.guide.remove();
         }
@@ -227,19 +231,34 @@ class TextTool extends paper.Tool {
         this.guide.dashArray = [4, 4];
         this.setTextEditTarget(this.textBox.id);
 
-        const canvasRect = paper.view.element.getBoundingClientRect();
+        this.textBox.opacity = 0;
 
+        const canvasRect = paper.view.element.getBoundingClientRect();
+        console.log(matrix);
+        console.log(location);
+        console.log(canvasRect);
+        // TODO holding shift when transforming in select mode does weird things
         this.element.style.display = 'initial';
-        this.element.style.text = 'hello';
+        this.element.value = initialText ? initialText : '';
         this.element.style['text-fill-color'] = this.colorState.fillColor;
         this.element.style['text-stroke-color'] = this.colorState.strokeColor;
         this.element.style['text-stroke-width'] = this.colorState.strokeWidth;
         this.element.style['-webkit-text-fill-color'] = this.colorState.fillColor;
         this.element.style['-webkit-text-stroke-color'] = this.colorState.strokeColor;
         this.element.style['-webkit-text-stroke-width'] = this.colorState.strokeWidth + 'px';
-        this.element.style.transform =
-            `translate(${location.x + canvasRect.x}px, ${location.y + canvasRect.y}px)`;
+        if (matrix) {
+            this.element.style.transform =
+                `translate(${canvasRect.x}px, ${location.y - matrix.ty + canvasRect.y}px)
+                matrix(${matrix.a}, ${matrix.b}, ${matrix.c}, ${matrix.d},
+                ${matrix.tx}, ${matrix.ty})`;
+        } else {
+            this.element.style.transform =
+                `translate(${location.x + canvasRect.x}px, ${location.y + canvasRect.y}px)`;
+        }
+        //this.element.style.width = this.guide.width;
+        //this.element.style.height = this.guide.height;
         this.element.focus();
+        this.element.addEventListener('input', this.handleTextInput.bind(this));
     }
     endTextEdit () {
         if (this.guide) {
@@ -247,7 +266,11 @@ class TextTool extends paper.Tool {
             this.guide = null;
             this.setTextEditTarget();
         }
+        if (this.textBox) {
+            this.textBox.opacity = 1;
+        }
         this.element.style.display = 'none';
+        this.element.removeEventListener('input', this.handleTextInput.bind(this));
     }
     deactivateTool () {
         this.boundingBoxTool.removeBoundsPath();

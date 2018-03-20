@@ -21,6 +21,7 @@ const TextModeComponent = props => (
         <textarea
             className={styles.textArea}
             ref={props.setTextArea}
+            spellcheck="false"
         />
     </div>
 );
