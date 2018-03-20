@@ -28,13 +28,15 @@ class TextTool extends paper.Tool {
         return 8;
     }
     /**
+     * @param {HTMLTextAreaElement} textAreaElement dom element for the editable text field
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      * @param {!function} setTextEditTarget Call to set text editing target whenever text editing is active
      */
-    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg, setTextEditTarget) {
+    constructor (textAreaElement, setSelectedItems, clearSelectedItems, onUpdateSvg, setTextEditTarget) {
         super();
+        this.element = textAreaElement;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateSvg = onUpdateSvg;
@@ -141,10 +143,6 @@ class TextTool extends paper.Tool {
             const hitResults = paper.project.hitTestAll(event.point, this.getTextEditHitOptions());
             if (hitResults.length) {
                 // Clicking a text item to begin text edit mode on that item
-                if (this.guide) {
-                    this.guide.remove();
-                    this.guide = null;
-                }
                 this.textBox = hitResults[0].item;
                 this.mode = TextTool.TEXT_EDIT_MODE;
             } else if (this.mode === TextTool.TEXT_EDIT_MODE) {
@@ -171,13 +169,9 @@ class TextTool extends paper.Tool {
         }
 
         if (this.mode === TextTool.TEXT_EDIT_MODE) {
-            this.guide = hoverBounds(this.textBox, TextTool.TEXT_PADDING);
-            this.guide.dashArray = [4, 4];
-            this.setTextEditTarget(this.textBox.id);
-        } else if (this.guide) {
-            this.guide.remove();
-            this.guide = null;
-            this.setTextEditTarget();
+            this.beginTextEdit(event.point);
+        } else {
+            this.endTextEdit();
         }
     }
     handleMouseDrag (event) {
@@ -224,17 +218,44 @@ class TextTool extends paper.Tool {
             this.guide.dashArray = [4, 4];
         }
     }
+    beginTextEdit (location) {
+        if (this.guide) {
+            this.guide.remove();
+        }
+
+        this.guide = hoverBounds(this.textBox, TextTool.TEXT_PADDING);
+        this.guide.dashArray = [4, 4];
+        this.setTextEditTarget(this.textBox.id);
+
+        const canvasRect = paper.view.element.getBoundingClientRect();
+
+        this.element.style.display = 'initial';
+        this.element.style.text = 'hello';
+        this.element.style['text-fill-color'] = this.colorState.fillColor;
+        this.element.style['text-stroke-color'] = this.colorState.strokeColor;
+        this.element.style['text-stroke-width'] = this.colorState.strokeWidth;
+        this.element.style['-webkit-text-fill-color'] = this.colorState.fillColor;
+        this.element.style['-webkit-text-stroke-color'] = this.colorState.strokeColor;
+        this.element.style['-webkit-text-stroke-width'] = this.colorState.strokeWidth + 'px';
+        this.element.style.transform =
+            `translate(${location.x + canvasRect.x}px, ${location.y + canvasRect.y}px)`;
+        this.element.focus();
+    }
+    endTextEdit () {
+        if (this.guide) {
+            this.guide.remove();
+            this.guide = null;
+            this.setTextEditTarget();
+        }
+        this.element.style.display = 'none';
+    }
     deactivateTool () {
         this.boundingBoxTool.removeBoundsPath();
         if (this.textBox && this.textBox.content.trim() === '') {
             this.textBox.remove();
             this.textBox = null;
         }
-        if (this.guide) {
-            this.guide.remove();
-            this.guide = null;
-            this.setTextEditTarget();
-        }
+        this.endTextEdit();
     }
 }
 

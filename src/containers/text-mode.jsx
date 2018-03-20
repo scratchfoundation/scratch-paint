@@ -21,7 +21,8 @@ class TextMode extends React.Component {
         super(props);
         bindAll(this, [
             'activateTool',
-            'deactivateTool'
+            'deactivateTool',
+            'setTextArea'
         ]);
     }
     componentDidMount () {
@@ -64,6 +65,7 @@ class TextMode extends React.Component {
             this.props.onChangeStrokeColor(null);
         }
         this.tool = new TextTool(
+            this.textArea,
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
             this.props.onUpdateSvg,
@@ -77,11 +79,15 @@ class TextMode extends React.Component {
         this.tool.remove();
         this.tool = null;
     }
+    setTextArea (element) {
+        this.textArea = element;
+    }
     render () {
         return (
             <TextModeComponent
                 isSelected={this.props.isTextModeActive}
                 onMouseDown={this.props.handleMouseDown}
+                setTextArea={this.setTextArea}
             />
         );
     }

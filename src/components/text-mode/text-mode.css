@@ -1,0 +1,15 @@
+.text-area {
+    background: transparent;
+    border: none;
+    display: none;
+    font-family: Times;
+    font-size: 30px;
+    left: 0;
+    outline: none;
+    overflow: hidden;
+    position: absolute;
+    resize: none;
+    top: 0;
+    white-space: nowrap;
+    z-index: 1;
+}
