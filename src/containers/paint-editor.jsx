@@ -280,7 +280,7 @@ PaintEditor.propTypes = {
         stack: PropTypes.arrayOf(PropTypes.object).isRequired,
         pointer: PropTypes.number.isRequired
     }),
-    updateViewBounds: PropTypes.func.isRequired,
+    updateViewBounds: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
