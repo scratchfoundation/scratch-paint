@@ -17,7 +17,6 @@ import {groupSelection, ungroupSelection} from '../helper/group';
 import {getSelectedLeafItems} from '../helper/selection';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
-import styles from '../components/paint-editor/paint-editor.css'
 
 import Modes from '../lib/modes';
 import {connect} from 'react-redux';
@@ -164,7 +163,7 @@ class PaintEditor extends React.Component {
             document.activeElement.blur();
         }
 
-        if (event.target !== paper.view.element && !event.target.classList.contains(styles.textArea)) {
+        if (event.target !== paper.view.element && event.target !== this.state.textArea) {
             // Exit text edit mode if you click anywhere outside of canvas
             this.props.removeTextEditTarget();
         }
