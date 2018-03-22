@@ -110,7 +110,8 @@ TextMode.propTypes = {
     setSelectedItems: PropTypes.func.isRequired,
     setTextEditTarget: PropTypes.func.isRequired,
     textArea: PropTypes.instanceOf(Element),
-    textEditTarget: PropTypes.number
+    textEditTarget: PropTypes.number,
+    viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired
 };
 
 const mapStateToProps = state => ({

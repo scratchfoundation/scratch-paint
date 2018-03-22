@@ -223,7 +223,7 @@ PaperCanvas.propTypes = {
     svg: PropTypes.string,
     svgId: PropTypes.string,
     undoSnapshot: PropTypes.func.isRequired,
-    updateViewBounds: PropTypes.instanceOf(paper.Matrix).isRequired
+    updateViewBounds: PropTypes.func.isRequired
 };
 const mapStateToProps = state => ({
     mode: state.scratchPaint.mode

@@ -268,6 +268,7 @@ PaintEditor.propTypes = {
         activate: PropTypes.func.isRequired,
         remove: PropTypes.func.isRequired
     }),
+    removeTextEditTarget: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     setSelectedItems: PropTypes.func.isRequired,
@@ -279,7 +280,7 @@ PaintEditor.propTypes = {
         stack: PropTypes.arrayOf(PropTypes.object).isRequired,
         pointer: PropTypes.number.isRequired
     }),
-    updateViewBounds: PropTypes.instanceOf(paper.Matrix).isRequired
+    updateViewBounds: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
