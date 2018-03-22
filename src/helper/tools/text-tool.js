@@ -1,6 +1,5 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {styleShape} from '../style-path';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -189,13 +188,13 @@ class TextTool extends paper.Tool {
                 content: '',
                 font: 'Times',
                 fontSize: 30,
+                fillColor: this.colorState.fillColor,
                 // Default leading for both the HTML text area and paper.PointText
                 // is 120%, but for some reason they are slightly off from each other.
                 // This value was obtained experimentally.
                 // (Don't round to 34.6, the text area will start to scroll.)
                 leading: 34.61
             });
-            styleShape(this.textBox, this.colorState);
             this.beginTextEdit(this.textBox.content, this.textBox.matrix);
         }
     }

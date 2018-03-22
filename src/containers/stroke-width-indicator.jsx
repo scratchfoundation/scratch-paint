@@ -32,7 +32,8 @@ class StrokeWidthIndicator extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    disabled: state.scratchPaint.mode === Modes.BRUSH,
+    disabled: state.scratchPaint.mode === Modes.BRUSH ||
+        state.scratchPaint.mode === Modes.TEXT,
     strokeWidth: state.scratchPaint.color.strokeWidth,
     textEditTarget: state.scratchPaint.textEditTarget
 });
