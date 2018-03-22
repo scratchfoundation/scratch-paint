@@ -8,6 +8,7 @@ import {undo, redo, undoSnapshot} from '../reducers/undo';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {deactivateEyeDropper} from '../reducers/eye-dropper';
 import {setTextEditTarget} from '../reducers/text-edit-target';
+import {updateViewBounds} from '../reducers/view-bounds';
 
 import {hideGuideLayers, showGuideLayers} from '../helper/layer';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
@@ -38,6 +39,9 @@ class PaintEditor extends React.Component {
             'handleSendToFront',
             'handleGroup',
             'handleUngroup',
+            'handleZoomIn',
+            'handleZoomOut',
+            'handleZoomReset',
             'canRedo',
             'canUndo',
             'onMouseDown',
@@ -137,12 +141,15 @@ class PaintEditor extends React.Component {
     }
     handleZoomIn () {
         zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
+        this.props.updateViewBounds(paper.view.matrix);
     }
     handleZoomOut () {
         zoomOnSelection(-PaintEditor.ZOOM_INCREMENT);
+        this.props.updateViewBounds(paper.view.matrix);
     }
     handleZoomReset () {
         resetZoom();
+        this.props.updateViewBounds(paper.view.matrix);
     }
     setCanvas (canvas) {
         this.setState({canvas: canvas});
@@ -158,7 +165,6 @@ class PaintEditor extends React.Component {
         }
 
         if (event.target !== paper.view.element && !event.target.classList.contains(styles.textArea)) {
-            debugger;
             // Exit text edit mode if you click anywhere outside of canvas
             this.props.removeTextEditTarget();
         }
@@ -273,7 +279,8 @@ PaintEditor.propTypes = {
     undoState: PropTypes.shape({
         stack: PropTypes.arrayOf(PropTypes.object).isRequired,
         pointer: PropTypes.number.isRequired
-    })
+    }),
+    updateViewBounds: PropTypes.instanceOf(paper.Matrix).isRequired
 };
 
 const mapStateToProps = state => ({
@@ -317,6 +324,10 @@ const mapDispatchToProps = dispatch => ({
     setSelectedItems: () => {
         dispatch(setSelectedItems(getSelectedLeafItems()));
     },
+    onDeactivateEyeDropper: () => {
+        // set redux values to default for eye dropper reducer
+        dispatch(deactivateEyeDropper());
+    },
     onUndo: () => {
         dispatch(undo());
     },
@@ -326,9 +337,8 @@ const mapDispatchToProps = dispatch => ({
     undoSnapshot: snapshot => {
         dispatch(undoSnapshot(snapshot));
     },
-    onDeactivateEyeDropper: () => {
-        // set redux values to default for eye dropper reducer
-        dispatch(deactivateEyeDropper());
+    updateViewBounds: matrix => {
+        dispatch(updateViewBounds(matrix));
     }
 });
 

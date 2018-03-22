@@ -8,6 +8,7 @@ import hoverReducer from './hover';
 import modalsReducer from './modals';
 import selectedItemReducer from './selected-items';
 import textEditTargetReducer from './text-edit-target';
+import viewBoundsReducer from './view-bounds';
 import undoReducer from './undo';
 
 export default combineReducers({
@@ -20,5 +21,6 @@ export default combineReducers({
     modals: modalsReducer,
     selectedItems: selectedItemReducer,
     textEditTarget: textEditTargetReducer,
-    undo: undoReducer
+    undo: undoReducer,
+    viewBounds: viewBoundsReducer
 });

@@ -94,7 +94,7 @@ class TextTool extends paper.Tool {
         };
     }
     /**
-     * Should be called if the selection changes to update the bounds of the bounding box.
+     * Called when the selection changes to update the bounds of the bounding box.
      * @param {Array<paper.Item>} selectedItems Array of selected items.
      */
     onSelectionChanged (selectedItems) {
@@ -103,6 +103,22 @@ class TextTool extends paper.Tool {
     // Allow other tools to cancel text edit mode
     onTextEditCancelled () {
         this.endTextEdit();
+    }
+    /**
+     * Called when the view matrix changes
+     * @param {paper.Matrix} viewMtx applied to paper.view
+     */
+    onViewBoundsChanged (viewMtx) {
+        if (this.mode !== TextTool.TEXT_EDIT_MODE) {
+            return;
+        }
+        const matrix = this.textBox.matrix;
+        this.element.style.transform =
+            `translate(0px, ${this.textBox.internalBounds.y}px)
+            matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
+            ${viewMtx.tx}, ${viewMtx.ty})
+            matrix(${matrix.a}, ${matrix.b}, ${matrix.c}, ${matrix.d},
+            ${matrix.tx}, ${matrix.ty})`;
     }
     setColorState (colorState) {
         this.colorState = colorState;

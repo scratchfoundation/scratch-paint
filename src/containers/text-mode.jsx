@@ -39,6 +39,9 @@ class TextMode extends React.Component {
         if (this.tool && !nextProps.textEditTarget && this.props.textEditTarget) {
             this.tool.onTextEditCancelled();
         }
+        if (this.tool && !nextProps.viewBounds.equals(this.props.viewBounds)) {
+            this.tool.onViewBoundsChanged(nextProps.viewBounds);
+        }
 
         if (nextProps.isTextModeActive && !this.props.isTextModeActive) {
             this.activateTool();
@@ -114,7 +117,8 @@ const mapStateToProps = state => ({
     colorState: state.scratchPaint.color,
     isTextModeActive: state.scratchPaint.mode === Modes.TEXT,
     selectedItems: state.scratchPaint.selectedItems,
-    textEditTarget: state.scratchPaint.textEditTarget
+    textEditTarget: state.scratchPaint.textEditTarget,
+    viewBounds: state.scratchPaint.viewBounds
 });
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
