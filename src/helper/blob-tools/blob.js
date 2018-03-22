@@ -2,6 +2,7 @@ import paper from '@scratch/paper';
 import log from '../../log/log';
 import BroadBrushHelper from './broad-brush-helper';
 import SegmentBrushHelper from './segment-brush-helper';
+import PathExpandBrushHelper from './path-expand-brush-helper';
 import {MIXED, styleCursorPreview} from '../../helper/style-path';
 import {clearSelection, getItems} from '../../helper/selection';
 import {getGuideLayer} from '../../helper/layer';
@@ -33,6 +34,7 @@ class Blobbiness {
     constructor (onUpdateSvg, clearSelectedItems) {
         this.broadBrushHelper = new BroadBrushHelper();
         this.segmentBrushHelper = new SegmentBrushHelper();
+        this.pathExpandBrushHelper = new PathExpandBrushHelper();
         this.onUpdateSvg = onUpdateSvg;
         this.clearSelectedItems = clearSelectedItems;
 
@@ -98,7 +100,9 @@ class Blobbiness {
             if (event.event.button > 0) return; // only first mouse button
             this.active = true;
 
-            if (blob.options.brushSize < Blobbiness.THRESHOLD) {
+            if (blob.options.smooth) {
+                blob.pathExpandBrushHelper.onMouseDown(event, blob.tool, blob.options);
+            } else if (blob.options.brushSize < Blobbiness.THRESHOLD) {
                 blob.brush = Blobbiness.BROAD;
                 blob.broadBrushHelper.onBroadMouseDown(event, blob.tool, blob.options);
             } else {
@@ -111,7 +115,9 @@ class Blobbiness {
 
         this.tool.onMouseDrag = function (event) {
             if (event.event.button > 0 || !this.active) return; // only first mouse button
-            if (blob.brush === Blobbiness.BROAD) {
+            if (blob.options.smooth) {
+                blob.pathExpandBrushHelper.onMouseDrag(event, blob.tool, blob.options);
+            } else if (blob.brush === Blobbiness.BROAD) {
                 blob.broadBrushHelper.onBroadMouseDrag(event, blob.tool, blob.options);
             } else if (blob.brush === Blobbiness.SEGMENT) {
                 blob.segmentBrushHelper.onSegmentMouseDrag(event, blob.tool, blob.options);
@@ -127,7 +133,9 @@ class Blobbiness {
             if (event.event.button > 0 || !this.active) return; // only first mouse button
             
             let lastPath;
-            if (blob.brush === Blobbiness.BROAD) {
+            if (blob.options.smooth) {
+                lastPath = blob.pathExpandBrushHelper.onMouseUp(event, blob.tool, blob.options);
+            } else if (blob.brush === Blobbiness.BROAD) {
                 lastPath = blob.broadBrushHelper.onBroadMouseUp(event, blob.tool, blob.options);
             } else if (blob.brush === Blobbiness.SEGMENT) {
                 lastPath = blob.segmentBrushHelper.onSegmentMouseUp(event, blob.tool, blob.options);

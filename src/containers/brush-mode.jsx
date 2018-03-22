@@ -37,6 +37,7 @@ class BrushMode extends React.Component {
         } else if (nextProps.isBrushModeActive && this.props.isBrushModeActive) {
             this.blob.setOptions({
                 isEraser: false,
+                smooth: nextProps.smooth,
                 ...nextProps.colorState,
                 ...nextProps.brushModeState
             });
@@ -56,6 +57,7 @@ class BrushMode extends React.Component {
         }
         this.blob.activateTool({
             isEraser: false,
+            smooth: this.props.smooth,
             ...this.props.colorState,
             ...this.props.brushModeState
         });
@@ -86,13 +88,15 @@ BrushMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isBrushModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired
+    onUpdateSvg: PropTypes.func.isRequired,
+    smooth: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     brushModeState: state.scratchPaint.brushMode,
     colorState: state.scratchPaint.color,
-    isBrushModeActive: state.scratchPaint.mode === Modes.BRUSH
+    isBrushModeActive: state.scratchPaint.mode === Modes.BRUSH,
+    smooth: state.scratchPaint.smooth
 });
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
