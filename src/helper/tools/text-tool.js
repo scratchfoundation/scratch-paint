@@ -102,6 +102,11 @@ class TextTool extends paper.Tool {
     // Allow other tools to cancel text edit mode
     onTextEditCancelled () {
         this.endTextEdit();
+        if (this.textBox) {
+            this.mode = TextTool.SELECT_MODE;
+            this.textBox.selected = true;
+            this.setSelectedItems();
+        }
     }
     /**
      * Called when the view matrix changes
