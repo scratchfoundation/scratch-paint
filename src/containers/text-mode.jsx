@@ -36,6 +36,9 @@ class TextMode extends React.Component {
         if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
             this.tool.onSelectionChanged(nextProps.selectedItems);
         }
+        if (this.tool && !nextProps.textEditTarget && this.props.textEditTarget) {
+            this.tool.onTextEditCancelled();
+        }
 
         if (nextProps.isTextModeActive && !this.props.isTextModeActive) {
             this.activateTool();
@@ -103,13 +106,15 @@ TextMode.propTypes = {
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setSelectedItems: PropTypes.func.isRequired,
     setTextEditTarget: PropTypes.func.isRequired,
-    textArea: PropTypes.instanceOf(Element)
+    textArea: PropTypes.instanceOf(Element),
+    textEditTarget: PropTypes.number
 };
 
 const mapStateToProps = state => ({
     colorState: state.scratchPaint.color,
     isTextModeActive: state.scratchPaint.mode === Modes.TEXT,
-    selectedItems: state.scratchPaint.selectedItems
+    selectedItems: state.scratchPaint.selectedItems,
+    textEditTarget: state.scratchPaint.textEditTarget
 });
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {

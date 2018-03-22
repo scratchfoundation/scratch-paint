@@ -24,6 +24,10 @@ class TextTool extends paper.Tool {
     static get DOUBLE_CLICK_MILLIS () {
         return 250;
     }
+    /** Typing with no pauses longer than this amount of type will count as 1 action */
+    static get TYPING_TIMEOUT_MILLIS () {
+        return 1000;
+    }
     static get TEXT_PADDING () {
         return 8;
     }
@@ -59,6 +63,7 @@ class TextTool extends paper.Tool {
         this.colorState = null;
         this.mode = null;
         this.active = false;
+        this.lastTypeEvent = null;
 
         // If text selected and then activate this tool, switch to text edit mode for that text
         // If double click on text while in select mode, does mode change to text mode? Text fully selected by default
@@ -95,6 +100,10 @@ class TextTool extends paper.Tool {
     onSelectionChanged (selectedItems) {
         this.boundingBoxTool.onSelectionChanged(selectedItems);
     }
+    // Allow other tools to cancel text edit mode
+    onTextEditCancelled () {
+        this.endTextEdit();
+    }
     setColorState (colorState) {
         this.colorState = colorState;
     }
@@ -109,12 +118,6 @@ class TextTool extends paper.Tool {
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
-
-        // Remove invisible textboxes
-        if (this.textBox && this.textBox.content.trim() === '') {
-            this.textBox.remove();
-            this.textBox = null;
-        }
 
         // Check if double clicked
         let doubleClicked = false;
@@ -142,10 +145,12 @@ class TextTool extends paper.Tool {
             return;
         }
 
+        const lastMode = this.mode;
         // We clicked away from the item, so end the current mode
-        if (this.mode === TextTool.SELECT_MODE) {
+        if (lastMode === TextTool.SELECT_MODE) {
             clearSelection(this.clearSelectedItems);
-        } else if (this.mode === TextTool.TEXT_EDIT_MODE) {
+            this.mode = null;
+        } else if (lastMode === TextTool.TEXT_EDIT_MODE) {
             this.endTextEdit();
         }
 
@@ -154,14 +159,12 @@ class TextTool extends paper.Tool {
             // Clicking a different text item to begin text edit mode on that item
             this.textBox = hitResults[0].item;
             this.beginTextEdit(this.textBox.content, this.textBox.matrix);
-        } else if (this.mode === TextTool.TEXT_EDIT_MODE) {
+        } else if (lastMode === TextTool.TEXT_EDIT_MODE) {
             // In text mode clicking away to begin select mode
             if (this.textBox) {
                 this.mode = TextTool.SELECT_MODE;
                 this.textBox.selected = true;
                 this.setSelectedItems();
-            } else {
-                this.mode = null;
             }
         } else {
             // In no mode or select mode clicking away to begin text edit mode
@@ -214,7 +217,12 @@ class TextTool extends paper.Tool {
             this.nudgeTool.onKeyUp(event);
         }
     }
-    handleTextInput () {
+    handleTextInput (event) {
+        // Save undo state if you paused typing for long enough.
+        if (this.lastTypeEvent && event.timeStamp - this.lastTypeEvent.timeStamp > TextTool.TYPING_TIMEOUT_MILLIS) {
+            this.onUpdateSvg();
+        }
+        this.lastTypeEvent = event;
         if (this.mode === TextTool.TEXT_EDIT_MODE) {
             this.textBox.content = this.element.value;
         }
@@ -237,7 +245,6 @@ class TextTool extends paper.Tool {
         this.setTextEditTarget(this.textBox.id);
 
         // TODO text not positioned correctly when zoomed in
-        // TODO holding shift when rotating in select mode does weird things
         // TODO undo states
 
         this.element.style.display = 'initial';
@@ -259,6 +266,18 @@ class TextTool extends paper.Tool {
         this.resizeGuide();
     }
     endTextEdit () {
+        if (this.mode !== TextTool.TEXT_EDIT_MODE) {
+            return;
+        }
+        this.mode = null;
+
+        // Remove invisible textboxes
+        if (this.textBox && this.textBox.content.trim() === '') {
+            this.textBox.remove();
+            this.textBox = null;
+        }
+
+        // Remove guide
         if (this.guide) {
             this.guide.remove();
             this.guide = null;
@@ -268,6 +287,12 @@ class TextTool extends paper.Tool {
         if (this.eventListener) {
             this.element.removeEventListener('input', this.eventListener);
             this.eventListener = null;
+        }
+        this.lastTypeEvent = null;
+
+        // If you finished editing a textbox, save undo state
+        if (this.textBox && this.textBox.content.trim().length) {
+            this.onUpdateSvg();
         }
     }
     deactivateTool () {

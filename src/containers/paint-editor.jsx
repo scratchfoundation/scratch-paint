@@ -7,6 +7,7 @@ import {changeMode} from '../reducers/modes';
 import {undo, redo, undoSnapshot} from '../reducers/undo';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {deactivateEyeDropper} from '../reducers/eye-dropper';
+import {setTextEditTarget} from '../reducers/text-edit-target';
 
 import {hideGuideLayers, showGuideLayers} from '../helper/layer';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
@@ -15,6 +16,7 @@ import {groupSelection, ungroupSelection} from '../helper/group';
 import {getSelectedLeafItems} from '../helper/selection';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
+import styles from '../components/paint-editor/paint-editor.css'
 
 import Modes from '../lib/modes';
 import {connect} from 'react-redux';
@@ -153,6 +155,12 @@ class PaintEditor extends React.Component {
         if (event.target === paper.view.element &&
                 document.activeElement instanceof HTMLInputElement) {
             document.activeElement.blur();
+        }
+
+        if (event.target !== paper.view.element && !event.target.classList.contains(styles.textArea)) {
+            debugger;
+            // Exit text edit mode if you click anywhere outside of canvas
+            this.props.removeTextEditTarget();
         }
 
         if (this.props.isEyeDropping) {
@@ -302,6 +310,9 @@ const mapDispatchToProps = dispatch => ({
     },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
+    },
+    removeTextEditTarget: () => {
+        dispatch(setTextEditTarget());
     },
     setSelectedItems: () => {
         dispatch(setSelectedItems(getSelectedLeafItems()));
