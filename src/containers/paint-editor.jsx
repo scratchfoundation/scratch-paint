@@ -40,6 +40,7 @@ class PaintEditor extends React.Component {
             'canUndo',
             'onMouseDown',
             'setCanvas',
+            'setTextArea',
             'startEyeDroppingLoop',
             'stopEyeDroppingLoop'
         ]);
@@ -145,6 +146,9 @@ class PaintEditor extends React.Component {
         this.setState({canvas: canvas});
         this.canvas = canvas;
     }
+    setTextArea (element) {
+        this.setState({textArea: element});
+    }
     onMouseDown (event) {
         if (event.target === paper.view.element &&
                 document.activeElement instanceof HTMLInputElement) {
@@ -214,8 +218,10 @@ class PaintEditor extends React.Component {
                 rotationCenterX={this.props.rotationCenterX}
                 rotationCenterY={this.props.rotationCenterY}
                 setCanvas={this.setCanvas}
+                setTextArea={this.setTextArea}
                 svg={this.props.svg}
                 svgId={this.props.svgId}
+                textArea={this.state.textArea}
                 onGroup={this.handleGroup}
                 onRedo={this.handleRedo}
                 onSendBackward={this.handleSendBackward}

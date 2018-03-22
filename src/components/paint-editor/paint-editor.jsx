@@ -354,6 +354,7 @@ const PaintEditorComponent = props => {
                             onUpdateSvg={props.onUpdateSvg}
                         />
                         <TextMode
+                            textArea={props.textArea}
                             onUpdateSvg={props.onUpdateSvg}
                         />
                         <LineMode
@@ -367,33 +368,40 @@ const PaintEditorComponent = props => {
                         />
                     </div>
                 ) : null}
-
-                {/* Canvas */}
-                <div
-                    className={classNames(
-                        styles.canvasContainer,
-                        {[styles.withEyeDropper]: props.isEyeDropping}
-                    )}
-                >
-                    <PaperCanvas
-                        canvasRef={props.setCanvas}
-                        rotationCenterX={props.rotationCenterX}
-                        rotationCenterY={props.rotationCenterY}
-                        svg={props.svg}
-                        svgId={props.svgId}
-                        onUpdateSvg={props.onUpdateSvg}
-                    />
-                    {props.isEyeDropping &&
-                        props.colorInfo !== null &&
-                        !props.colorInfo.hideLoupe ? (
-                            <Box className={styles.colorPickerWrapper}>
-                                <Loupe
-                                    colorInfo={props.colorInfo}
-                                    pixelRatio={paper.project.view.pixelRatio}
-                                />
-                            </Box>
-                        ) : null
-                    }
+                
+                <div>
+                    {/* Canvas */}
+                    <div
+                        className={classNames(
+                            styles.canvasContainer,
+                            {[styles.withEyeDropper]: props.isEyeDropping}
+                        )}
+                    >
+                        <PaperCanvas
+                            canvasRef={props.setCanvas}
+                            rotationCenterX={props.rotationCenterX}
+                            rotationCenterY={props.rotationCenterY}
+                            svg={props.svg}
+                            svgId={props.svgId}
+                            onUpdateSvg={props.onUpdateSvg}
+                        />
+                        <textarea
+                            className={styles.textArea}
+                            ref={props.setTextArea}
+                            spellCheck={false}
+                        />
+                        {props.isEyeDropping &&
+                            props.colorInfo !== null &&
+                            !props.colorInfo.hideLoupe ? (
+                                <Box className={styles.colorPickerWrapper}>
+                                    <Loupe
+                                        colorInfo={props.colorInfo}
+                                        pixelRatio={paper.project.view.pixelRatio}
+                                    />
+                                </Box>
+                            ) : null
+                        }
+                    </div>
                     <div className={styles.canvasControls}>
                         <ComingSoonTooltip
                             className={styles.bitmapTooltip}
@@ -459,7 +467,7 @@ const PaintEditorComponent = props => {
 PaintEditorComponent.propTypes = {
     canRedo: PropTypes.func.isRequired,
     canUndo: PropTypes.func.isRequired,
-    canvas: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    canvas: PropTypes.instanceOf(Element),
     colorInfo: Loupe.propTypes.colorInfo,
     intl: intlShape,
     isEyeDropping: PropTypes.bool,
@@ -480,8 +488,10 @@ PaintEditorComponent.propTypes = {
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     setCanvas: PropTypes.func.isRequired,
+    setTextArea: PropTypes.func.isRequired,
     svg: PropTypes.string,
-    svgId: PropTypes.string
+    svgId: PropTypes.string,
+    textArea: PropTypes.instanceOf(Element)
 };
 
 export default injectIntl(PaintEditorComponent);

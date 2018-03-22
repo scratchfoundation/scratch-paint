@@ -21,8 +21,7 @@ class TextMode extends React.Component {
         super(props);
         bindAll(this, [
             'activateTool',
-            'deactivateTool',
-            'setTextArea'
+            'deactivateTool'
         ]);
     }
     componentDidMount () {
@@ -65,7 +64,7 @@ class TextMode extends React.Component {
             this.props.onChangeStrokeColor(null);
         }
         this.tool = new TextTool(
-            this.textArea,
+            this.props.textArea,
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
             this.props.onUpdateSvg,
@@ -79,15 +78,11 @@ class TextMode extends React.Component {
         this.tool.remove();
         this.tool = null;
     }
-    setTextArea (element) {
-        this.textArea = element;
-    }
     render () {
         return (
             <TextModeComponent
                 isSelected={this.props.isTextModeActive}
                 onMouseDown={this.props.handleMouseDown}
-                setTextArea={this.setTextArea}
             />
         );
     }
@@ -107,7 +102,8 @@ TextMode.propTypes = {
     onUpdateSvg: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setSelectedItems: PropTypes.func.isRequired,
-    setTextEditTarget: PropTypes.func.isRequired
+    setTextEditTarget: PropTypes.func.isRequired,
+    textArea: PropTypes.instanceOf(Element)
 };
 
 const mapStateToProps = state => ({
