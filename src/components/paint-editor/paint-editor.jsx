@@ -33,7 +33,7 @@ import ReshapeMode from '../../containers/reshape-mode.jsx';
 import SelectMode from '../../containers/select-mode.jsx';
 import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicator.jsx';
 import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicator.jsx';
-import TextModeComponent from '../text-mode/text-mode.jsx';
+import TextMode from '../../containers/text-mode.jsx';
 
 import layout from '../../lib/layout-constants';
 import styles from './paint-editor.css';
@@ -350,11 +350,13 @@ const PaintEditorComponent = props => {
                         <EraserMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
-                        {/* Text mode will go here */}
-                        <LineMode
+                        <FillMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
-                        <FillMode
+                        <TextMode
+                            onUpdateSvg={props.onUpdateSvg}
+                        />
+                        <LineMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
                         <OvalMode
@@ -363,8 +365,6 @@ const PaintEditorComponent = props => {
                         <RectMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
-                        {/* text tool, coming soon */}
-                        <TextModeComponent />
                     </div>
                 ) : null}
 

@@ -49,7 +49,12 @@ class PaintEditor extends React.Component {
         };
     }
     componentDidMount () {
-        document.addEventListener('keydown', this.props.onKeyPress);
+        document.addEventListener('keydown', event => {
+            // Don't activate keyboard shortcuts during text editing
+            if (!this.props.textEditing) {
+                this.props.onKeyPress(event);
+            }
+        });
         // document listeners used to detect if a mouse is down outside of the
         // canvas, and should therefore stop the eye dropper
         document.addEventListener('mousedown', this.onMouseDown);
@@ -249,6 +254,7 @@ PaintEditor.propTypes = {
     setSelectedItems: PropTypes.func.isRequired,
     svg: PropTypes.string,
     svgId: PropTypes.string,
+    textEditing: PropTypes.bool.isRequired,
     undoSnapshot: PropTypes.func.isRequired,
     undoState: PropTypes.shape({
         stack: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -263,6 +269,7 @@ const mapStateToProps = state => ({
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
     previousTool: state.scratchPaint.color.eyeDropper.previousTool,
     selectedItems: state.scratchPaint.selectedItems,
+    textEditing: state.scratchPaint.textEditTarget !== null,
     undoState: state.scratchPaint.undo
 });
 const mapDispatchToProps = dispatch => ({
@@ -275,6 +282,16 @@ const mapDispatchToProps = dispatch => ({
             dispatch(changeMode(Modes.LINE));
         } else if (event.key === 's') {
             dispatch(changeMode(Modes.SELECT));
+        } else if (event.key === 'w') {
+            dispatch(changeMode(Modes.RESHAPE));
+        } else if (event.key === 'f') {
+            dispatch(changeMode(Modes.FILL));
+        } else if (event.key === 't') {
+            dispatch(changeMode(Modes.TEXT));
+        } else if (event.key === 'c') {
+            dispatch(changeMode(Modes.OVAL));
+        } else if (event.key === 'r') {
+            dispatch(changeMode(Modes.RECT));
         }
     },
     clearSelectedItems: () => {
