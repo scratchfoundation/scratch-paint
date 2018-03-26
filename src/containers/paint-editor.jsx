@@ -36,6 +36,9 @@ class PaintEditor extends React.Component {
             'handleSendToFront',
             'handleGroup',
             'handleUngroup',
+            'handleZoomIn',
+            'handleZoomOut',
+            'handleZoomReset',
             'canRedo',
             'canUndo',
             'onMouseDown',
@@ -129,12 +132,21 @@ class PaintEditor extends React.Component {
     }
     handleZoomIn () {
         zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
+        if (this.props.setSelectedItems) {
+            this.props.setSelectedItems();
+        }
     }
     handleZoomOut () {
         zoomOnSelection(-PaintEditor.ZOOM_INCREMENT);
+        if (this.props.setSelectedItems) {
+            this.props.setSelectedItems();
+        }
     }
     handleZoomReset () {
         resetZoom();
+        if (this.props.setSelectedItems) {
+            this.props.setSelectedItems();
+        }
     }
     setCanvas (canvas) {
         this.setState({canvas: canvas});
