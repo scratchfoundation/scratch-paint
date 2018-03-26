@@ -179,6 +179,7 @@ class PaperCanvas extends React.Component {
                 new paper.Point(offsetX, offsetY)
             );
             zoomOnFixedPoint(-event.deltaY / 100, fixedPoint);
+            this.props.setSelectedItems();
         } else if (event.shiftKey && event.deltaX === 0) {
             // Scroll horizontally (based on vertical scroll delta)
             // This is needed as for some browser/system combinations which do not set deltaX.
