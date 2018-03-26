@@ -121,8 +121,8 @@ class FillTool extends paper.Tool {
                     this.addedFillItem.fillColor.type !== 'gradient' &&
                     this.fillItem.parent.fillColor.toCSS() === this.addedFillItem.fillColor.toCSS()) {
                 this.addedFillItem.remove();
-                this.addedFillItem = null;     
-                var parent = this.fillItem.parent;
+                this.addedFillItem = null;
+                let parent = this.fillItem.parent;
                 this.fillItem.remove();
                 parent = parent.reduce();
                 parent.fillColor = this.fillColor;
