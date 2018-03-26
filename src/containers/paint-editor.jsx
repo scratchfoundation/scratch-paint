@@ -7,6 +7,8 @@ import {changeMode} from '../reducers/modes';
 import {undo, redo, undoSnapshot} from '../reducers/undo';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {deactivateEyeDropper} from '../reducers/eye-dropper';
+import {setTextEditTarget} from '../reducers/text-edit-target';
+import {updateViewBounds} from '../reducers/view-bounds';
 
 import {hideGuideLayers, showGuideLayers} from '../helper/layer';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
@@ -36,10 +38,14 @@ class PaintEditor extends React.Component {
             'handleSendToFront',
             'handleGroup',
             'handleUngroup',
+            'handleZoomIn',
+            'handleZoomOut',
+            'handleZoomReset',
             'canRedo',
             'canUndo',
             'onMouseDown',
             'setCanvas',
+            'setTextArea',
             'startEyeDroppingLoop',
             'stopEyeDroppingLoop'
         ]);
@@ -134,21 +140,32 @@ class PaintEditor extends React.Component {
     }
     handleZoomIn () {
         zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
+        this.props.updateViewBounds(paper.view.matrix);
     }
     handleZoomOut () {
         zoomOnSelection(-PaintEditor.ZOOM_INCREMENT);
+        this.props.updateViewBounds(paper.view.matrix);
     }
     handleZoomReset () {
         resetZoom();
+        this.props.updateViewBounds(paper.view.matrix);
     }
     setCanvas (canvas) {
         this.setState({canvas: canvas});
         this.canvas = canvas;
     }
+    setTextArea (element) {
+        this.setState({textArea: element});
+    }
     onMouseDown (event) {
         if (event.target === paper.view.element &&
                 document.activeElement instanceof HTMLInputElement) {
             document.activeElement.blur();
+        }
+
+        if (event.target !== paper.view.element && event.target !== this.state.textArea) {
+            // Exit text edit mode if you click anywhere outside of canvas
+            this.props.removeTextEditTarget();
         }
 
         if (this.props.isEyeDropping) {
@@ -214,8 +231,10 @@ class PaintEditor extends React.Component {
                 rotationCenterX={this.props.rotationCenterX}
                 rotationCenterY={this.props.rotationCenterY}
                 setCanvas={this.setCanvas}
+                setTextArea={this.setTextArea}
                 svg={this.props.svg}
                 svgId={this.props.svgId}
+                textArea={this.state.textArea}
                 onGroup={this.handleGroup}
                 onRedo={this.handleRedo}
                 onSendBackward={this.handleSendBackward}
@@ -249,6 +268,7 @@ PaintEditor.propTypes = {
         activate: PropTypes.func.isRequired,
         remove: PropTypes.func.isRequired
     }),
+    removeTextEditTarget: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     setSelectedItems: PropTypes.func.isRequired,
@@ -259,7 +279,8 @@ PaintEditor.propTypes = {
     undoState: PropTypes.shape({
         stack: PropTypes.arrayOf(PropTypes.object).isRequired,
         pointer: PropTypes.number.isRequired
-    })
+    }),
+    updateViewBounds: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -297,8 +318,15 @@ const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
+    removeTextEditTarget: () => {
+        dispatch(setTextEditTarget());
+    },
     setSelectedItems: () => {
         dispatch(setSelectedItems(getSelectedLeafItems()));
+    },
+    onDeactivateEyeDropper: () => {
+        // set redux values to default for eye dropper reducer
+        dispatch(deactivateEyeDropper());
     },
     onUndo: () => {
         dispatch(undo());
@@ -309,9 +337,8 @@ const mapDispatchToProps = dispatch => ({
     undoSnapshot: snapshot => {
         dispatch(undoSnapshot(snapshot));
     },
-    onDeactivateEyeDropper: () => {
-        // set redux values to default for eye dropper reducer
-        dispatch(deactivateEyeDropper());
+    updateViewBounds: matrix => {
+        dispatch(updateViewBounds(matrix));
     }
 });
 

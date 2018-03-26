@@ -16,7 +16,7 @@ import {pan, resetZoom, zoomOnFixedPoint} from '../helper/view';
 import {ensureClockwise} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
-
+import {updateViewBounds} from '../reducers/view-bounds';
 
 import styles from './paper-canvas.css';
 
@@ -59,6 +59,7 @@ class PaperCanvas extends React.Component {
             const oldZoom = paper.project.view.zoom;
             const oldCenter = paper.project.view.center.clone();
             resetZoom();
+            this.props.updateViewBounds(paper.view.matrix);
             this.importSvg(newProps.svg, newProps.rotationCenterX, newProps.rotationCenterY);
             paper.project.view.zoom = oldZoom;
             paper.project.view.center = oldCenter;
@@ -179,16 +180,19 @@ class PaperCanvas extends React.Component {
                 new paper.Point(offsetX, offsetY)
             );
             zoomOnFixedPoint(-event.deltaY / 100, fixedPoint);
+            this.props.updateViewBounds(paper.view.matrix);
         } else if (event.shiftKey && event.deltaX === 0) {
             // Scroll horizontally (based on vertical scroll delta)
             // This is needed as for some browser/system combinations which do not set deltaX.
             // See #156.
             const dx = event.deltaY / paper.project.view.zoom;
             pan(dx, 0);
+            this.props.updateViewBounds(paper.view.matrix);
         } else {
             const dx = event.deltaX / paper.project.view.zoom;
             const dy = event.deltaY / paper.project.view.zoom;
             pan(dx, dy);
+            this.props.updateViewBounds(paper.view.matrix);
         }
         event.preventDefault();
     }
@@ -218,7 +222,8 @@ PaperCanvas.propTypes = {
     setSelectedItems: PropTypes.func.isRequired,
     svg: PropTypes.string,
     svgId: PropTypes.string,
-    undoSnapshot: PropTypes.func.isRequired
+    undoSnapshot: PropTypes.func.isRequired,
+    updateViewBounds: PropTypes.func.isRequired
 };
 const mapStateToProps = state => ({
     mode: state.scratchPaint.mode
@@ -241,6 +246,9 @@ const mapDispatchToProps = dispatch => ({
     },
     clearPasteOffset: () => {
         dispatch(clearPasteOffset());
+    },
+    updateViewBounds: matrix => {
+        dispatch(updateViewBounds(matrix));
     }
 });
 

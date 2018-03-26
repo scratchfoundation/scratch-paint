@@ -1,6 +1,5 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {styleShape} from '../style-path';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -24,17 +23,23 @@ class TextTool extends paper.Tool {
     static get DOUBLE_CLICK_MILLIS () {
         return 250;
     }
+    /** Typing with no pauses longer than this amount of type will count as 1 action */
+    static get TYPING_TIMEOUT_MILLIS () {
+        return 1000;
+    }
     static get TEXT_PADDING () {
         return 8;
     }
     /**
+     * @param {HTMLTextAreaElement} textAreaElement dom element for the editable text field
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      * @param {!function} setTextEditTarget Call to set text editing target whenever text editing is active
      */
-    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg, setTextEditTarget) {
+    constructor (textAreaElement, setSelectedItems, clearSelectedItems, onUpdateSvg, setTextEditTarget) {
         super();
+        this.element = textAreaElement;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateSvg = onUpdateSvg;
@@ -57,6 +62,7 @@ class TextTool extends paper.Tool {
         this.colorState = null;
         this.mode = null;
         this.active = false;
+        this.lastTypeEvent = null;
 
         // If text selected and then activate this tool, switch to text edit mode for that text
         // If double click on text while in select mode, does mode change to text mode? Text fully selected by default
@@ -87,11 +93,36 @@ class TextTool extends paper.Tool {
         };
     }
     /**
-     * Should be called if the selection changes to update the bounds of the bounding box.
+     * Called when the selection changes to update the bounds of the bounding box.
      * @param {Array<paper.Item>} selectedItems Array of selected items.
      */
     onSelectionChanged (selectedItems) {
         this.boundingBoxTool.onSelectionChanged(selectedItems);
+    }
+    // Allow other tools to cancel text edit mode
+    onTextEditCancelled () {
+        this.endTextEdit();
+        if (this.textBox) {
+            this.mode = TextTool.SELECT_MODE;
+            this.textBox.selected = true;
+            this.setSelectedItems();
+        }
+    }
+    /**
+     * Called when the view matrix changes
+     * @param {paper.Matrix} viewMtx applied to paper.view
+     */
+    onViewBoundsChanged (viewMtx) {
+        if (this.mode !== TextTool.TEXT_EDIT_MODE) {
+            return;
+        }
+        const matrix = this.textBox.matrix;
+        this.element.style.transform =
+            `translate(0px, ${this.textBox.internalBounds.y}px)
+            matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
+            ${viewMtx.tx}, ${viewMtx.ty})
+            matrix(${matrix.a}, ${matrix.b}, ${matrix.c}, ${matrix.d},
+            ${matrix.tx}, ${matrix.ty})`;
     }
     setColorState (colorState) {
         this.colorState = colorState;
@@ -108,10 +139,7 @@ class TextTool extends paper.Tool {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
 
-        if (this.textBox && this.textBox.content.trim() === '') {
-            this.textBox.remove();
-            this.textBox = null;
-        }
+        const lastMode = this.mode;
 
         // Check if double clicked
         let doubleClicked = false;
@@ -128,56 +156,53 @@ class TextTool extends paper.Tool {
         if (doubleClicked &&
                 this.mode === TextTool.SELECT_MODE &&
                 doubleClickHitTest) {
+            // Double click in select mode moves you to text edit mode
             clearSelection(this.clearSelectedItems);
             this.textBox = doubleClickHitTest.item;
-            this.mode = TextTool.TEXT_EDIT_MODE;
+            this.beginTextEdit(this.textBox.content, this.textBox.matrix);
         } else if (
             this.boundingBoxTool.onMouseDown(
                 event, false /* clone */, false /* multiselect */, this.getBoundingBoxHitOptions())) {
             // In select mode staying in select mode
-            this.mode = TextTool.SELECT_MODE;
-        } else {
-            clearSelection(this.clearSelectedItems);
-            const hitResults = paper.project.hitTestAll(event.point, this.getTextEditHitOptions());
-            if (hitResults.length) {
-                // Clicking a text item to begin text edit mode on that item
-                if (this.guide) {
-                    this.guide.remove();
-                    this.guide = null;
-                }
-                this.textBox = hitResults[0].item;
-                this.mode = TextTool.TEXT_EDIT_MODE;
-            } else if (this.mode === TextTool.TEXT_EDIT_MODE) {
-                // In text mode clicking away to begin select mode
-                if (this.textBox) {
-                    this.mode = TextTool.SELECT_MODE;
-                    this.textBox.selected = true;
-                    this.setSelectedItems();
-                } else {
-                    this.mode = null;
-                }
-            } else {
-                // In no mode or select mode clicking away to begin text edit mode
-                this.mode = TextTool.TEXT_EDIT_MODE;
-                clearSelection(this.clearSelectedItems);
-                this.textBox = new paper.PointText({
-                    point: event.point,
-                    content: '',
-                    font: 'Times',
-                    fontSize: 30
-                });
-                styleShape(this.textBox, this.colorState);
-            }
+            return;
         }
 
-        if (this.mode === TextTool.TEXT_EDIT_MODE) {
-            this.guide = hoverBounds(this.textBox, TextTool.TEXT_PADDING);
-            this.guide.dashArray = [4, 4];
-            this.setTextEditTarget(this.textBox.id);
-        } else if (this.guide) {
-            this.guide.remove();
-            this.guide = null;
-            this.setTextEditTarget();
+        // We clicked away from the item, so end the current mode
+        if (lastMode === TextTool.SELECT_MODE) {
+            clearSelection(this.clearSelectedItems);
+            this.mode = null;
+        } else if (lastMode === TextTool.TEXT_EDIT_MODE) {
+            this.endTextEdit();
+        }
+
+        const hitResults = paper.project.hitTestAll(event.point, this.getTextEditHitOptions());
+        if (hitResults.length) {
+            // Clicking a different text item to begin text edit mode on that item
+            clearSelection(this.clearSelectedItems);
+            this.textBox = hitResults[0].item;
+            this.beginTextEdit(this.textBox.content, this.textBox.matrix);
+        } else if (lastMode === TextTool.TEXT_EDIT_MODE) {
+            // In text mode clicking away to begin select mode
+            if (this.textBox) {
+                this.mode = TextTool.SELECT_MODE;
+                this.textBox.selected = true;
+                this.setSelectedItems();
+            }
+        } else {
+            // In no mode or select mode clicking away to begin text edit mode
+            this.textBox = new paper.PointText({
+                point: event.point,
+                content: '',
+                font: 'Times',
+                fontSize: 30,
+                fillColor: this.colorState.fillColor,
+                // Default leading for both the HTML text area and paper.PointText
+                // is 120%, but for some reason they are slightly off from each other.
+                // This value was obtained experimentally.
+                // (Don't round to 34.6, the text area will start to scroll.)
+                leading: 34.61
+            });
+            this.beginTextEdit(this.textBox.content, this.textBox.matrix);
         }
     }
     handleMouseDrag (event) {
@@ -212,29 +237,89 @@ class TextTool extends paper.Tool {
         
         if (this.mode === TextTool.SELECT_MODE) {
             this.nudgeTool.onKeyUp(event);
-        } else if (this.mode === TextTool.TEXT_EDIT_MODE) {
-            if ((event.key === 'delete' || event.key === 'backspace') && this.textBox.content.length) {
-                this.textBox.content = this.textBox.content.slice(0, this.textBox.content.length - 1);
-            } else if (!(event.modifiers.alt || event.modifiers.comand || event.modifiers.control ||
-                    event.modifiers.meta || event.modifiers.option)) {
-                this.textBox.content = this.textBox.content + event.character;
-            }
-            if (this.guide) this.guide.remove();
-            this.guide = hoverBounds(this.textBox, TextTool.TEXT_PADDING);
-            this.guide.dashArray = [4, 4];
         }
     }
-    deactivateTool () {
-        this.boundingBoxTool.removeBoundsPath();
+    handleTextInput (event) {
+        // Save undo state if you paused typing for long enough.
+        if (this.lastTypeEvent && event.timeStamp - this.lastTypeEvent.timeStamp > TextTool.TYPING_TIMEOUT_MILLIS) {
+            this.onUpdateSvg();
+        }
+        this.lastTypeEvent = event;
+        if (this.mode === TextTool.TEXT_EDIT_MODE) {
+            this.textBox.content = this.element.value;
+        }
+        this.resizeGuide();
+    }
+    resizeGuide () {
+        if (this.guide) this.guide.remove();
+        this.guide = hoverBounds(this.textBox, TextTool.TEXT_PADDING);
+        this.guide.dashArray = [4, 4];
+        this.element.style.width = `${this.textBox.internalBounds.width}px`;
+        this.element.style.height = `${this.textBox.internalBounds.height}px`;
+    }
+    /**
+     * @param {string} initialText Text to initialize the text area with
+     * @param {paper.Matrix} matrix Transform matrix for the element. Defaults
+     *     to the identity matrix.
+     */
+    beginTextEdit (initialText, matrix) {
+        this.mode = TextTool.TEXT_EDIT_MODE;
+        this.setTextEditTarget(this.textBox.id);
+
+        const viewMtx = paper.view.matrix;
+
+        this.element.style.display = 'initial';
+        this.element.value = initialText ? initialText : '';
+        this.element.style.transformOrigin =
+            `${-this.textBox.internalBounds.x}px ${-this.textBox.internalBounds.y}px`;
+        this.element.style.transform =
+            `translate(0px, ${this.textBox.internalBounds.y}px)
+            matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
+            ${viewMtx.tx}, ${viewMtx.ty})
+            matrix(${matrix.a}, ${matrix.b}, ${matrix.c}, ${matrix.d},
+            ${matrix.tx}, ${matrix.ty})`;
+        this.element.focus({preventScroll: true});
+        this.eventListener = this.handleTextInput.bind(this);
+        this.element.addEventListener('input', this.eventListener);
+        this.resizeGuide();
+    }
+    endTextEdit () {
+        if (this.mode !== TextTool.TEXT_EDIT_MODE) {
+            return;
+        }
+        this.mode = null;
+
+        // Remove invisible textboxes
         if (this.textBox && this.textBox.content.trim() === '') {
             this.textBox.remove();
             this.textBox = null;
         }
+
+        // Remove guide
         if (this.guide) {
             this.guide.remove();
             this.guide = null;
             this.setTextEditTarget();
         }
+        this.element.style.display = 'none';
+        if (this.eventListener) {
+            this.element.removeEventListener('input', this.eventListener);
+            this.eventListener = null;
+        }
+        this.lastTypeEvent = null;
+
+        // If you finished editing a textbox, save undo state
+        if (this.textBox && this.textBox.content.trim().length) {
+            this.onUpdateSvg();
+        }
+    }
+    deactivateTool () {
+        if (this.textBox && this.textBox.content.trim() === '') {
+            this.textBox.remove();
+            this.textBox = null;
+        }
+        this.endTextEdit();
+        this.boundingBoxTool.removeBoundsPath();
     }
 }
 
