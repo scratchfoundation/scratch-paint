@@ -141,14 +141,17 @@ class PaintEditor extends React.Component {
     handleZoomIn () {
         zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
         this.props.updateViewBounds(paper.view.matrix);
+        this.props.setSelectedItems();
     }
     handleZoomOut () {
         zoomOnSelection(-PaintEditor.ZOOM_INCREMENT);
         this.props.updateViewBounds(paper.view.matrix);
+        this.props.setSelectedItems();
     }
     handleZoomReset () {
         resetZoom();
         this.props.updateViewBounds(paper.view.matrix);
+        this.props.setSelectedItems();
     }
     setCanvas (canvas) {
         this.setState({canvas: canvas});
