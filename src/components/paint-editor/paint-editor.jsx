@@ -33,7 +33,7 @@ import ReshapeMode from '../../containers/reshape-mode.jsx';
 import SelectMode from '../../containers/select-mode.jsx';
 import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicator.jsx';
 import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicator.jsx';
-import TextModeComponent from '../text-mode/text-mode.jsx';
+import TextMode from '../../containers/text-mode.jsx';
 
 import layout from '../../lib/layout-constants';
 import styles from './paint-editor.css';
@@ -350,11 +350,14 @@ const PaintEditorComponent = props => {
                         <EraserMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
-                        {/* Text mode will go here */}
-                        <LineMode
+                        <FillMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
-                        <FillMode
+                        <TextMode
+                            textArea={props.textArea}
+                            onUpdateSvg={props.onUpdateSvg}
+                        />
+                        <LineMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
                         <OvalMode
@@ -363,37 +366,42 @@ const PaintEditorComponent = props => {
                         <RectMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
-                        {/* text tool, coming soon */}
-                        <TextModeComponent />
                     </div>
                 ) : null}
-
-                {/* Canvas */}
-                <div
-                    className={classNames(
-                        styles.canvasContainer,
-                        {[styles.withEyeDropper]: props.isEyeDropping}
-                    )}
-                >
-                    <PaperCanvas
-                        canvasRef={props.setCanvas}
-                        rotationCenterX={props.rotationCenterX}
-                        rotationCenterY={props.rotationCenterY}
-                        svg={props.svg}
-                        svgId={props.svgId}
-                        onUpdateSvg={props.onUpdateSvg}
-                    />
-                    {props.isEyeDropping &&
-                        props.colorInfo !== null &&
-                        !props.colorInfo.hideLoupe ? (
-                            <Box className={styles.colorPickerWrapper}>
-                                <Loupe
-                                    colorInfo={props.colorInfo}
-                                    pixelRatio={paper.project.view.pixelRatio}
-                                />
-                            </Box>
-                        ) : null
-                    }
+                
+                <div>
+                    {/* Canvas */}
+                    <div
+                        className={classNames(
+                            styles.canvasContainer,
+                            {[styles.withEyeDropper]: props.isEyeDropping}
+                        )}
+                    >
+                        <PaperCanvas
+                            canvasRef={props.setCanvas}
+                            rotationCenterX={props.rotationCenterX}
+                            rotationCenterY={props.rotationCenterY}
+                            svg={props.svg}
+                            svgId={props.svgId}
+                            onUpdateSvg={props.onUpdateSvg}
+                        />
+                        <textarea
+                            className={styles.textArea}
+                            ref={props.setTextArea}
+                            spellCheck={false}
+                        />
+                        {props.isEyeDropping &&
+                            props.colorInfo !== null &&
+                            !props.colorInfo.hideLoupe ? (
+                                <Box className={styles.colorPickerWrapper}>
+                                    <Loupe
+                                        colorInfo={props.colorInfo}
+                                        pixelRatio={paper.project.view.pixelRatio}
+                                    />
+                                </Box>
+                            ) : null
+                        }
+                    </div>
                     <div className={styles.canvasControls}>
                         <ComingSoonTooltip
                             className={styles.bitmapTooltip}
@@ -459,7 +467,7 @@ const PaintEditorComponent = props => {
 PaintEditorComponent.propTypes = {
     canRedo: PropTypes.func.isRequired,
     canUndo: PropTypes.func.isRequired,
-    canvas: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+    canvas: PropTypes.instanceOf(Element),
     colorInfo: Loupe.propTypes.colorInfo,
     intl: intlShape,
     isEyeDropping: PropTypes.bool,
@@ -480,8 +488,10 @@ PaintEditorComponent.propTypes = {
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     setCanvas: PropTypes.func.isRequired,
+    setTextArea: PropTypes.func.isRequired,
     svg: PropTypes.string,
-    svgId: PropTypes.string
+    svgId: PropTypes.string,
+    textArea: PropTypes.instanceOf(Element)
 };
 
 export default injectIntl(PaintEditorComponent);

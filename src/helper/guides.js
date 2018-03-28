@@ -30,14 +30,19 @@ const hoverItem = function (item) {
     return clone;
 };
 
-const hoverBounds = function (item) {
-    const rect = new paper.Path.Rectangle(item.internalBounds);
+const hoverBounds = function (item, expandBy) {
+    let bounds = item.internalBounds;
+    if (expandBy) {
+        bounds = bounds.expand(expandBy);
+    }
+    const rect = new paper.Path.Rectangle(bounds);
     rect.matrix = item.matrix;
     setDefaultGuideStyle(rect);
     rect.parent = getGuideLayer();
     rect.strokeColor = GUIDE_BLUE;
     rect.fillColor = null;
     rect.data.isHelperItem = true;
+    rect.data.origItem = item;
     rect.bringToFront();
 
     return rect;

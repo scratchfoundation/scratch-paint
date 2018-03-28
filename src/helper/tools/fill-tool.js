@@ -38,14 +38,14 @@ class FillTool extends paper.Tool {
                 item.lastSegment.point.getDistance(item.firstSegment.point) < 8;
         };
         return {
-            class: paper.Path,
             segments: true,
             stroke: true,
             curves: true,
             fill: true,
             guide: false,
             match: function (hitResult) {
-                return (hitResult.item.hasFill() || hitResult.item.closed || isAlmostClosedPath(hitResult.item));
+                return (hitResult.item instanceof paper.Path || hitResult.item instanceof paper.PointText) &&
+                    (hitResult.item.hasFill() || hitResult.item.closed || isAlmostClosedPath(hitResult.item));
             },
             hitUnfilledPaths: true,
             tolerance: FillTool.TOLERANCE / paper.view.zoom
