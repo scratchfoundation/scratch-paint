@@ -23205,7 +23205,8 @@ var removeHitPoint = function removeHitPoint() {
 var drawHitPoint = function drawHitPoint(point) {
     removeHitPoint();
     if (point) {
-        var hitPoint = _paper2.default.Path.Circle(point, 4 /* radius */);
+        var hitPoint = _paper2.default.Path.Circle(point, 4 / _paper2.default.view.zoom /* radius */);
+        hitPoint.strokeWidth = 1 / _paper2.default.view.zoom;
         hitPoint.strokeColor = GUIDE_BLUE;
         hitPoint.fillColor = new _paper2.default.Color(1, 1, 1, 0.5);
         hitPoint.parent = (0, _layer.getGuideLayer)();
@@ -45968,18 +45969,21 @@ var PaintEditor = function (_React$Component) {
         value: function handleZoomIn() {
             (0, _view.zoomOnSelection)(PaintEditor.ZOOM_INCREMENT);
             this.props.updateViewBounds(_paper2.default.view.matrix);
+            this.props.setSelectedItems();
         }
     }, {
         key: 'handleZoomOut',
         value: function handleZoomOut() {
             (0, _view.zoomOnSelection)(-PaintEditor.ZOOM_INCREMENT);
             this.props.updateViewBounds(_paper2.default.view.matrix);
+            this.props.setSelectedItems();
         }
     }, {
         key: 'handleZoomReset',
         value: function handleZoomReset() {
             (0, _view.resetZoom)();
             this.props.updateViewBounds(_paper2.default.view.matrix);
+            this.props.setSelectedItems();
         }
     }, {
         key: 'setCanvas',
@@ -54950,6 +54954,7 @@ var PaperCanvas = function (_React$Component) {
                 var fixedPoint = _paper2.default.project.view.viewToProject(new _paper2.default.Point(offsetX, offsetY));
                 (0, _view.zoomOnFixedPoint)(-event.deltaY / 100, fixedPoint);
                 this.props.updateViewBounds(_paper2.default.view.matrix);
+                this.props.setSelectedItems();
             } else if (event.shiftKey && event.deltaX === 0) {
                 // Scroll horizontally (based on vertical scroll delta)
                 // This is needed as for some browser/system combinations which do not set deltaX.
