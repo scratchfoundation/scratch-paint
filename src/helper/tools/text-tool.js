@@ -47,7 +47,7 @@ class TextTool extends paper.Tool {
         this.boundingBoxTool = new BoundingBoxTool(Modes.TEXT, setSelectedItems, clearSelectedItems, onUpdateSvg);
         this.nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateSvg);
         this.lastEvent = null;
-
+        
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseDown = this.handleMouseDown;
@@ -194,7 +194,7 @@ class TextTool extends paper.Tool {
                 point: event.point,
                 content: '',
                 font: 'Helvetica',
-                fontSize: 22,
+                fontSize: 30,
                 fillColor: this.colorState.fillColor,
                 // Default leading for both the HTML text area and paper.PointText
                 // is 120%, but for some reason they are slightly off from each other.
@@ -215,7 +215,7 @@ class TextTool extends paper.Tool {
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
-
+        
         if (this.mode === TextTool.SELECT_MODE) {
             this.boundingBoxTool.onMouseUp(event);
             this.isBoundingBoxMode = null;
@@ -234,7 +234,7 @@ class TextTool extends paper.Tool {
             // Ignore nudge if a text input field is focused
             return;
         }
-
+        
         if (this.mode === TextTool.SELECT_MODE) {
             this.nudgeTool.onKeyUp(event);
         }
