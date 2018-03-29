@@ -208,8 +208,11 @@ $border-radius: 0.25rem;
     background: transparent;
     border: none;
     display: none;
-    font-family: Times;
-    font-size: 30px;
+
+    /* @todo needs to match the text tool font/size */
+    font-family: Helvetica;
+    font-size: 22px;
+
     outline: none;
     overflow: hidden;
     padding: 0px;
