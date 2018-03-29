@@ -128,7 +128,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Mon Dec 18 12:02:00 2017 -0500
+ * Date: Thu Mar 29 15:20:02 2018 -0400
  *
  ***
  *
@@ -14184,9 +14184,16 @@ new function() {
 	}
 
 	function exportText(item) {
-		var node = SvgElement.create('text', getTransform(item._matrix, true),
+		var node = SvgElement.create('text', getTransform(item._matrix, false),
 				formatter);
-		node.textContent = item._content;
+		for (var i = 0; i < item._lines.length; i++) {
+			var tspanNode = SvgElement.create('tspan', {
+				x: '0',
+				dy: i === 0 ? '0' : item._style.getLeading() + 'px'
+			}, formatter);
+			tspanNode.textContent = item._lines[i];
+			node.appendChild(tspanNode);
+		}
 		return node;
 	}
 
@@ -14566,10 +14573,22 @@ new function() {
 		},
 
 		text: function(node) {
-			var text = new PointText(getPoint(node).add(
-					getPoint(node, 'dx', 'dy')));
-			text.setContent(node.textContent.trim() || '');
-			return text;
+
+			if (node.childElementCount === 0) {
+				var text = new PointText();
+				text.setContent(node.textContent.trim() || '');
+				text.translate(0, text._style.getLeading());
+				return text;
+			} else {
+				var lines = [];
+				for (var i = 0; i < node.children.length; i++) {
+					var child = node.children[i];
+					lines.push(child.textContent);
+				}
+				var text = new PointText();
+				text.setContent(lines.join('\n') || '');
+				return text;
+			}
 		}
 	};
 
