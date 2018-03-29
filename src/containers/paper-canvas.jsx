@@ -86,13 +86,10 @@ class PaperCanvas extends React.Component {
     importSvg (svg, rotationCenterX, rotationCenterY) {
         const paperCanvas = this;
         // Pre-process SVG to prevent parsing errors (discussion from #213)
-        // 1. Remove newlines and tab characters, chrome will not load urls with them.
-        //      https://www.chromestatus.com/feature/5735596811091968
-        svg = svg.split(/[\n|\r|\t]/).join('');
-        // 2. Remove svg: namespace on elements.
+        // 1. Remove svg: namespace on elements.
         svg = svg.split(/<\s*svg:/).join('<');
         svg = svg.split(/<\/\s*svg:/).join('</');
-        // 3. Add root svg namespace if it does not exist.
+        // 2. Add root svg namespace if it does not exist.
         const svgAttrs = svg.match(/<svg [^>]*>/);
         if (svgAttrs && svgAttrs[0].indexOf('xmlns=') === -1) {
             svg = svg.replace(
