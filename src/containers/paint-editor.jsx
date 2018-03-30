@@ -55,12 +55,12 @@ class PaintEditor extends React.Component {
         };
     }
     componentDidMount () {
-        document.addEventListener('keydown', _event => {
+        document.addEventListener('keydown', (/* event */) => {
             // Don't activate keyboard shortcuts during text editing
             if (!this.props.textEditing) {
                 // @todo disabling keyboard shortcuts because there is a bug
                 // that is interfering with text editing.
-                // this.props.onKeyPress(_event);
+                // this.props.onKeyPress(event);
             }
         });
         // document listeners used to detect if a mouse is down outside of the
