@@ -45877,10 +45877,12 @@ var PaintEditor = function (_React$Component) {
         value: function componentDidMount() {
             var _this2 = this;
 
-            document.addEventListener('keydown', function (event) {
+            document.addEventListener('keydown', function () /* event */{
                 // Don't activate keyboard shortcuts during text editing
                 if (!_this2.props.textEditing) {
-                    _this2.props.onKeyPress(event);
+                    // @todo disabling keyboard shortcuts because there is a bug
+                    // that is interfering with text editing.
+                    // this.props.onKeyPress(event);
                 }
             });
             // document listeners used to detect if a mouse is down outside of the
