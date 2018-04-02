@@ -30,7 +30,7 @@ class StrokeColorIndicator extends React.Component {
     }
     handleChangeStrokeColor (newColor) {
         // Apply color and update redux, but do not update svg until picker closes.
-        const isDifferent = applyStrokeColorToSelection(newColor);
+        const isDifferent = applyStrokeColorToSelection(newColor, this.props.textEditTarget);
         this._hasChanged = this._hasChanged || isDifferent;
         this.props.onChangeStrokeColor(newColor);
     }
@@ -51,10 +51,12 @@ class StrokeColorIndicator extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    disabled: state.scratchPaint.mode === Modes.BRUSH,
+    disabled: state.scratchPaint.mode === Modes.BRUSH ||
+        state.scratchPaint.mode === Modes.TEXT,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     strokeColor: state.scratchPaint.color.strokeColor,
-    strokeColorModalVisible: state.scratchPaint.modals.strokeColor
+    strokeColorModalVisible: state.scratchPaint.modals.strokeColor,
+    textEditTarget: state.scratchPaint.textEditTarget
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -76,7 +78,8 @@ StrokeColorIndicator.propTypes = {
     onCloseStrokeColor: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
     strokeColor: PropTypes.string,
-    strokeColorModalVisible: PropTypes.bool.isRequired
+    strokeColorModalVisible: PropTypes.bool.isRequired,
+    textEditTarget: PropTypes.number
 };
 
 export default connect(

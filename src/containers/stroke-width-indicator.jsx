@@ -15,7 +15,9 @@ class StrokeWidthIndicator extends React.Component {
         ]);
     }
     handleChangeStrokeWidth (newWidth) {
-        applyStrokeWidthToSelection(newWidth, this.props.onUpdateSvg);
+        if (applyStrokeWidthToSelection(newWidth, this.props.textEditTarget)) {
+            this.props.onUpdateSvg();
+        }
         this.props.onChangeStrokeWidth(newWidth);
     }
     render () {
@@ -30,8 +32,10 @@ class StrokeWidthIndicator extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    disabled: state.scratchPaint.mode === Modes.BRUSH,
-    strokeWidth: state.scratchPaint.color.strokeWidth
+    disabled: state.scratchPaint.mode === Modes.BRUSH ||
+        state.scratchPaint.mode === Modes.TEXT,
+    strokeWidth: state.scratchPaint.color.strokeWidth,
+    textEditTarget: state.scratchPaint.textEditTarget
 });
 const mapDispatchToProps = dispatch => ({
     onChangeStrokeWidth: strokeWidth => {
@@ -43,7 +47,8 @@ StrokeWidthIndicator.propTypes = {
     disabled: PropTypes.bool.isRequired,
     onChangeStrokeWidth: PropTypes.func.isRequired,
     onUpdateSvg: PropTypes.func.isRequired,
-    strokeWidth: PropTypes.number
+    strokeWidth: PropTypes.number,
+    textEditTarget: PropTypes.number
 };
 
 export default connect(

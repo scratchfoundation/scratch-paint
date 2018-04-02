@@ -30,14 +30,19 @@ const hoverItem = function (item) {
     return clone;
 };
 
-const hoverBounds = function (item) {
-    const rect = new paper.Path.Rectangle(item.internalBounds);
+const hoverBounds = function (item, expandBy) {
+    let bounds = item.internalBounds;
+    if (expandBy) {
+        bounds = bounds.expand(expandBy);
+    }
+    const rect = new paper.Path.Rectangle(bounds);
     rect.matrix = item.matrix;
     setDefaultGuideStyle(rect);
     rect.parent = getGuideLayer();
     rect.strokeColor = GUIDE_BLUE;
     rect.fillColor = null;
     rect.data.isHelperItem = true;
+    rect.data.origItem = item;
     rect.bringToFront();
 
     return rect;
@@ -104,7 +109,8 @@ const removeHitPoint = function () {
 const drawHitPoint = function (point) {
     removeHitPoint();
     if (point) {
-        const hitPoint = paper.Path.Circle(point, 4 /* radius */);
+        const hitPoint = paper.Path.Circle(point, 4 / paper.view.zoom /* radius */);
+        hitPoint.strokeWidth = 1 / paper.view.zoom;
         hitPoint.strokeColor = GUIDE_BLUE;
         hitPoint.fillColor = new paper.Color(1, 1, 1, 0.5);
         hitPoint.parent = getGuideLayer();

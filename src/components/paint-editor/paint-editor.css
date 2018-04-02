@@ -203,3 +203,20 @@ $border-radius: 0.25rem;
         justify-content: flex-start;
     }
 }
+
+.text-area {
+    background: transparent;
+    border: none;
+    display: none;
+    font-family: Helvetica;
+    font-size: 30px;
+    outline: none;
+    overflow: hidden;
+    padding: 0px;
+    position: absolute;
+    resize: none;
+    white-space: nowrap;
+    margin: 0px;
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent;
+}
