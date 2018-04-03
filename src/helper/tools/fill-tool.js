@@ -122,7 +122,10 @@ class FillTool extends paper.Tool {
                     this.fillItem.parent.fillColor.toCSS() === this.addedFillItem.fillColor.toCSS()) {
                 this.addedFillItem.remove();
                 this.addedFillItem = null;
+                let parent = this.fillItem.parent;
                 this.fillItem.remove();
+                parent = parent.reduce();
+                parent.fillColor = this.fillColor;
             } else if (this.addedFillItem) {
                 // Fill in a hole.
                 this.addedFillItem.data.noHover = false;
