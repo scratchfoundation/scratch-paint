@@ -22225,7 +22225,7 @@ var _ungroupLoop = function _ungroupLoop(group, recursive, setSelectedItems) {
     // iterate over group children recursively
     for (var i = 0; i < group.children.length; i++) {
         var groupChild = group.children[i];
-        if (groupChild.hasChildren()) {
+        if (groupChild instanceof _paper2.default.Group && groupChild.hasChildren()) {
             // recursion (groups can contain groups, ie. from SVG import)
             if (recursive) {
                 _ungroupLoop(groupChild, recursive, setSelectedItems);
@@ -66012,7 +66012,10 @@ var FillTool = function (_paper$Tool) {
                 if (this.addedFillItem && this._noStroke(this.fillItem.parent) && this.addedFillItem.fillColor.type !== 'gradient' && this.fillItem.parent.fillColor.toCSS() === this.addedFillItem.fillColor.toCSS()) {
                     this.addedFillItem.remove();
                     this.addedFillItem = null;
+                    var parent = this.fillItem.parent;
                     this.fillItem.remove();
+                    parent = parent.reduce();
+                    parent.fillColor = this.fillColor;
                 } else if (this.addedFillItem) {
                     // Fill in a hole.
                     this.addedFillItem.data.noHover = false;
