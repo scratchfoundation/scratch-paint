@@ -55,10 +55,12 @@ class PaintEditor extends React.Component {
         };
     }
     componentDidMount () {
-        document.addEventListener('keydown', event => {
+        document.addEventListener('keydown', (/* event */) => {
             // Don't activate keyboard shortcuts during text editing
             if (!this.props.textEditing) {
-                this.props.onKeyPress(event);
+                // @todo disabling keyboard shortcuts because there is a bug
+                // that is interfering with text editing.
+                // this.props.onKeyPress(event);
             }
         });
         // document listeners used to detect if a mouse is down outside of the
@@ -141,14 +143,17 @@ class PaintEditor extends React.Component {
     handleZoomIn () {
         zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
         this.props.updateViewBounds(paper.view.matrix);
+        this.props.setSelectedItems();
     }
     handleZoomOut () {
         zoomOnSelection(-PaintEditor.ZOOM_INCREMENT);
         this.props.updateViewBounds(paper.view.matrix);
+        this.props.setSelectedItems();
     }
     handleZoomReset () {
         resetZoom();
         this.props.updateViewBounds(paper.view.matrix);
+        this.props.setSelectedItems();
     }
     setCanvas (canvas) {
         this.setState({canvas: canvas});

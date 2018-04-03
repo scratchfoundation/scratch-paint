@@ -193,7 +193,7 @@ class TextTool extends paper.Tool {
             this.textBox = new paper.PointText({
                 point: event.point,
                 content: '',
-                font: 'Times',
+                font: 'Helvetica',
                 fontSize: 30,
                 fillColor: this.colorState.fillColor,
                 // Default leading for both the HTML text area and paper.PointText
