@@ -49,7 +49,7 @@ const _ungroupLoop = function (group, recursive, setSelectedItems) {
     // iterate over group children recursively
     for (let i = 0; i < group.children.length; i++) {
         let groupChild = group.children[i];
-        if (groupChild.hasChildren()) {
+        if (groupChild instanceof paper.Group && groupChild.hasChildren()) {
             // recursion (groups can contain groups, ie. from SVG import)
             if (recursive) {
                 _ungroupLoop(groupChild, recursive, setSelectedItems);
