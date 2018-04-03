@@ -44,12 +44,8 @@ class RotateTool {
             
             if (event.modifiers.shift) {
                 rotAngle = Math.round(rotAngle / 45) * 45;
-                item.applyMatrix = false;
-                item.pivot = this.rotGroupPivot;
-                item.rotation = rotAngle;
-            } else {
-                item.rotate(rotAngle - this.prevRot[i], this.rotGroupPivot);
             }
+            item.rotate(rotAngle - this.prevRot[i], this.rotGroupPivot);
             this.prevRot[i] = rotAngle;
         }
     }
