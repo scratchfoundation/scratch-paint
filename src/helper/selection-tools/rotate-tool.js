@@ -27,7 +27,7 @@ class RotateTool {
                 this.rotItems.push(item);
             }
         }
-        this.prevRot = 90;        
+        this.prevRot = 90;
     }
     onMouseDrag (event) {
         let rotAngle = (event.point.subtract(this.rotGroupPivot)).angle;
