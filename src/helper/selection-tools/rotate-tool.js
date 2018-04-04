@@ -10,7 +10,7 @@ class RotateTool {
     constructor (onUpdateSvg) {
         this.rotItems = [];
         this.rotGroupPivot = null;
-        this.prevRot = [];
+        this.prevRot = 90;
         this.onUpdateSvg = onUpdateSvg;
     }
 
@@ -27,31 +27,25 @@ class RotateTool {
                 this.rotItems.push(item);
             }
         }
-        
-        for (let i = 0; i < this.rotItems.length; i++) {
-            this.prevRot[i] = 90;
-        }
+        this.prevRot = 90;
     }
     onMouseDrag (event) {
         let rotAngle = (event.point.subtract(this.rotGroupPivot)).angle;
-        
+        if (event.modifiers.shift) {
+            rotAngle = Math.round(rotAngle / 45) * 45;
+        }
+
         for (let i = 0; i < this.rotItems.length; i++) {
             const item = this.rotItems[i];
             
             if (!item.data.origRot) {
                 item.data.origRot = item.rotation;
             }
-            
-            if (event.modifiers.shift) {
-                rotAngle = Math.round(rotAngle / 45) * 45;
-                item.applyMatrix = false;
-                item.pivot = this.rotGroupPivot;
-                item.rotation = rotAngle;
-            } else {
-                item.rotate(rotAngle - this.prevRot[i], this.rotGroupPivot);
-            }
-            this.prevRot[i] = rotAngle;
+
+            item.rotate(rotAngle - this.prevRot, this.rotGroupPivot);
         }
+
+        this.prevRot = rotAngle;
     }
     onMouseUp (event) {
         if (event.event.button > 0) return; // only first mouse button
@@ -61,7 +55,7 @@ class RotateTool {
         
         this.rotItems.length = 0;
         this.rotGroupPivot = null;
-        this.prevRot = [];
+        this.prevRot = 90;
 
         this.onUpdateSvg();
     }
