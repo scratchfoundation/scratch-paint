@@ -10,6 +10,7 @@ import PaperCanvas from '../../containers/paper-canvas.jsx';
 import {shouldShowGroup, shouldShowUngroup} from '../../helper/group';
 import {shouldShowBringForward, shouldShowSendBackward} from '../../helper/order';
 
+import BitBrushMode from '../../containers/bit-brush-mode.jsx';
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
@@ -370,6 +371,9 @@ const PaintEditorComponent = props => {
                             onUpdateSvg={props.onUpdateSvg}
                         />
                         <RectMode
+                            onUpdateSvg={props.onUpdateSvg}
+                        />
+                        <BitBrushMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
                     </div>
