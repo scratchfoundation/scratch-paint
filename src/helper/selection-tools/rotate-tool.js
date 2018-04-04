@@ -49,9 +49,6 @@ class RotateTool {
     }
     onMouseUp (event) {
         if (event.event.button > 0) return; // only first mouse button
-        for (const item of this.rotItems) {
-            item.applyMatrix = true;
-        }
         
         this.rotItems.length = 0;
         this.rotGroupPivot = null;
