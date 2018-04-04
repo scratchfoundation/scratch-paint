@@ -68493,7 +68493,7 @@ var RotateTool = function () {
 
         this.rotItems = [];
         this.rotGroupPivot = null;
-        this.prevRot = [];
+        this.prevRot = 90;
         this.onUpdateSvg = onUpdateSvg;
     }
 
@@ -68536,14 +68536,15 @@ var RotateTool = function () {
                 }
             }
 
-            for (var i = 0; i < this.rotItems.length; i++) {
-                this.prevRot[i] = 90;
-            }
+            this.prevRot = 90;
         }
     }, {
         key: 'onMouseDrag',
         value: function onMouseDrag(event) {
             var rotAngle = event.point.subtract(this.rotGroupPivot).angle;
+            if (event.modifiers.shift) {
+                rotAngle = Math.round(rotAngle / 45) * 45;
+            }
 
             for (var i = 0; i < this.rotItems.length; i++) {
                 var item = this.rotItems[i];
@@ -68552,16 +68553,10 @@ var RotateTool = function () {
                     item.data.origRot = item.rotation;
                 }
 
-                if (event.modifiers.shift) {
-                    rotAngle = Math.round(rotAngle / 45) * 45;
-                    item.applyMatrix = false;
-                    item.pivot = this.rotGroupPivot;
-                    item.rotation = rotAngle;
-                } else {
-                    item.rotate(rotAngle - this.prevRot[i], this.rotGroupPivot);
-                }
-                this.prevRot[i] = rotAngle;
+                item.rotate(rotAngle - this.prevRot, this.rotGroupPivot);
             }
+
+            this.prevRot = rotAngle;
         }
     }, {
         key: 'onMouseUp',
@@ -68594,7 +68589,7 @@ var RotateTool = function () {
 
             this.rotItems.length = 0;
             this.rotGroupPivot = null;
-            this.prevRot = [];
+            this.prevRot = 90;
 
             this.onUpdateSvg();
         }
