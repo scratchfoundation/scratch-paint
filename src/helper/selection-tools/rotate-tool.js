@@ -31,20 +31,21 @@ class RotateTool {
     }
     onMouseDrag (event) {
         let rotAngle = (event.point.subtract(this.rotGroupPivot)).angle;
-        
+        if (event.modifiers.shift) {
+            rotAngle = Math.round(rotAngle / 45) * 45;
+        }
+
         for (let i = 0; i < this.rotItems.length; i++) {
             const item = this.rotItems[i];
             
             if (!item.data.origRot) {
                 item.data.origRot = item.rotation;
             }
-            
-            if (event.modifiers.shift) {
-                rotAngle = Math.round(rotAngle / 45) * 45;
-            }
+
             item.rotate(rotAngle - this.prevRot, this.rotGroupPivot);
-            this.prevRot = rotAngle;
         }
+
+        this.prevRot = rotAngle;
     }
     onMouseUp (event) {
         if (event.event.button > 0) return; // only first mouse button
