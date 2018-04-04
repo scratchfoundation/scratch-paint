@@ -33,6 +33,12 @@ class PaperCanvas extends React.Component {
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyDown);
         paper.setup(this.canvas);
+
+        const context = this.canvas.getContext('2d');
+        context.webkitImageSmoothingEnabled = false;
+        context.mozImageSmoothingEnabled = false;
+        context.imageSmoothingEnabled = false;
+
         // Don't show handles by default
         paper.settings.handleSize = 0;
         // Make layers.

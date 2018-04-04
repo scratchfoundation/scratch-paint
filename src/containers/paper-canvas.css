@@ -4,7 +4,4 @@
     margin: auto;  
     position: absolute;
     background-color: #fff;
-	/* Turn off anti-aliasing for the drawing canvas. Each time it's updated it switches
-	back and forth from aliased to unaliased and that looks bad */
-	image-rendering: pixelated;
 }
