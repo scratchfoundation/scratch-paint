@@ -24,7 +24,7 @@ class BrushTool extends paper.Tool {
         this.size = 5;
     }
     setColor (color) {
-        this.color = color;
+        this.color = color ? color : new paper.Color(0, 0, 0, 0);
     }
     bresenhamLine (point1, point2, callback){
         // Fast Math.floor
