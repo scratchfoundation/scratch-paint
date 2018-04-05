@@ -36,6 +36,9 @@ class LoupeComponent extends React.Component {
         tmpCanvas.width = LOUPE_RADIUS * 2;
         tmpCanvas.height = LOUPE_RADIUS * 2;
         const tmpCtx = tmpCanvas.getContext('2d');
+        tmpCtx.webkitImageSmoothingEnabled = false;
+        tmpCtx.mozImageSmoothingEnabled = false;
+        tmpCtx.imageSmoothingEnabled = false;
         const imageData = tmpCtx.createImageData(
             LOUPE_RADIUS * 2, LOUPE_RADIUS * 2
         );
