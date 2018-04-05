@@ -28,6 +28,15 @@ const clearRaster = function () {
 };
 
 const getRaster = function () {
+    const layer = _getLayer('isRasterLayer');
+    // Generate blank raster
+    if (layer.children.length === 0) {
+        const raster = new paper.Raster(rasterSrc);
+        raster.parent = layer;
+        raster.guide = true;
+        raster.locked = true;
+        raster.position = paper.view.center;
+    }
     return _getLayer('isRasterLayer').children[0];
 };
 

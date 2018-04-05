@@ -28,8 +28,8 @@ class BitBrushMode extends React.Component {
         }
     }
     componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.colorState !== this.props.colorState) {
-            this.tool.setColorState(nextProps.colorState);
+        if (this.tool && nextProps.color !== this.props.color) {
+            this.tool.setColor(nextProps.color);
         }
         
         if (nextProps.isBitBrushModeActive && !this.props.isBitBrushModeActive) {
@@ -44,14 +44,16 @@ class BitBrushMode extends React.Component {
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
         // Force the default brush color if fill is MIXED or transparent
-        const {fillColor} = this.props.colorState;
-        if (fillColor === MIXED || fillColor === null) {
+        let color = this.props.color;
+        if (color === MIXED || color === null) {
             this.props.onChangeFillColor(DEFAULT_COLOR);
+            color = DEFAULT_COLOR;
         }
         this.tool = new BitBrushTool(
             this.props.onUpdateSvg
         );
-        this.tool.setColorState(this.props.colorState);
+        this.tool.setColor(color);
+
         this.tool.activate();
     }
     deactivateTool () {
@@ -74,11 +76,7 @@ BitBrushMode.propTypes = {
         brushSize: PropTypes.number.isRequired
     }),
     clearSelectedItems: PropTypes.func.isRequired,
-    colorState: PropTypes.shape({
-        fillColor: PropTypes.string,
-        strokeColor: PropTypes.string,
-        strokeWidth: PropTypes.number
-    }).isRequired,
+    color: PropTypes.string,
     handleMouseDown: PropTypes.func.isRequired,
     isBitBrushModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
@@ -87,7 +85,7 @@ BitBrushMode.propTypes = {
 
 const mapStateToProps = state => ({
     brushModeState: state.scratchPaint.brushMode,
-    colorState: state.scratchPaint.color,
+    color: state.scratchPaint.color.fillColor,
     isBitBrushModeActive: state.scratchPaint.mode === Modes.BIT_BRUSH
 });
 const mapDispatchToProps = dispatch => ({

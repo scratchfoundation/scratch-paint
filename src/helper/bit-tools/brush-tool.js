@@ -20,14 +20,45 @@ class BrushTool extends paper.Tool {
 
         this.colorState = null;
         this.active = false;
+        this.lastPoint = null;
     }
-    setColorState (colorState) {
-        this.colorState = colorState;
+    setColor (color) {
+        this.color = color;
+    }
+    bresenhamLine (point1, point2, color, callback){
+        // Fast Math.floor
+        let x1 = ~~point1.x;
+        let x2 = ~~point2.x;
+        let y1 = ~~point1.y;
+        let y2 = ~~point2.y;
+        
+        const dx = Math.abs(x2 - x1);
+        const dy = Math.abs(y2 - y1);
+        const sx = (x1 < x2) ? 1 : -1;
+        const sy = (y1 < y2) ? 1 : -1;
+        let err = dx - dy;
+        
+        callback(x1, y1, color);
+        while (x1 !== x2 || y1 !== y2) {
+            let e2 = err*2;
+            if (e2 >-dy) {
+                err -= dy; x1 += sx;
+            }
+            if (e2 < dx) {
+                err += dx; y1 += sy;
+            }
+            callback(x1, y1, color);
+        }
+    }
+    // Draw a brush mark at the given point
+    draw (x, y, color) {
+        getRaster().setPixel(new paper.Point(x, y), color);
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
-        getRaster().setPixel(event.point, 'blue');
+        this.draw(event.point, event.point, this.color);
+        this.lastPoint = event.point;
     }
     handleMouseDrag (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
@@ -36,11 +67,13 @@ class BrushTool extends paper.Tool {
             this.boundingBoxTool.onMouseDrag(event);
             return;
         }
-        getRaster().setPixel(event.point, 'blue');
+        this.bresenhamLine(this.lastPoint, event.point, this.color, this.draw);
+        this.lastPoint = event.point;
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
-        getRaster().setPixel(event.point, 'blue');
+        this.bresenhamLine(this.lastPoint, event.point, this.color, this.draw);
+        this.lastPoint = null;
         this.active = false;
     }
     deactivateTool () {
