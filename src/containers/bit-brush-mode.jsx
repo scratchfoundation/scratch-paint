@@ -45,7 +45,7 @@ class BitBrushMode extends React.Component {
         clearSelection(this.props.clearSelectedItems);
         // Force the default brush color if fill is MIXED or transparent
         let color = this.props.color;
-        if (color === MIXED) {
+        if (!color || color === MIXED) {
             this.props.onChangeFillColor(DEFAULT_COLOR);
             color = DEFAULT_COLOR;
         }
