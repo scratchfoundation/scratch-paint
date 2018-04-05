@@ -403,22 +403,19 @@ const PaintEditorComponent = props => {
                         }
                     </div>
                     <div className={styles.canvasControls}>
-                        <ComingSoonTooltip
-                            className={styles.bitmapTooltip}
-                            place="top"
-                            tooltipId="bitmap-converter"
+                        <Button
+                            className={styles.bitmapButton}
+                            onClick={props.onZoomReset}
                         >
-                            <div className={styles.bitmapButton}>
-                                <img
-                                    className={styles.bitmapButtonIcon}
-                                    draggable={false}
-                                    src={bitmapIcon}
-                                />
-                                <span>
-                                    {props.intl.formatMessage(messages.bitmap)}
-                                </span>
-                            </div>
-                        </ComingSoonTooltip>
+                            <img
+                                className={styles.bitmapButtonIcon}
+                                draggable={false}
+                                src={bitmapIcon}
+                            />
+                            <span>
+                                {props.intl.formatMessage(messages.bitmap)}
+                            </span>
+                        </Button>
                         {/* Zoom controls */}
                         <InputGroup className={styles.zoomControls}>
                             <ButtonGroup>
