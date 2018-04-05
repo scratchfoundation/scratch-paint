@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
 import canvasBg from './background.png';
+import rasterSrc from './transparent.png';
 import log from '../log/log';
 
 const _getLayer = function (layerString) {
@@ -13,6 +14,19 @@ const _getLayer = function (layerString) {
 
 const _getPaintingLayer = function () {
     return _getLayer('isPaintingLayer');
+};
+
+const getRaster = function () {
+    const layer = _getLayer('isRasterLayer');
+    // Generate blank raster
+    if (layer.children.length === 0) {
+        const raster = new paper.Raster(rasterSrc);
+        raster.parent = layer;
+        raster.guide = true;
+        raster.locked = true;
+        raster.position = paper.view.center;
+    }
+    return _getLayer('isRasterLayer').children[0];
 };
 
 const _getBackgroundGuideLayer = function () {
@@ -72,6 +86,12 @@ const _makePaintingLayer = function () {
     return paintingLayer;
 };
 
+const _makeRasterLayer = function () {
+    const rasterLayer = new paper.Layer();
+    rasterLayer.data.isRasterLayer = true;
+    return rasterLayer;
+};
+
 const _makeBackgroundGuideLayer = function () {
     const guideLayer = new paper.Layer();
     guideLayer.locked = true;
@@ -113,6 +133,7 @@ const _makeBackgroundGuideLayer = function () {
 
 const setupLayers = function () {
     const backgroundGuideLayer = _makeBackgroundGuideLayer();
+    _makeRasterLayer();
     const paintLayer = _makePaintingLayer();
     const guideLayer = _makeGuideLayer();
     backgroundGuideLayer.sendToBack();
@@ -124,5 +145,6 @@ export {
     hideGuideLayers,
     showGuideLayers,
     getGuideLayer,
+    getRaster,
     setupLayers
 };
