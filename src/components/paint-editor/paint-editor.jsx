@@ -15,7 +15,6 @@ import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
 import BrushMode from '../../containers/brush-mode.jsx';
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
-import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
 import Dropdown from '../dropdown/dropdown.jsx';
 import EraserMode from '../../containers/eraser-mode.jsx';
 import FillColorIndicatorComponent from '../../containers/fill-color-indicator.jsx';
@@ -403,22 +402,19 @@ const PaintEditorComponent = props => {
                         }
                     </div>
                     <div className={styles.canvasControls}>
-                        <ComingSoonTooltip
-                            className={styles.bitmapTooltip}
-                            place="top"
-                            tooltipId="bitmap-converter"
+                        <Button
+                            className={styles.bitmapButton}
+                            onClick={props.onZoomReset}
                         >
-                            <div className={styles.bitmapButton}>
-                                <img
-                                    className={styles.bitmapButtonIcon}
-                                    draggable={false}
-                                    src={bitmapIcon}
-                                />
-                                <span>
-                                    {props.intl.formatMessage(messages.bitmap)}
-                                </span>
-                            </div>
-                        </ComingSoonTooltip>
+                            <img
+                                className={styles.bitmapButtonIcon}
+                                draggable={false}
+                                src={bitmapIcon}
+                            />
+                            <span>
+                                {props.intl.formatMessage(messages.bitmap)}
+                            </span>
+                        </Button>
                         {/* Zoom controls */}
                         <InputGroup className={styles.zoomControls}>
                             <ButtonGroup>
