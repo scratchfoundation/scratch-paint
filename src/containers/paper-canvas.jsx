@@ -7,6 +7,7 @@ import Formats from '../lib/format';
 import Modes from '../lib/modes';
 import log from '../log/log';
 
+import {trim} from '../helper/bitmap';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
@@ -26,6 +27,7 @@ class PaperCanvas extends React.Component {
         super(props);
         bindAll(this, [
             'convertToBitmap',
+            'convertToVector',
             'setCanvas',
             'importSvg',
             'handleKeyDown',
@@ -57,7 +59,7 @@ class PaperCanvas extends React.Component {
         } else if (this.props.format === Formats.VECTOR && newProps.format === Formats.BITMAP) {
             this.convertToBitmap();
         } else if (this.props.format === Formats.BITMAP && newProps.format === Formats.VECTOR) {
-            // do vector conversion
+            this.convertToVector();
         }
     }
     componentWillUnmount () {
@@ -83,6 +85,16 @@ class PaperCanvas extends React.Component {
             getRaster().drawImage(subCanvas, raster.bounds.topLeft);
         };
         paper.project.activeLayer.removeChildren();
+        performSnapshot(this.props.undoSnapshot);
+    }
+    convertToVector () {
+        const raster = trim(getRaster());
+        if (raster.width === 0 || raster.height === 0) {
+            raster.remove();
+        } else {
+            paper.project.activeLayer.addChild(raster);
+        }
+        clearRaster();
         performSnapshot(this.props.undoSnapshot);
     }
     switchCostume (svg, rotationCenterX, rotationCenterY) {
