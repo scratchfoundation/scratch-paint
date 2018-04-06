@@ -34,6 +34,7 @@ import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicat
 import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicator.jsx';
 import TextMode from '../../containers/text-mode.jsx';
 
+import Formats from '../../lib/format';
 import layout from '../../lib/layout-constants';
 import styles from './paint-editor.css';
 
@@ -106,6 +107,11 @@ const messages = defineMessages({
         defaultMessage: 'Convert to Bitmap',
         description: 'Label for button that converts the paint editor to bitmap mode',
         id: 'paint.paintEditor.bitmap'
+    },
+    vector: {
+        defaultMessage: 'Convert to Vector',
+        description: 'Label for button that converts the paint editor to vector mode',
+        id: 'paint.paintEditor.vector'
     }
 });
 
@@ -402,19 +408,34 @@ const PaintEditorComponent = props => {
                         }
                     </div>
                     <div className={styles.canvasControls}>
-                        <Button
-                            className={styles.bitmapButton}
-                            onClick={props.onZoomReset}
-                        >
-                            <img
-                                className={styles.bitmapButtonIcon}
-                                draggable={false}
-                                src={bitmapIcon}
-                            />
-                            <span>
-                                {props.intl.formatMessage(messages.bitmap)}
-                            </span>
-                        </Button>
+                        {props.format === Formats.VECTOR ?
+                            <Button
+                                className={styles.bitmapButton}
+                                onClick={props.onSwitchToBitmap}
+                            >
+                                <img
+                                    className={styles.bitmapButtonIcon}
+                                    draggable={false}
+                                    src={bitmapIcon}
+                                />
+                                <span>
+                                    {props.intl.formatMessage(messages.bitmap)}
+                                </span>
+                            </Button> :
+                            <Button
+                                className={styles.bitmapButton}
+                                onClick={props.onSwitchToVector}
+                            >
+                                <img
+                                    className={styles.bitmapButtonIcon}
+                                    draggable={false}
+                                    src={bitmapIcon}
+                                />
+                                <span>
+                                    {props.intl.formatMessage(messages.vector)}
+                                </span>
+                            </Button>
+                        }
                         {/* Zoom controls */}
                         <InputGroup className={styles.zoomControls}>
                             <ButtonGroup>
@@ -465,6 +486,7 @@ PaintEditorComponent.propTypes = {
     canUndo: PropTypes.func.isRequired,
     canvas: PropTypes.instanceOf(Element),
     colorInfo: Loupe.propTypes.colorInfo,
+    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
     intl: intlShape,
     isEyeDropping: PropTypes.bool,
     name: PropTypes.string,
@@ -474,6 +496,8 @@ PaintEditorComponent.propTypes = {
     onSendForward: PropTypes.func.isRequired,
     onSendToBack: PropTypes.func.isRequired,
     onSendToFront: PropTypes.func.isRequired,
+    onSwitchToBitmap: PropTypes.func.isRequired,
+    onSwitchToVector: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
     onUngroup: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,

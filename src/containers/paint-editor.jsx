@@ -4,6 +4,7 @@ import React from 'react';
 import PaintEditorComponent from '../components/paint-editor/paint-editor.jsx';
 
 import {changeMode} from '../reducers/modes';
+import {changeFormat} from '../reducers/format';
 import {undo, redo, undoSnapshot} from '../reducers/undo';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {deactivateEyeDropper} from '../reducers/eye-dropper';
@@ -19,6 +20,7 @@ import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
 import Modes from '../lib/modes';
+import Formats from '../lib/format';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 
@@ -231,6 +233,7 @@ class PaintEditor extends React.Component {
                 canUndo={this.canUndo}
                 canvas={this.state.canvas}
                 colorInfo={this.state.colorInfo}
+                format={this.props.format}
                 isEyeDropping={this.props.isEyeDropping}
                 name={this.props.name}
                 rotationCenterX={this.props.rotationCenterX}
@@ -246,6 +249,8 @@ class PaintEditor extends React.Component {
                 onSendForward={this.handleSendForward}
                 onSendToBack={this.handleSendToBack}
                 onSendToFront={this.handleSendToFront}
+                onSwitchToBitmap={this.props.handleSwitchToBitmap}
+                onSwitchToVector={this.props.handleSwitchToVector}
                 onUndo={this.handleUndo}
                 onUngroup={this.handleUngroup}
                 onUpdateName={this.props.onUpdateName}
@@ -261,6 +266,9 @@ class PaintEditor extends React.Component {
 PaintEditor.propTypes = {
     changeColorToEyeDropper: PropTypes.func,
     clearSelectedItems: PropTypes.func.isRequired,
+    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
+    handleSwitchToBitmap: PropTypes.func.isRequired,
+    handleSwitchToVector: PropTypes.func.isRequired,
     isEyeDropping: PropTypes.bool,
     name: PropTypes.string,
     onDeactivateEyeDropper: PropTypes.func.isRequired,
@@ -291,6 +299,7 @@ PaintEditor.propTypes = {
 const mapStateToProps = state => ({
     changeColorToEyeDropper: state.scratchPaint.color.eyeDropper.callback,
     clipboardItems: state.scratchPaint.clipboard.items,
+    format: state.scratchPaint.format,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
     previousTool: state.scratchPaint.color.eyeDropper.previousTool,
@@ -322,6 +331,12 @@ const mapDispatchToProps = dispatch => ({
     },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
+    },
+    handleSwitchToBitmap: () => {
+        dispatch(changeFormat(Formats.BITMAP));
+    },
+    handleSwitchToVector: () => {
+        dispatch(changeFormat(Formats.VECTOR));
     },
     removeTextEditTarget: () => {
         dispatch(setTextEditTarget());
