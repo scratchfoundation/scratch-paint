@@ -16,16 +16,19 @@ const _getPaintingLayer = function () {
     return _getLayer('isPaintingLayer');
 };
 
-const getRaster = function () {
+const clearRaster = function () {
     const layer = _getLayer('isRasterLayer');
+    layer.removeChildren();
+    
     // Generate blank raster
-    if (layer.children.length === 0) {
-        const raster = new paper.Raster(rasterSrc);
-        raster.parent = layer;
-        raster.guide = true;
-        raster.locked = true;
-        raster.position = paper.view.center;
-    }
+    const raster = new paper.Raster(rasterSrc);
+    raster.parent = layer;
+    raster.guide = true;
+    raster.locked = true;
+    raster.position = paper.view.center;
+};
+
+const getRaster = function () {
     return _getLayer('isRasterLayer').children[0];
 };
 
@@ -89,6 +92,7 @@ const _makePaintingLayer = function () {
 const _makeRasterLayer = function () {
     const rasterLayer = new paper.Layer();
     rasterLayer.data.isRasterLayer = true;
+    clearRaster();
     return rasterLayer;
 };
 
@@ -145,6 +149,7 @@ export {
     hideGuideLayers,
     showGuideLayers,
     getGuideLayer,
+    clearRaster,
     getRaster,
     setupLayers
 };
