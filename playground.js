@@ -71525,6 +71525,11 @@ var TextTool = function (_paper$Tool) {
     }, {
         key: 'handleKeyUp',
         value: function handleKeyUp(event) {
+            if (event.event.target instanceof HTMLInputElement) {
+                // Ignore nudge if a text input field is focused
+                return;
+            }
+
             if (this.mode === TextTool.SELECT_MODE) {
                 this.nudgeTool.onKeyUp(event);
             }
@@ -71538,7 +71543,7 @@ var TextTool = function (_paper$Tool) {
             }
 
             if (this.mode === TextTool.SELECT_MODE) {
-                this.nudgeTool.onKeyUp(event);
+                this.nudgeTool.onKeyDown(event);
             }
         }
     }, {
