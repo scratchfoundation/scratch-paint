@@ -72,6 +72,7 @@ const _makePaintingLayer = function () {
 };
 
 const _makeBackgroundPaper = function (width, height, color) {
+    // creates a checkerboard path of width * height squares in color on white
     let x = 0;
     let y = 0;
     const pathPoints = [];
