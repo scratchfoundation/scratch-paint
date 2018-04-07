@@ -72,35 +72,35 @@ const _makePaintingLayer = function () {
 };
 
 const _makeBackgroundPaper = function (width, height, color) {
-    var x = 0;
-    var y = 0;
-    var sb = [];
+    let x = 0;
+    let y = 0;
+    let pathPoints = [];
     while (x < width) {
-        sb.push(new paper.Point(x,y));
+        pathPoints.push(new paper.Point(x, y));
         x++;
-        sb.push(new paper.Point(x,y));
-        y = y == 0 ? height : 0;
+        pathPoints.push(new paper.Point(x, y));
+        y = y === 0 ? height : 0;
     }
     y = height - 1;
     x = width;
     while (y > 0) {
-        sb.push(new paper.Point(x,y));
-        x = (x == 0 ? width : 0);
-        sb.push(new paper.Point(x,y));
+        pathPoints.push(new paper.Point(x, y));
+        x = (x === 0 ? width : 0);
+        pathPoints.push(new paper.Point(x, y));
         y--;
     }
-    const vRect = new paper.Shape.Rectangle(new paper.Point(0,0), new paper.Point(120,90));
+    const vRect = new paper.Shape.Rectangle(new paper.Point(0, 0), new paper.Point(120, 90));
     vRect.fillColor = '#fff';
     vRect.guide = true;
     vRect.locked = true;
-    const vPath = new paper.Path(sb);
+    const vPath = new paper.Path(pathPoints);
     vPath.fillRule = 'evenodd';
     vPath.fillColor = color;
     vPath.guide = true;
     vPath.locked = true;
     const vGroup = new paper.Group([vRect, vPath]);
     return vGroup;
-}
+};
 
 const _makeBackgroundGuideLayer = function () {
     const guideLayer = new paper.Layer();
@@ -108,7 +108,7 @@ const _makeBackgroundGuideLayer = function () {
 
     const vBackground = _makeBackgroundPaper(120, 90, '#E5E5E5');
     vBackground.position = paper.view.center;
-    vBackground.scaling = new paper.Point(4,4);
+    vBackground.scaling = new paper.Point(4, 4);
     vBackground.guide = true;
     vBackground.locked = true;
 
