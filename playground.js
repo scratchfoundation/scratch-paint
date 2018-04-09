@@ -27005,9 +27005,10 @@ var Blobbiness = function () {
                     blob.mergeBrush(lastPath);
                 }
 
+                // Remove cursor preview during snapshot, then bring it back
                 blob.cursorPreview.remove();
-                blob.cursorPreview = null;
                 blob.onUpdateSvg();
+                blob.cursorPreview.parent = (0, _layer.getGuideLayer)();
 
                 // Reset
                 blob.brush = null;
