@@ -20,6 +20,8 @@ import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
 import {updateViewBounds} from '../reducers/view-bounds';
 
+import {isVector, isBitmap} from '../lib/format';
+
 import styles from './paper-canvas.css';
 
 class PaperCanvas extends React.Component {
@@ -50,15 +52,15 @@ class PaperCanvas extends React.Component {
         if (this.props.svg) {
             this.importSvg(this.props.svg, this.props.rotationCenterX, this.props.rotationCenterY);
         } else {
-            performSnapshot(this.props.undoSnapshot);
+            performSnapshot(this.props.undoSnapshot, this.props.format);
         }
     }
     componentWillReceiveProps (newProps) {
         if (this.props.svgId !== newProps.svgId) {
             this.switchCostume(newProps.svg, newProps.rotationCenterX, newProps.rotationCenterY);
-        } else if (this.props.format === Formats.VECTOR && newProps.format === Formats.BITMAP) {
+        } else if (isVector(this.props.format) && newProps.format === Formats.BITMAP) {
             this.convertToBitmap();
-        } else if (this.props.format === Formats.BITMAP && newProps.format === Formats.VECTOR) {
+        } else if (isBitmap(this.props.format) && newProps.format === Formats.VECTOR) {
             this.convertToVector();
         }
     }
@@ -121,7 +123,7 @@ class PaperCanvas extends React.Component {
             paper.project.view.zoom = oldZoom;
             paper.project.view.center = oldCenter;
         } else {
-            performSnapshot(this.props.undoSnapshot);
+            performSnapshot(this.props.undoSnapshot, this.props.format);
         }
     }
     importSvg (svg, rotationCenterX, rotationCenterY) {
@@ -156,7 +158,7 @@ class PaperCanvas extends React.Component {
                 if (!item) {
                     log.error('SVG import failed:');
                     log.info(svg);
-                    performSnapshot(paperCanvas.props.undoSnapshot);
+                    performSnapshot(paperCanvas.props.undoSnapshot, paperCanvas.props.format);
                     return;
                 }
                 const itemWidth = item.bounds.width;
@@ -198,7 +200,7 @@ class PaperCanvas extends React.Component {
                     ungroupItems([item]);
                 }
 
-                performSnapshot(paperCanvas.props.undoSnapshot);
+                performSnapshot(paperCanvas.props.undoSnapshot, paperCanvas.props.format);
             }
         });
     }

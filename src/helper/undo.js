@@ -2,11 +2,20 @@
 // modifed from https://github.com/memononen/stylii
 import paper from '@scratch/paper';
 import {hideGuideLayers, showGuideLayers, getRaster} from '../helper/layer';
+import Formats from '../lib/format';
+import {isVector, isBitmap} from '../lib/format';
+import log from '../log/log';
 
-const performSnapshot = function (dispatchPerformSnapshot) {
+/**
+ * Take an undo snapshot
+ * @param {function} dispatchPerformSnapshot Callback to dispatch a state update
+ * @param {Formats} either bitmap or vector
+ */
+const performSnapshot = function (dispatchPerformSnapshot, format) {
     const guideLayers = hideGuideLayers();
     dispatchPerformSnapshot({
-        json: paper.project.exportJSON({asString: false})
+        json: paper.project.exportJSON({asString: false}),
+        paintEditorFormat: format
     });
     showGuideLayers(guideLayers);
 };
@@ -32,16 +41,28 @@ const _restore = function (entry, setSelectedItems, onUpdateSvg) {
 
 const performUndo = function (undoState, dispatchPerformUndo, setSelectedItems, onUpdateSvg) {
     if (undoState.pointer > 0) {
-        _restore(undoState.stack[undoState.pointer - 1], setSelectedItems, onUpdateSvg);
-        dispatchPerformUndo();
+        const state = undoState.stack[undoState.pointer - 1];
+        _restore(state, setSelectedItems, onUpdateSvg);
+        const format = isVector(state.paintEditorFormat) ? Formats.UNDO_VECTOR :
+            isBitmap(state.paintEditorFormat) ? Formats.UNDO_BITMAP : null;
+        if (!format) {
+            log.error(`Invalid format: ${state.paintEditorFormat}`);
+        }
+        dispatchPerformUndo(format);
     }
 };
 
 
 const performRedo = function (undoState, dispatchPerformRedo, setSelectedItems, onUpdateSvg) {
     if (undoState.pointer >= 0 && undoState.pointer < undoState.stack.length - 1) {
-        _restore(undoState.stack[undoState.pointer + 1], setSelectedItems, onUpdateSvg);
-        dispatchPerformRedo();
+        const state = undoState.stack[undoState.pointer + 1];
+        _restore(state, setSelectedItems, onUpdateSvg);
+        const format = isVector(state.paintEditorFormat) ? Formats.UNDO_VECTOR :
+            isBitmap(state.paintEditorFormat) ? Formats.UNDO_BITMAP : null;
+        if (!format) {
+            log.error(`Invalid format: ${state.paintEditorFormat}`);
+        }
+        dispatchPerformRedo(format);
     }
 };
 

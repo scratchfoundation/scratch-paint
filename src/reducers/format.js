@@ -1,5 +1,6 @@
 import Formats from '../lib/format';
 import log from '../log/log';
+import {UNDO, REDO} from './undo';
 
 const CHANGE_FORMAT = 'scratch-paint/formats/CHANGE_FORMAT';
 const initialState = Formats.VECTOR;
@@ -7,6 +8,10 @@ const initialState = Formats.VECTOR;
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
+    case UNDO:
+        /* falls through */
+    case REDO:
+        /* falls through */
     case CHANGE_FORMAT:
         if (action.format in Formats) {
             return action.format;

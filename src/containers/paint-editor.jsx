@@ -23,6 +23,7 @@ import EyeDropperTool from '../helper/tools/eye-dropper';
 
 import Modes from '../lib/modes';
 import Formats from '../lib/format';
+import {isBitmap} from '../lib/format';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 
@@ -93,7 +94,7 @@ class PaintEditor extends React.Component {
         resetZoom();
 
         let raster;
-        if (this.props.format === Formats.BITMAP) {
+        if (isBitmap(this.props.format)) {
             // @todo export bitmap here
             raster = trim(getRaster());
             if (raster.width === 0 || raster.height === 0) {
@@ -116,12 +117,11 @@ class PaintEditor extends React.Component {
             paper.project.view.center.y - bounds.y);
 
         showGuideLayers(guideLayers);
+        if (raster) raster.remove();
 
         if (!skipSnapshot) {
-            performSnapshot(this.props.undoSnapshot);
+            performSnapshot(this.props.undoSnapshot, this.props.format);
         }
-
-        if (raster) raster.remove();
 
         // Restore old zoom
         paper.project.view.zoom = oldZoom;
@@ -363,11 +363,11 @@ const mapDispatchToProps = dispatch => ({
         // set redux values to default for eye dropper reducer
         dispatch(deactivateEyeDropper());
     },
-    onUndo: () => {
-        dispatch(undo());
+    onUndo: format => {
+        dispatch(undo(format));
     },
-    onRedo: () => {
-        dispatch(redo());
+    onRedo: format => {
+        dispatch(redo(format));
     },
     undoSnapshot: snapshot => {
         dispatch(undoSnapshot(snapshot));

@@ -150,6 +150,10 @@ $border-radius: 0.25rem;
     justify-content: space-between;
 }
 
+.hidden {
+    display: none;
+}
+
 .zoom-controls {
     display: flex;
     flex-direction: row-reverse;

@@ -2,6 +2,7 @@
 import Formats from '../../src/lib/format';
 import reducer from '../../src/reducers/format';
 import {changeFormat} from '../../src/reducers/format';
+import {undo, redo} from '../../src/reducers/undo';
 
 test('initialState', () => {
     let defaultState;
@@ -15,6 +16,16 @@ test('changeFormat', () => {
         .toBe(Formats.BITMAP);
     expect(reducer(Formats.BITMAP /* state */, changeFormat(Formats.VECTOR) /* action */))
         .toBe(Formats.VECTOR);
+});
+
+test('undoRedoChangeFormat', () => {
+    let defaultState;
+    let reduxState = reducer(defaultState /* state */, changeFormat(Formats.BITMAP) /* action */);
+    expect(reduxState).toBe(Formats.BITMAP);
+    reduxState = reducer(reduxState /* state */, undo(Formats.UNDO_BITMAP) /* action */);
+    expect().toBe(Formats.UNDO_BITMAP);
+    reduxState = reducer(reduxState /* state */, redo(Formats.UNDO_VECTOR) /* action */);
+    expect().toBe(Formats.UNDO_VECTOR);
 });
 
 test('invalidChangeMode', () => {
