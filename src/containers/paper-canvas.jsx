@@ -254,6 +254,7 @@ class PaperCanvas extends React.Component {
 
 PaperCanvas.propTypes = {
     canvasRef: PropTypes.func,
+    changeFormat: PropTypes.func.isRequired,
     clearHoveredItem: PropTypes.func.isRequired,
     clearPasteOffset: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
