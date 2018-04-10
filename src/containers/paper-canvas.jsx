@@ -19,6 +19,7 @@ import {ensureClockwise} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
 import {updateViewBounds} from '../reducers/view-bounds';
+import {changeFormat} from '../reducers/format';
 
 import {isVector, isBitmap} from '../lib/format';
 
@@ -114,6 +115,7 @@ class PaperCanvas extends React.Component {
         this.props.clearHoveredItem();
         this.props.clearPasteOffset();
         if (svg) {
+            this.props.changeFormat(Formats.VECTOR);
             // Store the zoom/pan and restore it after importing a new SVG
             const oldZoom = paper.project.view.zoom;
             const oldCenter = paper.project.view.center.clone();
@@ -289,6 +291,9 @@ const mapDispatchToProps = dispatch => ({
     },
     clearPasteOffset: () => {
         dispatch(clearPasteOffset());
+    },
+    changeFormat: format => {
+        dispatch(changeFormat(format));
     },
     updateViewBounds: matrix => {
         dispatch(updateViewBounds(matrix));
