@@ -36,7 +36,7 @@ import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicat
 import TextMode from '../../containers/text-mode.jsx';
 
 import Formats from '../../lib/format';
-import {isVector} from '../../lib/format';
+import {isBitmap, isVector} from '../../lib/format';
 import layout from '../../lib/layout-constants';
 import styles from './paint-editor.css';
 
@@ -373,6 +373,11 @@ const PaintEditorComponent = props => {
                         <RectMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
+                    </div>
+                ) : null}
+                
+                {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
+                    <div className={isBitmap(props.format) ? styles.modeSelector : styles.hidden}>
                         <BitBrushMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
