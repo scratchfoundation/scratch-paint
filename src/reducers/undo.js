@@ -63,14 +63,24 @@ const undoSnapshot = function (snapshot) {
         snapshot: snapshot
     };
 };
-const undo = function () {
+/**
+ * @param {Format} format Either VECTOR_SKIP_CONVERT or BITMAP_SKIP_CONVERT
+ * @return {Action} undo action
+ */
+const undo = function (format) {
     return {
-        type: UNDO
+        type: UNDO,
+        format: format
     };
 };
-const redo = function () {
+/**
+ * @param {Format} format Either VECTOR_SKIP_CONVERT or BITMAP_SKIP_CONVERT
+ * @return {Action} undo action
+ */
+const redo = function (format) {
     return {
-        type: REDO
+        type: REDO,
+        format: format
     };
 };
 const clearUndoState = function () {
@@ -85,5 +95,7 @@ export {
     redo,
     undoSnapshot,
     clearUndoState,
-    MAX_STACK_SIZE
+    MAX_STACK_SIZE,
+    UNDO,
+    REDO
 };

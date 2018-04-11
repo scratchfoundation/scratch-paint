@@ -1,4 +1,5 @@
 import paper from '@scratch/paper';
+import rasterSrc from './transparent.png';
 import log from '../log/log';
 
 const _getLayer = function (layerString) {
@@ -7,33 +8,66 @@ const _getLayer = function (layerString) {
             return layer;
         }
     }
-    log.error(`Didn't find layer ${layerString}`);
 };
 
 const _getPaintingLayer = function () {
     return _getLayer('isPaintingLayer');
 };
 
+const clearRaster = function () {
+    const layer = _getLayer('isRasterLayer');
+    layer.removeChildren();
+    
+    // Generate blank raster
+    const raster = new paper.Raster(rasterSrc);
+    raster.parent = layer;
+    raster.guide = true;
+    raster.locked = true;
+    raster.position = paper.view.center;
+};
+
+const getRaster = function () {
+    return _getLayer('isRasterLayer').children[0];
+};
+
 const _getBackgroundGuideLayer = function () {
     return _getLayer('isBackgroundGuideLayer');
 };
 
+const _makeGuideLayer = function () {
+    const guideLayer = new paper.Layer();
+    guideLayer.data.isGuideLayer = true;
+    return guideLayer;
+};
+
 const getGuideLayer = function () {
-    return _getLayer('isGuideLayer');
+    let layer = _getLayer('isGuideLayer');
+    if (!layer) {
+        layer = _makeGuideLayer();
+        _getPaintingLayer().activate();
+    }
+    return layer;
 };
 
 /**
  * Removes the guide layers, e.g. for purposes of exporting the image. Must call showGuideLayers to re-add them.
+ * @param {boolean} includeRaster true if the raster layer should also be hidden
  * @return {object} an object of the removed layers, which should be passed to showGuideLayers to re-add them.
  */
-const hideGuideLayers = function () {
+const hideGuideLayers = function (includeRaster) {
     const backgroundGuideLayer = _getBackgroundGuideLayer();
     const guideLayer = getGuideLayer();
     guideLayer.remove();
     backgroundGuideLayer.remove();
+    let rasterLayer;
+    if (includeRaster) {
+        rasterLayer = _getLayer('isRasterLayer');
+        rasterLayer.remove();
+    }
     return {
         guideLayer: guideLayer,
-        backgroundGuideLayer: backgroundGuideLayer
+        backgroundGuideLayer: backgroundGuideLayer,
+        rasterLayer: rasterLayer
     };
 };
 
@@ -45,6 +79,11 @@ const hideGuideLayers = function () {
 const showGuideLayers = function (guideLayers) {
     const backgroundGuideLayer = guideLayers.backgroundGuideLayer;
     const guideLayer = guideLayers.guideLayer;
+    const rasterLayer = guideLayers.rasterLayer;
+    if (rasterLayer && !rasterLayer.index) {
+        paper.project.addLayer(rasterLayer);
+        rasterLayer.sendToBack();
+    }
     if (!backgroundGuideLayer.index) {
         paper.project.addLayer(backgroundGuideLayer);
         backgroundGuideLayer.sendToBack();
@@ -59,16 +98,17 @@ const showGuideLayers = function (guideLayers) {
     }
 };
 
-const _makeGuideLayer = function () {
-    const guideLayer = new paper.Layer();
-    guideLayer.data.isGuideLayer = true;
-    return guideLayer;
-};
-
 const _makePaintingLayer = function () {
     const paintingLayer = new paper.Layer();
     paintingLayer.data.isPaintingLayer = true;
     return paintingLayer;
+};
+
+const _makeRasterLayer = function () {
+    const rasterLayer = new paper.Layer();
+    rasterLayer.data.isRasterLayer = true;
+    clearRaster();
+    return rasterLayer;
 };
 
 const _makeBackgroundPaper = function (width, height, color) {
@@ -140,6 +180,7 @@ const _makeBackgroundGuideLayer = function () {
 
 const setupLayers = function () {
     const backgroundGuideLayer = _makeBackgroundGuideLayer();
+    _makeRasterLayer();
     const paintLayer = _makePaintingLayer();
     const guideLayer = _makeGuideLayer();
     backgroundGuideLayer.sendToBack();
@@ -151,5 +192,7 @@ export {
     hideGuideLayers,
     showGuideLayers,
     getGuideLayer,
+    clearRaster,
+    getRaster,
     setupLayers
 };

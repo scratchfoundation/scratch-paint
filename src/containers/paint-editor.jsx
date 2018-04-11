@@ -1,16 +1,19 @@
 import paper from '@scratch/paper';
 import PropTypes from 'prop-types';
+
 import React from 'react';
 import PaintEditorComponent from '../components/paint-editor/paint-editor.jsx';
 
 import {changeMode} from '../reducers/modes';
+import {changeFormat} from '../reducers/format';
 import {undo, redo, undoSnapshot} from '../reducers/undo';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {deactivateEyeDropper} from '../reducers/eye-dropper';
 import {setTextEditTarget} from '../reducers/text-edit-target';
 import {updateViewBounds} from '../reducers/view-bounds';
 
-import {hideGuideLayers, showGuideLayers} from '../helper/layer';
+import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
+import {trim} from '../helper/bitmap';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
@@ -19,6 +22,8 @@ import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
 import Modes from '../lib/modes';
+import Formats from '../lib/format';
+import {isBitmap} from '../lib/format';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 
@@ -88,9 +93,20 @@ class PaintEditor extends React.Component {
         const oldCenter = paper.project.view.center.clone();
         resetZoom();
 
-        const guideLayers = hideGuideLayers();
-
+        let raster;
+        if (isBitmap(this.props.format)) {
+            // @todo export bitmap here
+            raster = trim(getRaster());
+            if (raster.width === 0 || raster.height === 0) {
+                raster.remove();
+            } else {
+                paper.project.activeLayer.addChild(raster);
+            }
+        }
+        
+        const guideLayers = hideGuideLayers(true /* includeRaster */);
         const bounds = paper.project.activeLayer.bounds;
+
         this.props.onUpdateSvg(
             paper.project.exportSVG({
                 asString: true,
@@ -101,9 +117,10 @@ class PaintEditor extends React.Component {
             paper.project.view.center.y - bounds.y);
 
         showGuideLayers(guideLayers);
+        if (raster) raster.remove();
 
         if (!skipSnapshot) {
-            performSnapshot(this.props.undoSnapshot);
+            performSnapshot(this.props.undoSnapshot, this.props.format);
         }
 
         // Restore old zoom
@@ -231,6 +248,7 @@ class PaintEditor extends React.Component {
                 canUndo={this.canUndo}
                 canvas={this.state.canvas}
                 colorInfo={this.state.colorInfo}
+                format={this.props.format}
                 isEyeDropping={this.props.isEyeDropping}
                 name={this.props.name}
                 rotationCenterX={this.props.rotationCenterX}
@@ -246,6 +264,8 @@ class PaintEditor extends React.Component {
                 onSendForward={this.handleSendForward}
                 onSendToBack={this.handleSendToBack}
                 onSendToFront={this.handleSendToFront}
+                onSwitchToBitmap={this.props.handleSwitchToBitmap}
+                onSwitchToVector={this.props.handleSwitchToVector}
                 onUndo={this.handleUndo}
                 onUngroup={this.handleUngroup}
                 onUpdateName={this.props.onUpdateName}
@@ -261,6 +281,9 @@ class PaintEditor extends React.Component {
 PaintEditor.propTypes = {
     changeColorToEyeDropper: PropTypes.func,
     clearSelectedItems: PropTypes.func.isRequired,
+    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
+    handleSwitchToBitmap: PropTypes.func.isRequired,
+    handleSwitchToVector: PropTypes.func.isRequired,
     isEyeDropping: PropTypes.bool,
     name: PropTypes.string,
     onDeactivateEyeDropper: PropTypes.func.isRequired,
@@ -291,6 +314,7 @@ PaintEditor.propTypes = {
 const mapStateToProps = state => ({
     changeColorToEyeDropper: state.scratchPaint.color.eyeDropper.callback,
     clipboardItems: state.scratchPaint.clipboard.items,
+    format: state.scratchPaint.format,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
     previousTool: state.scratchPaint.color.eyeDropper.previousTool,
@@ -323,6 +347,12 @@ const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
+    handleSwitchToBitmap: () => {
+        dispatch(changeFormat(Formats.BITMAP));
+    },
+    handleSwitchToVector: () => {
+        dispatch(changeFormat(Formats.VECTOR));
+    },
     removeTextEditTarget: () => {
         dispatch(setTextEditTarget());
     },
@@ -333,11 +363,11 @@ const mapDispatchToProps = dispatch => ({
         // set redux values to default for eye dropper reducer
         dispatch(deactivateEyeDropper());
     },
-    onUndo: () => {
-        dispatch(undo());
+    onUndo: format => {
+        dispatch(undo(format));
     },
-    onRedo: () => {
-        dispatch(redo());
+    onRedo: format => {
+        dispatch(redo(format));
     },
     undoSnapshot: snapshot => {
         dispatch(undoSnapshot(snapshot));
