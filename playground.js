@@ -23530,14 +23530,14 @@ var BoundingBoxTool = function () {
 
     /**
      * Should be called if the selection changes to update the bounds of the bounding box.
-     * @param {Array<paper.Item>} selectedItems Array of selected items.
+     * @param {?Array<paper.Item>} selectedItems Array of selected items.
      */
 
 
     _createClass(BoundingBoxTool, [{
         key: 'onSelectionChanged',
         value: function onSelectionChanged(selectedItems) {
-            if (selectedItems) {
+            if (selectedItems && selectedItems.length) {
                 this.setSelectionBounds();
             } else {
                 this.removeBoundsPath();
