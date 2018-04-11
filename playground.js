@@ -128,7 +128,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Thu Mar 29 15:20:02 2018 -0400
+ * Date: Wed Apr 11 14:32:35 2018 -0400
  *
  ***
  *
@@ -9871,7 +9871,7 @@ var CompoundPath = PathItem.extend({
 
 	_hitTestChildren: function _hitTestChildren(point, options, viewMatrix) {
 		return _hitTestChildren.base.call(this, point,
-				options.class === Path || options.type === 'path' ? options
+				options.class === Path || options.type === 'path' || options.hitUnfilledPaths ? options
 					: Base.set({}, options, { fill: false }),
 				viewMatrix);
 	},
@@ -11202,6 +11202,11 @@ var PointText = TextItem.extend({
 					numLines ? - 0.75 * leading : 0,
 					width, numLines * leading);
 		return matrix ? matrix._transformBounds(rect, rect) : rect;
+	},
+
+	_hitTestSelf: function(point, options) {
+		if (options.fill && (this.hasFill() || options.hitUnfilledPaths) && this._contains(point))
+			return new HitResult('fill', this);
 	}
 });
 
@@ -65947,7 +65952,12 @@ var FillTool = function (_paper$Tool) {
                 fill: true,
                 guide: false,
                 match: function match(hitResult) {
-                    return (hitResult.item instanceof _paper2.default.Path || hitResult.item instanceof _paper2.default.PointText) && (hitResult.item.hasFill() || hitResult.item.closed || isAlmostClosedPath(hitResult.item));
+                    if (hitResult.item instanceof _paper2.default.Path && (hitResult.item.hasFill() || hitResult.item.closed || isAlmostClosedPath(hitResult.item))) {
+                        return true;
+                    }
+                    if (hitResult.item instanceof _paper2.default.PointText) {
+                        return true;
+                    }
                 },
                 hitUnfilledPaths: true,
                 tolerance: FillTool.TOLERANCE / _paper2.default.view.zoom
