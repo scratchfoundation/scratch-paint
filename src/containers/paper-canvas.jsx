@@ -95,22 +95,22 @@ class PaperCanvas extends React.Component {
         
         // Get rid of anti-aliasing
         // @todo get crisp text?
-        svg.setAttribute('shape-rendering', 'optimizeSpeed');
+        svg.setAttribute('shape-rendering', 'crispEdges');
         const svgString = (new XMLSerializer()).serializeToString(svg);
 
         // Put anti-aliased SVG into image, and dump image back into canvas
         const img = new Image();
-        img.onload = function () {
+        img.onload = () => {
             const raster = new paper.Raster(img);
-            raster.onLoad = function () {
+            raster.onLoad = () => {
                 const subCanvas = raster.canvas;
                 getRaster().drawImage(
                     subCanvas,
                     new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
                 paper.project.activeLayer.removeChildren();
                 this.props.onUpdateSvg();
-            }.bind(this);
-        }.bind(this);
+            };
+        };
         img.src = `data:image/svg+xml;charset=utf-8,${svgString}`;
     }
     convertToVector () {
