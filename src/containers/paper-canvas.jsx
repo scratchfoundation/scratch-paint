@@ -4,14 +4,16 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import paper from '@scratch/paper';
+import Formats from '../lib/format';
 import Modes from '../lib/modes';
 import {ModeClasses} from '../lib/modes';
 import log from '../log/log';
 
+import {trim} from '../helper/bitmap';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
-import {setupLayers} from '../helper/layer';
+import {clearRaster, getRaster, setupLayers, hideGuideLayers, showGuideLayers} from '../helper/layer';
 import {deleteSelection, getSelectedLeafItems} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {pan, resetZoom, zoomOnFixedPoint} from '../helper/view';
@@ -19,6 +21,9 @@ import {ensureClockwise} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
 import {updateViewBounds} from '../reducers/view-bounds';
+import {changeFormat} from '../reducers/format';
+
+import {isVector, isBitmap} from '../lib/format';
 
 import styles from './paper-canvas.css';
 
@@ -26,15 +31,23 @@ class PaperCanvas extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'convertToBitmap',
+            'convertToVector',
             'setCanvas',
             'importSvg',
             'handleKeyDown',
-            'handleWheel'
+            'handleWheel',
+            'switchCostume'
         ]);
     }
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyDown);
         paper.setup(this.canvas);
+
+        const context = this.canvas.getContext('2d');
+        context.webkitImageSmoothingEnabled = false;
+        context.imageSmoothingEnabled = false;
+
         // Don't show handles by default
         paper.settings.handleSize = 0;
         // Make layers.
@@ -42,31 +55,16 @@ class PaperCanvas extends React.Component {
         if (this.props.svg) {
             this.importSvg(this.props.svg, this.props.rotationCenterX, this.props.rotationCenterY);
         } else {
-            performSnapshot(this.props.undoSnapshot);
+            performSnapshot(this.props.undoSnapshot, this.props.format);
         }
     }
     componentWillReceiveProps (newProps) {
-        if (this.props.svgId === newProps.svgId) return;
-        for (const layer of paper.project.layers) {
-            if (!layer.data.isBackgroundGuideLayer) {
-                layer.removeChildren();
-            }
-        }
-        this.props.clearUndo();
-        this.props.clearSelectedItems();
-        this.props.clearHoveredItem();
-        this.props.clearPasteOffset();
-        if (newProps.svg) {
-            // Store the zoom/pan and restore it after importing a new SVG
-            const oldZoom = paper.project.view.zoom;
-            const oldCenter = paper.project.view.center.clone();
-            resetZoom();
-            this.props.updateViewBounds(paper.view.matrix);
-            this.importSvg(newProps.svg, newProps.rotationCenterX, newProps.rotationCenterY);
-            paper.project.view.zoom = oldZoom;
-            paper.project.view.center = oldCenter;
-        } else {
-            performSnapshot(this.props.undoSnapshot);
+        if (this.props.svgId !== newProps.svgId) {
+            this.switchCostume(newProps.svg, newProps.rotationCenterX, newProps.rotationCenterY);
+        } else if (isVector(this.props.format) && newProps.format === Formats.BITMAP) {
+            this.convertToBitmap();
+        } else if (isBitmap(this.props.format) && newProps.format === Formats.VECTOR) {
+            this.convertToVector();
         }
     }
     componentWillUnmount () {
@@ -83,6 +81,75 @@ class PaperCanvas extends React.Component {
             if (deleteSelection(this.props.mode, this.props.onUpdateSvg)) {
                 this.props.setSelectedItems();
             }
+        }
+    }
+    convertToBitmap () {
+        // @todo if the active layer contains only rasters, drawing them directly to the raster layer
+        // would be more efficient.
+        // Export svg
+        const guideLayers = hideGuideLayers(true /* includeRaster */);
+        const bounds = paper.project.activeLayer.bounds;
+        const svg = paper.project.exportSVG({
+            bounds: 'content',
+            matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
+        });
+        showGuideLayers(guideLayers);
+        
+        // Get rid of anti-aliasing
+        // @todo get crisp text?
+        svg.setAttribute('shape-rendering', 'crispEdges');
+        const svgString = (new XMLSerializer()).serializeToString(svg);
+
+        // Put anti-aliased SVG into image, and dump image back into canvas
+        const img = new Image();
+        img.onload = () => {
+            const raster = new paper.Raster(img);
+            raster.onLoad = () => {
+                const subCanvas = raster.canvas;
+                getRaster().drawImage(
+                    subCanvas,
+                    new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
+                paper.project.activeLayer.removeChildren();
+                this.props.onUpdateSvg();
+            };
+        };
+        img.src = `data:image/svg+xml;charset=utf-8,${svgString}`;
+    }
+    convertToVector () {
+        this.props.clearSelectedItems();
+        const raster = trim(getRaster());
+        if (raster.width === 0 || raster.height === 0) {
+            raster.remove();
+        } else {
+            paper.project.activeLayer.addChild(raster);
+        }
+        clearRaster();
+        this.props.onUpdateSvg();
+    }
+    switchCostume (svg, rotationCenterX, rotationCenterY) {
+        for (const layer of paper.project.layers) {
+            if (layer.data.isRasterLayer) {
+                clearRaster();
+            } else if (!layer.data.isBackgroundGuideLayer) {
+                layer.removeChildren();
+            }
+        }
+        this.props.clearUndo();
+        this.props.clearSelectedItems();
+        this.props.clearHoveredItem();
+        this.props.clearPasteOffset();
+        if (svg) {
+            this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
+            // Store the zoom/pan and restore it after importing a new SVG
+            const oldZoom = paper.project.view.zoom;
+            const oldCenter = paper.project.view.center.clone();
+            resetZoom();
+            this.props.updateViewBounds(paper.view.matrix);
+            this.importSvg(svg, rotationCenterX, rotationCenterY);
+            paper.project.view.zoom = oldZoom;
+            paper.project.view.center = oldCenter;
+        } else {
+            performSnapshot(this.props.undoSnapshot, this.props.format);
         }
     }
     importSvg (svg, rotationCenterX, rotationCenterY) {
@@ -117,7 +184,7 @@ class PaperCanvas extends React.Component {
                 if (!item) {
                     log.error('SVG import failed:');
                     log.info(svg);
-                    performSnapshot(paperCanvas.props.undoSnapshot);
+                    performSnapshot(paperCanvas.props.undoSnapshot, paperCanvas.props.format);
                     return;
                 }
                 const itemWidth = item.bounds.width;
@@ -159,7 +226,7 @@ class PaperCanvas extends React.Component {
                     ungroupItems([item]);
                 }
 
-                performSnapshot(paperCanvas.props.undoSnapshot);
+                performSnapshot(paperCanvas.props.undoSnapshot, paperCanvas.props.format);
             }
         });
     }
@@ -214,10 +281,12 @@ class PaperCanvas extends React.Component {
 
 PaperCanvas.propTypes = {
     canvasRef: PropTypes.func,
+    changeFormat: PropTypes.func.isRequired,
     clearHoveredItem: PropTypes.func.isRequired,
     clearPasteOffset: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     clearUndo: PropTypes.func.isRequired,
+    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
     mode: PropTypes.oneOf(Object.keys(Modes)),
     onUpdateSvg: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
@@ -229,7 +298,8 @@ PaperCanvas.propTypes = {
     updateViewBounds: PropTypes.func.isRequired
 };
 const mapStateToProps = state => ({
-    mode: state.scratchPaint.mode
+    mode: state.scratchPaint.mode,
+    format: state.scratchPaint.format
 });
 const mapDispatchToProps = dispatch => ({
     undoSnapshot: snapshot => {
@@ -249,6 +319,9 @@ const mapDispatchToProps = dispatch => ({
     },
     clearPasteOffset: () => {
         dispatch(clearPasteOffset());
+    },
+    changeFormat: format => {
+        dispatch(changeFormat(format));
     },
     updateViewBounds: matrix => {
         dispatch(updateViewBounds(matrix));

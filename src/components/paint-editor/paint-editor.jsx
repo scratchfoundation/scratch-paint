@@ -15,7 +15,6 @@ import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
 import BrushMode from '../../containers/brush-mode.jsx';
 import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
-import {ComingSoonTooltip} from '../coming-soon/coming-soon.jsx';
 import Dropdown from '../dropdown/dropdown.jsx';
 import EraserMode from '../../containers/eraser-mode.jsx';
 import FillColorIndicatorComponent from '../../containers/fill-color-indicator.jsx';
@@ -35,6 +34,8 @@ import StrokeColorIndicatorComponent from '../../containers/stroke-color-indicat
 import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicator.jsx';
 import TextMode from '../../containers/text-mode.jsx';
 
+import Formats from '../../lib/format';
+import {isVector} from '../../lib/format';
 import layout from '../../lib/layout-constants';
 import styles from './paint-editor.css';
 
@@ -107,6 +108,11 @@ const messages = defineMessages({
         defaultMessage: 'Convert to Bitmap',
         description: 'Label for button that converts the paint editor to bitmap mode',
         id: 'paint.paintEditor.bitmap'
+    },
+    vector: {
+        defaultMessage: 'Convert to Vector',
+        description: 'Label for button that converts the paint editor to vector mode',
+        id: 'paint.paintEditor.vector'
     }
 });
 
@@ -337,7 +343,7 @@ const PaintEditorComponent = props => {
             <div className={styles.topAlignRow}>
                 {/* Modes */}
                 {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
-                    <div className={styles.modeSelector}>
+                    <div className={isVector(props.format) ? styles.modeSelector : styles.hidden}>
                         <SelectMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
@@ -403,12 +409,11 @@ const PaintEditorComponent = props => {
                         }
                     </div>
                     <div className={styles.canvasControls}>
-                        <ComingSoonTooltip
-                            className={styles.bitmapTooltip}
-                            place="top"
-                            tooltipId="bitmap-converter"
-                        >
-                            <div className={styles.bitmapButton}>
+                        {isVector(props.format) ?
+                            <Button
+                                className={styles.bitmapButton}
+                                onClick={props.onSwitchToBitmap}
+                            >
                                 <img
                                     className={styles.bitmapButtonIcon}
                                     draggable={false}
@@ -417,8 +422,21 @@ const PaintEditorComponent = props => {
                                 <span>
                                     {props.intl.formatMessage(messages.bitmap)}
                                 </span>
-                            </div>
-                        </ComingSoonTooltip>
+                            </Button> :
+                            <Button
+                                className={styles.bitmapButton}
+                                onClick={props.onSwitchToVector}
+                            >
+                                <img
+                                    className={styles.bitmapButtonIcon}
+                                    draggable={false}
+                                    src={bitmapIcon}
+                                />
+                                <span>
+                                    {props.intl.formatMessage(messages.vector)}
+                                </span>
+                            </Button>
+                        }
                         {/* Zoom controls */}
                         <InputGroup className={styles.zoomControls}>
                             <ButtonGroup>
@@ -469,6 +487,7 @@ PaintEditorComponent.propTypes = {
     canUndo: PropTypes.func.isRequired,
     canvas: PropTypes.instanceOf(Element),
     colorInfo: Loupe.propTypes.colorInfo,
+    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
     intl: intlShape,
     isEyeDropping: PropTypes.bool,
     name: PropTypes.string,
@@ -478,6 +497,8 @@ PaintEditorComponent.propTypes = {
     onSendForward: PropTypes.func.isRequired,
     onSendToBack: PropTypes.func.isRequired,
     onSendToFront: PropTypes.func.isRequired,
+    onSwitchToBitmap: PropTypes.func.isRequired,
+    onSwitchToVector: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
     onUngroup: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
