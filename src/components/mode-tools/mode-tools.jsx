@@ -74,6 +74,7 @@ const ModeToolsComponent = props => {
 
     switch (props.mode) {
     case Modes.BRUSH:
+    case Modes.BIT_BRUSH:
         return (
             <div className={classNames(props.className, styles.modeTools)}>
                 <div>

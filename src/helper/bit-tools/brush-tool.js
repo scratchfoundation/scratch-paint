@@ -21,11 +21,13 @@ class BrushTool extends paper.Tool {
         this.colorState = null;
         this.active = false;
         this.lastPoint = null;
-        // For performance, make sure this is an integer
-        this.size = 10;
     }
     setColor (color) {
         this.color = color;
+    }
+    setBrushSize (size) {
+        // For performance, make sure this is an integer
+        this.size = ~~size;
     }
     line (point1, point2, callback){
         // Bresenham line algorithm

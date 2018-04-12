@@ -31,6 +31,9 @@ class BitBrushMode extends React.Component {
         if (this.tool && nextProps.color !== this.props.color) {
             this.tool.setColor(nextProps.color);
         }
+        if (this.tool && nextProps.brushModeState !== this.props.brushModeState) {
+            this.tool.setBrushSize(nextProps.brushModeState.brushSize);
+        }
         
         if (nextProps.isBitBrushModeActive && !this.props.isBitBrushModeActive) {
             this.activateTool();
@@ -53,6 +56,7 @@ class BitBrushMode extends React.Component {
             this.props.onUpdateSvg
         );
         this.tool.setColor(color);
+        this.tool.setBrushSize(this.props.brushModeState.brushSize);
 
         this.tool.activate();
     }
@@ -72,7 +76,7 @@ class BitBrushMode extends React.Component {
 }
 
 BitBrushMode.propTypes = {
-    bitBrushModeState: PropTypes.shape({
+    brushModeState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
     }),
     clearSelectedItems: PropTypes.func.isRequired,
