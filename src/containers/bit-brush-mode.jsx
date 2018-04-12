@@ -6,7 +6,6 @@ import Modes from '../lib/modes';
 import {MIXED} from '../helper/style-path';
 
 import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
-import {changeBrushSize} from '../reducers/brush-mode';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {clearSelection} from '../helper/selection';
@@ -31,8 +30,8 @@ class BitBrushMode extends React.Component {
         if (this.tool && nextProps.color !== this.props.color) {
             this.tool.setColor(nextProps.color);
         }
-        if (this.tool && nextProps.brushModeState !== this.props.brushModeState) {
-            this.tool.setBrushSize(nextProps.brushModeState.brushSize);
+        if (this.tool && nextProps.bitBrushSize !== this.props.bitBrushSize) {
+            this.tool.setBrushSize(nextProps.bitBrushSize);
         }
         
         if (nextProps.isBitBrushModeActive && !this.props.isBitBrushModeActive) {
@@ -56,7 +55,7 @@ class BitBrushMode extends React.Component {
             this.props.onUpdateSvg
         );
         this.tool.setColor(color);
-        this.tool.setBrushSize(this.props.brushModeState.brushSize);
+        this.tool.setBrushSize(this.props.bitBrushSize);
 
         this.tool.activate();
     }
@@ -76,9 +75,7 @@ class BitBrushMode extends React.Component {
 }
 
 BitBrushMode.propTypes = {
-    brushModeState: PropTypes.shape({
-        brushSize: PropTypes.number.isRequired
-    }),
+    bitBrushSize: PropTypes.number.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     color: PropTypes.string,
     handleMouseDown: PropTypes.func.isRequired,
@@ -88,16 +85,13 @@ BitBrushMode.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    brushModeState: state.scratchPaint.brushMode,
+    bitBrushSize: state.scratchPaint.bitBrushSize,
     color: state.scratchPaint.color.fillColor,
     isBitBrushModeActive: state.scratchPaint.mode === Modes.BIT_BRUSH
 });
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
-    },
-    changeBrushSize: brushSize => {
-        dispatch(changeBrushSize(brushSize));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.BIT_BRUSH));

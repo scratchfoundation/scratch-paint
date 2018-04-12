@@ -7,7 +7,6 @@ import Blobbiness from '../helper/blob-tools/blob';
 import {MIXED} from '../helper/style-path';
 
 import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
-import {changeBrushSize} from '../reducers/brush-mode';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {clearSelection} from '../helper/selection';
@@ -97,9 +96,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
-    },
-    changeBrushSize: brushSize => {
-        dispatch(changeBrushSize(brushSize));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.BRUSH));

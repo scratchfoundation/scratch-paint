@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
 
-import brushIcon from '../brush-mode/brush.svg'; // @todo: replace
+import brushIcon from './brush.svg';
 
 const BitBrushModeComponent = props => (
     <ToolSelectComponent
