@@ -11,7 +11,7 @@ import {trim} from '../helper/bitmap';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
-import {clearRaster, getRaster, setupLayers} from '../helper/layer';
+import {clearRaster, getRaster, setupLayers, hideGuideLayers, showGuideLayers} from '../helper/layer';
 import {deleteSelection, getSelectedLeafItems} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {pan, resetZoom, zoomOnFixedPoint} from '../helper/view';
@@ -82,14 +82,36 @@ class PaperCanvas extends React.Component {
         }
     }
     convertToBitmap () {
-        this.props.clearSelectedItems();
-        const raster = paper.project.activeLayer.rasterize(72, false /* insert */);
-        raster.onLoad = function () {
-            const subCanvas = raster.canvas;
-            getRaster().drawImage(subCanvas, raster.bounds.topLeft);
-            paper.project.activeLayer.removeChildren();
-            this.props.onUpdateSvg();
-        }.bind(this);
+        // @todo if the active layer contains only rasters, drawing them directly to the raster layer
+        // would be more efficient.
+        // Export svg
+        const guideLayers = hideGuideLayers(true /* includeRaster */);
+        const bounds = paper.project.activeLayer.bounds;
+        const svg = paper.project.exportSVG({
+            bounds: 'content',
+            matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
+        });
+        showGuideLayers(guideLayers);
+        
+        // Get rid of anti-aliasing
+        // @todo get crisp text?
+        svg.setAttribute('shape-rendering', 'crispEdges');
+        const svgString = (new XMLSerializer()).serializeToString(svg);
+
+        // Put anti-aliased SVG into image, and dump image back into canvas
+        const img = new Image();
+        img.onload = () => {
+            const raster = new paper.Raster(img);
+            raster.onLoad = () => {
+                const subCanvas = raster.canvas;
+                getRaster().drawImage(
+                    subCanvas,
+                    new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
+                paper.project.activeLayer.removeChildren();
+                this.props.onUpdateSvg();
+            };
+        };
+        img.src = `data:image/svg+xml;charset=utf-8,${svgString}`;
     }
     convertToVector () {
         this.props.clearSelectedItems();
