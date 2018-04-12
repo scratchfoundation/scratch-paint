@@ -1,10 +1,23 @@
 import paper from '@scratch/paper';
+import {hideGuideLayers, showGuideLayers} from '../layer';
 
 const LOUPE_RADIUS = 20;
+const ZOOM_SCALE = 3;
 
 class EyeDropperTool extends paper.Tool {
     constructor (canvas, width, height, pixelRatio, zoom, offsetX, offsetY) {
         super();
+
+        const guideLayers = hideGuideLayers();
+
+        const colorShot = paper.project.exportSVG({asString: true});
+
+        paper.project.addLayer(guideLayers.backgroundGuideLayer);
+        guideLayers.backgroundGuideLayer.sendToBack();
+
+        const loopShot = paper.project.exportSVG({asString: true});
+
+        showGuideLayers(guideLayers);
 
         this.onMouseDown = this.handleMouseDown;
         this.onMouseMove = this.handleMouseMove;
@@ -30,14 +43,31 @@ class EyeDropperTool extends paper.Tool {
         */
         this.bufferLoaded = false;
         this.bufferCanvas = document.createElement('canvas');
-        this.bufferCanvas.width = canvas.width;
-        this.bufferCanvas.height = canvas.height;
+        this.bufferCanvas.width = canvas.width * 3;
+        this.bufferCanvas.height = canvas.height * 3;
         this.bufferImage = new Image();
         this.bufferImage.onload = () => {
-            this.bufferCanvas.getContext('2d').drawImage(this.bufferImage, 0, 0);
+            this.bufferCanvas.getContext('2d').drawImage(
+                this.bufferImage, 0, 0, this.bufferCanvas.width, this.bufferCanvas.height
+            );
             this.bufferLoaded = true;
         };
-        this.bufferImage.src = canvas.toDataURL();
+        this.bufferImage.src = `data:image/svg+xml;charset=utf-8,${loopShot}`;
+
+        this.colorLoaded = false;
+        this.colorCanvas = document.createElement('canvas');
+        this.colorCanvas.width = canvas.width;
+        this.colorCanvas.height = canvas.height;
+        this.colorImage = new Image();
+        this.colorImage.onload = () => {
+            const ctx = this.colorCanvas.getContext('2d');
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, this.colorCanvas.width, this.colorCanvas.height);
+            ctx.drawImage(this.colorImage, 0, 0, this.colorCanvas.width, this.colorCanvas.height);
+            this.colorLoaded = true;
+        };
+        this.colorImage.src = `data:image/svg+xml;charset=utf-8,${colorShot}`;
+
     }
     handleMouseMove (event) {
         // Set the pickX/Y for the color picker loop to pick up
@@ -69,17 +99,18 @@ class EyeDropperTool extends paper.Tool {
     }
     getColorInfo (x, y, hideLoupe) {
         if (!this.bufferLoaded) return null;
-        const ctx = this.bufferCanvas.getContext('2d');
-        const colors = ctx.getImageData(x, y, 1, 1);
+        const colorContext = this.colorCanvas.getContext('2d');
+        const loopContext = this.bufferCanvas.getContext('2d');
+        const colors = colorContext.getImageData(x, y, 1, 1);
         return {
             x: x,
             y: y,
             color: colors.data,
-            data: ctx.getImageData(
-                x - LOUPE_RADIUS,
-                y - LOUPE_RADIUS,
-                LOUPE_RADIUS * 2,
-                LOUPE_RADIUS * 2
+            data: loopContext.getImageData(
+                (x * ZOOM_SCALE) - (LOUPE_RADIUS * ZOOM_SCALE),
+                (y * ZOOM_SCALE) - (LOUPE_RADIUS * ZOOM_SCALE),
+                LOUPE_RADIUS * 2 * ZOOM_SCALE,
+                LOUPE_RADIUS * 2 * ZOOM_SCALE
             ).data,
             hideLoupe: hideLoupe
         };
@@ -88,5 +119,6 @@ class EyeDropperTool extends paper.Tool {
 
 export {
     EyeDropperTool as default,
-    LOUPE_RADIUS
+    LOUPE_RADIUS,
+    ZOOM_SCALE
 };
