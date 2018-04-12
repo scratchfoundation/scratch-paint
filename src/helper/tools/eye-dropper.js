@@ -43,8 +43,8 @@ class EyeDropperTool extends paper.Tool {
         */
         this.bufferLoaded = false;
         this.bufferCanvas = document.createElement('canvas');
-        this.bufferCanvas.width = canvas.width * 3;
-        this.bufferCanvas.height = canvas.height * 3;
+        this.bufferCanvas.width = canvas.width * ZOOM_SCALE;
+        this.bufferCanvas.height = canvas.height * ZOOM_SCALE;
         this.bufferImage = new Image();
         this.bufferImage.onload = () => {
             this.bufferCanvas.getContext('2d').drawImage(
