@@ -55112,14 +55112,36 @@ var PaperCanvas = function (_React$Component) {
     }, {
         key: 'convertToBitmap',
         value: function convertToBitmap() {
-            this.props.clearSelectedItems();
-            var raster = _paper2.default.project.activeLayer.rasterize(72, false /* insert */);
-            raster.onLoad = function () {
-                var subCanvas = raster.canvas;
-                (0, _layer.getRaster)().drawImage(subCanvas, raster.bounds.topLeft);
-                _paper2.default.project.activeLayer.removeChildren();
-                this.props.onUpdateSvg();
-            }.bind(this);
+            var _this2 = this;
+
+            // @todo if the active layer contains only rasters, drawing them directly to the raster layer
+            // would be more efficient.
+            // Export svg
+            var guideLayers = (0, _layer.hideGuideLayers)(true /* includeRaster */);
+            var bounds = _paper2.default.project.activeLayer.bounds;
+            var svg = _paper2.default.project.exportSVG({
+                bounds: 'content',
+                matrix: new _paper2.default.Matrix().translate(-bounds.x, -bounds.y)
+            });
+            (0, _layer.showGuideLayers)(guideLayers);
+
+            // Get rid of anti-aliasing
+            // @todo get crisp text?
+            svg.setAttribute('shape-rendering', 'crispEdges');
+            var svgString = new XMLSerializer().serializeToString(svg);
+
+            // Put anti-aliased SVG into image, and dump image back into canvas
+            var img = new Image();
+            img.onload = function () {
+                var raster = new _paper2.default.Raster(img);
+                raster.onLoad = function () {
+                    var subCanvas = raster.canvas;
+                    (0, _layer.getRaster)().drawImage(subCanvas, new _paper2.default.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
+                    _paper2.default.project.activeLayer.removeChildren();
+                    _this2.props.onUpdateSvg();
+                };
+            };
+            img.src = 'data:image/svg+xml;charset=utf-8,' + svgString;
         }
     }, {
         key: 'convertToVector',
