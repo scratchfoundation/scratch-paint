@@ -8,3 +8,7 @@
 	back and forth from aliased to unaliased and that looks bad */
 	image-rendering: pixelated;
 }
+
+.fill-mode {
+	cursor: url(../components/fill-mode/fill-mode.cur) 29 29, auto;
+}

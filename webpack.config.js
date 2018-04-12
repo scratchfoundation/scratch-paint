@@ -55,6 +55,10 @@ const base = {
             loader: 'url-loader'
         },
         {
+            test: /\.cur$/i,
+            loader: 'url-loader'
+        },
+        {
             test: /\.svg$/,
             loader: 'svg-url-loader?noquotes'
         }]
