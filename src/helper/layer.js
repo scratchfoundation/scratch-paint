@@ -30,7 +30,7 @@ const getRaster = function () {
     return _getLayer('isRasterLayer').children[0];
 };
 
-const _getBackgroundGuideLayer = function () {
+const getBackgroundGuideLayer = function () {
     return _getLayer('isBackgroundGuideLayer');
 };
 
@@ -55,7 +55,7 @@ const getGuideLayer = function () {
  * @return {object} an object of the removed layers, which should be passed to showGuideLayers to re-add them.
  */
 const hideGuideLayers = function (includeRaster) {
-    const backgroundGuideLayer = _getBackgroundGuideLayer();
+    const backgroundGuideLayer = getBackgroundGuideLayer();
     const guideLayer = getGuideLayer();
     guideLayer.remove();
     backgroundGuideLayer.remove();
@@ -192,6 +192,7 @@ export {
     hideGuideLayers,
     showGuideLayers,
     getGuideLayer,
+    getBackgroundGuideLayer,
     clearRaster,
     getRaster,
     setupLayers

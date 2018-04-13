@@ -1,23 +1,46 @@
 import paper from '@scratch/paper';
-import {hideGuideLayers, showGuideLayers} from '../layer';
+import {getRaster, getBackgroundGuideLayer} from '../layer';
 
 const LOUPE_RADIUS = 20;
 const ZOOM_SCALE = 3;
 
 class EyeDropperTool extends paper.Tool {
-    constructor (canvas, width, height, pixelRatio, zoom, offsetX, offsetY) {
+    constructor (canvas, width, height, pixelRatio, zoom, offsetX, offsetY, isBitmap) {
         super();
 
-        const guideLayers = hideGuideLayers();
+        const layer = isBitmap ? getRaster().layer : paper.project.activeLayer;
+        const contentRaster3x = layer.rasterize(
+            paper.view.getResolution() * ZOOM_SCALE /* resolution */, false /* insert */);
+        const contentRaster = layer.rasterize(
+            paper.view.getResolution() /* resolution */, false /* insert */);
+        const backgroundRaster3x = getBackgroundGuideLayer().rasterize(
+            paper.view.getResolution() * ZOOM_SCALE /* resolution */, false /* insert */);
+        
+        this.bufferCanvas = document.createElement('canvas');
+        this.bufferCanvas.width = canvas.width * ZOOM_SCALE;
+        this.bufferCanvas.height = canvas.height * ZOOM_SCALE;
+        const bufferRaster = new paper.Raster(this.bufferCanvas);
+        
+        this.colorCanvas = document.createElement('canvas');
+        this.colorCanvas.width = canvas.width;
+        this.colorCanvas.height = canvas.height;
+        const colorRaster = new paper.Raster(this.colorCanvas);
 
-        const colorShot = paper.project.exportSVG({asString: true});
-
-        paper.project.addLayer(guideLayers.backgroundGuideLayer);
-        guideLayers.backgroundGuideLayer.sendToBack();
-
-        const loopShot = paper.project.exportSVG({asString: true});
-
-        showGuideLayers(guideLayers);
+        contentRaster.onLoad = () => {
+            colorRaster.drawImage(contentRaster.canvas, contentRaster.bounds.topLeft);
+            colorRaster.remove();
+        };
+        backgroundRaster3x.onLoad = () => {
+            bufferRaster.drawImage(backgroundRaster3x.canvas, backgroundRaster3x.bounds.topLeft.multiply(ZOOM_SCALE));
+            contentRaster3x.onLoad = () => {
+                bufferRaster.drawImage(contentRaster3x.canvas, contentRaster3x.bounds.topLeft.multiply(ZOOM_SCALE));
+                bufferRaster.remove();
+                bufferRaster.onLoad = () => {
+                    this.bufferLoaded = true;
+                };
+            };
+            if (contentRaster3x.loaded) contentRaster3x.onLoad();
+        };
 
         this.onMouseDown = this.handleMouseDown;
         this.onMouseMove = this.handleMouseMove;
@@ -34,40 +57,6 @@ class EyeDropperTool extends paper.Tool {
         this.pickX = -1;
         this.pickY = -1;
         this.hideLoupe = true;
-
-        /*
-            Chrome 64 has a bug that makes it impossible to use getImageData directly
-            a 2d canvas. Until that is resolved, copy the canvas to a buffer canvas
-            and read the data from there.
-            https://github.com/LLK/scratch-paint/issues/276
-        */
-        this.bufferLoaded = false;
-        this.bufferCanvas = document.createElement('canvas');
-        this.bufferCanvas.width = canvas.width * ZOOM_SCALE;
-        this.bufferCanvas.height = canvas.height * ZOOM_SCALE;
-        this.bufferImage = new Image();
-        this.bufferImage.onload = () => {
-            this.bufferCanvas.getContext('2d').drawImage(
-                this.bufferImage, 0, 0, this.bufferCanvas.width, this.bufferCanvas.height
-            );
-            this.bufferLoaded = true;
-        };
-        this.bufferImage.src = `data:image/svg+xml;charset=utf-8,${loopShot}`;
-
-        this.colorLoaded = false;
-        this.colorCanvas = document.createElement('canvas');
-        this.colorCanvas.width = canvas.width;
-        this.colorCanvas.height = canvas.height;
-        this.colorImage = new Image();
-        this.colorImage.onload = () => {
-            const ctx = this.colorCanvas.getContext('2d');
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, this.colorCanvas.width, this.colorCanvas.height);
-            ctx.drawImage(this.colorImage, 0, 0, this.colorCanvas.width, this.colorCanvas.height);
-            this.colorLoaded = true;
-        };
-        this.colorImage.src = `data:image/svg+xml;charset=utf-8,${colorShot}`;
-
     }
     handleMouseMove (event) {
         // Set the pickX/Y for the color picker loop to pick up
