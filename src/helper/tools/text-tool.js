@@ -241,7 +241,7 @@ class TextTool extends paper.Tool {
         }
         if (this.mode === TextTool.TEXT_EDIT_MODE && event.key === 'escape') {
             this.endTextEdit();
-        }        
+        }
         if (this.mode === TextTool.SELECT_MODE) {
             this.nudgeTool.onKeyDown(event);
         }
