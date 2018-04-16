@@ -14,8 +14,8 @@ import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, getRaster, setupLayers, hideGuideLayers, showGuideLayers} from '../helper/layer';
 import {deleteSelection, getSelectedLeafItems} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
-import {pan, resetZoom, zoomOnFixedPoint} from '../helper/view';
-import {ensureClockwise} from '../helper/math';
+import {clampViewBounds, pan, resetZoom, zoomOnFixedPoint} from '../helper/view';
+import {ensureClockwise, scaleWithStrokes} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
 import {updateViewBounds} from '../reducers/view-bounds';
@@ -41,6 +41,8 @@ class PaperCanvas extends React.Component {
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyDown);
         paper.setup(this.canvas);
+        paper.view.zoom = .5;
+        clampViewBounds();
 
         const context = this.canvas.getContext('2d');
         context.webkitImageSmoothingEnabled = false;
@@ -85,6 +87,12 @@ class PaperCanvas extends React.Component {
         // @todo if the active layer contains only rasters, drawing them directly to the raster layer
         // would be more efficient.
         // Export svg
+    
+        // Store the zoom/pan and restore it after snapshotting
+        const oldZoom = paper.project.view.zoom;
+        const oldCenter = paper.project.view.center.clone();
+        paper.project.view.zoom = 1;
+
         const guideLayers = hideGuideLayers(true /* includeRaster */);
         const bounds = paper.project.activeLayer.bounds;
         const svg = paper.project.exportSVG({
@@ -104,6 +112,7 @@ class PaperCanvas extends React.Component {
             const raster = new paper.Raster(img);
             raster.onLoad = () => {
                 const subCanvas = raster.canvas;
+                document.body.appendChild(subCanvas);
                 getRaster().drawImage(
                     subCanvas,
                     new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
@@ -112,6 +121,10 @@ class PaperCanvas extends React.Component {
             };
         };
         img.src = `data:image/svg+xml;charset=utf-8,${svgString}`;
+
+        // Restore old zoom
+        paper.project.view.zoom = oldZoom;
+        paper.project.view.center = oldCenter;
     }
     convertToVector () {
         this.props.clearSelectedItems();
@@ -207,14 +220,15 @@ class PaperCanvas extends React.Component {
                 }
 
                 ensureClockwise(item);
-
+                scaleWithStrokes(item, 2, new paper.Point()); // Import at 2x
+                
                 if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
                     let rotationPoint = new paper.Point(rotationCenterX, rotationCenterY);
                     if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
                         rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
                     }
                     item.translate(paper.project.view.center
-                        .subtract(rotationPoint));
+                        .subtract(rotationPoint.multiply(2)));
                 } else {
                     // Center
                     item.translate(paper.project.view.center

@@ -17,6 +17,7 @@ import {trim} from '../helper/bitmap';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
+import {scaleWithStrokes} from '../helper/math';
 import {getSelectedLeafItems} from '../helper/selection';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
@@ -112,6 +113,9 @@ class PaintEditor extends React.Component {
         }
         
         const guideLayers = hideGuideLayers(true /* includeRaster */);
+
+        // Export at 0.5x
+        scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
         const bounds = paper.project.activeLayer.bounds;
 
         this.props.onUpdateSvg(
@@ -120,8 +124,11 @@ class PaintEditor extends React.Component {
                 bounds: 'content',
                 matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
             }),
-            paper.project.view.center.x - bounds.x,
-            paper.project.view.center.y - bounds.y);
+            (paper.project.view.center.x / 2) - bounds.x,
+            (paper.project.view.center.y / 2) - bounds.y);
+
+        scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
+        paper.project.activeLayer.applyMatrix = true;
 
         showGuideLayers(guideLayers);
         if (raster) raster.remove();
@@ -221,7 +228,8 @@ class PaintEditor extends React.Component {
             paper.project.view.pixelRatio,
             paper.view.zoom,
             paper.project.view.bounds.x,
-            paper.project.view.bounds.y
+            paper.project.view.bounds.y,
+            isBitmap(this.props.format)
         );
         this.eyeDropper.pickX = -1;
         this.eyeDropper.pickY = -1;
