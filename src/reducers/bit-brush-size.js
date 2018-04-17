@@ -3,7 +3,7 @@ import log from '../log/log';
 // Bit brush size affects bit brush width, circle/rectangle outline drawing width, and line width
 // in the bitmap paint editor.
 const CHANGE_BIT_BRUSH_SIZE = 'scratch-paint/brush-mode/CHANGE_BIT_BRUSH_SIZE';
-const initialState = 5;
+const initialState = 10;
 
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
