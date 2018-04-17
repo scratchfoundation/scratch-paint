@@ -32,10 +32,6 @@ class EyeDropperTool extends paper.Tool {
         this.bufferCanvas = document.createElement('canvas');
         this.bufferCanvas.width = canvas.width;
         this.bufferCanvas.height = canvas.height;
-        const context = this.bufferCanvas.getContext('2d')
-        context.webkitImageSmoothingEnabled = false;
-        context.mozImageSmoothingEnabled = false;
-        context.imageSmoothingEnabled = false;
         this.bufferImage = new Image();
         this.bufferImage.onload = () => {
             this.bufferCanvas.getContext('2d').drawImage(this.bufferImage, 0, 0);
