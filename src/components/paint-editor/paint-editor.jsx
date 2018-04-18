@@ -11,6 +11,13 @@ import {shouldShowGroup, shouldShowUngroup} from '../../helper/group';
 import {shouldShowBringForward, shouldShowSendBackward} from '../../helper/order';
 
 import BitBrushMode from '../../containers/bit-brush-mode.jsx';
+import BitLineMode from '../../components/bit-line-mode/bit-line-mode.jsx';
+import BitOvalMode from '../../components/bit-oval-mode/bit-oval-mode.jsx';
+import BitRectMode from '../../components/bit-rect-mode/bit-rect-mode.jsx';
+import BitTextMode from '../../components/bit-text-mode/bit-text-mode.jsx';
+import BitFillMode from '../../components/bit-fill-mode/bit-fill-mode.jsx';
+import BitEraserMode from '../../components/bit-eraser-mode/bit-eraser-mode.jsx';
+import BitSelectMode from '../../components/bit-select-mode/bit-select-mode.jsx';
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
@@ -403,6 +410,13 @@ const PaintEditorComponent = props => {
                         <BitBrushMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
+                        <BitLineMode />
+                        <BitOvalMode />
+                        <BitRectMode />
+                        <BitTextMode />
+                        <BitFillMode />
+                        <BitEraserMode />
+                        <BitSelectMode />
                     </div>
                 ) : null}
                 
