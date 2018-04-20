@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import {getRaster} from '../layer';
-import {line, fillEllipse} from '../bitmap';
+import {forEachLinePoint, fillEllipse} from '../bitmap';
 import {getGuideLayer} from '../layer';
 
 /**
@@ -35,7 +35,7 @@ class BrushTool extends paper.Tool {
     }
     // Draw a brush mark at the given point
     draw (x, y) {
-        const roundedUpRadius = ~~(this.size / 2) + (this.size % 2);
+        const roundedUpRadius = Math.ceil(this.size / 2);
         getRaster().drawImage(this.tmpCanvas, new paper.Point(~~x - roundedUpRadius, ~~y - roundedUpRadius));
     }
     updateCursorIfNeeded () {
@@ -54,7 +54,7 @@ class BrushTool extends paper.Tool {
             }
 
             this.tmpCanvas = document.createElement('canvas');
-            const roundedUpRadius = ~~(this.size / 2) + (this.size % 2);
+            const roundedUpRadius = Math.ceil(this.size / 2);
             this.tmpCanvas.width = roundedUpRadius * 2;
             this.tmpCanvas.height = roundedUpRadius * 2;
             const context = this.tmpCanvas.getContext('2d');
@@ -100,13 +100,13 @@ class BrushTool extends paper.Tool {
             this.boundingBoxTool.onMouseDrag(event);
             return;
         }
-        line(this.lastPoint, event.point, this.draw.bind(this));
+        forEachLinePoint(this.lastPoint, event.point, this.draw.bind(this));
         this.lastPoint = event.point;
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
         
-        line(this.lastPoint, event.point, this.draw.bind(this));
+        forEachLinePoint(this.lastPoint, event.point, this.draw.bind(this));
         this.onUpdateSvg();
 
         this.lastPoint = null;

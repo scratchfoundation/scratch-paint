@@ -1,8 +1,7 @@
 import paper from '@scratch/paper';
 
-const line = function (point1, point2, callback) {
+const forEachLinePoint = function (point1, point2, callback) {
     // Bresenham line algorithm
-    // Fast Math.floor
     let x1 = ~~point1.x;
     const x2 = ~~point2.x;
     let y1 = ~~point1.y;
@@ -18,10 +17,12 @@ const line = function (point1, point2, callback) {
     while (x1 !== x2 || y1 !== y2) {
         const e2 = err * 2;
         if (e2 > -dy) {
-            err -= dy; x1 += sx;
+            err -= dy;
+            x1 += sx;
         }
         if (e2 < dx) {
-            err += dx; y1 += sy;
+            err += dx;
+            y1 += sy;
         }
         callback(x1, y1);
     }
@@ -114,6 +115,6 @@ const trim = function (raster) {
 
 export {
     fillEllipse,
-    line,
+    forEachLinePoint,
     trim
 };
