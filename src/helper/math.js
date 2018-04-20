@@ -97,15 +97,34 @@ const expandBy = function (path, amount) {
     }
 };
 
-// Make item clockwise. Drill down into groups.
-const ensureClockwise = function (item) {
+// Do for all nested items in groups
+const _doRecursively = function (item, func) {
     if (item instanceof paper.Group) {
         for (const child of item.children) {
-            ensureClockwise(child);
+            _doRecursively(child, func);
         }
-    } else if (item instanceof paper.PathItem) {
-        item.clockwise = true;
+    } else {
+        func(item);
     }
+};
+
+// Make item clockwise. Drill down into groups.
+const ensureClockwise = function (root) {
+    _doRecursively(root, item => {
+        if (item instanceof paper.PathItem) {
+            item.clockwise = true;
+        }
+    });
+};
+
+// Scale item and its strokes by factor
+const scaleWithStrokes = function (root, factor, pivot) {
+    _doRecursively(root, item => {
+        if (item.strokeWidth) {
+            item.strokeWidth = item.strokeWidth * factor;
+        }
+    });
+    root.scale(factor, pivot);
 };
 
 export {
@@ -115,6 +134,7 @@ export {
     expandBy,
     getRandomInt,
     getRandomBoolean,
+    scaleWithStrokes,
     snapDeltaToAngle,
     sortItemsByZIndex
 };

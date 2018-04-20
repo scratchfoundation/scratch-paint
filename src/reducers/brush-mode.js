@@ -1,7 +1,7 @@
 import log from '../log/log';
 
 const CHANGE_BRUSH_SIZE = 'scratch-paint/brush-mode/CHANGE_BRUSH_SIZE';
-const initialState = {brushSize: 5};
+const initialState = {brushSize: 10};
 
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;

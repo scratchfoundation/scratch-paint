@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
-import rasterSrc from './transparent.png';
 import log from '../log/log';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from './view';
 
 const _getLayer = function (layerString) {
     for (const layer of paper.project.layers) {
@@ -19,7 +19,10 @@ const clearRaster = function () {
     layer.removeChildren();
     
     // Generate blank raster
-    const raster = new paper.Raster(rasterSrc);
+    const tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = ART_BOARD_WIDTH;
+    tmpCanvas.height = ART_BOARD_HEIGHT;
+    const raster = new paper.Raster(tmpCanvas);
     raster.parent = layer;
     raster.guide = true;
     raster.locked = true;
@@ -30,7 +33,10 @@ const getRaster = function () {
     const layer = _getLayer('isRasterLayer');
     // Generate blank raster
     if (layer.children.length === 0) {
-        const raster = new paper.Raster(rasterSrc);
+        const tmpCanvas = document.createElement('canvas');
+        tmpCanvas.width = ART_BOARD_WIDTH;
+        tmpCanvas.height = ART_BOARD_HEIGHT;
+        const raster = new paper.Raster(tmpCanvas);
         raster.parent = layer;
         raster.guide = true;
         raster.locked = true;
@@ -158,7 +164,7 @@ const _makeBackgroundGuideLayer = function () {
 
     const vBackground = _makeBackgroundPaper(120, 90, '#E5E5E5');
     vBackground.position = paper.view.center;
-    vBackground.scaling = new paper.Point(4, 4);
+    vBackground.scaling = new paper.Point(8, 8);
     vBackground.guide = true;
     vBackground.locked = true;
 

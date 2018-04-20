@@ -1,6 +1,9 @@
 import paper from '@scratch/paper';
 import {getSelectedRootItems} from './selection';
 
+const ART_BOARD_WIDTH = 480 * 2;
+const ART_BOARD_HEIGHT = 360 * 2;
+
 const clampViewBounds = () => {
     const {left, right, top, bottom} = paper.project.view.bounds;
     if (left < 0) {
@@ -9,11 +12,11 @@ const clampViewBounds = () => {
     if (top < 0) {
         paper.project.view.scrollBy(new paper.Point(0, -top));
     }
-    if (bottom > 360) {
-        paper.project.view.scrollBy(new paper.Point(0, 360 - bottom));
+    if (bottom > ART_BOARD_HEIGHT) {
+        paper.project.view.scrollBy(new paper.Point(0, ART_BOARD_HEIGHT - bottom));
     }
-    if (right > 480) {
-        paper.project.view.scrollBy(new paper.Point(480 - right, 0));
+    if (right > ART_BOARD_WIDTH) {
+        paper.project.view.scrollBy(new paper.Point(ART_BOARD_WIDTH - right, 0));
     }
 };
 
@@ -22,7 +25,7 @@ const clampViewBounds = () => {
 const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
     const {view} = paper.project;
     const preZoomCenter = view.center;
-    const newZoom = Math.max(1, view.zoom + deltaZoom);
+    const newZoom = Math.max(0.5, view.zoom + deltaZoom);
     const scaling = view.zoom / newZoom;
     const preZoomOffset = fixedPoint.subtract(preZoomCenter);
     const postZoomOffset = fixedPoint.subtract(preZoomOffset.multiply(scaling))
@@ -53,7 +56,7 @@ const zoomOnSelection = deltaZoom => {
 };
 
 const resetZoom = () => {
-    paper.project.view.zoom = 1;
+    paper.project.view.zoom = .5;
     clampViewBounds();
 };
 
@@ -63,6 +66,9 @@ const pan = (dx, dy) => {
 };
 
 export {
+    ART_BOARD_HEIGHT,
+    ART_BOARD_WIDTH,
+    clampViewBounds,
     pan,
     resetZoom,
     zoomOnSelection,
