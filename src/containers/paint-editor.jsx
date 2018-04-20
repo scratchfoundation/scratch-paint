@@ -23,7 +23,7 @@ import EyeDropperTool from '../helper/tools/eye-dropper';
 
 import Modes from '../lib/modes';
 import Formats from '../lib/format';
-import {isBitmap} from '../lib/format';
+import {isBitmap, isVector} from '../lib/format';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 
@@ -78,6 +78,13 @@ class PaintEditor extends React.Component {
             this.startEyeDroppingLoop();
         } else if (!this.props.isEyeDropping && prevProps.isEyeDropping) {
             this.stopEyeDroppingLoop();
+        }
+
+        // @todo move to correct corresponding tool
+        if (isVector(this.props.format) && isBitmap(prevProps.format)) {
+            this.props.changeMode(Modes.BRUSH);
+        } else if (isVector(prevProps.format) && isBitmap(this.props.format)) {
+            this.props.changeMode(Modes.BIT_BRUSH);
         }
     }
     componentWillUnmount () {
@@ -280,6 +287,7 @@ class PaintEditor extends React.Component {
 
 PaintEditor.propTypes = {
     changeColorToEyeDropper: PropTypes.func,
+    changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
     handleSwitchToBitmap: PropTypes.func.isRequired,
@@ -343,6 +351,9 @@ const mapDispatchToProps = dispatch => ({
         } else if (event.key === 'r') {
             dispatch(changeMode(Modes.RECT));
         }
+    },
+    changeMode: mode => {
+        dispatch(changeMode(mode));
     },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());

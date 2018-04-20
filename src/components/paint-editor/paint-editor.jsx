@@ -10,6 +10,7 @@ import PaperCanvas from '../../containers/paper-canvas.jsx';
 import {shouldShowGroup, shouldShowUngroup} from '../../helper/group';
 import {shouldShowBringForward, shouldShowSendBackward} from '../../helper/order';
 
+import BitBrushMode from '../../containers/bit-brush-mode.jsx';
 import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
@@ -35,7 +36,7 @@ import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicat
 import TextMode from '../../containers/text-mode.jsx';
 
 import Formats from '../../lib/format';
-import {isVector} from '../../lib/format';
+import {isBitmap, isVector} from '../../lib/format';
 import layout from '../../lib/layout-constants';
 import styles from './paint-editor.css';
 
@@ -309,34 +310,56 @@ const PaintEditorComponent = props => {
                     </div>
 
                     {/* Second Row */}
-                    <div className={styles.row}>
-                        <InputGroup
-                            className={classNames(
-                                styles.row,
-                                styles.modDashedBorder,
-                                styles.modLabeledIconHeight
-                            )}
-                        >
-                            {/* fill */}
-                            <FillColorIndicatorComponent
-                                className={styles.modMarginRight}
-                                onUpdateSvg={props.onUpdateSvg}
-                            />
-                            {/* stroke */}
-                            <StrokeColorIndicatorComponent
-                                onUpdateSvg={props.onUpdateSvg}
-                            />
-                            {/* stroke width */}
-                            <StrokeWidthIndicatorComponent
-                                onUpdateSvg={props.onUpdateSvg}
-                            />
-                        </InputGroup>
-                        <InputGroup className={styles.modModeTools}>
-                            <ModeToolsContainer
-                                onUpdateSvg={props.onUpdateSvg}
-                            />
-                        </InputGroup>
-                    </div>
+                    {isVector(props.format) ?
+                        <div className={styles.row}>
+                            <InputGroup
+                                className={classNames(
+                                    styles.row,
+                                    styles.modDashedBorder,
+                                    styles.modLabeledIconHeight
+                                )}
+                            >
+                                {/* fill */}
+                                <FillColorIndicatorComponent
+                                    className={styles.modMarginRight}
+                                    onUpdateSvg={props.onUpdateSvg}
+                                />
+                                {/* stroke */}
+                                <StrokeColorIndicatorComponent
+                                    onUpdateSvg={props.onUpdateSvg}
+                                />
+                                {/* stroke width */}
+                                <StrokeWidthIndicatorComponent
+                                    onUpdateSvg={props.onUpdateSvg}
+                                />
+                            </InputGroup>
+                            <InputGroup className={styles.modModeTools}>
+                                <ModeToolsContainer
+                                    onUpdateSvg={props.onUpdateSvg}
+                                />
+                            </InputGroup>
+                        </div> :
+                        <div className={styles.row}>
+                            <InputGroup
+                                className={classNames(
+                                    styles.row,
+                                    styles.modDashedBorder,
+                                    styles.modLabeledIconHeight
+                                )}
+                            >
+                                {/* fill */}
+                                <FillColorIndicatorComponent
+                                    className={styles.modMarginRight}
+                                    onUpdateSvg={props.onUpdateSvg}
+                                />
+                            </InputGroup>
+                            <InputGroup className={styles.modModeTools}>
+                                <ModeToolsContainer
+                                    onUpdateSvg={props.onUpdateSvg}
+                                />
+                            </InputGroup>
+                        </div>
+                    }
                 </div>
             ) : null}
 
@@ -370,6 +393,14 @@ const PaintEditorComponent = props => {
                             onUpdateSvg={props.onUpdateSvg}
                         />
                         <RectMode
+                            onUpdateSvg={props.onUpdateSvg}
+                        />
+                    </div>
+                ) : null}
+                
+                {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
+                    <div className={isBitmap(props.format) ? styles.modeSelector : styles.hidden}>
+                        <BitBrushMode
                             onUpdateSvg={props.onUpdateSvg}
                         />
                     </div>

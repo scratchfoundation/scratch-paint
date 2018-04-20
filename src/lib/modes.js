@@ -1,6 +1,7 @@
 import keyMirror from 'keymirror';
 
 const Modes = keyMirror({
+    BIT_BRUSH: null,
     BRUSH: null,
     ERASER: null,
     LINE: null,
