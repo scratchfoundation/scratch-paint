@@ -33,7 +33,10 @@ const getRaster = function () {
     const layer = _getLayer('isRasterLayer');
     // Generate blank raster
     if (layer.children.length === 0) {
-        const raster = new paper.Raster(rasterSrc);
+        const tmpCanvas = document.createElement('canvas');
+        tmpCanvas.width = ART_BOARD_WIDTH;
+        tmpCanvas.height = ART_BOARD_HEIGHT;
+        const raster = new paper.Raster(tmpCanvas);
         raster.parent = layer;
         raster.guide = true;
         raster.locked = true;
