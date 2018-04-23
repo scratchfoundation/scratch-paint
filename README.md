@@ -1,5 +1,5 @@
 # scratch-paint
-#### Scratch-paint provides a vector paint editor React component that takes and outputs SVGs. It is now in beta!
+#### Scratch-paint provides a vector paint editor React component that takes and outputs SVGs. Importing, editing, and exporting of bitmaps is now in progress!
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/LLK/scratch-paint.svg)](https://greenkeeper.io/)
 - Try it out at [https://llk.github.io/scratch-paint/](https://llk.github.io/scratch-paint/)
