@@ -346,27 +346,27 @@ const PaintEditorComponent = props => {
                                 />
                             </InputGroup>
                         </div> :
-                    isBitmap(props.format) ?
-                        <div className={styles.row}>
-                            <InputGroup
-                                className={classNames(
-                                    styles.row,
-                                    styles.modDashedBorder,
-                                    styles.modLabeledIconHeight
-                                )}
-                            >
-                                {/* fill */}
-                                <FillColorIndicatorComponent
-                                    className={styles.modMarginRight}
-                                    onUpdateImage={props.onUpdateImage}
-                                />
-                            </InputGroup>
-                            <InputGroup className={styles.modModeTools}>
-                                <ModeToolsContainer
-                                    onUpdateImage={props.onUpdateImage}
-                                />
-                            </InputGroup>
-                        </div> : null
+                        isBitmap(props.format) ?
+                            <div className={styles.row}>
+                                <InputGroup
+                                    className={classNames(
+                                        styles.row,
+                                        styles.modDashedBorder,
+                                        styles.modLabeledIconHeight
+                                    )}
+                                >
+                                    {/* fill */}
+                                    <FillColorIndicatorComponent
+                                        className={styles.modMarginRight}
+                                        onUpdateImage={props.onUpdateImage}
+                                    />
+                                </InputGroup>
+                                <InputGroup className={styles.modModeTools}>
+                                    <ModeToolsContainer
+                                        onUpdateImage={props.onUpdateImage}
+                                    />
+                                </InputGroup>
+                            </div> : null
                     }
                 </div>
             ) : null}
@@ -471,20 +471,20 @@ const PaintEditorComponent = props => {
                                     {props.intl.formatMessage(messages.bitmap)}
                                 </span>
                             </Button> :
-                        isBitmap(props.format) ?
-                            <Button
-                                className={styles.bitmapButton}
-                                onClick={props.onSwitchToVector}
-                            >
-                                <img
-                                    className={styles.bitmapButtonIcon}
-                                    draggable={false}
-                                    src={bitmapIcon}
-                                />
-                                <span>
-                                    {props.intl.formatMessage(messages.vector)}
-                                </span>
-                            </Button> : null
+                            isBitmap(props.format) ?
+                                <Button
+                                    className={styles.bitmapButton}
+                                    onClick={props.onSwitchToVector}
+                                >
+                                    <img
+                                        className={styles.bitmapButtonIcon}
+                                        draggable={false}
+                                        src={bitmapIcon}
+                                    />
+                                    <span>
+                                        {props.intl.formatMessage(messages.vector)}
+                                    </span>
+                                </Button> : null
                         }
                         {/* Zoom controls */}
                         <InputGroup className={styles.zoomControls}>
