@@ -28,30 +28,36 @@ class Playground extends React.Component {
         super(props);
         bindAll(this, [
             'handleUpdateName',
-            'handleUpdateSvg'
+            'handleUpdateImage'
         ]);
         this.state = {
             name: 'meow',
             rotationCenterX: 20,
             rotationCenterY: 400,
-            svg: svgString
+            image: svgString
         };
     }
     handleUpdateName (name) {
         this.setState({name});
     }
-    handleUpdateSvg (svg, rotationCenterX, rotationCenterY) {
-        console.log(svg);
+    handleUpdateImage (isVector, image, rotationCenterX, rotationCenterY) {
+        console.log(image);
         console.log(`rotationCenterX: ${rotationCenterX}    rotationCenterY: ${rotationCenterY}`);
-        this.setState({svg, rotationCenterX, rotationCenterY});
+        if (isVector) {
+            this.setState({image, rotationCenterX, rotationCenterY});
+        } else { // is Bitmap
+            const imageElement = new Image();
+            imageElement.src = image.toDataURL("image/png");
+            this.setState({imageElement, rotationCenterX, rotationCenterY});
+        }
     }
     render () {
         return (
             <PaintEditor
                 {...this.state}
-                svgId="meow"
+                imageId="meow"
                 onUpdateName={this.handleUpdateName}
-                onUpdateSvg={this.handleUpdateSvg}
+                onUpdateImage={this.handleUpdateImage}
             />
         );
     }
