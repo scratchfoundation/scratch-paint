@@ -117,7 +117,7 @@ class ModeTools extends React.Component {
         }
         if (changed) {
             this.props.setSelectedItems();
-            this.props.onUpdateSvg();
+            this.props.onUpdateImage();
         }
     }
     handlePointPoints () {
@@ -133,7 +133,7 @@ class ModeTools extends React.Component {
         }
         if (changed) {
             this.props.setSelectedItems();
-            this.props.onUpdateSvg();
+            this.props.onUpdateImage();
         }
     }
     _handleFlip (horizontalScale, verticalScale) {
@@ -160,7 +160,7 @@ class ModeTools extends React.Component {
         }
         itemGroup.remove();
 
-        this.props.onUpdateSvg();
+        this.props.onUpdateImage();
     }
     handleFlipHorizontal () {
         this._handleFlip(-1, 1);
@@ -194,7 +194,7 @@ class ModeTools extends React.Component {
             }
             this.props.incrementPasteOffset();
             this.props.setSelectedItems();
-            this.props.onUpdateSvg();
+            this.props.onUpdateImage();
         }
     }
     render () {
@@ -217,7 +217,7 @@ ModeTools.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
     incrementPasteOffset: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     pasteOffset: PropTypes.number,
     // Listen on selected items to update hasSelectedPoints
     selectedItems:

@@ -53,7 +53,7 @@ class FillMode extends React.Component {
         this.tool = new FillTool(
             this.props.setHoveredItem,
             this.props.clearHoveredItem,
-            this.props.onUpdateSvg
+            this.props.onUpdateImage
         );
         this.tool.setFillColor(this.props.fillColor === MIXED ? DEFAULT_COLOR : this.props.fillColor);
         this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
@@ -82,7 +82,7 @@ FillMode.propTypes = {
     hoveredItemId: PropTypes.number,
     isFillModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     setHoveredItem: PropTypes.func.isRequired
 };
 

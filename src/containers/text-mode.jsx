@@ -73,7 +73,7 @@ class TextMode extends React.Component {
             this.props.textArea,
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
-            this.props.onUpdateSvg,
+            this.props.onUpdateImage,
             this.props.setTextEditTarget,
         );
         this.tool.setColorState(this.props.colorState);
@@ -105,7 +105,7 @@ TextMode.propTypes = {
     isTextModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setSelectedItems: PropTypes.func.isRequired,
     setTextEditTarget: PropTypes.func.isRequired,

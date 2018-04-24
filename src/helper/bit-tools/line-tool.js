@@ -9,11 +9,11 @@ import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
  */
 class LineTool extends paper.Tool {
     /**
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (onUpdateSvg) {
+    constructor (onUpdateImage) {
         super();
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
         
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -103,7 +103,7 @@ class LineTool extends paper.Tool {
         this.drawTarget = getRaster();
         forEachLinePoint(this.startPoint, event.point, this.draw.bind(this));
         this.drawTarget = null;
-        this.onUpdateSvg();
+        this.onUpdateImage();
 
         this.lastPoint = null;
         this.active = false;

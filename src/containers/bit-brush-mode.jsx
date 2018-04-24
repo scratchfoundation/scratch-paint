@@ -52,7 +52,7 @@ class BitBrushMode extends React.Component {
             color = DEFAULT_COLOR;
         }
         this.tool = new BitBrushTool(
-            this.props.onUpdateSvg
+            this.props.onUpdateImage
         );
         this.tool.setColor(color);
         this.tool.setBrushSize(this.props.bitBrushSize);
@@ -81,7 +81,7 @@ BitBrushMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isBitBrushModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

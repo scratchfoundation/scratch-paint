@@ -4,7 +4,6 @@ import paper from '@scratch/paper';
 import {hideGuideLayers, showGuideLayers, getRaster} from '../helper/layer';
 import Formats from '../lib/format';
 import {isVector, isBitmap} from '../lib/format';
-import log from '../log/log';
 
 /**
  * Take an undo snapshot
@@ -20,7 +19,7 @@ const performSnapshot = function (dispatchPerformSnapshot, format) {
     showGuideLayers(guideLayers);
 };
 
-const _restore = function (entry, setSelectedItems, onUpdateSvg) {
+const _restore = function (entry, setSelectedItems, onUpdateImage) {
     for (let i = paper.project.layers.length - 1; i >= 0; i--) {
         const layer = paper.project.layers[i];
         if (!layer.data.isBackgroundGuideLayer) {
@@ -32,36 +31,30 @@ const _restore = function (entry, setSelectedItems, onUpdateSvg) {
 
     setSelectedItems();
     getRaster().onLoad = function () {
-        onUpdateSvg(true /* skipSnapshot */);
+        onUpdateImage(true /* skipSnapshot */);
     };
     if (getRaster().loaded) {
         getRaster().onLoad();
     }
 };
 
-const performUndo = function (undoState, dispatchPerformUndo, setSelectedItems, onUpdateSvg) {
+const performUndo = function (undoState, dispatchPerformUndo, setSelectedItems, onUpdateImage) {
     if (undoState.pointer > 0) {
         const state = undoState.stack[undoState.pointer - 1];
-        _restore(state, setSelectedItems, onUpdateSvg);
+        _restore(state, setSelectedItems, onUpdateImage);
         const format = isVector(state.paintEditorFormat) ? Formats.VECTOR_SKIP_CONVERT :
             isBitmap(state.paintEditorFormat) ? Formats.BITMAP_SKIP_CONVERT : null;
-        if (!format) {
-            log.error(`Invalid format: ${state.paintEditorFormat}`);
-        }
         dispatchPerformUndo(format);
     }
 };
 
 
-const performRedo = function (undoState, dispatchPerformRedo, setSelectedItems, onUpdateSvg) {
+const performRedo = function (undoState, dispatchPerformRedo, setSelectedItems, onUpdateImage) {
     if (undoState.pointer >= 0 && undoState.pointer < undoState.stack.length - 1) {
         const state = undoState.stack[undoState.pointer + 1];
-        _restore(state, setSelectedItems, onUpdateSvg);
+        _restore(state, setSelectedItems, onUpdateImage);
         const format = isVector(state.paintEditorFormat) ? Formats.VECTOR_SKIP_CONVERT :
             isBitmap(state.paintEditorFormat) ? Formats.BITMAP_SKIP_CONVERT : null;
-        if (!format) {
-            log.error(`Invalid format: ${state.paintEditorFormat}`);
-        }
         dispatchPerformRedo(format);
     }
 };

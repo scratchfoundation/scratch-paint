@@ -35,7 +35,7 @@ class PaintEditor extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleUpdateSvg',
+            'handleUpdateImage',
             'handleUndo',
             'handleRedo',
             'handleSendBackward',
@@ -118,7 +118,7 @@ class PaintEditor extends React.Component {
             }
         }
     }
-    handleUpdateSvg (skipSnapshot) {
+    handleUpdateImage (skipSnapshot) {
         // Store the zoom/pan and restore it after snapshotting
         // TODO Only doing this because snapshotting at zoom/pan makes export wrong
         const oldZoom = paper.project.view.zoom;
@@ -142,7 +142,7 @@ class PaintEditor extends React.Component {
         scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
         const bounds = paper.project.activeLayer.bounds;
 
-        this.props.onUpdateSvg(
+        this.props.onUpdateImage(
             paper.project.exportSVG({
                 asString: true,
                 bounds: 'content',
@@ -166,28 +166,28 @@ class PaintEditor extends React.Component {
         paper.project.view.center = oldCenter;
     }
     handleUndo () {
-        performUndo(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateSvg);
+        performUndo(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateImage);
     }
     handleRedo () {
-        performRedo(this.props.undoState, this.props.onRedo, this.props.setSelectedItems, this.handleUpdateSvg);
+        performRedo(this.props.undoState, this.props.onRedo, this.props.setSelectedItems, this.handleUpdateImage);
     }
     handleGroup () {
-        groupSelection(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateSvg);
+        groupSelection(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateImage);
     }
     handleUngroup () {
-        ungroupSelection(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateSvg);
+        ungroupSelection(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateImage);
     }
     handleSendBackward () {
-        sendBackward(this.handleUpdateSvg);
+        sendBackward(this.handleUpdateImage);
     }
     handleSendForward () {
-        bringForward(this.handleUpdateSvg);
+        bringForward(this.handleUpdateImage);
     }
     handleSendToBack () {
-        sendToBack(this.handleUpdateSvg);
+        sendToBack(this.handleUpdateImage);
     }
     handleSendToFront () {
-        bringToFront(this.handleUpdateSvg);
+        bringToFront(this.handleUpdateImage);
     }
     canUndo () {
         return shouldShowUndo(this.props.undoState);
@@ -287,14 +287,14 @@ class PaintEditor extends React.Component {
                 canvas={this.state.canvas}
                 colorInfo={this.state.colorInfo}
                 format={this.props.format}
+                image={this.props.image}
+                imageId={this.props.imageId}
                 isEyeDropping={this.props.isEyeDropping}
                 name={this.props.name}
                 rotationCenterX={this.props.rotationCenterX}
                 rotationCenterY={this.props.rotationCenterY}
                 setCanvas={this.setCanvas}
                 setTextArea={this.setTextArea}
-                svg={this.props.svg}
-                svgId={this.props.svgId}
                 textArea={this.state.textArea}
                 onGroup={this.handleGroup}
                 onRedo={this.handleRedo}
@@ -306,8 +306,8 @@ class PaintEditor extends React.Component {
                 onSwitchToVector={this.props.handleSwitchToVector}
                 onUndo={this.handleUndo}
                 onUngroup={this.handleUngroup}
+                onUpdateImage={this.handleUpdateImage}
                 onUpdateName={this.props.onUpdateName}
-                onUpdateSvg={this.handleUpdateSvg}
                 onZoomIn={this.handleZoomIn}
                 onZoomOut={this.handleZoomOut}
                 onZoomReset={this.handleZoomReset}
@@ -320,9 +320,14 @@ PaintEditor.propTypes = {
     changeColorToEyeDropper: PropTypes.func,
     changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
+    format: PropTypes.oneOf(Object.keys(Formats)),
     handleSwitchToBitmap: PropTypes.func.isRequired,
     handleSwitchToVector: PropTypes.func.isRequired,
+    image: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.instanceOf(HTMLImageElement)
+    ]),
+    imageId: PropTypes.string,
     isEyeDropping: PropTypes.bool,
     mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
     name: PropTypes.string,
@@ -330,8 +335,8 @@ PaintEditor.propTypes = {
     onKeyPress: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
     previousTool: PropTypes.shape({ // paper.Tool
         activate: PropTypes.func.isRequired,
         remove: PropTypes.func.isRequired
@@ -340,8 +345,6 @@ PaintEditor.propTypes = {
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     setSelectedItems: PropTypes.func.isRequired,
-    svg: PropTypes.string,
-    svgId: PropTypes.string,
     textEditing: PropTypes.bool.isRequired,
     undoSnapshot: PropTypes.func.isRequired,
     undoState: PropTypes.shape({

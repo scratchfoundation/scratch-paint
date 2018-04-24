@@ -21,10 +21,10 @@ class FillColorIndicator extends React.Component {
         this._hasChanged = false;
     }
     componentWillReceiveProps (newProps) {
-        const {fillColorModalVisible, onUpdateSvg} = this.props;
+        const {fillColorModalVisible, onUpdateImage} = this.props;
         if (fillColorModalVisible && !newProps.fillColorModalVisible) {
             // Submit the new SVG, which also stores a single undo/redo action.
-            if (this._hasChanged) onUpdateSvg();
+            if (this._hasChanged) onUpdateImage();
             this._hasChanged = false;
         }
     }
@@ -77,7 +77,7 @@ FillColorIndicator.propTypes = {
     isEyeDropping: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onCloseFillColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     textEditTarget: PropTypes.number
 };
 

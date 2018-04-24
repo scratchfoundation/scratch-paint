@@ -45,7 +45,7 @@ class RoundedRectMode extends React.Component {
             this.props.clearHoveredItem,
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
-            this.props.onUpdateSvg
+            this.props.onUpdateImage
         );
         this.tool.activate();
     }
@@ -70,7 +70,7 @@ RoundedRectMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     hoveredItemId: PropTypes.number,
     isRoundedRectModeActive: PropTypes.bool.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     setHoveredItem: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired
 };

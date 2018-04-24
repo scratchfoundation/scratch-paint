@@ -65,7 +65,7 @@ class OvalMode extends React.Component {
         this.tool = new OvalTool(
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
-            this.props.onUpdateSvg
+            this.props.onUpdateImage
         );
         this.tool.setColorState(this.props.colorState);
         this.tool.activate();
@@ -96,7 +96,7 @@ OvalMode.propTypes = {
     isOvalModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setSelectedItems: PropTypes.func.isRequired
 };
