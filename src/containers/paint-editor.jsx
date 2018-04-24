@@ -127,35 +127,36 @@ class PaintEditor extends React.Component {
 
         let raster;
         if (isBitmap(this.props.format)) {
-            // @todo export bitmap here
             raster = trim(getRaster());
-            if (raster.width === 0 || raster.height === 0) {
-                raster.remove();
-            } else {
-                paper.project.activeLayer.addChild(raster);
-            }
+            raster.remove();
+
+            this.props.onUpdateImage(
+                false /* isVector */,
+                raster.canvas,
+                paper.project.view.center.x - raster.bounds.x,
+                paper.project.view.center.y - raster.bounds.y);
+        } else if (isVector(this.props.format)) {
+            const guideLayers = hideGuideLayers(true /* includeRaster */);
+
+            // Export at 0.5x
+            scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
+            const bounds = paper.project.activeLayer.bounds;
+
+            this.props.onUpdateImage(
+                true /* isVector */,
+                paper.project.exportSVG({
+                    asString: true,
+                    bounds: 'content',
+                    matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
+                }),
+                (paper.project.view.center.x / 2) - bounds.x,
+                (paper.project.view.center.y / 2) - bounds.y);
+
+            scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
+            paper.project.activeLayer.applyMatrix = true;
+
+            showGuideLayers(guideLayers);
         }
-        
-        const guideLayers = hideGuideLayers(true /* includeRaster */);
-
-        // Export at 0.5x
-        scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
-        const bounds = paper.project.activeLayer.bounds;
-
-        this.props.onUpdateImage(
-            paper.project.exportSVG({
-                asString: true,
-                bounds: 'content',
-                matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
-            }),
-            (paper.project.view.center.x / 2) - bounds.x,
-            (paper.project.view.center.y / 2) - bounds.y);
-
-        scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
-        paper.project.activeLayer.applyMatrix = true;
-
-        showGuideLayers(guideLayers);
-        if (raster) raster.remove();
 
         if (!skipSnapshot) {
             performSnapshot(this.props.undoSnapshot, this.props.format);

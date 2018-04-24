@@ -28,6 +28,7 @@ class PaperCanvas extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'checkFormat',
             'convertToBitmap',
             'convertToVector',
             'setCanvas',
@@ -120,6 +121,7 @@ class PaperCanvas extends React.Component {
         const img = new Image();
         img.onload = () => {
             const raster = new paper.Raster(img);
+            raster.remove();
             raster.onLoad = () => {
                 const subCanvas = raster.canvas;
                 getRaster().drawImage(
@@ -146,7 +148,19 @@ class PaperCanvas extends React.Component {
         clearRaster();
         this.props.onUpdateImage();
     }
-    switchCostume (svg, rotationCenterX, rotationCenterY) {
+    checkFormat (image) {
+        if (image instanceof HTMLImageElement) return Formats.BITMAP;
+        if (typeof image === 'string') {
+            const parser = new DOMParser();
+            const svgDom = parser.parseFromString(image, 'text/xml');
+            if (svgDom && svgDom.firstElementChild && svgDom.firstElementChild.tagName === 'svg') {
+                return Formats.VECTOR;
+            }
+        }
+        log.error(`Image could not be read.`);
+        return null;
+    }
+    switchCostume (image, rotationCenterX, rotationCenterY) {
         for (const layer of paper.project.layers) {
             if (layer.data.isRasterLayer) {
                 clearRaster();
@@ -158,16 +172,29 @@ class PaperCanvas extends React.Component {
         this.props.clearSelectedItems();
         this.props.clearHoveredItem();
         this.props.clearPasteOffset();
-        if (svg) {
-            this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
-            // Store the zoom/pan and restore it after importing a new SVG
-            const oldZoom = paper.project.view.zoom;
-            const oldCenter = paper.project.view.center.clone();
-            resetZoom();
-            this.props.updateViewBounds(paper.view.matrix);
-            this.importSvg(svg, rotationCenterX, rotationCenterY);
-            paper.project.view.zoom = oldZoom;
-            paper.project.view.center = oldCenter;
+        if (image) {
+            if (isBitmap(this.checkFormat(image))) {
+                // import bitmap
+                this.props.changeFormat(Formats.BITMAP_SKIP_CONVERT);
+                getRaster().drawImage(
+                    image,
+                    paper.project.view.center.x - rotationCenterX,
+                    paper.project.view.center.y - rotationCenterY);
+                performSnapshot(this.props.undoSnapshot, this.props.format);
+            } else if (isVector(this.checkFormat(image))) {
+                this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
+                // Store the zoom/pan and restore it after importing a new SVG
+                const oldZoom = paper.project.view.zoom;
+                const oldCenter = paper.project.view.center.clone();
+                resetZoom();
+                this.props.updateViewBounds(paper.view.matrix);
+                this.importSvg(image, rotationCenterX, rotationCenterY);
+                paper.project.view.zoom = oldZoom;
+                paper.project.view.center = oldCenter;
+            } else {
+                log.error(`Couldn't open image.`);
+                performSnapshot(this.props.undoSnapshot, this.props.format);
+            }
         } else {
             performSnapshot(this.props.undoSnapshot, this.props.format);
         }
