@@ -150,13 +150,7 @@ class PaperCanvas extends React.Component {
     }
     checkFormat (image) {
         if (image instanceof HTMLImageElement) return Formats.BITMAP;
-        if (typeof image === 'string') {
-            const parser = new DOMParser();
-            const svgDom = parser.parseFromString(image, 'text/xml');
-            if (svgDom && svgDom.firstElementChild && svgDom.firstElementChild.tagName === 'svg') {
-                return Formats.VECTOR;
-            }
-        }
+        if (typeof image === 'string') return Formats.VECTOR;
         log.error(`Image could not be read.`);
         return null;
     }
