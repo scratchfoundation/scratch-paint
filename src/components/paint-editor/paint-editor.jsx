@@ -12,7 +12,7 @@ import {shouldShowBringForward, shouldShowSendBackward} from '../../helper/order
 
 import BitBrushMode from '../../containers/bit-brush-mode.jsx';
 import BitLineMode from '../../containers/bit-line-mode.jsx';
-import BitOvalMode from '../../components/bit-oval-mode/bit-oval-mode.jsx';
+import BitOvalMode from '../../containers/bit-oval-mode.jsx';
 import BitRectMode from '../../components/bit-rect-mode/bit-rect-mode.jsx';
 import BitTextMode from '../../components/bit-text-mode/bit-text-mode.jsx';
 import BitFillMode from '../../components/bit-fill-mode/bit-fill-mode.jsx';
@@ -414,7 +414,9 @@ const PaintEditorComponent = props => {
                         <BitLineMode
                             onUpdateImage={props.onUpdateImage}
                         />
-                        <BitOvalMode />
+                        <BitOvalMode
+                            onUpdateImage={props.onUpdateImage}
+                        />
                         <BitRectMode />
                         <BitTextMode />
                         <BitFillMode />

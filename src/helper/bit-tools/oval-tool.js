@@ -1,6 +1,7 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {styleShape} from '../style-path';
+import {fillEllipse} from '../bitmap';
+import {getRaster} from '../layer';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -15,15 +16,15 @@ class OvalTool extends paper.Tool {
     /**
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setSelectedItems, clearSelectedItems, onUpdateImage) {
         super();
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
-        this.onUpdateSvg = onUpdateSvg;
-        this.boundingBoxTool = new BoundingBoxTool(Modes.OVAL, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateSvg);
+        this.onUpdateImage = onUpdateImage;
+        this.boundingBoxTool = new BoundingBoxTool(Modes.BIT_OVAL, setSelectedItems, clearSelectedItems, onUpdateImage);
+        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -34,20 +35,22 @@ class OvalTool extends paper.Tool {
         this.onKeyDown = nudgeTool.onKeyDown;
 
         this.oval = null;
-        this.colorState = null;
-        this.isBoundingBoxMode = null;
+        this.color = null;
         this.active = false;
     }
     getHitOptions () {
         return {
-            segments: true,
+            segments: false,
             stroke: true,
-            curves: true,
+            curves: false,
             fill: true,
             guide: false,
-            match: hitResult =>
-                (hitResult.item.data && hitResult.item.data.isHelperItem) ||
-                hitResult.item.selected, // Allow hits on bounding box and selected only
+            selected: true,
+            match: hitResult => {
+                console.log(hitResult.item);
+                return (hitResult.item.data && hitResult.item.data.isHelperItem) ||
+                    hitResult.item === this.oval; // Allow hits on bounding box and oval only
+            },
             tolerance: OvalTool.TOLERANCE / paper.view.zoom
         };
     }
@@ -58,8 +61,8 @@ class OvalTool extends paper.Tool {
     onSelectionChanged (selectedItems) {
         this.boundingBoxTool.onSelectionChanged(selectedItems);
     }
-    setColorState (colorState) {
-        this.colorState = colorState;
+    setColor (color) {
+        this.color = color;
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
@@ -70,11 +73,12 @@ class OvalTool extends paper.Tool {
         } else {
             this.isBoundingBoxMode = false;
             clearSelection(this.clearSelectedItems);
+            this.commitOval();
             this.oval = new paper.Shape.Ellipse({
+                fillColor: this.color,
                 point: event.downPoint,
                 size: 0
             });
-            styleShape(this.oval, this.colorState);
         }
     }
     handleMouseDrag (event) {
@@ -114,18 +118,30 @@ class OvalTool extends paper.Tool {
                 this.oval.remove();
                 this.oval = null;
             } else {
-                const ovalPath = this.oval.toPath(true /* insert */);
-                this.oval.remove();
-                this.oval = null;
-
-                ovalPath.selected = true;
+                // Hit testing does not work correctly unless the width and height are positive
+                this.oval.size = new paper.Point(Math.abs(this.oval.size.width), Math.abs(this.oval.size.height));
+                this.oval.selected = true;
                 this.setSelectedItems();
-                this.onUpdateSvg();
             }
         }
         this.active = false;
     }
+    commitOval () {
+        if (this.oval) {
+            const context = getRaster().getContext('2d');
+            context.fillStyle = this.color;
+            fillEllipse(
+                this.oval.position.x, this.oval.position.y,
+                Math.abs(this.oval.size.width) / 2, Math.abs(this.oval.size.height) / 2,
+                context);
+            this.oval.remove();
+            this.oval = null;
+            this.onUpdateImage();
+        }
+
+    }
     deactivateTool () {
+        this.commitOval();
         this.boundingBoxTool.removeBoundsPath();
     }
 }
