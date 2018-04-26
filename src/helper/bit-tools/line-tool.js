@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import {getRaster} from '../layer';
-import {forEachLinePoint, fillEllipse} from '../bitmap';
+import {forEachLinePoint, getBrushMark} from '../bitmap';
 import {getGuideLayer} from '../layer';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
 
@@ -56,25 +56,7 @@ class LineTool extends paper.Tool {
                 this.cursorPreview.remove();
             }
 
-            this.tmpCanvas = document.createElement('canvas');
-            const roundedUpRadius = Math.ceil(this.size / 2);
-            this.tmpCanvas.width = roundedUpRadius * 2;
-            this.tmpCanvas.height = roundedUpRadius * 2;
-            const context = this.tmpCanvas.getContext('2d');
-            context.imageSmoothingEnabled = false;
-            context.fillStyle = this.color;
-            // Small squares for pixel artists
-            if (this.size <= 5) {
-                if (this.size % 2) {
-                    context.fillRect(1, 1, this.size, this.size);
-                } else {
-                    context.fillRect(0, 0, this.size, this.size);
-                }
-            } else {
-                const roundedDownRadius = ~~(this.size / 2);
-                fillEllipse(roundedDownRadius, roundedDownRadius, roundedDownRadius, roundedDownRadius, context);
-            }
-
+            this.tmpCanvas = getBrushMark(this.size, this.color);
             this.cursorPreview = new paper.Raster(this.tmpCanvas);
             this.cursorPreview.guide = true;
             this.cursorPreview.parent = getGuideLayer();
