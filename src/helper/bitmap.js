@@ -81,6 +81,34 @@ const fillEllipse = function (centerX, centerY, radiusX, radiusY, context) {
     }
 };
 
+/**
+ * @param {!number} size The diameter of the brush
+ * @param {!string} color The css color of the brush
+ * @return {HTMLCanvasElement} a canvas with the brush mark printed on it
+ */
+const getBrushMark = function (size, color) {
+    size = ~~size;
+    const canvas = document.createElement('canvas');
+    const roundedUpRadius = Math.ceil(size / 2);
+    canvas.width = roundedUpRadius * 2;
+    canvas.height = roundedUpRadius * 2;
+    const context = canvas.getContext('2d');
+    context.imageSmoothingEnabled = false;
+    context.fillStyle = color;
+    // Small squares for pixel artists
+    if (size <= 5) {
+        if (size % 2) {
+            context.fillRect(1, 1, size, size);
+        } else {
+            context.fillRect(0, 0, size, size);
+        }
+    } else {
+        const roundedDownRadius = ~~(size / 2);
+        fillEllipse(roundedDownRadius, roundedDownRadius, roundedDownRadius, roundedDownRadius, context);
+    }
+    return canvas;
+};
+
 const rowBlank_ = function (imageData, width, y) {
     for (let x = 0; x < width; ++x) {
         if (imageData.data[(y * width << 2) + (x << 2) + 3] !== 0) return false;
@@ -114,6 +142,7 @@ const trim = function (raster) {
 };
 
 export {
+    getBrushMark,
     fillEllipse,
     forEachLinePoint,
     trim

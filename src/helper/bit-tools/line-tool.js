@@ -2,11 +2,12 @@ import paper from '@scratch/paper';
 import {getRaster} from '../layer';
 import {forEachLinePoint, getBrushMark} from '../bitmap';
 import {getGuideLayer} from '../layer';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
 
 /**
- * Tool for drawing with the bitmap brush.
+ * Tool for drawing lines with the bitmap brush.
  */
-class BrushTool extends paper.Tool {
+class LineTool extends paper.Tool {
     /**
      * @param {!function} onUpdateSvg A callback to call when the image visibly changes
      */
@@ -23,26 +24,27 @@ class BrushTool extends paper.Tool {
 
         this.colorState = null;
         this.active = false;
-        this.lastPoint = null;
+        this.startPoint = null;
         this.cursorPreview = null;
+        // Raster to which to draw
+        this.drawTarget = null;
     }
     setColor (color) {
         this.color = color;
     }
-    setBrushSize (size) {
+    setLineSize (size) {
         // For performance, make sure this is an integer
         this.size = Math.max(1, ~~size);
     }
     // Draw a brush mark at the given point
     draw (x, y) {
         const roundedUpRadius = Math.ceil(this.size / 2);
-        getRaster().drawImage(this.tmpCanvas, new paper.Point(~~x - roundedUpRadius, ~~y - roundedUpRadius));
+        this.drawTarget.drawImage(this.tmpCanvas, new paper.Point(~~x - roundedUpRadius, ~~y - roundedUpRadius));
     }
     updateCursorIfNeeded () {
         if (!this.size) {
             return;
         }
-
         // The cursor preview was unattached from the view by an outside process,
         // such as changing costumes or undo.
         if (this.cursorPreview && !this.cursorPreview.parent) {
@@ -60,7 +62,6 @@ class BrushTool extends paper.Tool {
             this.cursorPreview.parent = getGuideLayer();
             this.cursorPreview.data.isHelperItem = true;
         }
-
         this.lastSize = this.size;
         this.lastColor = this.color;
     }
@@ -74,19 +75,34 @@ class BrushTool extends paper.Tool {
         
         this.cursorPreview.remove();
 
+        const tmpCanvas = document.createElement('canvas');
+        tmpCanvas.width = ART_BOARD_WIDTH;
+        tmpCanvas.height = ART_BOARD_HEIGHT;
+        this.drawTarget = new paper.Raster(tmpCanvas);
+        this.drawTarget.parent = getGuideLayer();
+        this.drawTarget.guide = true;
+        this.drawTarget.locked = true;
+        this.drawTarget.position = getRaster().position;
+
         this.draw(event.point.x, event.point.y);
-        this.lastPoint = event.point;
+        this.startPoint = event.point;
     }
     handleMouseDrag (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
 
-        forEachLinePoint(this.lastPoint, event.point, this.draw.bind(this));
-        this.lastPoint = event.point;
+        // Clear
+        const context = this.drawTarget.canvas.getContext('2d');
+        context.clearRect(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+
+        forEachLinePoint(this.startPoint, event.point, this.draw.bind(this));
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
         
-        forEachLinePoint(this.lastPoint, event.point, this.draw.bind(this));
+        this.drawTarget.remove();
+        this.drawTarget = getRaster();
+        forEachLinePoint(this.startPoint, event.point, this.draw.bind(this));
+        this.drawTarget = null;
         this.onUpdateSvg();
 
         this.lastPoint = null;
@@ -105,4 +121,4 @@ class BrushTool extends paper.Tool {
     }
 }
 
-export default BrushTool;
+export default LineTool;
