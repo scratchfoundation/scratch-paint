@@ -220,7 +220,7 @@ class LineMode extends React.Component {
         }
 
         if (this.path) {
-            this.props.onUpdateSvg();
+            this.props.onUpdateImage();
             this.path = null;
         }
         this.active = false;
@@ -257,7 +257,7 @@ LineMode.propTypes = {
     isLineModeActive: PropTypes.bool.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
     onChangeStrokeWidth: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

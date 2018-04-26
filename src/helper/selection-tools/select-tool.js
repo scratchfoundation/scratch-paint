@@ -24,15 +24,15 @@ class SelectTool extends paper.Tool {
      * @param {function} clearHoveredItem Callback to clear the hovered item
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage) {
         super();
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
-        this.onUpdateSvg = onUpdateSvg;
-        this.boundingBoxTool = new BoundingBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateSvg);
+        this.onUpdateImage = onUpdateImage;
+        this.boundingBoxTool = new BoundingBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems, onUpdateImage);
+        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         this.selectionBoxTool = new SelectionBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems);
         this.selectionBoxMode = false;
         this.prevHoveredItemId = null;
@@ -140,7 +140,7 @@ class SelectTool extends paper.Tool {
         this.boundingBoxTool.removeBoundsPath();
         this.setHoveredItem = null;
         this.clearHoveredItem = null;
-        this.onUpdateSvg = null;
+        this.onUpdateImage = null;
         this.boundingBoxTool = null;
         this.selectionBoxTool = null;
     }

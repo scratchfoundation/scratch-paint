@@ -195,7 +195,7 @@ const getSelectedSegments = function () {
     return segments;
 };
 
-const _deleteItemSelection = function (items, onUpdateSvg) {
+const _deleteItemSelection = function (items, onUpdateImage) {
     // @todo: Update toolbar state on change
     if (items.length === 0) {
         return false;
@@ -203,12 +203,12 @@ const _deleteItemSelection = function (items, onUpdateSvg) {
     for (let i = 0; i < items.length; i++) {
         items[i].remove();
     }
-    onUpdateSvg();
+    onUpdateImage();
     return true;
 };
 
 // Return true if anything was removed
-const _removeSelectedSegments = function (items, onUpdateSvg) {
+const _removeSelectedSegments = function (items, onUpdateImage) {
     const segmentsToRemove = [];
     
     for (let i = 0; i < items.length; i++) {
@@ -229,33 +229,33 @@ const _removeSelectedSegments = function (items, onUpdateSvg) {
         removedSegments = true;
     }
     if (removedSegments) {
-        onUpdateSvg();
+        onUpdateImage();
     }
     return removedSegments;
 };
 
 // Return whether anything was deleted
-const deleteSelection = function (mode, onUpdateSvg) {
+const deleteSelection = function (mode, onUpdateImage) {
     if (mode === Modes.RESHAPE) {
         const selectedItems = getSelectedLeafItems();
         // If there are points selected remove them. If not delete the item selected.
-        if (_removeSelectedSegments(selectedItems, onUpdateSvg)) {
+        if (_removeSelectedSegments(selectedItems, onUpdateImage)) {
             return true;
         }
-        return _deleteItemSelection(selectedItems, onUpdateSvg);
+        return _deleteItemSelection(selectedItems, onUpdateImage);
     }
     const selectedItems = getSelectedRootItems();
-    return _deleteItemSelection(selectedItems, onUpdateSvg);
+    return _deleteItemSelection(selectedItems, onUpdateImage);
 };
 
-const cloneSelection = function (recursive, onUpdateSvg) {
+const cloneSelection = function (recursive, onUpdateImage) {
     const selectedItems = recursive ? getSelectedLeafItems() : getSelectedRootItems();
     for (let i = 0; i < selectedItems.length; i++) {
         const item = selectedItems[i];
         item.clone();
         item.selected = false;
     }
-    onUpdateSvg();
+    onUpdateImage();
 };
 
 const _checkBoundsItem = function (selectionRect, item, event) {

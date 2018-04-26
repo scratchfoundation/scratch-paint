@@ -21,7 +21,7 @@ class BrushMode extends React.Component {
             'deactivateTool'
         ]);
         this.blob = new Blobbiness(
-            this.props.onUpdateSvg, this.props.clearSelectedItems);
+            this.props.onUpdateImage, this.props.clearSelectedItems);
     }
     componentDidMount () {
         if (this.props.isBrushModeActive) {
@@ -85,7 +85,7 @@ BrushMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isBrushModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

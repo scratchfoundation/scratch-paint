@@ -45,7 +45,7 @@ class ReshapeMode extends React.Component {
             this.props.clearHoveredItem,
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
-            this.props.onUpdateSvg
+            this.props.onUpdateImage
         );
         this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
         this.tool.activate();
@@ -72,7 +72,7 @@ ReshapeMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     hoveredItemId: PropTypes.number,
     isReshapeModeActive: PropTypes.bool.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     setHoveredItem: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired
 };

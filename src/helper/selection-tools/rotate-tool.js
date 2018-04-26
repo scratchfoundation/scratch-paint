@@ -5,13 +5,13 @@ import paper from '@scratch/paper';
  */
 class RotateTool {
     /**
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (onUpdateSvg) {
+    constructor (onUpdateImage) {
         this.rotItems = [];
         this.rotGroupPivot = null;
         this.prevRot = 90;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
     }
 
     /**
@@ -54,7 +54,7 @@ class RotateTool {
         this.rotGroupPivot = null;
         this.prevRot = 90;
 
-        this.onUpdateSvg();
+        this.onUpdateImage();
     }
 }
 

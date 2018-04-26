@@ -52,7 +52,7 @@ class BitLineMode extends React.Component {
             color = DEFAULT_COLOR;
         }
         this.tool = new BitLineTool(
-            this.props.onUpdateSvg
+            this.props.onUpdateImage
         );
         this.tool.setColor(color);
         this.tool.setLineSize(this.props.bitBrushSize);
@@ -81,7 +81,7 @@ BitLineMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isBitLineModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

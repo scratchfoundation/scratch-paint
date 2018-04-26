@@ -16,7 +16,7 @@ class StrokeWidthIndicator extends React.Component {
     }
     handleChangeStrokeWidth (newWidth) {
         if (applyStrokeWidthToSelection(newWidth, this.props.textEditTarget)) {
-            this.props.onUpdateSvg();
+            this.props.onUpdateImage();
         }
         this.props.onChangeStrokeWidth(newWidth);
     }
@@ -46,7 +46,7 @@ const mapDispatchToProps = dispatch => ({
 StrokeWidthIndicator.propTypes = {
     disabled: PropTypes.bool.isRequired,
     onChangeStrokeWidth: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     strokeWidth: PropTypes.number,
     textEditTarget: PropTypes.number
 };

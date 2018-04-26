@@ -21,10 +21,10 @@ class StrokeColorIndicator extends React.Component {
         this._hasChanged = false;
     }
     componentWillReceiveProps (newProps) {
-        const {strokeColorModalVisible, onUpdateSvg} = this.props;
+        const {strokeColorModalVisible, onUpdateImage} = this.props;
         if (strokeColorModalVisible && !newProps.strokeColorModalVisible) {
             // Submit the new SVG, which also stores a single undo/redo action.
-            if (this._hasChanged) onUpdateSvg();
+            if (this._hasChanged) onUpdateImage();
             this._hasChanged = false;
         }
     }
@@ -76,7 +76,7 @@ StrokeColorIndicator.propTypes = {
     isEyeDropping: PropTypes.bool.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
     onCloseStrokeColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     strokeColor: PropTypes.string,
     strokeColorModalVisible: PropTypes.bool.isRequired,
     textEditTarget: PropTypes.number

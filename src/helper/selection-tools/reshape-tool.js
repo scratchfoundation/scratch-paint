@@ -43,22 +43,22 @@ class ReshapeTool extends paper.Tool {
      * @param {function} clearHoveredItem Callback to clear the hovered item
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage) {
         super();
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
         this.prevHoveredItemId = null;
         this.lastEvent = null;
         this.active = false;
         this.mode = ReshapeModes.SELECTION_BOX;
         this._modeMap = {};
         this._modeMap[ReshapeModes.FILL] =
-            new MoveTool(Modes.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        this._modeMap[ReshapeModes.POINT] = new PointTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
-        this._modeMap[ReshapeModes.HANDLE] = new HandleTool(setSelectedItems, clearSelectedItems, onUpdateSvg);
+            new MoveTool(Modes.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateImage);
+        this._modeMap[ReshapeModes.POINT] = new PointTool(setSelectedItems, clearSelectedItems, onUpdateImage);
+        this._modeMap[ReshapeModes.HANDLE] = new HandleTool(setSelectedItems, clearSelectedItems, onUpdateImage);
         this._modeMap[ReshapeModes.SELECTION_BOX] =
             new SelectionBoxTool(Modes.RESHAPE, setSelectedItems, clearSelectedItems);
 
@@ -271,7 +271,7 @@ class ReshapeTool extends paper.Tool {
         if (selected.length === 0) return;
 
         if (event.key === 'up' || event.key === 'down' || event.key === 'left' || event.key === 'right') {
-            this.onUpdateSvg();
+            this.onUpdateImage();
         }
     }
     deactivateTool () {
@@ -279,7 +279,7 @@ class ReshapeTool extends paper.Tool {
         this.clearHoveredItem();
         this.setHoveredItem = null;
         this.clearHoveredItem = null;
-        this.onUpdateSvg = null;
+        this.onUpdateImage = null;
         this.lastEvent = null;
     }
 }

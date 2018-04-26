@@ -8,9 +8,9 @@ class PointTool {
     /**
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setSelectedItems, clearSelectedItems, onUpdateImage) {
         /**
          * Deselection often does not happen until mouse up. If the mouse is dragged before
          * mouse up, deselection is cancelled. This variable keeps track of which paper.Item to deselect.
@@ -29,7 +29,7 @@ class PointTool {
         this.selectedItems = null;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
     }
 
     /**
@@ -191,7 +191,7 @@ class PointTool {
         this.selectedItems = null;
         this.setSelectedItems();
         if (moved) {
-            this.onUpdateSvg();
+            this.onUpdateImage();
         }
     }
 }

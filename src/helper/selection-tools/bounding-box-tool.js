@@ -28,25 +28,25 @@ const BoundingBoxModes = keyMirror({
  * On mouse down, the type of function (move, scale, rotate) is determined based on what is clicked
  * (scale handle, rotate handle, the object itself). This determines the mode of the tool, which then
  * delegates actions to the MoveTool, RotateTool or ScaleTool accordingly.
- * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+ * @param {!function} onUpdateImage A callback to call when the image visibly changes
  */
 class BoundingBoxTool {
     /**
      * @param {Modes} mode Paint editor mode
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateSvg) {
-        this.onUpdateSvg = onUpdateSvg;
+    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateImage) {
+        this.onUpdateImage = onUpdateImage;
         this.mode = null;
         this.boundsPath = null;
         this.boundsScaleHandles = [];
         this.boundsRotHandles = [];
         this._modeMap = {};
-        this._modeMap[BoundingBoxModes.SCALE] = new ScaleTool(onUpdateSvg);
-        this._modeMap[BoundingBoxModes.ROTATE] = new RotateTool(onUpdateSvg);
-        this._modeMap[BoundingBoxModes.MOVE] = new MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateSvg);
+        this._modeMap[BoundingBoxModes.SCALE] = new ScaleTool(onUpdateImage);
+        this._modeMap[BoundingBoxModes.ROTATE] = new RotateTool(onUpdateImage);
+        this._modeMap[BoundingBoxModes.MOVE] = new MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage);
     }
 
     /**

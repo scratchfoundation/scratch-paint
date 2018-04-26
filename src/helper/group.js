@@ -11,10 +11,10 @@ const isGroup = function (item) {
  * @param {!Array<paper.Item>} items Root level items to group
  * @param {!function} clearSelectedItems Function to clear Redux state's selected items
  * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
  * @return {paper.Group} the group if one is created, otherwise false.
  */
-const groupItems = function (items, clearSelectedItems, setSelectedItems, onUpdateSvg) {
+const groupItems = function (items, clearSelectedItems, setSelectedItems, onUpdateImage) {
     if (items.length > 0) {
         const group = new paper.Group(items);
         clearSelection(clearSelectedItems);
@@ -23,7 +23,7 @@ const groupItems = function (items, clearSelectedItems, setSelectedItems, onUpda
             group.children[i].selected = true;
         }
         setSelectedItems();
-        onUpdateSvg();
+        onUpdateImage();
         return group;
     }
     return false;
@@ -33,12 +33,12 @@ const groupItems = function (items, clearSelectedItems, setSelectedItems, onUpda
  * Groups the selected items. Other things are then deselected and the new group is selected.
  * @param {!function} clearSelectedItems Function to clear Redux state's selected items
  * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
  * @return {paper.Group} the group if one is created, otherwise false.
  */
-const groupSelection = function (clearSelectedItems, setSelectedItems, onUpdateSvg) {
+const groupSelection = function (clearSelectedItems, setSelectedItems, onUpdateImage) {
     const items = getSelectedRootItems();
-    return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg);
+    return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateImage);
 };
 
 const _ungroupLoop = function (group, recursive, setSelectedItems) {
@@ -71,15 +71,15 @@ const _ungroupLoop = function (group, recursive, setSelectedItems) {
 
 /**
  * Ungroups the given items. The new group is selected only if setSelectedItems is passed in.
- * onUpdateSvg is called to notify listeners of a change on the SVG only if onUpdateSvg is passed in.
+ * onUpdateImage is called to notify listeners of a change on the SVG only if onUpdateImage is passed in.
  * The reason these arguments are optional on ungroupItems is because ungroupItems is used for parts of
  * SVG import, which shouldn't change the selection or undo state.
  *
  * @param {!Array<paper.Item>} items Items to ungroup if they are groups
  * @param {?function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {?function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @param {?function} onUpdateImage Function to let listeners know that SVG has changed.
  */
-const ungroupItems = function (items, setSelectedItems, onUpdateSvg) {
+const ungroupItems = function (items, setSelectedItems, onUpdateImage) {
     if (items.length === 0) {
         return;
     }
@@ -102,8 +102,8 @@ const ungroupItems = function (items, setSelectedItems, onUpdateSvg) {
         emptyGroups[j].remove();
     }
     // @todo: enable/disable grouping icons
-    if (onUpdateSvg) {
-        onUpdateSvg();
+    if (onUpdateImage) {
+        onUpdateImage();
     }
 };
 
@@ -112,12 +112,12 @@ const ungroupItems = function (items, setSelectedItems, onUpdateSvg) {
  *
  * @param {!function} clearSelectedItems Function to clear Redux state's selected items
  * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
  */
-const ungroupSelection = function (clearSelectedItems, setSelectedItems, onUpdateSvg) {
+const ungroupSelection = function (clearSelectedItems, setSelectedItems, onUpdateImage) {
     const items = getSelectedRootItems();
     clearSelection(clearSelectedItems);
-    ungroupItems(items, setSelectedItems, onUpdateSvg);
+    ungroupItems(items, setSelectedItems, onUpdateImage);
 };
 
 const getItemsGroup = function (item) {

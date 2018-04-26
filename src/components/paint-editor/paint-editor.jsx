@@ -329,43 +329,44 @@ const PaintEditorComponent = props => {
                                 {/* fill */}
                                 <FillColorIndicatorComponent
                                     className={styles.modMarginRight}
-                                    onUpdateSvg={props.onUpdateSvg}
+                                    onUpdateImage={props.onUpdateImage}
                                 />
                                 {/* stroke */}
                                 <StrokeColorIndicatorComponent
-                                    onUpdateSvg={props.onUpdateSvg}
+                                    onUpdateImage={props.onUpdateImage}
                                 />
                                 {/* stroke width */}
                                 <StrokeWidthIndicatorComponent
-                                    onUpdateSvg={props.onUpdateSvg}
+                                    onUpdateImage={props.onUpdateImage}
                                 />
                             </InputGroup>
                             <InputGroup className={styles.modModeTools}>
                                 <ModeToolsContainer
-                                    onUpdateSvg={props.onUpdateSvg}
+                                    onUpdateImage={props.onUpdateImage}
                                 />
                             </InputGroup>
                         </div> :
-                        <div className={styles.row}>
-                            <InputGroup
-                                className={classNames(
-                                    styles.row,
-                                    styles.modDashedBorder,
-                                    styles.modLabeledIconHeight
-                                )}
-                            >
-                                {/* fill */}
-                                <FillColorIndicatorComponent
-                                    className={styles.modMarginRight}
-                                    onUpdateSvg={props.onUpdateSvg}
-                                />
-                            </InputGroup>
-                            <InputGroup className={styles.modModeTools}>
-                                <ModeToolsContainer
-                                    onUpdateSvg={props.onUpdateSvg}
-                                />
-                            </InputGroup>
-                        </div>
+                        isBitmap(props.format) ?
+                            <div className={styles.row}>
+                                <InputGroup
+                                    className={classNames(
+                                        styles.row,
+                                        styles.modDashedBorder,
+                                        styles.modLabeledIconHeight
+                                    )}
+                                >
+                                    {/* fill */}
+                                    <FillColorIndicatorComponent
+                                        className={styles.modMarginRight}
+                                        onUpdateImage={props.onUpdateImage}
+                                    />
+                                </InputGroup>
+                                <InputGroup className={styles.modModeTools}>
+                                    <ModeToolsContainer
+                                        onUpdateImage={props.onUpdateImage}
+                                    />
+                                </InputGroup>
+                            </div> : null
                     }
                 </div>
             ) : null}
@@ -375,32 +376,32 @@ const PaintEditorComponent = props => {
                 {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
                     <div className={isVector(props.format) ? styles.modeSelector : styles.hidden}>
                         <SelectMode
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <ReshapeMode
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <BrushMode
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <EraserMode
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <FillMode
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <TextMode
                             textArea={props.textArea}
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <LineMode
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <OvalMode
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <RectMode
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                     </div>
                 ) : null}
@@ -408,10 +409,10 @@ const PaintEditorComponent = props => {
                 {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
                     <div className={isBitmap(props.format) ? styles.modeSelector : styles.hidden}>
                         <BitBrushMode
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <BitLineMode
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <BitOvalMode />
                         <BitRectMode />
@@ -432,11 +433,11 @@ const PaintEditorComponent = props => {
                     >
                         <PaperCanvas
                             canvasRef={props.setCanvas}
+                            image={props.image}
+                            imageId={props.imageId}
                             rotationCenterX={props.rotationCenterX}
                             rotationCenterY={props.rotationCenterY}
-                            svg={props.svg}
-                            svgId={props.svgId}
-                            onUpdateSvg={props.onUpdateSvg}
+                            onUpdateImage={props.onUpdateImage}
                         />
                         <textarea
                             className={styles.textArea}
@@ -470,19 +471,20 @@ const PaintEditorComponent = props => {
                                     {props.intl.formatMessage(messages.bitmap)}
                                 </span>
                             </Button> :
-                            <Button
-                                className={styles.bitmapButton}
-                                onClick={props.onSwitchToVector}
-                            >
-                                <img
-                                    className={styles.bitmapButtonIcon}
-                                    draggable={false}
-                                    src={bitmapIcon}
-                                />
-                                <span>
-                                    {props.intl.formatMessage(messages.vector)}
-                                </span>
-                            </Button>
+                            isBitmap(props.format) ?
+                                <Button
+                                    className={styles.bitmapButton}
+                                    onClick={props.onSwitchToVector}
+                                >
+                                    <img
+                                        className={styles.bitmapButtonIcon}
+                                        draggable={false}
+                                        src={bitmapIcon}
+                                    />
+                                    <span>
+                                        {props.intl.formatMessage(messages.vector)}
+                                    </span>
+                                </Button> : null
                         }
                         {/* Zoom controls */}
                         <InputGroup className={styles.zoomControls}>
@@ -534,7 +536,12 @@ PaintEditorComponent.propTypes = {
     canUndo: PropTypes.func.isRequired,
     canvas: PropTypes.instanceOf(Element),
     colorInfo: Loupe.propTypes.colorInfo,
-    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
+    format: PropTypes.oneOf(Object.keys(Formats)),
+    image: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.instanceOf(HTMLImageElement)
+    ]),
+    imageId: PropTypes.string,
     intl: intlShape,
     isEyeDropping: PropTypes.bool,
     name: PropTypes.string,
@@ -548,8 +555,8 @@ PaintEditorComponent.propTypes = {
     onSwitchToVector: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
     onUngroup: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
     onZoomIn: PropTypes.func.isRequired,
     onZoomOut: PropTypes.func.isRequired,
     onZoomReset: PropTypes.func.isRequired,
@@ -557,8 +564,6 @@ PaintEditorComponent.propTypes = {
     rotationCenterY: PropTypes.number,
     setCanvas: PropTypes.func.isRequired,
     setTextArea: PropTypes.func.isRequired,
-    svg: PropTypes.string,
-    svgId: PropTypes.string,
     textArea: PropTypes.instanceOf(Element)
 };
 

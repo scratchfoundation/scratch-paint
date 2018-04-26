@@ -10,15 +10,15 @@ class RoundedRectTool extends paper.Tool {
      * @param {function} clearHoveredItem Callback to clear the hovered item
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage) {
         super();
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
         this.prevHoveredItemId = null;
         
         // We have to set these functions instead of just declaring them because
