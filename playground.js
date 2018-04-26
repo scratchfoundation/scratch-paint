@@ -17002,7 +17002,7 @@ var getSelectedSegments = function getSelectedSegments() {
     return segments;
 };
 
-var _deleteItemSelection = function _deleteItemSelection(items, onUpdateSvg) {
+var _deleteItemSelection = function _deleteItemSelection(items, onUpdateImage) {
     // @todo: Update toolbar state on change
     if (items.length === 0) {
         return false;
@@ -17010,12 +17010,12 @@ var _deleteItemSelection = function _deleteItemSelection(items, onUpdateSvg) {
     for (var i = 0; i < items.length; i++) {
         items[i].remove();
     }
-    onUpdateSvg();
+    onUpdateImage();
     return true;
 };
 
 // Return true if anything was removed
-var _removeSelectedSegments = function _removeSelectedSegments(items, onUpdateSvg) {
+var _removeSelectedSegments = function _removeSelectedSegments(items, onUpdateImage) {
     var segmentsToRemove = [];
 
     for (var i = 0; i < items.length; i++) {
@@ -17036,33 +17036,33 @@ var _removeSelectedSegments = function _removeSelectedSegments(items, onUpdateSv
         removedSegments = true;
     }
     if (removedSegments) {
-        onUpdateSvg();
+        onUpdateImage();
     }
     return removedSegments;
 };
 
 // Return whether anything was deleted
-var deleteSelection = function deleteSelection(mode, onUpdateSvg) {
+var deleteSelection = function deleteSelection(mode, onUpdateImage) {
     if (mode === _modes2.default.RESHAPE) {
         var _selectedItems = getSelectedLeafItems();
         // If there are points selected remove them. If not delete the item selected.
-        if (_removeSelectedSegments(_selectedItems, onUpdateSvg)) {
+        if (_removeSelectedSegments(_selectedItems, onUpdateImage)) {
             return true;
         }
-        return _deleteItemSelection(_selectedItems, onUpdateSvg);
+        return _deleteItemSelection(_selectedItems, onUpdateImage);
     }
     var selectedItems = getSelectedRootItems();
-    return _deleteItemSelection(selectedItems, onUpdateSvg);
+    return _deleteItemSelection(selectedItems, onUpdateImage);
 };
 
-var cloneSelection = function cloneSelection(recursive, onUpdateSvg) {
+var cloneSelection = function cloneSelection(recursive, onUpdateImage) {
     var selectedItems = recursive ? getSelectedLeafItems() : getSelectedRootItems();
     for (var i = 0; i < selectedItems.length; i++) {
         var item = selectedItems[i];
         item.clone();
         item.selected = false;
     }
-    onUpdateSvg();
+    onUpdateImage();
 };
 
 var _checkBoundsItem = function _checkBoundsItem(selectionRect, item, event) {
@@ -22565,10 +22565,10 @@ var isGroup = function isGroup(item) {
  * @param {!Array<paper.Item>} items Root level items to group
  * @param {!function} clearSelectedItems Function to clear Redux state's selected items
  * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
  * @return {paper.Group} the group if one is created, otherwise false.
  */
-var groupItems = function groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg) {
+var groupItems = function groupItems(items, clearSelectedItems, setSelectedItems, onUpdateImage) {
     if (items.length > 0) {
         var group = new _paper2.default.Group(items);
         (0, _selection.clearSelection)(clearSelectedItems);
@@ -22577,7 +22577,7 @@ var groupItems = function groupItems(items, clearSelectedItems, setSelectedItems
             group.children[i].selected = true;
         }
         setSelectedItems();
-        onUpdateSvg();
+        onUpdateImage();
         return group;
     }
     return false;
@@ -22587,12 +22587,12 @@ var groupItems = function groupItems(items, clearSelectedItems, setSelectedItems
  * Groups the selected items. Other things are then deselected and the new group is selected.
  * @param {!function} clearSelectedItems Function to clear Redux state's selected items
  * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
  * @return {paper.Group} the group if one is created, otherwise false.
  */
-var groupSelection = function groupSelection(clearSelectedItems, setSelectedItems, onUpdateSvg) {
+var groupSelection = function groupSelection(clearSelectedItems, setSelectedItems, onUpdateImage) {
     var items = (0, _selection.getSelectedRootItems)();
-    return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg);
+    return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateImage);
 };
 
 var _ungroupLoop = function _ungroupLoop(group, recursive, setSelectedItems) {
@@ -22625,15 +22625,15 @@ var _ungroupLoop = function _ungroupLoop(group, recursive, setSelectedItems) {
 
 /**
  * Ungroups the given items. The new group is selected only if setSelectedItems is passed in.
- * onUpdateSvg is called to notify listeners of a change on the SVG only if onUpdateSvg is passed in.
+ * onUpdateImage is called to notify listeners of a change on the SVG only if onUpdateImage is passed in.
  * The reason these arguments are optional on ungroupItems is because ungroupItems is used for parts of
  * SVG import, which shouldn't change the selection or undo state.
  *
  * @param {!Array<paper.Item>} items Items to ungroup if they are groups
  * @param {?function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {?function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @param {?function} onUpdateImage Function to let listeners know that SVG has changed.
  */
-var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateSvg) {
+var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateImage) {
     if (items.length === 0) {
         return;
     }
@@ -22656,8 +22656,8 @@ var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateSvg) {
         emptyGroups[j].remove();
     }
     // @todo: enable/disable grouping icons
-    if (onUpdateSvg) {
-        onUpdateSvg();
+    if (onUpdateImage) {
+        onUpdateImage();
     }
 };
 
@@ -22666,12 +22666,12 @@ var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateSvg) {
  *
  * @param {!function} clearSelectedItems Function to clear Redux state's selected items
  * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
  */
-var ungroupSelection = function ungroupSelection(clearSelectedItems, setSelectedItems, onUpdateSvg) {
+var ungroupSelection = function ungroupSelection(clearSelectedItems, setSelectedItems, onUpdateImage) {
     var items = (0, _selection.getSelectedRootItems)();
     (0, _selection.clearSelection)(clearSelectedItems);
-    ungroupItems(items, setSelectedItems, onUpdateSvg);
+    ungroupItems(items, setSelectedItems, onUpdateImage);
 };
 
 var getItemsGroup = function getItemsGroup(item) {
@@ -24280,7 +24280,7 @@ var BoundingBoxModes = (0, _keymirror2.default)({
  * On mouse down, the type of function (move, scale, rotate) is determined based on what is clicked
  * (scale handle, rotate handle, the object itself). This determines the mode of the tool, which then
  * delegates actions to the MoveTool, RotateTool or ScaleTool accordingly.
- * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+ * @param {!function} onUpdateImage A callback to call when the image visibly changes
  */
 
 var BoundingBoxTool = function () {
@@ -24288,20 +24288,20 @@ var BoundingBoxTool = function () {
      * @param {Modes} mode Paint editor mode
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    function BoundingBoxTool(mode, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    function BoundingBoxTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage) {
         _classCallCheck(this, BoundingBoxTool);
 
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
         this.mode = null;
         this.boundsPath = null;
         this.boundsScaleHandles = [];
         this.boundsRotHandles = [];
         this._modeMap = {};
-        this._modeMap[BoundingBoxModes.SCALE] = new _scaleTool2.default(onUpdateSvg);
-        this._modeMap[BoundingBoxModes.ROTATE] = new _rotateTool2.default(onUpdateSvg);
-        this._modeMap[BoundingBoxModes.MOVE] = new _moveTool2.default(mode, setSelectedItems, clearSelectedItems, onUpdateSvg);
+        this._modeMap[BoundingBoxModes.SCALE] = new _scaleTool2.default(onUpdateImage);
+        this._modeMap[BoundingBoxModes.ROTATE] = new _rotateTool2.default(onUpdateImage);
+        this._modeMap[BoundingBoxModes.MOVE] = new _moveTool2.default(mode, setSelectedItems, clearSelectedItems, onUpdateImage);
     }
 
     /**
@@ -24589,13 +24589,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var NudgeTool = function () {
     /**
      * @param {function} boundingBoxTool to control the bounding box
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    function NudgeTool(boundingBoxTool, onUpdateSvg) {
+    function NudgeTool(boundingBoxTool, onUpdateImage) {
         _classCallCheck(this, NudgeTool);
 
         this.boundingBoxTool = boundingBoxTool;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
     }
 
     _createClass(NudgeTool, [{
@@ -24657,7 +24657,7 @@ var NudgeTool = function () {
             if (selected.length === 0) return;
 
             if (event.key === 'up' || event.key === 'down' || event.key === 'left' || event.key === 'right') {
-                this.onUpdateSvg();
+                this.onUpdateImage();
             }
         }
     }]);
@@ -25084,7 +25084,7 @@ var _undo = __webpack_require__(39);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var CHANGE_FORMAT = 'scratch-paint/formats/CHANGE_FORMAT';
-var initialState = _format2.default.VECTOR;
+var initialState = null;
 
 var reducer = function reducer(state, action) {
     if (typeof state === 'undefined') state = initialState;
@@ -25094,6 +25094,7 @@ var reducer = function reducer(state, action) {
         case _undo.REDO:
         /* falls through */
         case CHANGE_FORMAT:
+            if (!action.format) return state;
             if (action.format in _format2.default) {
                 return action.format;
             }
@@ -27009,10 +27010,6 @@ var _format = __webpack_require__(22);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _log = __webpack_require__(9);
-
-var _log2 = _interopRequireDefault(_log);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -27020,6 +27017,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {function} dispatchPerformSnapshot Callback to dispatch a state update
  * @param {Formats} format Either Formats.BITMAP or Formats.VECTOR
  */
+// undo functionality
+// modifed from https://github.com/memononen/stylii
 var performSnapshot = function performSnapshot(dispatchPerformSnapshot, format) {
     var guideLayers = (0, _layer.hideGuideLayers)();
     dispatchPerformSnapshot({
@@ -27027,11 +27026,9 @@ var performSnapshot = function performSnapshot(dispatchPerformSnapshot, format) 
         paintEditorFormat: format
     });
     (0, _layer.showGuideLayers)(guideLayers);
-}; // undo functionality
-// modifed from https://github.com/memononen/stylii
+};
 
-
-var _restore = function _restore(entry, setSelectedItems, onUpdateSvg) {
+var _restore = function _restore(entry, setSelectedItems, onUpdateImage) {
     for (var i = _paper2.default.project.layers.length - 1; i >= 0; i--) {
         var layer = _paper2.default.project.layers[i];
         if (!layer.data.isBackgroundGuideLayer) {
@@ -27043,33 +27040,27 @@ var _restore = function _restore(entry, setSelectedItems, onUpdateSvg) {
 
     setSelectedItems();
     (0, _layer.getRaster)().onLoad = function () {
-        onUpdateSvg(true /* skipSnapshot */);
+        onUpdateImage(true /* skipSnapshot */);
     };
     if ((0, _layer.getRaster)().loaded) {
         (0, _layer.getRaster)().onLoad();
     }
 };
 
-var performUndo = function performUndo(undoState, dispatchPerformUndo, setSelectedItems, onUpdateSvg) {
+var performUndo = function performUndo(undoState, dispatchPerformUndo, setSelectedItems, onUpdateImage) {
     if (undoState.pointer > 0) {
         var state = undoState.stack[undoState.pointer - 1];
-        _restore(state, setSelectedItems, onUpdateSvg);
+        _restore(state, setSelectedItems, onUpdateImage);
         var format = (0, _format.isVector)(state.paintEditorFormat) ? _format2.default.VECTOR_SKIP_CONVERT : (0, _format.isBitmap)(state.paintEditorFormat) ? _format2.default.BITMAP_SKIP_CONVERT : null;
-        if (!format) {
-            _log2.default.error('Invalid format: ' + state.paintEditorFormat);
-        }
         dispatchPerformUndo(format);
     }
 };
 
-var performRedo = function performRedo(undoState, dispatchPerformRedo, setSelectedItems, onUpdateSvg) {
+var performRedo = function performRedo(undoState, dispatchPerformRedo, setSelectedItems, onUpdateImage) {
     if (undoState.pointer >= 0 && undoState.pointer < undoState.stack.length - 1) {
         var state = undoState.stack[undoState.pointer + 1];
-        _restore(state, setSelectedItems, onUpdateSvg);
+        _restore(state, setSelectedItems, onUpdateImage);
         var format = (0, _format.isVector)(state.paintEditorFormat) ? _format2.default.VECTOR_SKIP_CONVERT : (0, _format.isBitmap)(state.paintEditorFormat) ? _format2.default.BITMAP_SKIP_CONVERT : null;
-        if (!format) {
-            _log2.default.error('Invalid format: ' + state.paintEditorFormat);
-        }
         dispatchPerformRedo(format);
     }
 };
@@ -27102,7 +27093,7 @@ exports.shouldShowSendBackward = exports.shouldShowBringForward = exports.sendBa
 
 var _selection = __webpack_require__(3);
 
-var bringToFront = function bringToFront(onUpdateSvg) {
+var bringToFront = function bringToFront(onUpdateImage) {
     var items = (0, _selection.getSelectedRootItems)();
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
@@ -27129,18 +27120,18 @@ var bringToFront = function bringToFront(onUpdateSvg) {
         }
     }
 
-    onUpdateSvg();
+    onUpdateImage();
 };
 
-var sendToBack = function sendToBack(onUpdateSvg) {
+var sendToBack = function sendToBack(onUpdateImage) {
     var items = (0, _selection.getSelectedRootItems)();
     for (var i = items.length - 1; i >= 0; i--) {
         items[i].sendToBack();
     }
-    onUpdateSvg();
+    onUpdateImage();
 };
 
-var bringForward = function bringForward(onUpdateSvg) {
+var bringForward = function bringForward(onUpdateImage) {
     var items = (0, _selection.getSelectedRootItems)();
     // Already at front
     if (items.length === 0 || !items[items.length - 1].nextSibling) {
@@ -27151,10 +27142,10 @@ var bringForward = function bringForward(onUpdateSvg) {
     for (var i = items.length - 1; i >= 0; i--) {
         items[i].insertAbove(nextSibling);
     }
-    onUpdateSvg();
+    onUpdateImage();
 };
 
-var sendBackward = function sendBackward(onUpdateSvg) {
+var sendBackward = function sendBackward(onUpdateImage) {
     var items = (0, _selection.getSelectedRootItems)();
     // Already at front
     if (items.length === 0 || !items[0].previousSibling) {
@@ -27187,7 +27178,7 @@ var sendBackward = function sendBackward(onUpdateSvg) {
         }
     }
 
-    onUpdateSvg();
+    onUpdateImage();
 };
 
 var shouldShowSendBackward = function shouldShowSendBackward() {
@@ -27452,18 +27443,18 @@ var Blobbiness = function () {
         }
 
         /**
-         * @param {function} onUpdateSvg call when the drawing has changed to let listeners know
+         * @param {function} onUpdateImage call when the drawing has changed to let listeners know
          * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
          */
 
     }]);
 
-    function Blobbiness(onUpdateSvg, clearSelectedItems) {
+    function Blobbiness(onUpdateImage, clearSelectedItems) {
         _classCallCheck(this, Blobbiness);
 
         this.broadBrushHelper = new _broadBrushHelper2.default();
         this.segmentBrushHelper = new _segmentBrushHelper2.default();
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
         this.clearSelectedItems = clearSelectedItems;
 
         // The following are stored to check whether these have changed and the cursor preview needs to be redrawn.
@@ -27579,7 +27570,7 @@ var Blobbiness = function () {
 
                 // Remove cursor preview during snapshot, then bring it back
                 blob.cursorPreview.remove();
-                blob.onUpdateSvg();
+                blob.onUpdateImage();
                 blob.cursorPreview.parent = (0, _layer.getGuideLayer)();
 
                 // Reset
@@ -28753,16 +28744,16 @@ var MoveTool = function () {
      * @param {Modes} mode Paint editor mode
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    function MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    function MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage) {
         _classCallCheck(this, MoveTool);
 
         this.mode = mode;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
         this.boundsPath = null;
     }
 
@@ -28802,7 +28793,7 @@ var MoveTool = function () {
                 }
                 this._select(item, true, hitProperties.subselect);
             }
-            if (hitProperties.clone) (0, _selection.cloneSelection)(hitProperties.subselect, this.onUpdateSvg);
+            if (hitProperties.clone) (0, _selection.cloneSelection)(hitProperties.subselect, this.onUpdateImage);
             this.selectedItems = this.mode === _modes2.default.RESHAPE ? (0, _selection.getSelectedLeafItems)() : (0, _selection.getSelectedRootItems)();
             if (this.boundsPath) {
                 this.selectedItems.push(this.boundsPath);
@@ -28914,7 +28905,7 @@ var MoveTool = function () {
             this.selectedItems = null;
 
             if (moved) {
-                this.onUpdateSvg();
+                this.onUpdateImage();
             }
         }
     }]);
@@ -29133,12 +29124,12 @@ var Playground = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Playground.__proto__ || Object.getPrototypeOf(Playground)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['handleUpdateName', 'handleUpdateSvg']);
+        (0, _lodash2.default)(_this, ['handleUpdateName', 'handleUpdateImage']);
         _this.state = {
             name: 'meow',
             rotationCenterX: 20,
             rotationCenterY: 400,
-            svg: svgString
+            image: svgString
         };
         return _this;
     }
@@ -29149,19 +29140,26 @@ var Playground = function (_React$Component) {
             this.setState({ name: name });
         }
     }, {
-        key: 'handleUpdateSvg',
-        value: function handleUpdateSvg(svg, rotationCenterX, rotationCenterY) {
-            console.log(svg);
+        key: 'handleUpdateImage',
+        value: function handleUpdateImage(isVector, image, rotationCenterX, rotationCenterY) {
+            console.log(image);
             console.log('rotationCenterX: ' + rotationCenterX + '    rotationCenterY: ' + rotationCenterY);
-            this.setState({ svg: svg, rotationCenterX: rotationCenterX, rotationCenterY: rotationCenterY });
+            if (isVector) {
+                this.setState({ image: image, rotationCenterX: rotationCenterX, rotationCenterY: rotationCenterY });
+            } else {
+                // is Bitmap
+                var imageElement = new Image();
+                imageElement.src = image.toDataURL("image/png");
+                this.setState({ imageElement: imageElement, rotationCenterX: rotationCenterX, rotationCenterY: rotationCenterY });
+            }
         }
     }, {
         key: 'render',
         value: function render() {
             return _react2.default.createElement(_2.default, _extends({}, this.state, {
-                svgId: 'meow',
+                imageId: 'meow',
                 onUpdateName: this.handleUpdateName,
-                onUpdateSvg: this.handleUpdateSvg
+                onUpdateImage: this.handleUpdateImage
             }));
         }
     }]);
@@ -46522,7 +46520,7 @@ var PaintEditor = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaintEditor.__proto__ || Object.getPrototypeOf(PaintEditor)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['handleUpdateSvg', 'handleUndo', 'handleRedo', 'handleSendBackward', 'handleSendForward', 'handleSendToBack', 'handleSendToFront', 'handleGroup', 'handleUngroup', 'handleZoomIn', 'handleZoomOut', 'handleZoomReset', 'canRedo', 'canUndo', 'switchMode', 'onMouseDown', 'setCanvas', 'setTextArea', 'startEyeDroppingLoop', 'stopEyeDroppingLoop']);
+        (0, _lodash2.default)(_this, ['handleUpdateImage', 'handleUndo', 'handleRedo', 'handleSendBackward', 'handleSendForward', 'handleSendToBack', 'handleSendToFront', 'handleGroup', 'handleUngroup', 'handleZoomIn', 'handleZoomOut', 'handleZoomReset', 'canRedo', 'canUndo', 'switchMode', 'onMouseDown', 'setCanvas', 'setTextArea', 'startEyeDroppingLoop', 'stopEyeDroppingLoop']);
         _this.state = {
             canvas: null,
             colorInfo: null
@@ -46597,8 +46595,8 @@ var PaintEditor = function (_React$Component) {
             }
         }
     }, {
-        key: 'handleUpdateSvg',
-        value: function handleUpdateSvg(skipSnapshot) {
+        key: 'handleUpdateImage',
+        value: function handleUpdateImage(skipSnapshot) {
             // Store the zoom/pan and restore it after snapshotting
             // TODO Only doing this because snapshotting at zoom/pan makes export wrong
             var oldZoom = _paper2.default.project.view.zoom;
@@ -46607,32 +46605,30 @@ var PaintEditor = function (_React$Component) {
 
             var raster = void 0;
             if ((0, _format2.isBitmap)(this.props.format)) {
-                // @todo export bitmap here
                 raster = (0, _bitmap.trim)((0, _layer.getRaster)());
-                if (raster.width === 0 || raster.height === 0) {
-                    raster.remove();
-                } else {
-                    _paper2.default.project.activeLayer.addChild(raster);
-                }
+                raster.remove();
+
+                this.props.onUpdateImage(false /* isVector */
+                , raster.canvas, _paper2.default.project.view.center.x - raster.bounds.x, _paper2.default.project.view.center.y - raster.bounds.y);
+            } else if ((0, _format2.isVector)(this.props.format)) {
+                var guideLayers = (0, _layer.hideGuideLayers)(true /* includeRaster */);
+
+                // Export at 0.5x
+                (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, .5, new _paper2.default.Point());
+                var bounds = _paper2.default.project.activeLayer.bounds;
+
+                this.props.onUpdateImage(true /* isVector */
+                , _paper2.default.project.exportSVG({
+                    asString: true,
+                    bounds: 'content',
+                    matrix: new _paper2.default.Matrix().translate(-bounds.x, -bounds.y)
+                }), _paper2.default.project.view.center.x / 2 - bounds.x, _paper2.default.project.view.center.y / 2 - bounds.y);
+
+                (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, 2, new _paper2.default.Point());
+                _paper2.default.project.activeLayer.applyMatrix = true;
+
+                (0, _layer.showGuideLayers)(guideLayers);
             }
-
-            var guideLayers = (0, _layer.hideGuideLayers)(true /* includeRaster */);
-
-            // Export at 0.5x
-            (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, .5, new _paper2.default.Point());
-            var bounds = _paper2.default.project.activeLayer.bounds;
-
-            this.props.onUpdateSvg(_paper2.default.project.exportSVG({
-                asString: true,
-                bounds: 'content',
-                matrix: new _paper2.default.Matrix().translate(-bounds.x, -bounds.y)
-            }), _paper2.default.project.view.center.x / 2 - bounds.x, _paper2.default.project.view.center.y / 2 - bounds.y);
-
-            (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, 2, new _paper2.default.Point());
-            _paper2.default.project.activeLayer.applyMatrix = true;
-
-            (0, _layer.showGuideLayers)(guideLayers);
-            if (raster) raster.remove();
 
             if (!skipSnapshot) {
                 (0, _undo2.performSnapshot)(this.props.undoSnapshot, this.props.format);
@@ -46645,42 +46641,42 @@ var PaintEditor = function (_React$Component) {
     }, {
         key: 'handleUndo',
         value: function handleUndo() {
-            (0, _undo2.performUndo)(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateSvg);
+            (0, _undo2.performUndo)(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateImage);
         }
     }, {
         key: 'handleRedo',
         value: function handleRedo() {
-            (0, _undo2.performRedo)(this.props.undoState, this.props.onRedo, this.props.setSelectedItems, this.handleUpdateSvg);
+            (0, _undo2.performRedo)(this.props.undoState, this.props.onRedo, this.props.setSelectedItems, this.handleUpdateImage);
         }
     }, {
         key: 'handleGroup',
         value: function handleGroup() {
-            (0, _group.groupSelection)(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateSvg);
+            (0, _group.groupSelection)(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateImage);
         }
     }, {
         key: 'handleUngroup',
         value: function handleUngroup() {
-            (0, _group.ungroupSelection)(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateSvg);
+            (0, _group.ungroupSelection)(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateImage);
         }
     }, {
         key: 'handleSendBackward',
         value: function handleSendBackward() {
-            (0, _order.sendBackward)(this.handleUpdateSvg);
+            (0, _order.sendBackward)(this.handleUpdateImage);
         }
     }, {
         key: 'handleSendForward',
         value: function handleSendForward() {
-            (0, _order.bringForward)(this.handleUpdateSvg);
+            (0, _order.bringForward)(this.handleUpdateImage);
         }
     }, {
         key: 'handleSendToBack',
         value: function handleSendToBack() {
-            (0, _order.sendToBack)(this.handleUpdateSvg);
+            (0, _order.sendToBack)(this.handleUpdateImage);
         }
     }, {
         key: 'handleSendToFront',
         value: function handleSendToFront() {
-            (0, _order.bringToFront)(this.handleUpdateSvg);
+            (0, _order.bringToFront)(this.handleUpdateImage);
         }
     }, {
         key: 'canUndo',
@@ -46786,14 +46782,14 @@ var PaintEditor = function (_React$Component) {
                 canvas: this.state.canvas,
                 colorInfo: this.state.colorInfo,
                 format: this.props.format,
+                image: this.props.image,
+                imageId: this.props.imageId,
                 isEyeDropping: this.props.isEyeDropping,
                 name: this.props.name,
                 rotationCenterX: this.props.rotationCenterX,
                 rotationCenterY: this.props.rotationCenterY,
                 setCanvas: this.setCanvas,
                 setTextArea: this.setTextArea,
-                svg: this.props.svg,
-                svgId: this.props.svgId,
                 textArea: this.state.textArea,
                 onGroup: this.handleGroup,
                 onRedo: this.handleRedo,
@@ -46805,8 +46801,8 @@ var PaintEditor = function (_React$Component) {
                 onSwitchToVector: this.props.handleSwitchToVector,
                 onUndo: this.handleUndo,
                 onUngroup: this.handleUngroup,
+                onUpdateImage: this.handleUpdateImage,
                 onUpdateName: this.props.onUpdateName,
-                onUpdateSvg: this.handleUpdateSvg,
                 onZoomIn: this.handleZoomIn,
                 onZoomOut: this.handleZoomOut,
                 onZoomReset: this.handleZoomReset
@@ -46821,9 +46817,11 @@ PaintEditor.propTypes = {
     changeColorToEyeDropper: _propTypes2.default.func,
     changeMode: _propTypes2.default.func.isRequired,
     clearSelectedItems: _propTypes2.default.func.isRequired,
-    format: _propTypes2.default.oneOf(Object.keys(_format3.default)).isRequired,
+    format: _propTypes2.default.oneOf(Object.keys(_format3.default)),
     handleSwitchToBitmap: _propTypes2.default.func.isRequired,
     handleSwitchToVector: _propTypes2.default.func.isRequired,
+    image: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.instanceOf(HTMLImageElement)]),
+    imageId: _propTypes2.default.string,
     isEyeDropping: _propTypes2.default.bool,
     mode: _propTypes2.default.oneOf(Object.keys(_modes3.default)).isRequired,
     name: _propTypes2.default.string,
@@ -46831,8 +46829,8 @@ PaintEditor.propTypes = {
     onKeyPress: _propTypes2.default.func.isRequired,
     onRedo: _propTypes2.default.func.isRequired,
     onUndo: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     onUpdateName: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
     previousTool: _propTypes2.default.shape({ // paper.Tool
         activate: _propTypes2.default.func.isRequired,
         remove: _propTypes2.default.func.isRequired
@@ -46841,8 +46839,6 @@ PaintEditor.propTypes = {
     rotationCenterX: _propTypes2.default.number,
     rotationCenterY: _propTypes2.default.number,
     setSelectedItems: _propTypes2.default.func.isRequired,
-    svg: _propTypes2.default.string,
-    svgId: _propTypes2.default.string,
     textEditing: _propTypes2.default.bool.isRequired,
     undoSnapshot: _propTypes2.default.func.isRequired,
     undoState: _propTypes2.default.shape({
@@ -51803,23 +51799,23 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                     },
                     _react2.default.createElement(_fillColorIndicator2.default, {
                         className: _paintEditor2.default.modMarginRight,
-                        onUpdateSvg: props.onUpdateSvg
+                        onUpdateImage: props.onUpdateImage
                     }),
                     _react2.default.createElement(_strokeColorIndicator2.default, {
-                        onUpdateSvg: props.onUpdateSvg
+                        onUpdateImage: props.onUpdateImage
                     }),
                     _react2.default.createElement(_strokeWidthIndicator2.default, {
-                        onUpdateSvg: props.onUpdateSvg
+                        onUpdateImage: props.onUpdateImage
                     })
                 ),
                 _react2.default.createElement(
                     _inputGroup2.default,
                     { className: _paintEditor2.default.modModeTools },
                     _react2.default.createElement(_modeTools2.default, {
-                        onUpdateSvg: props.onUpdateSvg
+                        onUpdateImage: props.onUpdateImage
                     })
                 )
-            ) : _react2.default.createElement(
+            ) : (0, _format.isBitmap)(props.format) ? _react2.default.createElement(
                 'div',
                 { className: _paintEditor2.default.row },
                 _react2.default.createElement(
@@ -51829,17 +51825,17 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                     },
                     _react2.default.createElement(_fillColorIndicator2.default, {
                         className: _paintEditor2.default.modMarginRight,
-                        onUpdateSvg: props.onUpdateSvg
+                        onUpdateImage: props.onUpdateImage
                     })
                 ),
                 _react2.default.createElement(
                     _inputGroup2.default,
                     { className: _paintEditor2.default.modModeTools },
                     _react2.default.createElement(_modeTools2.default, {
-                        onUpdateSvg: props.onUpdateSvg
+                        onUpdateImage: props.onUpdateImage
                     })
                 )
-            )
+            ) : null
         ) : null,
         _react2.default.createElement(
             'div',
@@ -51849,32 +51845,32 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                 'div',
                 { className: (0, _format.isVector)(props.format) ? _paintEditor2.default.modeSelector : _paintEditor2.default.hidden },
                 _react2.default.createElement(_selectMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 }),
                 _react2.default.createElement(_reshapeMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 }),
                 _react2.default.createElement(_brushMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 }),
                 _react2.default.createElement(_eraserMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 }),
                 _react2.default.createElement(_fillMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 }),
                 _react2.default.createElement(_textMode2.default, {
                     textArea: props.textArea,
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 }),
                 _react2.default.createElement(_lineMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 }),
                 _react2.default.createElement(_ovalMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 }),
                 _react2.default.createElement(_rectMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 })
             ) : null,
             props.canvas !== null ? // eslint-disable-line no-negated-condition
@@ -51882,10 +51878,10 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                 'div',
                 { className: (0, _format.isBitmap)(props.format) ? _paintEditor2.default.modeSelector : _paintEditor2.default.hidden },
                 _react2.default.createElement(_bitBrushMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 }),
                 _react2.default.createElement(_bitLineMode2.default, {
-                    onUpdateSvg: props.onUpdateSvg
+                    onUpdateImage: props.onUpdateImage
                 }),
                 _react2.default.createElement(_bitOvalMode2.default, null),
                 _react2.default.createElement(_bitRectMode2.default, null),
@@ -51904,11 +51900,11 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                     },
                     _react2.default.createElement(_paperCanvas2.default, {
                         canvasRef: props.setCanvas,
+                        image: props.image,
+                        imageId: props.imageId,
                         rotationCenterX: props.rotationCenterX,
                         rotationCenterY: props.rotationCenterY,
-                        svg: props.svg,
-                        svgId: props.svgId,
-                        onUpdateSvg: props.onUpdateSvg
+                        onUpdateImage: props.onUpdateImage
                     }),
                     _react2.default.createElement('textarea', {
                         className: _paintEditor2.default.textArea,
@@ -51943,7 +51939,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                             null,
                             props.intl.formatMessage(messages.bitmap)
                         )
-                    ) : _react2.default.createElement(
+                    ) : (0, _format.isBitmap)(props.format) ? _react2.default.createElement(
                         _button2.default,
                         {
                             className: _paintEditor2.default.bitmapButton,
@@ -51959,7 +51955,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                             null,
                             props.intl.formatMessage(messages.vector)
                         )
-                    ),
+                    ) : null,
                     _react2.default.createElement(
                         _inputGroup2.default,
                         { className: _paintEditor2.default.zoomControls },
@@ -52018,7 +52014,9 @@ PaintEditorComponent.propTypes = {
     canUndo: _propTypes2.default.func.isRequired,
     canvas: _propTypes2.default.instanceOf(Element),
     colorInfo: _loupe2.default.propTypes.colorInfo,
-    format: _propTypes2.default.oneOf(Object.keys(_format2.default)).isRequired,
+    format: _propTypes2.default.oneOf(Object.keys(_format2.default)),
+    image: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.instanceOf(HTMLImageElement)]),
+    imageId: _propTypes2.default.string,
     intl: _reactIntl.intlShape,
     isEyeDropping: _propTypes2.default.bool,
     name: _propTypes2.default.string,
@@ -52032,8 +52030,8 @@ PaintEditorComponent.propTypes = {
     onSwitchToVector: _propTypes2.default.func.isRequired,
     onUndo: _propTypes2.default.func.isRequired,
     onUngroup: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     onUpdateName: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
     onZoomIn: _propTypes2.default.func.isRequired,
     onZoomOut: _propTypes2.default.func.isRequired,
     onZoomReset: _propTypes2.default.func.isRequired,
@@ -52041,8 +52039,6 @@ PaintEditorComponent.propTypes = {
     rotationCenterY: _propTypes2.default.number,
     setCanvas: _propTypes2.default.func.isRequired,
     setTextArea: _propTypes2.default.func.isRequired,
-    svg: _propTypes2.default.string,
-    svgId: _propTypes2.default.string,
     textArea: _propTypes2.default.instanceOf(Element)
 };
 
@@ -55589,7 +55585,7 @@ var PaperCanvas = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaperCanvas.__proto__ || Object.getPrototypeOf(PaperCanvas)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['convertToBitmap', 'convertToVector', 'setCanvas', 'importSvg', 'handleKeyDown', 'handleWheel', 'switchCostume']);
+        (0, _lodash2.default)(_this, ['checkFormat', 'convertToBitmap', 'convertToVector', 'setCanvas', 'importSvg', 'handleKeyDown', 'handleWheel', 'switchCostume']);
         return _this;
     }
 
@@ -55609,8 +55605,16 @@ var PaperCanvas = function (_React$Component) {
             _paper2.default.settings.handleSize = 0;
             // Make layers.
             (0, _layer.setupLayers)();
-            if (this.props.svg) {
-                this.importSvg(this.props.svg, this.props.rotationCenterX, this.props.rotationCenterY);
+            if (this.props.image) {
+                if ((0, _format.isBitmap)(this.checkFormat(this.props.image))) {
+                    // import bitmap
+                    this.props.changeFormat(_format2.default.BITMAP_SKIP_CONVERT);
+                    (0, _undo.performSnapshot)(this.props.undoSnapshot, this.props.format);
+                    (0, _layer.getRaster)().drawImage(this.props.image, _paper2.default.project.view.center.x - this.props.rotationCenterX, _paper2.default.project.view.center.y - this.props.rotationCenterY);
+                } else if ((0, _format.isVector)(this.checkFormat(this.props.image))) {
+                    this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
+                    this.importSvg(this.props.image, this.props.rotationCenterX, this.props.rotationCenterY);
+                }
             } else {
                 (0, _undo.performSnapshot)(this.props.undoSnapshot, this.props.format);
             }
@@ -55618,8 +55622,8 @@ var PaperCanvas = function (_React$Component) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(newProps) {
-            if (this.props.svgId !== newProps.svgId) {
-                this.switchCostume(newProps.svg, newProps.rotationCenterX, newProps.rotationCenterY);
+            if (this.props.imageId !== newProps.imageId) {
+                this.switchCostume(newProps.image, newProps.rotationCenterX, newProps.rotationCenterY);
             } else if ((0, _format.isVector)(this.props.format) && newProps.format === _format2.default.BITMAP) {
                 this.convertToBitmap();
             } else if ((0, _format.isBitmap)(this.props.format) && newProps.format === _format2.default.VECTOR) {
@@ -55641,7 +55645,7 @@ var PaperCanvas = function (_React$Component) {
             }
             // Backspace, delete
             if (event.key === 'Delete' || event.key === 'Backspace') {
-                if ((0, _selection.deleteSelection)(this.props.mode, this.props.onUpdateSvg)) {
+                if ((0, _selection.deleteSelection)(this.props.mode, this.props.onUpdateImage)) {
                     this.props.setSelectedItems();
                 }
             }
@@ -55677,11 +55681,12 @@ var PaperCanvas = function (_React$Component) {
             var img = new Image();
             img.onload = function () {
                 var raster = new _paper2.default.Raster(img);
+                raster.remove();
                 raster.onLoad = function () {
                     var subCanvas = raster.canvas;
                     (0, _layer.getRaster)().drawImage(subCanvas, new _paper2.default.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
                     _paper2.default.project.activeLayer.removeChildren();
-                    _this2.props.onUpdateSvg();
+                    _this2.props.onUpdateImage();
                 };
             };
             img.src = 'data:image/svg+xml;charset=utf-8,' + svgString;
@@ -55701,11 +55706,19 @@ var PaperCanvas = function (_React$Component) {
                 _paper2.default.project.activeLayer.addChild(raster);
             }
             (0, _layer.clearRaster)();
-            this.props.onUpdateSvg();
+            this.props.onUpdateImage();
+        }
+    }, {
+        key: 'checkFormat',
+        value: function checkFormat(image) {
+            if (image instanceof HTMLImageElement) return _format2.default.BITMAP;
+            if (typeof image === 'string') return _format2.default.VECTOR;
+            _log2.default.error('Image could not be read.');
+            return null;
         }
     }, {
         key: 'switchCostume',
-        value: function switchCostume(svg, rotationCenterX, rotationCenterY) {
+        value: function switchCostume(image, rotationCenterX, rotationCenterY) {
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -55739,16 +55752,26 @@ var PaperCanvas = function (_React$Component) {
             this.props.clearSelectedItems();
             this.props.clearHoveredItem();
             this.props.clearPasteOffset();
-            if (svg) {
-                this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
-                // Store the zoom/pan and restore it after importing a new SVG
-                var oldZoom = _paper2.default.project.view.zoom;
-                var oldCenter = _paper2.default.project.view.center.clone();
-                (0, _view.resetZoom)();
-                this.props.updateViewBounds(_paper2.default.view.matrix);
-                this.importSvg(svg, rotationCenterX, rotationCenterY);
-                _paper2.default.project.view.zoom = oldZoom;
-                _paper2.default.project.view.center = oldCenter;
+            if (image) {
+                if ((0, _format.isBitmap)(this.checkFormat(image))) {
+                    // import bitmap
+                    this.props.changeFormat(_format2.default.BITMAP_SKIP_CONVERT);
+                    (0, _layer.getRaster)().drawImage(image, _paper2.default.project.view.center.x - rotationCenterX, _paper2.default.project.view.center.y - rotationCenterY);
+                    (0, _undo.performSnapshot)(this.props.undoSnapshot, this.props.format);
+                } else if ((0, _format.isVector)(this.checkFormat(image))) {
+                    this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
+                    // Store the zoom/pan and restore it after importing a new SVG
+                    var oldZoom = _paper2.default.project.view.zoom;
+                    var oldCenter = _paper2.default.project.view.center.clone();
+                    (0, _view.resetZoom)();
+                    this.props.updateViewBounds(_paper2.default.view.matrix);
+                    this.importSvg(image, rotationCenterX, rotationCenterY);
+                    _paper2.default.project.view.zoom = oldZoom;
+                    _paper2.default.project.view.center = oldCenter;
+                } else {
+                    _log2.default.error('Couldn\'t open image.');
+                    (0, _undo.performSnapshot)(this.props.undoSnapshot, this.props.format);
+                }
             } else {
                 (0, _undo.performSnapshot)(this.props.undoSnapshot, this.props.format);
             }
@@ -55907,14 +55930,14 @@ PaperCanvas.propTypes = {
     clearPasteOffset: _propTypes2.default.func.isRequired,
     clearSelectedItems: _propTypes2.default.func.isRequired,
     clearUndo: _propTypes2.default.func.isRequired,
-    format: _propTypes2.default.oneOf(Object.keys(_format2.default)).isRequired,
+    format: _propTypes2.default.oneOf(Object.keys(_format2.default)),
+    image: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.instanceOf(HTMLImageElement)]),
+    imageId: _propTypes2.default.string,
     mode: _propTypes2.default.oneOf(Object.keys(_modes2.default)),
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     rotationCenterX: _propTypes2.default.number,
     rotationCenterY: _propTypes2.default.number,
     setSelectedItems: _propTypes2.default.func.isRequired,
-    svg: _propTypes2.default.string,
-    svgId: _propTypes2.default.string,
     undoSnapshot: _propTypes2.default.func.isRequired,
     updateViewBounds: _propTypes2.default.func.isRequired
 };
@@ -57909,7 +57932,7 @@ var BitBrushMode = function (_React$Component) {
                 this.props.onChangeFillColor(_fillColor.DEFAULT_COLOR);
                 color = _fillColor.DEFAULT_COLOR;
             }
-            this.tool = new _brushTool2.default(this.props.onUpdateSvg);
+            this.tool = new _brushTool2.default(this.props.onUpdateImage);
             this.tool.setColor(color);
             this.tool.setBrushSize(this.props.bitBrushSize);
 
@@ -57942,7 +57965,7 @@ BitBrushMode.propTypes = {
     handleMouseDown: _propTypes2.default.func.isRequired,
     isBitBrushModeActive: _propTypes2.default.bool.isRequired,
     onChangeFillColor: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired
+    onUpdateImage: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -58192,14 +58215,14 @@ var BrushTool = function (_paper$Tool) {
     _inherits(BrushTool, _paper$Tool);
 
     /**
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    function BrushTool(onUpdateSvg) {
+    function BrushTool(onUpdateImage) {
         _classCallCheck(this, BrushTool);
 
         var _this = _possibleConstructorReturn(this, (BrushTool.__proto__ || Object.getPrototypeOf(BrushTool)).call(this));
 
-        _this.onUpdateSvg = onUpdateSvg;
+        _this.onUpdateImage = onUpdateImage;
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -58293,7 +58316,7 @@ var BrushTool = function (_paper$Tool) {
             if (event.event.button > 0 || !this.active) return; // only first mouse button
 
             (0, _bitmap.forEachLinePoint)(this.lastPoint, event.point, this.draw.bind(this));
-            this.onUpdateSvg();
+            this.onUpdateImage();
 
             this.lastPoint = null;
             this.active = false;
@@ -58425,7 +58448,7 @@ var BitLineMode = function (_React$Component) {
                 this.props.onChangeFillColor(_fillColor.DEFAULT_COLOR);
                 color = _fillColor.DEFAULT_COLOR;
             }
-            this.tool = new _lineTool2.default(this.props.onUpdateSvg);
+            this.tool = new _lineTool2.default(this.props.onUpdateImage);
             this.tool.setColor(color);
             this.tool.setLineSize(this.props.bitBrushSize);
 
@@ -58458,7 +58481,7 @@ BitLineMode.propTypes = {
     handleMouseDown: _propTypes2.default.func.isRequired,
     isBitLineModeActive: _propTypes2.default.bool.isRequired,
     onChangeFillColor: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired
+    onUpdateImage: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -58571,14 +58594,14 @@ var LineTool = function (_paper$Tool) {
     _inherits(LineTool, _paper$Tool);
 
     /**
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    function LineTool(onUpdateSvg) {
+    function LineTool(onUpdateImage) {
         _classCallCheck(this, LineTool);
 
         var _this = _possibleConstructorReturn(this, (LineTool.__proto__ || Object.getPrototypeOf(LineTool)).call(this));
 
-        _this.onUpdateSvg = onUpdateSvg;
+        _this.onUpdateImage = onUpdateImage;
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -58687,7 +58710,7 @@ var LineTool = function (_paper$Tool) {
             this.drawTarget = (0, _layer.getRaster)();
             (0, _bitmap.forEachLinePoint)(this.startPoint, event.point, this.draw.bind(this));
             this.drawTarget = null;
-            this.onUpdateSvg();
+            this.onUpdateImage();
 
             this.lastPoint = null;
             this.active = false;
@@ -62325,7 +62348,7 @@ var BrushMode = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (BrushMode.__proto__ || Object.getPrototypeOf(BrushMode)).call(this, props));
 
         (0, _lodash2.default)(_this, ['activateTool', 'deactivateTool']);
-        _this.blob = new _blob2.default(_this.props.onUpdateSvg, _this.props.clearSelectedItems);
+        _this.blob = new _blob2.default(_this.props.onUpdateImage, _this.props.clearSelectedItems);
         return _this;
     }
 
@@ -62401,7 +62424,7 @@ BrushMode.propTypes = {
     handleMouseDown: _propTypes2.default.func.isRequired,
     isBrushModeActive: _propTypes2.default.bool.isRequired,
     onChangeFillColor: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired
+    onUpdateImage: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -65515,7 +65538,7 @@ var EraserMode = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (EraserMode.__proto__ || Object.getPrototypeOf(EraserMode)).call(this, props));
 
         (0, _lodash2.default)(_this, ['activateTool', 'deactivateTool']);
-        _this.blob = new _blob2.default(_this.props.onUpdateSvg, _this.props.clearSelectedItems);
+        _this.blob = new _blob2.default(_this.props.onUpdateImage, _this.props.clearSelectedItems);
         return _this;
     }
 
@@ -65574,7 +65597,7 @@ EraserMode.propTypes = {
     }),
     handleMouseDown: _propTypes2.default.func.isRequired,
     isEraserModeActive: _propTypes2.default.bool.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired
+    onUpdateImage: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -65719,11 +65742,11 @@ var FillColorIndicator = function (_React$Component) {
         value: function componentWillReceiveProps(newProps) {
             var _props = this.props,
                 fillColorModalVisible = _props.fillColorModalVisible,
-                onUpdateSvg = _props.onUpdateSvg;
+                onUpdateImage = _props.onUpdateImage;
 
             if (fillColorModalVisible && !newProps.fillColorModalVisible) {
                 // Submit the new SVG, which also stores a single undo/redo action.
-                if (this._hasChanged) onUpdateSvg();
+                if (this._hasChanged) onUpdateImage();
                 this._hasChanged = false;
             }
         }
@@ -65786,7 +65809,7 @@ FillColorIndicator.propTypes = {
     isEyeDropping: _propTypes2.default.bool.isRequired,
     onChangeFillColor: _propTypes2.default.func.isRequired,
     onCloseFillColor: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     textEditTarget: _propTypes2.default.number
 };
 
@@ -67583,7 +67606,7 @@ var FillMode = function (_React$Component) {
             if (this.props.fillColor === _stylePath.MIXED) {
                 this.props.onChangeFillColor(_fillColor.DEFAULT_COLOR);
             }
-            this.tool = new _fillTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.onUpdateSvg);
+            this.tool = new _fillTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.onUpdateImage);
             this.tool.setFillColor(this.props.fillColor === _stylePath.MIXED ? _fillColor.DEFAULT_COLOR : this.props.fillColor);
             this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
             this.tool.activate();
@@ -67616,7 +67639,7 @@ FillMode.propTypes = {
     hoveredItemId: _propTypes2.default.number,
     isFillModeActive: _propTypes2.default.bool.isRequired,
     onChangeFillColor: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     setHoveredItem: _propTypes2.default.func.isRequired
 };
 
@@ -67690,19 +67713,19 @@ var FillTool = function (_paper$Tool) {
         /**
          * @param {function} setHoveredItem Callback to set the hovered item
          * @param {function} clearHoveredItem Callback to clear the hovered item
-         * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+         * @param {!function} onUpdateImage A callback to call when the image visibly changes
          */
 
     }]);
 
-    function FillTool(setHoveredItem, clearHoveredItem, onUpdateSvg) {
+    function FillTool(setHoveredItem, clearHoveredItem, onUpdateImage) {
         _classCallCheck(this, FillTool);
 
         var _this = _possibleConstructorReturn(this, (FillTool.__proto__ || Object.getPrototypeOf(FillTool)).call(this));
 
         _this.setHoveredItem = setHoveredItem;
         _this.clearHoveredItem = clearHoveredItem;
-        _this.onUpdateSvg = onUpdateSvg;
+        _this.onUpdateImage = onUpdateImage;
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -67844,7 +67867,7 @@ var FillTool = function (_paper$Tool) {
                 this.fillItem = null;
                 this.addedFillItem = null;
                 this.fillItemOrigColor = null;
-                this.onUpdateSvg();
+                this.onUpdateImage();
             }
         }
     }, {
@@ -68364,7 +68387,7 @@ var LineMode = function (_React$Component) {
             }
 
             if (this.path) {
-                this.props.onUpdateSvg();
+                this.props.onUpdateImage();
                 this.path = null;
             }
             this.active = false;
@@ -68406,7 +68429,7 @@ LineMode.propTypes = {
     isLineModeActive: _propTypes2.default.bool.isRequired,
     onChangeStrokeColor: _propTypes2.default.func.isRequired,
     onChangeStrokeWidth: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired
+    onUpdateImage: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -69045,7 +69068,7 @@ var ModeTools = function (_React$Component) {
 
             if (changed) {
                 this.props.setSelectedItems();
-                this.props.onUpdateSvg();
+                this.props.onUpdateImage();
             }
         }
     }, {
@@ -69085,7 +69108,7 @@ var ModeTools = function (_React$Component) {
 
             if (changed) {
                 this.props.setSelectedItems();
-                this.props.onUpdateSvg();
+                this.props.onUpdateImage();
             }
         }
     }, {
@@ -69136,7 +69159,7 @@ var ModeTools = function (_React$Component) {
             }
             itemGroup.remove();
 
-            this.props.onUpdateSvg();
+            this.props.onUpdateImage();
         }
     }, {
         key: 'handleFlipHorizontal',
@@ -69178,7 +69201,7 @@ var ModeTools = function (_React$Component) {
                 }
                 this.props.incrementPasteOffset();
                 this.props.setSelectedItems();
-                this.props.onUpdateSvg();
+                this.props.onUpdateImage();
             }
         }
     }, {
@@ -69204,7 +69227,7 @@ ModeTools.propTypes = {
     clearSelectedItems: _propTypes2.default.func.isRequired,
     clipboardItems: _propTypes2.default.arrayOf(_propTypes2.default.array),
     incrementPasteOffset: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     pasteOffset: _propTypes2.default.number,
     // Listen on selected items to update hasSelectedPoints
     selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)), // eslint-disable-line react/no-unused-prop-types
@@ -69789,7 +69812,7 @@ var OvalMode = function (_React$Component) {
             } else if (fillColorPresent && !strokeColorPresent) {
                 this.props.onChangeStrokeColor(null);
             }
-            this.tool = new _ovalTool2.default(this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateSvg);
+            this.tool = new _ovalTool2.default(this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage);
             this.tool.setColorState(this.props.colorState);
             this.tool.activate();
         }
@@ -69824,7 +69847,7 @@ OvalMode.propTypes = {
     isOvalModeActive: _propTypes2.default.bool.isRequired,
     onChangeFillColor: _propTypes2.default.func.isRequired,
     onChangeStrokeColor: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setSelectedItems: _propTypes2.default.func.isRequired
 };
@@ -69913,21 +69936,21 @@ var OvalTool = function (_paper$Tool) {
         /**
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
          * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-         * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+         * @param {!function} onUpdateImage A callback to call when the image visibly changes
          */
 
     }]);
 
-    function OvalTool(setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    function OvalTool(setSelectedItems, clearSelectedItems, onUpdateImage) {
         _classCallCheck(this, OvalTool);
 
         var _this = _possibleConstructorReturn(this, (OvalTool.__proto__ || Object.getPrototypeOf(OvalTool)).call(this));
 
         _this.setSelectedItems = setSelectedItems;
         _this.clearSelectedItems = clearSelectedItems;
-        _this.onUpdateSvg = onUpdateSvg;
-        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.OVAL, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        var nudgeTool = new _nudgeTool2.default(_this.boundingBoxTool, onUpdateSvg);
+        _this.onUpdateImage = onUpdateImage;
+        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.OVAL, setSelectedItems, clearSelectedItems, onUpdateImage);
+        var nudgeTool = new _nudgeTool2.default(_this.boundingBoxTool, onUpdateImage);
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -70038,7 +70061,7 @@ var OvalTool = function (_paper$Tool) {
 
                     ovalPath.selected = true;
                     this.setSelectedItems();
-                    this.onUpdateSvg();
+                    this.onUpdateImage();
                 }
             }
             this.active = false;
@@ -70084,9 +70107,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var ScaleTool = function () {
     /**
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    function ScaleTool(onUpdateSvg) {
+    function ScaleTool(onUpdateImage) {
         _classCallCheck(this, ScaleTool);
 
         this.active = false;
@@ -70099,7 +70122,7 @@ var ScaleTool = function () {
         this.itemGroup = null;
         // Lowest item above all scale items in z index
         this.itemToInsertBelow = null;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
     }
 
     /**
@@ -70253,7 +70276,7 @@ var ScaleTool = function () {
             }
             this.itemGroup.remove();
 
-            this.onUpdateSvg();
+            this.onUpdateImage();
             this.active = false;
         }
     }, {
@@ -70333,15 +70356,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 var RotateTool = function () {
     /**
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    function RotateTool(onUpdateSvg) {
+    function RotateTool(onUpdateImage) {
         _classCallCheck(this, RotateTool);
 
         this.rotItems = [];
         this.rotGroupPivot = null;
         this.prevRot = 90;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
     }
 
     /**
@@ -70414,7 +70437,7 @@ var RotateTool = function () {
             this.rotGroupPivot = null;
             this.prevRot = 90;
 
-            this.onUpdateSvg();
+            this.onUpdateImage();
         }
     }]);
 
@@ -70603,7 +70626,7 @@ var RectMode = function (_React$Component) {
             } else if (fillColorPresent && !strokeColorPresent) {
                 this.props.onChangeStrokeColor(null);
             }
-            this.tool = new _rectTool2.default(this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateSvg);
+            this.tool = new _rectTool2.default(this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage);
             this.tool.setColorState(this.props.colorState);
             this.tool.activate();
         }
@@ -70638,7 +70661,7 @@ RectMode.propTypes = {
     isRectModeActive: _propTypes2.default.bool.isRequired,
     onChangeFillColor: _propTypes2.default.func.isRequired,
     onChangeStrokeColor: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setSelectedItems: _propTypes2.default.func.isRequired
 };
@@ -70727,21 +70750,21 @@ var RectTool = function (_paper$Tool) {
         /**
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
          * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-         * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+         * @param {!function} onUpdateImage A callback to call when the image visibly changes
          */
 
     }]);
 
-    function RectTool(setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    function RectTool(setSelectedItems, clearSelectedItems, onUpdateImage) {
         _classCallCheck(this, RectTool);
 
         var _this = _possibleConstructorReturn(this, (RectTool.__proto__ || Object.getPrototypeOf(RectTool)).call(this));
 
         _this.setSelectedItems = setSelectedItems;
         _this.clearSelectedItems = clearSelectedItems;
-        _this.onUpdateSvg = onUpdateSvg;
-        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.RECT, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        var nudgeTool = new _nudgeTool2.default(_this.boundingBoxTool, onUpdateSvg);
+        _this.onUpdateImage = onUpdateImage;
+        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.RECT, setSelectedItems, clearSelectedItems, onUpdateImage);
+        var nudgeTool = new _nudgeTool2.default(_this.boundingBoxTool, onUpdateImage);
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -70846,7 +70869,7 @@ var RectTool = function (_paper$Tool) {
                 } else {
                     this.rect.selected = true;
                     this.setSelectedItems();
-                    this.onUpdateSvg();
+                    this.onUpdateImage();
                     this.rect = null;
                 }
             }
@@ -71014,7 +71037,7 @@ var ReshapeMode = function (_React$Component) {
     }, {
         key: 'activateTool',
         value: function activateTool() {
-            this.tool = new _reshapeTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateSvg);
+            this.tool = new _reshapeTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage);
             this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
             this.tool.activate();
         }
@@ -71045,7 +71068,7 @@ ReshapeMode.propTypes = {
     handleMouseDown: _propTypes2.default.func.isRequired,
     hoveredItemId: _propTypes2.default.number,
     isReshapeModeActive: _propTypes2.default.bool.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     setHoveredItem: _propTypes2.default.func.isRequired,
     setSelectedItems: _propTypes2.default.func.isRequired
 };
@@ -71178,27 +71201,27 @@ var ReshapeTool = function (_paper$Tool) {
          * @param {function} clearHoveredItem Callback to clear the hovered item
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
          * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-         * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+         * @param {!function} onUpdateImage A callback to call when the image visibly changes
          */
 
     }]);
 
-    function ReshapeTool(setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    function ReshapeTool(setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage) {
         _classCallCheck(this, ReshapeTool);
 
         var _this = _possibleConstructorReturn(this, (ReshapeTool.__proto__ || Object.getPrototypeOf(ReshapeTool)).call(this));
 
         _this.setHoveredItem = setHoveredItem;
         _this.clearHoveredItem = clearHoveredItem;
-        _this.onUpdateSvg = onUpdateSvg;
+        _this.onUpdateImage = onUpdateImage;
         _this.prevHoveredItemId = null;
         _this.lastEvent = null;
         _this.active = false;
         _this.mode = ReshapeModes.SELECTION_BOX;
         _this._modeMap = {};
-        _this._modeMap[ReshapeModes.FILL] = new _moveTool2.default(_modes2.default.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        _this._modeMap[ReshapeModes.POINT] = new _pointTool2.default(setSelectedItems, clearSelectedItems, onUpdateSvg);
-        _this._modeMap[ReshapeModes.HANDLE] = new _handleTool2.default(setSelectedItems, clearSelectedItems, onUpdateSvg);
+        _this._modeMap[ReshapeModes.FILL] = new _moveTool2.default(_modes2.default.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateImage);
+        _this._modeMap[ReshapeModes.POINT] = new _pointTool2.default(setSelectedItems, clearSelectedItems, onUpdateImage);
+        _this._modeMap[ReshapeModes.HANDLE] = new _handleTool2.default(setSelectedItems, clearSelectedItems, onUpdateImage);
         _this._modeMap[ReshapeModes.SELECTION_BOX] = new _selectionBoxTool2.default(_modes2.default.RESHAPE, setSelectedItems, clearSelectedItems);
 
         // We have to set these functions instead of just declaring them because
@@ -71466,7 +71489,7 @@ var ReshapeTool = function (_paper$Tool) {
             if (selected.length === 0) return;
 
             if (event.key === 'up' || event.key === 'down' || event.key === 'left' || event.key === 'right') {
-                this.onUpdateSvg();
+                this.onUpdateImage();
             }
         }
     }, {
@@ -71476,7 +71499,7 @@ var ReshapeTool = function (_paper$Tool) {
             this.clearHoveredItem();
             this.setHoveredItem = null;
             this.clearHoveredItem = null;
-            this.onUpdateSvg = null;
+            this.onUpdateImage = null;
             this.lastEvent = null;
         }
     }]);
@@ -71516,9 +71539,9 @@ var PointTool = function () {
     /**
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    function PointTool(setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    function PointTool(setSelectedItems, clearSelectedItems, onUpdateImage) {
         _classCallCheck(this, PointTool);
 
         /**
@@ -71539,7 +71562,7 @@ var PointTool = function () {
         this.selectedItems = null;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
     }
 
     /**
@@ -71752,7 +71775,7 @@ var PointTool = function () {
             this.selectedItems = null;
             this.setSelectedItems();
             if (moved) {
-                this.onUpdateSvg();
+                this.onUpdateImage();
             }
         }
     }]);
@@ -71784,15 +71807,15 @@ var HandleTool = function () {
     /**
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    function HandleTool(setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    function HandleTool(setSelectedItems, clearSelectedItems, onUpdateImage) {
         _classCallCheck(this, HandleTool);
 
         this.hitType = null;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
         this.selectedItems = [];
     }
     /**
@@ -71950,7 +71973,7 @@ var HandleTool = function () {
 
             if (moved) {
                 this.setSelectedItems();
-                this.onUpdateSvg();
+                this.onUpdateImage();
             }
             this.selectedItems = [];
         }
@@ -72118,7 +72141,7 @@ var SelectMode = function (_React$Component) {
     }, {
         key: 'activateTool',
         value: function activateTool() {
-            this.tool = new _selectTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateSvg);
+            this.tool = new _selectTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage);
             this.tool.activate();
         }
     }, {
@@ -72147,7 +72170,7 @@ SelectMode.propTypes = {
     handleMouseDown: _propTypes2.default.func.isRequired,
     hoveredItemId: _propTypes2.default.number,
     isSelectModeActive: _propTypes2.default.bool.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setHoveredItem: _propTypes2.default.func.isRequired,
     setSelectedItems: _propTypes2.default.func.isRequired
@@ -72249,21 +72272,21 @@ var SelectTool = function (_paper$Tool) {
          * @param {function} clearHoveredItem Callback to clear the hovered item
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
          * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-         * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+         * @param {!function} onUpdateImage A callback to call when the image visibly changes
          */
 
     }]);
 
-    function SelectTool(setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    function SelectTool(setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage) {
         _classCallCheck(this, SelectTool);
 
         var _this = _possibleConstructorReturn(this, (SelectTool.__proto__ || Object.getPrototypeOf(SelectTool)).call(this));
 
         _this.setHoveredItem = setHoveredItem;
         _this.clearHoveredItem = clearHoveredItem;
-        _this.onUpdateSvg = onUpdateSvg;
-        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.SELECT, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        var nudgeTool = new _nudgeTool2.default(_this.boundingBoxTool, onUpdateSvg);
+        _this.onUpdateImage = onUpdateImage;
+        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.SELECT, setSelectedItems, clearSelectedItems, onUpdateImage);
+        var nudgeTool = new _nudgeTool2.default(_this.boundingBoxTool, onUpdateImage);
         _this.selectionBoxTool = new _selectionBoxTool2.default(_modes2.default.SELECT, setSelectedItems, clearSelectedItems);
         _this.selectionBoxMode = false;
         _this.prevHoveredItemId = null;
@@ -72387,7 +72410,7 @@ var SelectTool = function (_paper$Tool) {
             this.boundingBoxTool.removeBoundsPath();
             this.setHoveredItem = null;
             this.clearHoveredItem = null;
-            this.onUpdateSvg = null;
+            this.onUpdateImage = null;
             this.boundingBoxTool = null;
             this.selectionBoxTool = null;
         }
@@ -72524,11 +72547,11 @@ var StrokeColorIndicator = function (_React$Component) {
         value: function componentWillReceiveProps(newProps) {
             var _props = this.props,
                 strokeColorModalVisible = _props.strokeColorModalVisible,
-                onUpdateSvg = _props.onUpdateSvg;
+                onUpdateImage = _props.onUpdateImage;
 
             if (strokeColorModalVisible && !newProps.strokeColorModalVisible) {
                 // Submit the new SVG, which also stores a single undo/redo action.
-                if (this._hasChanged) onUpdateSvg();
+                if (this._hasChanged) onUpdateImage();
                 this._hasChanged = false;
             }
         }
@@ -72589,7 +72612,7 @@ StrokeColorIndicator.propTypes = {
     isEyeDropping: _propTypes2.default.bool.isRequired,
     onChangeStrokeColor: _propTypes2.default.func.isRequired,
     onCloseStrokeColor: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     strokeColor: _propTypes2.default.string,
     strokeColorModalVisible: _propTypes2.default.bool.isRequired,
     textEditTarget: _propTypes2.default.number
@@ -72754,7 +72777,7 @@ var StrokeWidthIndicator = function (_React$Component) {
         key: 'handleChangeStrokeWidth',
         value: function handleChangeStrokeWidth(newWidth) {
             if ((0, _stylePath.applyStrokeWidthToSelection)(newWidth, this.props.textEditTarget)) {
-                this.props.onUpdateSvg();
+                this.props.onUpdateImage();
             }
             this.props.onChangeStrokeWidth(newWidth);
         }
@@ -72790,7 +72813,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 StrokeWidthIndicator.propTypes = {
     disabled: _propTypes2.default.bool.isRequired,
     onChangeStrokeWidth: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     strokeWidth: _propTypes2.default.number,
     textEditTarget: _propTypes2.default.number
 };
@@ -72991,7 +73014,7 @@ var TextMode = function (_React$Component) {
             } else if (fillColorPresent && !strokeColorPresent) {
                 this.props.onChangeStrokeColor(null);
             }
-            this.tool = new _textTool2.default(this.props.textArea, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateSvg, this.props.setTextEditTarget);
+            this.tool = new _textTool2.default(this.props.textArea, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage, this.props.setTextEditTarget);
             this.tool.setColorState(this.props.colorState);
             this.tool.activate();
         }
@@ -73026,7 +73049,7 @@ TextMode.propTypes = {
     isTextModeActive: _propTypes2.default.bool.isRequired,
     onChangeFillColor: _propTypes2.default.func.isRequired,
     onChangeStrokeColor: _propTypes2.default.func.isRequired,
-    onUpdateSvg: _propTypes2.default.func.isRequired,
+    onUpdateImage: _propTypes2.default.func.isRequired,
     selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setSelectedItems: _propTypes2.default.func.isRequired,
     setTextEditTarget: _propTypes2.default.func.isRequired,
@@ -73155,13 +73178,13 @@ var TextTool = function (_paper$Tool) {
          * @param {HTMLTextAreaElement} textAreaElement dom element for the editable text field
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
          * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-         * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+         * @param {!function} onUpdateImage A callback to call when the image visibly changes
          * @param {!function} setTextEditTarget Call to set text editing target whenever text editing is active
          */
 
     }]);
 
-    function TextTool(textAreaElement, setSelectedItems, clearSelectedItems, onUpdateSvg, setTextEditTarget) {
+    function TextTool(textAreaElement, setSelectedItems, clearSelectedItems, onUpdateImage, setTextEditTarget) {
         _classCallCheck(this, TextTool);
 
         var _this = _possibleConstructorReturn(this, (TextTool.__proto__ || Object.getPrototypeOf(TextTool)).call(this));
@@ -73169,10 +73192,10 @@ var TextTool = function (_paper$Tool) {
         _this.element = textAreaElement;
         _this.setSelectedItems = setSelectedItems;
         _this.clearSelectedItems = clearSelectedItems;
-        _this.onUpdateSvg = onUpdateSvg;
+        _this.onUpdateImage = onUpdateImage;
         _this.setTextEditTarget = setTextEditTarget;
-        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.TEXT, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        _this.nudgeTool = new _nudgeTool2.default(_this.boundingBoxTool, onUpdateSvg);
+        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.TEXT, setSelectedItems, clearSelectedItems, onUpdateImage);
+        _this.nudgeTool = new _nudgeTool2.default(_this.boundingBoxTool, onUpdateImage);
         _this.lastEvent = null;
 
         // We have to set these functions instead of just declaring them because
@@ -73400,7 +73423,7 @@ var TextTool = function (_paper$Tool) {
         value: function handleTextInput(event) {
             // Save undo state if you paused typing for long enough.
             if (this.lastTypeEvent && event.timeStamp - this.lastTypeEvent.timeStamp > TextTool.TYPING_TIMEOUT_MILLIS) {
-                this.onUpdateSvg();
+                this.onUpdateImage();
             }
             this.lastTypeEvent = event;
             if (this.mode === TextTool.TEXT_EDIT_MODE) {
@@ -73469,7 +73492,7 @@ var TextTool = function (_paper$Tool) {
 
             // If you finished editing a textbox, save undo state
             if (this.textBox && this.textBox.content.trim().length) {
-                this.onUpdateSvg();
+                this.onUpdateImage();
             }
         }
     }, {
