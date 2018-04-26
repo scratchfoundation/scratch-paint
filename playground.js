@@ -16676,7 +16676,7 @@ var _modes = __webpack_require__(5);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(22);
+var _group = __webpack_require__(24);
 
 var _item = __webpack_require__(25);
 
@@ -19049,7 +19049,7 @@ var _selection = __webpack_require__(3);
 
 var _item = __webpack_require__(25);
 
-var _group = __webpack_require__(22);
+var _group = __webpack_require__(24);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22505,186 +22505,6 @@ exports.setupLayers = setupLayers;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.shouldShowUngroup = exports.shouldShowGroup = exports.isGroupChild = exports.isGroup = exports.getItemsGroup = exports.ungroupItems = exports.groupItems = exports.ungroupSelection = exports.groupSelection = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _item = __webpack_require__(25);
-
-var _selection = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var isGroup = function isGroup(item) {
-    return (0, _item.isGroupItem)(item);
-};
-
-/**
- * Groups the given items. Other things are then deselected and the new group is selected.
- * @param {!Array<paper.Item>} items Root level items to group
- * @param {!function} clearSelectedItems Function to clear Redux state's selected items
- * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
- * @return {paper.Group} the group if one is created, otherwise false.
- */
-var groupItems = function groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg) {
-    if (items.length > 0) {
-        var group = new _paper2.default.Group(items);
-        (0, _selection.clearSelection)(clearSelectedItems);
-        (0, _selection.setItemSelection)(group, true);
-        for (var i = 0; i < group.children.length; i++) {
-            group.children[i].selected = true;
-        }
-        setSelectedItems();
-        onUpdateSvg();
-        return group;
-    }
-    return false;
-};
-
-/**
- * Groups the selected items. Other things are then deselected and the new group is selected.
- * @param {!function} clearSelectedItems Function to clear Redux state's selected items
- * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
- * @return {paper.Group} the group if one is created, otherwise false.
- */
-var groupSelection = function groupSelection(clearSelectedItems, setSelectedItems, onUpdateSvg) {
-    var items = (0, _selection.getSelectedRootItems)();
-    return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg);
-};
-
-var _ungroupLoop = function _ungroupLoop(group, recursive, setSelectedItems) {
-    // Can't ungroup items that are not groups
-    if (!group || !group.children || !isGroup(group)) return;
-
-    group.applyMatrix = true;
-    // iterate over group children recursively
-    for (var i = 0; i < group.children.length; i++) {
-        var groupChild = group.children[i];
-        if (groupChild instanceof _paper2.default.Group && groupChild.hasChildren()) {
-            // recursion (groups can contain groups, ie. from SVG import)
-            if (recursive) {
-                _ungroupLoop(groupChild, recursive, setSelectedItems);
-                continue;
-            }
-            if (groupChild.children.length === 1) {
-                groupChild = groupChild.reduce();
-            }
-        }
-        groupChild.applyMatrix = true;
-        // move items from the group to the activeLayer (ungrouping)
-        groupChild.insertBelow(group);
-        if (setSelectedItems) {
-            groupChild.selected = true;
-        }
-        i--;
-    }
-};
-
-/**
- * Ungroups the given items. The new group is selected only if setSelectedItems is passed in.
- * onUpdateSvg is called to notify listeners of a change on the SVG only if onUpdateSvg is passed in.
- * The reason these arguments are optional on ungroupItems is because ungroupItems is used for parts of
- * SVG import, which shouldn't change the selection or undo state.
- *
- * @param {!Array<paper.Item>} items Items to ungroup if they are groups
- * @param {?function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {?function} onUpdateSvg Function to let listeners know that SVG has changed.
- */
-var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateSvg) {
-    if (items.length === 0) {
-        return;
-    }
-    var emptyGroups = [];
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (isGroup(item) && !item.data.isPGTextItem) {
-            _ungroupLoop(item, false /* recursive */, setSelectedItems);
-
-            if (!item.hasChildren()) {
-                emptyGroups.push(item);
-            }
-        }
-    }
-    if (setSelectedItems) {
-        setSelectedItems();
-    }
-    // remove all empty groups after ungrouping
-    for (var j = 0; j < emptyGroups.length; j++) {
-        emptyGroups[j].remove();
-    }
-    // @todo: enable/disable grouping icons
-    if (onUpdateSvg) {
-        onUpdateSvg();
-    }
-};
-
-/**
- * Ungroups the selected items. Other items are deselected and the ungrouped items are selected.
- *
- * @param {!function} clearSelectedItems Function to clear Redux state's selected items
- * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
- */
-var ungroupSelection = function ungroupSelection(clearSelectedItems, setSelectedItems, onUpdateSvg) {
-    var items = (0, _selection.getSelectedRootItems)();
-    (0, _selection.clearSelection)(clearSelectedItems);
-    ungroupItems(items, setSelectedItems, onUpdateSvg);
-};
-
-var getItemsGroup = function getItemsGroup(item) {
-    var itemParent = item.parent;
-
-    if (isGroup(itemParent)) {
-        return itemParent;
-    }
-    return null;
-};
-
-var isGroupChild = function isGroupChild(item) {
-    var rootItem = (0, _item.getRootItem)(item);
-    return isGroup(rootItem);
-};
-
-var shouldShowGroup = function shouldShowGroup() {
-    var items = (0, _selection.getSelectedRootItems)();
-    return items.length > 1;
-};
-
-var shouldShowUngroup = function shouldShowUngroup() {
-    var items = (0, _selection.getSelectedRootItems)();
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (isGroup(item) && !item.data.isPGTextItem && item.children && item.children.length > 0) {
-            return true;
-        }
-    }
-    return false;
-};
-
-exports.groupSelection = groupSelection;
-exports.ungroupSelection = ungroupSelection;
-exports.groupItems = groupItems;
-exports.ungroupItems = ungroupItems;
-exports.getItemsGroup = getItemsGroup;
-exports.isGroup = isGroup;
-exports.isGroupChild = isGroupChild;
-exports.shouldShowGroup = shouldShowGroup;
-exports.shouldShowUngroup = shouldShowUngroup;
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 exports.ComingSoonTooltip = exports.ComingSoonComponent = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -22868,7 +22688,7 @@ exports.ComingSoonComponent = ComingSoon;
 exports.ComingSoonTooltip = ComingSoonTooltip;
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22904,6 +22724,186 @@ var isBitmap = function isBitmap(format) {
 exports.default = Formats;
 exports.isVector = isVector;
 exports.isBitmap = isBitmap;
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.shouldShowUngroup = exports.shouldShowGroup = exports.isGroupChild = exports.isGroup = exports.getItemsGroup = exports.ungroupItems = exports.groupItems = exports.ungroupSelection = exports.groupSelection = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _item = __webpack_require__(25);
+
+var _selection = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var isGroup = function isGroup(item) {
+    return (0, _item.isGroupItem)(item);
+};
+
+/**
+ * Groups the given items. Other things are then deselected and the new group is selected.
+ * @param {!Array<paper.Item>} items Root level items to group
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @return {paper.Group} the group if one is created, otherwise false.
+ */
+var groupItems = function groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg) {
+    if (items.length > 0) {
+        var group = new _paper2.default.Group(items);
+        (0, _selection.clearSelection)(clearSelectedItems);
+        (0, _selection.setItemSelection)(group, true);
+        for (var i = 0; i < group.children.length; i++) {
+            group.children[i].selected = true;
+        }
+        setSelectedItems();
+        onUpdateSvg();
+        return group;
+    }
+    return false;
+};
+
+/**
+ * Groups the selected items. Other things are then deselected and the new group is selected.
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ * @return {paper.Group} the group if one is created, otherwise false.
+ */
+var groupSelection = function groupSelection(clearSelectedItems, setSelectedItems, onUpdateSvg) {
+    var items = (0, _selection.getSelectedRootItems)();
+    return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateSvg);
+};
+
+var _ungroupLoop = function _ungroupLoop(group, recursive, setSelectedItems) {
+    // Can't ungroup items that are not groups
+    if (!group || !group.children || !isGroup(group)) return;
+
+    group.applyMatrix = true;
+    // iterate over group children recursively
+    for (var i = 0; i < group.children.length; i++) {
+        var groupChild = group.children[i];
+        if (groupChild instanceof _paper2.default.Group && groupChild.hasChildren()) {
+            // recursion (groups can contain groups, ie. from SVG import)
+            if (recursive) {
+                _ungroupLoop(groupChild, recursive, setSelectedItems);
+                continue;
+            }
+            if (groupChild.children.length === 1) {
+                groupChild = groupChild.reduce();
+            }
+        }
+        groupChild.applyMatrix = true;
+        // move items from the group to the activeLayer (ungrouping)
+        groupChild.insertBelow(group);
+        if (setSelectedItems) {
+            groupChild.selected = true;
+        }
+        i--;
+    }
+};
+
+/**
+ * Ungroups the given items. The new group is selected only if setSelectedItems is passed in.
+ * onUpdateSvg is called to notify listeners of a change on the SVG only if onUpdateSvg is passed in.
+ * The reason these arguments are optional on ungroupItems is because ungroupItems is used for parts of
+ * SVG import, which shouldn't change the selection or undo state.
+ *
+ * @param {!Array<paper.Item>} items Items to ungroup if they are groups
+ * @param {?function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {?function} onUpdateSvg Function to let listeners know that SVG has changed.
+ */
+var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateSvg) {
+    if (items.length === 0) {
+        return;
+    }
+    var emptyGroups = [];
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (isGroup(item) && !item.data.isPGTextItem) {
+            _ungroupLoop(item, false /* recursive */, setSelectedItems);
+
+            if (!item.hasChildren()) {
+                emptyGroups.push(item);
+            }
+        }
+    }
+    if (setSelectedItems) {
+        setSelectedItems();
+    }
+    // remove all empty groups after ungrouping
+    for (var j = 0; j < emptyGroups.length; j++) {
+        emptyGroups[j].remove();
+    }
+    // @todo: enable/disable grouping icons
+    if (onUpdateSvg) {
+        onUpdateSvg();
+    }
+};
+
+/**
+ * Ungroups the selected items. Other items are deselected and the ungrouped items are selected.
+ *
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateSvg Function to let listeners know that SVG has changed.
+ */
+var ungroupSelection = function ungroupSelection(clearSelectedItems, setSelectedItems, onUpdateSvg) {
+    var items = (0, _selection.getSelectedRootItems)();
+    (0, _selection.clearSelection)(clearSelectedItems);
+    ungroupItems(items, setSelectedItems, onUpdateSvg);
+};
+
+var getItemsGroup = function getItemsGroup(item) {
+    var itemParent = item.parent;
+
+    if (isGroup(itemParent)) {
+        return itemParent;
+    }
+    return null;
+};
+
+var isGroupChild = function isGroupChild(item) {
+    var rootItem = (0, _item.getRootItem)(item);
+    return isGroup(rootItem);
+};
+
+var shouldShowGroup = function shouldShowGroup() {
+    var items = (0, _selection.getSelectedRootItems)();
+    return items.length > 1;
+};
+
+var shouldShowUngroup = function shouldShowUngroup() {
+    var items = (0, _selection.getSelectedRootItems)();
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (isGroup(item) && !item.data.isPGTextItem && item.children && item.children.length > 0) {
+            return true;
+        }
+    }
+    return false;
+};
+
+exports.groupSelection = groupSelection;
+exports.ungroupSelection = ungroupSelection;
+exports.groupItems = groupItems;
+exports.ungroupItems = ungroupItems;
+exports.getItemsGroup = getItemsGroup;
+exports.isGroup = isGroup;
+exports.isGroupChild = isGroupChild;
+exports.shouldShowGroup = shouldShowGroup;
+exports.shouldShowUngroup = shouldShowUngroup;
 
 /***/ }),
 /* 25 */
@@ -25041,7 +25041,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeFormat = exports.default = undefined;
 
-var _format = __webpack_require__(24);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -25526,7 +25526,7 @@ var _item = __webpack_require__(25);
 
 var _guides = __webpack_require__(32);
 
-var _group = __webpack_require__(22);
+var _group = __webpack_require__(24);
 
 var _math = __webpack_require__(17);
 
@@ -26975,7 +26975,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _layer = __webpack_require__(21);
 
-var _format = __webpack_require__(24);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -28697,7 +28697,7 @@ var _modes = __webpack_require__(5);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(22);
+var _group = __webpack_require__(24);
 
 var _item = __webpack_require__(25);
 
@@ -46437,7 +46437,7 @@ var _undo2 = __webpack_require__(83);
 
 var _order = __webpack_require__(84);
 
-var _group = __webpack_require__(22);
+var _group = __webpack_require__(24);
 
 var _math = __webpack_require__(17);
 
@@ -46453,7 +46453,7 @@ var _modes2 = __webpack_require__(5);
 
 var _modes3 = _interopRequireDefault(_modes2);
 
-var _format2 = __webpack_require__(24);
+var _format2 = __webpack_require__(23);
 
 var _format3 = _interopRequireDefault(_format2);
 
@@ -51299,7 +51299,7 @@ var _paperCanvas = __webpack_require__(142);
 
 var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
 
-var _group = __webpack_require__(22);
+var _group = __webpack_require__(24);
 
 var _order = __webpack_require__(84);
 
@@ -51427,7 +51427,7 @@ var _textMode = __webpack_require__(316);
 
 var _textMode2 = _interopRequireDefault(_textMode);
 
-var _format = __webpack_require__(24);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -55469,7 +55469,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _format = __webpack_require__(24);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -55486,8 +55486,6 @@ var _bitmap = __webpack_require__(47);
 var _undo = __webpack_require__(83);
 
 var _undo2 = __webpack_require__(37);
-
-var _group = __webpack_require__(22);
 
 var _layer = __webpack_require__(21);
 
@@ -55781,9 +55779,6 @@ var PaperCanvas = function (_React$Component) {
                     } else {
                         // Center
                         item.translate(_paper2.default.project.view.center.subtract(itemWidth / 2, itemHeight / 2));
-                    }
-                    if ((0, _group.isGroup)(item)) {
-                        (0, _group.ungroupItems)([item]);
                     }
 
                     (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot, paperCanvas.props.format);
@@ -58294,7 +58289,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(23);
+var _comingSoon = __webpack_require__(22);
 
 var _toolSelectBase = __webpack_require__(11);
 
@@ -59817,7 +59812,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(23);
+var _comingSoon = __webpack_require__(22);
 
 var _toolSelectBase = __webpack_require__(11);
 
@@ -59873,7 +59868,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(23);
+var _comingSoon = __webpack_require__(22);
 
 var _toolSelectBase = __webpack_require__(11);
 
@@ -59929,7 +59924,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(23);
+var _comingSoon = __webpack_require__(22);
 
 var _toolSelectBase = __webpack_require__(11);
 
@@ -59985,7 +59980,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(23);
+var _comingSoon = __webpack_require__(22);
 
 var _toolSelectBase = __webpack_require__(11);
 
@@ -60041,7 +60036,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(23);
+var _comingSoon = __webpack_require__(22);
 
 var _toolSelectBase = __webpack_require__(11);
 
@@ -60097,7 +60092,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(23);
+var _comingSoon = __webpack_require__(22);
 
 var _toolSelectBase = __webpack_require__(11);
 
@@ -68918,7 +68913,7 @@ var _modes = __webpack_require__(5);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _format = __webpack_require__(24);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
