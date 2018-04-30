@@ -141,9 +141,6 @@ class PaintEditor extends React.Component {
                 }),
                 (SVG_ART_BOARD_WIDTH / 2) - bounds.x,
                 (SVG_ART_BOARD_HEIGHT / 2) - bounds.y);
-
-            console.log(-bounds.x);
-            console.log(-bounds.y);
             scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
             paper.project.activeLayer.applyMatrix = true;
 

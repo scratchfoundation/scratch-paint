@@ -4,7 +4,6 @@ import paper from '@scratch/paper';
 import {hideGuideLayers, showGuideLayers, getRaster} from '../helper/layer';
 import Formats from '../lib/format';
 import {isVector, isBitmap} from '../lib/format';
-import log from '../log/log';
 
 /**
  * Take an undo snapshot
