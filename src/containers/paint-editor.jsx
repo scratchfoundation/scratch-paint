@@ -286,6 +286,7 @@ class PaintEditor extends React.Component {
                 colorInfo={this.state.colorInfo}
                 format={this.props.format}
                 image={this.props.image}
+                imageFormat={this.props.imageFormat}
                 imageId={this.props.imageId}
                 isEyeDropping={this.props.isEyeDropping}
                 name={this.props.name}
@@ -318,13 +319,14 @@ PaintEditor.propTypes = {
     changeColorToEyeDropper: PropTypes.func,
     changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    format: PropTypes.oneOf(Object.keys(Formats)),
+    format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
     handleSwitchToBitmap: PropTypes.func.isRequired,
     handleSwitchToVector: PropTypes.func.isRequired,
     image: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.instanceOf(HTMLImageElement)
     ]),
+    imageFormat: PropTypes.string, // The incoming image's data format, used during import
     imageId: PropTypes.string,
     isEyeDropping: PropTypes.bool,
     mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,

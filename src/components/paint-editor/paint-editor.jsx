@@ -434,6 +434,7 @@ const PaintEditorComponent = props => {
                         <PaperCanvas
                             canvasRef={props.setCanvas}
                             image={props.image}
+                            imageFormat={props.imageFormat}
                             imageId={props.imageId}
                             rotationCenterX={props.rotationCenterX}
                             rotationCenterY={props.rotationCenterY}
@@ -541,6 +542,7 @@ PaintEditorComponent.propTypes = {
         PropTypes.string,
         PropTypes.instanceOf(HTMLImageElement)
     ]),
+    imageFormat: PropTypes.string,
     imageId: PropTypes.string,
     intl: intlShape,
     isEyeDropping: PropTypes.bool,
