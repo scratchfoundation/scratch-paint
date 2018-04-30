@@ -26,21 +26,14 @@ const clearRaster = function () {
     raster.parent = layer;
     raster.guide = true;
     raster.locked = true;
-    raster.position = paper.view.center;
+    raster.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
 };
 
 const getRaster = function () {
     const layer = _getLayer('isRasterLayer');
     // Generate blank raster
     if (layer.children.length === 0) {
-        const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = ART_BOARD_WIDTH;
-        tmpCanvas.height = ART_BOARD_HEIGHT;
-        const raster = new paper.Raster(tmpCanvas);
-        raster.parent = layer;
-        raster.guide = true;
-        raster.locked = true;
-        raster.position = paper.view.center;
+        clearRaster();
     }
     return _getLayer('isRasterLayer').children[0];
 };
@@ -163,7 +156,7 @@ const _makeBackgroundGuideLayer = function () {
     guideLayer.locked = true;
 
     const vBackground = _makeBackgroundPaper(120, 90, '#E5E5E5');
-    vBackground.position = paper.view.center;
+    vBackground.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     vBackground.scaling = new paper.Point(8, 8);
     vBackground.guide = true;
     vBackground.locked = true;
@@ -171,21 +164,21 @@ const _makeBackgroundGuideLayer = function () {
     const vLine = new paper.Path.Line(new paper.Point(0, -7), new paper.Point(0, 7));
     vLine.strokeWidth = 2;
     vLine.strokeColor = '#ccc';
-    vLine.position = paper.view.center;
+    vLine.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     vLine.guide = true;
     vLine.locked = true;
 
     const hLine = new paper.Path.Line(new paper.Point(-7, 0), new paper.Point(7, 0));
     hLine.strokeWidth = 2;
     hLine.strokeColor = '#ccc';
-    hLine.position = paper.view.center;
+    hLine.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     hLine.guide = true;
     hLine.locked = true;
 
     const circle = new paper.Shape.Circle(new paper.Point(0, 0), 5);
     circle.strokeWidth = 2;
     circle.strokeColor = '#ccc';
-    circle.position = paper.view.center;
+    circle.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     circle.guide = true;
     circle.locked = true;
 

@@ -34,7 +34,8 @@ class Playground extends React.Component {
             name: 'meow',
             rotationCenterX: 20,
             rotationCenterY: 400,
-            image: svgString
+            imageFormat: 'svg', // 'svg', 'png', or 'jpg'
+            image: svgString // svg string or data URI
         };
     }
     handleUpdateName (name) {
@@ -46,9 +47,16 @@ class Playground extends React.Component {
         if (isVector) {
             this.setState({image, rotationCenterX, rotationCenterY});
         } else { // is Bitmap
-            const imageElement = new Image();
-            imageElement.src = image.toDataURL("image/png");
-            this.setState({imageElement, rotationCenterX, rotationCenterY});
+            // image parameter has type ImageData
+            // paint editor takes dataURI as input
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            context.putImageData(image, 0, 0);
+            this.setState({
+                image: canvas.toDataURL('image/png'),
+                rotationCenterX: rotationCenterX,
+                rotationCenterY: rotationCenterY
+            });
         }
     }
     render () {

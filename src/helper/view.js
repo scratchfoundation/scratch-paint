@@ -1,6 +1,11 @@
 import paper from '@scratch/paper';
 import {getSelectedRootItems} from './selection';
 
+// Vectors are imported and exported at SVG_ART_BOARD size.
+// Once they are imported however, both SVGs and bitmaps are on
+// canvases of ART_BOARD size.
+const SVG_ART_BOARD_WIDTH = 480;
+const SVG_ART_BOARD_HEIGHT = 360;
 const ART_BOARD_WIDTH = 480 * 2;
 const ART_BOARD_HEIGHT = 360 * 2;
 
@@ -68,6 +73,8 @@ const pan = (dx, dy) => {
 export {
     ART_BOARD_HEIGHT,
     ART_BOARD_WIDTH,
+    SVG_ART_BOARD_WIDTH,
+    SVG_ART_BOARD_HEIGHT,
     pan,
     resetZoom,
     zoomOnSelection,

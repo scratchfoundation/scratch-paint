@@ -19,7 +19,7 @@ import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/or
 import {groupSelection, ungroupSelection} from '../helper/group';
 import {scaleWithStrokes} from '../helper/math';
 import {getSelectedLeafItems} from '../helper/selection';
-import {resetZoom, zoomOnSelection} from '../helper/view';
+import {SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT, resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
 import Modes from '../lib/modes';
@@ -119,26 +119,19 @@ class PaintEditor extends React.Component {
         }
     }
     handleUpdateImage (skipSnapshot) {
-        // Store the zoom/pan and restore it after snapshotting
-        // TODO Only doing this because snapshotting at zoom/pan makes export wrong
-        const oldZoom = paper.project.view.zoom;
-        const oldCenter = paper.project.view.center.clone();
-        resetZoom();
-
         if (isBitmap(this.props.format)) {
             const rect = getHitBounds(getRaster());
             this.props.onUpdateImage(
                 false /* isVector */,
                 getRaster().getImageData(rect),
-                paper.view.center.x - rect.x,
-                paper.view.center.y - rect.y);
+                getRaster().position.x - rect.x,
+                getRaster().position.y - rect.y);
         } else if (isVector(this.props.format)) {
             const guideLayers = hideGuideLayers(true /* includeRaster */);
 
             // Export at 0.5x
             scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
             const bounds = paper.project.activeLayer.bounds;
-
             this.props.onUpdateImage(
                 true /* isVector */,
                 paper.project.exportSVG({
@@ -146,9 +139,11 @@ class PaintEditor extends React.Component {
                     bounds: 'content',
                     matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
                 }),
-                (paper.project.view.center.x / 2) - bounds.x,
-                (paper.project.view.center.y / 2) - bounds.y);
+                (SVG_ART_BOARD_WIDTH / 2) - bounds.x,
+                (SVG_ART_BOARD_HEIGHT / 2) - bounds.y);
 
+            console.log(-bounds.x);
+            console.log(-bounds.y);
             scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
             paper.project.activeLayer.applyMatrix = true;
 
@@ -158,10 +153,6 @@ class PaintEditor extends React.Component {
         if (!skipSnapshot) {
             performSnapshot(this.props.undoSnapshot, this.props.format);
         }
-
-        // Restore old zoom
-        paper.project.view.zoom = oldZoom;
-        paper.project.view.center = oldCenter;
     }
     handleUndo () {
         performUndo(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateImage);
