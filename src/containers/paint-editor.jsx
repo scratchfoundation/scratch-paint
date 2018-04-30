@@ -19,7 +19,8 @@ import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/or
 import {groupSelection, ungroupSelection} from '../helper/group';
 import {scaleWithStrokes} from '../helper/math';
 import {getSelectedLeafItems} from '../helper/selection';
-import {SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT, resetZoom, zoomOnSelection} from '../helper/view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
+import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
 import Modes from '../lib/modes';
@@ -124,8 +125,8 @@ class PaintEditor extends React.Component {
             this.props.onUpdateImage(
                 false /* isVector */,
                 getRaster().getImageData(rect),
-                getRaster().position.x - rect.x,
-                getRaster().position.y - rect.y);
+                (ART_BOARD_WIDTH / 2) - rect.x,
+                (ART_BOARD_HEIGHT / 2) - rect.y);
         } else if (isVector(this.props.format)) {
             const guideLayers = hideGuideLayers(true /* includeRaster */);
 
