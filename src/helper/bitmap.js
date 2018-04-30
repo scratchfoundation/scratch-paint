@@ -124,8 +124,8 @@ const columnBlank_ = function (imageData, width, x, top, bottom) {
 };
 
 // Adapted from Tim Down's https://gist.github.com/timdown/021d9c8f2aabc7092df564996f5afbbf
-// Trims transparent pixels from edges.
-const trim = function (raster) {
+// Get bounds, trimming transparent pixels from edges.
+const getHitBounds = function (raster) {
     const width = raster.width;
     const imageData = raster.getImageData(raster.bounds);
     let top = 0;
@@ -138,11 +138,16 @@ const trim = function (raster) {
     while (left < right && columnBlank_(imageData, width, left, top, bottom)) ++left;
     while (right - 1 > left && columnBlank_(imageData, width, right - 1, top, bottom)) --right;
 
-    return raster.getSubRaster(new paper.Rectangle(left, top, right - left, bottom - top));
+    return new paper.Rectangle(left, top, right - left, bottom - top);
+};
+
+const trim = function (raster) {
+    return raster.getSubRaster(getHitBounds(raster));
 };
 
 export {
     getBrushMark,
+    getHitBounds,
     fillEllipse,
     forEachLinePoint,
     trim

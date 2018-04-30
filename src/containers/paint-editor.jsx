@@ -13,7 +13,7 @@ import {setTextEditTarget} from '../reducers/text-edit-target';
 import {updateViewBounds} from '../reducers/view-bounds';
 
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
-import {trim} from '../helper/bitmap';
+import {getHitBounds} from '../helper/bitmap';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
@@ -125,16 +125,13 @@ class PaintEditor extends React.Component {
         const oldCenter = paper.project.view.center.clone();
         resetZoom();
 
-        let raster;
         if (isBitmap(this.props.format)) {
-            raster = trim(getRaster());
-            raster.remove();
-
+            const rect = getHitBounds(getRaster());
             this.props.onUpdateImage(
                 false /* isVector */,
-                raster.canvas,
-                paper.project.view.center.x - raster.bounds.x,
-                paper.project.view.center.y - raster.bounds.y);
+                getRaster().getImageData(rect),
+                paper.view.center.x - rect.x,
+                paper.view.center.y - rect.y);
         } else if (isVector(this.props.format)) {
             const guideLayers = hideGuideLayers(true /* includeRaster */);
 

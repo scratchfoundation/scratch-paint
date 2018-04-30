@@ -13,7 +13,7 @@ import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {clearRaster, getRaster, setupLayers, hideGuideLayers, showGuideLayers} from '../helper/layer';
 import {deleteSelection, getSelectedLeafItems} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
-import {clampViewBounds, pan, resetZoom, zoomOnFixedPoint} from '../helper/view';
+import {pan, resetZoom, zoomOnFixedPoint} from '../helper/view';
 import {ensureClockwise, scaleWithStrokes} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
@@ -41,8 +41,7 @@ class PaperCanvas extends React.Component {
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyDown);
         paper.setup(this.canvas);
-        paper.view.zoom = .5;
-        clampViewBounds();
+        resetZoom();
 
         const context = this.canvas.getContext('2d');
         context.webkitImageSmoothingEnabled = false;
@@ -102,7 +101,7 @@ class PaperCanvas extends React.Component {
         // Store the zoom/pan and restore it after snapshotting
         const oldZoom = paper.project.view.zoom;
         const oldCenter = paper.project.view.center.clone();
-        paper.project.view.zoom = 1;
+        resetZoom();
 
         const guideLayers = hideGuideLayers(true /* includeRaster */);
         const bounds = paper.project.activeLayer.bounds;
