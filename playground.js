@@ -22312,21 +22312,14 @@ var clearRaster = function clearRaster() {
     raster.parent = layer;
     raster.guide = true;
     raster.locked = true;
-    raster.position = _paper2.default.view.center;
+    raster.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
 };
 
 var getRaster = function getRaster() {
     var layer = _getLayer('isRasterLayer');
     // Generate blank raster
     if (layer.children.length === 0) {
-        var tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = _view.ART_BOARD_WIDTH;
-        tmpCanvas.height = _view.ART_BOARD_HEIGHT;
-        var raster = new _paper2.default.Raster(tmpCanvas);
-        raster.parent = layer;
-        raster.guide = true;
-        raster.locked = true;
-        raster.position = _paper2.default.view.center;
+        clearRaster();
     }
     return _getLayer('isRasterLayer').children[0];
 };
@@ -22449,7 +22442,7 @@ var _makeBackgroundGuideLayer = function _makeBackgroundGuideLayer() {
     guideLayer.locked = true;
 
     var vBackground = _makeBackgroundPaper(120, 90, '#E5E5E5');
-    vBackground.position = _paper2.default.view.center;
+    vBackground.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
     vBackground.scaling = new _paper2.default.Point(8, 8);
     vBackground.guide = true;
     vBackground.locked = true;
@@ -22457,21 +22450,21 @@ var _makeBackgroundGuideLayer = function _makeBackgroundGuideLayer() {
     var vLine = new _paper2.default.Path.Line(new _paper2.default.Point(0, -7), new _paper2.default.Point(0, 7));
     vLine.strokeWidth = 2;
     vLine.strokeColor = '#ccc';
-    vLine.position = _paper2.default.view.center;
+    vLine.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
     vLine.guide = true;
     vLine.locked = true;
 
     var hLine = new _paper2.default.Path.Line(new _paper2.default.Point(-7, 0), new _paper2.default.Point(7, 0));
     hLine.strokeWidth = 2;
     hLine.strokeColor = '#ccc';
-    hLine.position = _paper2.default.view.center;
+    hLine.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
     hLine.guide = true;
     hLine.locked = true;
 
     var circle = new _paper2.default.Shape.Circle(new _paper2.default.Point(0, 0), 5);
     circle.strokeWidth = 2;
     circle.strokeColor = '#ccc';
-    circle.position = _paper2.default.view.center;
+    circle.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
     circle.guide = true;
     circle.locked = true;
 
@@ -23805,7 +23798,7 @@ module.exports = keyMirror;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.trim = exports.forEachLinePoint = exports.fillEllipse = exports.getBrushMark = undefined;
+exports.trim = exports.forEachLinePoint = exports.fillEllipse = exports.getHitBounds = exports.getBrushMark = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -23936,8 +23929,8 @@ var columnBlank_ = function columnBlank_(imageData, width, x, top, bottom) {
 };
 
 // Adapted from Tim Down's https://gist.github.com/timdown/021d9c8f2aabc7092df564996f5afbbf
-// Trims transparent pixels from edges.
-var trim = function trim(raster) {
+// Get bounds, trimming transparent pixels from edges.
+var getHitBounds = function getHitBounds(raster) {
     var width = raster.width;
     var imageData = raster.getImageData(raster.bounds);
     var top = 0;
@@ -23953,10 +23946,15 @@ var trim = function trim(raster) {
         ++left;
     }while (right - 1 > left && columnBlank_(imageData, width, right - 1, top, bottom)) {
         --right;
-    }return raster.getSubRaster(new _paper2.default.Rectangle(left, top, right - left, bottom - top));
+    }return new _paper2.default.Rectangle(left, top, right - left, bottom - top);
+};
+
+var trim = function trim(raster) {
+    return raster.getSubRaster(getHitBounds(raster));
 };
 
 exports.getBrushMark = getBrushMark;
+exports.getHitBounds = getHitBounds;
 exports.fillEllipse = fillEllipse;
 exports.forEachLinePoint = forEachLinePoint;
 exports.trim = trim;
@@ -23971,7 +23969,7 @@ exports.trim = trim;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resetZoom = exports.pan = exports.clampViewBounds = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = undefined;
+exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resetZoom = exports.pan = exports.SVG_ART_BOARD_HEIGHT = exports.SVG_ART_BOARD_WIDTH = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -23981,10 +23979,15 @@ var _selection = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// Vectors are imported and exported at SVG_ART_BOARD size.
+// Once they are imported however, both SVGs and bitmaps are on
+// canvases of ART_BOARD size.
+var SVG_ART_BOARD_WIDTH = 480;
+var SVG_ART_BOARD_HEIGHT = 360;
 var ART_BOARD_WIDTH = 480 * 2;
 var ART_BOARD_HEIGHT = 360 * 2;
 
-var clampViewBounds = function clampViewBounds() {
+var _clampViewBounds = function _clampViewBounds() {
     var _paper$project$view$b = _paper2.default.project.view.bounds,
         left = _paper$project$view$b.left,
         right = _paper$project$view$b.right,
@@ -24017,7 +24020,7 @@ var zoomOnFixedPoint = function zoomOnFixedPoint(deltaZoom, fixedPoint) {
     var postZoomOffset = fixedPoint.subtract(preZoomOffset.multiply(scaling)).subtract(preZoomCenter);
     view.zoom = newZoom;
     view.translate(postZoomOffset.multiply(-1));
-    clampViewBounds();
+    _clampViewBounds();
 };
 
 // Zoom keeping the selection center (if any) fixed.
@@ -24064,17 +24067,18 @@ var zoomOnSelection = function zoomOnSelection(deltaZoom) {
 
 var resetZoom = function resetZoom() {
     _paper2.default.project.view.zoom = .5;
-    clampViewBounds();
+    _clampViewBounds();
 };
 
 var pan = function pan(dx, dy) {
     _paper2.default.project.view.scrollBy(new _paper2.default.Point(dx, dy));
-    clampViewBounds();
+    _clampViewBounds();
 };
 
 exports.ART_BOARD_HEIGHT = ART_BOARD_HEIGHT;
 exports.ART_BOARD_WIDTH = ART_BOARD_WIDTH;
-exports.clampViewBounds = clampViewBounds;
+exports.SVG_ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH;
+exports.SVG_ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT;
 exports.pan = pan;
 exports.resetZoom = resetZoom;
 exports.zoomOnSelection = zoomOnSelection;
@@ -27010,6 +27014,10 @@ var _format = __webpack_require__(22);
 
 var _format2 = _interopRequireDefault(_format);
 
+var _log = __webpack_require__(9);
+
+var _log2 = _interopRequireDefault(_log);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -27017,16 +27025,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {function} dispatchPerformSnapshot Callback to dispatch a state update
  * @param {Formats} format Either Formats.BITMAP or Formats.VECTOR
  */
-// undo functionality
-// modifed from https://github.com/memononen/stylii
 var performSnapshot = function performSnapshot(dispatchPerformSnapshot, format) {
+    if (!format) {
+        _log2.default.error('Format must be specified.');
+    }
     var guideLayers = (0, _layer.hideGuideLayers)();
     dispatchPerformSnapshot({
         json: _paper2.default.project.exportJSON({ asString: false }),
         paintEditorFormat: format
     });
     (0, _layer.showGuideLayers)(guideLayers);
-};
+}; // undo functionality
+// modifed from https://github.com/memononen/stylii
+
 
 var _restore = function _restore(entry, setSelectedItems, onUpdateImage) {
     for (var i = _paper2.default.project.layers.length - 1; i >= 0; i--) {
@@ -29129,7 +29140,8 @@ var Playground = function (_React$Component) {
             name: 'meow',
             rotationCenterX: 20,
             rotationCenterY: 400,
-            image: svgString
+            imageFormat: 'svg', // 'svg', 'png', or 'jpg'
+            image: svgString // svg string or data URI
         };
         return _this;
     }
@@ -29148,9 +29160,16 @@ var Playground = function (_React$Component) {
                 this.setState({ image: image, rotationCenterX: rotationCenterX, rotationCenterY: rotationCenterY });
             } else {
                 // is Bitmap
-                var imageElement = new Image();
-                imageElement.src = image.toDataURL("image/png");
-                this.setState({ imageElement: imageElement, rotationCenterX: rotationCenterX, rotationCenterY: rotationCenterY });
+                // image parameter has type ImageData
+                // paint editor takes dataURI as input
+                var canvas = document.createElement('canvas');
+                var context = canvas.getContext('2d');
+                context.putImageData(image, 0, 0);
+                this.setState({
+                    image: canvas.toDataURL('image/png'),
+                    rotationCenterX: rotationCenterX,
+                    rotationCenterY: rotationCenterY
+                });
             }
         }
     }, {
@@ -46597,33 +46616,22 @@ var PaintEditor = function (_React$Component) {
     }, {
         key: 'handleUpdateImage',
         value: function handleUpdateImage(skipSnapshot) {
-            // Store the zoom/pan and restore it after snapshotting
-            // TODO Only doing this because snapshotting at zoom/pan makes export wrong
-            var oldZoom = _paper2.default.project.view.zoom;
-            var oldCenter = _paper2.default.project.view.center.clone();
-            (0, _view.resetZoom)();
-
-            var raster = void 0;
             if ((0, _format2.isBitmap)(this.props.format)) {
-                raster = (0, _bitmap.trim)((0, _layer.getRaster)());
-                raster.remove();
-
+                var rect = (0, _bitmap.getHitBounds)((0, _layer.getRaster)());
                 this.props.onUpdateImage(false /* isVector */
-                , raster.canvas, _paper2.default.project.view.center.x - raster.bounds.x, _paper2.default.project.view.center.y - raster.bounds.y);
+                , (0, _layer.getRaster)().getImageData(rect), _view.ART_BOARD_WIDTH / 2 - rect.x, _view.ART_BOARD_HEIGHT / 2 - rect.y);
             } else if ((0, _format2.isVector)(this.props.format)) {
                 var guideLayers = (0, _layer.hideGuideLayers)(true /* includeRaster */);
 
                 // Export at 0.5x
                 (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, .5, new _paper2.default.Point());
                 var bounds = _paper2.default.project.activeLayer.bounds;
-
                 this.props.onUpdateImage(true /* isVector */
                 , _paper2.default.project.exportSVG({
                     asString: true,
                     bounds: 'content',
                     matrix: new _paper2.default.Matrix().translate(-bounds.x, -bounds.y)
-                }), _paper2.default.project.view.center.x / 2 - bounds.x, _paper2.default.project.view.center.y / 2 - bounds.y);
-
+                }), _view.SVG_ART_BOARD_WIDTH / 2 - bounds.x, _view.SVG_ART_BOARD_HEIGHT / 2 - bounds.y);
                 (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, 2, new _paper2.default.Point());
                 _paper2.default.project.activeLayer.applyMatrix = true;
 
@@ -46633,10 +46641,6 @@ var PaintEditor = function (_React$Component) {
             if (!skipSnapshot) {
                 (0, _undo2.performSnapshot)(this.props.undoSnapshot, this.props.format);
             }
-
-            // Restore old zoom
-            _paper2.default.project.view.zoom = oldZoom;
-            _paper2.default.project.view.center = oldCenter;
         }
     }, {
         key: 'handleUndo',
@@ -46783,6 +46787,7 @@ var PaintEditor = function (_React$Component) {
                 colorInfo: this.state.colorInfo,
                 format: this.props.format,
                 image: this.props.image,
+                imageFormat: this.props.imageFormat,
                 imageId: this.props.imageId,
                 isEyeDropping: this.props.isEyeDropping,
                 name: this.props.name,
@@ -46817,10 +46822,11 @@ PaintEditor.propTypes = {
     changeColorToEyeDropper: _propTypes2.default.func,
     changeMode: _propTypes2.default.func.isRequired,
     clearSelectedItems: _propTypes2.default.func.isRequired,
-    format: _propTypes2.default.oneOf(Object.keys(_format3.default)),
+    format: _propTypes2.default.oneOf(Object.keys(_format3.default)), // Internal, up-to-date data format
     handleSwitchToBitmap: _propTypes2.default.func.isRequired,
     handleSwitchToVector: _propTypes2.default.func.isRequired,
     image: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.instanceOf(HTMLImageElement)]),
+    imageFormat: _propTypes2.default.string, // The incoming image's data format, used during import
     imageId: _propTypes2.default.string,
     isEyeDropping: _propTypes2.default.bool,
     mode: _propTypes2.default.oneOf(Object.keys(_modes3.default)).isRequired,
@@ -51901,6 +51907,7 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                     _react2.default.createElement(_paperCanvas2.default, {
                         canvasRef: props.setCanvas,
                         image: props.image,
+                        imageFormat: props.imageFormat,
                         imageId: props.imageId,
                         rotationCenterX: props.rotationCenterX,
                         rotationCenterY: props.rotationCenterY,
@@ -52016,6 +52023,7 @@ PaintEditorComponent.propTypes = {
     colorInfo: _loupe2.default.propTypes.colorInfo,
     format: _propTypes2.default.oneOf(Object.keys(_format2.default)),
     image: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.instanceOf(HTMLImageElement)]),
+    imageFormat: _propTypes2.default.string,
     imageId: _propTypes2.default.string,
     intl: _reactIntl.intlShape,
     isEyeDropping: _propTypes2.default.bool,
@@ -55585,7 +55593,7 @@ var PaperCanvas = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaperCanvas.__proto__ || Object.getPrototypeOf(PaperCanvas)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['checkFormat', 'convertToBitmap', 'convertToVector', 'setCanvas', 'importSvg', 'handleKeyDown', 'handleWheel', 'switchCostume']);
+        (0, _lodash2.default)(_this, ['convertToBitmap', 'convertToVector', 'setCanvas', 'importSvg', 'handleKeyDown', 'handleWheel', 'switchCostume']);
         return _this;
     }
 
@@ -55594,8 +55602,7 @@ var PaperCanvas = function (_React$Component) {
         value: function componentDidMount() {
             document.addEventListener('keydown', this.handleKeyDown);
             _paper2.default.setup(this.canvas);
-            _paper2.default.view.zoom = .5;
-            (0, _view.clampViewBounds)();
+            (0, _view.resetZoom)();
 
             var context = this.canvas.getContext('2d');
             context.webkitImageSmoothingEnabled = false;
@@ -55605,25 +55612,13 @@ var PaperCanvas = function (_React$Component) {
             _paper2.default.settings.handleSize = 0;
             // Make layers.
             (0, _layer.setupLayers)();
-            if (this.props.image) {
-                if ((0, _format.isBitmap)(this.checkFormat(this.props.image))) {
-                    // import bitmap
-                    this.props.changeFormat(_format2.default.BITMAP_SKIP_CONVERT);
-                    (0, _undo.performSnapshot)(this.props.undoSnapshot, this.props.format);
-                    (0, _layer.getRaster)().drawImage(this.props.image, _paper2.default.project.view.center.x - this.props.rotationCenterX, _paper2.default.project.view.center.y - this.props.rotationCenterY);
-                } else if ((0, _format.isVector)(this.checkFormat(this.props.image))) {
-                    this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
-                    this.importSvg(this.props.image, this.props.rotationCenterX, this.props.rotationCenterY);
-                }
-            } else {
-                (0, _undo.performSnapshot)(this.props.undoSnapshot, this.props.format);
-            }
+            this.importImage(this.props.imageFormat, this.props.image, this.props.rotationCenterX, this.props.rotationCenterY);
         }
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(newProps) {
             if (this.props.imageId !== newProps.imageId) {
-                this.switchCostume(newProps.image, newProps.rotationCenterX, newProps.rotationCenterY);
+                this.switchCostume(newProps.imageFormat, newProps.image, newProps.rotationCenterX, newProps.rotationCenterY);
             } else if ((0, _format.isVector)(this.props.format) && newProps.format === _format2.default.BITMAP) {
                 this.convertToBitmap();
             } else if ((0, _format.isBitmap)(this.props.format) && newProps.format === _format2.default.VECTOR) {
@@ -55657,13 +55652,8 @@ var PaperCanvas = function (_React$Component) {
 
             // @todo if the active layer contains only rasters, drawing them directly to the raster layer
             // would be more efficient.
+
             // Export svg
-
-            // Store the zoom/pan and restore it after snapshotting
-            var oldZoom = _paper2.default.project.view.zoom;
-            var oldCenter = _paper2.default.project.view.center.clone();
-            _paper2.default.project.view.zoom = 1;
-
             var guideLayers = (0, _layer.hideGuideLayers)(true /* includeRaster */);
             var bounds = _paper2.default.project.activeLayer.bounds;
             var svg = _paper2.default.project.exportSVG({
@@ -55680,20 +55670,12 @@ var PaperCanvas = function (_React$Component) {
             // Put anti-aliased SVG into image, and dump image back into canvas
             var img = new Image();
             img.onload = function () {
-                var raster = new _paper2.default.Raster(img);
-                raster.remove();
-                raster.onLoad = function () {
-                    var subCanvas = raster.canvas;
-                    (0, _layer.getRaster)().drawImage(subCanvas, new _paper2.default.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
-                    _paper2.default.project.activeLayer.removeChildren();
-                    _this2.props.onUpdateImage();
-                };
+                (0, _layer.getRaster)().drawImage(img, new _paper2.default.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
+
+                _paper2.default.project.activeLayer.removeChildren();
+                _this2.props.onUpdateImage();
             };
             img.src = 'data:image/svg+xml;charset=utf-8,' + svgString;
-
-            // Restore old zoom
-            _paper2.default.project.view.zoom = oldZoom;
-            _paper2.default.project.view.center = oldCenter;
         }
     }, {
         key: 'convertToVector',
@@ -55709,16 +55691,8 @@ var PaperCanvas = function (_React$Component) {
             this.props.onUpdateImage();
         }
     }, {
-        key: 'checkFormat',
-        value: function checkFormat(image) {
-            if (image instanceof HTMLImageElement) return _format2.default.BITMAP;
-            if (typeof image === 'string') return _format2.default.VECTOR;
-            _log2.default.error('Image could not be read.');
-            return null;
-        }
-    }, {
         key: 'switchCostume',
-        value: function switchCostume(image, rotationCenterX, rotationCenterY) {
+        value: function switchCostume(format, image, rotationCenterX, rotationCenterY) {
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -55752,28 +55726,36 @@ var PaperCanvas = function (_React$Component) {
             this.props.clearSelectedItems();
             this.props.clearHoveredItem();
             this.props.clearPasteOffset();
-            if (image) {
-                if ((0, _format.isBitmap)(this.checkFormat(image))) {
-                    // import bitmap
-                    this.props.changeFormat(_format2.default.BITMAP_SKIP_CONVERT);
-                    (0, _layer.getRaster)().drawImage(image, _paper2.default.project.view.center.x - rotationCenterX, _paper2.default.project.view.center.y - rotationCenterY);
-                    (0, _undo.performSnapshot)(this.props.undoSnapshot, this.props.format);
-                } else if ((0, _format.isVector)(this.checkFormat(image))) {
-                    this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
-                    // Store the zoom/pan and restore it after importing a new SVG
-                    var oldZoom = _paper2.default.project.view.zoom;
-                    var oldCenter = _paper2.default.project.view.center.clone();
-                    (0, _view.resetZoom)();
-                    this.props.updateViewBounds(_paper2.default.view.matrix);
-                    this.importSvg(image, rotationCenterX, rotationCenterY);
-                    _paper2.default.project.view.zoom = oldZoom;
-                    _paper2.default.project.view.center = oldCenter;
-                } else {
-                    _log2.default.error('Couldn\'t open image.');
-                    (0, _undo.performSnapshot)(this.props.undoSnapshot, this.props.format);
-                }
+            this.importImage(format, image, rotationCenterX, rotationCenterY);
+        }
+    }, {
+        key: 'importImage',
+        value: function importImage(format, image, rotationCenterX, rotationCenterY) {
+            var _this3 = this;
+
+            if (!image) {
+                this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
+                (0, _undo.performSnapshot)(this.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
+                return;
+            }
+
+            if (format === 'jpg' || format === 'png') {
+                // import bitmap
+                this.props.changeFormat(_format2.default.BITMAP_SKIP_CONVERT);
+                var imgElement = new Image();
+                imgElement.onload = function () {
+                    (0, _layer.getRaster)().drawImage(imgElement, _view.ART_BOARD_WIDTH / 2 - rotationCenterX, _view.ART_BOARD_HEIGHT / 2 - rotationCenterY);
+                    (0, _layer.getRaster)().drawImage(imgElement, _view.ART_BOARD_WIDTH / 2 - rotationCenterX, _view.ART_BOARD_HEIGHT / 2 - rotationCenterY);
+                    (0, _undo.performSnapshot)(_this3.props.undoSnapshot, _format2.default.BITMAP_SKIP_CONVERT);
+                };
+                imgElement.src = image;
+            } else if (format === 'svg') {
+                this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
+                this.importSvg(image, rotationCenterX, rotationCenterY);
             } else {
-                (0, _undo.performSnapshot)(this.props.undoSnapshot, this.props.format);
+                _log2.default.error('Didn\'t recognize format: ' + format + '. Use \'jpg\', \'png\' or \'svg\'.');
+                this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
+                (0, _undo.performSnapshot)(this.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
             }
         }
     }, {
@@ -55808,7 +55790,8 @@ var PaperCanvas = function (_React$Component) {
                     if (!item) {
                         _log2.default.error('SVG import failed:');
                         _log2.default.info(svg);
-                        (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot, paperCanvas.props.format);
+                        this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
+                        (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
                         return;
                     }
                     var itemWidth = item.bounds.width;
@@ -55850,7 +55833,7 @@ var PaperCanvas = function (_React$Component) {
                     }
 
                     // Reduce single item nested in groups
-                    if (item.children && item.children.length === 1) {
+                    if (item instanceof _paper2.default.Group && item.children.length === 1) {
                         item = item.reduce();
                     }
 
@@ -55862,13 +55845,13 @@ var PaperCanvas = function (_React$Component) {
                         if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
                             rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
                         }
-                        item.translate(_paper2.default.project.view.center.subtract(rotationPoint.multiply(2)));
+                        item.translate(new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2).subtract(rotationPoint.multiply(2)));
                     } else {
                         // Center
-                        item.translate(_paper2.default.project.view.center.subtract(itemWidth / 2, itemHeight / 2));
+                        item.translate(new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2).subtract(itemWidth, itemHeight));
                     }
 
-                    (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot, paperCanvas.props.format);
+                    (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
                 }
             });
         }
@@ -55930,8 +55913,9 @@ PaperCanvas.propTypes = {
     clearPasteOffset: _propTypes2.default.func.isRequired,
     clearSelectedItems: _propTypes2.default.func.isRequired,
     clearUndo: _propTypes2.default.func.isRequired,
-    format: _propTypes2.default.oneOf(Object.keys(_format2.default)),
+    format: _propTypes2.default.oneOf(Object.keys(_format2.default)), // Internal, up-to-date data format
     image: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.instanceOf(HTMLImageElement)]),
+    imageFormat: _propTypes2.default.string, // The incoming image's data format, used during import
     imageId: _propTypes2.default.string,
     mode: _propTypes2.default.oneOf(Object.keys(_modes2.default)),
     onUpdateImage: _propTypes2.default.func.isRequired,
