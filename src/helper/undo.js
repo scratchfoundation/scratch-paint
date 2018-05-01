@@ -4,6 +4,7 @@ import paper from '@scratch/paper';
 import {hideGuideLayers, showGuideLayers, getRaster} from '../helper/layer';
 import Formats from '../lib/format';
 import {isVector, isBitmap} from '../lib/format';
+import log from '../log/log';
 
 /**
  * Take an undo snapshot
@@ -11,6 +12,9 @@ import {isVector, isBitmap} from '../lib/format';
  * @param {Formats} format Either Formats.BITMAP or Formats.VECTOR
  */
 const performSnapshot = function (dispatchPerformSnapshot, format) {
+    if (!format) {
+        log.error('Format must be specified.');
+    }
     const guideLayers = hideGuideLayers();
     dispatchPerformSnapshot({
         json: paper.project.exportJSON({asString: false}),

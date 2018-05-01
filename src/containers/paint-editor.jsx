@@ -13,12 +13,13 @@ import {setTextEditTarget} from '../reducers/text-edit-target';
 import {updateViewBounds} from '../reducers/view-bounds';
 
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
-import {trim} from '../helper/bitmap';
+import {getHitBounds} from '../helper/bitmap';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
 import {scaleWithStrokes} from '../helper/math';
 import {getSelectedLeafItems} from '../helper/selection';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
@@ -119,29 +120,19 @@ class PaintEditor extends React.Component {
         }
     }
     handleUpdateImage (skipSnapshot) {
-        // Store the zoom/pan and restore it after snapshotting
-        // TODO Only doing this because snapshotting at zoom/pan makes export wrong
-        const oldZoom = paper.project.view.zoom;
-        const oldCenter = paper.project.view.center.clone();
-        resetZoom();
-
-        let raster;
         if (isBitmap(this.props.format)) {
-            raster = trim(getRaster());
-            raster.remove();
-
+            const rect = getHitBounds(getRaster());
             this.props.onUpdateImage(
                 false /* isVector */,
-                raster.canvas,
-                paper.project.view.center.x - raster.bounds.x,
-                paper.project.view.center.y - raster.bounds.y);
+                getRaster().getImageData(rect),
+                (ART_BOARD_WIDTH / 2) - rect.x,
+                (ART_BOARD_HEIGHT / 2) - rect.y);
         } else if (isVector(this.props.format)) {
             const guideLayers = hideGuideLayers(true /* includeRaster */);
 
             // Export at 0.5x
             scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
             const bounds = paper.project.activeLayer.bounds;
-
             this.props.onUpdateImage(
                 true /* isVector */,
                 paper.project.exportSVG({
@@ -149,9 +140,8 @@ class PaintEditor extends React.Component {
                     bounds: 'content',
                     matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
                 }),
-                (paper.project.view.center.x / 2) - bounds.x,
-                (paper.project.view.center.y / 2) - bounds.y);
-
+                (SVG_ART_BOARD_WIDTH / 2) - bounds.x,
+                (SVG_ART_BOARD_HEIGHT / 2) - bounds.y);
             scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
             paper.project.activeLayer.applyMatrix = true;
 
@@ -161,10 +151,6 @@ class PaintEditor extends React.Component {
         if (!skipSnapshot) {
             performSnapshot(this.props.undoSnapshot, this.props.format);
         }
-
-        // Restore old zoom
-        paper.project.view.zoom = oldZoom;
-        paper.project.view.center = oldCenter;
     }
     handleUndo () {
         performUndo(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateImage);
@@ -289,6 +275,7 @@ class PaintEditor extends React.Component {
                 colorInfo={this.state.colorInfo}
                 format={this.props.format}
                 image={this.props.image}
+                imageFormat={this.props.imageFormat}
                 imageId={this.props.imageId}
                 isEyeDropping={this.props.isEyeDropping}
                 name={this.props.name}
@@ -321,13 +308,14 @@ PaintEditor.propTypes = {
     changeColorToEyeDropper: PropTypes.func,
     changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    format: PropTypes.oneOf(Object.keys(Formats)),
+    format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
     handleSwitchToBitmap: PropTypes.func.isRequired,
     handleSwitchToVector: PropTypes.func.isRequired,
     image: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.instanceOf(HTMLImageElement)
     ]),
+    imageFormat: PropTypes.string, // The incoming image's data format, used during import
     imageId: PropTypes.string,
     isEyeDropping: PropTypes.bool,
     mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,

@@ -60,7 +60,7 @@ Then go to [http://localhost:8601](http://localhost:8601). 601 is supposed to lo
 
 ### How to include in your own Node.js App
 For an example of how to use scratch-paint as a library, check out the `scratch-paint/src/playground` directory.
-In `playground.jsx`, you can change the image that is passed in (which may either be nothing, an SVG string or an HTMLImageElement) and edit the handler `onUpdateImage`, which is called with the new image (either an SVG string or an HTMLCanvasElement) each time the vector drawing is edited.
+In `playground.jsx`, you can change the image that is passed in (which may either be nothing, an SVG string or a base64 data URI) and edit the handler `onUpdateImage`, which is called with the new image (either an SVG string or an ImageData) each time the vector drawing is edited.
 
 If the `imageId` parameter changes, then the paint editor will be cleared, the undo stack reset, and the image re-imported.
 
@@ -73,6 +73,7 @@ import PaintEditor from 'scratch-paint';
 <PaintEditor
     image={optionalImage}
     imageId={optionalId}
+    imageFormat='svg' // 'svg', 'png', or 'jpg'
     rotationCenterX={optionalCenterPointXRelativeToTopLeft}
     rotationCenterY={optionalCenterPointYRelativeToTopLeft}
     onUpdateImage={handleUpdateImageFunction}

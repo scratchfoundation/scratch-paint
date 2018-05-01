@@ -1,10 +1,15 @@
 import paper from '@scratch/paper';
 import {getSelectedRootItems} from './selection';
 
+// Vectors are imported and exported at SVG_ART_BOARD size.
+// Once they are imported however, both SVGs and bitmaps are on
+// canvases of ART_BOARD size.
+const SVG_ART_BOARD_WIDTH = 480;
+const SVG_ART_BOARD_HEIGHT = 360;
 const ART_BOARD_WIDTH = 480 * 2;
 const ART_BOARD_HEIGHT = 360 * 2;
 
-const clampViewBounds = () => {
+const _clampViewBounds = () => {
     const {left, right, top, bottom} = paper.project.view.bounds;
     if (left < 0) {
         paper.project.view.scrollBy(new paper.Point(-left, 0));
@@ -32,7 +37,7 @@ const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
         .subtract(preZoomCenter);
     view.zoom = newZoom;
     view.translate(postZoomOffset.multiply(-1));
-    clampViewBounds();
+    _clampViewBounds();
 };
 
 // Zoom keeping the selection center (if any) fixed.
@@ -57,18 +62,19 @@ const zoomOnSelection = deltaZoom => {
 
 const resetZoom = () => {
     paper.project.view.zoom = .5;
-    clampViewBounds();
+    _clampViewBounds();
 };
 
 const pan = (dx, dy) => {
     paper.project.view.scrollBy(new paper.Point(dx, dy));
-    clampViewBounds();
+    _clampViewBounds();
 };
 
 export {
     ART_BOARD_HEIGHT,
     ART_BOARD_WIDTH,
-    clampViewBounds,
+    SVG_ART_BOARD_WIDTH,
+    SVG_ART_BOARD_HEIGHT,
     pan,
     resetZoom,
     zoomOnSelection,
