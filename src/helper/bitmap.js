@@ -1,4 +1,5 @@
 import paper from '@scratch/paper';
+import {clearRaster, getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
 
 const forEachLinePoint = function (point1, point2, callback) {
     // Bresenham line algorithm
@@ -28,6 +29,121 @@ const forEachLinePoint = function (point1, point2, callback) {
     }
 };
 
+/**
+ * @param {!object} options drawing options
+ * @param {!number} options.centerX center of ellipse, x
+ * @param {!number} options.centerY center of ellipse, y
+ * @param {!number} options.radiusX major radius of ellipse
+ * @param {!number} options.radiusY minor radius of ellipse
+ * @param {!number} options.shearSlope slope of the sheared x axis
+ * @param {?boolean} options.isFilled true if isFilled
+ * @param {!CanvasRenderingContext2D} context for drawing
+ */
+const drawShearedEllipse = function (options, context) {
+    const centerX = ~~options.centerX;
+    const centerY = ~~options.centerY;
+    const radiusX = ~~options.radiusX;
+    const radiusY = ~~options.radiusY;
+    const shearSlope = options.shearSlope;
+    const isFilled = options.isFilled;
+    if (shearSlope === Infinity || radiusX === 0 || radiusY === 0) {
+        return;
+    }
+
+    // Bresenham ellipse algorithm
+    const twoRadXSquared = 2 * radiusX * radiusX;
+    const twoRadYSquared = 2 * radiusY * radiusY;
+    let x = radiusX;
+    let y = 0;
+    let dx = radiusY * radiusY * (1 - (radiusX << 1));
+    let dy = radiusX * radiusX;
+    let error = 0;
+    let stoppingX = twoRadYSquared * radiusX;
+    let stoppingY = 0;
+ 
+    while (stoppingX >= stoppingY) {
+        if (isFilled) {
+            context.fillRect(centerX + x, centerY - y - ~~(x * shearSlope), 1, 2 * y);
+            context.fillRect(centerX - x, centerY - y + ~~(x * shearSlope), 1, 2 * y);
+        } else {
+            // TODO connect these to the prev segment and add thickness
+            context.fillRect(centerX + x, centerY + y - ~~(x * shearSlope), 1, 1);
+            context.fillRect(centerX + x, centerY - y - ~~(x * shearSlope), 1, 1);
+            context.fillRect(centerX - x, centerY + y + ~~(x * shearSlope), 1, 1);
+            context.fillRect(centerX - x, centerY - y + ~~(x * shearSlope), 1, 1);
+        }
+        y++;
+        stoppingY += twoRadXSquared;
+        error += dy;
+        dy += twoRadXSquared;
+        if ((error << 1) + dx > 0) {
+            x--;
+            stoppingX -= twoRadYSquared;
+            error += dx;
+            dx += twoRadYSquared;
+        }
+    }
+
+    x = 0;
+    y = radiusY;
+    dx = radiusY * radiusY;
+    dy = radiusX * radiusX * (1 - (radiusY << 1));
+    error = 0;
+    stoppingX = 0;
+    stoppingY = twoRadXSquared * radiusY;
+    while (stoppingX <= stoppingY) {
+        if (isFilled) {
+            context.fillRect(centerX + x, centerY - y - ~~(x * shearSlope), 1, 2 * y);
+            context.fillRect(centerX - x, centerY - y + ~~(x * shearSlope), 1, 2 * y);
+        } else {
+            context.fillRect(centerX + x, centerY + y - ~~(x * shearSlope), 1, 1);
+            context.fillRect(centerX + x, centerY - y - ~~(x * shearSlope), 1, 1);
+            context.fillRect(centerX - x, centerY + y + ~~(x * shearSlope), 1, 1);
+            context.fillRect(centerX - x, centerY - y + ~~(x * shearSlope), 1, 1);
+        }
+        x++;
+        stoppingX += twoRadYSquared;
+        error += dx;
+        dx += twoRadYSquared;
+        if ((error << 1) + dy > 0) {
+            y--;
+            stoppingY -= twoRadXSquared;
+            error += dy;
+            dy += twoRadXSquared;
+        }
+
+    }
+};
+
+/**
+ * @param {!object} options drawing options
+ * @param {!number} options.centerX center of ellipse, x
+ * @param {!number} options.centerY center of ellipse, y
+ * @param {!number} options.radiusX major radius of ellipse
+ * @param {!number} options.radiusY minor radius of ellipse
+ * @param {!number} options.rotation of ellipse, radians
+ * @param {?boolean} options.isFilled true if isFilled
+ * @param {!CanvasRenderingContext2D} context for drawing
+ */
+const drawRotatedEllipse = function (options, context) {
+    const centerX = ~~options.centerX;
+    const centerY = ~~options.centerY;
+    const radiusX = ~~options.radiusX;
+    const radiusY = ~~options.radiusY;
+    const rotation = options.rotation;
+    const isFilled = options.isFilled;
+    if (radiusX === radiusY) {
+        drawShearedEllipse({centerX, centerY, radiusX, radiusY, shearSlope: 0, isFilled}, context);
+    }
+    const theta = Math.atan2(radiusY * -Math.tan(rotation), radiusX);
+    const shearDx = (radiusX * Math.cos(theta) * Math.cos(rotation)) - (radiusY * Math.sin(theta) * Math.sin(rotation));
+    const shearDy = (radiusX * Math.cos(theta) * Math.sin(rotation)) + (radiusY * Math.sin(theta) * Math.cos(rotation));
+    const shearSlope = shearDy / shearDx;
+    const shearRadiusX = Math.abs(shearDx);
+    const shearRadiusY = radiusX * radiusY / shearRadiusX;
+    drawShearedEllipse({centerX, centerY, radiusX: shearRadiusX, radiusY: shearRadiusY, shearSlope, isFilled}, context);
+};
+
 const fillEllipse = function (centerX, centerY, radiusX, radiusY, context) {
     // Bresenham ellipse algorithm
     centerX = ~~centerX;
@@ -45,6 +161,7 @@ const fillEllipse = function (centerX, centerY, radiusX, radiusY, context) {
     let stoppingY = 0;
  
     while (stoppingX >= stoppingY) {
+        // todo outline
         context.fillRect(centerX - x, centerY - y, x << 1, y << 1);
         y++;
         stoppingY += twoRadXSquared;
@@ -141,14 +258,74 @@ const getHitBounds = function (raster) {
     return new paper.Rectangle(left, top, right - left, bottom - top);
 };
 
-const trim = function (raster) {
+const _trim = function (raster) {
     return raster.getSubRaster(getHitBounds(raster));
 };
 
+
+const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
+    // @todo if the active layer contains only rasters, drawing them directly to the raster layer
+    // would be more efficient.
+
+    clearSelectedItems();
+
+    // Export svg
+    const guideLayers = hideGuideLayers(true /* includeRaster */);
+    const bounds = paper.project.activeLayer.bounds;
+    const svg = paper.project.exportSVG({
+        bounds: 'content',
+        matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
+    });
+    showGuideLayers(guideLayers);
+
+    // Get rid of anti-aliasing
+    // @todo get crisp text?
+    svg.setAttribute('shape-rendering', 'crispEdges');
+    const svgString = (new XMLSerializer()).serializeToString(svg);
+
+    // Put anti-aliased SVG into image, and dump image back into canvas
+    const img = new Image();
+    img.onload = () => {
+        getRaster().drawImage(
+            img,
+            new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
+
+        paper.project.activeLayer.removeChildren();
+        onUpdateImage();
+    };
+    img.onerror = () => {
+        // Fallback if browser does not support SVG data URIs in images.
+        // The problem with rasterize is that it will anti-alias.
+        const raster = paper.project.activeLayer.rasterize(72, false /* insert */);
+        raster.onLoad = () => {
+            getRaster().drawImage(raster.canvas, raster.bounds.topLeft);
+            paper.project.activeLayer.removeChildren();
+            onUpdateImage();
+        };
+    };
+    // Hash tags will break image loading without being encoded first
+    img.src = `data:image/svg+xml;utf8,${encodeURIComponent(svgString)}`;
+};
+
+const convertToVector = function (clearSelectedItems, onUpdateImage) {
+    clearSelectedItems();
+    const raster = _trim(getRaster());
+    if (raster.width === 0 || raster.height === 0) {
+        raster.remove();
+    } else {
+        paper.project.activeLayer.addChild(raster);
+    }
+    clearRaster();
+    onUpdateImage();
+};
+
 export {
+    convertToBitmap,
+    convertToVector,
     getBrushMark,
     getHitBounds,
     fillEllipse,
-    forEachLinePoint,
-    trim
+    drawRotatedEllipse,
+    drawShearedEllipse,
+    forEachLinePoint
 };

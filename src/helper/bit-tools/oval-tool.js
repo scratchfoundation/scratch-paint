@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {fillEllipse} from '../bitmap';
+import {convertToBitmap, drawRotatedEllipse, drawShearedEllipse} from '../bitmap';
 import {getRaster} from '../layer';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
@@ -45,12 +45,9 @@ class OvalTool extends paper.Tool {
             curves: false,
             fill: true,
             guide: false,
-            selected: true,
-            match: hitResult => {
-                console.log(hitResult.item);
-                return (hitResult.item.data && hitResult.item.data.isHelperItem) ||
-                    hitResult.item === this.oval; // Allow hits on bounding box and oval only
-            },
+            match: hitResult =>
+                (hitResult.item.data && hitResult.item.data.isHelperItem) ||
+                    hitResult.item === this.oval, // Allow hits on bounding box and oval only
             tolerance: OvalTool.TOLERANCE / paper.view.zoom
         };
     }
@@ -128,12 +125,40 @@ class OvalTool extends paper.Tool {
     }
     commitOval () {
         if (this.oval) {
+            const decomposed = this.oval.matrix.decompose();
+            const a = this.oval.matrix.a;
+            const b = this.oval.matrix.b;
+            const c = this.oval.matrix.c;
+            const d = this.oval.matrix.d;
             const context = getRaster().getContext('2d');
             context.fillStyle = this.color;
-            fillEllipse(
-                this.oval.position.x, this.oval.position.y,
-                Math.abs(this.oval.size.width) / 2, Math.abs(this.oval.size.height) / 2,
-                context);
+            if (Math.abs(decomposed.skewing.x) < 1) {
+                console.log('using rotation');
+                drawRotatedEllipse({
+                    centerX: this.oval.position.x,
+                    centerY: this.oval.position.y,
+                    radiusX: Math.abs(this.oval.size.width * decomposed.scaling.x / 2),
+                    radiusY: Math.abs(this.oval.size.height * decomposed.scaling.y / 2),
+                    rotation: -decomposed.rotation * Math.PI / 180,
+                    isFilled: true
+                }, context);
+            } else if (Math.abs(decomposed.rotation) < 1 && (c || d)) {
+                console.log('using skewing');
+                console.log(((a * c) + (b * d)) / ((c * c) + (d * d)));
+                drawShearedEllipse({
+                    centerX: this.oval.position.x,
+                    centerY: this.oval.position.y,
+                    radiusX: Math.abs(this.oval.size.width * decomposed.scaling.x / 2),
+                    radiusY: Math.abs(this.oval.size.height * decomposed.scaling.y / 2),
+                    shearSlope: -((a * c) + (b * d)) / ((c * c) + (d * d)),
+                    isFilled: true
+                }, context);
+            } else {
+                console.log('using neither');
+                // @todo our draw ellipse algorithm can't handle both rotation and skewing
+                convertToBitmap(this.clearSelectedItems, this.onUpdateImage);
+            }
+            console.log(decomposed);
             this.oval.remove();
             this.oval = null;
             this.onUpdateImage();

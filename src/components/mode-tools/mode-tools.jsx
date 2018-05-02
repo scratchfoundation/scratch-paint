@@ -98,7 +98,8 @@ const ModeToolsComponent = props => {
         const currentMessage = props.mode === Modes.BIT_LINE ? messages.lineSize : messages.brushSize;
         return (
             <div className={classNames(props.className, styles.modeTools)}>
-                {props.mode === Modes.BIT_OVAL ? null :
+                {props.mode === Modes.BIT_OVAL ?
+                    null :
                     <div>
                         <img
                             alt={props.intl.formatMessage(currentMessage)}
