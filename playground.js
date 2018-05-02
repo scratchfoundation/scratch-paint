@@ -55675,7 +55675,18 @@ var PaperCanvas = function (_React$Component) {
                 _paper2.default.project.activeLayer.removeChildren();
                 _this2.props.onUpdateImage();
             };
-            img.src = 'data:image/svg+xml;charset=utf-8,' + svgString;
+            img.onerror = function () {
+                // Fallback if browser does not support SVG data URIs in images.
+                // The problem with rasterize is that it will anti-alias.
+                var raster = _paper2.default.project.activeLayer.rasterize(72, false /* insert */);
+                raster.onLoad = function () {
+                    (0, _layer.getRaster)().drawImage(raster.canvas, raster.bounds.topLeft);
+                    _paper2.default.project.activeLayer.removeChildren();
+                    _this2.props.onUpdateImage();
+                };
+            };
+            // Hash tags will break image loading without being encoded first
+            img.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svgString);
         }
     }, {
         key: 'convertToVector',
