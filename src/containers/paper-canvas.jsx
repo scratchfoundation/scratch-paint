@@ -107,7 +107,18 @@ class PaperCanvas extends React.Component {
             paper.project.activeLayer.removeChildren();
             this.props.onUpdateImage();
         };
-        img.src = `data:image/svg+xml;charset=utf-8,${svgString}`;
+        img.onerror = () => {
+            // Fallback if browser does not support SVG data URIs in images.
+            // The problem with rasterize is that it will anti-alias.
+            const raster = paper.project.activeLayer.rasterize(72, false /* insert */);
+            raster.onLoad = () => {
+                getRaster().drawImage(raster.canvas, raster.bounds.topLeft);
+                paper.project.activeLayer.removeChildren();
+                this.props.onUpdateImage();
+            };
+        };
+        // Hash tags will break image loading without being encoded first
+        img.src = `data:image/svg+xml;utf8,${encodeURIComponent(svgString)}`;
     }
     convertToVector () {
         this.props.clearSelectedItems();
