@@ -12,11 +12,12 @@ import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
 import Dropdown from '../dropdown/dropdown.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import Formats from '../../lib/format';
 import Input from '../forms/input.jsx';
 import InputGroup from '../input-group/input-group.jsx';
 import Label from '../forms/label.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
-import {isBitmap, isVector} from '../../lib/format';
+import {isVector} from '../../lib/format';
 import layout from '../../lib/layout-constants';
 import styles from './fixed-tools.css';
 
@@ -156,119 +157,127 @@ const FixedToolsComponent = props => {
             </InputGroup>
 
             {/* Group/Ungroup */}
-            <InputGroup className={styles.modDashedBorder}>
-                <LabeledIconButton
-                    disabled={!shouldShowGroup()}
-                    imgSrc={groupIcon}
-                    title={props.intl.formatMessage(messages.group)}
-                    onClick={props.onGroup}
-                />
-                <LabeledIconButton
-                    disabled={!shouldShowUngroup()}
-                    imgSrc={ungroupIcon}
-                    title={props.intl.formatMessage(messages.ungroup)}
-                    onClick={props.onUngroup}
-                />
-            </InputGroup>
+            {isVector(props.format) ?
+                <InputGroup className={styles.modDashedBorder}>
+                    <LabeledIconButton
+                        disabled={!shouldShowGroup()}
+                        imgSrc={groupIcon}
+                        title={props.intl.formatMessage(messages.group)}
+                        onClick={props.onGroup}
+                    />
+                    <LabeledIconButton
+                        disabled={!shouldShowUngroup()}
+                        imgSrc={ungroupIcon}
+                        title={props.intl.formatMessage(messages.ungroup)}
+                        onClick={props.onUngroup}
+                    />
+                </InputGroup> : null
+            }
 
             {/* Forward/Backward */}
-            <InputGroup className={styles.modDashedBorder}>
-                <LabeledIconButton
-                    disabled={!shouldShowBringForward()}
-                    imgSrc={sendForwardIcon}
-                    title={props.intl.formatMessage(messages.forward)}
-                    onClick={props.onSendForward}
-                />
-                <LabeledIconButton
-                    disabled={!shouldShowSendBackward()}
-                    imgSrc={sendBackwardIcon}
-                    title={props.intl.formatMessage(messages.backward)}
-                    onClick={props.onSendBackward}
-                />
-            </InputGroup>
-
-            <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
-                <InputGroup className={styles.row}>
+            {isVector(props.format) ?
+                <InputGroup className={styles.modDashedBorder}>
                     <LabeledIconButton
                         disabled={!shouldShowBringForward()}
-                        imgSrc={sendFrontIcon}
-                        title={props.intl.formatMessage(messages.front)}
-                        onClick={props.onSendToFront}
+                        imgSrc={sendForwardIcon}
+                        title={props.intl.formatMessage(messages.forward)}
+                        onClick={props.onSendForward}
                     />
                     <LabeledIconButton
                         disabled={!shouldShowSendBackward()}
-                        imgSrc={sendBackIcon}
-                        title={props.intl.formatMessage(messages.back)}
-                        onClick={props.onSendToBack}
+                        imgSrc={sendBackwardIcon}
+                        title={props.intl.formatMessage(messages.backward)}
+                        onClick={props.onSendBackward}
                     />
-                </InputGroup>
+                </InputGroup> : null
+            }
 
-                {/* To be rotation point */}
-                {/* <InputGroup>
-                    <LabeledIconButton
-                        imgAlt="Rotation Point"
-                        imgSrc={rotationPointIcon}
-                        title="Rotation Point"
-                        onClick={function () {}}
-                    />
-                </InputGroup> */}
-            </MediaQuery>
-            <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
-                <InputGroup>
-                    <Dropdown
-                        className={styles.modUnselect}
-                        enterExitTransitionDurationMs={20}
-                        popoverContent={
-                            <InputGroup className={styles.modContextMenu}>
-                                <Button
-                                    className={classNames(styles.modMenuItem, {
-                                        [styles.modDisabled]: !shouldShowBringForward()
-                                    })}
-                                    disabled={!shouldShowBringForward()}
-                                    onClick={props.onSendToFront}
-                                >
-                                    <img
-                                        className={styles.menuItemIcon}
-                                        draggable={false}
-                                        src={sendFrontIcon}
-                                    />
-                                    <span>{props.intl.formatMessage(messages.front)}</span>
-                                </Button>
-                                <Button
-                                    className={classNames(styles.modMenuItem, {
-                                        [styles.modDisabled]: !shouldShowSendBackward()
-                                    })}
-                                    disabled={!shouldShowSendBackward()}
-                                    onClick={props.onSendToBack}
-                                >
-                                    <img
-                                        className={styles.menuItemIcon}
-                                        draggable={false}
-                                        src={sendBackIcon}
-                                    />
-                                    <span>{props.intl.formatMessage(messages.back)}</span>
-                                </Button>
+            {isVector(props.format) ?
+                <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
+                    <InputGroup className={styles.row}>
+                        <LabeledIconButton
+                            disabled={!shouldShowBringForward()}
+                            imgSrc={sendFrontIcon}
+                            title={props.intl.formatMessage(messages.front)}
+                            onClick={props.onSendToFront}
+                        />
+                        <LabeledIconButton
+                            disabled={!shouldShowSendBackward()}
+                            imgSrc={sendBackIcon}
+                            title={props.intl.formatMessage(messages.back)}
+                            onClick={props.onSendToBack}
+                        />
+                    </InputGroup>
 
-                                {/* To be rotation point */}
-                                {/* <Button
-                                    className={classNames(styles.modMenuItem, styles.modTopDivider)}
-                                    onClick={function () {}}
-                                >
-                                    <img
-                                        className={styles.menuItemIcon}
-                                        draggable={false}
-                                        src={rotationPointIcon}
-                                    />
-                                    <span>{'Rotation Point'}</span>
-                                </Button> */}
-                            </InputGroup>
-                        }
-                        tipSize={.01}
-                    >
-                        {props.intl.formatMessage(messages.more)}
-                    </Dropdown>
-                </InputGroup>
-            </MediaQuery>
+                    {/* To be rotation point */}
+                    {/* <InputGroup>
+                        <LabeledIconButton
+                            imgAlt="Rotation Point"
+                            imgSrc={rotationPointIcon}
+                            title="Rotation Point"
+                            onClick={function () {}}
+                        />
+                    </InputGroup> */}
+                </MediaQuery> : null
+            }
+            {isVector(props.format) ?
+                <MediaQuery maxWidth={layout.fullSizeEditorMinWidth - 1}>
+                    <InputGroup>
+                        <Dropdown
+                            className={styles.modUnselect}
+                            enterExitTransitionDurationMs={20}
+                            popoverContent={
+                                <InputGroup className={styles.modContextMenu}>
+                                    <Button
+                                        className={classNames(styles.modMenuItem, {
+                                            [styles.modDisabled]: !shouldShowBringForward()
+                                        })}
+                                        disabled={!shouldShowBringForward()}
+                                        onClick={props.onSendToFront}
+                                    >
+                                        <img
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={sendFrontIcon}
+                                        />
+                                        <span>{props.intl.formatMessage(messages.front)}</span>
+                                    </Button>
+                                    <Button
+                                        className={classNames(styles.modMenuItem, {
+                                            [styles.modDisabled]: !shouldShowSendBackward()
+                                        })}
+                                        disabled={!shouldShowSendBackward()}
+                                        onClick={props.onSendToBack}
+                                    >
+                                        <img
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={sendBackIcon}
+                                        />
+                                        <span>{props.intl.formatMessage(messages.back)}</span>
+                                    </Button>
+
+                                    {/* To be rotation point */}
+                                    {/* <Button
+                                        className={classNames(styles.modMenuItem, styles.modTopDivider)}
+                                        onClick={function () {}}
+                                    >
+                                        <img
+                                            className={styles.menuItemIcon}
+                                            draggable={false}
+                                            src={rotationPointIcon}
+                                        />
+                                        <span>{'Rotation Point'}</span>
+                                    </Button> */}
+                                </InputGroup>
+                            }
+                            tipSize={.01}
+                        >
+                            {props.intl.formatMessage(messages.more)}
+                        </Dropdown>
+                    </InputGroup>
+                </MediaQuery> : null
+            }
         </div>
     );
 };
@@ -276,6 +285,7 @@ const FixedToolsComponent = props => {
 FixedToolsComponent.propTypes = {
     canRedo: PropTypes.func.isRequired,
     canUndo: PropTypes.func.isRequired,
+    format: PropTypes.oneOf(Object.keys(Formats)),
     intl: intlShape,
     name: PropTypes.string,
     onGroup: PropTypes.func.isRequired,
