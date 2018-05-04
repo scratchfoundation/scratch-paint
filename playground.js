@@ -67700,7 +67700,8 @@ FixedToolsComponent.propTypes = {
 var mapStateToProps = function mapStateToProps(state) {
     return {
         format: state.scratchPaint.format,
-        selectedItems: state.scratchPaint.selectedItems
+        selectedItems: state.scratchPaint.selectedItems,
+        undoState: state.scratchPaint.undo
     };
 };
 
