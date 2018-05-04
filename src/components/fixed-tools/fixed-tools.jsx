@@ -301,7 +301,8 @@ FixedToolsComponent.propTypes = {
 
 const mapStateToProps = state => ({
     format: state.scratchPaint.format,
-    selectedItems: state.scratchPaint.selectedItems
+    selectedItems: state.scratchPaint.selectedItems,
+    undoState: state.scratchPaint.undo
 });
 
 export default connect(
