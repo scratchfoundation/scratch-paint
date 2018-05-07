@@ -7,6 +7,8 @@ import Formats from '../lib/format';
 import Modes from '../lib/modes';
 import log from '../log/log';
 
+import {inlineSvgFonts} from 'scratch-svg-renderer';
+
 import {trim} from '../helper/bitmap';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
@@ -95,6 +97,7 @@ class PaperCanvas extends React.Component {
         // Get rid of anti-aliasing
         // @todo get crisp text?
         svg.setAttribute('shape-rendering', 'crispEdges');
+        inlineSvgFonts(svg);
         const svgString = (new XMLSerializer()).serializeToString(svg);
 
         // Put anti-aliased SVG into image, and dump image back into canvas
