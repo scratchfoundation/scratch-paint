@@ -5,3 +5,7 @@
     position: absolute;
     background-color: #fff;
 }
+
+.fill-mode {
+	cursor: url(../components/fill-mode/fill-mode.cur) 29 29, auto;
+}

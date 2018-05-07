@@ -15,4 +15,11 @@ const Modes = keyMirror({
     TEXT: null
 });
 
-export default Modes;
+const ModeClasses = {
+};
+ModeClasses[Modes.FILL] = 'fill-mode';
+
+export {
+    Modes as default,
+    ModeClasses
+};

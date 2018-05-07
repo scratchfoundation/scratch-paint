@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -5,6 +6,7 @@ import {connect} from 'react-redux';
 import paper from '@scratch/paper';
 import Formats from '../lib/format';
 import Modes from '../lib/modes';
+import {ModeClasses} from '../lib/modes';
 import log from '../log/log';
 
 import {trim} from '../helper/bitmap';
@@ -290,7 +292,10 @@ class PaperCanvas extends React.Component {
     render () {
         return (
             <canvas
-                className={styles.paperCanvas}
+                className={classNames(
+                    styles.paperCanvas,
+                    styles[ModeClasses[this.props.mode]]
+                )}
                 height="360px"
                 ref={this.setCanvas}
                 width="480px"
