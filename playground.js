@@ -47930,7 +47930,11 @@ var PaperCanvas = function (_React$Component) {
                         item.translate(new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2).subtract(itemWidth, itemHeight));
                     }
 
-                    (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
+                    // Without the callback, the transforms sometimes don't finish applying before the
+                    // snapshot is taken.
+                    window.setTimeout(function () {
+                        return (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
+                    }, 0);
                 }
             });
         }
