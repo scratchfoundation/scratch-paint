@@ -253,7 +253,10 @@ class PaperCanvas extends React.Component {
                         .subtract(itemWidth, itemHeight));
                 }
 
-                performSnapshot(paperCanvas.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
+                // Without the callback, the transforms sometimes don't finish applying before the
+                // snapshot is taken.
+                window.setTimeout(
+                    () => performSnapshot(paperCanvas.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT), 0);
             }
         });
     }
