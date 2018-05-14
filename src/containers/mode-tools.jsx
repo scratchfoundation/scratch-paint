@@ -231,7 +231,7 @@ class ModeTools extends React.Component {
 ModeTools.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
-    font: PropTypes.oneOf(Object.keys(Fonts).map(e => Fonts[e])).isRequired,
+    font: PropTypes.string,
     incrementPasteOffset: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     pasteOffset: PropTypes.number,

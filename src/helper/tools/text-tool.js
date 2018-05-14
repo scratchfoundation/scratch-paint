@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {clearSelection} from '../selection';
+import {clearSelection, getSelectedLeafItems} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 import {hoverBounds} from '../guides';
@@ -99,6 +99,20 @@ class TextTool extends paper.Tool {
     onSelectionChanged (selectedItems) {
         this.boundingBoxTool.onSelectionChanged(selectedItems);
     }
+    setFont (font) {
+        this.font = font;
+        if (this.textBox) {
+            this.textBox.font = font;
+        }
+        const selected = getSelectedLeafItems();
+        for (const item of selected) {
+            if (item instanceof paper.PointText) {
+                item.font = font;
+            }
+        }
+        this.element.style.fontFamily = font;
+        this.setSelectedItems();
+    }
     // Allow other tools to cancel text edit mode
     onTextEditCancelled () {
         this.endTextEdit();
@@ -193,7 +207,7 @@ class TextTool extends paper.Tool {
             this.textBox = new paper.PointText({
                 point: event.point,
                 content: '',
-                font: 'Helvetica',
+                font: this.font,
                 fontSize: 30,
                 fillColor: this.colorState.fillColor,
                 // Default leading for both the HTML text area and paper.PointText

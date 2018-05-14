@@ -248,7 +248,7 @@ class ModeToolsComponent extends React.Component {
                 <InputGroup>
                     <Dropdown
                         className={classNames(styles.modUnselect, styles.fontDropdown)}
-                        enterExitTransitionDurationMs={20}
+                        enterExitTransitionDurationMs={60}
                         popoverContent={
                             <InputGroup className={styles.modContextMenu}>
                                 <Button
