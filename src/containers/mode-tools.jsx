@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 
+import Fonts from '../lib/fonts';
+
 import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
@@ -25,6 +27,18 @@ class ModeTools extends React.Component {
             'handlePasteFromClipboard',
             'handlePointPoints'
         ]);
+    }
+    _getFontName () {
+        switch (this.props.font) {
+        case Fonts.CHINESE:
+            return '中文';
+        case Fonts.KOREAN:
+            return '한국어';
+        case Fonts.JAPANESE:
+            return '日本語';
+        default:
+            return this.props.font;
+        }
     }
     _getSelectedUncurvedPoints () {
         const items = [];
@@ -200,6 +214,7 @@ class ModeTools extends React.Component {
     render () {
         return (
             <ModeToolsComponent
+                fontName={this._getFontName()}
                 hasSelectedUncurvedPoints={this.hasSelectedUncurvedPoints()}
                 hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
                 onCopyToClipboard={this.handleCopyToClipboard}
@@ -216,6 +231,7 @@ class ModeTools extends React.Component {
 ModeTools.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
+    font: PropTypes.oneOf(Object.keys(Fonts).map(e => Fonts[e])).isRequired,
     incrementPasteOffset: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     pasteOffset: PropTypes.number,
@@ -228,6 +244,7 @@ ModeTools.propTypes = {
 
 const mapStateToProps = state => ({
     clipboardItems: state.scratchPaint.clipboard.items,
+    font: state.scratchPaint.font,
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
     selectedItems: state.scratchPaint.selectedItems
 });

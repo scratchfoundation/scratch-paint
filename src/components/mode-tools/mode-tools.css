@@ -21,3 +21,48 @@
 .mod-labeled-icon-height {
     height: 2.85rem; /* for the second row so the dashed borders are equal in size */
 }
+
+.mod-menu-item {
+    display: flex;
+    margin: 0 -$grid-unit;
+    min-width: 6.25rem;
+    padding: calc(2 * $grid-unit);
+    padding-left: calc(3 * $grid-unit);
+    padding-right: calc(3 * $grid-unit);
+    white-space: nowrap;
+    width: 8.5rem;
+    cursor: pointer;
+    transition: 0.1s ease;
+    align-items: center;
+}
+
+.mod-menu-item:hover {
+    background: $motion-primary;
+    color: white;
+}
+
+.mod-context-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.mod-unselect {
+    user-select: none;
+}
+
+.font-dropdown {
+    align-items: center;
+    color: $text-primary;
+    display: flex;
+    font-size: 0.625rem;
+    justify-content: space-between;
+    width: 8.5rem;
+}
+
+.serif {
+    font-family: 'Serif';
+}
+
+.sans-serif {
+    font-family: 'Sans Serif';
+}
