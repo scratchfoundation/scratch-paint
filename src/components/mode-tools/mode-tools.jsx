@@ -173,7 +173,7 @@ class ModeToolsComponent extends React.Component {
         case Fonts.KOREAN:
             return styles.korean;
         default:
-            return font;
+            return '';
         }
     }
     handleChangeFontSansSerif () {
