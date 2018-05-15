@@ -57,6 +57,7 @@
     font-size: 0.625rem;
     justify-content: space-between;
     width: 8.5rem;
+    height: 2rem;
 }
 
 .serif {
@@ -65,4 +66,36 @@
 
 .sans-serif {
     font-family: 'Sans Serif';
+}
+
+.serif {
+    font-family: 'Serif';
+}
+
+.handwriting {
+    font-family: 'Handwriting';
+}
+
+.marker {
+    font-family: 'Marker';
+}
+
+.curly {
+    font-family: 'Curly';
+}
+
+.pixel {
+    font-family: 'Pixel';
+}
+
+.chinese {
+    font-family: "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑";
+}
+
+.japanese {
+    font-family: "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "メイリオ", Meiryo, "ＭＳ Ｐゴシック", "MS PGothic";
+}
+
+.korean {
+    font-family: "Malgun Gothic";
 }

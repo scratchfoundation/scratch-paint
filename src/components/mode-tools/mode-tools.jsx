@@ -92,6 +92,26 @@ const messages = defineMessages({
         defaultMessage: 'Serif',
         description: 'Name of the serif font',
         id: 'paint.modeTools.serif'
+    },
+    handwriting: {
+        defaultMessage: 'Handwriting',
+        description: 'Name of the handwriting font',
+        id: 'paint.modeTools.handwriting'
+    },
+    marker: {
+        defaultMessage: 'Marker',
+        description: 'Name of the marker font',
+        id: 'paint.modeTools.marker'
+    },
+    curly: {
+        defaultMessage: 'Curly',
+        description: 'Name of the curly font',
+        id: 'paint.modeTools.curly'
+    },
+    pixel: {
+        defaultMessage: 'Pixel',
+        description: 'Name of the pixelated font',
+        id: 'paint.modeTools.pixel'
     }
 });
 class ModeToolsComponent extends React.Component {
@@ -102,6 +122,13 @@ class ModeToolsComponent extends React.Component {
             'getTranslatedFontName',
             'handleChangeFontSerif',
             'handleChangeFontSansSerif',
+            'handleChangeFontHandwriting',
+            'handleChangeFontMarker',
+            'handleChangeFontCurly',
+            'handleChangeFontPixel',
+            'handleChangeFontChinese',
+            'handleChangeFontJapanese',
+            'handleChangeFontKorean',
             'handleOuterAction',
             'setDropdown',
             'handleClick'
@@ -113,6 +140,14 @@ class ModeToolsComponent extends React.Component {
             return this.props.intl.formatMessage(messages.serif);
         case Fonts.SANS_SERIF:
             return this.props.intl.formatMessage(messages.sansSerif);
+        case Fonts.HANDWRITING:
+            return this.props.intl.formatMessage(messages.handwriting);
+        case Fonts.MARKER:
+            return this.props.intl.formatMessage(messages.marker);
+        case Fonts.CURLY:
+            return this.props.intl.formatMessage(messages.curly);
+        case Fonts.PIXEL:
+            return this.props.intl.formatMessage(messages.pixel);
         default:
             return font;
         }
@@ -123,6 +158,20 @@ class ModeToolsComponent extends React.Component {
             return styles.serif;
         case Fonts.SANS_SERIF:
             return styles.sansSerif;
+        case Fonts.HANDWRITING:
+            return styles.handwriting;
+        case Fonts.MARKER:
+            return styles.marker;
+        case Fonts.CURLY:
+            return styles.curly;
+        case Fonts.PIXEL:
+            return styles.pixel;
+        case Fonts.CHINESE:
+            return styles.chinese;
+        case Fonts.JAPANESE:
+            return styles.japanese;
+        case Fonts.KOREAN:
+            return styles.korean;
         default:
             return font;
         }
@@ -132,6 +181,27 @@ class ModeToolsComponent extends React.Component {
     }
     handleChangeFontSerif () {
         this.props.changeFont(Fonts.SERIF);
+    }
+    handleChangeFontHandwriting () {
+        this.props.changeFont(Fonts.HANDWRITING);
+    }
+    handleChangeFontMarker () {
+        this.props.changeFont(Fonts.MARKER);
+    }
+    handleChangeFontCurly () {
+        this.props.changeFont(Fonts.CURLY);
+    }
+    handleChangeFontPixel () {
+        this.props.changeFont(Fonts.PIXEL);
+    }
+    handleChangeFontChinese () {
+        this.props.changeFont(Fonts.CHINESE);
+    }
+    handleChangeFontJapanese () {
+        this.props.changeFont(Fonts.JAPANESE);
+    }
+    handleChangeFontKorean () {
+        this.props.changeFont(Fonts.KOREAN);
     }
     handleClick () {
         this.dropDown.handleClosePopover();
@@ -276,6 +346,69 @@ class ModeToolsComponent extends React.Component {
                                 >
                                     <span className={styles.serif}>
                                         {this.props.intl.formatMessage(messages.serif)}
+                                    </span>
+                                </Button>
+                                <Button
+                                    className={classNames(styles.modMenuItem)}
+                                    onClick={this.handleClick}
+                                    onMouseOver={this.handleChangeFontHandwriting}
+                                >
+                                    <span className={styles.handwriting}>
+                                        {this.props.intl.formatMessage(messages.handwriting)}
+                                    </span>
+                                </Button>
+                                <Button
+                                    className={classNames(styles.modMenuItem)}
+                                    onClick={this.handleClick}
+                                    onMouseOver={this.handleChangeFontMarker}
+                                >
+                                    <span className={styles.marker}>
+                                        {this.props.intl.formatMessage(messages.marker)}
+                                    </span>
+                                </Button>
+                                <Button
+                                    className={classNames(styles.modMenuItem)}
+                                    onClick={this.handleClick}
+                                    onMouseOver={this.handleChangeFontCurly}
+                                >
+                                    <span className={styles.curly}>
+                                        {this.props.intl.formatMessage(messages.curly)}
+                                    </span>
+                                </Button>
+                                <Button
+                                    className={classNames(styles.modMenuItem)}
+                                    onClick={this.handleClick}
+                                    onMouseOver={this.handleChangeFontPixel}
+                                >
+                                    <span className={styles.pixel}>
+                                        {this.props.intl.formatMessage(messages.pixel)}
+                                    </span>
+                                </Button>
+                                <Button
+                                    className={classNames(styles.modMenuItem)}
+                                    onClick={this.handleClick}
+                                    onMouseOver={this.handleChangeFontChinese}
+                                >
+                                    <span className={styles.chinese}>
+                                        中文
+                                    </span>
+                                </Button>
+                                <Button
+                                    className={classNames(styles.modMenuItem)}
+                                    onClick={this.handleClick}
+                                    onMouseOver={this.handleChangeFontJapanese}
+                                >
+                                    <span className={styles.japanese}>
+                                        日本語
+                                    </span>
+                                </Button>
+                                <Button
+                                    className={classNames(styles.modMenuItem)}
+                                    onClick={this.handleClick}
+                                    onMouseOver={this.handleChangeFontKorean}
+                                >
+                                    <span className={styles.korean}>
+                                        한국어
                                     </span>
                                 </Button>
                             </InputGroup>
