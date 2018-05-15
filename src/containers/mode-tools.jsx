@@ -21,6 +21,7 @@ class ModeTools extends React.Component {
             '_getSelectedUnpointedPoints',
             'hasSelectedUncurvedPoints',
             'hasSelectedUnpointedPoints',
+            'handleClickFont',
             'handleClickOutsideDropdown',
             'handleCopyToClipboard',
             'handleCurvePoints',
@@ -84,6 +85,9 @@ class ModeTools extends React.Component {
     hasSelectedUnpointedPoints () {
         const points = this._getSelectedUnpointedPoints();
         return points.length > 0;
+    }
+    handleClickFont () {
+        this.props.onUpdateImage();
     }
     handleCurvePoints () {
         let changed;
@@ -237,6 +241,7 @@ class ModeTools extends React.Component {
                 fontName={this._getFontName()}
                 hasSelectedUncurvedPoints={this.hasSelectedUncurvedPoints()}
                 hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
+                onClickFont={this.handleClickFont}
                 onClickOutsideDropdown={this.handleClickOutsideDropdown}
                 onCopyToClipboard={this.handleCopyToClipboard}
                 onCurvePoints={this.handleCurvePoints}

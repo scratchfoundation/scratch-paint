@@ -224,6 +224,7 @@ class ModeToolsComponent extends React.Component {
     handleClick () {
         if (this.dropDown.isOpen()) {
             this.dropDown.handleClosePopover();
+            this.props.onClickFont();
         }
     }
     handleOuterAction (e) {
@@ -468,6 +469,7 @@ ModeToolsComponent.propTypes = {
     mode: PropTypes.string.isRequired,
     onBitBrushSliderChange: PropTypes.func.isRequired,
     onBrushSliderChange: PropTypes.func.isRequired,
+    onClickFont: PropTypes.func.isRequired,
     onClickOutsideDropdown: PropTypes.func,
     onCopyToClipboard: PropTypes.func.isRequired,
     onCurvePoints: PropTypes.func.isRequired,
