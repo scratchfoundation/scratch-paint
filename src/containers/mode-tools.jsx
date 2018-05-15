@@ -262,14 +262,14 @@ ModeTools.propTypes = {
     selectedItems:
         PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)), // eslint-disable-line react/no-unused-prop-types
     setClipboardItems: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func.isRequired,
+    setSelectedItems: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     clipboardItems: state.scratchPaint.clipboard.items,
     font: state.scratchPaint.font,
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
-    selectedItems: state.scratchPaint.selectedItems,
+    selectedItems: state.scratchPaint.selectedItems
 });
 const mapDispatchToProps = dispatch => ({
     changeFont: font => {
