@@ -13,7 +13,8 @@ class Dropdown extends React.Component {
         super(props);
         bindAll(this, [
             'handleClosePopover',
-            'handleToggleOpenState'
+            'handleToggleOpenState',
+            'isOpen'
         ]);
         this.state = {
             isOpen: false
@@ -32,6 +33,9 @@ class Dropdown extends React.Component {
         if (newState && this.props.onOpen) {
             this.props.onOpen();
         }
+    }
+    isOpen () {
+        return this.state.isOpen;
     }
     render () {
         return (

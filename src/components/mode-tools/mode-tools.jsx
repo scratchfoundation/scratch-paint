@@ -177,34 +177,54 @@ class ModeToolsComponent extends React.Component {
         }
     }
     handleChangeFontSansSerif () {
-        this.props.changeFont(Fonts.SANS_SERIF);
+        if (this.dropDown.isOpen()) {
+            this.props.changeFont(Fonts.SANS_SERIF);
+        }
     }
     handleChangeFontSerif () {
-        this.props.changeFont(Fonts.SERIF);
+        if (this.dropDown.isOpen()) {
+            this.props.changeFont(Fonts.SERIF);
+        }
     }
     handleChangeFontHandwriting () {
-        this.props.changeFont(Fonts.HANDWRITING);
+        if (this.dropDown.isOpen()) {
+            this.props.changeFont(Fonts.HANDWRITING);
+        }
     }
     handleChangeFontMarker () {
-        this.props.changeFont(Fonts.MARKER);
+        if (this.dropDown.isOpen()) {
+            this.props.changeFont(Fonts.MARKER);
+        }
     }
     handleChangeFontCurly () {
-        this.props.changeFont(Fonts.CURLY);
+        if (this.dropDown.isOpen()) {
+            this.props.changeFont(Fonts.CURLY);
+        }
     }
     handleChangeFontPixel () {
-        this.props.changeFont(Fonts.PIXEL);
+        if (this.dropDown.isOpen()) {
+            this.props.changeFont(Fonts.PIXEL);
+        }
     }
     handleChangeFontChinese () {
-        this.props.changeFont(Fonts.CHINESE);
+        if (this.dropDown.isOpen()) {
+            this.props.changeFont(Fonts.CHINESE);
+        }
     }
     handleChangeFontJapanese () {
-        this.props.changeFont(Fonts.JAPANESE);
+        if (this.dropDown.isOpen()) {
+            this.props.changeFont(Fonts.JAPANESE);
+        }
     }
     handleChangeFontKorean () {
-        this.props.changeFont(Fonts.KOREAN);
+        if (this.dropDown.isOpen()) {
+            this.props.changeFont(Fonts.KOREAN);
+        }
     }
     handleClick () {
-        this.dropDown.handleClosePopover();
+        if (this.dropDown.isOpen()) {
+            this.dropDown.handleClosePopover();
+        }
     }
     handleOuterAction (e) {
         e.stopPropagation();
