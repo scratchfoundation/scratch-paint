@@ -25,9 +25,13 @@ class Dropdown extends React.Component {
         });
     }
     handleToggleOpenState () {
+        const newState = !this.state.isOpen;
         this.setState({
-            isOpen: !this.state.isOpen
+            isOpen: newState
         });
+        if (newState && this.props.onOpen) {
+            this.props.onOpen();
+        }
     }
     render () {
         return (
@@ -35,7 +39,8 @@ class Dropdown extends React.Component {
                 body={this.props.popoverContent}
                 isOpen={this.state.isOpen}
                 preferPlace="below"
-                onOuterAction={this.handleClosePopover}
+                onOuterAction={this.props.onOuterAction ?
+                    this.props.onOuterAction : this.handleClosePopover}
                 {...this.props}
             >
                 <div
@@ -62,6 +67,8 @@ class Dropdown extends React.Component {
 Dropdown.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
+    onOpen: PropTypes.func,
+    onOuterAction: PropTypes.func,
     popoverContent: PropTypes.node.isRequired
 };
 

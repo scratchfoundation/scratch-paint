@@ -7,6 +7,7 @@ import bindAll from 'lodash.bindall';
 import Fonts from '../lib/fonts';
 
 import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
+import {changeFont} from '../reducers/font';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
 import {clearSelection, getSelectedLeafItems, getSelectedRootItems, getAllRootItems} from '../helper/selection';
@@ -20,10 +21,12 @@ class ModeTools extends React.Component {
             '_getSelectedUnpointedPoints',
             'hasSelectedUncurvedPoints',
             'hasSelectedUnpointedPoints',
+            'handleClickOutsideDropdown',
             'handleCopyToClipboard',
             'handleCurvePoints',
             'handleFlipHorizontal',
             'handleFlipVertical',
+            'handleOpenDropdown',
             'handlePasteFromClipboard',
             'handlePointPoints'
         ]);
@@ -150,6 +153,22 @@ class ModeTools extends React.Component {
             this.props.onUpdateImage();
         }
     }
+    handleOpenDropdown () {
+        this.savedFont = this.props.font;
+        this.savedSelection = getSelectedLeafItems();
+    }
+    handleClickOutsideDropdown () {
+        // Cancel font change
+        for (const item of this.savedSelection) {
+            if (item instanceof paper.PointText) {
+                item.font = this.savedFont;
+            }
+        }
+
+        this.props.changeFont(this.savedFont);
+        this.savedFont = null;
+        this.savedSelection = null;
+    }
     _handleFlip (horizontalScale, verticalScale) {
         let selectedItems = getSelectedRootItems();
         if (selectedItems.length === 0) {
@@ -214,13 +233,16 @@ class ModeTools extends React.Component {
     render () {
         return (
             <ModeToolsComponent
+                changeFont={this.props.changeFont}
                 fontName={this._getFontName()}
                 hasSelectedUncurvedPoints={this.hasSelectedUncurvedPoints()}
                 hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
+                onClickOutsideDropdown={this.handleClickOutsideDropdown}
                 onCopyToClipboard={this.handleCopyToClipboard}
                 onCurvePoints={this.handleCurvePoints}
                 onFlipHorizontal={this.handleFlipHorizontal}
                 onFlipVertical={this.handleFlipVertical}
+                onOpenDropdown={this.handleOpenDropdown}
                 onPasteFromClipboard={this.handlePasteFromClipboard}
                 onPointPoints={this.handlePointPoints}
             />
@@ -229,6 +251,7 @@ class ModeTools extends React.Component {
 }
 
 ModeTools.propTypes = {
+    changeFont: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
     font: PropTypes.string,
@@ -239,16 +262,19 @@ ModeTools.propTypes = {
     selectedItems:
         PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)), // eslint-disable-line react/no-unused-prop-types
     setClipboardItems: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
     clipboardItems: state.scratchPaint.clipboard.items,
     font: state.scratchPaint.font,
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
-    selectedItems: state.scratchPaint.selectedItems
+    selectedItems: state.scratchPaint.selectedItems,
 });
 const mapDispatchToProps = dispatch => ({
+    changeFont: font => {
+        dispatch(changeFont(font));
+    },
     setClipboardItems: items => {
         dispatch(setClipboardItems(items));
     },

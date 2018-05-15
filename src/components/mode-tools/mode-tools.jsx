@@ -8,7 +8,6 @@ import React from 'react';
 import {changeBrushSize} from '../../reducers/brush-mode';
 import {changeBrushSize as changeEraserSize} from '../../reducers/eraser-mode';
 import {changeBitBrushSize} from '../../reducers/bit-brush-size';
-import {changeFont} from '../../reducers/font';
 
 import Button from '../button/button.jsx';
 import Dropdown from '../dropdown/dropdown.jsx';
@@ -103,7 +102,9 @@ class ModeToolsComponent extends React.Component {
             'getTranslatedFontName',
             'handleChangeFontSerif',
             'handleChangeFontSansSerif',
-            'setDropdown'
+            'handleOuterAction',
+            'setDropdown',
+            'handleClick'
         ]);
     }
     getTranslatedFontName (font) {
@@ -127,12 +128,20 @@ class ModeToolsComponent extends React.Component {
         }
     }
     handleChangeFontSansSerif () {
-        this.dropDown.handleToggleOpenState();
         this.props.changeFont(Fonts.SANS_SERIF);
     }
     handleChangeFontSerif () {
-        this.dropDown.handleToggleOpenState();
         this.props.changeFont(Fonts.SERIF);
+    }
+    handleClick () {
+        this.dropDown.handleClosePopover();
+    }
+    handleOuterAction (e) {
+        e.stopPropagation();
+        this.dropDown.handleClosePopover();
+        if (this.props.onClickOutsideDropdown) {
+            this.props.onClickOutsideDropdown();
+        }
     }
     setDropdown (element) {
         this.dropDown = element;
@@ -253,7 +262,8 @@ class ModeToolsComponent extends React.Component {
                             <InputGroup className={styles.modContextMenu}>
                                 <Button
                                     className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleChangeFontSansSerif}
+                                    onClick={this.handleClick}
+                                    onMouseOver={this.handleChangeFontSansSerif}
                                 >
                                     <span className={styles.sansSerif}>
                                         {this.props.intl.formatMessage(messages.sansSerif)}
@@ -261,7 +271,8 @@ class ModeToolsComponent extends React.Component {
                                 </Button>
                                 <Button
                                     className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleChangeFontSerif}
+                                    onClick={this.handleClick}
+                                    onMouseOver={this.handleChangeFontSerif}
                                 >
                                     <span className={styles.serif}>
                                         {this.props.intl.formatMessage(messages.serif)}
@@ -271,6 +282,8 @@ class ModeToolsComponent extends React.Component {
                         }
                         ref={this.setDropdown}
                         tipSize={.01}
+                        onOpen={this.props.onOpenDropdown}
+                        onOuterAction={this.handleOuterAction}
                     >
                         <span className={this.getFontStyle(this.props.fontName)}>
                             {this.getTranslatedFontName(this.props.fontName)}
@@ -302,11 +315,13 @@ ModeToolsComponent.propTypes = {
     mode: PropTypes.string.isRequired,
     onBitBrushSliderChange: PropTypes.func.isRequired,
     onBrushSliderChange: PropTypes.func.isRequired,
+    onClickOutsideDropdown: PropTypes.func,
     onCopyToClipboard: PropTypes.func.isRequired,
     onCurvePoints: PropTypes.func.isRequired,
     onEraserSliderChange: PropTypes.func,
     onFlipHorizontal: PropTypes.func.isRequired,
     onFlipVertical: PropTypes.func.isRequired,
+    onOpenDropdown: PropTypes.func,
     onPasteFromClipboard: PropTypes.func.isRequired,
     onPointPoints: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item))
@@ -322,9 +337,6 @@ const mapStateToProps = state => ({
     selectedItems: state.scratchPaint.selectedItems
 });
 const mapDispatchToProps = dispatch => ({
-    changeFont: font => {
-        dispatch(changeFont(font));
-    },
     onBrushSliderChange: brushSize => {
         dispatch(changeBrushSize(brushSize));
     },
