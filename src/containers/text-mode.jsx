@@ -86,6 +86,7 @@ class TextMode extends React.Component {
             this.props.clearSelectedItems,
             this.props.onUpdateImage,
             this.props.setTextEditTarget,
+            this.props.changeFont
         );
         this.tool.setColorState(this.props.colorState);
         this.tool.setFont(this.props.font);

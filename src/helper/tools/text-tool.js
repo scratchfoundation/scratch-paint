@@ -36,14 +36,16 @@ class TextTool extends paper.Tool {
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      * @param {!function} setTextEditTarget Call to set text editing target whenever text editing is active
+     * @param {!function} changeFont Call to change the font in the dropdown
      */
-    constructor (textAreaElement, setSelectedItems, clearSelectedItems, onUpdateImage, setTextEditTarget) {
+    constructor (textAreaElement, setSelectedItems, clearSelectedItems, onUpdateImage, setTextEditTarget, changeFont) {
         super();
         this.element = textAreaElement;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateImage = onUpdateImage;
         this.setTextEditTarget = setTextEditTarget;
+        this.changeFont = changeFont;
         this.boundingBoxTool = new BoundingBoxTool(Modes.TEXT, setSelectedItems, clearSelectedItems, onUpdateImage);
         this.nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         this.lastEvent = null;
@@ -286,6 +288,11 @@ class TextTool extends paper.Tool {
     beginTextEdit (initialText, matrix) {
         this.mode = TextTool.TEXT_EDIT_MODE;
         this.setTextEditTarget(this.textBox.id);
+        if (this.font !== this.textBox.font) {
+            this.changeFont(this.textBox.font);
+        }
+        this.element.style.fontSize = `${this.textBox.fontSize}px`;
+        this.element.style.lineHeight = this.textBox.leading / this.textBox.fontSize;
 
         const viewMtx = paper.view.matrix;
 
