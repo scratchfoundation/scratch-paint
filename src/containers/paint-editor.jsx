@@ -133,6 +133,7 @@ class PaintEditor extends React.Component {
             // Export at 0.5x
             scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
             const bounds = paper.project.activeLayer.bounds;
+            // @todo generate view box
             this.props.onUpdateImage(
                 true /* isVector */,
                 paper.project.exportSVG({
