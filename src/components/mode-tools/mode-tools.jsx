@@ -34,54 +34,55 @@ import straightPointIcon from './icons/straight-point.svg';
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
 const LiveInput = LiveInputHOC(Input);
-const messages = defineMessages({
-    brushSize: {
-        defaultMessage: 'Brush size',
-        description: 'Label for the brush size input',
-        id: 'paint.modeTools.brushSize'
-    },
-    lineSize: {
-        defaultMessage: 'Line size',
-        description: 'Label for the line size input',
-        id: 'paint.modeTools.lineSize'
-    },
-    eraserSize: {
-        defaultMessage: 'Eraser size',
-        description: 'Label for the eraser size input',
-        id: 'paint.modeTools.eraserSize'
-    },
-    copy: {
-        defaultMessage: 'Copy',
-        description: 'Label for the copy button',
-        id: 'paint.modeTools.copy'
-    },
-    paste: {
-        defaultMessage: 'Paste',
-        description: 'Label for the paste button',
-        id: 'paint.modeTools.paste'
-    },
-    curved: {
-        defaultMessage: 'Curved',
-        description: 'Label for the button that converts selected points to curves',
-        id: 'paint.modeTools.curved'
-    },
-    pointed: {
-        defaultMessage: 'Pointed',
-        description: 'Label for the button that converts selected points to sharp points',
-        id: 'paint.modeTools.pointed'
-    },
-    flipHorizontal: {
-        defaultMessage: 'Flip Horizontal',
-        description: 'Label for the button to flip the image horizontally',
-        id: 'paint.modeTools.flipHorizontal'
-    },
-    flipVertical: {
-        defaultMessage: 'Flip Vertical',
-        description: 'Label for the button to flip the image vertically',
-        id: 'paint.modeTools.flipVertical'
-    }
-});
 const ModeToolsComponent = props => {
+    const messages = defineMessages({
+        brushSize: {
+            defaultMessage: 'Brush size',
+            description: 'Label for the brush size input',
+            id: 'paint.modeTools.brushSize'
+        },
+        lineSize: {
+            defaultMessage: 'Line size',
+            description: 'Label for the line size input',
+            id: 'paint.modeTools.lineSize'
+        },
+        eraserSize: {
+            defaultMessage: 'Eraser size',
+            description: 'Label for the eraser size input',
+            id: 'paint.modeTools.eraserSize'
+        },
+        copy: {
+            defaultMessage: 'Copy',
+            description: 'Label for the copy button',
+            id: 'paint.modeTools.copy'
+        },
+        paste: {
+            defaultMessage: 'Paste',
+            description: 'Label for the paste button',
+            id: 'paint.modeTools.paste'
+        },
+        curved: {
+            defaultMessage: 'Curved',
+            description: 'Label for the button that converts selected points to curves',
+            id: 'paint.modeTools.curved'
+        },
+        pointed: {
+            defaultMessage: 'Pointed',
+            description: 'Label for the button that converts selected points to sharp points',
+            id: 'paint.modeTools.pointed'
+        },
+        flipHorizontal: {
+            defaultMessage: 'Flip Horizontal',
+            description: 'Label for the button to flip the image horizontally',
+            id: 'paint.modeTools.flipHorizontal'
+        },
+        flipVertical: {
+            defaultMessage: 'Flip Vertical',
+            description: 'Label for the button to flip the image vertically',
+            id: 'paint.modeTools.flipVertical'
+        }
+    });
+
     switch (props.mode) {
     case Modes.BRUSH:
         /* falls through */
@@ -92,8 +93,7 @@ const ModeToolsComponent = props => {
         const currentIcon = isVector(props.format) ? brushIcon :
             props.mode === Modes.BIT_LINE ? bitLineIcon : bitBrushIcon;
         const currentBrushValue = isBitmap(props.format) ? props.bitBrushSize : props.brushValue;
-        const changeFunction = isBitmap(props.format) ?
-            props.onBitBrushSliderChange : props.onBrushSliderChange;
+        const changeFunction = isBitmap(props.format) ? props.onBitBrushSliderChange : props.onBrushSliderChange;
         const currentMessage = props.mode === Modes.BIT_LINE ? messages.lineSize : messages.brushSize;
         return (
             <div className={classNames(props.className, styles.modeTools)}>
