@@ -55312,6 +55312,7 @@ var PaintEditor = function (_React$Component) {
                 // Export at 0.5x
                 (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, .5, new _paper2.default.Point());
                 var bounds = _paper2.default.project.activeLayer.bounds;
+                // @todo generate view box
                 this.props.onUpdateImage(true /* isVector */
                 , _paper2.default.project.exportSVG({
                     asString: true,
