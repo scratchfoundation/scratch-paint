@@ -7,7 +7,7 @@ import bindAll from 'lodash.bindall';
 import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
-import {clearSelection, getSelectedLeafItems, getSelectedRootItems, getAllRootItems} from '../helper/selection';
+import {deleteSelection, clearSelection, getSelectedLeafItems, getSelectedRootItems, getAllRootItems} from '../helper/selection';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 
 class ModeTools extends React.Component {
@@ -23,6 +23,7 @@ class ModeTools extends React.Component {
             'handleFlipHorizontal',
             'handleFlipVertical',
             'handlePasteFromClipboard',
+            'handleDeleteFromClipboard',
             'handlePointPoints'
         ]);
     }
@@ -197,12 +198,18 @@ class ModeTools extends React.Component {
             this.props.onUpdateImage();
         }
     }
+    handleDeleteFromClipboard() {
+        if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
+            this.props.setSelectedItems();
+        }
+    }
     render () {
         return (
             <ModeToolsComponent
                 hasSelectedUncurvedPoints={this.hasSelectedUncurvedPoints()}
                 hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
                 onCopyToClipboard={this.handleCopyToClipboard}
+                onDeleteFromClipboard={this.handleDeleteFromClipboard}
                 onCurvePoints={this.handleCurvePoints}
                 onFlipHorizontal={this.handleFlipHorizontal}
                 onFlipVertical={this.handleFlipVertical}
