@@ -4,10 +4,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 
-import Fonts from '../lib/fonts';
-
 import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
-import {changeFont} from '../reducers/font';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
 import {clearSelection, getSelectedLeafItems, getSelectedRootItems, getAllRootItems} from '../helper/selection';
@@ -21,28 +18,13 @@ class ModeTools extends React.Component {
             '_getSelectedUnpointedPoints',
             'hasSelectedUncurvedPoints',
             'hasSelectedUnpointedPoints',
-            'handleClickFont',
-            'handleClickOutsideDropdown',
             'handleCopyToClipboard',
             'handleCurvePoints',
             'handleFlipHorizontal',
             'handleFlipVertical',
-            'handleOpenDropdown',
             'handlePasteFromClipboard',
             'handlePointPoints'
         ]);
-    }
-    _getFontName () {
-        switch (this.props.font) {
-        case Fonts.CHINESE:
-            return '中文';
-        case Fonts.KOREAN:
-            return '한국어';
-        case Fonts.JAPANESE:
-            return '日本語';
-        default:
-            return this.props.font;
-        }
     }
     _getSelectedUncurvedPoints () {
         const items = [];
@@ -85,9 +67,6 @@ class ModeTools extends React.Component {
     hasSelectedUnpointedPoints () {
         const points = this._getSelectedUnpointedPoints();
         return points.length > 0;
-    }
-    handleClickFont () {
-        this.props.onUpdateImage();
     }
     handleCurvePoints () {
         let changed;
@@ -157,22 +136,6 @@ class ModeTools extends React.Component {
             this.props.onUpdateImage();
         }
     }
-    handleOpenDropdown () {
-        this.savedFont = this.props.font;
-        this.savedSelection = getSelectedLeafItems();
-    }
-    handleClickOutsideDropdown () {
-        // Cancel font change
-        for (const item of this.savedSelection) {
-            if (item instanceof paper.PointText) {
-                item.font = this.savedFont;
-            }
-        }
-
-        this.props.changeFont(this.savedFont);
-        this.savedFont = null;
-        this.savedSelection = null;
-    }
     _handleFlip (horizontalScale, verticalScale) {
         let selectedItems = getSelectedRootItems();
         if (selectedItems.length === 0) {
@@ -237,29 +200,23 @@ class ModeTools extends React.Component {
     render () {
         return (
             <ModeToolsComponent
-                changeFont={this.props.changeFont}
-                fontName={this._getFontName()}
                 hasSelectedUncurvedPoints={this.hasSelectedUncurvedPoints()}
                 hasSelectedUnpointedPoints={this.hasSelectedUnpointedPoints()}
-                onClickFont={this.handleClickFont}
-                onClickOutsideDropdown={this.handleClickOutsideDropdown}
                 onCopyToClipboard={this.handleCopyToClipboard}
                 onCurvePoints={this.handleCurvePoints}
                 onFlipHorizontal={this.handleFlipHorizontal}
                 onFlipVertical={this.handleFlipVertical}
-                onOpenDropdown={this.handleOpenDropdown}
                 onPasteFromClipboard={this.handlePasteFromClipboard}
                 onPointPoints={this.handlePointPoints}
+                onUpdateImage={this.props.onUpdateImage}
             />
         );
     }
 }
 
 ModeTools.propTypes = {
-    changeFont: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
-    font: PropTypes.string,
     incrementPasteOffset: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     pasteOffset: PropTypes.number,
@@ -272,14 +229,10 @@ ModeTools.propTypes = {
 
 const mapStateToProps = state => ({
     clipboardItems: state.scratchPaint.clipboard.items,
-    font: state.scratchPaint.font,
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
     selectedItems: state.scratchPaint.selectedItems
 });
 const mapDispatchToProps = dispatch => ({
-    changeFont: font => {
-        dispatch(changeFont(font));
-    },
     setClipboardItems: items => {
         dispatch(setClipboardItems(items));
     },

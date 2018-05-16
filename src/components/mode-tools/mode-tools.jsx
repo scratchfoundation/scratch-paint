@@ -1,7 +1,6 @@
 import paper from '@scratch/paper';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
-import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -9,15 +8,13 @@ import {changeBrushSize} from '../../reducers/brush-mode';
 import {changeBrushSize as changeEraserSize} from '../../reducers/eraser-mode';
 import {changeBitBrushSize} from '../../reducers/bit-brush-size';
 
-import Button from '../button/button.jsx';
-import Dropdown from '../dropdown/dropdown.jsx';
+import FontDropdown from '../../containers/font-dropdown.jsx';
 import LiveInputHOC from '../forms/live-input-hoc.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Input from '../forms/input.jsx';
 import InputGroup from '../input-group/input-group.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import Modes from '../../lib/modes';
-import Fonts from '../../lib/fonts';
 import Formats from '../../lib/format';
 import {isBitmap, isVector} from '../../lib/format';
 import styles from './mode-tools.css';
@@ -82,386 +79,138 @@ const messages = defineMessages({
         defaultMessage: 'Flip Vertical',
         description: 'Label for the button to flip the image vertically',
         id: 'paint.modeTools.flipVertical'
-    },
-    sansSerif: {
-        defaultMessage: 'Sans Serif',
-        description: 'Name of the sans serif font',
-        id: 'paint.modeTools.sansSerif'
-    },
-    serif: {
-        defaultMessage: 'Serif',
-        description: 'Name of the serif font',
-        id: 'paint.modeTools.serif'
-    },
-    handwriting: {
-        defaultMessage: 'Handwriting',
-        description: 'Name of the handwriting font',
-        id: 'paint.modeTools.handwriting'
-    },
-    marker: {
-        defaultMessage: 'Marker',
-        description: 'Name of the marker font',
-        id: 'paint.modeTools.marker'
-    },
-    curly: {
-        defaultMessage: 'Curly',
-        description: 'Name of the curly font',
-        id: 'paint.modeTools.curly'
-    },
-    pixel: {
-        defaultMessage: 'Pixel',
-        description: 'Name of the pixelated font',
-        id: 'paint.modeTools.pixel'
     }
 });
-class ModeToolsComponent extends React.Component {
-    constructor (props) {
-        super(props);
-        bindAll(this, [
-            'getFontStyle',
-            'getTranslatedFontName',
-            'handleChangeFontSerif',
-            'handleChangeFontSansSerif',
-            'handleChangeFontHandwriting',
-            'handleChangeFontMarker',
-            'handleChangeFontCurly',
-            'handleChangeFontPixel',
-            'handleChangeFontChinese',
-            'handleChangeFontJapanese',
-            'handleChangeFontKorean',
-            'handleOuterAction',
-            'setDropdown',
-            'handleClick'
-        ]);
-    }
-    getTranslatedFontName (font) {
-        switch (font) {
-        case Fonts.SERIF:
-            return this.props.intl.formatMessage(messages.serif);
-        case Fonts.SANS_SERIF:
-            return this.props.intl.formatMessage(messages.sansSerif);
-        case Fonts.HANDWRITING:
-            return this.props.intl.formatMessage(messages.handwriting);
-        case Fonts.MARKER:
-            return this.props.intl.formatMessage(messages.marker);
-        case Fonts.CURLY:
-            return this.props.intl.formatMessage(messages.curly);
-        case Fonts.PIXEL:
-            return this.props.intl.formatMessage(messages.pixel);
-        default:
-            return font;
-        }
-    }
-    getFontStyle (font) {
-        switch (font) {
-        case Fonts.SERIF:
-            return styles.serif;
-        case Fonts.SANS_SERIF:
-            return styles.sansSerif;
-        case Fonts.HANDWRITING:
-            return styles.handwriting;
-        case Fonts.MARKER:
-            return styles.marker;
-        case Fonts.CURLY:
-            return styles.curly;
-        case Fonts.PIXEL:
-            return styles.pixel;
-        case Fonts.CHINESE:
-            return styles.chinese;
-        case Fonts.JAPANESE:
-            return styles.japanese;
-        case Fonts.KOREAN:
-            return styles.korean;
-        default:
-            return '';
-        }
-    }
-    handleChangeFontSansSerif () {
-        if (this.dropDown.isOpen()) {
-            this.props.changeFont(Fonts.SANS_SERIF);
-        }
-    }
-    handleChangeFontSerif () {
-        if (this.dropDown.isOpen()) {
-            this.props.changeFont(Fonts.SERIF);
-        }
-    }
-    handleChangeFontHandwriting () {
-        if (this.dropDown.isOpen()) {
-            this.props.changeFont(Fonts.HANDWRITING);
-        }
-    }
-    handleChangeFontMarker () {
-        if (this.dropDown.isOpen()) {
-            this.props.changeFont(Fonts.MARKER);
-        }
-    }
-    handleChangeFontCurly () {
-        if (this.dropDown.isOpen()) {
-            this.props.changeFont(Fonts.CURLY);
-        }
-    }
-    handleChangeFontPixel () {
-        if (this.dropDown.isOpen()) {
-            this.props.changeFont(Fonts.PIXEL);
-        }
-    }
-    handleChangeFontChinese () {
-        if (this.dropDown.isOpen()) {
-            this.props.changeFont(Fonts.CHINESE);
-        }
-    }
-    handleChangeFontJapanese () {
-        if (this.dropDown.isOpen()) {
-            this.props.changeFont(Fonts.JAPANESE);
-        }
-    }
-    handleChangeFontKorean () {
-        if (this.dropDown.isOpen()) {
-            this.props.changeFont(Fonts.KOREAN);
-        }
-    }
-    handleClick () {
-        if (this.dropDown.isOpen()) {
-            this.dropDown.handleClosePopover();
-            this.props.onClickFont();
-        }
-    }
-    handleOuterAction (e) {
-        e.stopPropagation();
-        this.dropDown.handleClosePopover();
-        if (this.props.onClickOutsideDropdown) {
-            this.props.onClickOutsideDropdown();
-        }
-    }
-    setDropdown (element) {
-        this.dropDown = element;
-    }
-    render () {
-        switch (this.props.mode) {
-        case Modes.BRUSH:
-            /* falls through */
-        case Modes.BIT_BRUSH:
-            /* falls through */
-        case Modes.BIT_LINE:
-        {
-            const currentIcon = isVector(this.props.format) ? brushIcon :
-                this.props.mode === Modes.BIT_LINE ? bitLineIcon : bitBrushIcon;
-            const currentBrushValue = isBitmap(this.props.format) ? this.props.bitBrushSize : this.props.brushValue;
-            const changeFunction = isBitmap(this.props.format) ?
-                this.props.onBitBrushSliderChange : this.props.onBrushSliderChange;
-            const currentMessage = this.props.mode === Modes.BIT_LINE ? messages.lineSize : messages.brushSize;
-            return (
-                <div className={classNames(this.props.className, styles.modeTools)}>
-                    <div>
-                        <img
-                            alt={this.props.intl.formatMessage(currentMessage)}
-                            className={styles.modeToolsIcon}
-                            draggable={false}
-                            src={currentIcon}
-                        />
-                    </div>
-                    <LiveInput
-                        range
-                        small
-                        max={MAX_STROKE_WIDTH}
-                        min="1"
-                        type="number"
-                        value={currentBrushValue}
-                        onSubmit={changeFunction}
+const ModeToolsComponent = props => {
+    switch (props.mode) {
+    case Modes.BRUSH:
+        /* falls through */
+    case Modes.BIT_BRUSH:
+        /* falls through */
+    case Modes.BIT_LINE:
+    {
+        const currentIcon = isVector(props.format) ? brushIcon :
+            props.mode === Modes.BIT_LINE ? bitLineIcon : bitBrushIcon;
+        const currentBrushValue = isBitmap(props.format) ? props.bitBrushSize : props.brushValue;
+        const changeFunction = isBitmap(props.format) ?
+            props.onBitBrushSliderChange : props.onBrushSliderChange;
+        const currentMessage = props.mode === Modes.BIT_LINE ? messages.lineSize : messages.brushSize;
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <div>
+                    <img
+                        alt={props.intl.formatMessage(currentMessage)}
+                        className={styles.modeToolsIcon}
+                        draggable={false}
+                        src={currentIcon}
                     />
                 </div>
-            );
-        }
-        case Modes.ERASER:
-            return (
-                <div className={classNames(this.props.className, styles.modeTools)}>
-                    <div>
-                        <img
-                            alt={this.props.intl.formatMessage(messages.eraserSize)}
-                            className={styles.modeToolsIcon}
-                            draggable={false}
-                            src={eraserIcon}
-                        />
-                    </div>
-                    <LiveInput
-                        range
-                        small
-                        max={MAX_STROKE_WIDTH}
-                        min="1"
-                        type="number"
-                        value={this.props.eraserValue}
-                        onSubmit={this.props.onEraserSliderChange}
+                <LiveInput
+                    range
+                    small
+                    max={MAX_STROKE_WIDTH}
+                    min="1"
+                    type="number"
+                    value={currentBrushValue}
+                    onSubmit={changeFunction}
+                />
+            </div>
+        );
+    }
+    case Modes.ERASER:
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <div>
+                    <img
+                        alt={props.intl.formatMessage(messages.eraserSize)}
+                        className={styles.modeToolsIcon}
+                        draggable={false}
+                        src={eraserIcon}
                     />
                 </div>
-            );
-        case Modes.RESHAPE:
-            return (
-                <div className={classNames(this.props.className, styles.modeTools)}>
+                <LiveInput
+                    range
+                    small
+                    max={MAX_STROKE_WIDTH}
+                    min="1"
+                    type="number"
+                    value={props.eraserValue}
+                    onSubmit={props.onEraserSliderChange}
+                />
+            </div>
+        );
+    case Modes.RESHAPE:
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <LabeledIconButton
+                    disabled={!props.hasSelectedUncurvedPoints}
+                    imgSrc={curvedPointIcon}
+                    title={props.intl.formatMessage(messages.curved)}
+                    onClick={props.onCurvePoints}
+                />
+                <LabeledIconButton
+                    disabled={!props.hasSelectedUnpointedPoints}
+                    imgSrc={straightPointIcon}
+                    title={props.intl.formatMessage(messages.pointed)}
+                    onClick={props.onPointPoints}
+                />
+            </div>
+        );
+    case Modes.SELECT:
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
                     <LabeledIconButton
-                        disabled={!this.props.hasSelectedUncurvedPoints}
-                        imgSrc={curvedPointIcon}
-                        title={this.props.intl.formatMessage(messages.curved)}
-                        onClick={this.props.onCurvePoints}
+                        disabled={!props.selectedItems.length}
+                        imgSrc={copyIcon}
+                        title={props.intl.formatMessage(messages.copy)}
+                        onClick={props.onCopyToClipboard}
                     />
                     <LabeledIconButton
-                        disabled={!this.props.hasSelectedUnpointedPoints}
-                        imgSrc={straightPointIcon}
-                        title={this.props.intl.formatMessage(messages.pointed)}
-                        onClick={this.props.onPointPoints}
+                        disabled={!(props.clipboardItems.length > 0)}
+                        imgSrc={pasteIcon}
+                        title={props.intl.formatMessage(messages.paste)}
+                        onClick={props.onPasteFromClipboard}
                     />
-                </div>
-            );
-        case Modes.SELECT:
-            return (
-                <div className={classNames(this.props.className, styles.modeTools)}>
-                    <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
-                        <LabeledIconButton
-                            disabled={!this.props.selectedItems.length}
-                            imgSrc={copyIcon}
-                            title={this.props.intl.formatMessage(messages.copy)}
-                            onClick={this.props.onCopyToClipboard}
-                        />
-                        <LabeledIconButton
-                            disabled={!(this.props.clipboardItems.length > 0)}
-                            imgSrc={pasteIcon}
-                            title={this.props.intl.formatMessage(messages.paste)}
-                            onClick={this.props.onPasteFromClipboard}
-                        />
-                    </InputGroup>
-                    <InputGroup className={classNames(styles.modLabeledIconHeight)}>
-                        <LabeledIconButton
-                            imgSrc={flipHorizontalIcon}
-                            title={this.props.intl.formatMessage(messages.flipHorizontal)}
-                            onClick={this.props.onFlipHorizontal}
-                        />
-                        <LabeledIconButton
-                            imgSrc={flipVerticalIcon}
-                            title={this.props.intl.formatMessage(messages.flipVertical)}
-                            onClick={this.props.onFlipVertical}
-                        />
-                    </InputGroup>
-                </div>
-            );
-        case Modes.TEXT:
-            return (
-                <InputGroup>
-                    <Dropdown
-                        className={classNames(styles.modUnselect, styles.fontDropdown)}
-                        enterExitTransitionDurationMs={60}
-                        popoverContent={
-                            <InputGroup className={styles.modContextMenu}>
-                                <Button
-                                    className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleClick}
-                                    onMouseOver={this.handleChangeFontSansSerif}
-                                >
-                                    <span className={styles.sansSerif}>
-                                        {this.props.intl.formatMessage(messages.sansSerif)}
-                                    </span>
-                                </Button>
-                                <Button
-                                    className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleClick}
-                                    onMouseOver={this.handleChangeFontSerif}
-                                >
-                                    <span className={styles.serif}>
-                                        {this.props.intl.formatMessage(messages.serif)}
-                                    </span>
-                                </Button>
-                                <Button
-                                    className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleClick}
-                                    onMouseOver={this.handleChangeFontHandwriting}
-                                >
-                                    <span className={styles.handwriting}>
-                                        {this.props.intl.formatMessage(messages.handwriting)}
-                                    </span>
-                                </Button>
-                                <Button
-                                    className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleClick}
-                                    onMouseOver={this.handleChangeFontMarker}
-                                >
-                                    <span className={styles.marker}>
-                                        {this.props.intl.formatMessage(messages.marker)}
-                                    </span>
-                                </Button>
-                                <Button
-                                    className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleClick}
-                                    onMouseOver={this.handleChangeFontCurly}
-                                >
-                                    <span className={styles.curly}>
-                                        {this.props.intl.formatMessage(messages.curly)}
-                                    </span>
-                                </Button>
-                                <Button
-                                    className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleClick}
-                                    onMouseOver={this.handleChangeFontPixel}
-                                >
-                                    <span className={styles.pixel}>
-                                        {this.props.intl.formatMessage(messages.pixel)}
-                                    </span>
-                                </Button>
-                                <Button
-                                    className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleClick}
-                                    onMouseOver={this.handleChangeFontChinese}
-                                >
-                                    <span className={styles.chinese}>
-                                        中文
-                                    </span>
-                                </Button>
-                                <Button
-                                    className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleClick}
-                                    onMouseOver={this.handleChangeFontJapanese}
-                                >
-                                    <span className={styles.japanese}>
-                                        日本語
-                                    </span>
-                                </Button>
-                                <Button
-                                    className={classNames(styles.modMenuItem)}
-                                    onClick={this.handleClick}
-                                    onMouseOver={this.handleChangeFontKorean}
-                                >
-                                    <span className={styles.korean}>
-                                        한국어
-                                    </span>
-                                </Button>
-                            </InputGroup>
-                        }
-                        ref={this.setDropdown}
-                        tipSize={.01}
-                        onOpen={this.props.onOpenDropdown}
-                        onOuterAction={this.handleOuterAction}
-                    >
-                        <span className={this.getFontStyle(this.props.fontName)}>
-                            {this.getTranslatedFontName(this.props.fontName)}
-                        </span>
-                    </Dropdown>
                 </InputGroup>
-            );
-        default:
-            // Leave empty for now, if mode not supported
-            return (
-                <div className={classNames(this.props.className, styles.modeTools)} />
-            );
-        }
+                <InputGroup className={classNames(styles.modLabeledIconHeight)}>
+                    <LabeledIconButton
+                        imgSrc={flipHorizontalIcon}
+                        title={props.intl.formatMessage(messages.flipHorizontal)}
+                        onClick={props.onFlipHorizontal}
+                    />
+                    <LabeledIconButton
+                        imgSrc={flipVerticalIcon}
+                        title={props.intl.formatMessage(messages.flipVertical)}
+                        onClick={props.onFlipVertical}
+                    />
+                </InputGroup>
+            </div>
+        );
+    case Modes.TEXT:
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <InputGroup>
+                    <FontDropdown
+                        onUpdateImage={props.onUpdateImage}
+                    />
+                </InputGroup>
+            </div>
+        );
+    default:
+        // Leave empty for now, if mode not supported
+        return (
+            <div className={classNames(props.className, styles.modeTools)} />
+        );
     }
-}
+};
 
 ModeToolsComponent.propTypes = {
     bitBrushSize: PropTypes.number,
     brushValue: PropTypes.number,
-    changeFont: PropTypes.func.isRequired,
     className: PropTypes.string,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
     eraserValue: PropTypes.number,
-    fontName: PropTypes.string,
     format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
     hasSelectedUncurvedPoints: PropTypes.bool,
     hasSelectedUnpointedPoints: PropTypes.bool,
@@ -469,16 +218,14 @@ ModeToolsComponent.propTypes = {
     mode: PropTypes.string.isRequired,
     onBitBrushSliderChange: PropTypes.func.isRequired,
     onBrushSliderChange: PropTypes.func.isRequired,
-    onClickFont: PropTypes.func.isRequired,
-    onClickOutsideDropdown: PropTypes.func,
     onCopyToClipboard: PropTypes.func.isRequired,
     onCurvePoints: PropTypes.func.isRequired,
     onEraserSliderChange: PropTypes.func,
     onFlipHorizontal: PropTypes.func.isRequired,
     onFlipVertical: PropTypes.func.isRequired,
-    onOpenDropdown: PropTypes.func,
     onPasteFromClipboard: PropTypes.func.isRequired,
     onPointPoints: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item))
 };
 
