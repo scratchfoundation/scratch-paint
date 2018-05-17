@@ -30935,13 +30935,12 @@ var TextTool = function (_paper$Tool) {
                     point: event.point,
                     content: '',
                     font: this.font,
-                    fontSize: 30,
+                    fontSize: 40,
                     fillColor: this.colorState.fillColor,
                     // Default leading for both the HTML text area and paper.PointText
                     // is 120%, but for some reason they are slightly off from each other.
                     // This value was obtained experimentally.
-                    // (Don't round to 34.6, the text area will start to scroll.)
-                    leading: 34.61
+                    leading: 46.15
                 });
                 this.beginTextEdit(this.textBox.content, this.textBox.matrix);
             }
@@ -34615,7 +34614,7 @@ exports = module.exports = __webpack_require__(11)(false);
 
 
 // module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.font-dropdown_mod-menu-item_hwOca {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0 -.25rem;\n    min-width: 6.25rem;\n    padding: calc(2 * .25rem);\n    padding-left: calc(3 * .25rem);\n    padding-right: calc(3 * .25rem);\n    white-space: nowrap;\n    width: 8.5rem;\n    cursor: pointer;\n    -webkit-transition: 0.1s ease;\n    -o-transition: 0.1s ease;\n    transition: 0.1s ease;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.font-dropdown_mod-menu-item_hwOca:hover {\n    background: #4C97FF;\n    color: white;\n}\n\n.font-dropdown_mod-context-menu_3llFm {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n\n.font-dropdown_mod-unselect_130OF {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n\n.font-dropdown_font-dropdown_3vjc6 {\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n    color: #575e75;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    font-size: 0.625rem;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    width: 8.5rem;\n    height: 2rem;\n}\n\n.font-dropdown_serif_tMSQM {\n    font-family: 'Serif';\n}\n\n.font-dropdown_sans-serif_24kX9 {\n    font-family: 'Sans Serif';\n}\n\n.font-dropdown_serif_tMSQM {\n    font-family: 'Serif';\n}\n\n.font-dropdown_handwriting_Y7s5d {\n    font-family: 'Handwriting';\n}\n\n.font-dropdown_marker_3AmLD {\n    font-family: 'Marker';\n}\n\n.font-dropdown_curly_1UQYh {\n    font-family: 'Curly';\n}\n\n.font-dropdown_pixel_3aRC6 {\n    font-family: 'Pixel';\n}\n\n.font-dropdown_chinese_zV1Hj {\n    font-family: \"Microsoft YaHei\", \"\\5FAE\\8F6F\\96C5\\9ED1\", STXihei, \"\\534E\\6587\\7EC6\\9ED1\";\n}\n\n.font-dropdown_japanese_2SlYs {\n    font-family: \"\\30D2\\30E9\\30AE\\30CE\\89D2\\30B4   Pro W3\", \"Hiragino Kaku Gothic Pro\", Osaka, \"\\30E1\\30A4\\30EA\\30AA\", Meiryo, \"\\FF2D\\FF33   \\FF30\\30B4\\30B7\\30C3\\30AF\", \"MS PGothic\";\n}\n\n.font-dropdown_korean_1Fx37 {\n    font-family: \"Malgun Gothic\";\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.font-dropdown_mod-menu-item_hwOca {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0 -.25rem;\n    min-width: 6.25rem;\n    padding: calc(2 * .25rem);\n    padding-left: calc(3 * .25rem);\n    padding-right: calc(3 * .25rem);\n    white-space: nowrap;\n    width: 8.5rem;\n    cursor: pointer;\n    -webkit-transition: 0.1s ease;\n    -o-transition: 0.1s ease;\n    transition: 0.1s ease;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.font-dropdown_mod-menu-item_hwOca:hover {\n    background: #4C97FF;\n    color: white;\n}\n\n.font-dropdown_mod-context-menu_3llFm {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n\n.font-dropdown_mod-unselect_130OF {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n\n.font-dropdown_displayed-font-name_3cU-U {\n    font-size: .8rem;\n}\n\n.font-dropdown_font-dropdown_3vjc6 {\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n    color: #575e75;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    font-size: 1rem;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    width: 8.5rem;\n    height: 2rem;\n}\n\n.font-dropdown_serif_tMSQM {\n    font-family: 'Serif';\n}\n\n.font-dropdown_sans-serif_24kX9 {\n    font-family: 'Sans Serif';\n}\n\n.font-dropdown_serif_tMSQM {\n    font-family: 'Serif';\n}\n\n.font-dropdown_handwriting_Y7s5d {\n    font-family: 'Handwriting';\n}\n\n.font-dropdown_marker_3AmLD {\n    font-family: 'Marker';\n}\n\n.font-dropdown_curly_1UQYh {\n    font-family: 'Curly';\n}\n\n.font-dropdown_pixel_3aRC6 {\n    font-family: 'Pixel';\n}\n\n.font-dropdown_chinese_zV1Hj {\n    font-family: \"Microsoft YaHei\", \"\\5FAE\\8F6F\\96C5\\9ED1\", STXihei, \"\\534E\\6587\\7EC6\\9ED1\";\n}\n\n.font-dropdown_japanese_2SlYs {\n    font-family: \"\\30D2\\30E9\\30AE\\30CE\\89D2\\30B4   Pro W3\", \"Hiragino Kaku Gothic Pro\", Osaka, \"\\30E1\\30A4\\30EA\\30AA\", Meiryo, \"\\FF2D\\FF33   \\FF30\\30B4\\30B7\\30C3\\30AF\", \"MS PGothic\";\n}\n\n.font-dropdown_korean_1Fx37 {\n    font-family: \"Malgun Gothic\";\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -34625,6 +34624,8 @@ exports.locals = {
 	"modContextMenu": "font-dropdown_mod-context-menu_3llFm",
 	"mod-unselect": "font-dropdown_mod-unselect_130OF",
 	"modUnselect": "font-dropdown_mod-unselect_130OF",
+	"displayed-font-name": "font-dropdown_displayed-font-name_3cU-U",
+	"displayedFontName": "font-dropdown_displayed-font-name_3cU-U",
 	"font-dropdown": "font-dropdown_font-dropdown_3vjc6",
 	"fontDropdown": "font-dropdown_font-dropdown_3vjc6",
 	"serif": "font-dropdown_serif_tMSQM",
@@ -34703,7 +34704,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement(
                         'span',
                         { className: _fontDropdown2.default.sansSerif },
-                        props.getTranslatedFontName(_fonts2.default.SANS_SERIF)
+                        props.getFontName(_fonts2.default.SANS_SERIF)
                     )
                 ),
                 _react2.default.createElement(
@@ -34716,7 +34717,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement(
                         'span',
                         { className: _fontDropdown2.default.serif },
-                        props.getTranslatedFontName(_fonts2.default.SERIF)
+                        props.getFontName(_fonts2.default.SERIF)
                     )
                 ),
                 _react2.default.createElement(
@@ -34729,7 +34730,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement(
                         'span',
                         { className: _fontDropdown2.default.handwriting },
-                        props.getTranslatedFontName(_fonts2.default.HANDWRITING)
+                        props.getFontName(_fonts2.default.HANDWRITING)
                     )
                 ),
                 _react2.default.createElement(
@@ -34742,7 +34743,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement(
                         'span',
                         { className: _fontDropdown2.default.marker },
-                        props.getTranslatedFontName(_fonts2.default.MARKER)
+                        props.getFontName(_fonts2.default.MARKER)
                     )
                 ),
                 _react2.default.createElement(
@@ -34755,7 +34756,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement(
                         'span',
                         { className: _fontDropdown2.default.curly },
-                        props.getTranslatedFontName(_fonts2.default.CURLY)
+                        props.getFontName(_fonts2.default.CURLY)
                     )
                 ),
                 _react2.default.createElement(
@@ -34768,7 +34769,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement(
                         'span',
                         { className: _fontDropdown2.default.pixel },
-                        props.getTranslatedFontName(_fonts2.default.PIXEL)
+                        props.getFontName(_fonts2.default.PIXEL)
                     )
                 ),
                 _react2.default.createElement(
@@ -34781,7 +34782,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement(
                         'span',
                         { className: _fontDropdown2.default.chinese },
-                        props.getTranslatedFontName(_fonts2.default.CHINESE)
+                        props.getFontName(_fonts2.default.CHINESE)
                     )
                 ),
                 _react2.default.createElement(
@@ -34794,7 +34795,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement(
                         'span',
                         { className: _fontDropdown2.default.japanese },
-                        props.getTranslatedFontName(_fonts2.default.JAPANESE)
+                        props.getFontName(_fonts2.default.JAPANESE)
                     )
                 ),
                 _react2.default.createElement(
@@ -34807,7 +34808,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _react2.default.createElement(
                         'span',
                         { className: _fontDropdown2.default.korean },
-                        props.getTranslatedFontName(_fonts2.default.KOREAN)
+                        props.getFontName(_fonts2.default.KOREAN)
                     )
                 )
             ),
@@ -34818,8 +34819,8 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
         },
         _react2.default.createElement(
             'span',
-            { className: props.getFontStyle(props.font) },
-            props.getTranslatedFontName(props.font)
+            { className: (0, _classnames2.default)(props.getFontStyle(props.font), _fontDropdown2.default.displayedFontName) },
+            props.getFontName(props.font)
         )
     );
 };
@@ -34827,8 +34828,8 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
 ModeToolsComponent.propTypes = {
     componentRef: _propTypes2.default.func.isRequired,
     font: _propTypes2.default.string,
+    getFontName: _propTypes2.default.func.isRequired,
     getFontStyle: _propTypes2.default.func.isRequired,
-    getTranslatedFontName: _propTypes2.default.func.isRequired,
     onChoose: _propTypes2.default.func.isRequired,
     onClickOutsideDropdown: _propTypes2.default.func,
     onHoverChinese: _propTypes2.default.func,
@@ -34875,8 +34876,6 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactIntl = __webpack_require__(15);
-
 var _fontDropdown = __webpack_require__(148);
 
 var _fontDropdown2 = _interopRequireDefault(_fontDropdown);
@@ -34901,33 +34900,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var messages = (0, _reactIntl.defineMessages)({
-    sansSerif: {
-        'id': 'paint.modeTools.sansSerif',
-        'defaultMessage': 'Sans Serif'
-    },
-    serif: {
-        'id': 'paint.modeTools.serif',
-        'defaultMessage': 'Serif'
-    },
-    handwriting: {
-        'id': 'paint.modeTools.handwriting',
-        'defaultMessage': 'Handwriting'
-    },
-    marker: {
-        'id': 'paint.modeTools.marker',
-        'defaultMessage': 'Marker'
-    },
-    curly: {
-        'id': 'paint.modeTools.curly',
-        'defaultMessage': 'Curly'
-    },
-    pixel: {
-        'id': 'paint.modeTools.pixel',
-        'defaultMessage': 'Pixel'
-    }
-});
-
 var ModeToolsComponent = function (_React$Component) {
     _inherits(ModeToolsComponent, _React$Component);
 
@@ -34936,7 +34908,7 @@ var ModeToolsComponent = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (ModeToolsComponent.__proto__ || Object.getPrototypeOf(ModeToolsComponent)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['getFontStyle', 'getTranslatedFontName', 'handleChangeFontSerif', 'handleChangeFontSansSerif', 'handleChangeFontHandwriting', 'handleChangeFontMarker', 'handleChangeFontCurly', 'handleChangeFontPixel', 'handleChangeFontChinese', 'handleChangeFontJapanese', 'handleChangeFontKorean', 'handleOpenDropdown', 'handleClickOutsideDropdown', 'setDropdown', 'handleChoose']);
+        (0, _lodash2.default)(_this, ['getFontStyle', 'getFontName', 'handleChangeFontSerif', 'handleChangeFontSansSerif', 'handleChangeFontHandwriting', 'handleChangeFontMarker', 'handleChangeFontCurly', 'handleChangeFontPixel', 'handleChangeFontChinese', 'handleChangeFontJapanese', 'handleChangeFontKorean', 'handleOpenDropdown', 'handleClickOutsideDropdown', 'setDropdown', 'handleChoose']);
         return _this;
     }
 
@@ -34967,21 +34939,9 @@ var ModeToolsComponent = function (_React$Component) {
             }
         }
     }, {
-        key: 'getTranslatedFontName',
-        value: function getTranslatedFontName(font) {
+        key: 'getFontName',
+        value: function getFontName(font) {
             switch (font) {
-                case _fonts2.default.SERIF:
-                    return this.props.intl.formatMessage(messages.serif);
-                case _fonts2.default.SANS_SERIF:
-                    return this.props.intl.formatMessage(messages.sansSerif);
-                case _fonts2.default.HANDWRITING:
-                    return this.props.intl.formatMessage(messages.handwriting);
-                case _fonts2.default.MARKER:
-                    return this.props.intl.formatMessage(messages.marker);
-                case _fonts2.default.CURLY:
-                    return this.props.intl.formatMessage(messages.curly);
-                case _fonts2.default.PIXEL:
-                    return this.props.intl.formatMessage(messages.pixel);
                 case _fonts2.default.CHINESE:
                     return '中文';
                 case _fonts2.default.KOREAN:
@@ -35118,8 +35078,8 @@ var ModeToolsComponent = function (_React$Component) {
             return _react2.default.createElement(_fontDropdown2.default, {
                 componentRef: this.setDropdown,
                 font: this.props.font,
+                getFontName: this.getFontName,
                 getFontStyle: this.getFontStyle,
-                getTranslatedFontName: this.getTranslatedFontName,
                 onChoose: this.handleChoose,
                 onClickOutsideDropdown: this.handleClickOutsideDropdown,
                 onHoverChinese: this.handleChangeFontChinese,
@@ -35142,7 +35102,6 @@ var ModeToolsComponent = function (_React$Component) {
 ModeToolsComponent.propTypes = {
     changeFont: _propTypes2.default.func.isRequired,
     font: _propTypes2.default.string,
-    intl: _reactIntl.intlShape.isRequired,
     onUpdateImage: _propTypes2.default.func.isRequired
 };
 
@@ -35159,7 +35118,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)((0, _reactIntl.injectIntl)(ModeToolsComponent));
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ModeToolsComponent);
 
 /***/ }),
 /* 150 */
