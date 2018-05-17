@@ -102,7 +102,7 @@ const ModeToolsComponent = props => (
         onOpen={props.onOpenDropdown}
         onOuterAction={props.onClickOutsideDropdown}
     >
-        <span className={props.getFontStyle(props.font)}>
+        <span className={classNames(props.getFontStyle(props.font), styles.displayedFontName)}>
             {props.getFontName(props.font)}
         </span>
     </Dropdown>

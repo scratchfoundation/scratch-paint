@@ -210,13 +210,12 @@ class TextTool extends paper.Tool {
                 point: event.point,
                 content: '',
                 font: this.font,
-                fontSize: 30,
+                fontSize: 40,
                 fillColor: this.colorState.fillColor,
                 // Default leading for both the HTML text area and paper.PointText
                 // is 120%, but for some reason they are slightly off from each other.
                 // This value was obtained experimentally.
-                // (Don't round to 34.6, the text area will start to scroll.)
-                leading: 34.61
+                leading: 46.15
             });
             this.beginTextEdit(this.textBox.content, this.textBox.matrix);
         }

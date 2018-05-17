@@ -29,11 +29,15 @@
     user-select: none;
 }
 
+.displayed-font-name {
+    font-size: .8rem;
+}
+
 .font-dropdown {
     align-items: center;
     color: $text-primary;
     display: flex;
-    font-size: 0.625rem;
+    font-size: 1rem;
     justify-content: space-between;
     width: 8.5rem;
     height: 2rem;
