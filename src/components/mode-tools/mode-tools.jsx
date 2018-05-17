@@ -8,6 +8,7 @@ import {changeBrushSize} from '../../reducers/brush-mode';
 import {changeBrushSize as changeEraserSize} from '../../reducers/eraser-mode';
 import {changeBitBrushSize} from '../../reducers/bit-brush-size';
 
+import FontDropdown from '../../containers/font-dropdown.jsx';
 import LiveInputHOC from '../forms/live-input-hoc.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Input from '../forms/input.jsx';
@@ -186,6 +187,16 @@ const ModeToolsComponent = props => {
                 </InputGroup>
             </div>
         );
+    case Modes.TEXT:
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <InputGroup>
+                    <FontDropdown
+                        onUpdateImage={props.onUpdateImage}
+                    />
+                </InputGroup>
+            </div>
+        );
     default:
         // Leave empty for now, if mode not supported
         return (
@@ -214,6 +225,7 @@ ModeToolsComponent.propTypes = {
     onFlipVertical: PropTypes.func.isRequired,
     onPasteFromClipboard: PropTypes.func.isRequired,
     onPointPoints: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item))
 };
 

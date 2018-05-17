@@ -208,6 +208,7 @@ class ModeTools extends React.Component {
                 onFlipVertical={this.handleFlipVertical}
                 onPasteFromClipboard={this.handlePasteFromClipboard}
                 onPointPoints={this.handlePointPoints}
+                onUpdateImage={this.props.onUpdateImage}
             />
         );
     }
