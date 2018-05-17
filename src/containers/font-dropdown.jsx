@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import PropTypes from 'prop-types';
 import React from 'react';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
 
 import FontDropdownComponent from '../components/font-dropdown/font-dropdown.jsx';
 import Fonts from '../lib/fonts';
@@ -11,44 +10,12 @@ import {changeFont} from '../reducers/font';
 import {getSelectedLeafItems} from '../helper/selection';
 import styles from '../components/font-dropdown/font-dropdown.css';
 
-const messages = defineMessages({
-    sansSerif: {
-        defaultMessage: 'Sans Serif',
-        description: 'Name of the sans serif font',
-        id: 'paint.modeTools.sansSerif'
-    },
-    serif: {
-        defaultMessage: 'Serif',
-        description: 'Name of the serif font',
-        id: 'paint.modeTools.serif'
-    },
-    handwriting: {
-        defaultMessage: 'Handwriting',
-        description: 'Name of the handwriting font',
-        id: 'paint.modeTools.handwriting'
-    },
-    marker: {
-        defaultMessage: 'Marker',
-        description: 'Name of the marker font',
-        id: 'paint.modeTools.marker'
-    },
-    curly: {
-        defaultMessage: 'Curly',
-        description: 'Name of the curly font',
-        id: 'paint.modeTools.curly'
-    },
-    pixel: {
-        defaultMessage: 'Pixel',
-        description: 'Name of the pixelated font',
-        id: 'paint.modeTools.pixel'
-    }
-});
 class ModeToolsComponent extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
             'getFontStyle',
-            'getTranslatedFontName',
+            'getFontName',
             'handleChangeFontSerif',
             'handleChangeFontSansSerif',
             'handleChangeFontHandwriting',
@@ -88,20 +55,8 @@ class ModeToolsComponent extends React.Component {
             return '';
         }
     }
-    getTranslatedFontName (font) {
+    getFontName (font) {
         switch (font) {
-        case Fonts.SERIF:
-            return this.props.intl.formatMessage(messages.serif);
-        case Fonts.SANS_SERIF:
-            return this.props.intl.formatMessage(messages.sansSerif);
-        case Fonts.HANDWRITING:
-            return this.props.intl.formatMessage(messages.handwriting);
-        case Fonts.MARKER:
-            return this.props.intl.formatMessage(messages.marker);
-        case Fonts.CURLY:
-            return this.props.intl.formatMessage(messages.curly);
-        case Fonts.PIXEL:
-            return this.props.intl.formatMessage(messages.pixel);
         case Fonts.CHINESE:
             return '中文';
         case Fonts.KOREAN:
@@ -190,8 +145,8 @@ class ModeToolsComponent extends React.Component {
             <FontDropdownComponent
                 componentRef={this.setDropdown}
                 font={this.props.font}
+                getFontName={this.getFontName}
                 getFontStyle={this.getFontStyle}
-                getTranslatedFontName={this.getTranslatedFontName}
                 onChoose={this.handleChoose}
                 onClickOutsideDropdown={this.handleClickOutsideDropdown}
                 onHoverChinese={this.handleChangeFontChinese}
@@ -212,7 +167,6 @@ class ModeToolsComponent extends React.Component {
 ModeToolsComponent.propTypes = {
     changeFont: PropTypes.func.isRequired,
     font: PropTypes.string,
-    intl: intlShape.isRequired,
     onUpdateImage: PropTypes.func.isRequired
 };
 
@@ -228,4 +182,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(injectIntl(ModeToolsComponent));
+)(ModeToolsComponent);

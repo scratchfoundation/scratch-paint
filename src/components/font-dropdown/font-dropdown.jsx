@@ -20,7 +20,7 @@ const ModeToolsComponent = props => (
                     onMouseOver={props.onHoverSansSerif}
                 >
                     <span className={styles.sansSerif}>
-                        {props.getTranslatedFontName(Fonts.SANS_SERIF)}
+                        {props.getFontName(Fonts.SANS_SERIF)}
                     </span>
                 </Button>
                 <Button
@@ -29,7 +29,7 @@ const ModeToolsComponent = props => (
                     onMouseOver={props.onHoverSerif}
                 >
                     <span className={styles.serif}>
-                        {props.getTranslatedFontName(Fonts.SERIF)}
+                        {props.getFontName(Fonts.SERIF)}
                     </span>
                 </Button>
                 <Button
@@ -38,7 +38,7 @@ const ModeToolsComponent = props => (
                     onMouseOver={props.onHoverHandwriting}
                 >
                     <span className={styles.handwriting}>
-                        {props.getTranslatedFontName(Fonts.HANDWRITING)}
+                        {props.getFontName(Fonts.HANDWRITING)}
                     </span>
                 </Button>
                 <Button
@@ -47,7 +47,7 @@ const ModeToolsComponent = props => (
                     onMouseOver={props.onHoverMarker}
                 >
                     <span className={styles.marker}>
-                        {props.getTranslatedFontName(Fonts.MARKER)}
+                        {props.getFontName(Fonts.MARKER)}
                     </span>
                 </Button>
                 <Button
@@ -56,7 +56,7 @@ const ModeToolsComponent = props => (
                     onMouseOver={props.onHoverCurly}
                 >
                     <span className={styles.curly}>
-                        {props.getTranslatedFontName(Fonts.CURLY)}
+                        {props.getFontName(Fonts.CURLY)}
                     </span>
                 </Button>
                 <Button
@@ -65,7 +65,7 @@ const ModeToolsComponent = props => (
                     onMouseOver={props.onHoverPixel}
                 >
                     <span className={styles.pixel}>
-                        {props.getTranslatedFontName(Fonts.PIXEL)}
+                        {props.getFontName(Fonts.PIXEL)}
                     </span>
                 </Button>
                 <Button
@@ -74,7 +74,7 @@ const ModeToolsComponent = props => (
                     onMouseOver={props.onHoverChinese}
                 >
                     <span className={styles.chinese}>
-                        {props.getTranslatedFontName(Fonts.CHINESE)}
+                        {props.getFontName(Fonts.CHINESE)}
                     </span>
                 </Button>
                 <Button
@@ -83,7 +83,7 @@ const ModeToolsComponent = props => (
                     onMouseOver={props.onHoverJapanese}
                 >
                     <span className={styles.japanese}>
-                        {props.getTranslatedFontName(Fonts.JAPANESE)}
+                        {props.getFontName(Fonts.JAPANESE)}
                     </span>
                 </Button>
                 <Button
@@ -92,7 +92,7 @@ const ModeToolsComponent = props => (
                     onMouseOver={props.onHoverKorean}
                 >
                     <span className={styles.korean}>
-                        {props.getTranslatedFontName(Fonts.KOREAN)}
+                        {props.getFontName(Fonts.KOREAN)}
                     </span>
                 </Button>
             </InputGroup>
@@ -103,7 +103,7 @@ const ModeToolsComponent = props => (
         onOuterAction={props.onClickOutsideDropdown}
     >
         <span className={props.getFontStyle(props.font)}>
-            {props.getTranslatedFontName(props.font)}
+            {props.getFontName(props.font)}
         </span>
     </Dropdown>
 );
@@ -111,8 +111,8 @@ const ModeToolsComponent = props => (
 ModeToolsComponent.propTypes = {
     componentRef: PropTypes.func.isRequired,
     font: PropTypes.string,
+    getFontName: PropTypes.func.isRequired,
     getFontStyle: PropTypes.func.isRequired,
-    getTranslatedFontName: PropTypes.func.isRequired,
     onChoose: PropTypes.func.isRequired,
     onClickOutsideDropdown: PropTypes.func,
     onHoverChinese: PropTypes.func,
