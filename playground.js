@@ -16660,9 +16660,9 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(27);
+var _group = __webpack_require__(22);
 
-var _item = __webpack_require__(26);
+var _item = __webpack_require__(27);
 
 var _compoundPath = __webpack_require__(268);
 
@@ -19711,9 +19711,9 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _selection = __webpack_require__(3);
 
-var _item = __webpack_require__(26);
+var _item = __webpack_require__(27);
 
-var _group = __webpack_require__(27);
+var _group = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20896,7 +20896,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedHTMLMessage", function() { return FormattedHTMLMessage; });
 /* harmony import */ var _locale_data_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(96);
 /* harmony import */ var _locale_data_index_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_locale_data_index_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(23);
+/* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(24);
 /* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(intl_messageformat__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var intl_relativeformat__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(30);
 /* harmony import */ var intl_relativeformat__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(intl_relativeformat__WEBPACK_IMPORTED_MODULE_2__);
@@ -23178,6 +23178,186 @@ exports.default = InputGroup;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.shouldShowUngroup = exports.shouldShowGroup = exports.isGroupChild = exports.isGroup = exports.getItemsGroup = exports.ungroupItems = exports.groupItems = exports.ungroupSelection = exports.groupSelection = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _item = __webpack_require__(27);
+
+var _selection = __webpack_require__(3);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var isGroup = function isGroup(item) {
+    return (0, _item.isGroupItem)(item);
+};
+
+/**
+ * Groups the given items. Other things are then deselected and the new group is selected.
+ * @param {!Array<paper.Item>} items Root level items to group
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
+ * @return {paper.Group} the group if one is created, otherwise false.
+ */
+var groupItems = function groupItems(items, clearSelectedItems, setSelectedItems, onUpdateImage) {
+    if (items.length > 0) {
+        var group = new _paper2.default.Group(items);
+        (0, _selection.clearSelection)(clearSelectedItems);
+        (0, _selection.setItemSelection)(group, true);
+        for (var i = 0; i < group.children.length; i++) {
+            group.children[i].selected = true;
+        }
+        setSelectedItems();
+        onUpdateImage();
+        return group;
+    }
+    return false;
+};
+
+/**
+ * Groups the selected items. Other things are then deselected and the new group is selected.
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
+ * @return {paper.Group} the group if one is created, otherwise false.
+ */
+var groupSelection = function groupSelection(clearSelectedItems, setSelectedItems, onUpdateImage) {
+    var items = (0, _selection.getSelectedRootItems)();
+    return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateImage);
+};
+
+var _ungroupLoop = function _ungroupLoop(group, recursive, setSelectedItems) {
+    // Can't ungroup items that are not groups
+    if (!group || !group.children || !isGroup(group)) return;
+
+    group.applyMatrix = true;
+    // iterate over group children recursively
+    for (var i = 0; i < group.children.length; i++) {
+        var groupChild = group.children[i];
+        if (groupChild instanceof _paper2.default.Group && groupChild.hasChildren()) {
+            // recursion (groups can contain groups, ie. from SVG import)
+            if (recursive) {
+                _ungroupLoop(groupChild, recursive, setSelectedItems);
+                continue;
+            }
+            if (groupChild.children.length === 1) {
+                groupChild = groupChild.reduce();
+            }
+        }
+        groupChild.applyMatrix = true;
+        // move items from the group to the activeLayer (ungrouping)
+        groupChild.insertBelow(group);
+        if (setSelectedItems) {
+            groupChild.selected = true;
+        }
+        i--;
+    }
+};
+
+/**
+ * Ungroups the given items. The new group is selected only if setSelectedItems is passed in.
+ * onUpdateImage is called to notify listeners of a change on the SVG only if onUpdateImage is passed in.
+ * The reason these arguments are optional on ungroupItems is because ungroupItems is used for parts of
+ * SVG import, which shouldn't change the selection or undo state.
+ *
+ * @param {!Array<paper.Item>} items Items to ungroup if they are groups
+ * @param {?function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {?function} onUpdateImage Function to let listeners know that SVG has changed.
+ */
+var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateImage) {
+    if (items.length === 0) {
+        return;
+    }
+    var emptyGroups = [];
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (isGroup(item) && !item.data.isPGTextItem) {
+            _ungroupLoop(item, false /* recursive */, setSelectedItems);
+
+            if (!item.hasChildren()) {
+                emptyGroups.push(item);
+            }
+        }
+    }
+    if (setSelectedItems) {
+        setSelectedItems();
+    }
+    // remove all empty groups after ungrouping
+    for (var j = 0; j < emptyGroups.length; j++) {
+        emptyGroups[j].remove();
+    }
+    // @todo: enable/disable grouping icons
+    if (onUpdateImage) {
+        onUpdateImage();
+    }
+};
+
+/**
+ * Ungroups the selected items. Other items are deselected and the ungrouped items are selected.
+ *
+ * @param {!function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
+ */
+var ungroupSelection = function ungroupSelection(clearSelectedItems, setSelectedItems, onUpdateImage) {
+    var items = (0, _selection.getSelectedRootItems)();
+    (0, _selection.clearSelection)(clearSelectedItems);
+    ungroupItems(items, setSelectedItems, onUpdateImage);
+};
+
+var getItemsGroup = function getItemsGroup(item) {
+    var itemParent = item.parent;
+
+    if (isGroup(itemParent)) {
+        return itemParent;
+    }
+    return null;
+};
+
+var isGroupChild = function isGroupChild(item) {
+    var rootItem = (0, _item.getRootItem)(item);
+    return isGroup(rootItem);
+};
+
+var shouldShowGroup = function shouldShowGroup() {
+    var items = (0, _selection.getSelectedRootItems)();
+    return items.length > 1;
+};
+
+var shouldShowUngroup = function shouldShowUngroup() {
+    var items = (0, _selection.getSelectedRootItems)();
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if (isGroup(item) && !item.data.isPGTextItem && item.children && item.children.length > 0) {
+            return true;
+        }
+    }
+    return false;
+};
+
+exports.groupSelection = groupSelection;
+exports.ungroupSelection = ungroupSelection;
+exports.groupItems = groupItems;
+exports.ungroupItems = ungroupItems;
+exports.getItemsGroup = getItemsGroup;
+exports.isGroup = isGroup;
+exports.isGroupChild = isGroupChild;
+exports.shouldShowGroup = shouldShowGroup;
+exports.shouldShowUngroup = shouldShowUngroup;
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.isBitmap = exports.isVector = exports.default = undefined;
 
 var _keymirror = __webpack_require__(42);
@@ -23207,7 +23387,7 @@ exports.isVector = isVector;
 exports.isBitmap = isBitmap;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23229,7 +23409,7 @@ exports['default'] = exports;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23287,7 +23467,7 @@ exports.default = reducer;
 exports.changeStrokeColor = changeStrokeColor;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23479,7 +23659,7 @@ exports.ComingSoonComponent = ComingSoon;
 exports.ComingSoonTooltip = ComingSoonTooltip;
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23560,186 +23740,6 @@ exports.setPivot = setPivot;
 exports.getPositionInView = getPositionInView;
 exports.setPositionInView = setPositionInView;
 exports.getRootItem = getRootItem;
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.shouldShowUngroup = exports.shouldShowGroup = exports.isGroupChild = exports.isGroup = exports.getItemsGroup = exports.ungroupItems = exports.groupItems = exports.ungroupSelection = exports.groupSelection = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _item = __webpack_require__(26);
-
-var _selection = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var isGroup = function isGroup(item) {
-    return (0, _item.isGroupItem)(item);
-};
-
-/**
- * Groups the given items. Other things are then deselected and the new group is selected.
- * @param {!Array<paper.Item>} items Root level items to group
- * @param {!function} clearSelectedItems Function to clear Redux state's selected items
- * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
- * @return {paper.Group} the group if one is created, otherwise false.
- */
-var groupItems = function groupItems(items, clearSelectedItems, setSelectedItems, onUpdateImage) {
-    if (items.length > 0) {
-        var group = new _paper2.default.Group(items);
-        (0, _selection.clearSelection)(clearSelectedItems);
-        (0, _selection.setItemSelection)(group, true);
-        for (var i = 0; i < group.children.length; i++) {
-            group.children[i].selected = true;
-        }
-        setSelectedItems();
-        onUpdateImage();
-        return group;
-    }
-    return false;
-};
-
-/**
- * Groups the selected items. Other things are then deselected and the new group is selected.
- * @param {!function} clearSelectedItems Function to clear Redux state's selected items
- * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
- * @return {paper.Group} the group if one is created, otherwise false.
- */
-var groupSelection = function groupSelection(clearSelectedItems, setSelectedItems, onUpdateImage) {
-    var items = (0, _selection.getSelectedRootItems)();
-    return groupItems(items, clearSelectedItems, setSelectedItems, onUpdateImage);
-};
-
-var _ungroupLoop = function _ungroupLoop(group, recursive, setSelectedItems) {
-    // Can't ungroup items that are not groups
-    if (!group || !group.children || !isGroup(group)) return;
-
-    group.applyMatrix = true;
-    // iterate over group children recursively
-    for (var i = 0; i < group.children.length; i++) {
-        var groupChild = group.children[i];
-        if (groupChild instanceof _paper2.default.Group && groupChild.hasChildren()) {
-            // recursion (groups can contain groups, ie. from SVG import)
-            if (recursive) {
-                _ungroupLoop(groupChild, recursive, setSelectedItems);
-                continue;
-            }
-            if (groupChild.children.length === 1) {
-                groupChild = groupChild.reduce();
-            }
-        }
-        groupChild.applyMatrix = true;
-        // move items from the group to the activeLayer (ungrouping)
-        groupChild.insertBelow(group);
-        if (setSelectedItems) {
-            groupChild.selected = true;
-        }
-        i--;
-    }
-};
-
-/**
- * Ungroups the given items. The new group is selected only if setSelectedItems is passed in.
- * onUpdateImage is called to notify listeners of a change on the SVG only if onUpdateImage is passed in.
- * The reason these arguments are optional on ungroupItems is because ungroupItems is used for parts of
- * SVG import, which shouldn't change the selection or undo state.
- *
- * @param {!Array<paper.Item>} items Items to ungroup if they are groups
- * @param {?function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {?function} onUpdateImage Function to let listeners know that SVG has changed.
- */
-var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateImage) {
-    if (items.length === 0) {
-        return;
-    }
-    var emptyGroups = [];
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (isGroup(item) && !item.data.isPGTextItem) {
-            _ungroupLoop(item, false /* recursive */, setSelectedItems);
-
-            if (!item.hasChildren()) {
-                emptyGroups.push(item);
-            }
-        }
-    }
-    if (setSelectedItems) {
-        setSelectedItems();
-    }
-    // remove all empty groups after ungrouping
-    for (var j = 0; j < emptyGroups.length; j++) {
-        emptyGroups[j].remove();
-    }
-    // @todo: enable/disable grouping icons
-    if (onUpdateImage) {
-        onUpdateImage();
-    }
-};
-
-/**
- * Ungroups the selected items. Other items are deselected and the ungrouped items are selected.
- *
- * @param {!function} clearSelectedItems Function to clear Redux state's selected items
- * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
- */
-var ungroupSelection = function ungroupSelection(clearSelectedItems, setSelectedItems, onUpdateImage) {
-    var items = (0, _selection.getSelectedRootItems)();
-    (0, _selection.clearSelection)(clearSelectedItems);
-    ungroupItems(items, setSelectedItems, onUpdateImage);
-};
-
-var getItemsGroup = function getItemsGroup(item) {
-    var itemParent = item.parent;
-
-    if (isGroup(itemParent)) {
-        return itemParent;
-    }
-    return null;
-};
-
-var isGroupChild = function isGroupChild(item) {
-    var rootItem = (0, _item.getRootItem)(item);
-    return isGroup(rootItem);
-};
-
-var shouldShowGroup = function shouldShowGroup() {
-    var items = (0, _selection.getSelectedRootItems)();
-    return items.length > 1;
-};
-
-var shouldShowUngroup = function shouldShowUngroup() {
-    var items = (0, _selection.getSelectedRootItems)();
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if (isGroup(item) && !item.data.isPGTextItem && item.children && item.children.length > 0) {
-            return true;
-        }
-    }
-    return false;
-};
-
-exports.groupSelection = groupSelection;
-exports.ungroupSelection = ungroupSelection;
-exports.groupItems = groupItems;
-exports.ungroupItems = ungroupItems;
-exports.getItemsGroup = getItemsGroup;
-exports.isGroup = isGroup;
-exports.isGroupChild = isGroupChild;
-exports.shouldShowGroup = shouldShowGroup;
-exports.shouldShowUngroup = shouldShowUngroup;
 
 /***/ }),
 /* 28 */
@@ -25942,11 +25942,11 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _item = __webpack_require__(26);
+var _item = __webpack_require__(27);
 
 var _guides = __webpack_require__(32);
 
-var _group = __webpack_require__(27);
+var _group = __webpack_require__(22);
 
 var _math = __webpack_require__(17);
 
@@ -26374,7 +26374,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeFormat = exports.default = undefined;
 
-var _format = __webpack_require__(22);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -27057,9 +27057,9 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(27);
+var _group = __webpack_require__(22);
 
-var _item = __webpack_require__(26);
+var _item = __webpack_require__(27);
 
 var _math = __webpack_require__(17);
 
@@ -29287,7 +29287,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _layer = __webpack_require__(19);
 
-var _format = __webpack_require__(22);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -30256,7 +30256,7 @@ var _fillColor = __webpack_require__(16);
 
 var _fillColor2 = _interopRequireDefault(_fillColor);
 
-var _strokeColor = __webpack_require__(24);
+var _strokeColor = __webpack_require__(25);
 
 var _strokeColor2 = _interopRequireDefault(_strokeColor);
 
@@ -31138,7 +31138,7 @@ var _font = __webpack_require__(45);
 
 var _fillColor = __webpack_require__(16);
 
-var _strokeColor = __webpack_require__(24);
+var _strokeColor = __webpack_require__(25);
 
 var _modes3 = __webpack_require__(14);
 
@@ -31617,7 +31617,7 @@ var _lodash = __webpack_require__(4);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _strokeColor = __webpack_require__(24);
+var _strokeColor = __webpack_require__(25);
 
 var _modals = __webpack_require__(54);
 
@@ -32730,7 +32730,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _hover = __webpack_require__(47);
 
-var _item = __webpack_require__(26);
+var _item = __webpack_require__(27);
 
 var _selection = __webpack_require__(3);
 
@@ -33552,7 +33552,7 @@ var _stylePath = __webpack_require__(7);
 
 var _fillColor = __webpack_require__(16);
 
-var _strokeColor = __webpack_require__(24);
+var _strokeColor = __webpack_require__(25);
 
 var _modes3 = __webpack_require__(14);
 
@@ -34366,7 +34366,7 @@ var _stylePath = __webpack_require__(7);
 
 var _fillColor = __webpack_require__(16);
 
-var _strokeColor = __webpack_require__(24);
+var _strokeColor = __webpack_require__(25);
 
 var _modes3 = __webpack_require__(14);
 
@@ -35181,7 +35181,7 @@ var _modes = __webpack_require__(6);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _format = __webpack_require__(22);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -37069,7 +37069,7 @@ var _reactResponsive = __webpack_require__(171);
 
 var _reactResponsive2 = _interopRequireDefault(_reactResponsive);
 
-var _group = __webpack_require__(27);
+var _group = __webpack_require__(22);
 
 var _order = __webpack_require__(73);
 
@@ -37091,7 +37091,7 @@ var _dropdown2 = _interopRequireDefault(_dropdown);
 
 var _reactIntl = __webpack_require__(15);
 
-var _format = __webpack_require__(22);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -37779,7 +37779,7 @@ var _guides = __webpack_require__(32);
 
 var _stylePath = __webpack_require__(7);
 
-var _strokeColor = __webpack_require__(24);
+var _strokeColor = __webpack_require__(25);
 
 var _strokeWidth = __webpack_require__(31);
 
@@ -45033,7 +45033,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(25);
+var _comingSoon = __webpack_require__(26);
 
 var _toolSelectBase = __webpack_require__(12);
 
@@ -45089,7 +45089,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(25);
+var _comingSoon = __webpack_require__(26);
 
 var _toolSelectBase = __webpack_require__(12);
 
@@ -45145,7 +45145,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(25);
+var _comingSoon = __webpack_require__(26);
 
 var _toolSelectBase = __webpack_require__(12);
 
@@ -45201,7 +45201,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(25);
+var _comingSoon = __webpack_require__(26);
 
 var _toolSelectBase = __webpack_require__(12);
 
@@ -45257,7 +45257,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(25);
+var _comingSoon = __webpack_require__(26);
 
 var _toolSelectBase = __webpack_require__(12);
 
@@ -46755,7 +46755,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _comingSoon = __webpack_require__(25);
+var _comingSoon = __webpack_require__(26);
 
 var _toolSelectBase = __webpack_require__(12);
 
@@ -48348,7 +48348,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _format = __webpack_require__(22);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -48367,6 +48367,8 @@ var _bitmap = __webpack_require__(41);
 var _undo = __webpack_require__(88);
 
 var _undo2 = __webpack_require__(39);
+
+var _group = __webpack_require__(22);
 
 var _layer = __webpack_require__(19);
 
@@ -48674,6 +48676,9 @@ var PaperCanvas = function (_React$Component) {
                     } else {
                         // Center
                         item.translate(new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2).subtract(itemWidth, itemHeight));
+                    }
+                    if ((0, _group.isGroup)(item) && item.data && item.data.isPaintingLayer) {
+                        (0, _group.ungroupItems)([item]);
                     }
 
                     // Without the callback, the transforms sometimes don't finish applying before the
@@ -49129,7 +49134,7 @@ See the accompanying LICENSE file for terms.
 /* jslint esnext: true */
 
 
-var intl$messageformat$$ = __webpack_require__(23), src$diff$$ = __webpack_require__(287), src$es5$$ = __webpack_require__(286);
+var intl$messageformat$$ = __webpack_require__(24), src$diff$$ = __webpack_require__(287), src$es5$$ = __webpack_require__(286);
 exports["default"] = RelativeFormat;
 
 // -----------------------------------------------------------------------------
@@ -51592,7 +51597,7 @@ var _textMode = __webpack_require__(114);
 
 var _textMode2 = _interopRequireDefault(_textMode);
 
-var _format = __webpack_require__(22);
+var _format = __webpack_require__(23);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -55884,7 +55889,7 @@ var _undo2 = __webpack_require__(88);
 
 var _order = __webpack_require__(73);
 
-var _group = __webpack_require__(27);
+var _group = __webpack_require__(22);
 
 var _math = __webpack_require__(17);
 
@@ -55900,7 +55905,7 @@ var _modes2 = __webpack_require__(6);
 
 var _modes3 = _interopRequireDefault(_modes2);
 
-var _format2 = __webpack_require__(22);
+var _format2 = __webpack_require__(23);
 
 var _format3 = _interopRequireDefault(_format2);
 
