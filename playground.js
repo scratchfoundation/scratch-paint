@@ -34566,7 +34566,7 @@ exports = module.exports = __webpack_require__(11)(false);
 
 
 // module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.mode-tools_mode-tools_UREem {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    min-height: 3rem;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.mode-tools_mode-tools-icon_3yoZ2 {\n    margin-right: calc(2 * .25rem);\n    width: 2rem;\n    height: 2rem;\n}\n\n.mode-tools_mod-dashed-border_3Bmy_ {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(3 * .25rem);\n}\n\n.mode-tools_mod-labeled-icon-height_kRA3W {\n    height: 2.85rem; /* for the second row so the dashed borders are equal in size */\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.mode-tools_mode-tools_UREem {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    min-height: 3rem;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.mode-tools_mode-tools-icon_3yoZ2 {\n    margin-right: calc(2 * .25rem);\n    width: 2rem;\n    height: 2rem;\n}\n\n.mode-tools_mod-dashed-border_3Bmy_ {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(3 * .25rem);\n}\n\n.mode-tools_mod-labeled-icon-height_kRA3W {\n    height: 2.85rem; /* for the second row so the dashed borders are equal in size */\n}\n\n.mode-tools_font-dropdown_1iMy5 {\n    display: none;\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -34577,7 +34577,9 @@ exports.locals = {
 	"mod-dashed-border": "mode-tools_mod-dashed-border_3Bmy_",
 	"modDashedBorder": "mode-tools_mod-dashed-border_3Bmy_",
 	"mod-labeled-icon-height": "mode-tools_mod-labeled-icon-height_kRA3W",
-	"modLabeledIconHeight": "mode-tools_mod-labeled-icon-height_kRA3W"
+	"modLabeledIconHeight": "mode-tools_mod-labeled-icon-height_kRA3W",
+	"font-dropdown": "mode-tools_font-dropdown_1iMy5",
+	"fontDropdown": "mode-tools_font-dropdown_1iMy5"
 };
 
 /***/ }),
@@ -35391,7 +35393,7 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                 { className: (0, _classnames2.default)(props.className, _modeTools2.default.modeTools) },
                 _react2.default.createElement(
                     _inputGroup2.default,
-                    null,
+                    { className: _modeTools2.default.fontDropdown },
                     _react2.default.createElement(_fontDropdown2.default, {
                         onUpdateImage: props.onUpdateImage
                     })
