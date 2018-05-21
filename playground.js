@@ -114,7 +114,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Wed Apr 11 14:32:35 2018 -0400
+ * Date: Mon May 21 11:31:55 2018 -0400
  *
  ***
  *
@@ -14177,10 +14177,11 @@ new function() {
 	function exportText(item) {
 		var node = SvgElement.create('text', getTransform(item._matrix, false),
 				formatter);
+		node.setAttribute('font-size', item.fontSize);
 		for (var i = 0; i < item._lines.length; i++) {
 			var tspanNode = SvgElement.create('tspan', {
 				x: '0',
-				dy: i === 0 ? '0' : item._style.getLeading() + 'px'
+				dy: i === 0 ? '0' : item.getLeading() + 'px'
 			}, formatter);
 			tspanNode.textContent = item._lines[i];
 			node.appendChild(tspanNode);
@@ -14565,19 +14566,35 @@ new function() {
 
 		text: function(node) {
 
+			var fontSize = parseFloat(node.getAttribute("font-size"));
 			if (node.childElementCount === 0) {
 				var text = new PointText();
 				text.setContent(node.textContent.trim() || '');
 				text.translate(0, text._style.getLeading());
+				if (!isNaN(fontSize)) text.setFontSize(fontSize);
 				return text;
 			} else {
 				var lines = [];
+				var spacing = 1.2;
 				for (var i = 0; i < node.children.length; i++) {
 					var child = node.children[i];
 					lines.push(child.textContent);
+					var dyString = child.getAttribute('dy');
+					if (dyString) {
+						var dy = parseFloat(dyString);
+						if (!isNaN(dy)) {
+							if (dyString.endsWith('em')) {
+								spacing = dy;
+							} else if (dyString.endsWith('px') && !isNaN(fontSize)) {
+								spacing = dy / fontSize;
+							}
+						}
+					}
 				}
 				var text = new PointText();
+				if (!isNaN(fontSize)) text.setFontSize(fontSize);
 				text.setContent(lines.join('\n') || '');
+				text.setLeading(text.fontSize * spacing);
 				return text;
 			}
 		}
