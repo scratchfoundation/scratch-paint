@@ -72,7 +72,9 @@ class BrushTool extends paper.Tool {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
         
-        this.cursorPreview.remove();
+        if (this.cursorPreview) {
+            this.cursorPreview.remove();
+        }
 
         this.draw(event.point.x, event.point.y);
         this.lastPoint = event.point;

@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {clearSelection} from '../selection';
+import {clearSelection, getSelectedLeafItems} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 import {hoverBounds} from '../guides';
@@ -36,14 +36,16 @@ class TextTool extends paper.Tool {
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      * @param {!function} setTextEditTarget Call to set text editing target whenever text editing is active
+     * @param {!function} changeFont Call to change the font in the dropdown
      */
-    constructor (textAreaElement, setSelectedItems, clearSelectedItems, onUpdateImage, setTextEditTarget) {
+    constructor (textAreaElement, setSelectedItems, clearSelectedItems, onUpdateImage, setTextEditTarget, changeFont) {
         super();
         this.element = textAreaElement;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateImage = onUpdateImage;
         this.setTextEditTarget = setTextEditTarget;
+        this.changeFont = changeFont;
         this.boundingBoxTool = new BoundingBoxTool(Modes.TEXT, setSelectedItems, clearSelectedItems, onUpdateImage);
         this.nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         this.lastEvent = null;
@@ -98,6 +100,20 @@ class TextTool extends paper.Tool {
      */
     onSelectionChanged (selectedItems) {
         this.boundingBoxTool.onSelectionChanged(selectedItems);
+    }
+    setFont (font) {
+        this.font = font;
+        if (this.textBox) {
+            this.textBox.font = font;
+        }
+        const selected = getSelectedLeafItems();
+        for (const item of selected) {
+            if (item instanceof paper.PointText) {
+                item.font = font;
+            }
+        }
+        this.element.style.fontFamily = font;
+        this.setSelectedItems();
     }
     // Allow other tools to cancel text edit mode
     onTextEditCancelled () {
@@ -193,14 +209,13 @@ class TextTool extends paper.Tool {
             this.textBox = new paper.PointText({
                 point: event.point,
                 content: '',
-                font: 'Helvetica',
-                fontSize: 30,
+                font: this.font,
+                fontSize: 40,
                 fillColor: this.colorState.fillColor,
                 // Default leading for both the HTML text area and paper.PointText
                 // is 120%, but for some reason they are slightly off from each other.
                 // This value was obtained experimentally.
-                // (Don't round to 34.6, the text area will start to scroll.)
-                leading: 34.61
+                leading: 46.15
             });
             this.beginTextEdit(this.textBox.content, this.textBox.matrix);
         }
@@ -261,7 +276,8 @@ class TextTool extends paper.Tool {
         if (this.guide) this.guide.remove();
         this.guide = hoverBounds(this.textBox, TextTool.TEXT_PADDING);
         this.guide.dashArray = [4, 4];
-        this.element.style.width = `${this.textBox.internalBounds.width}px`;
+        // Prevent line from wrapping
+        this.element.style.width = `${this.textBox.internalBounds.width + 1}px`;
         this.element.style.height = `${this.textBox.internalBounds.height}px`;
     }
     /**
@@ -272,6 +288,11 @@ class TextTool extends paper.Tool {
     beginTextEdit (initialText, matrix) {
         this.mode = TextTool.TEXT_EDIT_MODE;
         this.setTextEditTarget(this.textBox.id);
+        if (this.font !== this.textBox.font) {
+            this.changeFont(this.textBox.font);
+        }
+        this.element.style.fontSize = `${this.textBox.fontSize}px`;
+        this.element.style.lineHeight = this.textBox.leading / this.textBox.fontSize;
 
         const viewMtx = paper.view.matrix;
 

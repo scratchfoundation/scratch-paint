@@ -1,9 +1,9 @@
 const defaultsDeep = require('lodash.defaultsdeep');
 const path = require('path');
-const webpack = require('webpack');
 
 // Plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 // PostCss
 const autoprefixer = require('autoprefixer');
@@ -11,6 +11,7 @@ const postcssVars = require('postcss-simple-vars');
 const postcssImport = require('postcss-import');
 
 const base = {
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     devtool: 'cheap-module-source-map',
     module: {
         rules: [{
@@ -19,7 +20,7 @@ const base = {
             include: path.resolve(__dirname, 'src'),
             options: {
                 plugins: ['transform-object-rest-spread'],
-                presets: ['es2015', 'react']
+                presets: [['env', {browsers: ['last 3 versions', 'Safari >= 8', 'iOS >= 8']}], 'react']
             }
         },
         {
@@ -59,13 +60,14 @@ const base = {
             loader: 'svg-url-loader?noquotes'
         }]
     },
-    plugins: []
-        .concat(process.env.NODE_ENV === 'production' ? [
-            new webpack.optimize.UglifyJsPlugin({
-                include: /\.min\.js$/,
-                minimize: true
+    optimization: {
+        minimizer: [
+            new UglifyJsPlugin({
+                include: /\.min\.js$/
             })
-        ] : [])
+        ]
+    },
+    plugins: []
 };
 
 module.exports = [

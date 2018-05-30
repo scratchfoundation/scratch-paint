@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
+import Fonts from '../lib/fonts';
 import Modes from '../lib/modes';
 import {MIXED} from '../helper/style-path';
 
+import {changeFont} from '../reducers/font';
 import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
 import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeMode} from '../reducers/modes';
@@ -42,6 +44,9 @@ class TextMode extends React.Component {
         if (this.tool && !nextProps.viewBounds.equals(this.props.viewBounds)) {
             this.tool.onViewBoundsChanged(nextProps.viewBounds);
         }
+        if (this.tool && nextProps.font !== this.props.font) {
+            this.tool.setFont(nextProps.font);
+        }
 
         if (nextProps.isTextModeActive && !this.props.isTextModeActive) {
             this.activateTool();
@@ -54,6 +59,7 @@ class TextMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
+        
         // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
         // If exactly one of fill or stroke color is set, set the other one to transparent.
         // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
@@ -69,14 +75,21 @@ class TextMode extends React.Component {
         } else if (fillColorPresent && !strokeColorPresent) {
             this.props.onChangeStrokeColor(null);
         }
+        if (!this.props.font || Object.keys(Fonts).map(key => Fonts[key])
+            .indexOf(this.props.font) < 0) {
+            this.props.changeFont(Fonts.SANS_SERIF);
+        }
+
         this.tool = new TextTool(
             this.props.textArea,
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
             this.props.onUpdateImage,
             this.props.setTextEditTarget,
+            this.props.changeFont
         );
         this.tool.setColorState(this.props.colorState);
+        this.tool.setFont(this.props.font);
         this.tool.activate();
     }
     deactivateTool () {
@@ -95,12 +108,14 @@ class TextMode extends React.Component {
 }
 
 TextMode.propTypes = {
+    changeFont: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,
         strokeColor: PropTypes.string,
         strokeWidth: PropTypes.number
     }).isRequired,
+    font: PropTypes.string,
     handleMouseDown: PropTypes.func.isRequired,
     isTextModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
@@ -116,12 +131,16 @@ TextMode.propTypes = {
 
 const mapStateToProps = state => ({
     colorState: state.scratchPaint.color,
+    font: state.scratchPaint.font,
     isTextModeActive: state.scratchPaint.mode === Modes.TEXT,
     selectedItems: state.scratchPaint.selectedItems,
     textEditTarget: state.scratchPaint.textEditTarget,
     viewBounds: state.scratchPaint.viewBounds
 });
 const mapDispatchToProps = dispatch => ({
+    changeFont: font => {
+        dispatch(changeFont(font));
+    },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },

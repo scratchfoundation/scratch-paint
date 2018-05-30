@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
 import {clearRaster, getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
+import {inlineSvgFonts} from 'scratch-svg-renderer';
 
 const forEachLinePoint = function (point1, point2, callback) {
     // Bresenham line algorithm
@@ -262,7 +263,6 @@ const _trim = function (raster) {
     return raster.getSubRaster(getHitBounds(raster));
 };
 
-
 const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
     // @todo if the active layer contains only rasters, drawing them directly to the raster layer
     // would be more efficient.
@@ -281,6 +281,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
     // Get rid of anti-aliasing
     // @todo get crisp text?
     svg.setAttribute('shape-rendering', 'crispEdges');
+    inlineSvgFonts(svg);
     const svgString = (new XMLSerializer()).serializeToString(svg);
 
     // Put anti-aliased SVG into image, and dump image back into canvas

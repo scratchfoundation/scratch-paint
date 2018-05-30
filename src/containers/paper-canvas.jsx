@@ -10,6 +10,7 @@ import log from '../log/log';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
+import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, getRaster, setupLayers} from '../helper/layer';
 import {deleteSelection, getSelectedLeafItems} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
@@ -195,8 +196,14 @@ class PaperCanvas extends React.Component {
                     item.translate(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2)
                         .subtract(itemWidth, itemHeight));
                 }
+                if (isGroup(item) && item.data && item.data.isPaintingLayer) {
+                    ungroupItems([item]);
+                }
 
-                performSnapshot(paperCanvas.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
+                // Without the callback, the transforms sometimes don't finish applying before the
+                // snapshot is taken.
+                window.setTimeout(
+                    () => performSnapshot(paperCanvas.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT), 0);
             }
         });
     }

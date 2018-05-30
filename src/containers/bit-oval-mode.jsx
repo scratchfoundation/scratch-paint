@@ -11,7 +11,7 @@ import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
 import OvalTool from '../helper/bit-tools/oval-tool';
-import OvalModeComponent from '../components/oval-mode/oval-mode.jsx';
+import OvalModeComponent from '../components/bit-oval-mode/bit-oval-mode.jsx';
 
 class BitOvalMode extends React.Component {
     constructor (props) {
