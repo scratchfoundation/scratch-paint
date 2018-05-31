@@ -146,57 +146,7 @@ const drawRotatedEllipse = function (options, context) {
 };
 
 const fillEllipse = function (centerX, centerY, radiusX, radiusY, context) {
-    // Bresenham ellipse algorithm
-    centerX = ~~centerX;
-    centerY = ~~centerY;
-    radiusX = ~~radiusX;
-    radiusY = ~~radiusY;
-    const twoRadXSquared = 2 * radiusX * radiusX;
-    const twoRadYSquared = 2 * radiusY * radiusY;
-    let x = radiusX;
-    let y = 0;
-    let dx = radiusY * radiusY * (1 - (radiusX << 1));
-    let dy = radiusX * radiusX;
-    let error = 0;
-    let stoppingX = twoRadYSquared * radiusX;
-    let stoppingY = 0;
- 
-    while (stoppingX >= stoppingY) {
-        // todo outline
-        context.fillRect(centerX - x, centerY - y, x << 1, y << 1);
-        y++;
-        stoppingY += twoRadXSquared;
-        error += dy;
-        dy += twoRadXSquared;
-        if ((error << 1) + dx > 0) {
-            x--;
-            stoppingX -= twoRadYSquared;
-            error += dx;
-            dx += twoRadYSquared;
-        }
-    }
-
-    x = 0;
-    y = radiusY;
-    dx = radiusY * radiusY;
-    dy = radiusX * radiusX * (1 - (radiusY << 1));
-    error = 0;
-    stoppingX = 0;
-    stoppingY = twoRadXSquared * radiusY;
-    while (stoppingX <= stoppingY) {
-        context.fillRect(centerX - x, centerY - y, x * 2, y * 2);
-        x++;
-        stoppingX += twoRadYSquared;
-        error += dx;
-        dx += twoRadYSquared;
-        if ((error << 1) + dy > 0) {
-            y--;
-            stoppingY -= twoRadXSquared;
-            error += dy;
-            dy += twoRadXSquared;
-        }
-
-    }
+    drawShearedEllipse({centerX, centerY, radiusX, radiusY, shearSlope: 0, isFilled: true}, context);
 };
 
 /**

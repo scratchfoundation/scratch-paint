@@ -123,46 +123,91 @@ class OvalTool extends paper.Tool {
         }
         this.active = false;
     }
+    /*
+     * Based on paper.Matrix.decompose, but get a vertical shear instead of horizontal shear
+     * and keep radians.
+     */
+    _decompose (matrix) {
+        const a = matrix.a;
+        const b = matrix.b;
+        const c = matrix.c;
+        const d = matrix.d;
+        if (isNaN(a) || isNaN(b) || isNaN(c) || isNaN(d) || (c === 0 && d === 0)) {
+            return null; // degenerate
+        }
+        const s = Math.sqrt((c * c) + (d * d));
+        return {
+            rotation: Math.asin(c / s) * (d > 0 ? 1 : -1),
+            scaling: new paper.Point(((a * d) - (b * c)) / s, s),
+            shearSlope: new paper.Point(s * s, (a * c) + (b * d))
+        };
+    }
     commitOval () {
-        if (this.oval) {
-            const decomposed = this.oval.matrix.decompose();
-            const a = this.oval.matrix.a;
-            const b = this.oval.matrix.b;
-            const c = this.oval.matrix.c;
-            const d = this.oval.matrix.d;
+        if (!this.oval) return;
+
+        const decomposed = this._decompose(this.oval.matrix);
+        if (decomposed) {
+            console.log(decomposed);
             const context = getRaster().getContext('2d');
-            context.fillStyle = this.color;
-            if (Math.abs(decomposed.skewing.x) < 1) {
+            context.fillStyle = 'orange';
+            //context.fillStyle = this.color;
+            if (Math.abs(Math.atan2(decomposed.shearSlope.y, decomposed.shearSlope.x)) < Math.PI / 180) {
                 console.log('using rotation');
                 drawRotatedEllipse({
                     centerX: this.oval.position.x,
                     centerY: this.oval.position.y,
                     radiusX: Math.abs(this.oval.size.width * decomposed.scaling.x / 2),
                     radiusY: Math.abs(this.oval.size.height * decomposed.scaling.y / 2),
-                    rotation: -decomposed.rotation * Math.PI / 180,
+                    rotation: decomposed.rotation,
                     isFilled: true
                 }, context);
-            } else if (Math.abs(decomposed.rotation) < 1 && (c || d)) {
-                console.log('using skewing');
-                console.log(((a * c) + (b * d)) / ((c * c) + (d * d)));
-                drawShearedEllipse({
+            }
+            // else if (Math.abs(decomposed.rotation) < Math.PI / 180) {
+            //     console.log('using skewing');
+            //     drawShearedEllipse({
+            //         centerX: this.oval.position.x,
+            //         centerY: this.oval.position.y,
+            //         radiusX: Math.abs(this.oval.size.width * decomposed.scaling.x / 2),
+            //         radiusY: Math.abs(this.oval.size.height * decomposed.scaling.y / 2),
+            //         shearSlope: -decomposed.shearSlope.y / decomposed.shearSlope.x,
+            //         isFilled: true
+            //     }, context);
+            // }
+            else {
+                console.log('using neither');
+                const radiusX = Math.abs(this.oval.size.width * decomposed.scaling.x / 2);
+                const radiusY = Math.abs(this.oval.size.height * decomposed.scaling.y / 2);
+                const shearSlope = -decomposed.shearSlope.y / decomposed.shearSlope.x;
+                console.log(shearSlope * 180 / Math.PI);
+                // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a skewed ellipse formula
+                const A = (1 / radiusX / radiusX) + (shearSlope * shearSlope / radiusY / radiusY);
+                const B = -2 * shearSlope / radiusY / radiusY;
+                const C = 1 / radiusY / radiusY;
+                const radiusA = Math.sqrt(2) *
+                    Math.sqrt(
+                        (A + C - Math.sqrt((A * A) + (B * B) - (2 * A * C) + (C * C))) /
+                        ((-B * B) + (4 * A * C))
+                    );
+                const radiusB = 1 / Math.sqrt(A + C - (1 / radiusA / radiusA));
+                let theta = .5 * Math.asin(B / ((1 / radiusA / radiusA) - (1 / radiusB / radiusB)));
+                if (radiusX > radiusY && Math.abs(shearSlope) < Math.PI / 2) {
+                    theta = (Math.PI / 2) - theta;
+                } // TODO
+                drawRotatedEllipse({
                     centerX: this.oval.position.x,
                     centerY: this.oval.position.y,
-                    radiusX: Math.abs(this.oval.size.width * decomposed.scaling.x / 2),
-                    radiusY: Math.abs(this.oval.size.height * decomposed.scaling.y / 2),
-                    shearSlope: -((a * c) + (b * d)) / ((c * c) + (d * d)),
+                    radiusX: radiusA,
+                    radiusY: radiusB,
+                    rotation: theta + decomposed.rotation,
                     isFilled: true
                 }, context);
-            } else {
-                console.log('using neither');
                 // @todo our draw ellipse algorithm can't handle both rotation and skewing
-                convertToBitmap(this.clearSelectedItems, this.onUpdateImage);
+                //convertToBitmap(this.clearSelectedItems, this.onUpdateImage);
             }
-            console.log(decomposed);
-            this.oval.remove();
-            this.oval = null;
-            this.onUpdateImage();
         }
+        //this.oval.remove();
+        //this.oval = null;
+        if (decomposed) this.onUpdateImage();
 
     }
     deactivateTool () {
