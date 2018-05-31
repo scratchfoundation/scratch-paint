@@ -57,6 +57,11 @@ class OvalTool extends paper.Tool {
      */
     onSelectionChanged (selectedItems) {
         this.boundingBoxTool.onSelectionChanged(selectedItems);
+        if ((!this.oval || !this.oval.parent) &&
+                selectedItems && selectedItems.length === 1 && selectedItems[0].shape === 'ellipse') {
+            // Infer that an undo occurred and get back the active oval
+            this.oval = selectedItems[0];
+        }
     }
     setColor (color) {
         this.color = color;
@@ -143,7 +148,7 @@ class OvalTool extends paper.Tool {
         };
     }
     commitOval () {
-        if (!this.oval) return;
+        if (!this.oval || !this.oval.parent) return;
 
         const decomposed = this._decompose(this.oval.matrix);
         if (decomposed) {

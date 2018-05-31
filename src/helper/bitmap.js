@@ -64,14 +64,14 @@ const drawShearedEllipse = function (options, context) {
  
     while (stoppingX >= stoppingY) {
         if (isFilled) {
-            context.fillRect(centerX + x, centerY - y - ~~(x * shearSlope), 1, 2 * y);
-            context.fillRect(centerX - x, centerY - y + ~~(x * shearSlope), 1, 2 * y);
+            context.fillRect(centerX + x - 1, centerY - y - Math.round(x * shearSlope), 1, y << 1);
+            context.fillRect(centerX - x, centerY - y + Math.round(x * shearSlope), 1, y << 1);
         } else {
             // TODO connect these to the prev segment and add thickness
-            context.fillRect(centerX + x, centerY + y - ~~(x * shearSlope), 1, 1);
-            context.fillRect(centerX + x, centerY - y - ~~(x * shearSlope), 1, 1);
-            context.fillRect(centerX - x, centerY + y + ~~(x * shearSlope), 1, 1);
-            context.fillRect(centerX - x, centerY - y + ~~(x * shearSlope), 1, 1);
+            context.fillRect(centerX + x, centerY + y - Math.round(x * shearSlope), 1, 1);
+            context.fillRect(centerX + x, centerY - y - Math.round(x * shearSlope), 1, 1);
+            context.fillRect(centerX - x, centerY + y + Math.round(x * shearSlope), 1, 1);
+            context.fillRect(centerX - x, centerY - y + Math.round(x * shearSlope), 1, 1);
         }
         y++;
         stoppingY += twoRadXSquared;
@@ -84,7 +84,6 @@ const drawShearedEllipse = function (options, context) {
             dx += twoRadYSquared;
         }
     }
-
     x = 0;
     y = radiusY;
     dx = radiusY * radiusY;
@@ -94,13 +93,13 @@ const drawShearedEllipse = function (options, context) {
     stoppingY = twoRadXSquared * radiusY;
     while (stoppingX <= stoppingY) {
         if (isFilled) {
-            context.fillRect(centerX + x, centerY - y - ~~(x * shearSlope), 1, 2 * y);
-            context.fillRect(centerX - x, centerY - y + ~~(x * shearSlope), 1, 2 * y);
+            context.fillRect(centerX + x - 1, centerY - y - Math.round(x * shearSlope), 1, y << 1);
+            context.fillRect(centerX - x, centerY - y + Math.round(x * shearSlope), 1, y << 1);
         } else {
-            context.fillRect(centerX + x, centerY + y - ~~(x * shearSlope), 1, 1);
-            context.fillRect(centerX + x, centerY - y - ~~(x * shearSlope), 1, 1);
-            context.fillRect(centerX - x, centerY + y + ~~(x * shearSlope), 1, 1);
-            context.fillRect(centerX - x, centerY - y + ~~(x * shearSlope), 1, 1);
+            context.fillRect(centerX + x, centerY + y - Math.round(x * shearSlope), 1, 1);
+            context.fillRect(centerX + x, centerY - y - Math.round(x * shearSlope), 1, 1);
+            context.fillRect(centerX - x, centerY + y + Math.round(x * shearSlope), 1, 1);
+            context.fillRect(centerX - x, centerY - y + Math.round(x * shearSlope), 1, 1);
         }
         x++;
         stoppingX += twoRadYSquared;
@@ -112,7 +111,6 @@ const drawShearedEllipse = function (options, context) {
             error += dy;
             dy += twoRadXSquared;
         }
-
     }
 };
 
