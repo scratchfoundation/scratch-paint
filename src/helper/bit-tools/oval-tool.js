@@ -178,7 +178,6 @@ class OvalTool extends paper.Tool {
                 const radiusX = Math.abs(this.oval.size.width * decomposed.scaling.x / 2);
                 const radiusY = Math.abs(this.oval.size.height * decomposed.scaling.y / 2);
                 const shearSlope = -decomposed.shearSlope.y / decomposed.shearSlope.x;
-                console.log(shearSlope * 180 / Math.PI);
                 // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a skewed ellipse formula
                 const A = (1 / radiusX / radiusX) + (shearSlope * shearSlope / radiusY / radiusY);
                 const B = -2 * shearSlope / radiusY / radiusY;
@@ -189,10 +188,13 @@ class OvalTool extends paper.Tool {
                         ((-B * B) + (4 * A * C))
                     );
                 const radiusB = 1 / Math.sqrt(A + C - (1 / radiusA / radiusA));
-                let theta = .5 * Math.asin(B / ((1 / radiusA / radiusA) - (1 / radiusB / radiusB)));
-                if (radiusX > radiusY && Math.abs(shearSlope) < Math.PI / 2) {
-                    theta = (Math.PI / 2) - theta;
-                } // TODO
+                let theta = Math.asin(Math.sqrt(
+                    (A - (1 / radiusA / radiusA)) /
+                    ((1 / radiusB / radiusB) - (1 / radiusA / radiusA))
+                ));
+                if (shearSlope > 0) {
+                     theta = Math.PI - theta;
+                }
                 drawRotatedEllipse({
                     centerX: this.oval.position.x,
                     centerY: this.oval.position.y,
@@ -201,8 +203,6 @@ class OvalTool extends paper.Tool {
                     rotation: theta + decomposed.rotation,
                     isFilled: true
                 }, context);
-                // @todo our draw ellipse algorithm can't handle both rotation and skewing
-                //convertToBitmap(this.clearSelectedItems, this.onUpdateImage);
             }
         }
         //this.oval.remove();
