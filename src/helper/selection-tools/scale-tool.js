@@ -103,9 +103,7 @@ class ScaleTool {
             sx *= signx;
             sy *= signy;
         }
-        // TODO revert
-        this.itemGroup.shear(0, sx / this.lastSx / 180 * Math.PI);
-        //this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
+        this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
         this.lastSx = sx;
         this.lastSy = sy;
     }

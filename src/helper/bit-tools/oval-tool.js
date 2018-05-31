@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {convertToBitmap, drawRotatedEllipse, drawShearedEllipse} from '../bitmap';
+import {drawRotatedEllipse, drawShearedEllipse} from '../bitmap';
 import {getRaster} from '../layer';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
@@ -147,41 +147,38 @@ class OvalTool extends paper.Tool {
 
         const decomposed = this._decompose(this.oval.matrix);
         if (decomposed) {
-            console.log(decomposed);
+            const radiusX = Math.abs(this.oval.size.width * decomposed.scaling.x / 2);
+            const radiusY = Math.abs(this.oval.size.height * decomposed.scaling.y / 2);
+            const shearSlope = -decomposed.shearSlope.y / decomposed.shearSlope.x;
             const context = getRaster().getContext('2d');
-            context.fillStyle = 'orange';
-            //context.fillStyle = this.color;
+            context.fillStyle = this.color;
             if (Math.abs(Math.atan2(decomposed.shearSlope.y, decomposed.shearSlope.x)) < Math.PI / 180) {
-                console.log('using rotation');
+                // Use rotation
                 drawRotatedEllipse({
                     centerX: this.oval.position.x,
                     centerY: this.oval.position.y,
-                    radiusX: Math.abs(this.oval.size.width * decomposed.scaling.x / 2),
-                    radiusY: Math.abs(this.oval.size.height * decomposed.scaling.y / 2),
+                    radiusX,
+                    radiusY,
                     rotation: decomposed.rotation,
                     isFilled: true
                 }, context);
-            }
-            // else if (Math.abs(decomposed.rotation) < Math.PI / 180) {
-            //     console.log('using skewing');
-            //     drawShearedEllipse({
-            //         centerX: this.oval.position.x,
-            //         centerY: this.oval.position.y,
-            //         radiusX: Math.abs(this.oval.size.width * decomposed.scaling.x / 2),
-            //         radiusY: Math.abs(this.oval.size.height * decomposed.scaling.y / 2),
-            //         shearSlope: -decomposed.shearSlope.y / decomposed.shearSlope.x,
-            //         isFilled: true
-            //     }, context);
-            // }
-            else {
-                console.log('using neither');
-                const radiusX = Math.abs(this.oval.size.width * decomposed.scaling.x / 2);
-                const radiusY = Math.abs(this.oval.size.height * decomposed.scaling.y / 2);
-                const shearSlope = -decomposed.shearSlope.y / decomposed.shearSlope.x;
+            } else if (Math.abs(decomposed.rotation) < Math.PI / 180) {
+                // Use shear
+                drawShearedEllipse({
+                    centerX: this.oval.position.x,
+                    centerY: this.oval.position.y,
+                    radiusX,
+                    radiusY,
+                    shearSlope,
+                    isFilled: true
+                }, context);
+            } else {
+                // Both shear and rotation exist. Convert the shear to a rotation and use rotation.
                 // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a skewed ellipse formula
                 const A = (1 / radiusX / radiusX) + (shearSlope * shearSlope / radiusY / radiusY);
                 const B = -2 * shearSlope / radiusY / radiusY;
                 const C = 1 / radiusY / radiusY;
+                // radiusA, radiusB and theta are properties of the sheared ellipse converted to a rotated ellipse
                 const radiusA = Math.sqrt(2) *
                     Math.sqrt(
                         (A + C - Math.sqrt((A * A) + (B * B) - (2 * A * C) + (C * C))) /
@@ -193,7 +190,7 @@ class OvalTool extends paper.Tool {
                     ((1 / radiusB / radiusB) - (1 / radiusA / radiusA))
                 ));
                 if (shearSlope > 0) {
-                     theta = Math.PI - theta;
+                    theta = Math.PI - theta;
                 }
                 drawRotatedEllipse({
                     centerX: this.oval.position.x,
@@ -205,8 +202,8 @@ class OvalTool extends paper.Tool {
                 }, context);
             }
         }
-        //this.oval.remove();
-        //this.oval = null;
+        this.oval.remove();
+        this.oval = null;
         if (decomposed) this.onUpdateImage();
 
     }

@@ -42,8 +42,8 @@ class Playground extends React.Component {
         this.setState({name});
     }
     handleUpdateImage (isVector, image, rotationCenterX, rotationCenterY) {
-        //console.log(image);
-        //console.log(`rotationCenterX: ${rotationCenterX}    rotationCenterY: ${rotationCenterY}`);
+        console.log(image);
+        console.log(`rotationCenterX: ${rotationCenterX}    rotationCenterY: ${rotationCenterY}`);
         if (isVector) {
             this.setState({image, rotationCenterX, rotationCenterY});
         } else { // is Bitmap
