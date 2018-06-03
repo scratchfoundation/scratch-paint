@@ -150,15 +150,15 @@ class OvalTool extends paper.Tool {
     commitOval () {
         if (!this.oval || !this.oval.parent) return;
 
-        const decomposed = this._decompose(this.oval.matrix);
-        if (!decomposed) {
+        if (!this.oval.matrix.isInvertible()) {
             this.oval.remove();
             this.oval = null;
             return;
         }
 
-        const radiusX = Math.abs(this.oval.size.width * decomposed.scaling.x / 2);
-        const radiusY = Math.abs(this.oval.size.height * decomposed.scaling.y / 2);
+        const decomposed = this._decompose(this.oval.matrix);
+        const radiusX = Math.abs(this.oval.size.width / 2);
+        const radiusY = Math.abs(this.oval.size.height / 2);
         const shearSlope = -decomposed.shearSlope.y / decomposed.shearSlope.x;
         const context = getRaster().getContext('2d');
         context.fillStyle = this.color;
@@ -167,8 +167,8 @@ class OvalTool extends paper.Tool {
             drawRotatedEllipse({
                 centerX: this.oval.position.x,
                 centerY: this.oval.position.y,
-                radiusX,
-                radiusY,
+                radiusX: radiusX * decomposed.scaling.x,
+                radiusY: radiusY * decomposed.scaling.y,
                 rotation: decomposed.rotation,
                 isFilled: true
             }, context);
@@ -177,64 +177,46 @@ class OvalTool extends paper.Tool {
             drawShearedEllipse({
                 centerX: this.oval.position.x,
                 centerY: this.oval.position.y,
-                radiusX,
-                radiusY,
+                radiusX: radiusX * decomposed.scaling.x,
+                radiusY: radiusY * decomposed.scaling.y,
                 shearSlope,
                 isFilled: true
             }, context);
         } else {
-            console.log('Using neither');
-            console.log(decomposed);
-            console.log(shearSlope);
-            // Both shear and rotation exist. Convert the shear to a rotation and use rotation.
-            // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a skewed ellipse formula
-            const A = (1 / radiusX / radiusX) + (shearSlope * shearSlope / radiusY / radiusY);
-            const B = -2 * shearSlope / radiusY / radiusY;
-            const C = 1 / radiusY / radiusY;
-            // radiusA, radiusB and theta are properties of the sheared ellipse converted to a rotated ellipse
+            // Both shear and rotation exist.
+            const inverse = this.oval.matrix.clone().invert();
+
+            // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a transformed ellipse formula
+            const A = (inverse.a * inverse.a / radiusX / radiusX) + (inverse.b * inverse.b / radiusY / radiusY);
+            const B = (2 * inverse.a * inverse.c / radiusX / radiusX) + (2 * inverse.b * inverse.d / radiusY / radiusY);
+            const C = (inverse.c * inverse.c / radiusX / radiusX) + (inverse.d * inverse.d / radiusY / radiusY);
+            // radiusA, radiusB and theta are properties of the transformed ellipse converted to a rotated ellipse
             const radiusA = Math.sqrt(2) *
                 Math.sqrt(
                     (A + C - Math.sqrt((A * A) + (B * B) - (2 * A * C) + (C * C))) /
                     ((-B * B) + (4 * A * C))
                 );
             const radiusB = 1 / Math.sqrt(A + C - (1 / radiusA / radiusA));
-            let theta = Math.asin(Math.sqrt(
-                (A - (1 / radiusA / radiusA)) /
-                ((1 / radiusB / radiusB) - (1 / radiusA / radiusA))
-            ));
-            if (shearSlope > 0) {
-                theta = Math.PI - theta;
+            let temp = (A - (1 / radiusA / radiusA)) /
+                ((1 / radiusB / radiusB) - (1 / radiusA / radiusA));
+            if (temp < 0 && Math.abs(temp) < 1e-8) temp = 0; // Fix floating point issue
+            temp = Math.sqrt(temp);
+            if (Math.abs(1 - temp) < 1e-8) temp = 1; // Fix floating point issue
+            // Solve for which of the two possible thetas
+            let theta = Math.asin(temp);
+            const theta2 = -theta;
+            if (Math.abs(Math.sin(2 * theta2) - (B / ((1 / radiusA / radiusA) - (1 / radiusB / radiusB)))) < 1e-8) {
+                theta = theta2;
             }
             drawRotatedEllipse({
                 centerX: this.oval.position.x,
                 centerY: this.oval.position.y,
                 radiusX: radiusA,
                 radiusY: radiusB,
-                rotation: theta + decomposed.rotation,
+                rotation: -theta,
                 isFilled: true
             }, context);
         }
-        console.log(this.oval.matrix);
-        // Order of operations of the decomposition matrix
-        const blueOval = new paper.Shape.Ellipse({
-            fillColor: 'blue',
-            point: this.oval.position,
-            size: this.oval.size
-        });
-        const redOval = blueOval.clone();
-        redOval.fillColor = 'red';
-        redOval.scale(decomposed.scaling);
-        const orangeOval = redOval.clone();
-        orangeOval.fillColor = 'orange';
-        orangeOval.skew(0, Math.atan2(decomposed.shearSlope.y, decomposed.shearSlope.x) / Math.PI * 180);
-        const greenOval = orangeOval.clone();
-        greenOval.fillColor = 'green';
-        greenOval.rotate(-decomposed.rotation / Math.PI * 180);
-        console.log(greenOval.matrix);
-
-
-        const purpleOval = this.oval.clone();
-        purpleOval.fillColor = 'purple';
         this.oval.remove();
         this.oval = null;
         this.onUpdateImage();
