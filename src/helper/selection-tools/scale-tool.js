@@ -97,16 +97,13 @@ class ScaleTool {
         }
 
         if (event.modifiers.shift) {
-        // TODO revert
-        //     const signx = sx > 0 ? 1 : -1;
-        //     const signy = sy > 0 ? 1 : -1;
-        //     sx = sy = Math.max(Math.abs(sx), Math.abs(sy));
-        //     sx *= signx;
-        //     sy *= signy;
-            this.itemGroup.shear(0, sx / this.lastSx / 180 * Math.PI);
-        } else {
-            this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
+            const signx = sx > 0 ? 1 : -1;
+            const signy = sy > 0 ? 1 : -1;
+            sx = sy = Math.max(Math.abs(sx), Math.abs(sy));
+            sx *= signx;
+            sy *= signy;
         }
+        this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
         this.lastSx = sx;
         this.lastSy = sy;
     }
