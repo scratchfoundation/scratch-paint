@@ -1,12 +1,14 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
+import {drawRect} from '../bitmap';
+import {getRaster} from '../layer';
 import {styleShape} from '../style-path';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 
 /**
- * Tool for drawing rectangles.
+ * Tool for drawing rects.
  */
 class RectTool extends paper.Tool {
     static get TOLERANCE () {
@@ -22,7 +24,7 @@ class RectTool extends paper.Tool {
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateImage = onUpdateImage;
-        this.boundingBoxTool = new BoundingBoxTool(Modes.RECT, setSelectedItems, clearSelectedItems, onUpdateImage);
+        this.boundingBoxTool = new BoundingBoxTool(Modes.BIT_RECT, setSelectedItems, clearSelectedItems, onUpdateImage);
         const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         
         // We have to set these functions instead of just declaring them because
@@ -34,20 +36,19 @@ class RectTool extends paper.Tool {
         this.onKeyDown = nudgeTool.onKeyDown;
 
         this.rect = null;
-        this.colorState = null;
-        this.isBoundingBoxMode = null;
+        this.color = null;
         this.active = false;
     }
     getHitOptions () {
         return {
-            segments: true,
+            segments: false,
             stroke: true,
-            curves: true,
+            curves: false,
             fill: true,
             guide: false,
             match: hitResult =>
                 (hitResult.item.data && hitResult.item.data.isHelperItem) ||
-                hitResult.item.selected, // Allow hits on bounding box and selected only
+                    hitResult.item === this.rect, // Allow hits on bounding box and rect only
             tolerance: RectTool.TOLERANCE / paper.view.zoom
         };
     }
@@ -57,9 +58,14 @@ class RectTool extends paper.Tool {
      */
     onSelectionChanged (selectedItems) {
         this.boundingBoxTool.onSelectionChanged(selectedItems);
+        if ((!this.rect || !this.rect.parent) &&
+                selectedItems && selectedItems.length === 1 && selectedItems[0].shape === 'rectangle') {
+            // Infer that an undo occurred and get back the active rect
+            this.rect = selectedItems[0];
+        }
     }
-    setColorState (colorState) {
-        this.colorState = colorState;
+    setColor (color) {
+        this.color = color;
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
@@ -70,6 +76,7 @@ class RectTool extends paper.Tool {
         } else {
             this.isBoundingBoxMode = false;
             clearSelection(this.clearSelectedItems);
+            this.commitRect();
         }
     }
     handleMouseDrag (event) {
@@ -80,25 +87,21 @@ class RectTool extends paper.Tool {
             return;
         }
 
-        if (this.rect) {
-            this.rect.remove();
-        }
-
         let dimensions = event.point.subtract(event.downPoint);
-        const rect = new paper.Rectangle(event.downPoint, event.point);
+        const baseRect = new paper.Rectangle(event.downPoint, event.point);
         if (event.modifiers.shift) {
-            rect.height = rect.width;
-            dimensions.y = event.downPoint.y > event.point.y ? -Math.abs(rect.width) : Math.abs(rect.width);
+            baseRect.height = baseRect.width;
+            dimensions.y = event.downPoint.y > event.point.y ? -Math.abs(baseRect.width) : Math.abs(baseRect.width);
         }
-        this.rect = new paper.Path.Rectangle(rect);
+        if (this.rect) this.rect.remove();
+        this.rect = new paper.Shape.Rectangle(baseRect);
+        this.rect.fillColor = this.color;
         
         if (event.modifiers.alt) {
             this.rect.position = event.downPoint;
         } else {
             this.rect.position = event.downPoint.add(dimensions.multiply(.5));
         }
-        
-        styleShape(this.rect, this.colorState);
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
@@ -110,20 +113,37 @@ class RectTool extends paper.Tool {
         }
 
         if (this.rect) {
-            if (this.rect.area < RectTool.TOLERANCE / paper.view.zoom) {
-                // Tiny rectangle created unintentionally?
+            if (Math.abs(this.rect.size.width * this.rect.size.height) < RectTool.TOLERANCE / paper.view.zoom) {
+                // Tiny shape created unintentionally?
                 this.rect.remove();
                 this.rect = null;
             } else {
+                // Hit testing does not work correctly unless the width and height are positive
+                this.rect.size = new paper.Point(Math.abs(this.rect.size.width), Math.abs(this.rect.size.height));
                 this.rect.selected = true;
                 this.setSelectedItems();
-                this.onUpdateImage();
-                this.rect = null;
             }
         }
         this.active = false;
     }
+    commitRect () {
+        if (!this.rect || !this.rect.parent) return;
+
+
+        const canvas = document.createElement('canvas');
+        canvas.width = getRaster().width;
+        canvas.height = getRaster().height;
+        const context = canvas.getContext('2d');
+        context.fillStyle = this.color;
+        drawRect(this.rect, context);
+        const context2 = getRaster().getContext('2d');
+
+        this.rect.remove();
+        this.rect = null;
+        this.onUpdateImage();
+    }
     deactivateTool () {
+        this.commitRect();
         this.boundingBoxTool.removeBoundsPath();
     }
 }

@@ -145,7 +145,78 @@ const trim = function (raster) {
     return raster.getSubRaster(getHitBounds(raster));
 };
 
+const getColor_ = (x, y, context) => {
+    const color = context.getImageData(x, y, 1, 1).data;
+    if (color[3] === 0) {
+        // Treat all transparent as the same
+        return [0, 0, 0, 0];
+    }
+    return color;
+}
+
+/**
+ * Flood fill beginning at the given point
+ * @param {!int} x The x coordinate on the context at which to begin
+ * @param {!int} y The y coordinate on the context at which to begin
+ * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @param {!Array<number>} newColor The color to replace with. A length 4 array [r, g, b, a].
+ * @param {!Array<number>} oldColor The color to replace. A length 4 array [r, g, b, a].
+ */
+const floodFillInternal_ = function (x, y, context, newColor, oldColor) {
+    const color = getColor_(x, y, context);
+    if (color[0] === newColor[0] && color[1] === newColor[1] && color[2] === newColor[2] && color[3] === newColor[3]) {
+        return;
+    } else if (color[0] === oldColor[0] && color[1] === oldColor[1] && color[2] === oldColor[2] && color[3] === oldColor[3]) {
+        context.fillRect(x, y, 1, 1);
+        floodFillInternal_(x + 1, y, context, newColor, oldColor);
+        floodFillInternal_(x, y + 1, context, newColor, oldColor);
+        floodFillInternal_(x - 1, y, context, newColor, oldColor);
+        floodFillInternal_(x, y - 1, context, newColor, oldColor);
+    }
+}
+/**
+ * Flood fill beginning at the given point
+ * @param {!int} x The x coordinate on the context at which to begin
+ * @param {!int} y The y coordinate on the context at which to begin
+ * @param {!HTMLCanvas2DContext} context The context in which to draw
+ */
+const floodFill = function (x, y, context) {
+    const oldColor = getColor_(x, y, context);
+    context.fillRect(x, y, 1, 1);
+    const newColor = getColor_(x, y, context);
+    context.fillStyle = `rgba(${oldColor[0]},${oldColor[1]},${oldColor[2]},${oldColor[3]})`;
+    context.fillRect(x, y, 1, 1);
+    context.fillStyle = `rgba(${newColor[0]},${newColor[1]},${newColor[2]},${newColor[3]})`;
+    floodFillInternal_(x, y, context, newColor, oldColor);
+}
+
+/**
+ * @param {!paper.Shape.Rectangle} rectangle The rectangle to draw to the canvas
+ * @param {!HTMLCanvas2DContext} context The context in which to draw
+ */
+const drawRect = function (rect, context) {
+    const startPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, -rect.size.height / 2));
+    const widthPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, -rect.size.height / 2));
+    const heightPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, rect.size.height / 2));
+    const endPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, rect.size.height / 2));
+    const center = rect.matrix.transform(new paper.Point());
+    forEachLinePoint(startPoint, widthPoint, (x, y) => {
+        context.fillRect(x, y, 1, 1);
+    });
+    forEachLinePoint(startPoint, heightPoint, (x, y) => {
+        context.fillRect(x, y, 1, 1);
+    });
+    forEachLinePoint(endPoint, widthPoint, (x, y) => {
+        context.fillRect(x, y, 1, 1);
+    });
+    forEachLinePoint(endPoint, heightPoint, (x, y) => {
+        context.fillRect(x, y, 1, 1);
+    });
+    floodFill(~~center.x, ~~center.y, context);
+}
+
 export {
+    drawRect,
     getBrushMark,
     getHitBounds,
     fillEllipse,
