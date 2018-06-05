@@ -93,6 +93,8 @@ const drawShearedEllipse = function (options, context) {
     stoppingY = twoRadXSquared * radiusY;
     while (stoppingX <= stoppingY) {
         if (isFilled) {
+            //context.fillRect(centerX + x - 1, centerY - y, 1, y << 1);
+            //context.fillRect(centerX - x, centerY - y, 1, y << 1);
             context.fillRect(centerX + x - 1, centerY - y - Math.round(x * shearSlope), 1, y << 1);
             context.fillRect(centerX - x, centerY - y + Math.round(x * shearSlope), 1, y << 1);
         } else {

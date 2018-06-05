@@ -130,16 +130,13 @@ class OvalTool extends paper.Tool {
     }
     /*
      * Based on paper.Matrix.decompose, but get a vertical shear instead of horizontal shear
-     * and keep radians.
+     * and keep radians. Assumes the matrix is invertible.
      */
     _decompose (matrix) {
         const a = matrix.a;
         const b = matrix.b;
         const c = matrix.c;
         const d = matrix.d;
-        if (isNaN(a) || isNaN(b) || isNaN(c) || isNaN(d) || (c === 0 && d === 0)) {
-            return null; // degenerate
-        }
         const s = Math.sqrt((c * c) + (d * d));
         return {
             rotation: Math.asin(c / s) * (d > 0 ? 1 : -1),
@@ -183,37 +180,25 @@ class OvalTool extends paper.Tool {
                 isFilled: true
             }, context);
         } else {
-            // Both shear and rotation exist.
+            // Arbitrary ellipse
             const inverse = this.oval.matrix.clone().invert();
 
             // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a transformed ellipse formula
             const A = (inverse.a * inverse.a / radiusX / radiusX) + (inverse.b * inverse.b / radiusY / radiusY);
             const B = (2 * inverse.a * inverse.c / radiusX / radiusX) + (2 * inverse.b * inverse.d / radiusY / radiusY);
             const C = (inverse.c * inverse.c / radiusX / radiusX) + (inverse.d * inverse.d / radiusY / radiusY);
-            // radiusA, radiusB and theta are properties of the transformed ellipse converted to a rotated ellipse
-            const radiusA = Math.sqrt(2) *
-                Math.sqrt(
-                    (A + C - Math.sqrt((A * A) + (B * B) - (2 * A * C) + (C * C))) /
-                    ((-B * B) + (4 * A * C))
-                );
-            const radiusB = 1 / Math.sqrt(A + C - (1 / radiusA / radiusA));
-            let temp = (A - (1 / radiusA / radiusA)) /
-                ((1 / radiusB / radiusB) - (1 / radiusA / radiusA));
-            if (temp < 0 && Math.abs(temp) < 1e-8) temp = 0; // Fix floating point issue
-            temp = Math.sqrt(temp);
-            if (Math.abs(1 - temp) < 1e-8) temp = 1; // Fix floating point issue
-            // Solve for which of the two possible thetas
-            let theta = Math.asin(temp);
-            const theta2 = -theta;
-            if (Math.abs(Math.sin(2 * theta2) - (B / ((1 / radiusA / radiusA) - (1 / radiusB / radiusB)))) < 1e-8) {
-                theta = theta2;
-            }
-            drawRotatedEllipse({
+  
+            // radiusA, radiusB, and slope are parameters of a skewed ellipse with the above formula
+            const radiusB = 1 / Math.sqrt(C);
+            const radiusA = Math.sqrt(-4 * C / ((B * B) - (4 * A * C)));
+            const slope = B / 2 / C;
+
+            drawShearedEllipse({
                 centerX: this.oval.position.x,
                 centerY: this.oval.position.y,
                 radiusX: radiusA,
                 radiusY: radiusB,
-                rotation: -theta,
+                shearSlope: slope,
                 isFilled: true
             }, context);
         }
