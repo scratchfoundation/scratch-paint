@@ -51,6 +51,46 @@ const drawShearedEllipse = function (options, context) {
         return;
     }
 
+    // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a skewed ellipse formula
+    let A = 1 / radiusX / radiusX + shearSlope / radiusY / radiusY;
+    let B = -2 * shearSlope / radiusY / radiusY;
+    let C = 1 / radiusY / radiusY;
+    //console.log(A);
+    //console.log(B);
+    //console.log(C);
+    let slope1 = (-2 * A + B) / (B + 2 * C);
+    let slope2 = (2 * A - B) / (2 * C - B);
+    // Make sure slope1 is higher
+    if (slope1 < slope2) {
+        const temp = slope2;
+        slope2 = slope1;
+        slope1 = temp;
+    }
+    let x = 0;
+    let y = radiusY;
+    let realY = radiusY;
+
+    while (slope1 > 0 ? x <= realY / slope1 : x < radiusX) {
+        if (isFilled) {
+            context.fillRect(centerX + x - 1, centerY - y, 1, y);
+            context.fillRect(centerX - x, centerY, 1, y);
+        } else {
+            context.fillRect(centerX + x - 1, centerY + y, 1, 1);
+            context.fillRect(centerX - x, centerY, 1, 1);
+        }
+        x++;
+        realY = (-B * x + Math.sqrt(B * B - 4 * (A * x * x - 1) * C)) / (2 * C);
+        //console.log(realY);
+        if (isNaN(realY)) {
+            break;
+        }
+        if (Math.abs(y - realY) > Math.abs(y - 1 - realY)) {
+            y--;
+            //console.log('yes');
+        }
+    }
+
+    /*
     // Bresenham ellipse algorithm
     const twoRadXSquared = 2 * radiusX * radiusX;
     const twoRadYSquared = 2 * radiusY * radiusY;
@@ -114,6 +154,7 @@ const drawShearedEllipse = function (options, context) {
             dy += twoRadXSquared;
         }
     }
+    */
 };
 
 /**
