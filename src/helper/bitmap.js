@@ -149,19 +149,22 @@ const getColor_ = function (x, y, context) {
     return context.getImageData(x, y, 1, 1).data;
 };
 
-const colorsMatch_ = function (color1, color2) {
-    return color1.length === 4 && color2.length === 4 &&
-        color1[0] === color2[0] && color1[1] === color2[1] &&
-        color1[2] === color2[2] && color1[3] === color2[3];
+const matchesColor_ = function (x, y, imageData, oldColor) {
+    const index = ((y * imageData.width) + x) * 4;
+    return (
+        imageData.data[index + 0] === oldColor[0] &&
+        imageData.data[index + 1] === oldColor[1] &&
+        imageData.data[index + 2] === oldColor[2] &&
+        imageData.data[index + 3 ] === oldColor[3]
+    );
 };
 
-// This function assumes that fillStyle is already set to color
-const fillPixel_ = function (x, y, color, context) {
-    if (colorsMatch_(color, [0, 0, 0, 0])) {
-        context.clearRect(x, y, 1, 1);
-    } else {
-        context.fillRect(x, y, 1, 1);
-    }
+const colorPixel_ = function (x, y, imageData, newColor) {
+    const index = ((y * imageData.width) + x) * 4;
+    imageData.data[index + 0] = newColor[0];
+    imageData.data[index + 1] = newColor[1];
+    imageData.data[index + 2] = newColor[2];
+    imageData.data[index + 3] = newColor[3];
 };
 
 /**
@@ -170,23 +173,23 @@ const fillPixel_ = function (x, y, color, context) {
  *
  * @param {!int} x The x coordinate on the context at which to begin
  * @param {!int} y The y coordinate on the context at which to begin
- * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @param {!ImageData} imageData The image data to edit
  * @param {!Array<number>} newColor The color to replace with. A length 4 array [r, g, b, a].
  * @param {!Array<number>} oldColor The color to replace. A length 4 array [r, g, b, a].
  *     This must be different from newColor.
  * @param {!Array<Array<int>>} stack The stack of pixels we need to look at
  */
-const floodFillInternal_ = function (x, y, context, newColor, oldColor, stack) {
-    while (y > 0 && colorsMatch_(getColor_(x, y - 1, context), oldColor)) {
+const floodFillInternal_ = function (x, y, imageData, newColor, oldColor, stack) {
+    while (y > 0 && matchesColor_(x, y - 1, imageData, oldColor)) {
         y--;
     }
     let lastLeftMatchedColor = false;
     let lastRightMatchedColor = false;
-    const startY = y;
-    for (; y < context.canvas.height; y++) {
-        if (!colorsMatch_(getColor_(x, y, context), oldColor)) break;
+    for (; y < imageData.height; y++) {
+        if (!matchesColor_(x, y, imageData, oldColor)) break;
+        colorPixel_(x, y, imageData, newColor);
         if (x > 0) {
-            if (colorsMatch_(getColor_(x - 1, y, context), oldColor)) {
+            if (matchesColor_(x - 1, y, imageData, oldColor)) {
                 if (!lastLeftMatchedColor) {
                     stack.push([x - 1, y]);
                     lastLeftMatchedColor = true;
@@ -195,8 +198,8 @@ const floodFillInternal_ = function (x, y, context, newColor, oldColor, stack) {
                 lastLeftMatchedColor = false;
             }
         }
-        if (x < context.canvas.width - 1) {
-            if (colorsMatch_(getColor_(x + 1, y, context), oldColor)) {
+        if (x < imageData.width - 1) {
+            if (matchesColor_(x + 1, y, imageData, oldColor)) {
                 if (!lastRightMatchedColor) {
                     stack.push([x + 1, y]);
                     lastRightMatchedColor = true;
@@ -206,7 +209,6 @@ const floodFillInternal_ = function (x, y, context, newColor, oldColor, stack) {
             }
         }
     }
-    context.fillRect(x, startY, 1, y - startY);
 };
 
 /**
@@ -216,19 +218,20 @@ const floodFillInternal_ = function (x, y, context, newColor, oldColor, stack) {
  * @param {!HTMLCanvas2DContext} context The context in which to draw
  */
 const floodFill = function (x, y, context) {
-    const oldImageData = context.getImageData(x, y, 1, 1);
-    const oldColor = oldImageData.data;
+    const oldColor = getColor_(x, y, context);
     context.fillRect(x, y, 1, 1);
-    const newColor = getColor_(x, y, context); // todo: if new color is transparent?
-    if (colorsMatch_(oldColor, newColor)) { // no-op
+    const newColor = getColor_(x, y, context);
+    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    if (matchesColor_(x, y, imageData, oldColor)) { // no-op
         return;
     }
-    context.putImageData(oldImageData, x, y); // Restore old color to avoid affecting result
+    colorPixel_(x, y, imageData, newColor); // Restore old color to avoid affecting result
     const stack = [[x, y]];
     while (stack.length) {
         const pop = stack.pop();
-        floodFillInternal_(pop[0], pop[1], context, newColor, oldColor, stack);
+        floodFillInternal_(pop[0], pop[1], imageData, newColor, oldColor, stack);
     }
+    context.putImageData(imageData, 0, 0);
 };
 
 /**
@@ -237,16 +240,16 @@ const floodFill = function (x, y, context) {
  */
 const drawRect = function (rect, context) {
     // No rotation component to matrix
-    // if (rect.matrix.b === 0 && rect.matrix.c === 0) {
-    //     const width = rect.size.width * rect.matrix.a;
-    //     const height = rect.size.height * rect.matrix.d;
-    //     context.fillRect(
-    //         ~~(rect.matrix.tx - (width / 2)),
-    //         ~~(rect.matrix.ty - (height / 2)),
-    //         ~~width,
-    //         ~~height);
-    //     return;
-    // }
+    if (rect.matrix.b === 0 && rect.matrix.c === 0) {
+        const width = rect.size.width * rect.matrix.a;
+        const height = rect.size.height * rect.matrix.d;
+        context.fillRect(
+            ~~(rect.matrix.tx - (width / 2)),
+            ~~(rect.matrix.ty - (height / 2)),
+            ~~width,
+            ~~height);
+        return;
+    }
     const startPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, -rect.size.height / 2));
     const widthPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, -rect.size.height / 2));
     const heightPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, rect.size.height / 2));
