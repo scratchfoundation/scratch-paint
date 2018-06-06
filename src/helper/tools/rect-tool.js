@@ -84,18 +84,14 @@ class RectTool extends paper.Tool {
             this.rect.remove();
         }
 
-        let dimensions = event.point.subtract(event.downPoint);
         const rect = new paper.Rectangle(event.downPoint, event.point);
         if (event.modifiers.shift) {
             rect.height = rect.width;
-            dimensions.y = event.downPoint.y > event.point.y ? -Math.abs(rect.width) : Math.abs(rect.width);
         }
         this.rect = new paper.Path.Rectangle(rect);
         
         if (event.modifiers.alt) {
             this.rect.position = event.downPoint;
-        } else {
-            this.rect.position = event.downPoint.add(dimensions.multiply(.5));
         }
         
         styleShape(this.rect, this.colorState);
