@@ -145,35 +145,70 @@ const trim = function (raster) {
     return raster.getSubRaster(getHitBounds(raster));
 };
 
-const getColor_ = (x, y, context) => {
-    const color = context.getImageData(x, y, 1, 1).data;
-    if (color[3] === 0) {
-        // Treat all transparent as the same
-        return [0, 0, 0, 0];
+const getColor_ = function (x, y, context) {
+    return context.getImageData(x, y, 1, 1).data;
+};
+
+const colorsMatch_ = function (color1, color2) {
+    return color1.length === 4 && color2.length === 4 &&
+        color1[0] === color2[0] && color1[1] === color2[1] &&
+        color1[2] === color2[2] && color1[3] === color2[3];
+};
+
+// This function assumes that fillStyle is already set to color
+const fillPixel_ = function (x, y, color, context) {
+    if (colorsMatch_(color, [0, 0, 0, 0])) {
+        context.clearRect(x, y, 1, 1);
+    } else {
+        context.fillRect(x, y, 1, 1);
     }
-    return color;
-}
+};
 
 /**
- * Flood fill beginning at the given point
+ * Flood fill beginning at the given point.
+ * Based on http://www.williammalone.com/articles/html5-canvas-javascript-paint-bucket-tool/
+ *
  * @param {!int} x The x coordinate on the context at which to begin
  * @param {!int} y The y coordinate on the context at which to begin
  * @param {!HTMLCanvas2DContext} context The context in which to draw
  * @param {!Array<number>} newColor The color to replace with. A length 4 array [r, g, b, a].
  * @param {!Array<number>} oldColor The color to replace. A length 4 array [r, g, b, a].
+ *     This must be different from newColor.
+ * @param {!Array<Array<int>>} stack The stack of pixels we need to look at
  */
-const floodFillInternal_ = function (x, y, context, newColor, oldColor) {
-    const color = getColor_(x, y, context);
-    if (color[0] === newColor[0] && color[1] === newColor[1] && color[2] === newColor[2] && color[3] === newColor[3]) {
-        return;
-    } else if (color[0] === oldColor[0] && color[1] === oldColor[1] && color[2] === oldColor[2] && color[3] === oldColor[3]) {
-        context.fillRect(x, y, 1, 1);
-        floodFillInternal_(x + 1, y, context, newColor, oldColor);
-        floodFillInternal_(x, y + 1, context, newColor, oldColor);
-        floodFillInternal_(x - 1, y, context, newColor, oldColor);
-        floodFillInternal_(x, y - 1, context, newColor, oldColor);
+const floodFillInternal_ = function (x, y, context, newColor, oldColor, stack) {
+    while (y > 0 && colorsMatch_(getColor_(x, y - 1, context), oldColor)) {
+        y--;
     }
-}
+    let lastLeftMatchedColor = false;
+    let lastRightMatchedColor = false;
+    const startY = y;
+    for (; y < context.canvas.height; y++) {
+        if (!colorsMatch_(getColor_(x, y, context), oldColor)) break;
+        if (x > 0) {
+            if (colorsMatch_(getColor_(x - 1, y, context), oldColor)) {
+                if (!lastLeftMatchedColor) {
+                    stack.push([x - 1, y]);
+                    lastLeftMatchedColor = true;
+                }
+            } else {
+                lastLeftMatchedColor = false;
+            }
+        }
+        if (x < context.canvas.width - 1) {
+            if (colorsMatch_(getColor_(x + 1, y, context), oldColor)) {
+                if (!lastRightMatchedColor) {
+                    stack.push([x + 1, y]);
+                    lastRightMatchedColor = true;
+                }
+            } else {
+                lastRightMatchedColor = false;
+            }
+        }
+    }
+    context.fillRect(x, startY, 1, y - startY);
+};
+
 /**
  * Flood fill beginning at the given point
  * @param {!int} x The x coordinate on the context at which to begin
@@ -181,20 +216,37 @@ const floodFillInternal_ = function (x, y, context, newColor, oldColor) {
  * @param {!HTMLCanvas2DContext} context The context in which to draw
  */
 const floodFill = function (x, y, context) {
-    const oldColor = getColor_(x, y, context);
+    const oldImageData = context.getImageData(x, y, 1, 1);
+    const oldColor = oldImageData.data;
     context.fillRect(x, y, 1, 1);
-    const newColor = getColor_(x, y, context);
-    context.fillStyle = `rgba(${oldColor[0]},${oldColor[1]},${oldColor[2]},${oldColor[3]})`;
-    context.fillRect(x, y, 1, 1);
-    context.fillStyle = `rgba(${newColor[0]},${newColor[1]},${newColor[2]},${newColor[3]})`;
-    floodFillInternal_(x, y, context, newColor, oldColor);
-}
+    const newColor = getColor_(x, y, context); // todo: if new color is transparent?
+    if (colorsMatch_(oldColor, newColor)) { // no-op
+        return;
+    }
+    context.putImageData(oldImageData, x, y); // Restore old color to avoid affecting result
+    const stack = [[x, y]];
+    while (stack.length) {
+        const pop = stack.pop();
+        floodFillInternal_(pop[0], pop[1], context, newColor, oldColor, stack);
+    }
+};
 
 /**
- * @param {!paper.Shape.Rectangle} rectangle The rectangle to draw to the canvas
+ * @param {!paper.Shape.Rectangle} rect The rectangle to draw to the canvas
  * @param {!HTMLCanvas2DContext} context The context in which to draw
  */
 const drawRect = function (rect, context) {
+    // No rotation component to matrix
+    // if (rect.matrix.b === 0 && rect.matrix.c === 0) {
+    //     const width = rect.size.width * rect.matrix.a;
+    //     const height = rect.size.height * rect.matrix.d;
+    //     context.fillRect(
+    //         ~~(rect.matrix.tx - (width / 2)),
+    //         ~~(rect.matrix.ty - (height / 2)),
+    //         ~~width,
+    //         ~~height);
+    //     return;
+    // }
     const startPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, -rect.size.height / 2));
     const widthPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, -rect.size.height / 2));
     const heightPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, rect.size.height / 2));
@@ -213,7 +265,7 @@ const drawRect = function (rect, context) {
         context.fillRect(x, y, 1, 1);
     });
     floodFill(~~center.x, ~~center.y, context);
-}
+};
 
 export {
     drawRect,

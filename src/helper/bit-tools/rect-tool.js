@@ -129,14 +129,13 @@ class RectTool extends paper.Tool {
     commitRect () {
         if (!this.rect || !this.rect.parent) return;
 
-
-        const canvas = document.createElement('canvas');
-        canvas.width = getRaster().width;
-        canvas.height = getRaster().height;
-        const context = canvas.getContext('2d');
+        const tmpCanvas = document.createElement('canvas');
+        tmpCanvas.width = getRaster().width;
+        tmpCanvas.height = getRaster().height;
+        const context = tmpCanvas.getContext('2d');
         context.fillStyle = this.color;
         drawRect(this.rect, context);
-        const context2 = getRaster().getContext('2d');
+        getRaster().drawImage(tmpCanvas, new paper.Point());
 
         this.rect.remove();
         this.rect = null;
