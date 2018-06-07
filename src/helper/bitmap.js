@@ -143,8 +143,12 @@ const getHitBounds = function (raster) {
     return new paper.Rectangle(left, top, right - left, bottom - top);
 };
 
-const _trim = function (raster) {
-    return raster.getSubRaster(getHitBounds(raster));
+const trim_ = function (raster) {
+    const hitBounds = getHitBounds(raster);
+    if (hitBounds.width && hitBounds.height) {
+        return raster.getSubRaster(getHitBounds(raster));
+    }
+    return null;
 };
 
 const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
@@ -171,10 +175,11 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
     // Put anti-aliased SVG into image, and dump image back into canvas
     const img = new Image();
     img.onload = () => {
-        getRaster().drawImage(
-            img,
-            new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
-
+        if (img.width && img.height) {
+            getRaster().drawImage(
+                img,
+                new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
+        }
         paper.project.activeLayer.removeChildren();
         onUpdateImage();
     };
@@ -183,7 +188,9 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
         // The problem with rasterize is that it will anti-alias.
         const raster = paper.project.activeLayer.rasterize(72, false /* insert */);
         raster.onLoad = () => {
-            getRaster().drawImage(raster.canvas, raster.bounds.topLeft);
+            if (raster.canvas.width && raster.canvas.height) {
+                getRaster().drawImage(raster.canvas, raster.bounds.topLeft);
+            }
             paper.project.activeLayer.removeChildren();
             onUpdateImage();
         };
@@ -194,11 +201,9 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
 
 const convertToVector = function (clearSelectedItems, onUpdateImage) {
     clearSelectedItems();
-    const raster = _trim(getRaster());
-    if (raster.width === 0 || raster.height === 0) {
-        raster.remove();
-    } else {
-        paper.project.activeLayer.addChild(raster);
+    const trimmedRaster = trim_(getRaster());
+    if (trimmedRaster) {
+        paper.project.activeLayer.addChild(trimmedRaster);
     }
     clearRaster();
     onUpdateImage();
