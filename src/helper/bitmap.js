@@ -142,7 +142,11 @@ const getHitBounds = function (raster) {
 };
 
 const trim = function (raster) {
-    return raster.getSubRaster(getHitBounds(raster));
+    const hitBounds = getHitBounds(raster);
+    if (hitBounds.width && hitBounds.height) {
+        return raster.getSubRaster(getHitBounds(raster));
+    }
+    return null;
 };
 
 export {
