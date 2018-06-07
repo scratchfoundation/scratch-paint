@@ -2,7 +2,6 @@ import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
 import {drawRect} from '../bitmap';
 import {getRaster} from '../layer';
-import {styleShape} from '../style-path';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -87,7 +86,7 @@ class RectTool extends paper.Tool {
             return;
         }
 
-        let dimensions = event.point.subtract(event.downPoint);
+        const dimensions = event.point.subtract(event.downPoint);
         const baseRect = new paper.Rectangle(event.downPoint, event.point);
         if (event.modifiers.shift) {
             baseRect.height = baseRect.width;
