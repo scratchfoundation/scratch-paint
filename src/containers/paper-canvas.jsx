@@ -7,13 +7,11 @@ import Formats from '../lib/format';
 import Modes from '../lib/modes';
 import log from '../log/log';
 
-import {inlineSvgFonts} from 'scratch-svg-renderer';
-
-import {trim} from '../helper/bitmap';
+import {convertToBitmap, convertToVector} from '../helper/bitmap';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
-import {clearRaster, getRaster, setupLayers, hideGuideLayers, showGuideLayers} from '../helper/layer';
+import {clearRaster, getRaster, setupLayers} from '../helper/layer';
 import {deleteSelection, getSelectedLeafItems} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, pan, resetZoom, zoomOnFixedPoint} from '../helper/view';
@@ -31,8 +29,6 @@ class PaperCanvas extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'convertToBitmap',
-            'convertToVector',
             'setCanvas',
             'importSvg',
             'handleKeyDown',
@@ -61,9 +57,9 @@ class PaperCanvas extends React.Component {
             this.switchCostume(
                 newProps.imageFormat, newProps.image, newProps.rotationCenterX, newProps.rotationCenterY);
         } else if (isVector(this.props.format) && newProps.format === Formats.BITMAP) {
-            this.convertToBitmap();
+            convertToBitmap(this.props.clearSelectedItems, this.props.onUpdateImage);
         } else if (isBitmap(this.props.format) && newProps.format === Formats.VECTOR) {
-            this.convertToVector();
+            convertToVector(this.props.clearSelectedItems, this.props.onUpdateImage);
         }
     }
     componentWillUnmount () {
@@ -81,60 +77,6 @@ class PaperCanvas extends React.Component {
                 this.props.setSelectedItems();
             }
         }
-    }
-    convertToBitmap () {
-        // @todo if the active layer contains only rasters, drawing them directly to the raster layer
-        // would be more efficient.
-
-        // Export svg
-        const guideLayers = hideGuideLayers(true /* includeRaster */);
-        const bounds = paper.project.activeLayer.bounds;
-        const svg = paper.project.exportSVG({
-            bounds: 'content',
-            matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
-        });
-        showGuideLayers(guideLayers);
-
-        // Get rid of anti-aliasing
-        // @todo get crisp text?
-        svg.setAttribute('shape-rendering', 'crispEdges');
-        inlineSvgFonts(svg);
-        const svgString = (new XMLSerializer()).serializeToString(svg);
-
-        // Put anti-aliased SVG into image, and dump image back into canvas
-        const img = new Image();
-        img.onload = () => {
-            if (img.width && img.height) {
-                getRaster().drawImage(
-                    img,
-                    new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
-            }
-            paper.project.activeLayer.removeChildren();
-            this.props.onUpdateImage();
-        };
-        img.onerror = () => {
-            // Fallback if browser does not support SVG data URIs in images.
-            // The problem with rasterize is that it will anti-alias.
-            const raster = paper.project.activeLayer.rasterize(72, false /* insert */);
-            raster.onLoad = () => {
-                if (raster.canvas.width && raster.canvas.height) {
-                    getRaster().drawImage(raster.canvas, raster.bounds.topLeft);
-                }
-                paper.project.activeLayer.removeChildren();
-                this.props.onUpdateImage();
-            };
-        };
-        // Hash tags will break image loading without being encoded first
-        img.src = `data:image/svg+xml;utf8,${encodeURIComponent(svgString)}`;
-    }
-    convertToVector () {
-        this.props.clearSelectedItems();
-        const trimmedRaster = trim(getRaster());
-        if (trimmedRaster) {
-            paper.project.activeLayer.addChild(trimmedRaster);
-        }
-        clearRaster();
-        this.props.onUpdateImage();
     }
     switchCostume (format, image, rotationCenterX, rotationCenterY) {
         for (const layer of paper.project.layers) {
