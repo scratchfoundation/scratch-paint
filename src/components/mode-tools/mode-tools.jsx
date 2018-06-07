@@ -89,8 +89,6 @@ const ModeToolsComponent = props => {
     case Modes.BIT_BRUSH:
         /* falls through */
     case Modes.BIT_LINE:
-        /* falls through */
-    case Modes.BIT_RECT:
     {
         const currentIcon = isVector(props.format) ? brushIcon :
             props.mode === Modes.BIT_LINE ? bitLineIcon : bitBrushIcon;
