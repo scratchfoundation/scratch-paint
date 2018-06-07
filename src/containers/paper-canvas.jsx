@@ -104,10 +104,11 @@ class PaperCanvas extends React.Component {
         // Put anti-aliased SVG into image, and dump image back into canvas
         const img = new Image();
         img.onload = () => {
-            getRaster().drawImage(
-                img,
-                new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
-
+            if (img.width && img.height) {
+                getRaster().drawImage(
+                    img,
+                    new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
+            }
             paper.project.activeLayer.removeChildren();
             this.props.onUpdateImage();
         };
@@ -116,7 +117,9 @@ class PaperCanvas extends React.Component {
             // The problem with rasterize is that it will anti-alias.
             const raster = paper.project.activeLayer.rasterize(72, false /* insert */);
             raster.onLoad = () => {
-                getRaster().drawImage(raster.canvas, raster.bounds.topLeft);
+                if (raster.canvas.width && raster.canvas.height) {
+                    getRaster().drawImage(raster.canvas, raster.bounds.topLeft);
+                }
                 paper.project.activeLayer.removeChildren();
                 this.props.onUpdateImage();
             };
@@ -126,11 +129,11 @@ class PaperCanvas extends React.Component {
     }
     convertToVector () {
         this.props.clearSelectedItems();
-        const raster = trim(getRaster());
-        if (raster.width === 0 || raster.height === 0) {
-            raster.remove();
+        const trimmedRaster = trim(getRaster());
+        if (trimmedRaster) {
+            paper.project.activeLayer.addChild(trimmedRaster);
         } else {
-            paper.project.activeLayer.addChild(raster);
+            getRaster().remove();
         }
         clearRaster();
         this.props.onUpdateImage();
