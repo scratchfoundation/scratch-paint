@@ -132,8 +132,6 @@ class PaperCanvas extends React.Component {
         const trimmedRaster = trim(getRaster());
         if (trimmedRaster) {
             paper.project.activeLayer.addChild(trimmedRaster);
-        } else {
-            getRaster().remove();
         }
         clearRaster();
         this.props.onUpdateImage();
