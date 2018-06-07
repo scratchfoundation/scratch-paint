@@ -1,4 +1,6 @@
 import paper from '@scratch/paper';
+import {clearRaster, getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
+import {inlineSvgFonts} from 'scratch-svg-renderer';
 
 const forEachLinePoint = function (point1, point2, callback) {
     // Bresenham line algorithm
@@ -141,14 +143,77 @@ const getHitBounds = function (raster) {
     return new paper.Rectangle(left, top, right - left, bottom - top);
 };
 
-const trim = function (raster) {
-    return raster.getSubRaster(getHitBounds(raster));
+const trim_ = function (raster) {
+    const hitBounds = getHitBounds(raster);
+    if (hitBounds.width && hitBounds.height) {
+        return raster.getSubRaster(getHitBounds(raster));
+    }
+    return null;
+};
+
+const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
+    // @todo if the active layer contains only rasters, drawing them directly to the raster layer
+    // would be more efficient.
+
+    clearSelectedItems();
+
+    // Export svg
+    const guideLayers = hideGuideLayers(true /* includeRaster */);
+    const bounds = paper.project.activeLayer.bounds;
+    const svg = paper.project.exportSVG({
+        bounds: 'content',
+        matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
+    });
+    showGuideLayers(guideLayers);
+
+    // Get rid of anti-aliasing
+    // @todo get crisp text?
+    svg.setAttribute('shape-rendering', 'crispEdges');
+    inlineSvgFonts(svg);
+    const svgString = (new XMLSerializer()).serializeToString(svg);
+
+    // Put anti-aliased SVG into image, and dump image back into canvas
+    const img = new Image();
+    img.onload = () => {
+        if (img.width && img.height) {
+            getRaster().drawImage(
+                img,
+                new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
+        }
+        paper.project.activeLayer.removeChildren();
+        onUpdateImage();
+    };
+    img.onerror = () => {
+        // Fallback if browser does not support SVG data URIs in images.
+        // The problem with rasterize is that it will anti-alias.
+        const raster = paper.project.activeLayer.rasterize(72, false /* insert */);
+        raster.onLoad = () => {
+            if (raster.canvas.width && raster.canvas.height) {
+                getRaster().drawImage(raster.canvas, raster.bounds.topLeft);
+            }
+            paper.project.activeLayer.removeChildren();
+            onUpdateImage();
+        };
+    };
+    // Hash tags will break image loading without being encoded first
+    img.src = `data:image/svg+xml;utf8,${encodeURIComponent(svgString)}`;
+};
+
+const convertToVector = function (clearSelectedItems, onUpdateImage) {
+    clearSelectedItems();
+    const trimmedRaster = trim_(getRaster());
+    if (trimmedRaster) {
+        paper.project.activeLayer.addChild(trimmedRaster);
+    }
+    clearRaster();
+    onUpdateImage();
 };
 
 export {
+    convertToBitmap,
+    convertToVector,
     getBrushMark,
     getHitBounds,
     fillEllipse,
-    forEachLinePoint,
-    trim
+    forEachLinePoint
 };
