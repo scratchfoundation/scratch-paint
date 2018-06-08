@@ -276,26 +276,78 @@ const floodFillInternal_ = function (x, y, imageData, newColor, oldColor, stack)
 };
 
 /**
- * Flood fill beginning at the given point
+ * Function to get the params from the context to use for flood filling
  * @param {!int} x The x coordinate on the context at which to begin
  * @param {!int} y The y coordinate on the context at which to begin
- * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @param {!HTMLCanvas2DContext} context The canvas context
+ * @return {{HTMLImageData, oldColor, newColor}} image data of context and color,
+ *     a length 4 array
  */
-const floodFill = function (x, y, context) {
+const getFillStyleParams_ = function (x, y, context) {
     const oldColor = getColor_(x, y, context);
     context.fillRect(x, y, 1, 1);
     const newColor = getColor_(x, y, context);
     const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-    if (matchesColor_(x, y, imageData, oldColor)) { // no-op
-        return;
+    colorPixel_(x, y, imageData, oldColor); // Restore old color to avoid affecting result
+    return {
+        imageData,
+        oldColor,
+        newColor
+    };
+};
+
+/**
+ * Flood fill beginning at the given point
+ * @param {!number} x The x coordinate on the context at which to begin
+ * @param {!number} y The y coordinate on the context at which to begin
+ * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @return {boolean} True if image changed, false otherwise
+ */
+const floodFill = function (x, y, context) {
+    x = ~~x;
+    y = ~~y;
+    const {imageData, oldColor, newColor} = getFillStyleParams_(x, y, context);
+    if (oldColor[0] === newColor[0] &&
+            oldColor[1] === newColor[1] &&
+            oldColor[2] === newColor[2] &&
+            oldColor[3] === newColor[3]) { // no-op
+        return false;
     }
-    colorPixel_(x, y, imageData, newColor); // Restore old color to avoid affecting result
     const stack = [[x, y]];
     while (stack.length) {
         const pop = stack.pop();
         floodFillInternal_(pop[0], pop[1], imageData, newColor, oldColor, stack);
     }
     context.putImageData(imageData, 0, 0);
+    return true;
+};
+
+/**
+ * Replace all instances of the color at the given point
+ * @param {!number} x The x coordinate on the context of the start color
+ * @param {!number} y The y coordinate on the context of the start color
+ * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @return {boolean} True if image changed, false otherwise
+ */
+const floodFillAll = function (x, y, context) {
+    x = ~~x;
+    y = ~~y;
+    const {imageData, oldColor, newColor} = getFillStyleParams_(x, y, context);
+    if (oldColor[0] === newColor[0] &&
+            oldColor[1] === newColor[1] &&
+            oldColor[2] === newColor[2] &&
+            oldColor[3] === newColor[3]) { // no-op
+        return false;
+    }
+    for (let i = 0; i < imageData.width; i++) {
+        for (let j = 0; j < imageData.height; j++) {
+            if (matchesColor_(i, j, imageData, oldColor)) {
+                colorPixel_(i, j, imageData, newColor);
+            }
+        }
+    }
+    context.putImageData(imageData, 0, 0);
+    return true;
 };
 
 /**
@@ -338,6 +390,8 @@ export {
     convertToBitmap,
     convertToVector,
     drawRect,
+    floodFill,
+    floodFillAll,
     getBrushMark,
     getHitBounds,
     fillEllipse,
