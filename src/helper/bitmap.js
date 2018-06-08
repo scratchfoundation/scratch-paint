@@ -276,37 +276,34 @@ const floodFillInternal_ = function (x, y, imageData, newColor, oldColor, stack)
 };
 
 /**
- * Function to get the params from the context to use for flood filling
- * @param {!int} x The x coordinate on the context at which to begin
- * @param {!int} y The y coordinate on the context at which to begin
- * @param {!HTMLCanvas2DContext} context The canvas context
- * @return {{HTMLImageData, oldColor, newColor}} image data of context and color,
- *     a length 4 array
+ * Given a fill style string, get the color
+ * @param {string} fillStyleString the fill style
+ * @return {Array<int>} Color, a length 4 array
  */
-const getFillStyleParams_ = function (x, y, context) {
-    const oldColor = getColor_(x, y, context);
-    context.fillRect(x, y, 1, 1);
-    const newColor = getColor_(x, y, context);
-    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-    colorPixel_(x, y, imageData, oldColor); // Restore old color to avoid affecting result
-    return {
-        imageData,
-        oldColor,
-        newColor
-    };
+const fillStyleToColor_ = function (fillStyleString) {
+    const tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = 1;
+    tmpCanvas.height = 1;
+    const context = tmpCanvas.getContext('2d');
+    context.fillStyle = fillStyleString;
+    context.fillRect(0, 0, 1, 1);
+    return context.getImageData(0, 0, 1, 1).data;
 };
 
 /**
  * Flood fill beginning at the given point
  * @param {!number} x The x coordinate on the context at which to begin
  * @param {!number} y The y coordinate on the context at which to begin
+ * @param {!string} color A color string, which would go into context.fillStyle
  * @param {!HTMLCanvas2DContext} context The context in which to draw
  * @return {boolean} True if image changed, false otherwise
  */
-const floodFill = function (x, y, context) {
+const floodFill = function (x, y, color, context) {
     x = ~~x;
     y = ~~y;
-    const {imageData, oldColor, newColor} = getFillStyleParams_(x, y, context);
+    const newColor = fillStyleToColor_(color);
+    const oldColor = getColor_(x, y, context);
+    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
     if (oldColor[0] === newColor[0] &&
             oldColor[1] === newColor[1] &&
             oldColor[2] === newColor[2] &&
@@ -326,13 +323,16 @@ const floodFill = function (x, y, context) {
  * Replace all instances of the color at the given point
  * @param {!number} x The x coordinate on the context of the start color
  * @param {!number} y The y coordinate on the context of the start color
+ * @param {!string} color A color string, which would go into context.fillStyle
  * @param {!HTMLCanvas2DContext} context The context in which to draw
  * @return {boolean} True if image changed, false otherwise
  */
-const floodFillAll = function (x, y, context) {
+const floodFillAll = function (x, y, color, context) {
     x = ~~x;
     y = ~~y;
-    const {imageData, oldColor, newColor} = getFillStyleParams_(x, y, context);
+    const newColor = fillStyleToColor_(color);
+    const oldColor = getColor_(x, y, context);
+    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
     if (oldColor[0] === newColor[0] &&
             oldColor[1] === newColor[1] &&
             oldColor[2] === newColor[2] &&
@@ -383,7 +383,7 @@ const drawRect = function (rect, context) {
     forEachLinePoint(endPoint, heightPoint, (x, y) => {
         context.fillRect(x, y, 1, 1);
     });
-    floodFill(~~center.x, ~~center.y, context);
+    floodFill(~~center.x, ~~center.y, context.fillStyle, context);
 };
 
 export {

@@ -24,23 +24,22 @@ class FillTool extends paper.Tool {
         this.active = false;
     }
     setColor (color) {
-        this.color = color;
+        this.color = color ? color : 'rgba(0,0,0,0)';
     }
     handleMouseDown (event) {
         const context = getRaster().getContext('2d');
-        context.fillStyle = this.color;
         if (event.event.shiftKey) {
-            this.changed = floodFillAll(event.point.x, event.point.y, context) || this.changed;
+            this.changed = floodFillAll(event.point.x, event.point.y, this.color, context) || this.changed;
         } else {
-            this.changed = floodFill(event.point.x, event.point.y, context) || this.changed;
+            this.changed = floodFill(event.point.x, event.point.y, this.color, context) || this.changed;
         }
     }
     handleMouseDrag (event) {
         const context = getRaster().getContext('2d');
         if (event.event.shiftKey) {
-            this.changed = floodFillAll(event.point.x, event.point.y, context) || this.changed;
+            this.changed = floodFillAll(event.point.x, event.point.y, this.color, context) || this.changed;
         } else {
-            this.changed = floodFill(event.point.x, event.point.y, context) || this.changed;
+            this.changed = floodFill(event.point.x, event.point.y, this.color, context) || this.changed;
         }
     }
     handleMouseUp () {
