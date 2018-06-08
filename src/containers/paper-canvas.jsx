@@ -253,12 +253,11 @@ PaperCanvas.propTypes = {
     clearPasteOffset: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     clearUndo: PropTypes.func.isRequired,
-    format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
     image: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.instanceOf(HTMLImageElement)
     ]),
-    imageFormat: PropTypes.string, // The incoming image's data format, used during import
+    imageFormat: PropTypes.string, // The incoming image's data format, used during import. The user could switch this.
     imageId: PropTypes.string,
     mode: PropTypes.oneOf(Object.keys(Modes)),
     onUpdateImage: PropTypes.func.isRequired,
