@@ -61,6 +61,9 @@ class RectTool extends paper.Tool {
                 selectedItems && selectedItems.length === 1 && selectedItems[0].shape === 'rectangle') {
             // Infer that an undo occurred and get back the active rect
             this.rect = selectedItems[0];
+        } else if (this.rect && this.rect.parent && !this.rect.selected) {
+            // Rectangle got deselected
+            this.commitRect();
         }
     }
     setColor (color) {

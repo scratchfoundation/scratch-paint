@@ -7,7 +7,6 @@ import Formats from '../lib/format';
 import Modes from '../lib/modes';
 import log from '../log/log';
 
-import {convertToBitmap, convertToVector} from '../helper/bitmap';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
@@ -20,8 +19,6 @@ import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
 import {updateViewBounds} from '../reducers/view-bounds';
 import {changeFormat} from '../reducers/format';
-
-import {isVector, isBitmap} from '../lib/format';
 
 import styles from './paper-canvas.css';
 
@@ -56,10 +53,6 @@ class PaperCanvas extends React.Component {
         if (this.props.imageId !== newProps.imageId) {
             this.switchCostume(
                 newProps.imageFormat, newProps.image, newProps.rotationCenterX, newProps.rotationCenterY);
-        } else if (isVector(this.props.format) && newProps.format === Formats.BITMAP) {
-            convertToBitmap(this.props.clearSelectedItems, this.props.onUpdateImage);
-        } else if (isBitmap(this.props.format) && newProps.format === Formats.VECTOR) {
-            convertToVector(this.props.clearSelectedItems, this.props.onUpdateImage);
         }
     }
     componentWillUnmount () {
