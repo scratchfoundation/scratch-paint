@@ -97,17 +97,14 @@ const ModeToolsComponent = props => {
         const currentMessage = props.mode === Modes.BIT_LINE ? messages.lineSize : messages.brushSize;
         return (
             <div className={classNames(props.className, styles.modeTools)}>
-                {props.mode === Modes.BIT_RECT ?
-                    null :
-                    <div>
-                        <img
-                            alt={props.intl.formatMessage(currentMessage)}
-                            className={styles.modeToolsIcon}
-                            draggable={false}
-                            src={currentIcon}
-                        />
-                    </div>
-                }
+                <div>
+                    <img
+                        alt={props.intl.formatMessage(currentMessage)}
+                        className={styles.modeToolsIcon}
+                        draggable={false}
+                        src={currentIcon}
+                    />
+                </div>
                 <LiveInput
                     range
                     small
