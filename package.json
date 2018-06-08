@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@scratch/paper": "0.11.20180523194304",
-    "classnames": "2.2.5",
+    "classnames": "2.2.6",
     "keymirror": "0.1.1",
     "lodash.bindall": "4.4.0",
     "minilog": "3.1.0",
