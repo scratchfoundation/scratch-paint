@@ -209,9 +209,135 @@ const convertToVector = function (clearSelectedItems, onUpdateImage) {
     onUpdateImage();
 };
 
+const getColor_ = function (x, y, context) {
+    return context.getImageData(x, y, 1, 1).data;
+};
+
+const matchesColor_ = function (x, y, imageData, oldColor) {
+    const index = ((y * imageData.width) + x) * 4;
+    return (
+        imageData.data[index + 0] === oldColor[0] &&
+        imageData.data[index + 1] === oldColor[1] &&
+        imageData.data[index + 2] === oldColor[2] &&
+        imageData.data[index + 3 ] === oldColor[3]
+    );
+};
+
+const colorPixel_ = function (x, y, imageData, newColor) {
+    const index = ((y * imageData.width) + x) * 4;
+    imageData.data[index + 0] = newColor[0];
+    imageData.data[index + 1] = newColor[1];
+    imageData.data[index + 2] = newColor[2];
+    imageData.data[index + 3] = newColor[3];
+};
+
+/**
+ * Flood fill beginning at the given point.
+ * Based on http://www.williammalone.com/articles/html5-canvas-javascript-paint-bucket-tool/
+ *
+ * @param {!int} x The x coordinate on the context at which to begin
+ * @param {!int} y The y coordinate on the context at which to begin
+ * @param {!ImageData} imageData The image data to edit
+ * @param {!Array<number>} newColor The color to replace with. A length 4 array [r, g, b, a].
+ * @param {!Array<number>} oldColor The color to replace. A length 4 array [r, g, b, a].
+ *     This must be different from newColor.
+ * @param {!Array<Array<int>>} stack The stack of pixels we need to look at
+ */
+const floodFillInternal_ = function (x, y, imageData, newColor, oldColor, stack) {
+    while (y > 0 && matchesColor_(x, y - 1, imageData, oldColor)) {
+        y--;
+    }
+    let lastLeftMatchedColor = false;
+    let lastRightMatchedColor = false;
+    for (; y < imageData.height; y++) {
+        if (!matchesColor_(x, y, imageData, oldColor)) break;
+        colorPixel_(x, y, imageData, newColor);
+        if (x > 0) {
+            if (matchesColor_(x - 1, y, imageData, oldColor)) {
+                if (!lastLeftMatchedColor) {
+                    stack.push([x - 1, y]);
+                    lastLeftMatchedColor = true;
+                }
+            } else {
+                lastLeftMatchedColor = false;
+            }
+        }
+        if (x < imageData.width - 1) {
+            if (matchesColor_(x + 1, y, imageData, oldColor)) {
+                if (!lastRightMatchedColor) {
+                    stack.push([x + 1, y]);
+                    lastRightMatchedColor = true;
+                }
+            } else {
+                lastRightMatchedColor = false;
+            }
+        }
+    }
+};
+
+/**
+ * Flood fill beginning at the given point
+ * @param {!int} x The x coordinate on the context at which to begin
+ * @param {!int} y The y coordinate on the context at which to begin
+ * @param {!HTMLCanvas2DContext} context The context in which to draw
+ */
+const floodFill = function (x, y, context) {
+    const oldColor = getColor_(x, y, context);
+    context.fillRect(x, y, 1, 1);
+    const newColor = getColor_(x, y, context);
+    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    if (matchesColor_(x, y, imageData, oldColor)) { // no-op
+        return;
+    }
+    colorPixel_(x, y, imageData, newColor); // Restore old color to avoid affecting result
+    const stack = [[x, y]];
+    while (stack.length) {
+        const pop = stack.pop();
+        floodFillInternal_(pop[0], pop[1], imageData, newColor, oldColor, stack);
+    }
+    context.putImageData(imageData, 0, 0);
+};
+
+/**
+ * @param {!paper.Shape.Rectangle} rect The rectangle to draw to the canvas
+ * @param {!HTMLCanvas2DContext} context The context in which to draw
+ */
+const drawRect = function (rect, context) {
+    // No rotation component to matrix
+    if (rect.matrix.b === 0 && rect.matrix.c === 0) {
+        const width = rect.size.width * rect.matrix.a;
+        const height = rect.size.height * rect.matrix.d;
+        context.fillRect(
+            ~~(rect.matrix.tx - (width / 2)),
+            ~~(rect.matrix.ty - (height / 2)),
+            ~~width,
+            ~~height);
+        return;
+    }
+    const startPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, -rect.size.height / 2));
+    const widthPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, -rect.size.height / 2));
+    const heightPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, rect.size.height / 2));
+    const endPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, rect.size.height / 2));
+    const center = rect.matrix.transform(new paper.Point());
+    forEachLinePoint(startPoint, widthPoint, (x, y) => {
+        context.fillRect(x, y, 1, 1);
+    });
+    forEachLinePoint(startPoint, heightPoint, (x, y) => {
+        context.fillRect(x, y, 1, 1);
+    });
+    forEachLinePoint(endPoint, widthPoint, (x, y) => {
+        context.fillRect(x, y, 1, 1);
+    });
+    forEachLinePoint(endPoint, heightPoint, (x, y) => {
+        context.fillRect(x, y, 1, 1);
+    });
+    floodFill(~~center.x, ~~center.y, context);
+};
+
 export {
     convertToBitmap,
     convertToVector,
+    drawRect,
     getBrushMark,
     getHitBounds,
     fillEllipse,
