@@ -1,9 +1,11 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
+import {isBitmap} from '../../lib/format';
 import {clearSelection, getSelectedLeafItems} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 import {hoverBounds} from '../guides';
+import {getRaster} from '../layer';
 
 /**
  * Tool for adding text. Text elements have limited editability; they can't be reshaped,
@@ -100,6 +102,12 @@ class TextTool extends paper.Tool {
      */
     onSelectionChanged (selectedItems) {
         this.boundingBoxTool.onSelectionChanged(selectedItems);
+        if ((!this.textBox || !this.textBox.parent) &&
+                selectedItems && selectedItems.length === 1 && selectedItems[0] instanceof paper.PointText) {
+            // Infer that an undo occurred and get back the active text
+            this.textBox = selectedItems[0];
+            this.mode = TextTool.SELECT_MODE;
+        }
     }
     setFont (font) {
         this.font = font;
@@ -117,6 +125,9 @@ class TextTool extends paper.Tool {
     }
     // Allow other tools to cancel text edit mode
     onTextEditCancelled () {
+        if (this.mode !== TextTool.TEXT_EDIT_MODE) {
+            return;
+        }
         this.endTextEdit();
         if (this.textBox) {
             this.mode = TextTool.SELECT_MODE;
@@ -143,6 +154,9 @@ class TextTool extends paper.Tool {
     setColorState (colorState) {
         this.colorState = colorState;
     }
+    setFormat (format) {
+        this.format = format;
+    }
     handleMouseMove (event) {
         const hitResults = paper.project.hitTestAll(event.point, this.getTextEditHitOptions());
         if (hitResults.length) {
@@ -156,7 +170,6 @@ class TextTool extends paper.Tool {
         this.active = true;
 
         const lastMode = this.mode;
-
         // Check if double clicked
         let doubleClicked = false;
         if (this.lastEvent) {
@@ -168,14 +181,13 @@ class TextTool extends paper.Tool {
         }
         this.lastEvent = event;
 
-        const doubleClickHitTest = paper.project.hitTest(event.point, this.getBoundingBoxHitOptions());
         if (doubleClicked &&
                 this.mode === TextTool.SELECT_MODE &&
-                doubleClickHitTest) {
+                this.textBox.hitTest(event.point)) {
             // Double click in select mode moves you to text edit mode
             clearSelection(this.clearSelectedItems);
-            this.textBox = doubleClickHitTest.item;
             this.beginTextEdit(this.textBox.content, this.textBox.matrix);
+            return;
         } else if (
             this.boundingBoxTool.onMouseDown(
                 event, false /* clone */, false /* multiselect */, this.getBoundingBoxHitOptions())) {
@@ -185,6 +197,9 @@ class TextTool extends paper.Tool {
 
         // We clicked away from the item, so end the current mode
         if (lastMode === TextTool.SELECT_MODE) {
+            if (isBitmap(this.format)) {
+                this.commitText();
+            }
             clearSelection(this.clearSelectedItems);
             this.mode = null;
         } else if (lastMode === TextTool.TEXT_EDIT_MODE) {
@@ -341,12 +356,30 @@ class TextTool extends paper.Tool {
             this.onUpdateImage();
         }
     }
+    commitText () {
+        if (!this.textBox || !this.textBox.parent) return;
+
+        // @todo get crisp text https://github.com/LLK/scratch-paint/issues/508
+        const textRaster = this.textBox.rasterize();
+        this.textBox.remove();
+        this.textBox = null;
+        textRaster.onLoad = () => {
+            getRaster().drawImage(
+                textRaster.canvas,
+                new paper.Point(Math.floor(textRaster.bounds.x), Math.floor(textRaster.bounds.y))
+            );
+            this.onUpdateImage();
+        };
+    }
     deactivateTool () {
         if (this.textBox && this.textBox.content.trim() === '') {
             this.textBox.remove();
             this.textBox = null;
         }
         this.endTextEdit();
+        if (isBitmap(this.format)) {
+            this.commitText();
+        }
         this.boundingBoxTool.removeBoundsPath();
     }
 }

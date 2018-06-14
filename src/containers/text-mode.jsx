@@ -5,6 +5,8 @@ import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Fonts from '../lib/fonts';
 import Modes from '../lib/modes';
+import {isBitmap} from '../lib/format';
+import Formats from '../lib/format';
 import {MIXED} from '../helper/style-path';
 
 import {changeFont} from '../reducers/font';
@@ -17,6 +19,7 @@ import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
 import TextTool from '../helper/tools/text-tool';
 import TextModeComponent from '../components/text-mode/text-mode.jsx';
+import BitTextModeComponent from '../components/bit-text-mode/bit-text-mode.jsx';
 
 class TextMode extends React.Component {
     constructor (props) {
@@ -47,6 +50,9 @@ class TextMode extends React.Component {
         if (this.tool && nextProps.font !== this.props.font) {
             this.tool.setFont(nextProps.font);
         }
+        if (this.tool && nextProps.format !== this.props.format) {
+            this.tool.setFormat(nextProps.format);
+        }
 
         if (nextProps.isTextModeActive && !this.props.isTextModeActive) {
             this.activateTool();
@@ -55,7 +61,8 @@ class TextMode extends React.Component {
         }
     }
     shouldComponentUpdate (nextProps) {
-        return nextProps.isTextModeActive !== this.props.isTextModeActive;
+        return nextProps.isTextModeActive !== this.props.isTextModeActive ||
+            nextProps.format !== this.props.format;
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
@@ -90,6 +97,7 @@ class TextMode extends React.Component {
         );
         this.tool.setColorState(this.props.colorState);
         this.tool.setFont(this.props.font);
+        this.tool.setFormat(this.props.format);
         this.tool.activate();
     }
     deactivateTool () {
@@ -99,10 +107,15 @@ class TextMode extends React.Component {
     }
     render () {
         return (
-            <TextModeComponent
-                isSelected={this.props.isTextModeActive}
-                onMouseDown={this.props.handleMouseDown}
-            />
+            isBitmap(this.props.format) ?
+                <BitTextModeComponent
+                    isSelected={this.props.isTextModeActive}
+                    onMouseDown={this.props.handleChangeModeBitText}
+                /> :
+                <TextModeComponent
+                    isSelected={this.props.isTextModeActive}
+                    onMouseDown={this.props.handleChangeModeText}
+                />
         );
     }
 }
@@ -116,7 +129,9 @@ TextMode.propTypes = {
         strokeWidth: PropTypes.number
     }).isRequired,
     font: PropTypes.string,
-    handleMouseDown: PropTypes.func.isRequired,
+    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
+    handleChangeModeBitText: PropTypes.func.isRequired,
+    handleChangeModeText: PropTypes.func.isRequired,
     isTextModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
@@ -132,7 +147,10 @@ TextMode.propTypes = {
 const mapStateToProps = state => ({
     colorState: state.scratchPaint.color,
     font: state.scratchPaint.font,
-    isTextModeActive: state.scratchPaint.mode === Modes.TEXT,
+    format: state.scratchPaint.format,
+    isTextModeActive: isBitmap(state.scratchPaint.format) ?
+        state.scratchPaint.mode === Modes.BIT_TEXT :
+        state.scratchPaint.mode === Modes.TEXT,
     selectedItems: state.scratchPaint.selectedItems,
     textEditTarget: state.scratchPaint.textEditTarget,
     viewBounds: state.scratchPaint.viewBounds
@@ -144,14 +162,17 @@ const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
+    handleChangeModeBitText: () => {
+        dispatch(changeMode(Modes.BIT_TEXT));
+    },
+    handleChangeModeText: () => {
+        dispatch(changeMode(Modes.TEXT));
+    },
     setSelectedItems: () => {
         dispatch(setSelectedItems(getSelectedLeafItems()));
     },
     setTextEditTarget: targetId => {
         dispatch(setTextEditTarget(targetId));
-    },
-    handleMouseDown: () => {
-        dispatch(changeMode(Modes.TEXT));
     },
     onChangeFillColor: fillColor => {
         dispatch(changeFillColor(fillColor));

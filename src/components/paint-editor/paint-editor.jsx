@@ -10,7 +10,6 @@ import BitBrushMode from '../../containers/bit-brush-mode.jsx';
 import BitLineMode from '../../containers/bit-line-mode.jsx';
 import BitOvalMode from '../../components/bit-oval-mode/bit-oval-mode.jsx';
 import BitRectMode from '../../containers/bit-rect-mode.jsx';
-import BitTextMode from '../../containers/bit-text-mode.jsx';
 import BitFillMode from '../../components/bit-fill-mode/bit-fill-mode.jsx';
 import BitEraserMode from '../../components/bit-eraser-mode/bit-eraser-mode.jsx';
 import BitSelectMode from '../../components/bit-select-mode/bit-select-mode.jsx';
@@ -180,7 +179,7 @@ const PaintEditorComponent = props => (
                     <BitRectMode
                         onUpdateImage={props.onUpdateImage}
                     />
-                    <BitTextMode
+                    <TextMode
                         textArea={props.textArea}
                         onUpdateImage={props.onUpdateImage}
                     />

@@ -167,7 +167,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
     showGuideLayers(guideLayers);
 
     // Get rid of anti-aliasing
-    // @todo get crisp text?
+    // @todo get crisp text https://github.com/LLK/scratch-paint/issues/508
     svg.setAttribute('shape-rendering', 'crispEdges');
     inlineSvgFonts(svg);
     const svgString = (new XMLSerializer()).serializeToString(svg);
