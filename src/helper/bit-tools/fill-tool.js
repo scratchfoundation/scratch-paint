@@ -2,6 +2,7 @@ import paper from '@scratch/paper';
 import {floodFill, floodFillAll} from '../bitmap';
 import {getRaster} from '../layer';
 
+const TRANSPARENT = 'rgba(0,0,0,0)';
 /**
  * Tool for drawing fills.
  */
@@ -24,7 +25,8 @@ class FillTool extends paper.Tool {
         this.active = false;
     }
     setColor (color) {
-        this.color = color ? color : 'rgba(0,0,0,0)';
+        // Null color means transparent because that is the standard in vector
+        this.color = color ? color : TRANSPARENT;
     }
     handleMouseDown (event) {
         const context = getRaster().getContext('2d');
