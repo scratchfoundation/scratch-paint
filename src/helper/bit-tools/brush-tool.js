@@ -30,16 +30,15 @@ class BrushTool extends paper.Tool {
     }
     setColor (color) {
         this.color = color;
+        this.tmpCanvas = getBrushMark(this.size, this.color, this.isEraser);
     }
     setBrushSize (size) {
         // For performance, make sure this is an integer
         this.size = Math.max(1, ~~size);
+        this.tmpCanvas = getBrushMark(this.size, this.color, this.isEraser);
     }
     // Draw a brush mark at the given point
     draw (x, y) {
-        if (!this.tmpCanvas) {
-            this.tmpCanvas = getBrushMark(this.size, this.color);
-        }
         const roundedUpRadius = Math.ceil(this.size / 2);
         const context = getRaster().getContext('2d');
         if (this.isEraser) {
