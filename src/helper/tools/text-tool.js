@@ -133,6 +133,8 @@ class TextTool extends paper.Tool {
             this.mode = TextTool.SELECT_MODE;
             this.textBox.selected = true;
             this.setSelectedItems();
+            // Finished editing a textbox, save undo state
+            this.onUpdateImage();
         }
     }
     /**
@@ -279,7 +281,10 @@ class TextTool extends paper.Tool {
     handleTextInput (event) {
         // Save undo state if you paused typing for long enough.
         if (this.lastTypeEvent && event.timeStamp - this.lastTypeEvent.timeStamp > TextTool.TYPING_TIMEOUT_MILLIS) {
+            // Select the textbox so that it will be selected if the user performs undo.
+            this.textBox.selected = true;
             this.onUpdateImage();
+            this.textBox.selected = false;
         }
         this.lastTypeEvent = event;
         if (this.mode === TextTool.TEXT_EDIT_MODE) {
@@ -350,17 +355,12 @@ class TextTool extends paper.Tool {
             this.eventListener = null;
         }
         this.lastTypeEvent = null;
-
-        // If you finished editing a textbox, save undo state
-        if (this.textBox && this.textBox.content.trim().length) {
-            this.onUpdateImage();
-        }
     }
     commitText () {
         if (!this.textBox || !this.textBox.parent) return;
 
         // @todo get crisp text https://github.com/LLK/scratch-paint/issues/508
-        const textRaster = this.textBox.rasterize();
+        const textRaster = this.textBox.rasterize(72, false /* insert */);
         this.textBox.remove();
         this.textBox = null;
         textRaster.onLoad = () => {
