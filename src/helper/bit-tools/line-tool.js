@@ -31,16 +31,15 @@ class LineTool extends paper.Tool {
     }
     setColor (color) {
         this.color = color;
+        this.tmpCanvas = getBrushMark(this.size, this.color);
     }
     setLineSize (size) {
         // For performance, make sure this is an integer
         this.size = Math.max(1, ~~size);
+        this.tmpCanvas = getBrushMark(this.size, this.color);
     }
     // Draw a brush mark at the given point
     draw (x, y) {
-        if (!this.tmpCanvas) {
-            this.tmpCanvas = getBrushMark(this.size, this.color);
-        }
         const roundedUpRadius = Math.ceil(this.size / 2);
         this.drawTarget.drawImage(this.tmpCanvas, new paper.Point(~~x - roundedUpRadius, ~~y - roundedUpRadius));
     }
