@@ -189,7 +189,13 @@ class PaperCanvas extends React.Component {
                     item.translate(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2)
                         .subtract(itemWidth, itemHeight));
                 }
-                if (isGroup(item) && item.data && item.data.isPaintingLayer) {
+                if (isGroup(item)) {
+                    // Fixes an issue where we may export empty groups
+                    for (const child of item.children) {
+                        if (isGroup(child) && child.children.length === 0) {
+                            child.remove();
+                        }
+                    }
                     ungroupItems([item]);
                 }
 
