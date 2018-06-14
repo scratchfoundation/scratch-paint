@@ -86,9 +86,10 @@ const fillEllipse = function (centerX, centerY, radiusX, radiusY, context) {
 /**
  * @param {!number} size The diameter of the brush
  * @param {!string} color The css color of the brush
+ * @param {?boolean} isEraser True if we want the brush mark for the eraser
  * @return {HTMLCanvasElement} a canvas with the brush mark printed on it
  */
-const getBrushMark = function (size, color) {
+const getBrushMark = function (size, color, isEraser) {
     size = ~~size;
     const canvas = document.createElement('canvas');
     const roundedUpRadius = Math.ceil(size / 2);
@@ -96,7 +97,8 @@ const getBrushMark = function (size, color) {
     canvas.height = roundedUpRadius * 2;
     const context = canvas.getContext('2d');
     context.imageSmoothingEnabled = false;
-    context.fillStyle = color;
+    context.fillStyle = isEraser ? 'white' : color;
+    // @todo add outline for erasers
     // Small squares for pixel artists
     if (size <= 5) {
         if (size % 2) {
@@ -276,26 +278,78 @@ const floodFillInternal_ = function (x, y, imageData, newColor, oldColor, stack)
 };
 
 /**
- * Flood fill beginning at the given point
- * @param {!int} x The x coordinate on the context at which to begin
- * @param {!int} y The y coordinate on the context at which to begin
- * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * Given a fill style string, get the color
+ * @param {string} fillStyleString the fill style
+ * @return {Array<int>} Color, a length 4 array
  */
-const floodFill = function (x, y, context) {
+const fillStyleToColor_ = function (fillStyleString) {
+    const tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = 1;
+    tmpCanvas.height = 1;
+    const context = tmpCanvas.getContext('2d');
+    context.fillStyle = fillStyleString;
+    context.fillRect(0, 0, 1, 1);
+    return context.getImageData(0, 0, 1, 1).data;
+};
+
+/**
+ * Flood fill beginning at the given point
+ * @param {!number} x The x coordinate on the context at which to begin
+ * @param {!number} y The y coordinate on the context at which to begin
+ * @param {!string} color A color string, which would go into context.fillStyle
+ * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @return {boolean} True if image changed, false otherwise
+ */
+const floodFill = function (x, y, color, context) {
+    x = ~~x;
+    y = ~~y;
+    const newColor = fillStyleToColor_(color);
     const oldColor = getColor_(x, y, context);
-    context.fillRect(x, y, 1, 1);
-    const newColor = getColor_(x, y, context);
     const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
-    if (matchesColor_(x, y, imageData, oldColor)) { // no-op
-        return;
+    if (oldColor[0] === newColor[0] &&
+            oldColor[1] === newColor[1] &&
+            oldColor[2] === newColor[2] &&
+            oldColor[3] === newColor[3]) { // no-op
+        return false;
     }
-    colorPixel_(x, y, imageData, newColor); // Restore old color to avoid affecting result
     const stack = [[x, y]];
     while (stack.length) {
         const pop = stack.pop();
         floodFillInternal_(pop[0], pop[1], imageData, newColor, oldColor, stack);
     }
     context.putImageData(imageData, 0, 0);
+    return true;
+};
+
+/**
+ * Replace all instances of the color at the given point
+ * @param {!number} x The x coordinate on the context of the start color
+ * @param {!number} y The y coordinate on the context of the start color
+ * @param {!string} color A color string, which would go into context.fillStyle
+ * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @return {boolean} True if image changed, false otherwise
+ */
+const floodFillAll = function (x, y, color, context) {
+    x = ~~x;
+    y = ~~y;
+    const newColor = fillStyleToColor_(color);
+    const oldColor = getColor_(x, y, context);
+    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    if (oldColor[0] === newColor[0] &&
+            oldColor[1] === newColor[1] &&
+            oldColor[2] === newColor[2] &&
+            oldColor[3] === newColor[3]) { // no-op
+        return false;
+    }
+    for (let i = 0; i < imageData.width; i++) {
+        for (let j = 0; j < imageData.height; j++) {
+            if (matchesColor_(i, j, imageData, oldColor)) {
+                colorPixel_(i, j, imageData, newColor);
+            }
+        }
+    }
+    context.putImageData(imageData, 0, 0);
+    return true;
 };
 
 /**
@@ -331,13 +385,15 @@ const drawRect = function (rect, context) {
     forEachLinePoint(endPoint, heightPoint, (x, y) => {
         context.fillRect(x, y, 1, 1);
     });
-    floodFill(~~center.x, ~~center.y, context);
+    floodFill(~~center.x, ~~center.y, context.fillStyle, context);
 };
 
 export {
     convertToBitmap,
     convertToVector,
     drawRect,
+    floodFill,
+    floodFillAll,
     getBrushMark,
     getHitBounds,
     fillEllipse,
