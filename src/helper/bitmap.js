@@ -31,6 +31,18 @@ const forEachLinePoint = function (point1, point2, callback) {
 };
 
 /**
+ * @param {!number} a Coefficient in ax^2 + bx + c = 0
+ * @param {!number} b Coefficient in ax^2 + bx + c = 0
+ * @param {!number} c Coefficient in ax^2 + bx + c = 0
+ * @return {Array<number>} Array of 2 solutions, with the larger solution first
+ */
+const solveQuadratic_ = function (a, b, c) {
+    const soln1 = (-b + Math.sqrt((b * b) - (4 * a * c))) / 2 / a;
+    const soln2 = (-b - Math.sqrt((b * b) - (4 * a * c))) / 2 / a;
+    return soln1 > soln2 ? [soln1, soln2] : [soln2, soln1];
+};
+
+/**
  * @param {!object} options drawing options
  * @param {!number} options.centerX center of ellipse, x
  * @param {!number} options.centerY center of ellipse, y
@@ -43,8 +55,8 @@ const forEachLinePoint = function (point1, point2, callback) {
 const drawShearedEllipse = function (options, context) {
     const centerX = ~~options.centerX;
     const centerY = ~~options.centerY;
-    const radiusX = ~~options.radiusX;
-    const radiusY = ~~options.radiusY;
+    const radiusX = ~~options.radiusX - .5;
+    const radiusY = ~~options.radiusY - .5;
     const shearSlope = options.shearSlope;
     const isFilled = options.isFilled;
     if (shearSlope === Infinity || radiusX === 0 || radiusY === 0) {
@@ -52,109 +64,134 @@ const drawShearedEllipse = function (options, context) {
     }
 
     // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a skewed ellipse formula
-    let A = 1 / radiusX / radiusX + shearSlope / radiusY / radiusY;
-    let B = -2 * shearSlope / radiusY / radiusY;
-    let C = 1 / radiusY / radiusY;
-    //console.log(A);
-    //console.log(B);
-    //console.log(C);
-    let slope1 = (-2 * A + B) / (B + 2 * C);
-    let slope2 = (2 * A - B) / (2 * C - B);
-    // Make sure slope1 is higher
-    if (slope1 < slope2) {
-        const temp = slope2;
-        slope2 = slope1;
-        slope1 = temp;
-    }
-    let x = 0;
-    let y = radiusY;
-    let realY = radiusY;
+    const A = (1 / radiusX / radiusX) + (shearSlope * shearSlope / radiusY / radiusY);
+    const B = -2 * shearSlope / radiusY / radiusY;
+    const C = 1 / radiusY / radiusY;
+    // Line with slope1 intersects the ellipse where its derivative is 1
+    const slope1 = ((-2 * A) - B) / ((2 * C) + B);
+    // Line with slope2 intersects the ellipse where its derivative is -1
+    const slope2 = (-(2 * A) + B) / (-(2 * C) + B);
+    const verticalStepsFirst = slope1 > slope2;
+    // Points on the ellipse
+    let x;
+    let y;
+    // Pixel-locked points on the ellipse
+    let pixelY;
+    let pixelX;
 
-    while (slope1 > 0 ? x <= realY / slope1 : x < radiusX) {
-        if (isFilled) {
-            context.fillRect(centerX + x - 1, centerY - y, 1, y);
-            context.fillRect(centerX - x, centerY, 1, y);
-        } else {
-            context.fillRect(centerX + x - 1, centerY + y, 1, 1);
-            context.fillRect(centerX - x, centerY, 1, 1);
-        }
-        x++;
-        realY = (-B * x + Math.sqrt(B * B - 4 * (A * x * x - 1) * C)) / (2 * C);
-        //console.log(realY);
-        if (isNaN(realY)) {
-            break;
-        }
-        if (Math.abs(y - realY) > Math.abs(y - 1 - realY)) {
-            y--;
-            //console.log('yes');
-        }
-    }
+    if (verticalStepsFirst) {
+        let forwardLeaning = false;
+        if (slope1 > 0) forwardLeaning = true;
 
-    /*
-    // Bresenham ellipse algorithm
-    const twoRadXSquared = 2 * radiusX * radiusX;
-    const twoRadYSquared = 2 * radiusY * radiusY;
-    let x = radiusX;
-    let y = 0;
-    let dx = radiusY * radiusY * (1 - (radiusX << 1));
-    let dy = radiusX * radiusX;
-    let error = 0;
-    let stoppingX = twoRadYSquared * radiusX;
-    let stoppingY = 0;
- 
-    while (stoppingX >= stoppingY) {
-        if (isFilled) {
-            context.fillRect(centerX + x - 1, centerY - y - Math.round(x * shearSlope), 1, y << 1);
-            context.fillRect(centerX - x, centerY - y + Math.round(x * shearSlope), 1, y << 1);
-        } else {
-            // TODO connect these to the prev segment and add thickness
-            context.fillRect(centerX + x - 1, centerY + y - Math.round(x * shearSlope), 1, 1);
-            context.fillRect(centerX + x - 1, centerY - y - Math.round(x * shearSlope), 1, 1);
-            context.fillRect(centerX - x, centerY + y + Math.round(x * shearSlope), 1, 1);
-            context.fillRect(centerX - x, centerY - y + Math.round(x * shearSlope), 1, 1);
-        }
-        y++;
-        stoppingY += twoRadXSquared;
-        error += dy;
-        dy += twoRadXSquared;
-        if ((error << 1) + dx > 0) {
-            x--;
-            stoppingX -= twoRadYSquared;
-            error += dx;
-            dx += twoRadYSquared;
-        }
-    }
-    x = 0;
-    y = radiusY;
-    dx = radiusY * radiusY;
-    dy = radiusX * radiusX * (1 - (radiusY << 1));
-    error = 0;
-    stoppingX = 0;
-    stoppingY = twoRadXSquared * radiusY;
-    while (stoppingX <= stoppingY) {
-        if (isFilled) {
-            //context.fillRect(centerX + x - 1, centerY - y, 1, y << 1);
-            //context.fillRect(centerX - x, centerY - y, 1, y << 1);
-            context.fillRect(centerX + x - 1, centerY - y - Math.round(x * shearSlope), 1, y << 1);
-            context.fillRect(centerX - x, centerY - y + Math.round(x * shearSlope), 1, y << 1);
-        } else {
-            context.fillRect(centerX + x - 1, centerY + y - Math.round(x * shearSlope), 1, 1);
-            context.fillRect(centerX + x - 1, centerY - y - Math.round(x * shearSlope), 1, 1);
-            context.fillRect(centerX - x, centerY + y + Math.round(x * shearSlope), 1, 1);
-            context.fillRect(centerX - x, centerY - y + Math.round(x * shearSlope), 1, 1);
-        }
-        x++;
-        stoppingX += twoRadYSquared;
-        error += dx;
-        dx += twoRadYSquared;
-        if ((error << 1) + dy > 0) {
+        // step vertically
+        y = forwardLeaning ? -radiusY : radiusY;
+        x = solveQuadratic_(A, B * y, (C * y * y) - 1);
+        pixelX = 0;
+        while ((y / x[0] > slope1) || (forwardLeaning && x[0] === 0)) {
+            pixelY = Math.floor(y);
+            pixelX = Math.floor(x[0]);
+            if (isFilled) {
+                context.fillRect(centerX - pixelX - 1, centerY + pixelY, pixelX - Math.floor(x[1]) + 1, 1);
+                context.fillRect(centerX + Math.floor(x[1]), centerY - pixelY - 1, pixelX - Math.floor(x[1]) + 1, 1);
+            } else {
+                context.fillRect(centerX - pixelX - 1, centerY + pixelY, 1, 1);
+                context.fillRect(centerX + pixelX, centerY - pixelY - 1, 1, 1);
+            }
             y--;
-            stoppingY -= twoRadXSquared;
-            error += dy;
-            dy += twoRadXSquared;
+            x = solveQuadratic_(A, B * y, (C * y * y) - 1);
+        }
+
+        // step horizontally while slope is flat
+        x = -pixelX + .5;
+        y = solveQuadratic_(C, B * x, (A * x * x) - 1);
+        pixelY = Math.floor(y[0]);
+        while (y[0] / x > slope2) {
+            pixelY = Math.floor(y[0]);
+            pixelX = Math.floor(x);
+            if (isFilled) {
+                context.fillRect(centerX - pixelX - 1, centerY + Math.floor(y[1]), 1, pixelY - Math.floor(y[1]) + 1);
+                context.fillRect(centerX + pixelX, centerY - pixelY - 1, 1, pixelY - Math.floor(y[1]) + 1);
+            } else {
+                context.fillRect(centerX - pixelX - 1, centerY + pixelY, 1, 1);
+                context.fillRect(centerX + pixelX, centerY - pixelY - 1, 1, 1);
+            }
+            x++;
+            y = solveQuadratic_(C, B * x, (A * x * x) - 1);
+        }
+
+        // step vertically until back to start
+        y = pixelY - .5;
+        x = solveQuadratic_(A, B * y, (C * y * y) - 1);
+        while (forwardLeaning ? y > -radiusY : y > radiusY) {
+            pixelY = Math.floor(y);
+            pixelX = Math.floor(x[0]);
+            if (isFilled) {
+                context.fillRect(centerX - pixelX - 1, centerY + pixelY, pixelX - Math.floor(x[1]) + 1, 1);
+                context.fillRect(centerX + Math.floor(x[1]), centerY - pixelY - 1, pixelX - Math.floor(x[1]) + 1, 1);
+            } else {
+                context.fillRect(centerX - pixelX - 1, centerY + pixelY, 1, 1);
+                context.fillRect(centerX + pixelX, centerY - pixelY - 1, 1, 1);
+            }
+            y--;
+            x = solveQuadratic_(A, B * y, (C * y * y) - 1);
+        }
+    } else {
+        // step horizontally forward
+        x = .5;
+        y = solveQuadratic_(C, B * x, (A * x * x) - 1);
+        pixelY = Math.floor(y[0]);
+        while (y[0] / x > slope2) {
+            pixelY = Math.floor(y[0]);
+            pixelX = Math.floor(x);
+            if (isFilled) {
+                context.fillRect(centerX - pixelX - 1, centerY + Math.floor(y[1]), 1, pixelY - Math.floor(y[1]) + 1);
+                context.fillRect(centerX + pixelX, centerY - pixelY - 1, 1, pixelY - Math.floor(y[1]) + 1);
+            } else {
+                context.fillRect(centerX - pixelX - 1, centerY + pixelY, 1, 1);
+                context.fillRect(centerX + pixelX, centerY - pixelY - 1, 1, 1);
+            }
+            x++;
+            y = solveQuadratic_(C, B * x, (A * x * x) - 1);
+        }
+
+        // step vertically while slope is steep
+        y = pixelY - .5;
+        x = solveQuadratic_(A, B * y, (C * y * y) - 1);
+        pixelX = Math.floor(x[0]);
+        // TODO is negative inf necessary
+        let slope = x[0] === 0 ? Number.NEGATIVE_INFINITY : y / x[0];
+        while (slope > slope1) {
+            pixelY = Math.floor(y);
+            pixelX = Math.floor(x[0]);
+            if (isFilled) {
+                context.fillRect(centerX - pixelX - 1, centerY + pixelY, pixelX - Math.floor(x[1]) + 1, 1);
+                context.fillRect(centerX + Math.floor(x[1]), centerY - pixelY - 1, pixelX - Math.floor(x[1]) + 1, 1);
+            } else {
+                context.fillRect(centerX - pixelX - 1, centerY + pixelY, 1, 1);
+                context.fillRect(centerX + pixelX, centerY - pixelY - 1, 1, 1);
+            }
+            y--;
+            x = solveQuadratic_(A, B * y, (C * y * y) - 1);
+            slope = x[0] === 0 ? Number.NEGATIVE_INFINITY : y / x[0];
+        }
+
+        // step horizontally until back to start
+        x = -pixelX + .5;
+        y = solveQuadratic_(C, B * x, (A * x * x) - 1);
+        while (x < 0) {
+            pixelY = Math.floor(y[0]);
+            pixelX = Math.floor(x);
+            if (isFilled) {
+                context.fillRect(centerX - pixelX - 1, centerY + Math.floor(y[1]), 1, pixelY - Math.floor(y[1]) + 1);
+                context.fillRect(centerX + pixelX, centerY - pixelY - 1, 1, pixelY - Math.floor(y[1]) + 1);
+            } else {
+                context.fillRect(centerX - pixelX - 1, centerY + pixelY, 1, 1);
+                context.fillRect(centerX + pixelX, centerY - pixelY - 1, 1, 1);
+            }
+            x++;
+            y = solveQuadratic_(C, B * x, (A * x * x) - 1);
         }
     }
-    */
 };
 
 /**
@@ -170,8 +207,8 @@ const drawShearedEllipse = function (options, context) {
 const drawRotatedEllipse = function (options, context) {
     const centerX = ~~options.centerX;
     const centerY = ~~options.centerY;
-    const radiusX = ~~options.radiusX;
-    const radiusY = ~~options.radiusY;
+    const radiusX = options.radiusX;
+    const radiusY = options.radiusY;
     const rotation = options.rotation;
     const isFilled = options.isFilled;
     if (radiusX === radiusY) {
@@ -212,8 +249,7 @@ const getBrushMark = function (size, color) {
             context.fillRect(0, 0, size, size);
         }
     } else {
-        const roundedDownRadius = ~~(size / 2);
-        fillEllipse(roundedDownRadius, roundedDownRadius, roundedDownRadius, roundedDownRadius, context);
+        fillEllipse(size / 2, size / 2, size / 2, size / 2, context);
     }
     return canvas;
 };
