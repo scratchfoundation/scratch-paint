@@ -54,7 +54,7 @@ const solveQuadratic_ = function (a, b, c) {
  * @param {!CanvasRenderingContext2D} context for drawing
  * @return {boolean} true if anything was drawn, false if not
  */
-const drawShearedEllipse = function (options, context) {
+const drawShearedEllipse_ = function (options, context) {
     const centerX = ~~options.centerX;
     const centerY = ~~options.centerY;
     const radiusX = ~~Math.abs(options.radiusX) - .5;
@@ -189,36 +189,43 @@ const drawShearedEllipse = function (options, context) {
 };
 
 /**
- * @param {!object} options drawing options
- * @param {!number} options.centerX center of ellipse, x
- * @param {!number} options.centerY center of ellipse, y
- * @param {!number} options.radiusX major radius of ellipse
- * @param {!number} options.radiusY minor radius of ellipse
- * @param {!number} options.rotation of ellipse, radians
- * @param {?boolean} options.isFilled true if isFilled
+ * Draw an ellipse, given the original axis-aligned radii and
+ * an affine transformation. Returns false if the ellipse could
+ * not be drawn; for instance, the matrix is non-invertible.
+ *
+ * @param {!number} positionX Center of ellipse
+ * @param {!number} positionY Center of ellipse
+ * @param {!number} radiusX x-aligned radius of ellipse
+ * @param {!number} radiusY y-aligned radius of ellipse
+ * @param {!paper.Matrix} matrix affine transformation matrix
+ * @param {?boolean} isFilled true if isFilled
  * @param {!CanvasRenderingContext2D} context for drawing
  * @return {boolean} true if anything was drawn, false if not
  */
-const drawRotatedEllipse = function (options, context) {
-    const centerX = ~~options.centerX;
-    const centerY = ~~options.centerY;
-    const radiusX = options.radiusX;
-    const radiusY = options.radiusY;
-    const rotation = options.rotation;
-    const isFilled = options.isFilled;
-    if (radiusX === radiusY) {
-        return drawShearedEllipse({centerX, centerY, radiusX, radiusY, shearSlope: 0, isFilled}, context);
-    }
-    const theta = Math.atan2(radiusY * -Math.tan(rotation), radiusX);
-    const shearDx = (radiusX * Math.cos(theta) * Math.cos(rotation)) - (radiusY * Math.sin(theta) * Math.sin(rotation));
-    const shearDy = (radiusX * Math.cos(theta) * Math.sin(rotation)) + (radiusY * Math.sin(theta) * Math.cos(rotation));
-    const shearSlope = shearDy / shearDx;
-    const shearRadiusX = Math.abs(shearDx);
-    const shearRadiusY = radiusX * radiusY / shearRadiusX;
-    return drawShearedEllipse(
-        {centerX, centerY, radiusX: shearRadiusX, radiusY: shearRadiusY, shearSlope, isFilled},
-        context
-    );
+const drawEllipse = function (positionX, positionY, radiusX, radiusY, matrix, isFilled, context) {
+    if (!matrix.isInvertible()) return false;
+    const inverse = matrix.clone().invert();
+
+    // Calculate the ellipse formula
+    // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a transformed ellipse formula
+    const A = (inverse.a * inverse.a / radiusX / radiusX) + (inverse.b * inverse.b / radiusY / radiusY);
+    const B = (2 * inverse.a * inverse.c / radiusX / radiusX) + (2 * inverse.b * inverse.d / radiusY / radiusY);
+    const C = (inverse.c * inverse.c / radiusX / radiusX) + (inverse.d * inverse.d / radiusY / radiusY);
+
+    // Convert to a sheared ellipse formula. All ellipses are equivalent to some sheared axis-aligned ellipse.
+    // radiusA, radiusB, and slope are parameters of a skewed ellipse with the above formula
+    const radiusB = 1 / Math.sqrt(C);
+    const radiusA = Math.sqrt(-4 * C / ((B * B) - (4 * A * C)));
+    const slope = B / 2 / C;
+
+    return drawShearedEllipse_({
+        centerX: positionX,
+        centerY: positionY,
+        radiusX: radiusA,
+        radiusY: radiusB,
+        shearSlope: slope,
+        isFilled: isFilled
+    }, context);
 };
 
 /**
@@ -249,7 +256,7 @@ const getBrushMark = function (size, color, isEraser) {
             context.fillRect(offset, offset, size, size);
         }
     } else {
-        drawShearedEllipse({
+        drawShearedEllipse_({
             centerX: size / 2,
             centerY: size / 2,
             radiusX: size / 2,
@@ -260,7 +267,7 @@ const getBrushMark = function (size, color, isEraser) {
         if (isEraser) {
             // Add outline
             context.fillStyle = getGuideColor();
-            drawShearedEllipse({
+            drawShearedEllipse_({
                 centerX: size / 2,
                 centerY: size / 2,
                 radiusX: size / 2,
@@ -556,7 +563,6 @@ export {
     floodFillAll,
     getBrushMark,
     getHitBounds,
-    drawRotatedEllipse,
-    drawShearedEllipse,
+    drawEllipse,
     forEachLinePoint
 };

@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {drawRotatedEllipse, drawShearedEllipse} from '../bitmap';
+import {drawEllipse} from '../bitmap';
 import {getRaster} from '../layer';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
@@ -131,81 +131,21 @@ class OvalTool extends paper.Tool {
         }
         this.active = false;
     }
-    /*
-     * Based on paper.Matrix.decompose, but get a vertical shear instead of horizontal shear
-     * and keep radians. Assumes the matrix is invertible.
-     */
-    _decompose (matrix) {
-        const a = matrix.a;
-        const b = matrix.b;
-        const c = matrix.c;
-        const d = matrix.d;
-        const s = Math.sqrt((c * c) + (d * d));
-        return {
-            rotation: Math.asin(c / s) * (d > 0 ? 1 : -1),
-            scaling: new paper.Point(((a * d) - (b * c)) / s, s),
-            shearSlope: new paper.Point(s * s, (a * c) + (b * d))
-        };
-    }
     commitOval () {
         if (!this.oval || !this.oval.parent) return;
 
-        if (!this.oval.matrix.isInvertible()) {
-            this.oval.remove();
-            this.oval = null;
-            return;
-        }
-
-        const decomposed = this._decompose(this.oval.matrix);
         const radiusX = Math.abs(this.oval.size.width / 2);
         const radiusY = Math.abs(this.oval.size.height / 2);
-        const shearSlope = -decomposed.shearSlope.y / decomposed.shearSlope.x;
         const context = getRaster().getContext('2d');
         context.fillStyle = this.color;
-        let drew = false;
-        if (Math.abs(decomposed.rotation) < Math.PI / 180) {
-            // Use shear
-            drew = drawShearedEllipse({
-                centerX: this.oval.position.x,
-                centerY: this.oval.position.y,
-                radiusX: radiusX * decomposed.scaling.x,
-                radiusY: radiusY * decomposed.scaling.y,
-                shearSlope,
-                isFilled: true
-            }, context);
-        } else if (Math.abs(Math.atan2(decomposed.shearSlope.y, decomposed.shearSlope.x)) < Math.PI / 180) {
-            // Use rotation
-            drew = drawRotatedEllipse({
-                centerX: this.oval.position.x,
-                centerY: this.oval.position.y,
-                radiusX: radiusX * decomposed.scaling.x,
-                radiusY: radiusY * decomposed.scaling.y,
-                rotation: decomposed.rotation,
-                isFilled: true
-            }, context);
-        } else {
-            // Arbitrary ellipse
-            const inverse = this.oval.matrix.clone().invert();
 
-            // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a transformed ellipse formula
-            const A = (inverse.a * inverse.a / radiusX / radiusX) + (inverse.b * inverse.b / radiusY / radiusY);
-            const B = (2 * inverse.a * inverse.c / radiusX / radiusX) + (2 * inverse.b * inverse.d / radiusY / radiusY);
-            const C = (inverse.c * inverse.c / radiusX / radiusX) + (inverse.d * inverse.d / radiusY / radiusY);
-  
-            // radiusA, radiusB, and slope are parameters of a skewed ellipse with the above formula
-            const radiusB = 1 / Math.sqrt(C);
-            const radiusA = Math.sqrt(-4 * C / ((B * B) - (4 * A * C)));
-            const slope = B / 2 / C;
+        const drew = drawEllipse(
+            this.oval.positionX, this.oval.positionY,
+            radiusX, radiusY,
+            this.oval.matrix,
+            true, /* isFilled */
+            context);
 
-            drew = drawShearedEllipse({
-                centerX: this.oval.position.x,
-                centerY: this.oval.position.y,
-                radiusX: radiusA,
-                radiusY: radiusB,
-                shearSlope: slope,
-                isFilled: true
-            }, context);
-        }
         this.oval.remove();
         this.oval = null;
         if (drew) {
