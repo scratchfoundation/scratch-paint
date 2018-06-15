@@ -91,8 +91,6 @@ const ModeToolsComponent = props => {
     case Modes.BIT_BRUSH:
         /* falls through */
     case Modes.BIT_LINE:
-        /* falls through */
-    case Modes.BIT_OVAL:
     {
         const currentIcon = isVector(props.format) ? brushIcon :
             props.mode === Modes.BIT_LINE ? bitLineIcon : bitBrushIcon;
@@ -101,17 +99,14 @@ const ModeToolsComponent = props => {
         const currentMessage = props.mode === Modes.BIT_LINE ? messages.lineSize : messages.brushSize;
         return (
             <div className={classNames(props.className, styles.modeTools)}>
-                {props.mode === Modes.BIT_OVAL ?
-                    null :
-                    <div>
-                        <img
-                            alt={props.intl.formatMessage(currentMessage)}
-                            className={styles.modeToolsIcon}
-                            draggable={false}
-                            src={currentIcon}
-                        />
-                    </div>
-                }
+                <div>
+                    <img
+                        alt={props.intl.formatMessage(currentMessage)}
+                        className={styles.modeToolsIcon}
+                        draggable={false}
+                        src={currentIcon}
+                    />
+                </div>
                 <LiveInput
                     range
                     small
