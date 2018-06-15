@@ -121,6 +121,9 @@ class PaintEditor extends React.Component {
             case Modes.BIT_LINE:
                 this.props.changeMode(Modes.LINE);
                 break;
+            case Modes.BIT_OVAL:
+                this.props.changeMode(Modes.OVAL);
+                break;
             case Modes.BIT_RECT:
                 this.props.changeMode(Modes.RECT);
                 break;
@@ -140,6 +143,9 @@ class PaintEditor extends React.Component {
                 break;
             case Modes.LINE:
                 this.props.changeMode(Modes.BIT_LINE);
+                break;
+            case Modes.OVAL:
+                this.props.changeMode(Modes.BIT_OVAL);
                 break;
             case Modes.RECT:
                 this.props.changeMode(Modes.BIT_RECT);
