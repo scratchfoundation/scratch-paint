@@ -31,10 +31,12 @@ class LineTool extends paper.Tool {
     }
     setColor (color) {
         this.color = color;
+        this.tmpCanvas = getBrushMark(this.size, this.color);
     }
     setLineSize (size) {
         // For performance, make sure this is an integer
         this.size = Math.max(1, ~~size);
+        this.tmpCanvas = getBrushMark(this.size, this.color);
     }
     // Draw a brush mark at the given point
     draw (x, y) {
@@ -72,8 +74,8 @@ class LineTool extends paper.Tool {
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
-        
-        this.cursorPreview.remove();
+
+        if (this.cursorPreview) this.cursorPreview.remove();
 
         const tmpCanvas = document.createElement('canvas');
         tmpCanvas.width = ART_BOARD_WIDTH;

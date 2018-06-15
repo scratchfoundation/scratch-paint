@@ -61,6 +61,9 @@ class OvalTool extends paper.Tool {
                 selectedItems && selectedItems.length === 1 && selectedItems[0].shape === 'ellipse') {
             // Infer that an undo occurred and get back the active oval
             this.oval = selectedItems[0];
+        } else if (this.oval && this.oval.parent && !this.oval.selected) {
+            // Oval got deselected
+            this.commitOval();
         }
     }
     setColor (color) {

@@ -2,6 +2,7 @@ import paper from '@scratch/paper';
 import PropTypes from 'prop-types';
 
 import React from 'react';
+import {connect} from 'react-redux';
 import PaintEditorComponent from '../components/paint-editor/paint-editor.jsx';
 
 import {changeMode} from '../reducers/modes';
@@ -13,7 +14,7 @@ import {setTextEditTarget} from '../reducers/text-edit-target';
 import {updateViewBounds} from '../reducers/view-bounds';
 
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
-import {getHitBounds} from '../helper/bitmap';
+import {convertToBitmap, convertToVector, getHitBounds} from '../helper/bitmap';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
@@ -24,9 +25,9 @@ import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
 import Modes from '../lib/modes';
+import {BitmapModes} from '../lib/modes';
 import Formats from '../lib/format';
 import {isBitmap, isVector} from '../lib/format';
-import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 
 class PaintEditor extends React.Component {
@@ -61,6 +62,9 @@ class PaintEditor extends React.Component {
             canvas: null,
             colorInfo: null
         };
+        // When isSwitchingFormats is true, the format is about to switch, but isn't done switching.
+        // This gives currently active tools a chance to finish what they were doing.
+        this.isSwitchingFormats = false;
     }
     componentDidMount () {
         document.addEventListener('keydown', (/* event */) => {
@@ -76,6 +80,17 @@ class PaintEditor extends React.Component {
         document.addEventListener('mousedown', this.onMouseDown);
         document.addEventListener('touchstart', this.onMouseDown);
     }
+    componentWillReceiveProps (newProps) {
+        if ((isVector(this.props.format) && newProps.format === Formats.BITMAP) ||
+                (isBitmap(this.props.format) && newProps.format === Formats.VECTOR)) {
+            this.isSwitchingFormats = true;
+        }
+        if (isVector(this.props.format) && isBitmap(newProps.format)) {
+            this.switchMode(Formats.BITMAP);
+        } else if (isVector(newProps.format) && isBitmap(this.props.format)) {
+            this.switchMode(Formats.VECTOR);
+        }
+    }
     componentDidUpdate (prevProps) {
         if (this.props.isEyeDropping && !prevProps.isEyeDropping) {
             this.startEyeDroppingLoop();
@@ -83,9 +98,12 @@ class PaintEditor extends React.Component {
             this.stopEyeDroppingLoop();
         }
 
-        if ((isVector(this.props.format) && isBitmap(prevProps.format)) ||
-            (isVector(prevProps.format) && isBitmap(this.props.format))) {
-            this.switchMode(this.props.format);
+        if (this.props.format === Formats.VECTOR && isBitmap(prevProps.format)) {
+            this.isSwitchingFormats = false;
+            convertToVector(this.props.clearSelectedItems, this.handleUpdateImage);
+        } else if (isVector(prevProps.format) && this.props.format === Formats.BITMAP) {
+            this.isSwitchingFormats = false;
+            convertToBitmap(this.props.clearSelectedItems, this.handleUpdateImage);
         }
     }
     componentWillUnmount () {
@@ -103,6 +121,15 @@ class PaintEditor extends React.Component {
             case Modes.BIT_LINE:
                 this.props.changeMode(Modes.LINE);
                 break;
+            case Modes.BIT_RECT:
+                this.props.changeMode(Modes.RECT);
+                break;
+            case Modes.BIT_FILL:
+                this.props.changeMode(Modes.FILL);
+                break;
+            case Modes.BIT_ERASER:
+                this.props.changeMode(Modes.ERASER);
+                break;
             default:
                 this.props.changeMode(Modes.BRUSH);
             }
@@ -114,20 +141,34 @@ class PaintEditor extends React.Component {
             case Modes.LINE:
                 this.props.changeMode(Modes.BIT_LINE);
                 break;
+            case Modes.RECT:
+                this.props.changeMode(Modes.BIT_RECT);
+                break;
+            case Modes.FILL:
+                this.props.changeMode(Modes.BIT_FILL);
+                break;
+            case Modes.ERASER:
+                this.props.changeMode(Modes.BIT_ERASER);
+                break;
             default:
                 this.props.changeMode(Modes.BIT_BRUSH);
             }
         }
     }
     handleUpdateImage (skipSnapshot) {
-        if (isBitmap(this.props.format)) {
+        // If in the middle of switching formats, rely on the current mode instead of format.
+        let actualFormat = this.props.format;
+        if (this.isSwitchingFormats) {
+            actualFormat = BitmapModes[this.props.mode] ? Formats.BITMAP : Formats.VECTOR;
+        }
+        if (isBitmap(actualFormat)) {
             const rect = getHitBounds(getRaster());
             this.props.onUpdateImage(
                 false /* isVector */,
                 getRaster().getImageData(rect),
                 (ART_BOARD_WIDTH / 2) - rect.x,
                 (ART_BOARD_HEIGHT / 2) - rect.y);
-        } else if (isVector(this.props.format)) {
+        } else if (isVector(actualFormat)) {
             const guideLayers = hideGuideLayers(true /* includeRaster */);
 
             // Export at 0.5x
@@ -150,7 +191,7 @@ class PaintEditor extends React.Component {
         }
 
         if (!skipSnapshot) {
-            performSnapshot(this.props.undoSnapshot, this.props.format);
+            performSnapshot(this.props.undoSnapshot, actualFormat);
         }
     }
     handleUndo () {
