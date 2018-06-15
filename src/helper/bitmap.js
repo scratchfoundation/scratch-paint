@@ -52,6 +52,7 @@ const solveQuadratic_ = function (a, b, c) {
  * @param {!number} options.shearSlope slope of the sheared x axis
  * @param {?boolean} options.isFilled true if isFilled
  * @param {!CanvasRenderingContext2D} context for drawing
+ * @return {boolean} true if anything was drawn, false if not
  */
 const drawShearedEllipse = function (options, context) {
     const centerX = ~~options.centerX;
@@ -61,7 +62,7 @@ const drawShearedEllipse = function (options, context) {
     const shearSlope = options.shearSlope;
     const isFilled = options.isFilled;
     if (shearSlope === Infinity || radiusX < 1 || radiusY < 1) {
-        return;
+        return false;
     }
     // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a skewed ellipse formula
     const A = (1 / radiusX / radiusX) + (shearSlope * shearSlope / radiusY / radiusY);
@@ -184,6 +185,7 @@ const drawShearedEllipse = function (options, context) {
             x => x < 0
         );
     }
+    return true;
 };
 
 /**
@@ -195,6 +197,7 @@ const drawShearedEllipse = function (options, context) {
  * @param {!number} options.rotation of ellipse, radians
  * @param {?boolean} options.isFilled true if isFilled
  * @param {!CanvasRenderingContext2D} context for drawing
+ * @return {boolean} true if anything was drawn, false if not
  */
 const drawRotatedEllipse = function (options, context) {
     const centerX = ~~options.centerX;
@@ -204,7 +207,7 @@ const drawRotatedEllipse = function (options, context) {
     const rotation = options.rotation;
     const isFilled = options.isFilled;
     if (radiusX === radiusY) {
-        drawShearedEllipse({centerX, centerY, radiusX, radiusY, shearSlope: 0, isFilled}, context);
+        return drawShearedEllipse({centerX, centerY, radiusX, radiusY, shearSlope: 0, isFilled}, context);
     }
     const theta = Math.atan2(radiusY * -Math.tan(rotation), radiusX);
     const shearDx = (radiusX * Math.cos(theta) * Math.cos(rotation)) - (radiusY * Math.sin(theta) * Math.sin(rotation));
@@ -212,7 +215,10 @@ const drawRotatedEllipse = function (options, context) {
     const shearSlope = shearDy / shearDx;
     const shearRadiusX = Math.abs(shearDx);
     const shearRadiusY = radiusX * radiusY / shearRadiusX;
-    drawShearedEllipse({centerX, centerY, radiusX: shearRadiusX, radiusY: shearRadiusY, shearSlope, isFilled}, context);
+    return drawShearedEllipse(
+        {centerX, centerY, radiusX: shearRadiusX, radiusY: shearRadiusY, shearSlope, isFilled},
+        context
+    );
 };
 
 /**

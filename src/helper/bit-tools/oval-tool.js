@@ -162,9 +162,10 @@ class OvalTool extends paper.Tool {
         const shearSlope = -decomposed.shearSlope.y / decomposed.shearSlope.x;
         const context = getRaster().getContext('2d');
         context.fillStyle = this.color;
+        let drew = false;
         if (Math.abs(decomposed.rotation) < Math.PI / 180) {
             // Use shear
-            drawShearedEllipse({
+            drew = drawShearedEllipse({
                 centerX: this.oval.position.x,
                 centerY: this.oval.position.y,
                 radiusX: radiusX * decomposed.scaling.x,
@@ -174,7 +175,7 @@ class OvalTool extends paper.Tool {
             }, context);
         } else if (Math.abs(Math.atan2(decomposed.shearSlope.y, decomposed.shearSlope.x)) < Math.PI / 180) {
             // Use rotation
-            drawRotatedEllipse({
+            drew = drawRotatedEllipse({
                 centerX: this.oval.position.x,
                 centerY: this.oval.position.y,
                 radiusX: radiusX * decomposed.scaling.x,
@@ -196,7 +197,7 @@ class OvalTool extends paper.Tool {
             const radiusA = Math.sqrt(-4 * C / ((B * B) - (4 * A * C)));
             const slope = B / 2 / C;
 
-            drawShearedEllipse({
+            drew = drawShearedEllipse({
                 centerX: this.oval.position.x,
                 centerY: this.oval.position.y,
                 radiusX: radiusA,
@@ -207,8 +208,9 @@ class OvalTool extends paper.Tool {
         }
         this.oval.remove();
         this.oval = null;
-        this.onUpdateImage();
-
+        if (drew) {
+            this.onUpdateImage();
+        }
     }
     deactivateTool () {
         this.commitOval();
