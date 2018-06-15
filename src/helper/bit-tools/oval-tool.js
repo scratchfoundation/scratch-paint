@@ -159,17 +159,7 @@ class OvalTool extends paper.Tool {
         const shearSlope = -decomposed.shearSlope.y / decomposed.shearSlope.x;
         const context = getRaster().getContext('2d');
         context.fillStyle = this.color;
-        if (Math.abs(Math.atan2(decomposed.shearSlope.y, decomposed.shearSlope.x)) < Math.PI / 180) {
-            // Use rotation
-            drawRotatedEllipse({
-                centerX: this.oval.position.x,
-                centerY: this.oval.position.y,
-                radiusX: radiusX * decomposed.scaling.x,
-                radiusY: radiusY * decomposed.scaling.y,
-                rotation: decomposed.rotation,
-                isFilled: true
-            }, context);
-        } else if (Math.abs(decomposed.rotation) < Math.PI / 180) {
+        if (Math.abs(decomposed.rotation) < Math.PI / 180) {
             // Use shear
             drawShearedEllipse({
                 centerX: this.oval.position.x,
@@ -177,6 +167,16 @@ class OvalTool extends paper.Tool {
                 radiusX: radiusX * decomposed.scaling.x,
                 radiusY: radiusY * decomposed.scaling.y,
                 shearSlope,
+                isFilled: true
+            }, context);
+        } else if (Math.abs(Math.atan2(decomposed.shearSlope.y, decomposed.shearSlope.x)) < Math.PI / 180) {
+            // Use rotation
+            drawRotatedEllipse({
+                centerX: this.oval.position.x,
+                centerY: this.oval.position.y,
+                radiusX: radiusX * decomposed.scaling.x,
+                radiusY: radiusY * decomposed.scaling.y,
+                rotation: decomposed.rotation,
                 isFilled: true
             }, context);
         } else {
