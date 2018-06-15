@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
-import {clearRaster, getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
+import {clearRaster, getRaster, hideGuideLayers, showGuideLayers} from './layer';
+import {getGuideColor} from './guides';
 import {inlineSvgFonts} from 'scratch-svg-renderer';
 
 const forEachLinePoint = function (point1, point2, callback) {
@@ -55,11 +56,11 @@ const solveQuadratic_ = function (a, b, c) {
 const drawShearedEllipse = function (options, context) {
     const centerX = ~~options.centerX;
     const centerY = ~~options.centerY;
-    const radiusX = ~~options.radiusX - .5;
-    const radiusY = ~~options.radiusY - .5;
+    const radiusX = ~~Math.abs(options.radiusX) - .5;
+    const radiusY = ~~Math.abs(options.radiusY) - .5;
     const shearSlope = options.shearSlope;
-    const isFilled = false;//options.isFilled;
-    if (shearSlope === Infinity || radiusX === 0 || radiusY === 0) {
+    const isFilled = options.isFilled;
+    if (shearSlope === Infinity || radiusX < 1 || radiusY < 1) {
         return;
     }
     // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a skewed ellipse formula
@@ -141,19 +142,20 @@ const drawShearedEllipse = function (options, context) {
         if (slope1 > 0) forwardLeaning = true;
 
         // step vertically
-        context.fillStyle = 'red';
         lastPoint = drawEllipseStepVertical_(
             forwardLeaning ? -radiusY : radiusY,
-            (x, y) => (y / x > slope1) || (forwardLeaning && x === 0)
+            (x, y) => {
+                if (x === 0 && y > 0) return true;
+                if (x === 0 && y < 0) return false;
+                return y / x > slope1;
+            }
         );
         // step horizontally while slope is flat
-        context.fillStyle = 'green';
         lastPoint = drawEllipseStepHorizontal_(
             lastPoint ? -lastPoint.x + .5 : .5,
             (x, y) => y / x > slope2
-        ) || lastPoint;
+        ) || {x: -lastPoint.x - .5, y: -lastPoint.y - .5};
         // step vertically until back to start
-        context.fillStyle = 'orange';
         drawEllipseStepVertical_(
             lastPoint.y - .5,
             (x, y) => {
@@ -163,19 +165,20 @@ const drawShearedEllipse = function (options, context) {
         );
     } else {
         // step horizontally forward
-        context.fillStyle = 'red';
         lastPoint = drawEllipseStepHorizontal_(
             .5,
             (x, y) => y / x > slope2
         );
         // step vertically while slope is steep
-        context.fillStyle = 'green';
         lastPoint = drawEllipseStepVertical_(
             lastPoint ? lastPoint.y - .5 : radiusY,
-            (x, y) => (y / x > slope1 && x !== 0)
+            (x, y) => {
+                if (x === 0 && y > 0) return true;
+                if (x === 0 && y < 0) return false;
+                return y / x > slope1;
+            }
         ) || lastPoint;
         // step horizontally until back to start
-        context.fillStyle = 'orange';
         drawEllipseStepHorizontal_(
             -lastPoint.x + .5,
             x => x < 0
@@ -227,13 +230,17 @@ const getBrushMark = function (size, color, isEraser) {
     const context = canvas.getContext('2d');
     context.imageSmoothingEnabled = false;
     context.fillStyle = isEraser ? 'white' : color;
-    // @todo add outline for erasers
     // Small squares for pixel artists
     if (size <= 5) {
-        if (size % 2) {
-            context.fillRect(1, 1, size, size);
+        let offset = 0;
+        if (size % 2) offset = 1;
+        if (isEraser) {
+            context.fillStyle = getGuideColor();
+            context.fillRect(offset, offset, size, size);
+            context.fillStyle = 'white';
+            context.fillRect(offset + 1, offset + 1, size - 2, size - 2);
         } else {
-            context.fillRect(0, 0, size, size);
+            context.fillRect(offset, offset, size, size);
         }
     } else {
         drawShearedEllipse({
@@ -244,6 +251,18 @@ const getBrushMark = function (size, color, isEraser) {
             shearSlope: 0,
             isFilled: true
         }, context);
+        if (isEraser) {
+            // Add outline
+            context.fillStyle = getGuideColor();
+            drawShearedEllipse({
+                centerX: size / 2,
+                centerY: size / 2,
+                radiusX: size / 2,
+                radiusY: size / 2,
+                shearSlope: 0,
+                isFilled: false
+            }, context);
+        }
     }
     return canvas;
 };
