@@ -58,7 +58,7 @@ const drawShearedEllipse = function (options, context) {
     const radiusX = ~~options.radiusX - .5;
     const radiusY = ~~options.radiusY - .5;
     const shearSlope = options.shearSlope;
-    const isFilled = options.isFilled;
+    const isFilled = false;//options.isFilled;
     if (shearSlope === Infinity || radiusX === 0 || radiusY === 0) {
         return;
     }
@@ -106,7 +106,7 @@ const drawShearedEllipse = function (options, context) {
     /**
      * Horizontal stepping portion of ellipse drawing algorithm
      * @param {!number} startX x to start drawing from
-     * @param {!function} conditionFn function which should become true when we should stop stepping
+     * @param {!function} conditionFn function which should become false when we should stop stepping
      * @return {object} last point drawn to the canvas, or null if no points drawn
      */
     const drawEllipseStepHorizontal_ = function (startX, conditionFn) {
@@ -141,14 +141,19 @@ const drawShearedEllipse = function (options, context) {
         if (slope1 > 0) forwardLeaning = true;
 
         // step vertically
+        context.fillStyle = 'red';
         lastPoint = drawEllipseStepVertical_(
             forwardLeaning ? -radiusY : radiusY,
-            (x, y) => (y / x > slope1) || (forwardLeaning && x === 0));
+            (x, y) => (y / x > slope1) || (forwardLeaning && x === 0)
+        );
         // step horizontally while slope is flat
+        context.fillStyle = 'green';
         lastPoint = drawEllipseStepHorizontal_(
             lastPoint ? -lastPoint.x + .5 : .5,
-            (x, y) => y / x > slope2) || lastPoint;
+            (x, y) => y / x > slope2
+        ) || lastPoint;
         // step vertically until back to start
+        context.fillStyle = 'orange';
         drawEllipseStepVertical_(
             lastPoint.y - .5,
             (x, y) => {
@@ -158,17 +163,23 @@ const drawShearedEllipse = function (options, context) {
         );
     } else {
         // step horizontally forward
+        context.fillStyle = 'red';
         lastPoint = drawEllipseStepHorizontal_(
             .5,
-            (x, y) => y / x > slope2);
+            (x, y) => y / x > slope2
+        );
         // step vertically while slope is steep
+        context.fillStyle = 'green';
         lastPoint = drawEllipseStepVertical_(
             lastPoint ? lastPoint.y - .5 : radiusY,
-            (x, y) => (y / x > slope1) || x === 0) || lastPoint;
+            (x, y) => (y / x > slope1 && x !== 0)
+        ) || lastPoint;
         // step horizontally until back to start
+        context.fillStyle = 'orange';
         drawEllipseStepHorizontal_(
             -lastPoint.x + .5,
-            (x, y) => y / x > slope2);
+            x => x < 0
+        );
     }
 };
 
