@@ -140,7 +140,7 @@ class OvalTool extends paper.Tool {
         context.fillStyle = this.color;
 
         const drew = drawEllipse(
-            this.oval.positionX, this.oval.positionY,
+            this.oval.position.x, this.oval.position.y,
             radiusX, radiusY,
             this.oval.matrix,
             true, /* isFilled */
