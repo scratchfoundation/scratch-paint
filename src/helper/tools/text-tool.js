@@ -51,7 +51,7 @@ class TextTool extends paper.Tool {
         this.boundingBoxTool = new BoundingBoxTool(Modes.TEXT, setSelectedItems, clearSelectedItems, onUpdateImage);
         this.nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         this.lastEvent = null;
-        
+
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseDown = this.handleMouseDown;
@@ -247,7 +247,7 @@ class TextTool extends paper.Tool {
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
-        
+
         if (this.mode === TextTool.SELECT_MODE) {
             this.boundingBoxTool.onMouseUp(event);
             this.isBoundingBoxMode = null;

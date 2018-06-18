@@ -166,7 +166,7 @@ const PaintEditorComponent = props => (
                     />
                 </div>
             ) : null}
-            
+
             {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
                 <div className={isBitmap(props.format) ? styles.modeSelector : styles.hidden}>
                     <BitBrushMode
@@ -180,6 +180,7 @@ const PaintEditorComponent = props => (
                         onUpdateImage={props.onUpdateImage}
                     />
                     <TextMode
+                        isBitmap
                         textArea={props.textArea}
                         onUpdateImage={props.onUpdateImage}
                     />
@@ -192,7 +193,7 @@ const PaintEditorComponent = props => (
                     <BitSelectMode />
                 </div>
             ) : null}
-            
+
             <div>
                 {/* Canvas */}
                 <div

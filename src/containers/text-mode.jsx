@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Fonts from '../lib/fonts';
 import Modes from '../lib/modes';
-import {isBitmap} from '../lib/format';
 import Formats from '../lib/format';
 import {MIXED} from '../helper/style-path';
 
@@ -66,7 +65,7 @@ class TextMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        
+
         // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
         // If exactly one of fill or stroke color is set, set the other one to transparent.
         // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
@@ -97,7 +96,8 @@ class TextMode extends React.Component {
         );
         this.tool.setColorState(this.props.colorState);
         this.tool.setFont(this.props.font);
-        this.tool.setFormat(this.props.format);
+        // Tool may be created before the format is changed, so trust this.props.isBitmap
+        this.tool.setFormat(this.props.isBitmap ? Formats.BITMAP : Formats.VECTOR);
         this.tool.activate();
     }
     deactivateTool () {
@@ -107,7 +107,7 @@ class TextMode extends React.Component {
     }
     render () {
         return (
-            isBitmap(this.props.format) ?
+            this.props.isBitmap ?
                 <BitTextModeComponent
                     isSelected={this.props.isTextModeActive}
                     onMouseDown={this.props.handleChangeModeBitText}
@@ -132,6 +132,7 @@ TextMode.propTypes = {
     format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
     handleChangeModeBitText: PropTypes.func.isRequired,
     handleChangeModeText: PropTypes.func.isRequired,
+    isBitmap: PropTypes.bool,
     isTextModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
@@ -144,11 +145,11 @@ TextMode.propTypes = {
     viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
     colorState: state.scratchPaint.color,
     font: state.scratchPaint.font,
     format: state.scratchPaint.format,
-    isTextModeActive: isBitmap(state.scratchPaint.format) ?
+    isTextModeActive: ownProps.isBitmap ?
         state.scratchPaint.mode === Modes.BIT_TEXT :
         state.scratchPaint.mode === Modes.TEXT,
     selectedItems: state.scratchPaint.selectedItems,
