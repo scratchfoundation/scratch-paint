@@ -196,6 +196,8 @@ const ModeToolsComponent = props => {
                 </InputGroup>
             </div>
         );
+    case Modes.BIT_TEXT:
+        /* falls through */
     case Modes.TEXT:
         return (
             <div className={classNames(props.className, styles.modeTools)}>

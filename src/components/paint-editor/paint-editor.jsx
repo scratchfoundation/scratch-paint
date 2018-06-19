@@ -10,7 +10,6 @@ import BitBrushMode from '../../containers/bit-brush-mode.jsx';
 import BitLineMode from '../../containers/bit-line-mode.jsx';
 import BitOvalMode from '../../containers/bit-oval-mode.jsx';
 import BitRectMode from '../../containers/bit-rect-mode.jsx';
-import BitTextMode from '../../components/bit-text-mode/bit-text-mode.jsx';
 import BitFillMode from '../../containers/bit-fill-mode.jsx';
 import BitEraserMode from '../../containers/bit-eraser-mode.jsx';
 import BitSelectMode from '../../components/bit-select-mode/bit-select-mode.jsx';
@@ -167,7 +166,7 @@ const PaintEditorComponent = props => (
                     />
                 </div>
             ) : null}
-            
+
             {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
                 <div className={isBitmap(props.format) ? styles.modeSelector : styles.hidden}>
                     <BitBrushMode
@@ -182,7 +181,11 @@ const PaintEditorComponent = props => (
                     <BitRectMode
                         onUpdateImage={props.onUpdateImage}
                     />
-                    <BitTextMode />
+                    <TextMode
+                        isBitmap
+                        textArea={props.textArea}
+                        onUpdateImage={props.onUpdateImage}
+                    />
                     <BitFillMode
                         onUpdateImage={props.onUpdateImage}
                     />
@@ -192,7 +195,7 @@ const PaintEditorComponent = props => (
                     <BitSelectMode />
                 </div>
             ) : null}
-            
+
             <div>
                 {/* Canvas */}
                 <div

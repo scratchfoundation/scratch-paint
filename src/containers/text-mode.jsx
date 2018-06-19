@@ -17,6 +17,7 @@ import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
 import TextTool from '../helper/tools/text-tool';
 import TextModeComponent from '../components/text-mode/text-mode.jsx';
+import BitTextModeComponent from '../components/bit-text-mode/bit-text-mode.jsx';
 
 class TextMode extends React.Component {
     constructor (props) {
@@ -49,7 +50,7 @@ class TextMode extends React.Component {
         }
 
         if (nextProps.isTextModeActive && !this.props.isTextModeActive) {
-            this.activateTool();
+            this.activateTool(nextProps);
         } else if (!nextProps.isTextModeActive && this.props.isTextModeActive) {
             this.deactivateTool();
         }
@@ -57,13 +58,13 @@ class TextMode extends React.Component {
     shouldComponentUpdate (nextProps) {
         return nextProps.isTextModeActive !== this.props.isTextModeActive;
     }
-    activateTool () {
+    activateTool (nextProps) {
         clearSelection(this.props.clearSelectedItems);
-        
+
         // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
         // If exactly one of fill or stroke color is set, set the other one to transparent.
         // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
-        const {fillColor, strokeColor, strokeWidth} = this.props.colorState;
+        const {fillColor, strokeColor, strokeWidth} = nextProps.colorState;
         const fillColorPresent = fillColor !== MIXED && fillColor !== null;
         const strokeColorPresent =
             strokeColor !== MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
@@ -75,8 +76,8 @@ class TextMode extends React.Component {
         } else if (fillColorPresent && !strokeColorPresent) {
             this.props.onChangeStrokeColor(null);
         }
-        if (!this.props.font || Object.keys(Fonts).map(key => Fonts[key])
-            .indexOf(this.props.font) < 0) {
+        if (!nextProps.font || Object.keys(Fonts).map(key => Fonts[key])
+            .indexOf(nextProps.font) < 0) {
             this.props.changeFont(Fonts.SANS_SERIF);
         }
 
@@ -86,10 +87,11 @@ class TextMode extends React.Component {
             this.props.clearSelectedItems,
             this.props.onUpdateImage,
             this.props.setTextEditTarget,
-            this.props.changeFont
+            this.props.changeFont,
+            nextProps.isBitmap
         );
-        this.tool.setColorState(this.props.colorState);
-        this.tool.setFont(this.props.font);
+        this.tool.setColorState(nextProps.colorState);
+        this.tool.setFont(nextProps.font);
         this.tool.activate();
     }
     deactivateTool () {
@@ -99,10 +101,15 @@ class TextMode extends React.Component {
     }
     render () {
         return (
-            <TextModeComponent
-                isSelected={this.props.isTextModeActive}
-                onMouseDown={this.props.handleMouseDown}
-            />
+            this.props.isBitmap ?
+                <BitTextModeComponent
+                    isSelected={this.props.isTextModeActive}
+                    onMouseDown={this.props.handleChangeModeBitText}
+                /> :
+                <TextModeComponent
+                    isSelected={this.props.isTextModeActive}
+                    onMouseDown={this.props.handleChangeModeText}
+                />
         );
     }
 }
@@ -116,7 +123,9 @@ TextMode.propTypes = {
         strokeWidth: PropTypes.number
     }).isRequired,
     font: PropTypes.string,
-    handleMouseDown: PropTypes.func.isRequired,
+    handleChangeModeBitText: PropTypes.func.isRequired,
+    handleChangeModeText: PropTypes.func.isRequired,
+    isBitmap: PropTypes.bool,
     isTextModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
@@ -129,10 +138,12 @@ TextMode.propTypes = {
     viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
     colorState: state.scratchPaint.color,
     font: state.scratchPaint.font,
-    isTextModeActive: state.scratchPaint.mode === Modes.TEXT,
+    isTextModeActive: ownProps.isBitmap ?
+        state.scratchPaint.mode === Modes.BIT_TEXT :
+        state.scratchPaint.mode === Modes.TEXT,
     selectedItems: state.scratchPaint.selectedItems,
     textEditTarget: state.scratchPaint.textEditTarget,
     viewBounds: state.scratchPaint.viewBounds
@@ -144,14 +155,17 @@ const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
+    handleChangeModeBitText: () => {
+        dispatch(changeMode(Modes.BIT_TEXT));
+    },
+    handleChangeModeText: () => {
+        dispatch(changeMode(Modes.TEXT));
+    },
     setSelectedItems: () => {
         dispatch(setSelectedItems(getSelectedLeafItems()));
     },
     setTextEditTarget: targetId => {
         dispatch(setTextEditTarget(targetId));
-    },
-    handleMouseDown: () => {
-        dispatch(changeMode(Modes.TEXT));
     },
     onChangeFillColor: fillColor => {
         dispatch(changeFillColor(fillColor));

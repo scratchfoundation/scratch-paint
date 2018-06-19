@@ -9,13 +9,13 @@ const forEachLinePoint = function (point1, point2, callback) {
     const x2 = ~~point2.x;
     let y1 = ~~point1.y;
     const y2 = ~~point2.y;
-    
+
     const dx = Math.abs(x2 - x1);
     const dy = Math.abs(y2 - y1);
     const sx = (x1 < x2) ? 1 : -1;
     const sy = (y1 < y2) ? 1 : -1;
     let err = dx - dy;
-    
+
     callback(x1, y1);
     while (x1 !== x2 || y1 !== y2) {
         const e2 = err * 2;
@@ -336,7 +336,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
     showGuideLayers(guideLayers);
 
     // Get rid of anti-aliasing
-    // @todo get crisp text?
+    // @todo get crisp text https://github.com/LLK/scratch-paint/issues/508
     svg.setAttribute('shape-rendering', 'crispEdges');
     inlineSvgFonts(svg);
     const svgString = (new XMLSerializer()).serializeToString(svg);
