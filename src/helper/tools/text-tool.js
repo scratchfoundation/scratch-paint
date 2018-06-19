@@ -1,6 +1,5 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {isBitmap} from '../../lib/format';
 import {clearSelection, getSelectedLeafItems} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -39,8 +38,10 @@ class TextTool extends paper.Tool {
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      * @param {!function} setTextEditTarget Call to set text editing target whenever text editing is active
      * @param {!function} changeFont Call to change the font in the dropdown
+     * @param {?boolean} isBitmap True if text should be rasterized once it's deselected
      */
-    constructor (textAreaElement, setSelectedItems, clearSelectedItems, onUpdateImage, setTextEditTarget, changeFont) {
+    constructor (textAreaElement, setSelectedItems, clearSelectedItems, onUpdateImage, setTextEditTarget, changeFont,
+            isBitmap) {
         super();
         this.element = textAreaElement;
         this.setSelectedItems = setSelectedItems;
@@ -50,7 +51,7 @@ class TextTool extends paper.Tool {
         this.changeFont = changeFont;
         this.boundingBoxTool = new BoundingBoxTool(Modes.TEXT, setSelectedItems, clearSelectedItems, onUpdateImage);
         this.nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
-        this.lastEvent = null;
+        this.isBitmap = isBitmap;
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -67,6 +68,7 @@ class TextTool extends paper.Tool {
         this.mode = null;
         this.active = false;
         this.lastTypeEvent = null;
+        this.lastEvent = null;
 
         // If text selected and then activate this tool, switch to text edit mode for that text
         // If double click on text while in select mode, does mode change to text mode? Text fully selected by default
@@ -156,9 +158,6 @@ class TextTool extends paper.Tool {
     setColorState (colorState) {
         this.colorState = colorState;
     }
-    setFormat (format) {
-        this.format = format;
-    }
     handleMouseMove (event) {
         const hitResults = paper.project.hitTestAll(event.point, this.getTextEditHitOptions());
         if (hitResults.length) {
@@ -199,7 +198,7 @@ class TextTool extends paper.Tool {
 
         // We clicked away from the item, so end the current mode
         if (lastMode === TextTool.SELECT_MODE) {
-            if (isBitmap(this.format)) {
+            if (this.isBitmap) {
                 this.commitText();
             }
             clearSelection(this.clearSelectedItems);
@@ -363,13 +362,11 @@ class TextTool extends paper.Tool {
         const textRaster = this.textBox.rasterize(72, false /* insert */);
         this.textBox.remove();
         this.textBox = null;
-        textRaster.onLoad = () => {
-            getRaster().drawImage(
-                textRaster.canvas,
-                new paper.Point(Math.floor(textRaster.bounds.x), Math.floor(textRaster.bounds.y))
-            );
-            this.onUpdateImage();
-        };
+        getRaster().drawImage(
+            textRaster.canvas,
+            new paper.Point(Math.floor(textRaster.bounds.x), Math.floor(textRaster.bounds.y))
+        );
+        this.onUpdateImage();
     }
     deactivateTool () {
         if (this.textBox && this.textBox.content.trim() === '') {
@@ -377,7 +374,7 @@ class TextTool extends paper.Tool {
             this.textBox = null;
         }
         this.endTextEdit();
-        if (isBitmap(this.format)) {
+        if (this.isBitmap) {
             this.commitText();
         }
         this.boundingBoxTool.removeBoundsPath();
