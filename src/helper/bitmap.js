@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
-import {clearRaster, getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
+import {clearRaster, getRaster, hideGuideLayers, showGuideLayers} from './layer';
+import {getGuideColor} from './guides';
 import {inlineSvgFonts} from 'scratch-svg-renderer';
 
 const forEachLinePoint = function (point1, point2, callback) {
@@ -30,57 +31,201 @@ const forEachLinePoint = function (point1, point2, callback) {
     }
 };
 
-const fillEllipse = function (centerX, centerY, radiusX, radiusY, context) {
-    // Bresenham ellipse algorithm
-    centerX = ~~centerX;
-    centerY = ~~centerY;
-    radiusX = ~~radiusX;
-    radiusY = ~~radiusY;
-    const twoRadXSquared = 2 * radiusX * radiusX;
-    const twoRadYSquared = 2 * radiusY * radiusY;
-    let x = radiusX;
-    let y = 0;
-    let dx = radiusY * radiusY * (1 - (radiusX << 1));
-    let dy = radiusX * radiusX;
-    let error = 0;
-    let stoppingX = twoRadYSquared * radiusX;
-    let stoppingY = 0;
+/**
+ * @param {!number} a Coefficient in ax^2 + bx + c = 0
+ * @param {!number} b Coefficient in ax^2 + bx + c = 0
+ * @param {!number} c Coefficient in ax^2 + bx + c = 0
+ * @return {Array<number>} Array of 2 solutions, with the larger solution first
+ */
+const solveQuadratic_ = function (a, b, c) {
+    const soln1 = (-b + Math.sqrt((b * b) - (4 * a * c))) / 2 / a;
+    const soln2 = (-b - Math.sqrt((b * b) - (4 * a * c))) / 2 / a;
+    return soln1 > soln2 ? [soln1, soln2] : [soln2, soln1];
+};
 
-    while (stoppingX >= stoppingY) {
-        context.fillRect(centerX - x, centerY - y, x << 1, y << 1);
-        y++;
-        stoppingY += twoRadXSquared;
-        error += dy;
-        dy += twoRadXSquared;
-        if ((error << 1) + dx > 0) {
-            x--;
-            stoppingX -= twoRadYSquared;
-            error += dx;
-            dx += twoRadYSquared;
-        }
+/**
+ * @param {!object} options drawing options
+ * @param {!number} options.centerX center of ellipse, x
+ * @param {!number} options.centerY center of ellipse, y
+ * @param {!number} options.radiusX major radius of ellipse
+ * @param {!number} options.radiusY minor radius of ellipse
+ * @param {!number} options.shearSlope slope of the sheared x axis
+ * @param {?boolean} options.isFilled true if isFilled
+ * @param {!CanvasRenderingContext2D} context for drawing
+ * @return {boolean} true if anything was drawn, false if not
+ */
+const drawShearedEllipse_ = function (options, context) {
+    const centerX = ~~options.centerX;
+    const centerY = ~~options.centerY;
+    const radiusX = ~~Math.abs(options.radiusX) - .5;
+    const radiusY = ~~Math.abs(options.radiusY) - .5;
+    const shearSlope = options.shearSlope;
+    const isFilled = options.isFilled;
+    if (shearSlope === Infinity || radiusX < 1 || radiusY < 1) {
+        return false;
     }
+    // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a skewed ellipse formula
+    const A = (1 / radiusX / radiusX) + (shearSlope * shearSlope / radiusY / radiusY);
+    const B = -2 * shearSlope / radiusY / radiusY;
+    const C = 1 / radiusY / radiusY;
+    // Line with slope1 intersects the ellipse where its derivative is 1
+    const slope1 = ((-2 * A) - B) / ((2 * C) + B);
+    // Line with slope2 intersects the ellipse where its derivative is -1
+    const slope2 = (-(2 * A) + B) / (-(2 * C) + B);
+    const verticalStepsFirst = slope1 > slope2;
 
-    x = 0;
-    y = radiusY;
-    dx = radiusY * radiusY;
-    dy = radiusX * radiusX * (1 - (radiusY << 1));
-    error = 0;
-    stoppingX = 0;
-    stoppingY = twoRadXSquared * radiusY;
-    while (stoppingX <= stoppingY) {
-        context.fillRect(centerX - x, centerY - y, x * 2, y * 2);
-        x++;
-        stoppingX += twoRadYSquared;
-        error += dx;
-        dx += twoRadYSquared;
-        if ((error << 1) + dy > 0) {
+    /**
+     * Vertical stepping portion of ellipse drawing algorithm
+     * @param {!number} startY y to start drawing from
+     * @param {!function} conditionFn function which should become true when we should stop stepping
+     * @return {object} last point drawn to the canvas, or null if no points drawn
+     */
+    const drawEllipseStepVertical_ = function (startY, conditionFn) {
+        // Points on the ellipse
+        let y = startY;
+        let x = solveQuadratic_(A, B * y, (C * y * y) - 1);
+        // last pixel position at which a draw was performed
+        let pY;
+        let pX1;
+        let pX2;
+        while (conditionFn(x[0], y)) {
+            pY = Math.floor(y);
+            pX1 = Math.floor(x[0]);
+            pX2 = Math.floor(x[1]);
+            if (isFilled) {
+                context.fillRect(centerX - pX1 - 1, centerY + pY, pX1 - pX2 + 1, 1);
+                context.fillRect(centerX + pX2, centerY - pY - 1, pX1 - pX2 + 1, 1);
+            } else {
+                context.fillRect(centerX - pX1 - 1, centerY + pY, 1, 1);
+                context.fillRect(centerX + pX1, centerY - pY - 1, 1, 1);
+            }
             y--;
-            stoppingY -= twoRadXSquared;
-            error += dy;
-            dy += twoRadXSquared;
+            x = solveQuadratic_(A, B * y, (C * y * y) - 1);
         }
+        return pX1 || pY ? {x: pX1, y: pY} : null;
+    };
 
+    /**
+     * Horizontal stepping portion of ellipse drawing algorithm
+     * @param {!number} startX x to start drawing from
+     * @param {!function} conditionFn function which should become false when we should stop stepping
+     * @return {object} last point drawn to the canvas, or null if no points drawn
+     */
+    const drawEllipseStepHorizontal_ = function (startX, conditionFn) {
+        // Points on the ellipse
+        let x = startX;
+        let y = solveQuadratic_(C, B * x, (A * x * x) - 1);
+        // last pixel position at which a draw was performed
+        let pX;
+        let pY1;
+        let pY2;
+        while (conditionFn(x, y[0])) {
+            pX = Math.floor(x);
+            pY1 = Math.floor(y[0]);
+            pY2 = Math.floor(y[1]);
+            if (isFilled) {
+                context.fillRect(centerX - pX - 1, centerY + pY2, 1, pY1 - pY2 + 1);
+                context.fillRect(centerX + pX, centerY - pY1 - 1, 1, pY1 - pY2 + 1);
+            } else {
+                context.fillRect(centerX - pX - 1, centerY + pY1, 1, 1);
+                context.fillRect(centerX + pX, centerY - pY1 - 1, 1, 1);
+            }
+            x++;
+            y = solveQuadratic_(C, B * x, (A * x * x) - 1);
+        }
+        return pX || pY1 ? {x: pX, y: pY1} : null;
+    };
+
+    // Last point drawn
+    let lastPoint;
+    if (verticalStepsFirst) {
+        let forwardLeaning = false;
+        if (slope1 > 0) forwardLeaning = true;
+
+        // step vertically
+        lastPoint = drawEllipseStepVertical_(
+            forwardLeaning ? -radiusY : radiusY,
+            (x, y) => {
+                if (x === 0 && y > 0) return true;
+                if (x === 0 && y < 0) return false;
+                return y / x > slope1;
+            }
+        );
+        // step horizontally while slope is flat
+        lastPoint = drawEllipseStepHorizontal_(
+            lastPoint ? -lastPoint.x + .5 : .5,
+            (x, y) => y / x > slope2
+        ) || {x: -lastPoint.x - .5, y: -lastPoint.y - .5};
+        // step vertically until back to start
+        drawEllipseStepVertical_(
+            lastPoint.y - .5,
+            (x, y) => {
+                if (forwardLeaning) return y > -radiusY;
+                return y > radiusY;
+            }
+        );
+    } else {
+        // step horizontally forward
+        lastPoint = drawEllipseStepHorizontal_(
+            .5,
+            (x, y) => y / x > slope2
+        );
+        // step vertically while slope is steep
+        lastPoint = drawEllipseStepVertical_(
+            lastPoint ? lastPoint.y - .5 : radiusY,
+            (x, y) => {
+                if (x === 0 && y > 0) return true;
+                if (x === 0 && y < 0) return false;
+                return y / x > slope1;
+            }
+        ) || lastPoint;
+        // step horizontally until back to start
+        drawEllipseStepHorizontal_(
+            -lastPoint.x + .5,
+            x => x < 0
+        );
     }
+    return true;
+};
+
+/**
+ * Draw an ellipse, given the original axis-aligned radii and
+ * an affine transformation. Returns false if the ellipse could
+ * not be drawn; for instance, the matrix is non-invertible.
+ *
+ * @param {!number} positionX Center of ellipse
+ * @param {!number} positionY Center of ellipse
+ * @param {!number} radiusX x-aligned radius of ellipse
+ * @param {!number} radiusY y-aligned radius of ellipse
+ * @param {!paper.Matrix} matrix affine transformation matrix
+ * @param {?boolean} isFilled true if isFilled
+ * @param {!CanvasRenderingContext2D} context for drawing
+ * @return {boolean} true if anything was drawn, false if not
+ */
+const drawEllipse = function (positionX, positionY, radiusX, radiusY, matrix, isFilled, context) {
+    if (!matrix.isInvertible()) return false;
+    const inverse = matrix.clone().invert();
+
+    // Calculate the ellipse formula
+    // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a transformed ellipse formula
+    const A = (inverse.a * inverse.a / radiusX / radiusX) + (inverse.b * inverse.b / radiusY / radiusY);
+    const B = (2 * inverse.a * inverse.c / radiusX / radiusX) + (2 * inverse.b * inverse.d / radiusY / radiusY);
+    const C = (inverse.c * inverse.c / radiusX / radiusX) + (inverse.d * inverse.d / radiusY / radiusY);
+
+    // Convert to a sheared ellipse formula. All ellipses are equivalent to some sheared axis-aligned ellipse.
+    // radiusA, radiusB, and slope are parameters of a skewed ellipse with the above formula
+    const radiusB = 1 / Math.sqrt(C);
+    const radiusA = Math.sqrt(-4 * C / ((B * B) - (4 * A * C)));
+    const slope = B / 2 / C;
+
+    return drawShearedEllipse_({
+        centerX: positionX,
+        centerY: positionY,
+        radiusX: radiusA,
+        radiusY: radiusB,
+        shearSlope: slope,
+        isFilled: isFilled
+    }, context);
 };
 
 /**
@@ -98,17 +243,39 @@ const getBrushMark = function (size, color, isEraser) {
     const context = canvas.getContext('2d');
     context.imageSmoothingEnabled = false;
     context.fillStyle = isEraser ? 'white' : color;
-    // @todo add outline for erasers
     // Small squares for pixel artists
     if (size <= 5) {
-        if (size % 2) {
-            context.fillRect(1, 1, size, size);
+        let offset = 0;
+        if (size % 2) offset = 1;
+        if (isEraser) {
+            context.fillStyle = getGuideColor();
+            context.fillRect(offset, offset, size, size);
+            context.fillStyle = 'white';
+            context.fillRect(offset + 1, offset + 1, size - 2, size - 2);
         } else {
-            context.fillRect(0, 0, size, size);
+            context.fillRect(offset, offset, size, size);
         }
     } else {
-        const roundedDownRadius = ~~(size / 2);
-        fillEllipse(roundedDownRadius, roundedDownRadius, roundedDownRadius, roundedDownRadius, context);
+        drawShearedEllipse_({
+            centerX: size / 2,
+            centerY: size / 2,
+            radiusX: size / 2,
+            radiusY: size / 2,
+            shearSlope: 0,
+            isFilled: true
+        }, context);
+        if (isEraser) {
+            // Add outline
+            context.fillStyle = getGuideColor();
+            drawShearedEllipse_({
+                centerX: size / 2,
+                centerY: size / 2,
+                radiusX: size / 2,
+                radiusY: size / 2,
+                shearSlope: 0,
+                isFilled: false
+            }, context);
+        }
     }
     return canvas;
 };
@@ -396,6 +563,6 @@ export {
     floodFillAll,
     getBrushMark,
     getHitBounds,
-    fillEllipse,
+    drawEllipse,
     forEachLinePoint
 };
