@@ -41,7 +41,7 @@ class TextTool extends paper.Tool {
      * @param {?boolean} isBitmap True if text should be rasterized once it's deselected
      */
     constructor (textAreaElement, setSelectedItems, clearSelectedItems, onUpdateImage, setTextEditTarget, changeFont,
-            isBitmap) {
+        isBitmap) {
         super();
         this.element = textAreaElement;
         this.setSelectedItems = setSelectedItems;
@@ -131,13 +131,7 @@ class TextTool extends paper.Tool {
             return;
         }
         this.endTextEdit();
-        if (this.textBox) {
-            this.mode = TextTool.SELECT_MODE;
-            this.textBox.selected = true;
-            this.setSelectedItems();
-            // Finished editing a textbox, save undo state
-            this.onUpdateImage();
-        }
+        this.beginSelect();
     }
     /**
      * Called when the view matrix changes
@@ -170,56 +164,44 @@ class TextTool extends paper.Tool {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
 
-        const lastMode = this.mode;
         // Check if double clicked
-        let doubleClicked = false;
-        if (this.lastEvent) {
-            if ((event.event.timeStamp - this.lastEvent.event.timeStamp) < TextTool.DOUBLE_CLICK_MILLIS) {
-                doubleClicked = true;
-            } else {
-                doubleClicked = false;
-            }
-        }
+        const doubleClicked = this.lastEvent &&
+            (event.event.timeStamp - this.lastEvent.event.timeStamp) < TextTool.DOUBLE_CLICK_MILLIS;
         this.lastEvent = event;
-
         if (doubleClicked &&
                 this.mode === TextTool.SELECT_MODE &&
                 this.textBox.hitTest(event.point)) {
             // Double click in select mode moves you to text edit mode
-            clearSelection(this.clearSelectedItems);
+            this.endSelect();
             this.beginTextEdit(this.textBox.content, this.textBox.matrix);
             return;
-        } else if (
-            this.boundingBoxTool.onMouseDown(
-                event, false /* clone */, false /* multiselect */, this.getBoundingBoxHitOptions())) {
-            // In select mode staying in select mode
+        }
+
+        // In select mode staying in select mode
+        if (this.boundingBoxTool.onMouseDown(
+            event, false /* clone */, false /* multiselect */, this.getBoundingBoxHitOptions())) {
             return;
         }
 
         // We clicked away from the item, so end the current mode
-        if (lastMode === TextTool.SELECT_MODE) {
+        const lastMode = this.mode;
+        if (this.mode === TextTool.SELECT_MODE) {
+            this.endSelect();
             if (this.isBitmap) {
                 this.commitText();
             }
-            clearSelection(this.clearSelectedItems);
-            this.mode = null;
-        } else if (lastMode === TextTool.TEXT_EDIT_MODE) {
+        } else if (this.mode === TextTool.TEXT_EDIT_MODE) {
             this.endTextEdit();
         }
 
         const hitResults = paper.project.hitTestAll(event.point, this.getTextEditHitOptions());
         if (hitResults.length) {
             // Clicking a different text item to begin text edit mode on that item
-            clearSelection(this.clearSelectedItems);
             this.textBox = hitResults[0].item;
             this.beginTextEdit(this.textBox.content, this.textBox.matrix);
         } else if (lastMode === TextTool.TEXT_EDIT_MODE) {
             // In text mode clicking away to begin select mode
-            if (this.textBox) {
-                this.mode = TextTool.SELECT_MODE;
-                this.textBox.selected = true;
-                this.setSelectedItems();
-            }
+            this.beginSelect();
         } else {
             // In no mode or select mode clicking away to begin text edit mode
             this.textBox = new paper.PointText({
@@ -299,6 +281,17 @@ class TextTool extends paper.Tool {
         this.element.style.width = `${this.textBox.internalBounds.width + 1}px`;
         this.element.style.height = `${this.textBox.internalBounds.height}px`;
     }
+    beginSelect () {
+        if (this.textBox) {
+            this.mode = TextTool.SELECT_MODE;
+            this.textBox.selected = true;
+            this.setSelectedItems();
+        }
+    }
+    endSelect () {
+        clearSelection(this.clearSelectedItems);
+        this.mode = null;
+    }
     /**
      * @param {string} initialText Text to initialize the text area with
      * @param {paper.Matrix} matrix Transform matrix for the element. Defaults
@@ -353,7 +346,14 @@ class TextTool extends paper.Tool {
             this.element.removeEventListener('input', this.eventListener);
             this.eventListener = null;
         }
-        this.lastTypeEvent = null;
+        if (this.textBox && this.lastTypeEvent) {
+            // Finished editing a textbox, save undo state
+            // Select the textbox so that it will be selected if the user performs undo.
+            this.textBox.selected = true;
+            this.onUpdateImage();
+            this.textBox.selected = false;
+            this.lastTypeEvent = null;
+        }
     }
     commitText () {
         if (!this.textBox || !this.textBox.parent) return;
