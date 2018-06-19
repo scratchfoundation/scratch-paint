@@ -3,6 +3,7 @@ import keyMirror from 'keymirror';
 const Modes = keyMirror({
     BIT_BRUSH: null,
     BIT_LINE: null,
+    BIT_OVAL: null,
     BIT_RECT: null,
     BIT_FILL: null,
     BIT_ERASER: null,
@@ -21,6 +22,7 @@ const Modes = keyMirror({
 const BitmapModes = keyMirror({
     BIT_BRUSH: null,
     BIT_LINE: null,
+    BIT_OVAL: null,
     BIT_RECT: null,
     BIT_FILL: null,
     BIT_ERASER: null

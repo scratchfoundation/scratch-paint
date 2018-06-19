@@ -8,7 +8,7 @@ import PaperCanvas from '../../containers/paper-canvas.jsx';
 
 import BitBrushMode from '../../containers/bit-brush-mode.jsx';
 import BitLineMode from '../../containers/bit-line-mode.jsx';
-import BitOvalMode from '../../components/bit-oval-mode/bit-oval-mode.jsx';
+import BitOvalMode from '../../containers/bit-oval-mode.jsx';
 import BitRectMode from '../../containers/bit-rect-mode.jsx';
 import BitTextMode from '../../components/bit-text-mode/bit-text-mode.jsx';
 import BitFillMode from '../../containers/bit-fill-mode.jsx';
@@ -176,7 +176,9 @@ const PaintEditorComponent = props => (
                     <BitLineMode
                         onUpdateImage={props.onUpdateImage}
                     />
-                    <BitOvalMode />
+                    <BitOvalMode
+                        onUpdateImage={props.onUpdateImage}
+                    />
                     <BitRectMode
                         onUpdateImage={props.onUpdateImage}
                     />
