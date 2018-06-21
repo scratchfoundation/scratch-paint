@@ -1,7 +1,7 @@
 import paper from '@scratch/paper';
 import {getRaster} from '../layer';
 import {forEachLinePoint, getBrushMark} from '../bitmap';
-import {getGuideLayer} from '../layer';
+import {createCanvas, getGuideLayer} from '../layer';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
 
 /**
@@ -77,9 +77,7 @@ class LineTool extends paper.Tool {
 
         if (this.cursorPreview) this.cursorPreview.remove();
 
-        const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = ART_BOARD_WIDTH;
-        tmpCanvas.height = ART_BOARD_HEIGHT;
+        const tmpCanvas = createCanvas();
         this.drawTarget = new paper.Raster(tmpCanvas);
         this.drawTarget.parent = getGuideLayer();
         this.drawTarget.guide = true;

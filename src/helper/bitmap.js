@@ -529,10 +529,11 @@ const drawRect = function (rect, context) {
         const width = rect.size.width * rect.matrix.a;
         const height = rect.size.height * rect.matrix.d;
         context.fillRect(
-            ~~(rect.matrix.tx - (width / 2)),
-            ~~(rect.matrix.ty - (height / 2)),
-            ~~width,
-            ~~height);
+            Math.round(rect.matrix.tx - (width / 2)),
+            Math.round(rect.matrix.ty - (height / 2)),
+            Math.round(width),
+            Math.round(height)
+        );
         return;
     }
     const startPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, -rect.size.height / 2));

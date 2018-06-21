@@ -44,10 +44,10 @@ class SelectionBoxTool {
         if (event.event.button > 0) return; // only first mouse button
         if (this.selectionRect) {
             const rect = new paper.Rectangle(
-                ~~this.selectionRect.bounds.x,
-                ~~this.selectionRect.bounds.y,
-                ~~this.selectionRect.bounds.width,
-                ~~this.selectionRect.bounds.height,
+                Math.round(this.selectionRect.bounds.x),
+                Math.round(this.selectionRect.bounds.y),
+                Math.round(this.selectionRect.bounds.width),
+                Math.round(this.selectionRect.bounds.height),
             );
 
             if (rect.area) {
@@ -55,11 +55,14 @@ class SelectionBoxTool {
                 const raster = getRaster().getSubRaster(rect);
                 raster.parent = paper.project.activeLayer;
                 raster.selected = true;
+                // Gather a bit of extra data so that we can avoid aliasing at edges
+                const expanded = getRaster().getSubRaster(rect.expand(4));
+                expanded.remove();
+                raster.data = {expanded: expanded};
                 this.setSelectedItems();
 
-                // Clear selection from raster layer
+                // Clear area from raster layer
                 const context = getRaster().canvas.getContext('2d');
-                context.imageSmoothingEnabled = false;
                 context.clearRect(rect.x, rect.y, rect.width, rect.height);
             }
 

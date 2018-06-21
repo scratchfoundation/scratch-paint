@@ -1,12 +1,14 @@
+import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
 
 import {getSelectedLeafItems} from '../selection';
-import {getRaster} from '../layer';
+import {createCanvas, getRaster} from '../layer';
+import {drawRect} from '../bitmap';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
 
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 import SelectionBoxTool from '../selection-tools/selection-box-tool';
-import paper from '@scratch/paper';
 
 /**
  * paper.Tool that handles select mode in bitmap. This is made up of 2 subtools.
@@ -113,21 +115,61 @@ class SelectTool extends paper.Tool {
     }
     commitSelection () {
         const selection = getSelectedLeafItems();
-        if (selection.length) {
+
+        for (const item of selection) {
             // @todo handle non-rasters?
-            for (const item of selection) {
-                if (item instanceof paper.Raster) {
-                    // TODO image smoothing?
-                    getRaster().canvas.drawImage(
-                        item.canvas,
-                        item.bounds.topLeft.x,
-                        item.bounds.topLeft.y,
-                        // Apply transform
-                    );
-                    item.remove();
-                }
+            // @todo handle undo state
+            if (!(item instanceof paper.Raster) && item.data.expanded) continue;
+            // In the special case that there is no rotation
+            if (item.matrix.b === 0 && item.matrix.c === 0) {
+                this.commitScaleTransformation(item);
+            } else {
+                this.commitArbitraryTransformation(item);
             }
         }
+    }
+    commitScaleTransformation (item) {
+        // context.drawImage will anti-alias the image if both width and height are reduced.
+        // However, it will preserve pixel colors if only one or the other is reduced, and
+        // imageSmoothingEnabled is set to false. Therefore, we can avoid aliasing by scaling
+        // down images in a 2 step process.
+
+        // @todo: Currently, we can't avoid anti-aliasing when the image is both scaled down on both axes and rotated.
+        let canvas = item.canvas;
+        if (item.matrix.a !== 1) {
+            const tmpCanvas = createCanvas(Math.round(item.size.width * item.matrix.a), canvas.height);
+            const context = tmpCanvas.getContext('2d');
+            context.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+            canvas = tmpCanvas;
+        }
+        if (item.matrix.d !== 1) {
+            const tmpCanvas = createCanvas(canvas.width, Math.round(item.size.height * item.matrix.d));
+            const context = tmpCanvas.getContext('2d');
+            context.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+            canvas = context.canvas;
+        }
+        getRaster().drawImage(canvas, item.bounds.topLeft);
+        item.remove();
+    }
+    commitArbitraryTransformation (item) {
+        // Create a canvas to perform masking
+        const tmpCanvas = createCanvas();
+        const context = tmpCanvas.getContext('2d');
+        // Draw mask
+        const rect = new paper.Shape.Rectangle(new paper.Point(), item.size);
+        rect.matrix = item.matrix;
+        drawRect(rect, context);
+        context.globalCompositeOperation = 'source-in';
+
+        // Draw image onto mask
+        const m = item.matrix;
+        context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+        context.transform(1, 0, 0, 1, -item.data.expanded.canvas.width / 2, -item.data.expanded.canvas.height / 2);
+        context.drawImage(item.data.expanded.canvas, 0, 0);
+
+        // Draw temp canvas onto raster layer
+        getRaster().canvas.getContext('2d').drawImage(tmpCanvas, 0, 0);
+        item.remove();
     }
     deactivateTool () {
         this.commitSelection();
