@@ -137,15 +137,29 @@ class SelectTool extends paper.Tool {
         // @todo: Currently, we can't avoid anti-aliasing when the image is both scaled down on both axes and rotated.
         let canvas = item.canvas;
         if (item.matrix.a !== 1) {
-            const tmpCanvas = createCanvas(Math.round(item.size.width * item.matrix.a), canvas.height);
+            const tmpCanvas = createCanvas(Math.round(item.size.width * Math.abs(item.matrix.a)), canvas.height);
             const context = tmpCanvas.getContext('2d');
-            context.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+            if (item.matrix.a < 0) {
+                context.save();
+                context.scale(-1, 1);
+                context.drawImage(canvas, 0, 0, -tmpCanvas.width, tmpCanvas.height);
+                context.restore();
+            } else {
+                context.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+            }
             canvas = tmpCanvas;
         }
         if (item.matrix.d !== 1) {
-            const tmpCanvas = createCanvas(canvas.width, Math.round(item.size.height * item.matrix.d));
+            const tmpCanvas = createCanvas(canvas.width, Math.round(item.size.height * Math.abs(item.matrix.d)));
             const context = tmpCanvas.getContext('2d');
-            context.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+            if (item.matrix.d < 0) {
+                context.save();
+                context.scale(1, -1);
+                context.drawImage(canvas, 0, 0, tmpCanvas.width, -tmpCanvas.height);
+                context.restore();
+            } else {
+                context.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+            }
             canvas = context.canvas;
         }
         getRaster().drawImage(canvas, item.bounds.topLeft);
