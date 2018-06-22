@@ -4,7 +4,6 @@ import Modes from '../../lib/modes';
 import {getSelectedLeafItems} from '../selection';
 import {createCanvas, getRaster} from '../layer';
 import {drawRect} from '../bitmap';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
 
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -115,10 +114,9 @@ class SelectTool extends paper.Tool {
     }
     commitSelection () {
         const selection = getSelectedLeafItems();
-
+        let changed = false;
         for (const item of selection) {
             // @todo handle non-rasters?
-            // @todo handle undo state
             if (!(item instanceof paper.Raster) && item.data.expanded) continue;
             // In the special case that there is no rotation
             if (item.matrix.b === 0 && item.matrix.c === 0) {
@@ -126,6 +124,10 @@ class SelectTool extends paper.Tool {
             } else {
                 this.commitArbitraryTransformation(item);
             }
+            changed = true;
+        }
+        if (changed) {
+            this.onUpdateImage();
         }
     }
     commitScaleTransformation (item) {
@@ -182,7 +184,7 @@ class SelectTool extends paper.Tool {
         context.drawImage(item.data.expanded.canvas, 0, 0);
 
         // Draw temp canvas onto raster layer
-        getRaster().canvas.getContext('2d').drawImage(tmpCanvas, 0, 0);
+        getRaster().drawImage(tmpCanvas, new paper.Point());
         item.remove();
     }
     deactivateTool () {

@@ -54,16 +54,17 @@ class SelectionBoxTool {
                 // Pull selected raster to active layer
                 const raster = getRaster().getSubRaster(rect);
                 raster.parent = paper.project.activeLayer;
+                raster.canvas.getContext('2d').imageSmoothingEnabled = false;
                 raster.selected = true;
                 // Gather a bit of extra data so that we can avoid aliasing at edges
                 const expanded = getRaster().getSubRaster(rect.expand(4));
                 expanded.remove();
                 raster.data = {expanded: expanded};
-                this.setSelectedItems();
 
                 // Clear area from raster layer
                 const context = getRaster().canvas.getContext('2d');
                 context.clearRect(rect.x, rect.y, rect.width, rect.height);
+                this.setSelectedItems();
             }
 
             // Remove dotted rectangle
