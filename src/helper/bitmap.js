@@ -523,16 +523,17 @@ const floodFillAll = function (x, y, color, context) {
  * @param {!paper.Shape.Rectangle} rect The rectangle to draw to the canvas
  * @param {!HTMLCanvas2DContext} context The context in which to draw
  */
-const drawRect = function (rect, context) {
+const fillRect = function (rect, context) {
     // No rotation component to matrix
     if (rect.matrix.b === 0 && rect.matrix.c === 0) {
         const width = rect.size.width * rect.matrix.a;
         const height = rect.size.height * rect.matrix.d;
         context.fillRect(
-            ~~(rect.matrix.tx - (width / 2)),
-            ~~(rect.matrix.ty - (height / 2)),
-            ~~width,
-            ~~height);
+            Math.round(rect.matrix.tx - (width / 2)),
+            Math.round(rect.matrix.ty - (height / 2)),
+            Math.round(width),
+            Math.round(height)
+        );
         return;
     }
     const startPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, -rect.size.height / 2));
@@ -540,25 +541,27 @@ const drawRect = function (rect, context) {
     const heightPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, rect.size.height / 2));
     const endPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, rect.size.height / 2));
     const center = rect.matrix.transform(new paper.Point());
-    forEachLinePoint(startPoint, widthPoint, (x, y) => {
-        context.fillRect(x, y, 1, 1);
-    });
-    forEachLinePoint(startPoint, heightPoint, (x, y) => {
-        context.fillRect(x, y, 1, 1);
-    });
-    forEachLinePoint(endPoint, widthPoint, (x, y) => {
-        context.fillRect(x, y, 1, 1);
-    });
-    forEachLinePoint(endPoint, heightPoint, (x, y) => {
-        context.fillRect(x, y, 1, 1);
-    });
-    floodFill(~~center.x, ~~center.y, context.fillStyle, context);
+    const points = [startPoint, widthPoint, heightPoint, endPoint].sort((a, b) => a.x - b.x);
+
+    const solveY = (point1, point2, x) => {
+        if (point2.x === point1.x) return center.x > point1.x ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+        return ((point2.y - point1.y) / (point2.x - point1.x) * (x - point1.x)) + point1.y;
+    };
+    for (let x = Math.round(points[0].x); x < Math.round(points[3].x); x++) {
+        const ys = [
+            solveY(startPoint, widthPoint, x + .5),
+            solveY(startPoint, heightPoint, x + .5),
+            solveY(endPoint, widthPoint, x + .5),
+            solveY(endPoint, heightPoint, x + .5)
+        ].sort((a, b) => a - b);
+        context.fillRect(x, Math.round(ys[1]), 1, Math.max(1, Math.round(ys[2]) - Math.round(ys[1])));
+    }
 };
 
 export {
     convertToBitmap,
     convertToVector,
-    drawRect,
+    fillRect,
     floodFill,
     floodFillAll,
     getBrushMark,
