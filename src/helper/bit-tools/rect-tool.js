@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {drawRect} from '../bitmap';
+import {fillRect} from '../bitmap';
 import {createCanvas, getRaster} from '../layer';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
@@ -25,7 +25,7 @@ class RectTool extends paper.Tool {
         this.onUpdateImage = onUpdateImage;
         this.boundingBoxTool = new BoundingBoxTool(Modes.BIT_RECT, setSelectedItems, clearSelectedItems, onUpdateImage);
         const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
-        
+
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseDown = this.handleMouseDown;
@@ -98,7 +98,7 @@ class RectTool extends paper.Tool {
         if (this.rect) this.rect.remove();
         this.rect = new paper.Shape.Rectangle(baseRect);
         this.rect.fillColor = this.color;
-        
+
         if (event.modifiers.alt) {
             this.rect.position = event.downPoint;
         } else {
@@ -107,7 +107,7 @@ class RectTool extends paper.Tool {
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
-        
+
         if (this.isBoundingBoxMode) {
             this.boundingBoxTool.onMouseUp(event);
             this.isBoundingBoxMode = null;
@@ -134,7 +134,7 @@ class RectTool extends paper.Tool {
         const tmpCanvas = createCanvas();
         const context = tmpCanvas.getContext('2d');
         context.fillStyle = this.color;
-        drawRect(this.rect, context);
+        fillRect(this.rect, context);
         getRaster().drawImage(tmpCanvas, new paper.Point());
 
         this.rect.remove();
