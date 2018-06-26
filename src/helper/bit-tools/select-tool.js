@@ -142,8 +142,8 @@ class SelectTool extends paper.Tool {
             this.scaleCanvas(item.data.expanded, decomposed.scaling);
             const matrix = new paper.Matrix()
                 .translate(decomposed.translation)
-                .rotate(decomposed.rotation)
-                .skew(decomposed.skewing);
+                .skew(decomposed.skewing)
+                .rotate(decomposed.rotation);
             item.matrix = matrix;
         }
     }
@@ -193,7 +193,7 @@ class SelectTool extends paper.Tool {
         item.remove();
     }
     deactivateTool () {
-        this.commitSelection();
+        this.commitSelection(); // TODO
         this.boundingBoxTool.removeBoundsPath();
         this.boundingBoxTool = null;
         this.selectionBoxTool = null;
