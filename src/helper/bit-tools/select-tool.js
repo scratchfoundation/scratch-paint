@@ -135,7 +135,9 @@ class SelectTool extends paper.Tool {
         if (Math.abs(decomposed.scaling.x) < 1 && Math.abs(decomposed.scaling.y) < 1 &&
                 decomposed.scaling.x !== 0 && decomposed.scaling.y !== 0) {
             item.canvas = scaleBitmap(item.canvas, decomposed.scaling);
-            item.data.expanded.canvas = scaleBitmap(item.data.expanded.canvas, decomposed.scaling);
+            if (item.data && item.data.expanded) {
+                item.data.expanded.canvas = scaleBitmap(item.data.expanded.canvas, decomposed.scaling);
+            }
             // Remove the scale from the item's matrix
             item.matrix.append(
                 new paper.Matrix().scale(new paper.Point(1 / decomposed.scaling.x, 1 / decomposed.scaling.y)));
@@ -155,8 +157,12 @@ class SelectTool extends paper.Tool {
         // Draw image onto mask
         const m = item.matrix;
         context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
-        context.transform(1, 0, 0, 1, -item.data.expanded.canvas.width / 2, -item.data.expanded.canvas.height / 2);
-        context.drawImage(item.data.expanded.canvas, 0, 0);
+        let canvas = item.canvas;
+        if (item.data && item.data.expanded) {
+            canvas = item.data.expanded.canvas;
+        }
+        context.transform(1, 0, 0, 1, -canvas.width / 2, -canvas.height / 2);
+        context.drawImage(canvas, 0, 0);
 
         // Draw temp canvas onto raster layer
         getRaster().drawImage(tmpCanvas, new paper.Point());

@@ -198,12 +198,23 @@ class ModeTools extends React.Component {
         clearSelection(this.props.clearSelectedItems);
 
         if (this.props.clipboardItems.length > 0) {
+            let items = [];
             for (let i = 0; i < this.props.clipboardItems.length; i++) {
                 const item = paper.Base.importJSON(this.props.clipboardItems[i]);
                 if (item) {
-                    item.selected = true;
+                    items.push(item);
                 }
+            }
+            if (!items.length) return;
+            // If pasting a group or non-raster to bitmap, rasterize firsts
+            if (isBitmap(this.props.format) && !(items.length === 1 && items[0] instanceof paper.Raster)) {
+                const group = new paper.Group(items);
+                items = [group.rasterize()];
+                group.remove();
+            }
+            for (const item of items) {
                 const placedItem = paper.project.getActiveLayer().addChild(item);
+                placedItem.selected = true;
                 placedItem.position.x += 10 * this.props.pasteOffset;
                 placedItem.position.y += 10 * this.props.pasteOffset;
             }
