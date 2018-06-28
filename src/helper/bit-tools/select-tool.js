@@ -63,14 +63,12 @@ class SelectTool extends paper.Tool {
     }
     /**
      * Returns the hit options to use when conducting hit tests.
-     * @param {boolean} preselectedOnly True if we should only return results that are already
-     *     selected.
      * @return {object} See paper.Item.hitTest for definition of options
      */
-    getHitOptions (preselectedOnly) {
+    getHitOptions () {
         // Tolerance needs to be scaled when the view is zoomed in in order to represent the same
         // distance for the user to move the mouse.
-        const hitOptions = {
+        return {
             segments: true,
             stroke: true,
             curves: true,
@@ -78,10 +76,6 @@ class SelectTool extends paper.Tool {
             guide: false,
             tolerance: SelectTool.TOLERANCE / paper.view.zoom
         };
-        if (preselectedOnly) {
-            hitOptions.selected = true;
-        }
-        return hitOptions;
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
@@ -94,7 +88,7 @@ class SelectTool extends paper.Tool {
                 event,
                 event.modifiers.alt,
                 event.modifiers.shift,
-                this.getHitOptions(false /* preseelectedOnly */))) {
+                this.getHitOptions())) {
             this.commitSelection();
             this.selectionBoxMode = true;
             this.selectionBoxTool.onMouseDown(event.modifiers.shift);

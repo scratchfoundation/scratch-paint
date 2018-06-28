@@ -16,7 +16,6 @@ const performSnapshot = function (dispatchPerformSnapshot, format) {
         log.error('Format must be specified.');
     }
     const guideLayers = hideGuideLayers();
-    // TODO getRaster.getImageData is returning the correct updated image, but perform snapshot's exportSvg is getting the old raster
     dispatchPerformSnapshot({
         json: paper.project.exportJSON({asString: false}),
         paintEditorFormat: format
