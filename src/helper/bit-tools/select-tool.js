@@ -2,7 +2,7 @@ import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
 
 import {createCanvas, getRaster} from '../layer';
-import {fillRect} from '../bitmap';
+import {fillRect, flipBitmapHorizontal, flipBitmapVertical} from '../bitmap';
 
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -144,6 +144,13 @@ class SelectTool extends paper.Tool {
                 .translate(decomposed.translation)
                 .skew(decomposed.skewing)
                 .rotate(decomposed.rotation);
+            console.log(item.matrix);
+            const composed = new paper.Matrix()
+                .scale(decomposed.scale)
+                .translate(decomposed.translation)
+                .skew(decomposed.skewing)
+                .rotate(decomposed.rotation);
+            console.log(composed);
             item.matrix = matrix;
         }
     }
@@ -152,24 +159,16 @@ class SelectTool extends paper.Tool {
         let tmpCanvas = createCanvas(Math.round(raster.size.width * Math.abs(scale.x)), canvas.height);
         let context = tmpCanvas.getContext('2d');
         if (scale.x < 0) {
-            context.save();
-            context.scale(-1, 1);
-            context.drawImage(canvas, 0, 0, -tmpCanvas.width, tmpCanvas.height);
-            context.restore();
-        } else {
-            context.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+            canvas = flipBitmapHorizontal(canvas);
         }
+        context.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
         canvas = tmpCanvas;
         tmpCanvas = createCanvas(canvas.width, Math.round(raster.size.height * Math.abs(scale.y)));
         context = tmpCanvas.getContext('2d');
         if (scale.y < 0) {
-            context.save();
-            context.scale(1, -1);
-            context.drawImage(canvas, 0, 0, tmpCanvas.width, -tmpCanvas.height);
-            context.restore();
-        } else {
-            context.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
+            canvas = flipBitmapVertical(canvas);
         }
+        context.drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
         raster.canvas = tmpCanvas;
     }
     commitArbitraryTransformation (item) {

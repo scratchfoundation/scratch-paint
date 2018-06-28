@@ -1,5 +1,5 @@
 import paper from '@scratch/paper';
-import {clearRaster, getRaster, hideGuideLayers, showGuideLayers} from './layer';
+import {createCanvas, clearRaster, getRaster, hideGuideLayers, showGuideLayers} from './layer';
 import {getGuideColor} from './guides';
 import {inlineSvgFonts} from 'scratch-svg-renderer';
 
@@ -558,6 +558,26 @@ const fillRect = function (rect, context) {
     }
 };
 
+const flipBitmapHorizontal = function (raster) {
+    const tmpCanvas = createCanvas(raster.size.width, raster.size.height);
+    const context = tmpCanvas.getContext('2d');
+    context.save();
+    context.scale(-1, 1);
+    context.drawImage(raster.canvas, 0, 0, -tmpCanvas.width, tmpCanvas.height);
+    context.restore();
+    return tmpCanvas;
+};
+
+const flipBitmapVertical = function (raster) {
+    const tmpCanvas = createCanvas(raster.size.width, raster.size.height);
+    const context = tmpCanvas.getContext('2d');
+    context.save();
+    context.scale(1, -1);
+    context.drawImage(raster.canvas, 0, 0, tmpCanvas.width, -tmpCanvas.height);
+    context.restore();
+    return tmpCanvas;
+};
+
 export {
     convertToBitmap,
     convertToVector,
@@ -567,5 +587,7 @@ export {
     getBrushMark,
     getHitBounds,
     drawEllipse,
-    forEachLinePoint
+    forEachLinePoint,
+    flipBitmapHorizontal,
+    flipBitmapVertical
 };
