@@ -15,14 +15,11 @@ const ToolSelectComponent = props => (
             })
         }
         disabled={props.disabled}
+        title={props.intl.formatMessage(props.imgDescriptor)}
         onClick={props.onMouseDown}
     >
         <img
-            alt={props.intl.formatMessage({
-                defaultMessage: props.imgDescriptor.defaultMessage,
-                description: props.imgDescriptor.description,
-                id: props.imgDescriptor.id
-            })}
+            alt={props.intl.formatMessage(props.imgDescriptor)}
             className={styles.toolSelectIcon}
             draggable={false}
             src={props.imgSrc}
