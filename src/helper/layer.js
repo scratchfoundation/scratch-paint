@@ -14,15 +14,27 @@ const _getPaintingLayer = function () {
     return _getLayer('isPaintingLayer');
 };
 
+/**
+ * Creates a canvas with width and height matching the art board size.
+ * @param {?number} width Width of the canvas. Defaults to ART_BOARD_WIDTH.
+ * @param {?number} height Height of the canvas. Defaults to ART_BOARD_HEIGHT.
+ * @return {HTMLCanvasElement} the canvas
+ */
+const createCanvas = function (width, height) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width ? width : ART_BOARD_WIDTH;
+    canvas.height = height ? height : ART_BOARD_HEIGHT;
+    canvas.getContext('2d').imageSmoothingEnabled = false;
+    return canvas;
+};
+
 const clearRaster = function () {
     const layer = _getLayer('isRasterLayer');
     layer.removeChildren();
     
     // Generate blank raster
-    const tmpCanvas = document.createElement('canvas');
-    tmpCanvas.width = ART_BOARD_WIDTH;
-    tmpCanvas.height = ART_BOARD_HEIGHT;
-    const raster = new paper.Raster(tmpCanvas);
+    const raster = new paper.Raster(createCanvas());
+    raster.canvas.getContext('2d').imageSmoothingEnabled = false;
     raster.parent = layer;
     raster.guide = true;
     raster.locked = true;
@@ -197,6 +209,7 @@ const setupLayers = function () {
 };
 
 export {
+    createCanvas,
     hideGuideLayers,
     showGuideLayers,
     getGuideLayer,

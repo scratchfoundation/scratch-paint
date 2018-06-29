@@ -9,6 +9,10 @@ import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
 import {clearSelection, getSelectedLeafItems, getSelectedRootItems, getAllRootItems} from '../helper/selection';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
+import {getRaster} from '../helper/layer';
+import {flipBitmapHorizontal, flipBitmapVertical} from '../helper/bitmap';
+import {isBitmap} from '../lib/format';
+import Formats from '../lib/format';
 
 class ModeTools extends React.Component {
     constructor (props) {
@@ -136,8 +140,7 @@ class ModeTools extends React.Component {
             this.props.onUpdateImage();
         }
     }
-    _handleFlip (horizontalScale, verticalScale) {
-        let selectedItems = getSelectedRootItems();
+    _handleFlip (horizontalScale, verticalScale, selectedItems) {
         if (selectedItems.length === 0) {
             // If nothing is selected, select everything
             selectedItems = getAllRootItems();
@@ -163,10 +166,22 @@ class ModeTools extends React.Component {
         this.props.onUpdateImage();
     }
     handleFlipHorizontal () {
-        this._handleFlip(-1, 1);
+        const selectedItems = getSelectedRootItems();
+        if (isBitmap(this.props.format) && selectedItems.length === 0) {
+            getRaster().canvas = flipBitmapHorizontal(getRaster().canvas);
+            this.props.onUpdateImage();
+        } else {
+            this._handleFlip(-1, 1, selectedItems);
+        }
     }
     handleFlipVertical () {
-        this._handleFlip(1, -1);
+        const selectedItems = getSelectedRootItems();
+        if (isBitmap(this.props.format) && selectedItems.length === 0) {
+            getRaster().canvas = flipBitmapVertical(getRaster().canvas);
+            this.props.onUpdateImage();
+        } else {
+            this._handleFlip(1, -1, selectedItems);
+        }
     }
     handleCopyToClipboard () {
         const selectedItems = getSelectedRootItems();
@@ -183,12 +198,23 @@ class ModeTools extends React.Component {
         clearSelection(this.props.clearSelectedItems);
 
         if (this.props.clipboardItems.length > 0) {
+            let items = [];
             for (let i = 0; i < this.props.clipboardItems.length; i++) {
                 const item = paper.Base.importJSON(this.props.clipboardItems[i]);
                 if (item) {
-                    item.selected = true;
+                    items.push(item);
                 }
+            }
+            if (!items.length) return;
+            // If pasting a group or non-raster to bitmap, rasterize firsts
+            if (isBitmap(this.props.format) && !(items.length === 1 && items[0] instanceof paper.Raster)) {
+                const group = new paper.Group(items);
+                items = [group.rasterize()];
+                group.remove();
+            }
+            for (const item of items) {
                 const placedItem = paper.project.getActiveLayer().addChild(item);
+                placedItem.selected = true;
                 placedItem.position.x += 10 * this.props.pasteOffset;
                 placedItem.position.y += 10 * this.props.pasteOffset;
             }
@@ -217,6 +243,7 @@ class ModeTools extends React.Component {
 ModeTools.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
+    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
     incrementPasteOffset: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     pasteOffset: PropTypes.number,
@@ -229,6 +256,7 @@ ModeTools.propTypes = {
 
 const mapStateToProps = state => ({
     clipboardItems: state.scratchPaint.clipboard.items,
+    format: state.scratchPaint.format,
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
     selectedItems: state.scratchPaint.selectedItems
 });
