@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {fillRect} from '../bitmap';
+import {fillRect, outlineRect} from '../bitmap';
 import {getRaster} from '../layer';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
@@ -69,6 +69,12 @@ class RectTool extends paper.Tool {
     setColor (color) {
         this.color = color;
     }
+    setFilled (filled) {
+        this.filled = filled;
+    }
+    setThickness (thickness) {
+        this.thickness = thickness;
+    }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
@@ -97,7 +103,12 @@ class RectTool extends paper.Tool {
         }
         if (this.rect) this.rect.remove();
         this.rect = new paper.Shape.Rectangle(baseRect);
-        this.rect.fillColor = this.color;
+        if (this.filled) {
+            this.rect.fillColor = this.color;
+        } else {
+            this.rect.strokeColor = this.color;
+            this.rect.strokeWidth = this.thickness;
+        }
 
         if (event.modifiers.alt) {
             this.rect.position = event.downPoint;
@@ -136,7 +147,11 @@ class RectTool extends paper.Tool {
         tmpCanvas.height = getRaster().height;
         const context = tmpCanvas.getContext('2d');
         context.fillStyle = this.color;
-        fillRect(this.rect, context);
+        if (this.filled) {
+            fillRect(this.rect, context);
+        } else {
+            outlineRect(this.rect, this.thickness, context);
+        }
         getRaster().drawImage(tmpCanvas, new paper.Point());
 
         this.rect.remove();

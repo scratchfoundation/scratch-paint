@@ -8,9 +8,11 @@ import {changeBrushSize} from '../../reducers/brush-mode';
 import {changeBrushSize as changeEraserSize} from '../../reducers/eraser-mode';
 import {changeBitBrushSize} from '../../reducers/bit-brush-size';
 import {changeBitEraserSize} from '../../reducers/bit-eraser-size';
+import {setShapesFilled} from '../../reducers/fill-bitmap-shapes';
 
 import FontDropdown from '../../containers/font-dropdown.jsx';
 import LiveInputHOC from '../forms/live-input-hoc.jsx';
+import Label from '../forms/label.jsx';
 import {defineMessages, injectIntl, intlShape} from 'react-intl';
 import Input from '../forms/input.jsx';
 import InputGroup from '../input-group/input-group.jsx';
@@ -32,6 +34,8 @@ import eraserIcon from '../eraser-mode/eraser.svg';
 import flipHorizontalIcon from './icons/flip-horizontal.svg';
 import flipVerticalIcon from './icons/flip-vertical.svg';
 import straightPointIcon from './icons/straight-point.svg';
+import bitOvalIcon from '../bit-oval-mode/oval.svg';
+import bitRectIcon from '../bit-rect-mode/rectangle.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
@@ -82,6 +86,16 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Flip Vertical',
             description: 'Label for the button to flip the image vertically',
             id: 'paint.modeTools.flipVertical'
+        },
+        filled: {
+            defaultMessage: 'Filled',
+            description: 'Label for the button that sets the bitmap rectangle/oval mode to draw outlines',
+            id: 'paint.modeTools.filled'
+        },
+        outlined: {
+            defaultMessage: 'Outlined',
+            description: 'Label for the button that sets the bitmap rectangle/oval mode to draw filled-in shapes',
+            id: 'paint.modeTools.outlined'
         }
     });
 
@@ -208,6 +222,41 @@ const ModeToolsComponent = props => {
                 </InputGroup>
             </div>
         );
+    case Modes.BIT_RECT:
+        /* falls through */
+    case Modes.BIT_OVAL:
+    {
+        const fillIcon = props.mode === Modes.BIT_RECT ? bitRectIcon : bitOvalIcon;
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <InputGroup>
+                    <LabeledIconButton
+                        highlighted={props.fillBitmapShapes}
+                        imgSrc={fillIcon}
+                        title={props.intl.formatMessage(messages.filled)}
+                        onClick={props.onFillShapes}
+                    />
+                    <LabeledIconButton
+                        highlighted={!props.fillBitmapShapes}
+                        imgSrc={fillIcon}
+                        title={props.intl.formatMessage(messages.outlined)}
+                        onClick={props.onOutlineShapes}
+                    />
+                    <Label text={props.intl.formatMessage(messages.pointed)}>
+                        <LiveInput
+                            range
+                            small
+                            max={MAX_STROKE_WIDTH}
+                            min="1"
+                            type="number"
+                            value={props.bitBrushSize}
+                            onSubmit={props.onBitBrushSliderChange}
+                        />
+                    </Label>
+                </InputGroup>
+            </div>
+        );
+    }
     default:
         // Leave empty for now, if mode not supported
         return (
@@ -223,6 +272,7 @@ ModeToolsComponent.propTypes = {
     className: PropTypes.string,
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
     eraserValue: PropTypes.number,
+    fillBitmapShapes: PropTypes.bool,
     format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
     hasSelectedUncurvedPoints: PropTypes.bool,
     hasSelectedUnpointedPoints: PropTypes.bool,
@@ -233,8 +283,10 @@ ModeToolsComponent.propTypes = {
     onCopyToClipboard: PropTypes.func.isRequired,
     onCurvePoints: PropTypes.func.isRequired,
     onEraserSliderChange: PropTypes.func,
+    onFillShapes: PropTypes.func.isRequired,
     onFlipHorizontal: PropTypes.func.isRequired,
     onFlipVertical: PropTypes.func.isRequired,
+    onOutlineShapes: PropTypes.func.isRequired,
     onPasteFromClipboard: PropTypes.func.isRequired,
     onPointPoints: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
@@ -244,6 +296,7 @@ ModeToolsComponent.propTypes = {
 const mapStateToProps = state => ({
     mode: state.scratchPaint.mode,
     format: state.scratchPaint.format,
+    fillBitmapShapes: state.scratchPaint.fillBitmapShapes,
     bitBrushSize: state.scratchPaint.bitBrushSize,
     bitEraserSize: state.scratchPaint.bitEraserSize,
     brushValue: state.scratchPaint.brushMode.brushSize,
@@ -263,6 +316,12 @@ const mapDispatchToProps = dispatch => ({
     },
     onEraserSliderChange: eraserSize => {
         dispatch(changeEraserSize(eraserSize));
+    },
+    onFillShapes: () => {
+        dispatch(setShapesFilled(true));
+    },
+    onOutlineShapes: () => {
+        dispatch(setShapesFilled(false));
     }
 });
 

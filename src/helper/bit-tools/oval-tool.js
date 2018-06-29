@@ -69,6 +69,12 @@ class OvalTool extends paper.Tool {
     setColor (color) {
         this.color = color;
     }
+    setFilled (filled) {
+        this.filled = filled;
+    }
+    setThickness (thickness) {
+        this.thickness = thickness;
+    }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
@@ -79,11 +85,20 @@ class OvalTool extends paper.Tool {
             this.isBoundingBoxMode = false;
             clearSelection(this.clearSelectedItems);
             this.commitOval();
-            this.oval = new paper.Shape.Ellipse({
-                fillColor: this.color,
-                point: event.downPoint,
-                size: 0
-            });
+            if (this.filled) {
+                this.oval = new paper.Shape.Ellipse({
+                    strokeColor: this.color,
+                    strokeWidth: this.thickness,
+                    point: event.downPoint,
+                    size: 0
+                });
+            } else {
+                this.oval = new paper.Shape.Ellipse({
+                    fillColor: this.color,
+                    point: event.downPoint,
+                    size: 0
+                });
+            }
         }
     }
     handleMouseDrag (event) {
@@ -143,7 +158,7 @@ class OvalTool extends paper.Tool {
             this.oval.position.x, this.oval.position.y,
             radiusX, radiusY,
             this.oval.matrix,
-            true, /* isFilled */
+            this.filled,
             context);
 
         this.oval.remove();

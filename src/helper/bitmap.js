@@ -558,10 +558,35 @@ const fillRect = function (rect, context) {
     }
 };
 
+/**
+ * @param {!paper.Shape.Rectangle} rect The rectangle to draw to the canvas
+ * @param {!number} thickness The thickness of the outline
+ * @param {!HTMLCanvas2DContext} context The context in which to draw
+ */
+const outlineRect = function (rect, thickness, context) {
+    const brushMark = getBrushMark(thickness, context.fillStyle);
+    const roundedUpRadius = Math.ceil(thickness / 2);
+    const drawFn = (x, y) => {
+        context.drawImage(brushMark, ~~x - roundedUpRadius, ~~y - roundedUpRadius);
+    };
+
+    const startPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, -rect.size.height / 2));
+    const widthPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, -rect.size.height / 2));
+    const heightPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, rect.size.height / 2));
+    const endPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, rect.size.height / 2));
+
+
+    forEachLinePoint(startPoint, widthPoint, drawFn);
+    forEachLinePoint(startPoint, heightPoint, drawFn);
+    forEachLinePoint(endPoint, widthPoint, drawFn);
+    forEachLinePoint(endPoint, heightPoint, drawFn);
+};
+
 export {
     convertToBitmap,
     convertToVector,
     fillRect,
+    outlineRect,
     floodFill,
     floodFillAll,
     getBrushMark,
