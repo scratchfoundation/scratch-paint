@@ -20,7 +20,7 @@ import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
 import {updateViewBounds} from '../reducers/view-bounds';
 import {changeFormat} from '../reducers/format';
-
+import {getEventXY} from '../lib/touch-utils';
 import styles from './paper-canvas.css';
 
 class PaperCanvas extends React.Component {
@@ -31,7 +31,13 @@ class PaperCanvas extends React.Component {
             'importSvg',
             'handleKeyDown',
             'handleWheel',
-            'switchCostume'
+            'switchCostume',
+            'handleHorizontalScrollbarMouseDown',
+            'handleHorizontalScrollbarMouseMove',
+            'handleHorizontalScrollbarMouseUp',
+            'handleVerticalScrollbarMouseDown',
+            'handleVerticalScrollbarMouseMove',
+            'handleVerticalScrollbarMouseUp'
         ]);
     }
     componentDidMount () {
@@ -214,6 +220,39 @@ class PaperCanvas extends React.Component {
             this.props.canvasRef(canvas);
         }
     }
+
+    handleHorizontalScrollbarMouseDown (event) {
+        window.addEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
+        window.addEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
+        this.initialX = getEventXY(event).x;
+        event.preventDefault();
+    }
+
+    handleHorizontalScrollbarMouseMove (event) {
+        const dx = this.initialX - getEventXY(event).x;
+
+        // console.log('horizontal', this.mouseDownPosition, mousePosition);
+    }
+
+    handleHorizontalScrollbarMouseUp (event) {
+        window.removeEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
+        window.removeEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
+    }
+
+    handleVerticalScrollbarMouseDown (event) {
+        window.addEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
+        window.addEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
+        this.initialY = getEventXY(event).y;
+        event.preventDefault();
+    }
+    handleVerticalScrollbarMouseMove (event) {
+        const mousePosition = getEventXY(event);
+        // console.log('vertical', this.mouseDownPosition, mousePosition);
+    }
+    handleVerticalScrollbarMouseUp (event) {
+        window.removeEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
+        window.removeEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
+    }
     handleWheel (event) {
         // Multiplier variable, so that non-pixel-deltaModes are supported. Needed for Firefox.
         // See #529 (or LLK/scratch-blocks#1190).
@@ -247,14 +286,46 @@ class PaperCanvas extends React.Component {
         event.preventDefault();
     }
     render () {
+        let widthPercent = 0;
+        let heightPercent = 0;
+        let topPercent = 0;
+        let leftPercent = 0;
+        if (paper.project) {
+            const {x, y, width, height} = paper.project.view.bounds;
+            widthPercent = Math.floor(100 * width / ART_BOARD_WIDTH);
+            heightPercent = Math.floor(100 * height / ART_BOARD_HEIGHT);
+            const centerX = (x + (width / 2)) / ART_BOARD_WIDTH;
+            const centerY = (y + (height / 2)) / ART_BOARD_HEIGHT;
+            topPercent = Math.floor(100 * centerY) - (heightPercent / 2);
+            leftPercent = Math.floor(100 * centerX) - (widthPercent / 2);
+        }
+
         return (
-            <canvas
-                className={styles.paperCanvas}
-                height="360px"
-                ref={this.setCanvas}
-                width="480px"
-                onWheel={this.handleWheel}
-            />
+            <div className={styles.scrollbarWrapper}>
+                <canvas
+                    className={styles.paperCanvas}
+                    height="360px"
+                    ref={this.setCanvas}
+                    width="480px"
+                    onWheel={this.handleWheel}
+                />
+                <div
+                    className={styles.horizontalScrollbar}
+                    style={{
+                        width: `${widthPercent}%`,
+                        left: `${leftPercent}%`
+                    }}
+                    onMouseDown={this.handleHorizontalScrollbarMouseDown}
+                />
+                <div
+                    className={styles.verticalScrollbar}
+                    style={{
+                        height: `${heightPercent}%`,
+                        top: `${topPercent}%`
+                    }}
+                    onMouseDown={this.handleVerticalScrollbarMouseDown}
+                />
+            </div>
         );
     }
 }
@@ -283,7 +354,8 @@ PaperCanvas.propTypes = {
 };
 const mapStateToProps = state => ({
     mode: state.scratchPaint.mode,
-    format: state.scratchPaint.format
+    format: state.scratchPaint.format,
+    viewBounds: state.scratchPaint.viewBounds
 });
 const mapDispatchToProps = dispatch => ({
     undoSnapshot: snapshot => {
