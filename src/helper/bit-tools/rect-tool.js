@@ -108,6 +108,8 @@ class RectTool extends paper.Tool {
         } else {
             this.rect.strokeColor = this.color;
             this.rect.strokeWidth = this.thickness;
+            this.rect.strokeJoin = 'round';
+            this.rect.strokeScaling = false;
         }
 
         if (event.modifiers.alt) {

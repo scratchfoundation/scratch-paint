@@ -87,15 +87,17 @@ class OvalTool extends paper.Tool {
             this.commitOval();
             if (this.filled) {
                 this.oval = new paper.Shape.Ellipse({
-                    strokeColor: this.color,
-                    strokeWidth: this.thickness,
+                    fillColor: this.color,
                     point: event.downPoint,
                     size: 0
                 });
             } else {
                 this.oval = new paper.Shape.Ellipse({
-                    fillColor: this.color,
+                    strokeColor: this.color,
+                    strokeWidth: this.thickness,
                     point: event.downPoint,
+                    strokeScaling: false,
+                    strokeJoin: 'round',
                     size: 0
                 });
             }

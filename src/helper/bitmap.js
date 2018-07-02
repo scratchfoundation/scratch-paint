@@ -572,9 +572,8 @@ const outlineRect = function (rect, thickness, context) {
 
     const startPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, -rect.size.height / 2));
     const widthPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, -rect.size.height / 2));
-    const heightPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, rect.size.height / 2));
+    const heightPoint = rect.matrixm.transform(new paper.Point(-rect.size.width / 2, rect.size.height / 2));
     const endPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, rect.size.height / 2));
-
 
     forEachLinePoint(startPoint, widthPoint, drawFn);
     forEachLinePoint(startPoint, heightPoint, drawFn);
