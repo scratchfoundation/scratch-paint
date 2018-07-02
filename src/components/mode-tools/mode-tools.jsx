@@ -36,6 +36,8 @@ import flipVerticalIcon from './icons/flip-vertical.svg';
 import straightPointIcon from './icons/straight-point.svg';
 import bitOvalIcon from '../bit-oval-mode/oval.svg';
 import bitRectIcon from '../bit-rect-mode/rectangle.svg';
+import bitOvalOutlinedIcon from '../bit-oval-mode/oval-outlined.svg';
+import bitRectOutlinedIcon from '../bit-rect-mode/rectangle-outlined.svg';
 
 import {MAX_STROKE_WIDTH} from '../../reducers/stroke-width';
 
@@ -43,14 +45,9 @@ const LiveInput = LiveInputHOC(Input);
 const ModeToolsComponent = props => {
     const messages = defineMessages({
         brushSize: {
-            defaultMessage: 'Brush size',
+            defaultMessage: 'Size',
             description: 'Label for the brush size input',
             id: 'paint.modeTools.brushSize'
-        },
-        lineSize: {
-            defaultMessage: 'Line size',
-            description: 'Label for the line size input',
-            id: 'paint.modeTools.lineSize'
         },
         eraserSize: {
             defaultMessage: 'Eraser size',
@@ -76,6 +73,11 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Pointed',
             description: 'Label for the button that converts selected points to sharp points',
             id: 'paint.modeTools.pointed'
+        },
+        thickness: {
+            defaultMessage: 'Thickness',
+            description: 'Label for the number input to choose the line thickness',
+            id: 'paint.modeTools.thickness'
         },
         flipHorizontal: {
             defaultMessage: 'Flip Horizontal',
@@ -110,7 +112,7 @@ const ModeToolsComponent = props => {
             props.mode === Modes.BIT_LINE ? bitLineIcon : bitBrushIcon;
         const currentBrushValue = isBitmap(props.format) ? props.bitBrushSize : props.brushValue;
         const changeFunction = isBitmap(props.format) ? props.onBitBrushSliderChange : props.onBrushSliderChange;
-        const currentMessage = props.mode === Modes.BIT_LINE ? messages.lineSize : messages.brushSize;
+        const currentMessage = props.mode === Modes.BIT_LINE ? messages.thickness : messages.brushSize;
         return (
             <div className={classNames(props.className, styles.modeTools)}>
                 <div>
@@ -227,6 +229,7 @@ const ModeToolsComponent = props => {
     case Modes.BIT_OVAL:
     {
         const fillIcon = props.mode === Modes.BIT_RECT ? bitRectIcon : bitOvalIcon;
+        const outlineIcon = props.mode === Modes.BIT_RECT ? bitRectOutlinedIcon : bitOvalOutlinedIcon;
         return (
             <div className={classNames(props.className, styles.modeTools)}>
                 <InputGroup>
@@ -236,13 +239,17 @@ const ModeToolsComponent = props => {
                         title={props.intl.formatMessage(messages.filled)}
                         onClick={props.onFillShapes}
                     />
+                </InputGroup>
+                <InputGroup>
                     <LabeledIconButton
                         highlighted={!props.fillBitmapShapes}
-                        imgSrc={fillIcon}
+                        imgSrc={outlineIcon}
                         title={props.intl.formatMessage(messages.outlined)}
                         onClick={props.onOutlineShapes}
                     />
-                    <Label text={props.intl.formatMessage(messages.pointed)}>
+                </InputGroup>
+                <InputGroup>
+                    <Label text={props.intl.formatMessage(messages.thickness)}>
                         <LiveInput
                             range
                             small
