@@ -1,5 +1,5 @@
 # scratch-paint
-#### Scratch-paint provides a vector paint editor React component that takes and outputs SVGs. Importing, editing, and exporting of bitmaps is now in progress!
+#### Scratch-paint provides a paint editor React component that takes and outputs SVGs or PNGs. It can convert between vector and bitmap modes.
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/LLK/scratch-paint.svg)](https://greenkeeper.io/)
 - Try it out at [https://llk.github.io/scratch-paint/](https://llk.github.io/scratch-paint/)
@@ -11,14 +11,20 @@ It will be easiest if you develop on Mac or Linux. If you are using Windows, I r
 
 - https://docs.microsoft.com/en-us/windows/wsl/install-win10
 
-Scratch Paint requires you to have Git and Node.js installed. See:
-- [https://git-scm.com/book/en/v2/Getting-Started-Installing-Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
-
-If you want to use scratch-paint in your own Node environment/application, add it with:
+Scratch Paint requires you to have Git and Node.js installed. E.g.:
 ```bash
-npm install scratch-paint
+- sudo apt-get update
+- sudo apt-get install git-core
+- sudo apt-get install nodejs
 ```
+
+For Ubuntu on Windows, the Windows install of nodejs may interfere with the Linux one, so installing nodejs requires more steps:
+```bash
+- curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+- sudo apt-get install -y nodejs
+- PATH="/usr/bin:$PATH"
+```
+
 If you want to edit scratch-paint, or help contribute to our open-source project, fork the [scratch-paint repo](https://github.com/LLK/scratch-paint). Then:
 ```bash
 git clone https://github.com/<YOUR_GITHUB_USERNAME>/scratch-paint.git
@@ -46,19 +52,22 @@ git clone https://github.com/LLK/scratch-gui.git
 Go to your `scratch-paint` folder and run:
 ```bash
 npm link
-npm run watch
 ```
-This runs a file watcher which should automatically recompile scratch-paint if you edit any files.
 
-Now in another tab, go back to the `scratch-gui` folder and run
+Now in another terminal, go back to the `scratch-gui` folder and run
 ```bash
-npm link scratch-paint
 npm install
+npm link scratch-paint
 npm start
 ```
 Then go to [http://localhost:8601](http://localhost:8601). 601 is supposed to look like GUI (it's okay, I don't really see it either.) The Costumes tab should be running your local copy of scratch-paint!
 
 ### How to include in your own Node.js App
+If you want to use scratch-paint in your own Node environment/application, add it with:
+```bash
+npm install --save scratch-paint
+```
+
 For an example of how to use scratch-paint as a library, check out the `scratch-paint/src/playground` directory.
 In `playground.jsx`, you can change the image that is passed in (which may either be nothing, an SVG string or a base64 data URI) and edit the handler `onUpdateImage`, which is called with the new image (either an SVG string or an ImageData) each time the vector drawing is edited.
 
