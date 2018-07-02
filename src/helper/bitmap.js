@@ -51,6 +51,8 @@ const solveQuadratic_ = function (a, b, c) {
  * @param {!number} options.radiusY minor radius of ellipse
  * @param {!number} options.shearSlope slope of the sheared x axis
  * @param {?boolean} options.isFilled true if isFilled
+ * @param {?function} options.drawFn The function called on each point in the outline, used only
+ *     if isFilled is false.
  * @param {!CanvasRenderingContext2D} context for drawing
  * @return {boolean} true if anything was drawn, false if not
  */
@@ -61,6 +63,7 @@ const drawShearedEllipse_ = function (options, context) {
     const radiusY = ~~Math.abs(options.radiusY) - .5;
     const shearSlope = options.shearSlope;
     const isFilled = options.isFilled;
+    const drawFn = options.drawFn;
     if (shearSlope === Infinity || radiusX < 1 || radiusY < 1) {
         return false;
     }
@@ -96,8 +99,8 @@ const drawShearedEllipse_ = function (options, context) {
                 context.fillRect(centerX - pX1 - 1, centerY + pY, pX1 - pX2 + 1, 1);
                 context.fillRect(centerX + pX2, centerY - pY - 1, pX1 - pX2 + 1, 1);
             } else {
-                context.fillRect(centerX - pX1 - 1, centerY + pY, 1, 1);
-                context.fillRect(centerX + pX1, centerY - pY - 1, 1, 1);
+                drawFn(centerX - pX1 - 1, centerY + pY);
+                drawFn(centerX + pX1, centerY - pY - 1);
             }
             y--;
             x = solveQuadratic_(A, B * y, (C * y * y) - 1);
@@ -127,8 +130,8 @@ const drawShearedEllipse_ = function (options, context) {
                 context.fillRect(centerX - pX - 1, centerY + pY2, 1, pY1 - pY2 + 1);
                 context.fillRect(centerX + pX, centerY - pY1 - 1, 1, pY1 - pY2 + 1);
             } else {
-                context.fillRect(centerX - pX - 1, centerY + pY1, 1, 1);
-                context.fillRect(centerX + pX, centerY - pY1 - 1, 1, 1);
+                drawFn(centerX - pX - 1, centerY + pY1);
+                drawFn(centerX + pX, centerY - pY1 - 1);
             }
             x++;
             y = solveQuadratic_(C, B * x, (A * x * x) - 1);
@@ -193,18 +196,36 @@ const drawShearedEllipse_ = function (options, context) {
  * an affine transformation. Returns false if the ellipse could
  * not be drawn; for instance, the matrix is non-invertible.
  *
- * @param {!number} positionX Center of ellipse
- * @param {!number} positionY Center of ellipse
- * @param {!number} radiusX x-aligned radius of ellipse
- * @param {!number} radiusY y-aligned radius of ellipse
- * @param {!paper.Matrix} matrix affine transformation matrix
- * @param {?boolean} isFilled true if isFilled
+ * @param {!options} options Parameters for the ellipse
+ * @param {!paper.Point} options.position Center of ellipse
+ * @param {!number} options.radiusX x-aligned radius of ellipse
+ * @param {!number} options.radiusY y-aligned radius of ellipse
+ * @param {!paper.Matrix} options.matrix affine transformation matrix
+ * @param {?boolean} options.isFilled true if isFilled
+ * @param {?number} options.thickness Thickness of outline, used only if isFilled is false.
  * @param {!CanvasRenderingContext2D} context for drawing
  * @return {boolean} true if anything was drawn, false if not
  */
-const drawEllipse = function (positionX, positionY, radiusX, radiusY, matrix, isFilled, context) {
+const drawEllipse = function (options, context) {
+    const positionX = options.position.x;
+    const positionY = options.position.y;
+    const radiusX = options.radiusX;
+    const radiusY = options.radiusY;
+    const matrix = options.matrix;
+    const isFilled = options.isFilled;
+    const thickness = options.thickness;
+    let drawFn = null;
+
     if (!matrix.isInvertible()) return false;
     const inverse = matrix.clone().invert();
+
+    if (!isFilled) {
+        const brushMark = getBrushMark(thickness, context.fillStyle);
+        const roundedUpRadius = Math.ceil(thickness / 2);
+        drawFn = (x, y) => {
+            context.drawImage(brushMark, ~~x - roundedUpRadius, ~~y - roundedUpRadius);
+        };
+    }
 
     // Calculate the ellipse formula
     // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 coefficients in a transformed ellipse formula
@@ -224,7 +245,8 @@ const drawEllipse = function (positionX, positionY, radiusX, radiusY, matrix, is
         radiusX: radiusA,
         radiusY: radiusB,
         shearSlope: slope,
-        isFilled: isFilled
+        isFilled: isFilled,
+        drawFn: drawFn
     }, context);
 };
 

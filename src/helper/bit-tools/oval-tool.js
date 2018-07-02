@@ -156,12 +156,14 @@ class OvalTool extends paper.Tool {
         const context = getRaster().getContext('2d');
         context.fillStyle = this.color;
 
-        const drew = drawEllipse(
-            this.oval.position.x, this.oval.position.y,
-            radiusX, radiusY,
-            this.oval.matrix,
-            this.filled,
-            context);
+        const drew = drawEllipse({
+            position: this.oval.position,
+            radiusX,
+            radiusY,
+            matrix: this.oval.matrix,
+            isFilled: this.filled,
+            thickness: this.thickness
+        }, context);
 
         this.oval.remove();
         this.oval = null;
