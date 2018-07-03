@@ -1,7 +1,7 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
 import {drawEllipse} from '../bitmap';
-import {getRaster} from '../layer';
+import {getGuideLayer, getRaster} from '../layer';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -61,6 +61,9 @@ class OvalTool extends paper.Tool {
                 selectedItems && selectedItems.length === 1 && selectedItems[0].shape === 'ellipse') {
             // Infer that an undo occurred and get back the active oval
             this.oval = selectedItems[0];
+            if (this.oval.strokeWidth && this.oval.data && this.oval.data.zoomLevel) {
+                this.setThickness(this.oval.strokeWidth / this.oval.data.zoomLevel);
+            }
         } else if (this.oval && this.oval.parent && !this.oval.selected) {
             // Oval got deselected
             this.commitOval();
@@ -68,12 +71,35 @@ class OvalTool extends paper.Tool {
     }
     setColor (color) {
         this.color = color;
+        if (this.oval) {
+            if (this.filled) {
+                this.oval.fillColor = this.color;
+            } else {
+                this.oval.strokeColor = this.color;
+            }
+        }
     }
     setFilled (filled) {
         this.filled = filled;
+        if (this.oval) {
+            if (this.filled) {
+                this.oval.fillColor = this.color;
+                this.oval.strokeWidh = 0;
+                this.oval.strokeColor = null;
+            } else {
+                this.oval.fillColor = null;
+                this.oval.strokeWidth = this.thickness;
+                this.oval.strokeColor = this.color;
+            }
+        }
     }
     setThickness (thickness) {
-        this.thickness = thickness;
+        this.thickness = thickness * paper.view.zoom;
+        if (this.oval && !this.filled) {
+            this.oval.strokeWidth = this.thickness;
+            if (!this.oval.data) this.oval.data = {};
+            this.oval.data.zoomLevel = paper.view.zoom;
+        }
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
@@ -89,6 +115,7 @@ class OvalTool extends paper.Tool {
                 this.oval = new paper.Shape.Ellipse({
                     fillColor: this.color,
                     point: event.downPoint,
+                    strokeScaling: false,
                     size: 0
                 });
             } else {
@@ -97,10 +124,10 @@ class OvalTool extends paper.Tool {
                     strokeWidth: this.thickness,
                     point: event.downPoint,
                     strokeScaling: false,
-                    strokeJoin: 'round',
                     size: 0
                 });
             }
+            //this.oval.parent = getGuideLayer();
         }
     }
     handleMouseDrag (event) {
@@ -162,7 +189,7 @@ class OvalTool extends paper.Tool {
             radiusY,
             matrix: this.oval.matrix,
             isFilled: this.filled,
-            thickness: this.thickness
+            thickness: this.thickness / paper.view.zoom
         }, context);
 
         this.oval.remove();

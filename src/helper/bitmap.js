@@ -295,7 +295,8 @@ const getBrushMark = function (size, color, isEraser) {
                 radiusX: size / 2,
                 radiusY: size / 2,
                 shearSlope: 0,
-                isFilled: false
+                isFilled: false,
+                drawFn: (x, y) => context.fillRect(x, y, 1, 1)
             }, context);
         }
     }

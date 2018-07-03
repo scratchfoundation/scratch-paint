@@ -4,6 +4,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import paper from '@scratch/paper';
 import Formats from '../lib/format';
+import {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
 import log from '../log/log';
 
@@ -282,7 +283,7 @@ const mapStateToProps = state => ({
     mode: state.scratchPaint.mode,
     format: state.scratchPaint.format
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
     undoSnapshot: snapshot => {
         dispatch(undoSnapshot(snapshot));
     },
@@ -290,7 +291,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearUndoState());
     },
     setSelectedItems: () => {
-        dispatch(setSelectedItems(getSelectedLeafItems()));
+        dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(ownProps.format)));
     },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());

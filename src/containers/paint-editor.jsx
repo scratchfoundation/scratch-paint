@@ -409,7 +409,7 @@ const mapStateToProps = state => ({
     textEditing: state.scratchPaint.textEditTarget !== null,
     undoState: state.scratchPaint.undo
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
     onKeyPress: event => {
         if (event.key === 'e') {
             dispatch(changeMode(Modes.ERASER));
@@ -447,7 +447,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(setTextEditTarget());
     },
     setSelectedItems: () => {
-        dispatch(setSelectedItems(getSelectedLeafItems()));
+        dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(ownProps.format)));
     },
     onDeactivateEyeDropper: () => {
         // set redux values to default for eye dropper reducer

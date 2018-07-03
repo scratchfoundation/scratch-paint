@@ -9,6 +9,9 @@ import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
 import {clearSelection, getSelectedLeafItems, getSelectedRootItems, getAllRootItems} from '../helper/selection';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
+import Formats from '../lib/format';
+import {isBitmap} from '../lib/format';
+
 
 class ModeTools extends React.Component {
     constructor (props) {
@@ -229,10 +232,11 @@ ModeTools.propTypes = {
 
 const mapStateToProps = state => ({
     clipboardItems: state.scratchPaint.clipboard.items,
+    format: state.scratchPaint.format,
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
     selectedItems: state.scratchPaint.selectedItems
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
     setClipboardItems: items => {
         dispatch(setClipboardItems(items));
     },
@@ -243,7 +247,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearSelectedItems());
     },
     setSelectedItems: () => {
-        dispatch(setSelectedItems(getSelectedLeafItems()));
+        dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(ownProps.format)));
     }
 });
 
