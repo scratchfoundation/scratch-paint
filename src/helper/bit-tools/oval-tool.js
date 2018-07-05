@@ -57,7 +57,7 @@ class OvalTool extends paper.Tool {
      */
     onSelectionChanged (selectedItems) {
         this.boundingBoxTool.onSelectionChanged(selectedItems);
-        if ((!this.oval || !this.oval.parent) &&
+        if ((!this.oval || !this.oval.isInserted()) &&
                 selectedItems && selectedItems.length === 1 && selectedItems[0].shape === 'ellipse') {
             // Infer that an undo occurred and get back the active oval
             this.oval = selectedItems[0];
@@ -65,7 +65,7 @@ class OvalTool extends paper.Tool {
                 this.oval.strokeWidth = this.oval.strokeWidth / this.oval.data.zoomLevel * paper.view.zoom;
                 this.oval.data.zoomLevel = paper.view.zoom;
             }
-        } else if (this.oval && this.oval.parent && !this.oval.selected) {
+        } else if (this.oval && this.oval.isInserted() && !this.oval.selected) {
             // Oval got deselected
             this.commitOval();
         }
@@ -98,9 +98,8 @@ class OvalTool extends paper.Tool {
         this.thickness = thickness * paper.view.zoom;
         if (this.oval && !this.filled) {
             this.oval.strokeWidth = this.thickness;
-            if (!this.oval.data) this.oval.data = {};
-            this.oval.data.zoomLevel = paper.view.zoom;
         }
+        if (this.oval) this.oval.data.zoomLevel = paper.view.zoom;
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
@@ -116,6 +115,7 @@ class OvalTool extends paper.Tool {
                 this.oval = new paper.Shape.Ellipse({
                     fillColor: this.color,
                     point: event.downPoint,
+                    strokeWidth: 0,
                     strokeScaling: false,
                     size: 0
                 });
@@ -128,6 +128,7 @@ class OvalTool extends paper.Tool {
                     size: 0
                 });
             }
+            this.oval.data = {zoomLevel: paper.view.zoom};
         }
     }
     handleMouseDrag (event) {
@@ -176,7 +177,7 @@ class OvalTool extends paper.Tool {
         this.active = false;
     }
     commitOval () {
-        if (!this.oval || !this.oval.parent) return;
+        if (!this.oval || !this.oval.isInserted()) return;
 
         const radiusX = Math.abs(this.oval.size.width / 2);
         const radiusY = Math.abs(this.oval.size.height / 2);

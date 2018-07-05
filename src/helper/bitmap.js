@@ -192,6 +192,59 @@ const drawShearedEllipse_ = function (options, context) {
 };
 
 /**
+ * @param {!number} size The diameter of the brush
+ * @param {!string} color The css color of the brush
+ * @param {?boolean} isEraser True if we want the brush mark for the eraser
+ * @return {HTMLCanvasElement} a canvas with the brush mark printed on it
+ */
+const getBrushMark = function (size, color, isEraser) {
+    size = ~~size;
+    const canvas = document.createElement('canvas');
+    const roundedUpRadius = Math.ceil(size / 2);
+    canvas.width = roundedUpRadius * 2;
+    canvas.height = roundedUpRadius * 2;
+    const context = canvas.getContext('2d');
+    context.imageSmoothingEnabled = false;
+    context.fillStyle = isEraser ? 'white' : color;
+    // Small squares for pixel artists
+    if (size <= 5) {
+        let offset = 0;
+        if (size % 2) offset = 1;
+        if (isEraser) {
+            context.fillStyle = getGuideColor();
+            context.fillRect(offset, offset, size, size);
+            context.fillStyle = 'white';
+            context.fillRect(offset + 1, offset + 1, size - 2, size - 2);
+        } else {
+            context.fillRect(offset, offset, size, size);
+        }
+    } else {
+        drawShearedEllipse_({
+            centerX: size / 2,
+            centerY: size / 2,
+            radiusX: size / 2,
+            radiusY: size / 2,
+            shearSlope: 0,
+            isFilled: true
+        }, context);
+        if (isEraser) {
+            // Add outline
+            context.fillStyle = getGuideColor();
+            drawShearedEllipse_({
+                centerX: size / 2,
+                centerY: size / 2,
+                radiusX: size / 2,
+                radiusY: size / 2,
+                shearSlope: 0,
+                isFilled: false,
+                drawFn: (x, y) => context.fillRect(x, y, 1, 1)
+            }, context);
+        }
+    }
+    return canvas;
+};
+
+/**
  * Draw an ellipse, given the original axis-aligned radii and
  * an affine transformation. Returns false if the ellipse could
  * not be drawn; for instance, the matrix is non-invertible.
@@ -248,59 +301,6 @@ const drawEllipse = function (options, context) {
         isFilled: isFilled,
         drawFn: drawFn
     }, context);
-};
-
-/**
- * @param {!number} size The diameter of the brush
- * @param {!string} color The css color of the brush
- * @param {?boolean} isEraser True if we want the brush mark for the eraser
- * @return {HTMLCanvasElement} a canvas with the brush mark printed on it
- */
-const getBrushMark = function (size, color, isEraser) {
-    size = ~~size;
-    const canvas = document.createElement('canvas');
-    const roundedUpRadius = Math.ceil(size / 2);
-    canvas.width = roundedUpRadius * 2;
-    canvas.height = roundedUpRadius * 2;
-    const context = canvas.getContext('2d');
-    context.imageSmoothingEnabled = false;
-    context.fillStyle = isEraser ? 'white' : color;
-    // Small squares for pixel artists
-    if (size <= 5) {
-        let offset = 0;
-        if (size % 2) offset = 1;
-        if (isEraser) {
-            context.fillStyle = getGuideColor();
-            context.fillRect(offset, offset, size, size);
-            context.fillStyle = 'white';
-            context.fillRect(offset + 1, offset + 1, size - 2, size - 2);
-        } else {
-            context.fillRect(offset, offset, size, size);
-        }
-    } else {
-        drawShearedEllipse_({
-            centerX: size / 2,
-            centerY: size / 2,
-            radiusX: size / 2,
-            radiusY: size / 2,
-            shearSlope: 0,
-            isFilled: true
-        }, context);
-        if (isEraser) {
-            // Add outline
-            context.fillStyle = getGuideColor();
-            drawShearedEllipse_({
-                centerX: size / 2,
-                centerY: size / 2,
-                radiusX: size / 2,
-                radiusY: size / 2,
-                shearSlope: 0,
-                isFilled: false,
-                drawFn: (x, y) => context.fillRect(x, y, 1, 1)
-            }, context);
-        }
-    }
-    return canvas;
 };
 
 const rowBlank_ = function (imageData, width, y) {

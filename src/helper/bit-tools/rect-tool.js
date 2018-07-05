@@ -57,7 +57,7 @@ class RectTool extends paper.Tool {
      */
     onSelectionChanged (selectedItems) {
         this.boundingBoxTool.onSelectionChanged(selectedItems);
-        if ((!this.rect || !this.rect.parent) &&
+        if ((!this.rect || !this.rect.isInserted()) &&
                 selectedItems && selectedItems.length === 1 && selectedItems[0].shape === 'rectangle') {
             // Infer that an undo occurred and get back the active rect
             this.rect = selectedItems[0];
@@ -65,7 +65,7 @@ class RectTool extends paper.Tool {
                 this.rect.strokeWidth = this.rect.strokeWidth / this.rect.data.zoomLevel * paper.view.zoom;
                 this.rect.data.zoomLevel = paper.view.zoom;
             }
-        } else if (this.rect && this.rect.parent && !this.rect.selected) {
+        } else if (this.rect && this.rect.isInserted() && !this.rect.selected) {
             // Rectangle got deselected
             this.commitRect();
         }
@@ -98,9 +98,8 @@ class RectTool extends paper.Tool {
         this.thickness = thickness * paper.view.zoom;
         if (this.rect && !this.filled) {
             this.rect.strokeWidth = this.thickness;
-            if (!this.rect.data) this.rect.data = {};
-            this.rect.data.zoomLevel = paper.view.zoom;
         }
+        if (this.rect) this.rect.data.zoomLevel = paper.view.zoom;
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
@@ -132,12 +131,14 @@ class RectTool extends paper.Tool {
         this.rect = new paper.Shape.Rectangle(baseRect);
         if (this.filled) {
             this.rect.fillColor = this.color;
+            this.rect.strokeWidth = 0;
         } else {
             this.rect.strokeColor = this.color;
             this.rect.strokeWidth = this.thickness;
-            this.rect.strokeJoin = 'round';
-            this.rect.strokeScaling = false;
         }
+        this.rect.strokeJoin = 'round';
+        this.rect.strokeScaling = false;
+        this.rect.data = {zoomLevel: paper.view.zoom};
 
         if (event.modifiers.alt) {
             this.rect.position = event.downPoint;
@@ -169,7 +170,7 @@ class RectTool extends paper.Tool {
         this.active = false;
     }
     commitRect () {
-        if (!this.rect || !this.rect.parent) return;
+        if (!this.rect || !this.rect.isInserted()) return;
 
         const tmpCanvas = createCanvas();
         const context = tmpCanvas.getContext('2d');
