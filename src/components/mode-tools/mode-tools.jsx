@@ -181,6 +181,8 @@ const ModeToolsComponent = props => {
                 />
             </div>
         );
+    case Modes.BIT_SELECT:
+        /* falls through */
     case Modes.SELECT:
         return (
             <div className={classNames(props.className, styles.modeTools)}>

@@ -37,7 +37,7 @@ class SelectTool extends paper.Tool {
         this.selectionBoxMode = false;
         this.prevHoveredItemId = null;
         this.active = false;
-        
+
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseDown = this.handleMouseDown;
@@ -128,7 +128,7 @@ class SelectTool extends paper.Tool {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
 
         if (this.selectionBoxMode) {
-            this.selectionBoxTool.onMouseUp(event);
+            this.selectionBoxTool.onMouseUpVector(event);
         } else {
             this.boundingBoxTool.onMouseUp(event);
         }

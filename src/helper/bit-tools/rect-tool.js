@@ -1,7 +1,7 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
 import {fillRect, outlineRect} from '../bitmap';
-import {getRaster} from '../layer';
+import {createCanvas, getRaster} from '../layer';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -171,9 +171,7 @@ class RectTool extends paper.Tool {
     commitRect () {
         if (!this.rect || !this.rect.parent) return;
 
-        const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = getRaster().width;
-        tmpCanvas.height = getRaster().height;
+        const tmpCanvas = createCanvas();
         const context = tmpCanvas.getContext('2d');
         context.fillStyle = this.color;
         if (this.filled) {
