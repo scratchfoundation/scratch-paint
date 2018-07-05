@@ -157,18 +157,28 @@ const ModeToolsComponent = props => {
     case Modes.RESHAPE:
         return (
             <div className={classNames(props.className, styles.modeTools)}>
-                <LabeledIconButton
-                    disabled={!props.hasSelectedUncurvedPoints}
-                    imgSrc={curvedPointIcon}
-                    title={props.intl.formatMessage(messages.curved)}
-                    onClick={props.onCurvePoints}
-                />
-                <LabeledIconButton
-                    disabled={!props.hasSelectedUnpointedPoints}
-                    imgSrc={straightPointIcon}
-                    title={props.intl.formatMessage(messages.pointed)}
-                    onClick={props.onPointPoints}
-                />
+                <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
+                    <LabeledIconButton
+                        disabled={!props.hasSelectedUncurvedPoints}
+                        imgSrc={curvedPointIcon}
+                        title={props.intl.formatMessage(messages.curved)}
+                        onClick={props.onCurvePoints}
+                    />
+                    <LabeledIconButton
+                        disabled={!props.hasSelectedUnpointedPoints}
+                        imgSrc={straightPointIcon}
+                        title={props.intl.formatMessage(messages.pointed)}
+                        onClick={props.onPointPoints}
+                    />
+                </InputGroup>
+                <InputGroup className={classNames(styles.modLabeledIconHeight)}>
+                    <LabeledIconButton
+                        disabled={!props.hasSelectedUncurvedPoints}
+                        imgSrc={deleteIcon}
+                        title={props.intl.formatMessage(messages.delete)}
+                        onClick={props.onDelete}
+                    />
+                </InputGroup>
             </div>
         );
     case Modes.BIT_SELECT:
