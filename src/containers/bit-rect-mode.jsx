@@ -27,17 +27,20 @@ class BitRectMode extends React.Component {
         }
     }
     componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.color !== this.props.color) {
-            this.tool.setColor(nextProps.color);
-        }
-        if (this.tool && nextProps.filled !== this.props.filled) {
-            this.tool.setFilled(nextProps.filled);
-        }
-        if (this.tool && nextProps.thickness !== this.props.thickness) {
-            this.tool.setThickness(nextProps.thickness);
-        }
-        if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
-            this.tool.onSelectionChanged(nextProps.selectedItems);
+        if (this.tool) {
+            if (nextProps.color !== this.props.color) {
+                this.tool.setColor(nextProps.color);
+            }
+            if (nextProps.filled !== this.props.filled) {
+                this.tool.setFilled(nextProps.filled);
+            }
+            if (nextProps.thickness !== this.props.thickness ||
+                    nextProps.zoom !== this.props.zoom) {
+                this.tool.setThickness(nextProps.thickness);
+            }
+            if (nextProps.selectedItems !== this.props.selectedItems) {
+                this.tool.onSelectionChanged(nextProps.selectedItems);
+            }
         }
 
         if (nextProps.isRectModeActive && !this.props.isRectModeActive) {
@@ -90,7 +93,8 @@ BitRectMode.propTypes = {
     onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setSelectedItems: PropTypes.func.isRequired,
-    thickness: PropTypes.number.isRequired
+    thickness: PropTypes.number.isRequired,
+    zoom: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -98,7 +102,8 @@ const mapStateToProps = state => ({
     filled: state.scratchPaint.fillBitmapShapes,
     isRectModeActive: state.scratchPaint.mode === Modes.BIT_RECT,
     selectedItems: state.scratchPaint.selectedItems,
-    thickness: state.scratchPaint.bitBrushSize
+    thickness: state.scratchPaint.bitBrushSize,
+    zoom: state.scratchPaint.viewBounds.scaling.x
 });
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {

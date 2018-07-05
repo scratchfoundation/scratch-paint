@@ -22,8 +22,8 @@ const reducer = function (state, action) {
         if (!action.selectedItems || !action.selectedItems.length) {
             return state;
         }
-        // Bitmap mode doesn't have stroke width
-        if (action.bitmapMode) {
+        // Vector mode doesn't have bit width
+        if (!action.bitmapMode) {
             return state;
         }
         const colorState = getColorsFromSelection(action.selectedItems, action.bitmapMode);

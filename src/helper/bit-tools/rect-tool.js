@@ -61,6 +61,10 @@ class RectTool extends paper.Tool {
                 selectedItems && selectedItems.length === 1 && selectedItems[0].shape === 'rectangle') {
             // Infer that an undo occurred and get back the active rect
             this.rect = selectedItems[0];
+            if (this.rect.data.zoomLevel !== paper.view.zoom) {
+                this.rect.strokeWidth = this.rect.strokeWidth / this.rect.data.zoomLevel * paper.view.zoom;
+                this.rect.data.zoomLevel = paper.view.zoom;
+            }
         } else if (this.rect && this.rect.parent && !this.rect.selected) {
             // Rectangle got deselected
             this.commitRect();
@@ -68,12 +72,35 @@ class RectTool extends paper.Tool {
     }
     setColor (color) {
         this.color = color;
+        if (this.rect) {
+            if (this.filled) {
+                this.rect.fillColor = this.color;
+            } else {
+                this.rect.strokeColor = this.color;
+            }
+        }
     }
     setFilled (filled) {
         this.filled = filled;
+        if (this.rect) {
+            if (this.filled) {
+                this.rect.fillColor = this.color;
+                this.rect.strokeWidh = 0;
+                this.rect.strokeColor = null;
+            } else {
+                this.rect.fillColor = null;
+                this.rect.strokeWidth = this.thickness;
+                this.rect.strokeColor = this.color;
+            }
+        }
     }
     setThickness (thickness) {
-        this.thickness = thickness;
+        this.thickness = thickness * paper.view.zoom;
+        if (this.rect && !this.filled) {
+            this.rect.strokeWidth = this.thickness;
+            if (!this.rect.data) this.rect.data = {};
+            this.rect.data.zoomLevel = paper.view.zoom;
+        }
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
@@ -152,7 +179,7 @@ class RectTool extends paper.Tool {
         if (this.filled) {
             fillRect(this.rect, context);
         } else {
-            outlineRect(this.rect, this.thickness, context);
+            outlineRect(this.rect, this.thickness / paper.view.zoom, context);
         }
         getRaster().drawImage(tmpCanvas, new paper.Point());
 

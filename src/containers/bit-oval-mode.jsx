@@ -103,7 +103,7 @@ const mapStateToProps = state => ({
     isOvalModeActive: state.scratchPaint.mode === Modes.BIT_OVAL,
     selectedItems: state.scratchPaint.selectedItems,
     thickness: state.scratchPaint.bitBrushSize,
-    zoom: state.scratchPaint.viewBounds.scaling.x,
+    zoom: state.scratchPaint.viewBounds.scaling.x
 });
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {

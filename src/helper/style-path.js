@@ -143,7 +143,6 @@ const applyStrokeWidthToSelection = function (value, textEditTargetId) {
  *     Thickness is line thickness, used in the bitmap editor
  */
 const getColorsFromSelection = function (selectedItems, bitmapMode) {
-    debugger;
     let selectionFillColorString;
     let selectionStrokeColorString;
     let selectionStrokeWidth;
@@ -230,11 +229,16 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
             }
         }
     }
+    if (bitmapMode) {
+        return {
+            fillColor: selectionFillColorString ? selectionFillColorString : null,
+            thickness: selectionThickness
+        };
+    }
     return {
         fillColor: selectionFillColorString ? selectionFillColorString : null,
         strokeColor: selectionStrokeColorString ? selectionStrokeColorString : null,
-        strokeWidth: selectionStrokeWidth || (selectionStrokeWidth === null) ? selectionStrokeWidth : 0,
-        thickness: selectionThickness
+        strokeWidth: selectionStrokeWidth || (selectionStrokeWidth === null) ? selectionStrokeWidth : 0
     };
 };
 

@@ -1,7 +1,7 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
 import {drawEllipse} from '../bitmap';
-import {getGuideLayer, getRaster} from '../layer';
+import {getRaster} from '../layer';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -61,8 +61,9 @@ class OvalTool extends paper.Tool {
                 selectedItems && selectedItems.length === 1 && selectedItems[0].shape === 'ellipse') {
             // Infer that an undo occurred and get back the active oval
             this.oval = selectedItems[0];
-            if (this.oval.strokeWidth && this.oval.data && this.oval.data.zoomLevel) {
-                this.setThickness(this.oval.strokeWidth / this.oval.data.zoomLevel);
+            if (this.oval.data.zoomLevel !== paper.view.zoom) {
+                this.oval.strokeWidth = this.oval.strokeWidth / this.oval.data.zoomLevel * paper.view.zoom;
+                this.oval.data.zoomLevel = paper.view.zoom;
             }
         } else if (this.oval && this.oval.parent && !this.oval.selected) {
             // Oval got deselected
@@ -127,7 +128,6 @@ class OvalTool extends paper.Tool {
                     size: 0
                 });
             }
-            //this.oval.parent = getGuideLayer();
         }
     }
     handleMouseDrag (event) {
