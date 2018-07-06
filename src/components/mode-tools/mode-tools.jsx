@@ -173,7 +173,8 @@ const ModeToolsComponent = props => {
                 </InputGroup>
                 <InputGroup className={classNames(styles.modLabeledIconHeight)}>
                     <LabeledIconButton
-                        disabled={!props.hasSelectedUncurvedPoints}
+                        disabled={!(props.hasSelectedUncurvedPoints ||
+                            props.hasSelectedUnpointedPoints || props.selectedItems.length)}
                         imgSrc={deleteIcon}
                         title={props.intl.formatMessage(messages.delete)}
                         onClick={props.onDelete}
