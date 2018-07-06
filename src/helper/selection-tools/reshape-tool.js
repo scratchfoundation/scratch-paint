@@ -227,7 +227,11 @@ class ReshapeTool extends paper.Tool {
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
-        this._modeMap[this.mode].onMouseUp(event);
+        if (this.mode === ReshapeModes.SELECTION_BOX) {
+            this._modeMap[this.mode].onMouseUpVector(event);
+        } else {
+            this._modeMap[this.mode].onMouseUp(event);
+        }
         this.mode = ReshapeModes.SELECTION_BOX;
         this.active = false;
     }
