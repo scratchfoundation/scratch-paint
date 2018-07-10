@@ -37,6 +37,7 @@ class PaperCanvas extends React.Component {
         document.addEventListener('keydown', this.handleKeyDown);
         paper.setup(this.canvas);
         resetZoom();
+        this.props.updateViewBounds(paper.view.matrix);
 
         const context = this.canvas.getContext('2d');
         context.webkitImageSmoothingEnabled = false;
