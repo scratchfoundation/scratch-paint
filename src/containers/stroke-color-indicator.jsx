@@ -5,6 +5,8 @@ import bindAll from 'lodash.bindall';
 import {changeStrokeColor} from '../reducers/stroke-color';
 import {openStrokeColor, closeStrokeColor} from '../reducers/modals';
 import Modes from '../lib/modes';
+import Formats from '../lib/format';
+import {isBitmap} from '../lib/format';
 
 import StrokeColorIndicatorComponent from '../components/stroke-color-indicator.jsx';
 import {applyStrokeColorToSelection} from '../helper/style-path';
