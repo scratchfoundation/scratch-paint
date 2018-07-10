@@ -132,19 +132,21 @@ class OvalTool extends paper.Tool {
         this.active = false;
     }
     commitOval () {
-        if (!this.oval || !this.oval.parent) return;
+        if (!this.oval || !this.oval.isInserted()) return;
 
         const radiusX = Math.abs(this.oval.size.width / 2);
         const radiusY = Math.abs(this.oval.size.height / 2);
         const context = getRaster().getContext('2d');
         context.fillStyle = this.color;
 
-        const drew = drawEllipse(
-            this.oval.position.x, this.oval.position.y,
-            radiusX, radiusY,
-            this.oval.matrix,
-            true, /* isFilled */
-            context);
+        const drew = drawEllipse({
+            position: this.oval.position,
+            radiusX,
+            radiusY,
+            matrix: this.oval.matrix,
+            isFilled: true,
+            thickness: 0
+        }, context);
 
         this.oval.remove();
         this.oval = null;
