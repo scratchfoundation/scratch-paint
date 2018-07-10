@@ -24,6 +24,7 @@ import styles from './mode-tools.css';
 
 import copyIcon from './icons/copy.svg';
 import pasteIcon from './icons/paste.svg';
+import deleteIcon from './icons/delete.svg';
 
 import bitBrushIcon from '../bit-brush-mode/brush.svg';
 import bitEraserIcon from '../bit-eraser-mode/eraser.svg';
@@ -63,6 +64,11 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Paste',
             description: 'Label for the paste button',
             id: 'paint.modeTools.paste'
+        },
+        delete: {
+            defaultMessage: 'Delete',
+            description: 'Label for the delete button',
+            id: 'paint.modeTools.delete'
         },
         curved: {
             defaultMessage: 'Curved',
@@ -167,18 +173,28 @@ const ModeToolsComponent = props => {
     case Modes.RESHAPE:
         return (
             <div className={classNames(props.className, styles.modeTools)}>
-                <LabeledIconButton
-                    disabled={!props.hasSelectedUncurvedPoints}
-                    imgSrc={curvedPointIcon}
-                    title={props.intl.formatMessage(messages.curved)}
-                    onClick={props.onCurvePoints}
-                />
-                <LabeledIconButton
-                    disabled={!props.hasSelectedUnpointedPoints}
-                    imgSrc={straightPointIcon}
-                    title={props.intl.formatMessage(messages.pointed)}
-                    onClick={props.onPointPoints}
-                />
+                <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
+                    <LabeledIconButton
+                        disabled={!props.hasSelectedUncurvedPoints}
+                        imgSrc={curvedPointIcon}
+                        title={props.intl.formatMessage(messages.curved)}
+                        onClick={props.onCurvePoints}
+                    />
+                    <LabeledIconButton
+                        disabled={!props.hasSelectedUnpointedPoints}
+                        imgSrc={straightPointIcon}
+                        title={props.intl.formatMessage(messages.pointed)}
+                        onClick={props.onPointPoints}
+                    />
+                </InputGroup>
+                <InputGroup className={classNames(styles.modLabeledIconHeight)}>
+                    <LabeledIconButton
+                        disabled={!props.selectedItems.length}
+                        imgSrc={deleteIcon}
+                        title={props.intl.formatMessage(messages.delete)}
+                        onClick={props.onDelete}
+                    />
+                </InputGroup>
             </div>
         );
     case Modes.BIT_SELECT:
@@ -198,6 +214,14 @@ const ModeToolsComponent = props => {
                         imgSrc={pasteIcon}
                         title={props.intl.formatMessage(messages.paste)}
                         onClick={props.onPasteFromClipboard}
+                    />
+                </InputGroup>
+                <InputGroup className={classNames(styles.modDashedBorder, styles.modLabeledIconHeight)}>
+                    <LabeledIconButton
+                        disabled={!props.selectedItems.length}
+                        imgSrc={deleteIcon}
+                        title={props.intl.formatMessage(messages.delete)}
+                        onClick={props.onDelete}
                     />
                 </InputGroup>
                 <InputGroup className={classNames(styles.modLabeledIconHeight)}>
@@ -291,6 +315,7 @@ ModeToolsComponent.propTypes = {
     onBrushSliderChange: PropTypes.func.isRequired,
     onCopyToClipboard: PropTypes.func.isRequired,
     onCurvePoints: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired,
     onEraserSliderChange: PropTypes.func,
     onFillShapes: PropTypes.func.isRequired,
     onFlipHorizontal: PropTypes.func.isRequired,
