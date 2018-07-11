@@ -186,11 +186,11 @@ class PointTool {
         }
         if (this.deleteOnMouseUp) {
             this.removePoint(this.deleteOnMouseUp);
-            this.deleteOnMouseUp = null;
         }
         this.selectedItems = null;
         this.setSelectedItems();
-        if (moved) {
+        if (moved || this.deleteOnMouseUp) {
+            this.deleteOnMouseUp = null;
             this.onUpdateImage();
         }
     }
