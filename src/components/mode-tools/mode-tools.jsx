@@ -274,19 +274,21 @@ const ModeToolsComponent = props => {
                         onClick={props.onOutlineShapes}
                     />
                 </InputGroup>
-                <InputGroup>
-                    <Label text={props.intl.formatMessage(messages.thickness)}>
-                        <LiveInput
-                            range
-                            small
-                            max={MAX_STROKE_WIDTH}
-                            min="1"
-                            type="number"
-                            value={props.bitBrushSize}
-                            onSubmit={props.onBitBrushSliderChange}
-                        />
-                    </Label>
-                </InputGroup>
+                {props.fillBitmapShapes ? null : (
+                    <InputGroup>
+                        <Label text={props.intl.formatMessage(messages.thickness)}>
+                            <LiveInput
+                                range
+                                small
+                                max={MAX_STROKE_WIDTH}
+                                min="1"
+                                type="number"
+                                value={props.bitBrushSize}
+                                onSubmit={props.onBitBrushSliderChange}
+                            />
+                        </Label>
+                    </InputGroup>)
+                }
             </div>
         );
     }
