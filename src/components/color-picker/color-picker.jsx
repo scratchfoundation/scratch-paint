@@ -1,21 +1,35 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {FormattedMessage} from 'react-intl';
+import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
+
 import classNames from 'classnames';
 import parseColor from 'parse-color';
 
 import Slider from '../forms/slider.jsx';
-
+import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import styles from './color-picker.css';
 
-import eyeDropperIcon from './eye-dropper.svg';
+import eyeDropperIcon from './icons/eye-dropper.svg';
 import noFillIcon from '../color-button/no-fill.svg';
+import fillHorzGradientIcon from './icons/fill-horz-gradient-enabled.svg';
+import fillRadialIcon from './icons/fill-radial-enabled.svg';
+import fillSolidIcon from './icons/fill-solid-enabled.svg';
+import fillVertGradientIcon from './icons/fill-vert-gradient-enabled.svg';
+import swapIcon from './icons/swap.svg';
 
 const hsvToHex = (h, s, v) =>
     // Scale hue back up to [0, 360] from [0, 100]
     parseColor(`hsv(${3.6 * h}, ${s}, ${v})`).hex
 ;
 
+const messages = defineMessages({
+    swap: {
+        defaultMessage: 'Swap',
+        description: 'Label for button that swaps the two colors in a gradient',
+        id: 'paint.colorPicker.swap'
+    }
+});
 class ColorPickerComponent extends React.Component {
     _makeBackground (channel) {
         const stops = [];
@@ -41,6 +55,56 @@ class ColorPickerComponent extends React.Component {
     render () {
         return (
             <div className={styles.colorPickerContainer}>
+                <div className={styles.row}>
+                    <div className={styles.gradientPickerRow}>
+                        <img
+                            className={styles.inactiveGradient}
+                            draggable={false}
+                            src={fillSolidIcon}
+                        />
+                        <img
+                            className={styles.inactiveGradient}
+                            draggable={false}
+                            src={fillHorzGradientIcon}
+                        />
+                        <img
+                            className={styles.inactiveGradient}
+                            draggable={false}
+                            src={fillVertGradientIcon}
+                        />
+                        <img
+                            className={styles.inactiveGradient}
+                            draggable={false}
+                            src={fillRadialIcon}
+                        />
+                    </div>
+                </div>
+                <div className={styles.divider} />
+                <div className={styles.row}>
+                    <div className={styles.gradientPickerRow}>
+                        <div
+                            className={classNames({
+                                [styles.swatch]: true,
+                                [styles.largeSwatch]: true,
+                                [styles.activeSwatch]: this.props.isEyeDropping
+                            })}
+                            style={{backgroundColor: this.props.color}}
+                        />
+                        <LabeledIconButton
+                            className={styles.swapButton}
+                            imgSrc={swapIcon}
+                            title={this.props.intl.formatMessage(messages.swap)}
+                        />
+                        <div
+                            className={classNames({
+                                [styles.swatch]: true,
+                                [styles.largeSwatch]: true,
+                                [styles.activeSwatch]: this.props.isEyeDropping
+                            })}
+                            style={{backgroundColor: this.props.color}}
+                        />
+                    </div>
+                </div>
                 <div className={styles.row}>
                     <div className={styles.rowHeader}>
                         <span className={styles.labelName}>
@@ -98,13 +162,13 @@ class ColorPickerComponent extends React.Component {
                     </div>
                     <div className={styles.rowSlider}>
                         <Slider
+                            lastSlider
                             background={this._makeBackground('brightness')}
                             value={this.props.brightness}
                             onChange={this.props.onBrightnessChange}
                         />
                     </div>
                 </div>
-                <div className={styles.divider} />
                 <div className={styles.swatchRow}>
                     <div className={styles.swatches}>
                         <div
@@ -144,6 +208,7 @@ ColorPickerComponent.propTypes = {
     brightness: PropTypes.number.isRequired,
     color: PropTypes.string,
     hue: PropTypes.number.isRequired,
+    intl: intlShape.isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onBrightnessChange: PropTypes.func.isRequired,
@@ -153,4 +218,4 @@ ColorPickerComponent.propTypes = {
     saturation: PropTypes.number.isRequired
 };
 
-export default ColorPickerComponent;
+export default connect()(injectIntl(ColorPickerComponent));
