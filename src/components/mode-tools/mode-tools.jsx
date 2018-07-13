@@ -255,6 +255,7 @@ ModeToolsComponent.propTypes = {
     intl: intlShape.isRequired,
     mode: PropTypes.string.isRequired,
     onBitBrushSliderChange: PropTypes.func.isRequired,
+    onBitEraserSliderChange: PropTypes.func.isRequired,
     onBrushSliderChange: PropTypes.func.isRequired,
     onCopyToClipboard: PropTypes.func.isRequired,
     onCurvePoints: PropTypes.func.isRequired,
