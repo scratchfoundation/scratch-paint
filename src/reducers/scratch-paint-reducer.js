@@ -6,6 +6,7 @@ import brushModeReducer from './brush-mode';
 import eraserModeReducer from './eraser-mode';
 import colorReducer from './color';
 import clipboardReducer from './clipboard';
+import fillBitmapShapesReducer from './fill-bitmap-shapes';
 import fillModeReducer from './fill-mode';
 import fontReducer from './font';
 import formatReducer from './format';
@@ -24,6 +25,7 @@ export default combineReducers({
     color: colorReducer,
     clipboard: clipboardReducer,
     eraserMode: eraserModeReducer,
+    fillBitmapShapes: fillBitmapShapesReducer,
     fillMode: fillModeReducer,
     font: fontReducer,
     format: formatReducer,
