@@ -3,6 +3,7 @@ import {getSelectedLeafItems} from './selection';
 import {isPGTextItem, isPointTextItem} from './item';
 import {isGroup} from './group';
 import {getItems} from './selection';
+import GradientTypes from '../lib/gradient-types';
 
 const MIXED = 'scratch-paint/style-path/mixed';
 
@@ -144,9 +145,11 @@ const applyStrokeWidthToSelection = function (value, textEditTargetId) {
  */
 const getColorsFromSelection = function (selectedItems, bitmapMode) {
     let selectionFillColorString;
+    let selectionFillColor2String;
     let selectionStrokeColorString;
     let selectionStrokeWidth;
     let selectionThickness;
+    let selectionGradientType;
     let firstChild = true;
 
     for (let item of selectedItems) {
@@ -155,7 +158,9 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
             item = item.parent;
         }
         let itemFillColorString;
+        let itemFillColor2String;
         let itemStrokeColorString;
+        let itemGradientType;
 
         // handle pgTextItems differently by going through their children
         if (isPGTextItem(item)) {
@@ -193,7 +198,22 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                 if (isPointTextItem(item) && item.fillColor.toCSS() === 'rgba(0,0,0,0)') {
                     itemFillColorString = null;
                 } else if (item.fillColor.type === 'gradient') {
-                    itemFillColorString = MIXED;
+                    // Scratch only recognizes 2 color gradients
+                    if (item.fillColor.gradient.stops.length === 2) {
+                        if (item.fillColor.gradient.radial) {
+                            itemGradientType = GradientTypes.RADIAL;
+                        } else {
+                            // Always use horizontal for linear gradients, since horizontal and vertical gradients
+                            // are the same with rotation. We don't want to show MIXED just because anything is rotated.
+                            itemGradientType = GradientTypes.HORIZONTAL;
+                        }
+                        itemFillColorString = item.fillColor.gradient.stops[0].color.toCSS();
+                        itemFillColor2String = item.fillColor.gradient.stops[1].color.toCSS();
+                    } else {
+                        itemFillColorString = MIXED;
+                        itemFillColor2String = null;
+                        item.gradientType = GradientTypes.SOLID;
+                    }
                 } else {
                     itemFillColorString = item.fillColor.toCSS();
                 }
@@ -212,14 +232,26 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
             if (firstChild) {
                 firstChild = false;
                 selectionFillColorString = itemFillColorString;
+                selectionFillColor2String = itemFillColor2String;
                 selectionStrokeColorString = itemStrokeColorString;
+                selectionGradientType = itemGradientType;
                 selectionStrokeWidth = item.strokeWidth;
                 if (item.strokeWidth && item.data && item.data.zoomLevel) {
                     selectionThickness = item.strokeWidth / item.data.zoomLevel;
                 }
             }
-            if (itemFillColorString !== selectionFillColorString) {
+            // True if gradient would match if flipped
+            const gradientMatchesFlipped = itemGradientType === GradientTypes.HORIZONTAL &&
+                itemFillColorString === selectionFillColor2String &&
+                itemFillColor2String === selectionFillColorString;
+            // If item fill color doesn't match selection fill color
+            if (!gradientMatchesFlipped &&
+                    (itemFillColorString !== selectionFillColorString ||
+                    itemFillColor2String !== selectionFillColor2String ||
+                    itemGradientType !== selectionGradientType)) {
                 selectionFillColorString = MIXED;
+                selectionFillColor2String = null;
+                selectionGradientType = GradientTypes.SOLID;
             }
             if (itemStrokeColorString !== selectionStrokeColorString) {
                 selectionStrokeColorString = MIXED;
@@ -229,14 +261,25 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
             }
         }
     }
+    // Convert selection gradient type from horizontal to vertical if first item is exactly vertical
+    if (selectionGradientType !== GradientTypes.SOLID) {
+        const direction = selectedItems[0].fillColor.destination.subtract(selectedItems[0].fillColor.origin);
+        if (Math.abs(direction.angle) === 90) {
+            selectionGradientType = GradientTypes.VERTICAL;
+        }
+    }
     if (bitmapMode) {
         return {
             fillColor: selectionFillColorString ? selectionFillColorString : null,
+            fillColor2: selectionFillColor2String ? selectionFillColor2String : null,
+            gradientType: selectionGradientType,
             thickness: selectionThickness
         };
     }
     return {
         fillColor: selectionFillColorString ? selectionFillColorString : null,
+        fillColor2: selectionFillColor2String ? selectionFillColor2String : null,
+        gradientType: selectionGradientType,
         strokeColor: selectionStrokeColorString ? selectionStrokeColorString : null,
         strokeWidth: selectionStrokeWidth || (selectionStrokeWidth === null) ? selectionStrokeWidth : 0
     };

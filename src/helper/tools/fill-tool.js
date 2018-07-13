@@ -16,7 +16,7 @@ class FillTool extends paper.Tool {
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
         this.onUpdateImage = onUpdateImage;
-        
+
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseMove = this.handleMouseMove;
@@ -58,6 +58,9 @@ class FillTool extends paper.Tool {
     }
     setFillColor (fillColor) {
         this.fillColor = fillColor;
+    }
+    setGradientType (gradientType) {
+        this.gradientType = gradientType;
     }
     /**
      * To be called when the hovered item changes. When the select tool hovers over a

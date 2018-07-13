@@ -5,7 +5,7 @@ import parseColor from 'parse-color';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {changeFillModeGradientType} from '../reducers/fill-mode-gradient-type';
+import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {changeColorIndex} from '../reducers/color-index';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {activateEyeDropper} from '../reducers/eye-dropper';
@@ -107,10 +107,10 @@ class ColorPicker extends React.Component {
                 brightness={this.state.brightness}
                 color={this.props.color}
                 colorIndex={this.props.colorIndex}
-                fillModeGradientType={this.props.fillModeGradientType}
                 hue={this.state.hue}
                 isEyeDropping={this.props.isEyeDropping}
                 saturation={this.state.saturation}
+                selectionGradientType={this.props.selectionGradientType}
                 onActivateEyeDropper={this.handleActivateEyeDropper}
                 onBrightnessChange={this.handleBrightnessChange}
                 onChangeColor={this.props.onChangeColor}
@@ -120,8 +120,8 @@ class ColorPicker extends React.Component {
                 onChangeGradientTypeVertical={this.props.onChangeGradientTypeVertical}
                 onHueChange={this.handleHueChange}
                 onSaturationChange={this.handleSaturationChange}
-                onSelectColor0={this.props.selectColor0}
-                onSelectColor1={this.props.selectColor1}
+                onSelectColor0={this.props.onSelectColor0}
+                onSelectColor1={this.props.onSelectColor1}
                 onTransparent={this.handleTransparent}
             />
         );
@@ -131,7 +131,6 @@ class ColorPicker extends React.Component {
 ColorPicker.propTypes = {
     color: PropTypes.string,
     colorIndex: PropTypes.number.isRequired,
-    fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onChangeColor: PropTypes.func.isRequired,
@@ -139,28 +138,29 @@ ColorPicker.propTypes = {
     onChangeGradientTypeRadial: PropTypes.func.isRequired,
     onChangeGradientTypeSolid: PropTypes.func.isRequired,
     onChangeGradientTypeVertical: PropTypes.func.isRequired,
-    selectColor0: PropTypes.func.isRequired,
-    selectColor1: PropTypes.func.isRequired
+    onSelectColor0: PropTypes.func.isRequired,
+    onSelectColor1: PropTypes.func.isRequired,
+    selectionGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired
 };
 
 const mapStateToProps = state => ({
     colorIndex: state.scratchPaint.fillMode.colorIndex,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
-    fillModeGradientType: state.scratchPaint.fillMode.gradientType
+    selectionGradientType: state.scratchPaint.color.gradientType
 });
 
 const mapDispatchToProps = dispatch => ({
     onChangeGradientTypeSolid: () => {
-        dispatch(changeFillModeGradientType(GradientTypes.SOLID));
+        dispatch(changeGradientType(GradientTypes.SOLID));
     },
     onChangeGradientTypeHorizontal: () => {
-        dispatch(changeFillModeGradientType(GradientTypes.HORIZONTAL));
+        dispatch(changeGradientType(GradientTypes.HORIZONTAL));
     },
     onChangeGradientTypeRadial: () => {
-        dispatch(changeFillModeGradientType(GradientTypes.RADIAL));
+        dispatch(changeGradientType(GradientTypes.RADIAL));
     },
     onChangeGradientTypeVertical: () => {
-        dispatch(changeFillModeGradientType(GradientTypes.VERTICAL));
+        dispatch(changeGradientType(GradientTypes.VERTICAL));
     },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
@@ -168,10 +168,10 @@ const mapDispatchToProps = dispatch => ({
     onActivateEyeDropper: (currentTool, callback) => {
         dispatch(activateEyeDropper(currentTool, callback));
     },
-    selectColor0: () => {
+    onSelectColor0: () => {
         dispatch(changeColorIndex(0));
     },
-    selectColor1: () => {
+    onSelectColor1: () => {
         dispatch(changeColorIndex(1));
     }
 });

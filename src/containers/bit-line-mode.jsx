@@ -9,6 +9,7 @@ import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {clearSelection} from '../helper/selection';
+import {clearGradient} from '../reducers/selection-gradient-type';
 
 import BitLineModeComponent from '../components/bit-line-mode/bit-line-mode.jsx';
 import BitLineTool from '../helper/bit-tools/line-tool';
@@ -33,7 +34,7 @@ class BitLineMode extends React.Component {
         if (this.tool && nextProps.bitBrushSize !== this.props.bitBrushSize) {
             this.tool.setLineSize(nextProps.bitBrushSize);
         }
-        
+
         if (nextProps.isBitLineModeActive && !this.props.isBitLineModeActive) {
             this.activateTool();
         } else if (!nextProps.isBitLineModeActive && this.props.isBitLineModeActive) {
@@ -45,6 +46,7 @@ class BitLineMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
+        clearGradient();
         // Force the default line color if fill is MIXED or transparent
         let color = this.props.color;
         if (!color || color === MIXED) {
@@ -92,6 +94,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
+    },
+    clearGradient: () => {
+        dispatch(clearGradient());
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.BIT_LINE));

@@ -9,6 +9,7 @@ import {MIXED} from '../helper/style-path';
 import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
+import {clearGradient} from '../reducers/selection-gradient-type';
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
 import RectTool from '../helper/bit-tools/rect-tool';
 import RectModeComponent from '../components/bit-rect-mode/bit-rect-mode.jsx';
@@ -54,6 +55,7 @@ class BitRectMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
+        clearGradient();
         // Force the default brush color if fill is MIXED or transparent
         const fillColorPresent = this.props.color !== MIXED && this.props.color !== null;
         if (!fillColorPresent) {
@@ -108,6 +110,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
+    },
+    clearGradient: () => {
+        dispatch(clearGradient());
     },
     setSelectedItems: () => {
         dispatch(setSelectedItems(getSelectedLeafItems(), true /* bitmapMode */));
