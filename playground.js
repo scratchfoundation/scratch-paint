@@ -36149,6 +36149,7 @@ ModeToolsComponent.propTypes = {
     intl: _reactIntl.intlShape.isRequired,
     mode: _propTypes2.default.string.isRequired,
     onBitBrushSliderChange: _propTypes2.default.func.isRequired,
+    onBitEraserSliderChange: _propTypes2.default.func.isRequired,
     onBrushSliderChange: _propTypes2.default.func.isRequired,
     onCopyToClipboard: _propTypes2.default.func.isRequired,
     onCurvePoints: _propTypes2.default.func.isRequired,
