@@ -4,6 +4,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import paper from '@scratch/paper';
 import Formats from '../lib/format';
+import {isBitmap} from '../lib/format';
 import Modes from '../lib/modes';
 import log from '../log/log';
 
@@ -37,6 +38,7 @@ class PaperCanvas extends React.Component {
         document.addEventListener('keydown', this.handleKeyDown);
         paper.setup(this.canvas);
         resetZoom();
+        this.props.updateViewBounds(paper.view.matrix);
 
         const context = this.canvas.getContext('2d');
         context.webkitImageSmoothingEnabled = false;
@@ -67,7 +69,7 @@ class PaperCanvas extends React.Component {
         // Backspace, delete
         if (event.key === 'Delete' || event.key === 'Backspace') {
             if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
-                this.props.setSelectedItems();
+                this.props.setSelectedItems(this.props.format);
             }
         }
     }
@@ -228,7 +230,7 @@ class PaperCanvas extends React.Component {
             );
             zoomOnFixedPoint(-deltaY / 100, fixedPoint);
             this.props.updateViewBounds(paper.view.matrix);
-            this.props.setSelectedItems();
+            this.props.setSelectedItems(this.props.format);
         } else if (event.shiftKey && event.deltaX === 0) {
             // Scroll horizontally (based on vertical scroll delta)
             // This is needed as for some browser/system combinations which do not set deltaX.
@@ -264,6 +266,7 @@ PaperCanvas.propTypes = {
     clearPasteOffset: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     clearUndo: PropTypes.func.isRequired,
+    format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
     image: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.instanceOf(HTMLImageElement)
@@ -289,8 +292,8 @@ const mapDispatchToProps = dispatch => ({
     clearUndo: () => {
         dispatch(clearUndoState());
     },
-    setSelectedItems: () => {
-        dispatch(setSelectedItems(getSelectedLeafItems()));
+    setSelectedItems: format => {
+        dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(format)));
     },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
