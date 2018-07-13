@@ -60,7 +60,8 @@ class ColorPickerComponent extends React.Component {
                     <div className={styles.gradientPickerRow}>
                         <img
                             className={classNames({
-                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.SOLID
+                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.SOLID,
+                                [styles.clickable]: true
                             })}
                             draggable={false}
                             src={fillSolidIcon}
@@ -68,7 +69,8 @@ class ColorPickerComponent extends React.Component {
                         />
                         <img
                             className={classNames({
-                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.HORIZONTAL
+                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.HORIZONTAL,
+                                [styles.clickable]: true
                             })}
                             draggable={false}
                             src={fillHorzGradientIcon}
@@ -76,7 +78,8 @@ class ColorPickerComponent extends React.Component {
                         />
                         <img
                             className={classNames({
-                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.VERTICAL
+                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.VERTICAL,
+                                [styles.clickable]: true
                             })}
                             draggable={false}
                             src={fillVertGradientIcon}
@@ -84,7 +87,8 @@ class ColorPickerComponent extends React.Component {
                         />
                         <img
                             className={classNames({
-                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.RADIAL
+                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.RADIAL,
+                                [styles.clickable]: true
                             })}
                             draggable={false}
                             src={fillRadialIcon}
@@ -98,11 +102,13 @@ class ColorPickerComponent extends React.Component {
                         <div className={styles.gradientPickerRow}>
                             <div
                                 className={classNames({
+                                    [styles.clickable]: true,
                                     [styles.swatch]: true,
                                     [styles.largeSwatch]: true,
-                                    [styles.activeSwatch]: this.props.isEyeDropping
+                                    [styles.activeSwatch]: this.props.colorIndex === 0
                                 })}
                                 style={{backgroundColor: this.props.color}}
+                                onClick={this.props.onSelectColor0}
                             />
                             <LabeledIconButton
                                 className={styles.swapButton}
@@ -111,11 +117,13 @@ class ColorPickerComponent extends React.Component {
                             />
                             <div
                                 className={classNames({
+                                    [styles.clickable]: true,
                                     [styles.swatch]: true,
                                     [styles.largeSwatch]: true,
-                                    [styles.activeSwatch]: this.props.isEyeDropping
+                                    [styles.activeSwatch]: this.props.colorIndex === 1
                                 })}
                                 style={{backgroundColor: this.props.color}}
+                                onClick={this.props.onSelectColor1}
                             />
                         </div>
                     </div>
@@ -188,6 +196,7 @@ class ColorPickerComponent extends React.Component {
                     <div className={styles.swatches}>
                         <div
                             className={classNames({
+                                [styles.clickable]: true,
                                 [styles.swatch]: true,
                                 [styles.activeSwatch]: this.props.color === null
                             })}
@@ -202,6 +211,7 @@ class ColorPickerComponent extends React.Component {
                     <div className={styles.swatches}>
                         <div
                             className={classNames({
+                                [styles.clickable]: true,
                                 [styles.swatch]: true,
                                 [styles.activeSwatch]: this.props.isEyeDropping
                             })}
@@ -222,18 +232,21 @@ class ColorPickerComponent extends React.Component {
 ColorPickerComponent.propTypes = {
     brightness: PropTypes.number.isRequired,
     color: PropTypes.string,
+    colorIndex: PropTypes.number.isRequired,
     fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     hue: PropTypes.number.isRequired,
     intl: intlShape.isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onBrightnessChange: PropTypes.func.isRequired,
-    onChangeGradientTypeSolid: PropTypes.func.isRequired,
     onChangeGradientTypeHorizontal: PropTypes.func.isRequired,
-    onChangeGradientTypeVertical: PropTypes.func.isRequired,
     onChangeGradientTypeRadial: PropTypes.func.isRequired,
+    onChangeGradientTypeSolid: PropTypes.func.isRequired,
+    onChangeGradientTypeVertical: PropTypes.func.isRequired,
     onHueChange: PropTypes.func.isRequired,
     onSaturationChange: PropTypes.func.isRequired,
+    onSelectColor0: PropTypes.func.isRequired,
+    onSelectColor1: PropTypes.func.isRequired,
     onTransparent: PropTypes.func.isRequired,
     saturation: PropTypes.number.isRequired
 };

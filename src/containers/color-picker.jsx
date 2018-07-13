@@ -5,9 +5,10 @@ import parseColor from 'parse-color';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import {changeFillModeGradientType} from '../reducers/fill-mode-gradient-type';
+import {changeColorIndex} from '../reducers/color-index';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {activateEyeDropper} from '../reducers/eye-dropper';
-import {changeFillModeGradientType} from '../reducers/fill-mode-gradient-type';
 import GradientTypes from '../lib/gradient-types';
 
 import ColorPickerComponent from '../components/color-picker/color-picker.jsx';
@@ -105,6 +106,7 @@ class ColorPicker extends React.Component {
             <ColorPickerComponent
                 brightness={this.state.brightness}
                 color={this.props.color}
+                colorIndex={this.props.colorIndex}
                 fillModeGradientType={this.props.fillModeGradientType}
                 hue={this.state.hue}
                 isEyeDropping={this.props.isEyeDropping}
@@ -112,12 +114,14 @@ class ColorPicker extends React.Component {
                 onActivateEyeDropper={this.handleActivateEyeDropper}
                 onBrightnessChange={this.handleBrightnessChange}
                 onChangeColor={this.props.onChangeColor}
-                onChangeGradientTypeSolid={this.props.onChangeGradientTypeSolid}
                 onChangeGradientTypeHorizontal={this.props.onChangeGradientTypeHorizontal}
-                onChangeGradientTypeVertical={this.props.onChangeGradientTypeVertical}
                 onChangeGradientTypeRadial={this.props.onChangeGradientTypeRadial}
+                onChangeGradientTypeSolid={this.props.onChangeGradientTypeSolid}
+                onChangeGradientTypeVertical={this.props.onChangeGradientTypeVertical}
                 onHueChange={this.handleHueChange}
                 onSaturationChange={this.handleSaturationChange}
+                onSelectColor0={this.props.selectColor0}
+                onSelectColor1={this.props.selectColor1}
                 onTransparent={this.handleTransparent}
             />
         );
@@ -126,6 +130,7 @@ class ColorPicker extends React.Component {
 
 ColorPicker.propTypes = {
     color: PropTypes.string,
+    colorIndex: PropTypes.number.isRequired,
     fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
@@ -133,10 +138,13 @@ ColorPicker.propTypes = {
     onChangeGradientTypeHorizontal: PropTypes.func.isRequired,
     onChangeGradientTypeRadial: PropTypes.func.isRequired,
     onChangeGradientTypeSolid: PropTypes.func.isRequired,
-    onChangeGradientTypeVertical: PropTypes.func.isRequired
+    onChangeGradientTypeVertical: PropTypes.func.isRequired,
+    selectColor0: PropTypes.func.isRequired,
+    selectColor1: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
+    colorIndex: state.scratchPaint.fillMode.colorIndex,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     fillModeGradientType: state.scratchPaint.fillMode.gradientType
 });
@@ -159,6 +167,12 @@ const mapDispatchToProps = dispatch => ({
     },
     onActivateEyeDropper: (currentTool, callback) => {
         dispatch(activateEyeDropper(currentTool, callback));
+    },
+    selectColor0: () => {
+        dispatch(changeColorIndex(0));
+    },
+    selectColor1: () => {
+        dispatch(changeColorIndex(1));
     }
 });
 
