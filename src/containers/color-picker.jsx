@@ -7,6 +7,8 @@ import React from 'react';
 
 import {clearSelectedItems} from '../reducers/selected-items';
 import {activateEyeDropper} from '../reducers/eye-dropper';
+import {changeFillModeGradientType} from '../reducers/fill-mode-gradient-type';
+import GradientTypes from '../lib/gradient-types';
 
 import ColorPickerComponent from '../components/color-picker/color-picker.jsx';
 import {MIXED} from '../helper/style-path';
@@ -103,12 +105,17 @@ class ColorPicker extends React.Component {
             <ColorPickerComponent
                 brightness={this.state.brightness}
                 color={this.props.color}
+                fillModeGradientType={this.props.fillModeGradientType}
                 hue={this.state.hue}
                 isEyeDropping={this.props.isEyeDropping}
                 saturation={this.state.saturation}
                 onActivateEyeDropper={this.handleActivateEyeDropper}
                 onBrightnessChange={this.handleBrightnessChange}
                 onChangeColor={this.props.onChangeColor}
+                onChangeGradientTypeSolid={this.props.onChangeGradientTypeSolid}
+                onChangeGradientTypeHorizontal={this.props.onChangeGradientTypeHorizontal}
+                onChangeGradientTypeVertical={this.props.onChangeGradientTypeVertical}
+                onChangeGradientTypeRadial={this.props.onChangeGradientTypeRadial}
                 onHueChange={this.handleHueChange}
                 onSaturationChange={this.handleSaturationChange}
                 onTransparent={this.handleTransparent}
@@ -119,16 +126,34 @@ class ColorPicker extends React.Component {
 
 ColorPicker.propTypes = {
     color: PropTypes.string,
+    fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
-    onChangeColor: PropTypes.func.isRequired
+    onChangeColor: PropTypes.func.isRequired,
+    onChangeGradientTypeHorizontal: PropTypes.func.isRequired,
+    onChangeGradientTypeRadial: PropTypes.func.isRequired,
+    onChangeGradientTypeSolid: PropTypes.func.isRequired,
+    onChangeGradientTypeVertical: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-    isEyeDropping: state.scratchPaint.color.eyeDropper.active
+    isEyeDropping: state.scratchPaint.color.eyeDropper.active,
+    fillModeGradientType: state.scratchPaint.fillMode.gradientType
 });
 
 const mapDispatchToProps = dispatch => ({
+    onChangeGradientTypeSolid: () => {
+        dispatch(changeFillModeGradientType(GradientTypes.SOLID));
+    },
+    onChangeGradientTypeHorizontal: () => {
+        dispatch(changeFillModeGradientType(GradientTypes.HORIZONTAL));
+    },
+    onChangeGradientTypeRadial: () => {
+        dispatch(changeFillModeGradientType(GradientTypes.RADIAL));
+    },
+    onChangeGradientTypeVertical: () => {
+        dispatch(changeFillModeGradientType(GradientTypes.VERTICAL));
+    },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },

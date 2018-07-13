@@ -9,6 +9,7 @@ import parseColor from 'parse-color';
 import Slider from '../forms/slider.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import styles from './color-picker.css';
+import GradientTypes from '../../lib/gradient-types';
 
 import eyeDropperIcon from './icons/eye-dropper.svg';
 import noFillIcon from '../color-button/no-fill.svg';
@@ -58,53 +59,67 @@ class ColorPickerComponent extends React.Component {
                 <div className={styles.row}>
                     <div className={styles.gradientPickerRow}>
                         <img
-                            className={styles.inactiveGradient}
+                            className={classNames({
+                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.SOLID
+                            })}
                             draggable={false}
                             src={fillSolidIcon}
+                            onClick={this.props.onChangeGradientTypeSolid}
                         />
                         <img
-                            className={styles.inactiveGradient}
+                            className={classNames({
+                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.HORIZONTAL
+                            })}
                             draggable={false}
                             src={fillHorzGradientIcon}
+                            onClick={this.props.onChangeGradientTypeHorizontal}
                         />
                         <img
-                            className={styles.inactiveGradient}
+                            className={classNames({
+                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.VERTICAL
+                            })}
                             draggable={false}
                             src={fillVertGradientIcon}
+                            onClick={this.props.onChangeGradientTypeVertical}
                         />
                         <img
-                            className={styles.inactiveGradient}
+                            className={classNames({
+                                [styles.inactiveGradient]: this.props.fillModeGradientType !== GradientTypes.RADIAL
+                            })}
                             draggable={false}
                             src={fillRadialIcon}
+                            onClick={this.props.onChangeGradientTypeRadial}
                         />
                     </div>
                 </div>
                 <div className={styles.divider} />
-                <div className={styles.row}>
-                    <div className={styles.gradientPickerRow}>
-                        <div
-                            className={classNames({
-                                [styles.swatch]: true,
-                                [styles.largeSwatch]: true,
-                                [styles.activeSwatch]: this.props.isEyeDropping
-                            })}
-                            style={{backgroundColor: this.props.color}}
-                        />
-                        <LabeledIconButton
-                            className={styles.swapButton}
-                            imgSrc={swapIcon}
-                            title={this.props.intl.formatMessage(messages.swap)}
-                        />
-                        <div
-                            className={classNames({
-                                [styles.swatch]: true,
-                                [styles.largeSwatch]: true,
-                                [styles.activeSwatch]: this.props.isEyeDropping
-                            })}
-                            style={{backgroundColor: this.props.color}}
-                        />
+                {this.props.fillModeGradientType === GradientTypes.SOLID ? null : (
+                    <div className={styles.row}>
+                        <div className={styles.gradientPickerRow}>
+                            <div
+                                className={classNames({
+                                    [styles.swatch]: true,
+                                    [styles.largeSwatch]: true,
+                                    [styles.activeSwatch]: this.props.isEyeDropping
+                                })}
+                                style={{backgroundColor: this.props.color}}
+                            />
+                            <LabeledIconButton
+                                className={styles.swapButton}
+                                imgSrc={swapIcon}
+                                title={this.props.intl.formatMessage(messages.swap)}
+                            />
+                            <div
+                                className={classNames({
+                                    [styles.swatch]: true,
+                                    [styles.largeSwatch]: true,
+                                    [styles.activeSwatch]: this.props.isEyeDropping
+                                })}
+                                style={{backgroundColor: this.props.color}}
+                            />
+                        </div>
                     </div>
-                </div>
+                )}
                 <div className={styles.row}>
                     <div className={styles.rowHeader}>
                         <span className={styles.labelName}>
@@ -207,11 +222,16 @@ class ColorPickerComponent extends React.Component {
 ColorPickerComponent.propTypes = {
     brightness: PropTypes.number.isRequired,
     color: PropTypes.string,
+    fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     hue: PropTypes.number.isRequired,
     intl: intlShape.isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onBrightnessChange: PropTypes.func.isRequired,
+    onChangeGradientTypeSolid: PropTypes.func.isRequired,
+    onChangeGradientTypeHorizontal: PropTypes.func.isRequired,
+    onChangeGradientTypeVertical: PropTypes.func.isRequired,
+    onChangeGradientTypeRadial: PropTypes.func.isRequired,
     onHueChange: PropTypes.func.isRequired,
     onSaturationChange: PropTypes.func.isRequired,
     onTransparent: PropTypes.func.isRequired,
