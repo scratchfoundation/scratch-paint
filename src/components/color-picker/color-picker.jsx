@@ -60,7 +60,7 @@ class ColorPickerComponent extends React.Component {
                     <div className={styles.gradientPickerRow}>
                         <img
                             className={classNames({
-                                [styles.inactiveGradient]: this.props.selectionGradientType !== GradientTypes.SOLID,
+                                [styles.inactiveGradient]: this.props.gradientType !== GradientTypes.SOLID,
                                 [styles.clickable]: true
                             })}
                             draggable={false}
@@ -70,7 +70,7 @@ class ColorPickerComponent extends React.Component {
                         <img
                             className={classNames({
                                 [styles.inactiveGradient]:
-                                    this.props.selectionGradientType !== GradientTypes.HORIZONTAL,
+                                    this.props.gradientType !== GradientTypes.HORIZONTAL,
                                 [styles.clickable]: true
                             })}
                             draggable={false}
@@ -79,7 +79,7 @@ class ColorPickerComponent extends React.Component {
                         />
                         <img
                             className={classNames({
-                                [styles.inactiveGradient]: this.props.selectionGradientType !== GradientTypes.VERTICAL,
+                                [styles.inactiveGradient]: this.props.gradientType !== GradientTypes.VERTICAL,
                                 [styles.clickable]: true
                             })}
                             draggable={false}
@@ -88,7 +88,7 @@ class ColorPickerComponent extends React.Component {
                         />
                         <img
                             className={classNames({
-                                [styles.inactiveGradient]: this.props.selectionGradientType !== GradientTypes.RADIAL,
+                                [styles.inactiveGradient]: this.props.gradientType !== GradientTypes.RADIAL,
                                 [styles.clickable]: true
                             })}
                             draggable={false}
@@ -98,7 +98,7 @@ class ColorPickerComponent extends React.Component {
                     </div>
                 </div>
                 <div className={styles.divider} />
-                {this.props.selectionGradientType === GradientTypes.SOLID ? null : (
+                {this.props.gradientType === GradientTypes.SOLID ? null : (
                     <div className={styles.row}>
                         <div className={styles.gradientPickerRow}>
                             <div
@@ -109,7 +109,7 @@ class ColorPickerComponent extends React.Component {
                                     [styles.activeSwatch]: this.props.colorIndex === 0
                                 })}
                                 style={{backgroundColor: this.props.color}}
-                                onClick={this.props.onSelectColor0}
+                                onClick={this.props.onSelectColor}
                             />
                             <LabeledIconButton
                                 className={styles.swapButton}
@@ -123,8 +123,8 @@ class ColorPickerComponent extends React.Component {
                                     [styles.largeSwatch]: true,
                                     [styles.activeSwatch]: this.props.colorIndex === 1
                                 })}
-                                style={{backgroundColor: this.props.color}}
-                                onClick={this.props.onSelectColor1}
+                                style={{backgroundColor: this.props.color2}}
+                                onClick={this.props.onSelectColor2}
                             />
                         </div>
                     </div>
@@ -233,7 +233,9 @@ class ColorPickerComponent extends React.Component {
 ColorPickerComponent.propTypes = {
     brightness: PropTypes.number.isRequired,
     color: PropTypes.string,
+    color2: PropTypes.string,
     colorIndex: PropTypes.number.isRequired,
+    gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     hue: PropTypes.number.isRequired,
     intl: intlShape.isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
@@ -245,11 +247,10 @@ ColorPickerComponent.propTypes = {
     onChangeGradientTypeVertical: PropTypes.func.isRequired,
     onHueChange: PropTypes.func.isRequired,
     onSaturationChange: PropTypes.func.isRequired,
-    onSelectColor0: PropTypes.func.isRequired,
-    onSelectColor1: PropTypes.func.isRequired,
+    onSelectColor: PropTypes.func.isRequired,
+    onSelectColor2: PropTypes.func.isRequired,
     onTransparent: PropTypes.func.isRequired,
-    saturation: PropTypes.number.isRequired,
-    selectionGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired
+    saturation: PropTypes.number.isRequired
 };
 
 export default connect()(injectIntl(ColorPickerComponent));

@@ -160,7 +160,7 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
         let itemFillColorString;
         let itemFillColor2String;
         let itemStrokeColorString;
-        let itemGradientType;
+        let itemGradientType = GradientTypes.SOLID;
 
         // handle pgTextItems differently by going through their children
         if (isPGTextItem(item)) {
@@ -195,7 +195,7 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
         } else if (!isGroup(item)) {
             if (item.fillColor) {
                 // hack bc text items with null fill can't be detected by fill-hitTest anymore
-                if (isPointTextItem(item) && item.fillColor.toCSS() === 'rgba(0,0,0,0)') {
+                if (isPointTextItem(item) && item.fillColor.alpha === 0) {
                     itemFillColorString = null;
                 } else if (item.fillColor.type === 'gradient') {
                     // Scratch only recognizes 2 color gradients
@@ -207,15 +207,20 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                             // are the same with rotation. We don't want to show MIXED just because anything is rotated.
                             itemGradientType = GradientTypes.HORIZONTAL;
                         }
-                        itemFillColorString = item.fillColor.gradient.stops[0].color.toCSS();
-                        itemFillColor2String = item.fillColor.gradient.stops[1].color.toCSS();
+                        itemFillColorString = item.fillColor.gradient.stops[0].color.alpha === 0 ?
+                            null :
+                            item.fillColor.gradient.stops[0].color.toCSS();
+                        itemFillColor2String = item.fillColor.gradient.stops[1].color.alpha === 0 ?
+                            null :
+                            item.fillColor.gradient.stops[1].color.toCSS();
                     } else {
                         itemFillColorString = MIXED;
                         itemFillColor2String = null;
-                        item.gradientType = GradientTypes.SOLID;
                     }
                 } else {
-                    itemFillColorString = item.fillColor.toCSS();
+                    itemFillColorString = item.fillColor.alpha === 0 ?
+                        null :
+                        item.fillColor.toCSS();
                 }
             }
             if (item.strokeColor) {
@@ -225,7 +230,9 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                 } else if (item.strokeColor.type === 'gradient') {
                     itemStrokeColorString = MIXED;
                 } else {
-                    itemStrokeColorString = item.strokeColor.toCSS();
+                    itemStrokeColorString = item.strokeColor.alpha === 0 ?
+                        null :
+                        item.strokeColor.toCSS();
                 }
             }
             // check every style against the first of the items

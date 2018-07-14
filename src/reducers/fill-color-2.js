@@ -25,6 +25,7 @@ const reducer = function (state, action) {
         return getColorsFromSelection(action.selectedItems).fillColor2;
     case CLEAR_GRADIENT:
         // TODO pick random color here
+        console.log('set fill color 2 clear');
         return null;
     default:
         return state;

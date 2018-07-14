@@ -8,6 +8,8 @@ import ColorPicker from '../containers/color-picker.jsx';
 import InputGroup from './input-group/input-group.jsx';
 import Label from './forms/label.jsx';
 
+import GradientTypes from '../lib/gradient-types';
+
 const messages = defineMessages({
     fill: {
         id: 'paint.paintEditor.fill',
@@ -25,6 +27,8 @@ const FillColorIndicatorComponent = props => (
             body={
                 <ColorPicker
                     color={props.fillColor}
+                    color2={props.fillColor2}
+                    gradientType={props.gradientType}
                     onChangeColor={props.onChangeFillColor}
                 />
             }
@@ -35,6 +39,8 @@ const FillColorIndicatorComponent = props => (
             <Label text={props.intl.formatMessage(messages.fill)}>
                 <ColorButton
                     color={props.fillColor}
+                    color2={props.fillColor2}
+                    gradientType={props.gradientType}
                     onClick={props.onOpenFillColor}
                 />
             </Label>
@@ -46,7 +52,9 @@ FillColorIndicatorComponent.propTypes = {
     className: PropTypes.string,
     disabled: PropTypes.bool.isRequired,
     fillColor: PropTypes.string,
+    fillColor2: PropTypes.string,
     fillColorModalVisible: PropTypes.bool.isRequired,
+    gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     intl: intlShape,
     onChangeFillColor: PropTypes.func.isRequired,
     onCloseFillColor: PropTypes.func.isRequired,

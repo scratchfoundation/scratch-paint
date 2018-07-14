@@ -7,6 +7,7 @@ import {openFillColor, closeFillColor} from '../reducers/modals';
 import Modes from '../lib/modes';
 import Formats from '../lib/format';
 import {isBitmap} from '../lib/format';
+import GradientTypes from '../lib/gradient-types';
 
 import FillColorIndicatorComponent from '../components/fill-color-indicator.jsx';
 import {applyFillColorToSelection} from '../helper/style-path';
@@ -55,8 +56,10 @@ class FillColorIndicator extends React.Component {
 const mapStateToProps = state => ({
     disabled: state.scratchPaint.mode === Modes.LINE,
     fillColor: state.scratchPaint.color.fillColor,
+    fillColor2: state.scratchPaint.color.fillColor2,
     fillColorModalVisible: state.scratchPaint.modals.fillColor,
     format: state.scratchPaint.format,
+    gradientType: state.scratchPaint.color.gradientType,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     textEditTarget: state.scratchPaint.textEditTarget
 });
@@ -76,8 +79,10 @@ const mapDispatchToProps = dispatch => ({
 FillColorIndicator.propTypes = {
     disabled: PropTypes.bool.isRequired,
     fillColor: PropTypes.string,
+    fillColor2: PropTypes.string,
     fillColorModalVisible: PropTypes.bool.isRequired,
     format: PropTypes.oneOf(Object.keys(Formats)),
+    gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onCloseFillColor: PropTypes.func.isRequired,
