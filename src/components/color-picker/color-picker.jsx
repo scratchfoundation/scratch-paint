@@ -110,7 +110,15 @@ class ColorPickerComponent extends React.Component {
                                 })}
                                 style={{backgroundColor: this.props.color}}
                                 onClick={this.props.onSelectColor}
-                            />
+                            >
+                                {this.props.color === null ? (
+                                    <img
+                                        className={styles.largeSwatchIcon}
+                                        draggable={false}
+                                        src={noFillIcon}
+                                    />
+                                ) : null}
+                            </div>
                             <LabeledIconButton
                                 className={styles.swapButton}
                                 imgSrc={swapIcon}
@@ -125,7 +133,15 @@ class ColorPickerComponent extends React.Component {
                                 })}
                                 style={{backgroundColor: this.props.color2}}
                                 onClick={this.props.onSelectColor2}
-                            />
+                            >
+                                {this.props.color2 === null ? (
+                                    <img
+                                        className={styles.largeSwatchIcon}
+                                        draggable={false}
+                                        src={noFillIcon}
+                                    />
+                                ) : null}
+                            </div>
                         </div>
                     </div>
                 )}
@@ -204,6 +220,7 @@ class ColorPickerComponent extends React.Component {
                             onClick={this.props.onTransparent}
                         >
                             <img
+                                className={styles.swatchIcon}
                                 draggable={false}
                                 src={noFillIcon}
                             />
@@ -219,6 +236,7 @@ class ColorPickerComponent extends React.Component {
                             onClick={this.props.onActivateEyeDropper}
                         >
                             <img
+                                className={styles.swatchIcon}
                                 draggable={false}
                                 src={eyeDropperIcon}
                             />

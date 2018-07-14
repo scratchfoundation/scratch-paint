@@ -60,6 +60,13 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: content-box;
+    display: flex;
+    align-items: center;
+}
+
+.large-swatch-icon {
+    width: 1.75rem;
+    margin: auto;
 }
 
 .large-swatch {
@@ -72,7 +79,7 @@
     box-shadow: 0px 0px 0px 3px hsla(215, 100%, 65%, 0.2);
 }
 
-.swatch > img {
+.swatch-icon {
     width: 1.5rem;
     height: 1.5rem;
 }
