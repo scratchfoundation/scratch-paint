@@ -130,6 +130,7 @@ class ColorPicker extends React.Component {
                 hue={this.state.hue}
                 isEyeDropping={this.props.isEyeDropping}
                 saturation={this.state.saturation}
+                shouldShowGradientTools={this.props.shouldShowGradientTools}
                 onActivateEyeDropper={this.handleActivateEyeDropper}
                 onBrightnessChange={this.handleBrightnessChange}
                 onChangeGradientTypeHorizontal={this.handleChangeGradientTypeHorizontal}
@@ -153,6 +154,7 @@ ColorPicker.propTypes = {
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
+    shouldShowGradientTools: PropTypes.bool.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onChangeColor: PropTypes.func.isRequired,
     onChangeGradientType: PropTypes.func,

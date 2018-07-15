@@ -152,12 +152,12 @@ const applyGradientTypeToSelection = function (gradientType, color2, bitmapMode,
 
         if (color2 === MIXED) color2 = null;
         let itemColor1 = item.fillColor === null || item.fillColor.alpha === 0 ? null :
-            !item.fillColor.gradient ? item.fillColor.toCSS() :
-            !item.fillColor.gradient.stops[0] || item.fillColor.gradient.stops[0].color.alpha === 0 ? null :
-            item.fillColor.gradient.stops[0].color.toCSS();
+            !item.fillColor.gradient ? item.fillColor.toCSS() : // eslint-disable-line no-negated-condition
+                !item.fillColor.gradient.stops[0] || item.fillColor.gradient.stops[0].color.alpha === 0 ? null :
+                    item.fillColor.gradient.stops[0].color.toCSS();
         let itemColor2 = !item.fillColor || !item.fillColor.gradient || !item.fillColor.gradient.stops[1] ? color2 :
             item.fillColor.gradient.stops[1].color.alpha === 0 ? null :
-            item.fillColor.gradient.stops[1].color.toCSS();
+                item.fillColor.gradient.stops[1].color.toCSS();
 
         if (bitmapMode) {
             // @todo

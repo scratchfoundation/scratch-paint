@@ -29,6 +29,7 @@ const FillColorIndicatorComponent = props => (
                     color={props.fillColor}
                     color2={props.fillColor2}
                     gradientType={props.gradientType}
+                    shouldShowGradientTools={props.shouldShowGradientTools}
                     onChangeColor={props.onChangeFillColor}
                     onChangeGradientType={props.onChangeGradientType}
                     onSwap={props.onSwap}
@@ -62,7 +63,8 @@ FillColorIndicatorComponent.propTypes = {
     onChangeGradientType: PropTypes.func.isRequired,
     onCloseFillColor: PropTypes.func.isRequired,
     onOpenFillColor: PropTypes.func.isRequired,
-    onSwap: PropTypes.func.isRequired
+    onSwap: PropTypes.func.isRequired,
+    shouldShowGradientTools: PropTypes.bool.isRequired
 };
 
 export default injectIntl(FillColorIndicatorComponent);
