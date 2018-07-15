@@ -49,7 +49,8 @@ class ColorPicker extends React.Component {
             'handleActivateEyeDropper'
         ]);
 
-        const hsv = this.getHsv(props.color);
+        const color = props.colorIndex === 0 ? props.color : props.color2;
+        const hsv = this.getHsv(color);
         this.state = {
             hue: hsv[0],
             saturation: hsv[1],
@@ -57,9 +58,11 @@ class ColorPicker extends React.Component {
         };
     }
     componentWillReceiveProps (newProps) {
-        if (this.props.isEyeDropping && this.props.color !== newProps.color) {
-            // color set by eye dropper, so update slider states
-            const hsv = this.getHsv(newProps.color);
+        const color = newProps.colorIndex === 0 ? this.props.color : this.props.color2;
+        const newColor = newProps.colorIndex === 0 ? newProps.color : newProps.color2;
+        const colorSetByEyedropper = this.props.isEyeDropping && color !== newColor;
+        if (colorSetByEyedropper || this.props.colorIndex !== newProps.colorIndex) {
+            const hsv = this.getHsv(newColor);
             this.setState({
                 hue: hsv[0],
                 saturation: hsv[1],

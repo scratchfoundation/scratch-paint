@@ -2,7 +2,9 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
+import {changeColorIndex} from '../reducers/color-index';
 import {changeFillColor} from '../reducers/fill-color';
+import {changeFillColor2} from '../reducers/fill-color-2';
 import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {openFillColor, closeFillColor} from '../reducers/modals';
 import Modes from '../lib/modes';
@@ -41,7 +43,7 @@ class FillColorIndicator extends React.Component {
             isBitmap(this.props.format),
             this.props.textEditTarget);
         this._hasChanged = this._hasChanged || isDifferent;
-        this.props.onChangeFillColor(newColor);
+        this.props.onChangeFillColor(newColor, this.props.colorIndex);
     }
     handleChangeGradientType (gradientType) {
         // Apply color and update redux, but do not update svg until picker closes.
@@ -57,6 +59,7 @@ class FillColorIndicator extends React.Component {
         if (!this.props.isEyeDropping) {
             this.props.onCloseFillColor();
         }
+        this.props.onChangeColorIndex(0);
     }
     render () {
         return (
@@ -83,8 +86,15 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onChangeFillColor: fillColor => {
-        dispatch(changeFillColor(fillColor));
+    onChangeColorIndex: index => {
+        dispatch(changeColorIndex(index));
+    },
+    onChangeFillColor: (fillColor, index) => {
+        if (index === 0) {
+            dispatch(changeFillColor(fillColor));
+        } else if (index === 1) {
+            dispatch(changeFillColor2(fillColor));
+        }
     },
     onOpenFillColor: () => {
         dispatch(openFillColor());
@@ -106,6 +116,7 @@ FillColorIndicator.propTypes = {
     format: PropTypes.oneOf(Object.keys(Formats)),
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
+    onChangeColorIndex: PropTypes.func.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onChangeGradientType: PropTypes.func.isRequired,
     onCloseFillColor: PropTypes.func.isRequired,
