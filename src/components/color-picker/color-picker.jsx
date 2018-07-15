@@ -230,7 +230,9 @@ class ColorPickerComponent extends React.Component {
                             className={classNames({
                                 [styles.clickable]: true,
                                 [styles.swatch]: true,
-                                [styles.activeSwatch]: this.props.color === null
+                                [styles.activeSwatch]:
+                                    (this.props.colorIndex === 0 && this.props.color === null) ||
+                                    (this.props.colorIndex === 1 && this.props.color2 === null)
                             })}
                             onClick={this.props.onTransparent}
                         >
