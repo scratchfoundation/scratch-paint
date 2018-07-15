@@ -10,7 +10,7 @@ const MIXED = 'scratch-paint/style-path/mixed';
 // Check if the item color matches the incoming color. If the item color is a gradient, we assume
 // that the incoming color never matches, since we don't support gradients yet.
 const _colorMatch = function (itemColor, incomingColor) {
-    // @todo check whether the gradient has changed when we support gradients
+    // @todo colorMatch should not be called with gradients as arguments once stroke gradients are supported
     if (itemColor && itemColor.type === 'gradient') return false;
     // Either both are null or both are the same color when converted to CSS.
     return (!itemColor && !incomingColor) ||
@@ -33,29 +33,148 @@ const _getColorStateListeners = function (textEditTargetId) {
 
 /**
  * Called when setting fill color
- * @param {string} colorString New color, css format
+ * @param {string} colorString color1, css format
+ * @param {string} colorString2 color2, css format
+ * @param {GradientType} gradientType gradient type
  * @param {?boolean} bitmapMode True if the fill color is being set in bitmap mode
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
  * @return {boolean} Whether the color application actually changed visibly.
  */
-const applyFillColorToSelection = function (colorString, bitmapMode, textEditTargetId) {
+const applyFillColorToSelection = function (colorString, colorString2, gradientType, bitmapMode, textEditTargetId) {
     const items = _getColorStateListeners(textEditTargetId);
     let changed = false;
     for (let item of items) {
-        if (isPointTextItem(item) && !colorString) {
-            colorString = 'rgba(0,0,0,0)';
-        } else if (item.parent instanceof paper.CompoundPath) {
+        if (isPointTextItem(item) || gradientType !== GradientTypes.SOLID) {
+            if (colorString === null) colorString = 'rgba(0,0,0,0)';
+            if (colorString2 === null) colorString2 = 'rgba(0,0,0,0)';
+        }
+        if (item.parent instanceof paper.CompoundPath) {
             item = item.parent;
         }
+
         // In bitmap mode, fill color applies to the stroke if there is a stroke
         if (bitmapMode && item.strokeColor !== null && item.strokeWidth !== 0) {
             if (!_colorMatch(item.strokeColor, colorString)) {
                 changed = true;
                 item.strokeColor = colorString;
             }
-        } else if (!_colorMatch(item.fillColor, colorString)) {
+        } else if (gradientType === GradientTypes.SOLID) {
+            // Applying a solid color
+            if (!_colorMatch(item.fillColor, colorString) || (item.fillColor && item.fillColor.gradient)) {
+                changed = true;
+                item.fillColor = colorString;
+            }
+        } else if (!item.fillColor || !item.fillColor.gradient) {
+            // Converting a solid color to a gradient
             changed = true;
-            item.fillColor = colorString;
+            const start = gradientType ===
+                GradientTypes.HORIZONTAL ? item.bounds.leftCenter :
+                GradientTypes.VERTICAL ? item.bounds.topCenter :
+                    GradientTypes.RADIAL ? item.position :
+                        null;
+            const halfLongestDimension = Math.max(item.bounds.width, item.bounds.height) / 2;
+            const end = gradientType ===
+                GradientTypes.HORIZONTAL ? item.bounds.rightCenter :
+                GradientTypes.VERTICAL ? item.bounds.bottomCenter :
+                    GradientTypes.RADIAL ? item.position.add(new paper.Point(halfLongestDimension, 0)) :
+                        null;
+            item.fillColor = {
+                gradient: {
+                    stops: [colorString, colorString2],
+                    radial: gradientType === GradientTypes.RADIAL
+                },
+                origin: start,
+                destination: end
+            };
+        } else if (!_colorMatch(item.fillColor.gradient.stops[0].color, colorString)) {
+            // Changing color 1 of an existing gradient
+            changed = true;
+            item.fillColor.gradient.stops[0].setColor(colorString);
+        } else if (!_colorMatch(item.fillColor.gradient.stops[1].color, colorString2)) {
+            // Changing color 2 of an existing gradient
+            changed = true;
+            item.fillColor.gradient.stops[1].setColor(colorString2);
+        }
+    }
+    return changed;
+};
+
+/**
+ * Called when setting gradient type
+ * @param {string} colorString color1, css format
+ * @param {string} colorString2 color2, css format
+ * @param {GradientType} gradientType gradient type
+ * @param {?boolean} bitmapMode True if the fill color is being set in bitmap mode
+ * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
+ * @return {boolean} Whether the color application actually changed visibly.
+ */
+const applyGradientTypeToSelection = function (colorString, colorString2, gradientType, bitmapMode, textEditTargetId) {
+    const items = _getColorStateListeners(textEditTargetId);
+    let changed = false;
+    for (let item of items) {
+        if (isPointTextItem(item) || gradientType !== GradientTypes.SOLID) {
+            // @todo gradients are fading through black
+            if (colorString === null) colorString = 'rgba(0,0,0,0)';
+            if (colorString2 === null) colorString2 = 'rgba(0,0,0,0)';
+        }
+        if (item.parent instanceof paper.CompoundPath) {
+            item = item.parent;
+        }
+
+        const itemColor1 = item.fillColor === null ? 'rgba(0,0,0,0)' :
+            !item.fillColor.gradient ? item.fillColor.toCSS() :
+            item.fillColor.gradient.stops[0].color.toCSS();
+        const itemColor2 = item.fillColor === null || !item.fillColor.gradient ? colorString2 :
+            item.fillColor.gradient.stops[1].color.toCSS();
+
+        if (bitmapMode) {
+            // @todo
+        } else if (gradientType === GradientTypes.SOLID) {
+            if (item.fillColor && item.fillColor.gradient) {
+                changed = true;
+                item.fillColor = itemColor1;
+            }
+        } else if (gradientType === GradientTypes.RADIAL) {
+            const hasRadialGradient = item.fillColor && item.fillColor.gradient && item.fillColor.gradient.radial;
+            if (!hasRadialGradient) {
+                changed = true;
+                const halfLongestDimension = Math.max(item.bounds.width, item.bounds.height) / 2;
+                item.fillColor = {
+                    gradient: {
+                        stops: [itemColor1, itemColor2],
+                        radial: true
+                    },
+                    origin: item.position,
+                    destination: item.position.add(new paper.Point(halfLongestDimension, 0))
+                };
+            }
+        } else if (gradientType === GradientTypes.HORIZONTAL) {
+            const hasHorizontalGradient = item.fillColor && item.fillColor.gradient &&
+                !item.fillColor.gradient.radial &&
+                Math.abs(item.fillColor.origin.y - item.fillColor.destination.y) < 1e-8;
+            if (!hasHorizontalGradient) {
+                changed = true;
+                item.fillColor = {
+                    gradient: {
+                        stops: [itemColor1, itemColor2]
+                    },
+                    origin: item.bounds.leftCenter,
+                    destination: item.bounds.rightCenter
+                };
+            }
+        } else if (gradientType === GradientTypes.VERTICAL) {
+            const hasVerticalGradient = item.fillColor && item.fillColor.gradient && !item.fillColor.gradient.radial &&
+                Math.abs(item.fillColor.origin.x - item.fillColor.destination.x) < 1e-8;
+            if (!hasVerticalGradient) {
+                changed = true;
+                item.fillColor = {
+                    gradient: {
+                        stops: [itemColor1, itemColor2]
+                    },
+                    origin: item.bounds.topCenter,
+                    destination: item.bounds.bottomCenter
+                };
+            }
         }
     }
     return changed;
@@ -247,15 +366,10 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                     selectionThickness = item.strokeWidth / item.data.zoomLevel;
                 }
             }
-            // True if gradient would match if flipped
-            const gradientMatchesFlipped = itemGradientType === GradientTypes.HORIZONTAL &&
-                itemFillColorString === selectionFillColor2String &&
-                itemFillColor2String === selectionFillColorString;
             // If item fill color doesn't match selection fill color
-            if (!gradientMatchesFlipped &&
-                    (itemFillColorString !== selectionFillColorString ||
+            if (itemFillColorString !== selectionFillColorString ||
                     itemFillColor2String !== selectionFillColor2String ||
-                    itemGradientType !== selectionGradientType)) {
+                    itemGradientType !== selectionGradientType) {
                 selectionFillColorString = MIXED;
                 selectionFillColor2String = null;
                 selectionGradientType = GradientTypes.SOLID;
@@ -332,6 +446,7 @@ const styleShape = function (path, options) {
 
 export {
     applyFillColorToSelection,
+    applyGradientTypeToSelection,
     applyStrokeColorToSelection,
     applyStrokeWidthToSelection,
     getColorsFromSelection,

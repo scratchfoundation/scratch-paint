@@ -10,9 +10,11 @@ import Slider from '../forms/slider.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import styles from './color-picker.css';
 import GradientTypes from '../../lib/gradient-types';
+import {MIXED} from '../../helper/style-path';
 
 import eyeDropperIcon from './icons/eye-dropper.svg';
 import noFillIcon from '../color-button/no-fill.svg';
+import mixedFillIcon from '../color-button/mixed-fill.svg';
 import fillHorzGradientIcon from './icons/fill-horz-gradient-enabled.svg';
 import fillRadialIcon from './icons/fill-radial-enabled.svg';
 import fillSolidIcon from './icons/fill-solid-enabled.svg';
@@ -117,6 +119,12 @@ class ColorPickerComponent extends React.Component {
                                         draggable={false}
                                         src={noFillIcon}
                                     />
+                                ) : this.props.color === MIXED ? (
+                                    <img
+                                        className={styles.largeSwatchIcon}
+                                        draggable={false}
+                                        src={mixedFillIcon}
+                                    />
                                 ) : null}
                             </div>
                             <LabeledIconButton
@@ -139,6 +147,12 @@ class ColorPickerComponent extends React.Component {
                                         className={styles.largeSwatchIcon}
                                         draggable={false}
                                         src={noFillIcon}
+                                    />
+                                ) : this.props.color2 === MIXED ? (
+                                    <img
+                                        className={styles.largeSwatchIcon}
+                                        draggable={false}
+                                        src={mixedFillIcon}
                                     />
                                 ) : null}
                             </div>

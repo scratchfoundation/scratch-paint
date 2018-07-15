@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
 import {changeFillColor} from '../reducers/fill-color';
+import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {openFillColor, closeFillColor} from '../reducers/modals';
 import Modes from '../lib/modes';
 import Formats from '../lib/format';
@@ -10,13 +11,14 @@ import {isBitmap} from '../lib/format';
 import GradientTypes from '../lib/gradient-types';
 
 import FillColorIndicatorComponent from '../components/fill-color-indicator.jsx';
-import {applyFillColorToSelection} from '../helper/style-path';
+import {applyFillColorToSelection, applyGradientTypeToSelection} from '../helper/style-path';
 
 class FillColorIndicator extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
             'handleChangeFillColor',
+            'handleChangeGradientType',
             'handleCloseFillColor'
         ]);
 
@@ -32,10 +34,33 @@ class FillColorIndicator extends React.Component {
         }
     }
     handleChangeFillColor (newColor) {
+        let color = this.props.fillColor;
+        let color2 = this.props.fillColor2;
+        if (this.props.colorIndex === 0) {
+            color = newColor;
+        } else {
+            color2 = newColor;
+        }
         // Apply color and update redux, but do not update svg until picker closes.
-        const isDifferent = applyFillColorToSelection(newColor, isBitmap(this.props.format), this.props.textEditTarget);
+        const isDifferent = applyFillColorToSelection(
+            color,
+            color2,
+            this.props.gradientType,
+            isBitmap(this.props.format),
+            this.props.textEditTarget);
         this._hasChanged = this._hasChanged || isDifferent;
         this.props.onChangeFillColor(newColor);
+    }
+    handleChangeGradientType (gradientType) {
+        // Apply color and update redux, but do not update svg until picker closes.
+        const isDifferent = applyGradientTypeToSelection(
+            this.props.fillColor,
+            this.props.fillColor2,
+            gradientType,
+            isBitmap(this.props.format),
+            this.props.textEditTarget);
+        this._hasChanged = this._hasChanged || isDifferent;
+        this.props.onChangeGradientType(gradientType);
     }
     handleCloseFillColor () {
         if (!this.props.isEyeDropping) {
@@ -47,6 +72,7 @@ class FillColorIndicator extends React.Component {
             <FillColorIndicatorComponent
                 {...this.props}
                 onChangeFillColor={this.handleChangeFillColor}
+                onChangeGradientType={this.handleChangeGradientType}
                 onCloseFillColor={this.handleCloseFillColor}
             />
         );
@@ -54,6 +80,7 @@ class FillColorIndicator extends React.Component {
 }
 
 const mapStateToProps = state => ({
+    colorIndex: state.scratchPaint.fillMode.colorIndex,
     disabled: state.scratchPaint.mode === Modes.LINE,
     fillColor: state.scratchPaint.color.fillColor,
     fillColor2: state.scratchPaint.color.fillColor2,
@@ -73,10 +100,14 @@ const mapDispatchToProps = dispatch => ({
     },
     onCloseFillColor: () => {
         dispatch(closeFillColor());
+    },
+    onChangeGradientType: gradientType => {
+        dispatch(changeGradientType(gradientType));
     }
 });
 
 FillColorIndicator.propTypes = {
+    colorIndex: PropTypes.number.isRequired,
     disabled: PropTypes.bool.isRequired,
     fillColor: PropTypes.string,
     fillColor2: PropTypes.string,
@@ -85,6 +116,7 @@ FillColorIndicator.propTypes = {
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
+    onChangeGradientType: PropTypes.func.isRequired,
     onCloseFillColor: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     textEditTarget: PropTypes.number

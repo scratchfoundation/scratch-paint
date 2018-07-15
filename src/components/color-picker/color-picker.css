@@ -96,6 +96,6 @@
     margin: 8px;
 }
 
-img + img {
+.gradient-picker-row > img + img {
     margin-left: calc(2 * $grid-unit);
 }
