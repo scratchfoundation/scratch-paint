@@ -80,11 +80,16 @@ const applyFillColorToSelection = function (colorString, colorIndex, bitmapMode,
             if (colorString === null) {
                 colorString = _getColorStringForTransparent(item.fillColor.gradient.stops[otherIndex].color.toCSS());
             }
-            item.fillColor.gradient.stops[colorIndex].setColor(colorString);
+            const colors = [0, 0];
+            colors[colorIndex] = colorString;
             // If the other color is transparent, its RGB values need to be adjusted for the gradient to be smooth
             if (item.fillColor.gradient.stops[otherIndex].color.alpha === 0) {
-                item.fillColor.gradient.stops[otherIndex].setColor(_getColorStringForTransparent(colorString));
+                colors[otherIndex] = _getColorStringForTransparent(colorString);
+            } else {
+                colors[otherIndex] = item.fillColor.gradient.stops[otherIndex].color.toCSS();
             }
+            // There seems to be a bug where setting colors on stops doesn't always update the view, so set gradient.
+            item.fillColor.gradient = {stops: colors, radial: item.fillColor.gradient.radial};
         }
     }
     return changed;
@@ -93,11 +98,13 @@ const applyFillColorToSelection = function (colorString, colorIndex, bitmapMode,
 /**
  * Called when setting gradient type
  * @param {GradientType} gradientType gradient type
+ * @param {string} color2 Fill color 2. When converting a solid to other gradient type, this is
+ *     the 2nd color that will appear. Not used in other cases.
  * @param {?boolean} bitmapMode True if the fill color is being set in bitmap mode
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
  * @return {boolean} Whether the color application actually changed visibly.
  */
-const applyGradientTypeToSelection = function (gradientType, bitmapMode, textEditTargetId) {
+const applyGradientTypeToSelection = function (gradientType, color2, bitmapMode, textEditTargetId) {
     const items = _getColorStateListeners(textEditTargetId);
     let changed = false;
     for (let item of items) {
@@ -105,14 +112,13 @@ const applyGradientTypeToSelection = function (gradientType, bitmapMode, textEdi
             item = item.parent;
         }
 
+        if (color2 === MIXED) color2 = null;
         let itemColor1 = item.fillColor === null || item.fillColor.alpha === 0 ? null :
             !item.fillColor.gradient ? item.fillColor.toCSS() :
             item.fillColor.gradient.stops[0].color.alpha === 0 ? null :
             item.fillColor.gradient.stops[0].color.toCSS();
-        let itemColor2 = item.fillColor === null ||
-                item.fillColor.alpha === 0 ||
-                !item.fillColor.gradient ||
-                item.fillColor.gradient.stops[1].color.alpha === 0 ? null :
+        let itemColor2 = !item.fillColor || !item.fillColor.gradient ? color2 :
+            item.fillColor.gradient.stops[1].color.alpha === 0 ? null :
             item.fillColor.gradient.stops[1].color.toCSS();
 
         if (bitmapMode) {

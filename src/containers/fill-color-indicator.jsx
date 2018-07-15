@@ -47,6 +47,7 @@ class FillColorIndicator extends React.Component {
         // Apply color and update redux, but do not update svg until picker closes.
         const isDifferent = applyGradientTypeToSelection(
             gradientType,
+            this.props.fillColor2,
             isBitmap(this.props.format),
             this.props.textEditTarget);
         this._hasChanged = this._hasChanged || isDifferent;
