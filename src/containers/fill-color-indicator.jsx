@@ -44,6 +44,7 @@ class FillColorIndicator extends React.Component {
         const isDifferent = applyFillColorToSelection(
             newColor,
             this.props.colorIndex,
+            this.props.gradientType === GradientTypes.SOLID,
             isBitmap(this.props.format),
             this.props.textEditTarget);
         this._hasChanged = this._hasChanged || isDifferent;

@@ -44,11 +44,14 @@ const _getColorStringForTransparent = function (colorToMatch) {
  * Called when setting fill color
  * @param {string} colorString color, css format, or null if completely transparent
  * @param {number} colorIndex index of color being changed
+ * @param {boolean} isSolidGradient True if is solid gradient. Sometimes the item has a gradient but the color
+ *     picker is set to a solid gradient. This happens when a mix of colors and gradient types is selected.
+ *     When changing the color in this case, the solid gradient should override the existing gradient on the item.
  * @param {?boolean} bitmapMode True if the fill color is being set in bitmap mode
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
  * @return {boolean} Whether the color application actually changed visibly.
  */
-const applyFillColorToSelection = function (colorString, colorIndex, bitmapMode, textEditTargetId) {
+const applyFillColorToSelection = function (colorString, colorIndex, isSolidGradient, bitmapMode, textEditTargetId) {
     const items = _getColorStateListeners(textEditTargetId);
     let changed = false;
     for (let item of items) {
@@ -62,7 +65,8 @@ const applyFillColorToSelection = function (colorString, colorIndex, bitmapMode,
                 changed = true;
                 item.strokeColor = colorString;
             }
-        } else if (!item.fillColor || !item.fillColor.gradient || !item.fillColor.gradient.stops.length === 2) {
+        } else if (isSolidGradient || !item.fillColor || !item.fillColor.gradient ||
+                !item.fillColor.gradient.stops.length === 2) {
             // Applying a solid color
             if (!_colorMatch(item.fillColor, colorString)) {
                 changed = true;
