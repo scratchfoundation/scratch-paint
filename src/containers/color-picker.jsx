@@ -140,6 +140,7 @@ class ColorPicker extends React.Component {
                 onSaturationChange={this.handleSaturationChange}
                 onSelectColor={this.props.onSelectColor}
                 onSelectColor2={this.props.onSelectColor2}
+                onSwap={this.props.onSwap}
                 onTransparent={this.handleTransparent}
             />
         );
@@ -156,7 +157,8 @@ ColorPicker.propTypes = {
     onChangeColor: PropTypes.func.isRequired,
     onChangeGradientType: PropTypes.func,
     onSelectColor: PropTypes.func.isRequired,
-    onSelectColor2: PropTypes.func.isRequired
+    onSelectColor2: PropTypes.func.isRequired,
+    onSwap: PropTypes.func
 };
 
 const mapStateToProps = state => ({

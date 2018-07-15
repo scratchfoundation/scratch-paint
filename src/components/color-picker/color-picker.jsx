@@ -131,6 +131,7 @@ class ColorPickerComponent extends React.Component {
                                 className={styles.swapButton}
                                 imgSrc={swapIcon}
                                 title={this.props.intl.formatMessage(messages.swap)}
+                                onClick={this.props.onSwap}
                             />
                             <div
                                 className={classNames({
@@ -281,6 +282,7 @@ ColorPickerComponent.propTypes = {
     onSaturationChange: PropTypes.func.isRequired,
     onSelectColor: PropTypes.func.isRequired,
     onSelectColor2: PropTypes.func.isRequired,
+    onSwap: PropTypes.func,
     onTransparent: PropTypes.func.isRequired,
     saturation: PropTypes.number.isRequired
 };

@@ -2,18 +2,21 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
+
 import {changeColorIndex} from '../reducers/color-index';
 import {changeFillColor} from '../reducers/fill-color';
 import {changeFillColor2} from '../reducers/fill-color-2';
 import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {openFillColor, closeFillColor} from '../reducers/modals';
+import {getSelectedLeafItems} from '../helper/selection';
+import {setSelectedItems} from '../reducers/selected-items';
 import Modes from '../lib/modes';
 import Formats from '../lib/format';
 import {isBitmap} from '../lib/format';
 import GradientTypes from '../lib/gradient-types';
 
 import FillColorIndicatorComponent from '../components/fill-color-indicator.jsx';
-import {applyFillColorToSelection, applyGradientTypeToSelection} from '../helper/style-path';
+import {applyFillColorToSelection, applyGradientTypeToSelection, swapColorsInSelection} from '../helper/style-path';
 
 class FillColorIndicator extends React.Component {
     constructor (props) {
@@ -21,7 +24,8 @@ class FillColorIndicator extends React.Component {
         bindAll(this, [
             'handleChangeFillColor',
             'handleChangeGradientType',
-            'handleCloseFillColor'
+            'handleCloseFillColor',
+            'handleSwap'
         ]);
 
         // Flag to track whether an svg-update-worthy change has been made
@@ -61,6 +65,12 @@ class FillColorIndicator extends React.Component {
         }
         this.props.onChangeColorIndex(0);
     }
+    handleSwap () {
+        swapColorsInSelection(
+            isBitmap(this.props.format),
+            this.props.textEditTarget);
+        this.props.setSelectedItems();
+    }
     render () {
         return (
             <FillColorIndicatorComponent
@@ -68,6 +78,7 @@ class FillColorIndicator extends React.Component {
                 onChangeFillColor={this.handleChangeFillColor}
                 onChangeGradientType={this.handleChangeGradientType}
                 onCloseFillColor={this.handleCloseFillColor}
+                onSwap={this.handleSwap}
             />
         );
     }
@@ -104,6 +115,9 @@ const mapDispatchToProps = dispatch => ({
     },
     onChangeGradientType: gradientType => {
         dispatch(changeGradientType(gradientType));
+    },
+    setSelectedItems: format => {
+        dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(format)));
     }
 });
 
@@ -121,6 +135,7 @@ FillColorIndicator.propTypes = {
     onChangeGradientType: PropTypes.func.isRequired,
     onCloseFillColor: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
+    setSelectedItems: PropTypes.func.isRequired,
     textEditTarget: PropTypes.number
 };
 
