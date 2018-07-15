@@ -12,7 +12,6 @@ import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeStrokeWidth} from '../reducers/stroke-width';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
-import {clearGradient} from '../reducers/selection-gradient-type';
 import {MIXED} from '../helper/style-path';
 import {snapDeltaToAngle} from '../helper/math';
 
@@ -54,7 +53,6 @@ class LineMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        clearGradient();
 
         // Force the default line color if stroke is MIXED or transparent
         const {strokeColor} = this.props.colorState;
@@ -269,9 +267,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
-    },
-    clearGradient: () => {
-        dispatch(clearGradient());
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.LINE));

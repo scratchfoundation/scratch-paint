@@ -46,7 +46,7 @@ class BitLineMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        clearGradient();
+        this.props.clearGradient();
         // Force the default line color if fill is MIXED or transparent
         let color = this.props.color;
         if (!color || color === MIXED) {
@@ -78,6 +78,7 @@ class BitLineMode extends React.Component {
 
 BitLineMode.propTypes = {
     bitBrushSize: PropTypes.number.isRequired,
+    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     color: PropTypes.string,
     handleMouseDown: PropTypes.func.isRequired,

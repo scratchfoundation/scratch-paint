@@ -49,7 +49,7 @@ class BrushMode extends React.Component {
         // TODO: Instead of clearing selection, consider a kind of "draw inside"
         // analogous to how selection works with eraser
         clearSelection(this.props.clearSelectedItems);
-        clearGradient();
+        this.props.clearGradient();
         // Force the default brush color if fill is MIXED or transparent
         const {fillColor} = this.props.colorState;
         if (fillColor === MIXED || fillColor === null) {
@@ -78,6 +78,7 @@ BrushMode.propTypes = {
     brushModeState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
     }),
+    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,

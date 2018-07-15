@@ -51,6 +51,7 @@ class FillMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
+
         // Force the default fill color if fill is MIXED
         if (this.props.fillColor === MIXED) {
             this.props.onChangeFillColor(DEFAULT_COLOR);

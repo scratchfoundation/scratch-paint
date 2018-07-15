@@ -48,7 +48,7 @@ class OvalMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        clearGradient();
+        this.props.clearGradient();
         // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
         // If exactly one of fill or stroke color is set, set the other one to transparent.
         // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
@@ -88,6 +88,7 @@ class OvalMode extends React.Component {
 }
 
 OvalMode.propTypes = {
+    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,

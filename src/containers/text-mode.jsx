@@ -61,7 +61,7 @@ class TextMode extends React.Component {
     }
     activateTool (nextProps) {
         clearSelection(this.props.clearSelectedItems);
-        clearGradient();
+        this.props.clearGradient();
 
         // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
         // If exactly one of fill or stroke color is set, set the other one to transparent.
@@ -118,6 +118,7 @@ class TextMode extends React.Component {
 
 TextMode.propTypes = {
     changeFont: PropTypes.func.isRequired,
+    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,

@@ -55,7 +55,7 @@ class BitRectMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        clearGradient();
+        this.props.clearGradient();
         // Force the default brush color if fill is MIXED or transparent
         const fillColorPresent = this.props.color !== MIXED && this.props.color !== null;
         if (!fillColorPresent) {
@@ -86,6 +86,7 @@ class BitRectMode extends React.Component {
 }
 
 BitRectMode.propTypes = {
+    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     color: PropTypes.string,
     filled: PropTypes.bool,
