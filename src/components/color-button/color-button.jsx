@@ -42,7 +42,7 @@ const ColorButtonComponent = props => (
                     draggable={false}
                     src={noFillIcon}
                 />
-            ) : ((props.color === MIXED ? (
+            ) : ((props.color === MIXED || (props.gradientType !== GradientTypes.SOLID && props.color2 === MIXED) ? (
                 <img
                     className={styles.swatchIcon}
                     draggable={false}

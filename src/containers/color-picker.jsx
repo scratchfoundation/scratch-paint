@@ -5,7 +5,6 @@ import parseColor from 'parse-color';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {changeColorIndex} from '../reducers/color-index';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {activateEyeDropper} from '../reducers/eye-dropper';
@@ -39,6 +38,10 @@ class ColorPicker extends React.Component {
         super(props);
         bindAll(this, [
             'getHsv',
+            'handleChangeGradientTypeHorizontal',
+            'handleChangeGradientTypeRadial',
+            'handleChangeGradientTypeSolid',
+            'handleChangeGradientTypeVertical',
             'handleHueChange',
             'handleSaturationChange',
             'handleBrightnessChange',
@@ -101,6 +104,18 @@ class ColorPicker extends React.Component {
             this.props.onChangeColor
         );
     }
+    handleChangeGradientTypeHorizontal () {
+        this.props.onChangeGradientType(GradientTypes.HORIZONTAL);
+    }
+    handleChangeGradientTypeRadial () {
+        this.props.onChangeGradientType(GradientTypes.RADIAL);
+    }
+    handleChangeGradientTypeSolid () {
+        this.props.onChangeGradientType(GradientTypes.SOLID);
+    }
+    handleChangeGradientTypeVertical () {
+        this.props.onChangeGradientType(GradientTypes.VERTICAL);
+    }
     render () {
         return (
             <ColorPickerComponent
@@ -114,11 +129,10 @@ class ColorPicker extends React.Component {
                 saturation={this.state.saturation}
                 onActivateEyeDropper={this.handleActivateEyeDropper}
                 onBrightnessChange={this.handleBrightnessChange}
-                onChangeColor={this.props.onChangeColor}
-                onChangeGradientTypeHorizontal={this.props.onChangeGradientTypeHorizontal}
-                onChangeGradientTypeRadial={this.props.onChangeGradientTypeRadial}
-                onChangeGradientTypeSolid={this.props.onChangeGradientTypeSolid}
-                onChangeGradientTypeVertical={this.props.onChangeGradientTypeVertical}
+                onChangeGradientTypeHorizontal={this.handleChangeGradientTypeHorizontal}
+                onChangeGradientTypeRadial={this.handleChangeGradientTypeRadial}
+                onChangeGradientTypeSolid={this.handleChangeGradientTypeSolid}
+                onChangeGradientTypeVertical={this.handleChangeGradientTypeVertical}
                 onHueChange={this.handleHueChange}
                 onSaturationChange={this.handleSaturationChange}
                 onSelectColor={this.props.onSelectColor}
@@ -137,10 +151,7 @@ ColorPicker.propTypes = {
     isEyeDropping: PropTypes.bool.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onChangeColor: PropTypes.func.isRequired,
-    onChangeGradientTypeHorizontal: PropTypes.func.isRequired,
-    onChangeGradientTypeRadial: PropTypes.func.isRequired,
-    onChangeGradientTypeSolid: PropTypes.func.isRequired,
-    onChangeGradientTypeVertical: PropTypes.func.isRequired,
+    onChangeGradientType: PropTypes.func,
     onSelectColor: PropTypes.func.isRequired,
     onSelectColor2: PropTypes.func.isRequired
 };
@@ -151,18 +162,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    onChangeGradientTypeSolid: () => {
-        dispatch(changeGradientType(GradientTypes.SOLID));
-    },
-    onChangeGradientTypeHorizontal: () => {
-        dispatch(changeGradientType(GradientTypes.HORIZONTAL));
-    },
-    onChangeGradientTypeRadial: () => {
-        dispatch(changeGradientType(GradientTypes.RADIAL));
-    },
-    onChangeGradientTypeVertical: () => {
-        dispatch(changeGradientType(GradientTypes.VERTICAL));
-    },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },

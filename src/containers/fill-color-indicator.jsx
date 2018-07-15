@@ -34,18 +34,10 @@ class FillColorIndicator extends React.Component {
         }
     }
     handleChangeFillColor (newColor) {
-        let color = this.props.fillColor;
-        let color2 = this.props.fillColor2;
-        if (this.props.colorIndex === 0) {
-            color = newColor;
-        } else {
-            color2 = newColor;
-        }
         // Apply color and update redux, but do not update svg until picker closes.
         const isDifferent = applyFillColorToSelection(
-            color,
-            color2,
-            this.props.gradientType,
+            newColor,
+            this.props.colorIndex,
             isBitmap(this.props.format),
             this.props.textEditTarget);
         this._hasChanged = this._hasChanged || isDifferent;
@@ -54,8 +46,6 @@ class FillColorIndicator extends React.Component {
     handleChangeGradientType (gradientType) {
         // Apply color and update redux, but do not update svg until picker closes.
         const isDifferent = applyGradientTypeToSelection(
-            this.props.fillColor,
-            this.props.fillColor2,
             gradientType,
             isBitmap(this.props.format),
             this.props.textEditTarget);
