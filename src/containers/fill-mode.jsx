@@ -97,7 +97,10 @@ FillMode.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    fillModeGradientType: state.scratchPaint.fillMode.gradientType,
+    // If there is a last user-selected gradient type, switch to that. This way,
+    // fill gradient type isn't lost by switching tools and back.
+    fillModeGradientType: state.scratchPaint.fillMode.gradientType ?
+        state.scratchPaint.fillMode.gradientType : state.scratchPaint.color.gradientType,
     fillColor: state.scratchPaint.color.fillColor,
     hoveredItemId: state.scratchPaint.hoveredItemId,
     isFillModeActive: state.scratchPaint.mode === Modes.FILL

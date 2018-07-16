@@ -4,7 +4,7 @@ import GradientTypes from '../lib/gradient-types';
 import log from '../log/log';
 
 const CHANGE_GRADIENT_TYPE = 'scratch-paint/fill-mode-gradient-type/CHANGE_GRADIENT_TYPE';
-const initialState = GradientTypes.SOLID;
+const initialState = null;
 
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
