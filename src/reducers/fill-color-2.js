@@ -17,7 +17,7 @@ const reducer = function (state, action) {
     if (typeof state === 'undefined') state = getRandomColor();
     switch (action.type) {
     case CHANGE_FILL_COLOR_2:
-        if (!regExp.test(action.fillColor) && action.fillColor !== null) {
+        if (!regExp.test(action.fillColor) && action.fillColor !== null && action.fillColor !== MIXED) {
             log.warn(`Invalid hex color code: ${action.fillColor}`);
             return state;
         }

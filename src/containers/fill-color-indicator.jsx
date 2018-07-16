@@ -2,6 +2,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
+import parseColor from 'parse-color';
 
 import {changeColorIndex} from '../reducers/color-index';
 import {changeFillColor} from '../reducers/fill-color';
@@ -16,7 +17,10 @@ import {isBitmap, isVector} from '../lib/format';
 import GradientTypes from '../lib/gradient-types';
 
 import FillColorIndicatorComponent from '../components/fill-color-indicator.jsx';
-import {applyFillColorToSelection, applyGradientTypeToSelection, swapColorsInSelection} from '../helper/style-path';
+import {applyFillColorToSelection,
+    applyGradientTypeToSelection,
+    swapColorsInSelection,
+    MIXED} from '../helper/style-path';
 
 class FillColorIndicator extends React.Component {
     constructor (props) {
@@ -67,10 +71,19 @@ class FillColorIndicator extends React.Component {
         this.props.onChangeColorIndex(0);
     }
     handleSwap () {
-        swapColorsInSelection(
-            isBitmap(this.props.format),
-            this.props.textEditTarget);
-        this.props.setSelectedItems();
+        if (getSelectedLeafItems().length) {
+            swapColorsInSelection(
+                isBitmap(this.props.format),
+                this.props.textEditTarget);
+            this.props.setSelectedItems();
+        } else {
+            let color1 = this.props.fillColor;
+            let color2 = this.props.fillColor2;
+            color1 = color1 === null || color1 === MIXED ? color1 : parseColor(color1).hex;
+            color2 = color2 === null || color2 === MIXED ? color2 : parseColor(color2).hex;
+            this.props.onChangeFillColor(color1, 1);
+            this.props.onChangeFillColor(color2, 0);
+        }
     }
     render () {
         return (
