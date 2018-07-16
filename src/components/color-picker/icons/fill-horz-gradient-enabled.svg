@@ -4,7 +4,7 @@
     <title>fill-horz-gradient-enabled</title>
     <desc>Created with Sketch.</desc>
     <defs>
-        <linearGradient x1="0%" y1="50%" x2="100%" y2="50%" id="linearGradient-1">
+        <linearGradient x1="100%" y1="50%" x2="0%" y2="50%" id="linearGradient-1">
             <stop stop-color="#FFFFFF" offset="0%"></stop>
             <stop stop-color="#4C97FF" offset="100%"></stop>
         </linearGradient>
