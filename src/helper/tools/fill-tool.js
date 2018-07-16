@@ -59,6 +59,10 @@ class FillTool extends paper.Tool {
     setFillColor (fillColor) {
         this.fillColor = fillColor;
     }
+    setFillColor2 (fillColor2) {
+        this.fillColor2 = fillColor2;
+        console.log(fillColor2);
+    }
     setGradientType (gradientType) {
         this.gradientType = gradientType;
     }

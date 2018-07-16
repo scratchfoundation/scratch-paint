@@ -8,6 +8,7 @@ import FillTool from '../helper/tools/fill-tool';
 import {MIXED} from '../helper/style-path';
 
 import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
+import {getRandomColor} from '../reducers/fill-color-2';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {clearSelection} from '../helper/selection';
@@ -30,14 +31,19 @@ class FillMode extends React.Component {
         }
     }
     componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.fillColor !== this.props.fillColor) {
-            this.tool.setFillColor(nextProps.fillColor);
-        }
-        if (this.tool && nextProps.hoveredItemId !== this.props.hoveredItemId) {
-            this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
-        }
-        if (this.tool && nextProps.fillModeGradientType !== this.props.fillModeGradientType) {
-            this.tool.setGradientType(nextProps.fillModeGradientType);
+        if (this.tool) {
+            if (nextProps.fillColor !== this.props.fillColor) {
+                this.tool.setFillColor(nextProps.fillColor);
+            }
+            if (nextProps.fillColor2 !== this.props.fillColor2) {
+                this.tool.setFillColor2(nextProps.fillColor2);
+            }
+            if (nextProps.hoveredItemId !== this.props.hoveredItemId) {
+                this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
+            }
+            if (nextProps.fillModeGradientType !== this.props.fillModeGradientType) {
+                this.tool.setGradientType(nextProps.fillModeGradientType);
+            }
         }
 
         if (nextProps.isFillModeActive && !this.props.isFillModeActive) {
@@ -53,8 +59,15 @@ class FillMode extends React.Component {
         clearSelection(this.props.clearSelectedItems);
 
         // Force the default fill color if fill is MIXED
+        let fillColor = this.props.fillColor;
         if (this.props.fillColor === MIXED) {
+            fillColor = DEFAULT_COLOR;
             this.props.onChangeFillColor(DEFAULT_COLOR);
+        }
+        let fillColor2 = this.props.fillColor2;
+        if (this.props.fillColor2 === MIXED) {
+            fillColor2 = getRandomColor();
+            this.props.onChangeFillColor(fillColor2);
         }
         this.props.changeGradientType(this.props.fillModeGradientType);
         this.tool = new FillTool(
@@ -62,7 +75,8 @@ class FillMode extends React.Component {
             this.props.clearHoveredItem,
             this.props.onUpdateImage
         );
-        this.tool.setFillColor(this.props.fillColor === MIXED ? DEFAULT_COLOR : this.props.fillColor);
+        this.tool.setFillColor(fillColor);
+        this.tool.setFillColor2(fillColor2);
         this.tool.setGradientType(this.props.fillModeGradientType);
         this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
         this.tool.activate();
@@ -87,6 +101,7 @@ FillMode.propTypes = {
     clearHoveredItem: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     fillColor: PropTypes.string,
+    fillColor2: PropTypes.string,
     fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     hoveredItemId: PropTypes.number,
@@ -102,6 +117,7 @@ const mapStateToProps = state => ({
     fillModeGradientType: state.scratchPaint.fillMode.gradientType ?
         state.scratchPaint.fillMode.gradientType : state.scratchPaint.color.gradientType,
     fillColor: state.scratchPaint.color.fillColor,
+    fillColor2: state.scratchPaint.color.fillColor2,
     hoveredItemId: state.scratchPaint.hoveredItemId,
     isFillModeActive: state.scratchPaint.mode === Modes.FILL
 });

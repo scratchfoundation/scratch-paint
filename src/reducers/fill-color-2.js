@@ -9,12 +9,12 @@ const CHANGE_FILL_COLOR_2 = 'scratch-paint/fill-color/CHANGE_FILL_COLOR_2';
 // Matches hex colors
 const regExp = /^#([0-9a-f]{3}){1,2}$/i;
 
-const _randomColor = function () {
+const getRandomColor = function () {
     return parseColor(`hsv(${Math.round(Math.random() * 360)}, 100, 100)`).hex;
 };
 
 const reducer = function (state, action) {
-    if (typeof state === 'undefined') state = _randomColor();
+    if (typeof state === 'undefined') state = getRandomColor();
     switch (action.type) {
     case CHANGE_FILL_COLOR_2:
         if (!regExp.test(action.fillColor) && action.fillColor !== null) {
@@ -38,7 +38,7 @@ const reducer = function (state, action) {
         return colors.fillColor2;
     }
     case CLEAR_GRADIENT:
-        return _randomColor();
+        return getRandomColor();
     default:
         return state;
     }
@@ -54,5 +54,6 @@ const changeFillColor2 = function (fillColor) {
 
 export {
     reducer as default,
-    changeFillColor2
+    changeFillColor2,
+    getRandomColor
 };
