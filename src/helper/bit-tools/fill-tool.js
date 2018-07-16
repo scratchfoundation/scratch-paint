@@ -1,6 +1,7 @@
 import paper from '@scratch/paper';
 import {floodFill, floodFillAll} from '../bitmap';
-import {getRaster} from '../layer';
+import {createCanvas, getRaster} from '../layer';
+import GradientTypes from '../../lib/gradient-types';
 
 const TRANSPARENT = 'rgba(0,0,0,0)';
 /**
@@ -38,19 +39,25 @@ class FillTool extends paper.Tool {
         this.gradientType = gradientType;
     }
     handleMouseDown (event) {
-        const context = getRaster().getContext('2d');
-        if (event.event.shiftKey) {
-            this.changed = floodFillAll(event.point.x, event.point.y, this.color, context) || this.changed;
-        } else {
-            this.changed = floodFill(event.point.x, event.point.y, this.color, context) || this.changed;
-        }
+        this.paint(event);
     }
     handleMouseDrag (event) {
-        const context = getRaster().getContext('2d');
+        this.paint(event);
+    }
+    paint (event) {
+        const sourceContext = getRaster().getContext('2d');
+        let destContext = sourceContext;
+        // Paint to a mask instead of the original canvas when drawing
+        if (this.gradientType !== GradientTypes.SOLID) {
+            const tmpCanvas = createCanvas();
+            destContext = tmpCanvas.getContext('2d');
+        }
         if (event.event.shiftKey) {
-            this.changed = floodFillAll(event.point.x, event.point.y, this.color, context) || this.changed;
+            this.changed = floodFillAll(event.point.x, event.point.y, this.color, sourceContext, destContext) ||
+                this.changed;
         } else {
-            this.changed = floodFill(event.point.x, event.point.y, this.color, context) || this.changed;
+            this.changed = floodFill(event.point.x, event.point.y, this.color, sourceContext, destContext) ||
+                this.changed;
         }
     }
     handleMouseUp () {
