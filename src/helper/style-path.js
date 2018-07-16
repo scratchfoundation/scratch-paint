@@ -403,7 +403,9 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
     }
     // Convert selection gradient type from horizontal to vertical if first item is exactly vertical
     if (selectionGradientType !== GradientTypes.SOLID) {
-        const direction = selectedItems[0].fillColor.destination.subtract(selectedItems[0].fillColor.origin);
+        let firstItem = selectedItems[0];
+        if (firstItem.parent instanceof paper.CompoundPath) firstItem = firstItem.parent;
+        const direction = firstItem.fillColor.destination.subtract(firstItem.fillColor.origin);
         if (Math.abs(direction.angle) === 90) {
             selectionGradientType = GradientTypes.VERTICAL;
         }
