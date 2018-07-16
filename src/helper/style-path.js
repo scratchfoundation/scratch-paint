@@ -31,10 +31,14 @@ const _getColorStateListeners = function (textEditTargetId) {
     return items;
 };
 
-// Transparent R, G, B values need to match the other color of the gradient
-// in order to form a smooth gradient, otherwise it fades through black. This
-// function gets the transparent color for a given color string.
-const _getColorStringForTransparent = function (colorToMatch) {
+/**
+ * Transparent R, G, B values need to match the other color of the gradient
+ * in order to form a smooth gradient, otherwise it fades through black. This
+ * function gets the transparent color for a given color string.
+ * @param {?string} colorToMatch CSS string of other color of gradient, or null for transparent
+ * @return {string} CSS string for matching color of transparent
+ */
+const getColorStringForTransparent = function (colorToMatch) {
     const color = new paper.Color(colorToMatch);
     color.alpha = 0;
     return color.toCSS();
@@ -82,13 +86,13 @@ const applyFillColorToSelection = function (colorString, colorIndex, isSolidGrad
             changed = true;
             const otherIndex = colorIndex === 0 ? 1 : 0;
             if (colorString === null) {
-                colorString = _getColorStringForTransparent(item.fillColor.gradient.stops[otherIndex].color.toCSS());
+                colorString = getColorStringForTransparent(item.fillColor.gradient.stops[otherIndex].color.toCSS());
             }
             const colors = [0, 0];
             colors[colorIndex] = colorString;
             // If the other color is transparent, its RGB values need to be adjusted for the gradient to be smooth
             if (item.fillColor.gradient.stops[otherIndex].color.alpha === 0) {
-                colors[otherIndex] = _getColorStringForTransparent(colorString);
+                colors[otherIndex] = getColorStringForTransparent(colorString);
             } else {
                 colors[otherIndex] = item.fillColor.gradient.stops[otherIndex].color.toCSS();
             }
@@ -171,10 +175,10 @@ const applyGradientTypeToSelection = function (gradientType, color2, bitmapMode,
         }
 
         if (itemColor1 === null) {
-            itemColor1 = _getColorStringForTransparent(itemColor2);
+            itemColor1 = getColorStringForTransparent(itemColor2);
         }
         if (itemColor2 === null) {
-            itemColor2 = _getColorStringForTransparent(itemColor1);
+            itemColor2 = getColorStringForTransparent(itemColor1);
         }
         if (gradientType === GradientTypes.RADIAL) {
             const hasRadialGradient = item.fillColor && item.fillColor.gradient && item.fillColor.gradient.radial;
@@ -465,6 +469,7 @@ export {
     applyStrokeColorToSelection,
     applyStrokeWidthToSelection,
     getColorsFromSelection,
+    getColorStringForTransparent,
     MIXED,
     styleBlob,
     styleShape,

@@ -1,6 +1,8 @@
 import paper from '@scratch/paper';
 import {getHoveredItem} from '../hover';
 import {expandBy} from '../math';
+import {getColorStringForTransparent} from '../style-path';
+import GradientTypes from '../../lib/gradient-types';
 
 class FillTool extends paper.Tool {
     static get TOLERANCE () {
@@ -24,6 +26,9 @@ class FillTool extends paper.Tool {
 
         // Color to fill with
         this.fillColor = null;
+        this.fillColor2 = null;
+        this.gradientType = null;
+
         // The path that's being hovered over.
         this.fillItem = null;
         // If we're hovering over a hole in a compound path, we can't just recolor it. This is the
@@ -61,7 +66,6 @@ class FillTool extends paper.Tool {
     }
     setFillColor2 (fillColor2) {
         this.fillColor2 = fillColor2;
-        console.log(fillColor2);
     }
     setGradientType (gradientType) {
         this.gradientType = gradientType;
@@ -87,6 +91,10 @@ class FillTool extends paper.Tool {
         const hitItem = hoveredItem ? hoveredItem.data.origItem : null;
         // Still hitting the same thing
         if ((!hitItem && !this.fillItem) || this.fillItem === hitItem) {
+            // Only radial gradient needs to be updated
+            if (this.gradientType === GradientTypes.RADIAL) {
+                this._setFillItemColor(this.fillColor, this.fillColor2, this.gradientType, event.point);
+            }
             return;
         }
         if (this.fillItem) {
@@ -121,7 +129,7 @@ class FillTool extends paper.Tool {
             } else if (this.fillItem.parent instanceof paper.CompoundPath) {
                 this.fillItemOrigColor = hitItem.parent.fillColor;
             }
-            this._setFillItemColor(this.fillColor);
+            this._setFillItemColor(this.fillColor, this.fillColor2, this.gradientType, event.point);
         }
     }
     handleMouseUp (event) {
@@ -165,14 +173,48 @@ class FillTool extends paper.Tool {
                 item.strokeColor.alpha === 0 ||
                 item.strokeWidth === 0;
     }
-    _setFillItemColor (color) {
-        if (this.addedFillItem) {
-            this.addedFillItem.fillColor = color;
-        } else if (this.fillItem.parent instanceof paper.CompoundPath) {
-            this.fillItem.parent.fillColor = color;
+    // Either pass in a fully defined paper.Color as color1,
+    // or pass in 2 color strings, a gradient type, and a pointer location
+    _setFillItemColor (color1, color2, gradientType, pointerLocation) {
+        let fillColor;
+        const item = this._getFillItem();
+        if (!item) return;
+        if (color1 instanceof paper.Color || gradientType === GradientTypes.SOLID) {
+            fillColor = color1;
         } else {
-            this.fillItem.fillColor = color;
+            if (color1 === null) {
+                color1 = getColorStringForTransparent(color2);
+            }
+            if (color2 === null) {
+                color2 = getColorStringForTransparent(color1);
+            }
+            const halfLongestDimension = Math.max(item.bounds.width, item.bounds.height) / 2;
+            const start = gradientType === GradientTypes.RADIAL ? pointerLocation :
+                gradientType === GradientTypes.VERTICAL ? item.bounds.topCenter :
+                    gradientType === GradientTypes.HORIZONTAL ? item.bounds.leftCenter :
+                        null;
+            const end = gradientType === GradientTypes.RADIAL ? start.add(new paper.Point(halfLongestDimension, 0)) :
+                gradientType === GradientTypes.VERTICAL ? item.bounds.bottomCenter :
+                    gradientType === GradientTypes.HORIZONTAL ? item.bounds.rightCenter :
+                        null;
+            fillColor = {
+                gradient: {
+                    stops: [color1, color2],
+                    radial: gradientType === GradientTypes.RADIAL
+                },
+                origin: start,
+                destination: end
+            };
         }
+        item.fillColor = fillColor;
+    }
+    _getFillItem () {
+        if (this.addedFillItem) {
+            return this.addedFillItem;
+        } else if (this.fillItem && this.fillItem.parent instanceof paper.CompoundPath) {
+            return this.fillItem.parent;
+        }
+        return this.fillItem;
     }
     deactivateTool () {
         if (this.fillItem) {

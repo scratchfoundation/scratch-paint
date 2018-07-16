@@ -8,7 +8,7 @@ import FillTool from '../helper/tools/fill-tool';
 import {MIXED} from '../helper/style-path';
 
 import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
-import {getRandomColor} from '../reducers/fill-color-2';
+import {changeFillColor2, getRandomColor} from '../reducers/fill-color-2';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {clearSelection} from '../helper/selection';
@@ -62,12 +62,12 @@ class FillMode extends React.Component {
         let fillColor = this.props.fillColor;
         if (this.props.fillColor === MIXED) {
             fillColor = DEFAULT_COLOR;
-            this.props.onChangeFillColor(DEFAULT_COLOR);
+            this.props.onChangeFillColor(DEFAULT_COLOR, 0);
         }
         let fillColor2 = this.props.fillColor2;
         if (this.props.fillColor2 === MIXED) {
             fillColor2 = getRandomColor();
-            this.props.onChangeFillColor(fillColor2);
+            this.props.onChangeFillColor(fillColor2, 1);
         }
         this.props.changeGradientType(this.props.fillModeGradientType);
         this.tool = new FillTool(
@@ -137,8 +137,12 @@ const mapDispatchToProps = dispatch => ({
     handleMouseDown: () => {
         dispatch(changeMode(Modes.FILL));
     },
-    onChangeFillColor: fillColor => {
-        dispatch(changeFillColor(fillColor));
+    onChangeFillColor: (fillColor, index) => {
+        if (index === 0) {
+            dispatch(changeFillColor(fillColor));
+        } else if (index === 1) {
+            dispatch(changeFillColor2(fillColor));
+        }
     }
 });
 
