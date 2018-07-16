@@ -13,7 +13,7 @@ class FillTool extends paper.Tool {
     constructor (onUpdateImage) {
         super();
         this.onUpdateImage = onUpdateImage;
-        
+
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseDown = this.handleMouseDown;
@@ -21,12 +21,21 @@ class FillTool extends paper.Tool {
         this.onMouseUp = this.handleMouseUp;
 
         this.color = null;
+        this.color2 = null;
+        this.gradientType = null;
         this.changed = false;
         this.active = false;
     }
     setColor (color) {
         // Null color means transparent because that is the standard in vector
         this.color = color ? color : TRANSPARENT;
+    }
+    setColor2 (color2) {
+        // Null color means transparent because that is the standard in vector
+        this.color2 = color2 ? color2 : TRANSPARENT;
+    }
+    setGradientType (gradientType) {
+        this.gradientType = gradientType;
     }
     handleMouseDown (event) {
         const context = getRaster().getContext('2d');
