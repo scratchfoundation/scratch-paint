@@ -154,13 +154,13 @@ ColorPicker.propTypes = {
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
-    shouldShowGradientTools: PropTypes.bool.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onChangeColor: PropTypes.func.isRequired,
     onChangeGradientType: PropTypes.func,
     onSelectColor: PropTypes.func.isRequired,
     onSelectColor2: PropTypes.func.isRequired,
-    onSwap: PropTypes.func
+    onSwap: PropTypes.func,
+    shouldShowGradientTools: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
