@@ -36,7 +36,7 @@ const ColorButtonComponent = props => (
                 background: colorToBackground(props.color, props.color2, props.gradientType)
             }}
         >
-            {props.color === null && props.color2 === null ? (
+            {props.color === null && (props.gradientType === GradientTypes.SOLID || props.color2 === null) ? (
                 <img
                     className={styles.swatchIcon}
                     draggable={false}
