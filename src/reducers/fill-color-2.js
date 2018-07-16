@@ -2,19 +2,14 @@ import log from '../log/log';
 import {CHANGE_SELECTED_ITEMS} from './selected-items';
 import {CLEAR_GRADIENT} from './selection-gradient-type';
 import {MIXED, getColorsFromSelection} from '../helper/style-path';
-import parseColor from 'parse-color';
 import GradientTypes from '../lib/gradient-types';
 
 const CHANGE_FILL_COLOR_2 = 'scratch-paint/fill-color/CHANGE_FILL_COLOR_2';
 // Matches hex colors
 const regExp = /^#([0-9a-f]{3}){1,2}$/i;
 
-const getRandomColor = function () {
-    return parseColor(`hsv(${Math.round(Math.random() * 360)}, 100, 100)`).hex;
-};
-
 const reducer = function (state, action) {
-    if (typeof state === 'undefined') state = getRandomColor();
+    if (typeof state === 'undefined') state = null;
     switch (action.type) {
     case CHANGE_FILL_COLOR_2:
         if (!regExp.test(action.fillColor) && action.fillColor !== null && action.fillColor !== MIXED) {
@@ -38,7 +33,7 @@ const reducer = function (state, action) {
         return colors.fillColor2;
     }
     case CLEAR_GRADIENT:
-        return getRandomColor();
+        return null;
     default:
         return state;
     }
@@ -54,6 +49,5 @@ const changeFillColor2 = function (fillColor) {
 
 export {
     reducer as default,
-    changeFillColor2,
-    getRandomColor
+    changeFillColor2
 };

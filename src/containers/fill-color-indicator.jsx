@@ -19,6 +19,7 @@ import GradientTypes from '../lib/gradient-types';
 import FillColorIndicatorComponent from '../components/fill-color-indicator.jsx';
 import {applyFillColorToSelection,
     applyGradientTypeToSelection,
+    getRotatedColor,
     swapColorsInSelection,
     MIXED} from '../helper/style-path';
 
@@ -58,10 +59,14 @@ class FillColorIndicator extends React.Component {
         // Apply color and update redux, but do not update svg until picker closes.
         const isDifferent = applyGradientTypeToSelection(
             gradientType,
-            this.props.fillColor2,
             isBitmap(this.props.format),
             this.props.textEditTarget);
         this._hasChanged = this._hasChanged || isDifferent;
+        if (getSelectedLeafItems().length) {
+            this.props.setSelectedItems();
+        } else {
+            this.props.onChangeFillColor(getRotatedColor(this.props.fillColor), 1);
+        }
         this.props.onChangeGradientType(gradientType);
     }
     handleCloseFillColor () {

@@ -4,6 +4,8 @@ import {isPGTextItem, isPointTextItem} from './item';
 import {isGroup} from './group';
 import {getItems} from './selection';
 import GradientTypes from '../lib/gradient-types';
+import parseColor from 'parse-color';
+import {DEFAULT_COLOR} from '../reducers/fill-color';
 
 const MIXED = 'scratch-paint/style-path/mixed';
 
@@ -42,6 +44,15 @@ const getColorStringForTransparent = function (colorToMatch) {
     const color = new paper.Color(colorToMatch);
     color.alpha = 0;
     return color.toCSS();
+};
+
+// Returns a color shift by 72 of the given color, DEFAULT_COLOR if the given color is null, or null if it is MIXED.
+const getRotatedColor = function (firstColor) {
+    if (firstColor === MIXED) return null;
+    const color = new paper.Color(firstColor);
+    if (!firstColor || color.alpha === 0) return DEFAULT_COLOR;
+    return parseColor(
+        `hsl(${(color.hue - 72) % 360}, ${color.saturation * 100}, ${Math.max(color.lightness * 100, 10)})`).hex;
 };
 
 /**
@@ -140,13 +151,11 @@ const swapColorsInSelection = function (bitmapMode, textEditTargetId) {
 /**
  * Called when setting gradient type
  * @param {GradientType} gradientType gradient type
- * @param {string} color2 Fill color 2. When converting a solid to other gradient type, this is
- *     the 2nd color that will appear. Not used in other cases.
  * @param {?boolean} bitmapMode True if the fill color is being set in bitmap mode
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
  * @return {boolean} Whether the color application actually changed visibly.
  */
-const applyGradientTypeToSelection = function (gradientType, color2, bitmapMode, textEditTargetId) {
+const applyGradientTypeToSelection = function (gradientType, bitmapMode, textEditTargetId) {
     const items = _getColorStateListeners(textEditTargetId);
     let changed = false;
     for (let item of items) {
@@ -154,14 +163,14 @@ const applyGradientTypeToSelection = function (gradientType, color2, bitmapMode,
             item = item.parent;
         }
 
-        if (color2 === MIXED) color2 = null;
         let itemColor1 = item.fillColor === null || item.fillColor.alpha === 0 ? null :
             !item.fillColor.gradient ? item.fillColor.toCSS() : // eslint-disable-line no-negated-condition
                 !item.fillColor.gradient.stops[0] || item.fillColor.gradient.stops[0].color.alpha === 0 ? null :
                     item.fillColor.gradient.stops[0].color.toCSS();
-        let itemColor2 = !item.fillColor || !item.fillColor.gradient || !item.fillColor.gradient.stops[1] ? color2 :
-            item.fillColor.gradient.stops[1].color.alpha === 0 ? null :
-                item.fillColor.gradient.stops[1].color.toCSS();
+        let itemColor2 = !item.fillColor || !item.fillColor.gradient || !item.fillColor.gradient.stops[1] ?
+            getRotatedColor(itemColor1) :
+                item.fillColor.gradient.stops[1].color.alpha === 0 ? null :
+                    item.fillColor.gradient.stops[1].color.toCSS();
 
         if (bitmapMode) {
             // @todo
@@ -472,6 +481,7 @@ export {
     applyStrokeWidthToSelection,
     getColorsFromSelection,
     getColorStringForTransparent,
+    getRotatedColor,
     MIXED,
     styleBlob,
     styleShape,
