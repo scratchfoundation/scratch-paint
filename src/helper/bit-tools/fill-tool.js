@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
-import {floodFill, floodFillAll} from '../bitmap';
+import {floodFill, floodFillAll, getHitBounds} from '../bitmap';
+import {createGradientObject} from '../style-path';
 import {createCanvas, getRaster} from '../layer';
 import GradientTypes from '../../lib/gradient-types';
 
@@ -28,12 +29,10 @@ class FillTool extends paper.Tool {
         this.active = false;
     }
     setColor (color) {
-        // Null color means transparent because that is the standard in vector
-        this.color = color ? color : TRANSPARENT;
+        this.color = color;
     }
     setColor2 (color2) {
-        // Null color means transparent because that is the standard in vector
-        this.color2 = color2 ? color2 : TRANSPARENT;
+        this.color2 = color2;
     }
     setGradientType (gradientType) {
         this.gradientType = gradientType;
@@ -47,17 +46,58 @@ class FillTool extends paper.Tool {
     paint (event) {
         const sourceContext = getRaster().getContext('2d');
         let destContext = sourceContext;
+        let color = this.color;
         // Paint to a mask instead of the original canvas when drawing
         if (this.gradientType !== GradientTypes.SOLID) {
             const tmpCanvas = createCanvas();
             destContext = tmpCanvas.getContext('2d');
+            color = 'black';
+        } else if (!color) {
+            // Null color means transparent because that is the standard in vector
+            color = TRANSPARENT;
         }
         if (event.event.shiftKey) {
-            this.changed = floodFillAll(event.point.x, event.point.y, this.color, sourceContext, destContext) ||
+            this.changed = floodFillAll(event.point.x, event.point.y, color, sourceContext, destContext) ||
                 this.changed;
         } else {
-            this.changed = floodFill(event.point.x, event.point.y, this.color, sourceContext, destContext) ||
+            this.changed = floodFill(event.point.x, event.point.y, color, sourceContext, destContext) ||
                 this.changed;
+        }
+        if (this.changed && this.gradientType !== GradientTypes.SOLID) {
+            const raster = new paper.Raster({insert: false});
+            raster.canvas = destContext.canvas;
+            raster.onLoad = () => {
+                raster.position = paper.view.center;
+                // Erase what's already there
+                getRaster().getContext().globalCompositeOperation = 'destination-out';
+                getRaster().drawImage(raster.canvas, new paper.Point());
+                getRaster().getContext().globalCompositeOperation = 'source-over';
+
+                // Create the gradient to be masked
+                const hitBounds = getHitBounds(raster);
+                if (!hitBounds.area) return;
+                const gradient = new paper.Shape.Rectangle({
+                    insert: false,
+                    rectangle: {
+                        topLeft: hitBounds.topLeft,
+                        bottomRight: hitBounds.bottomRight
+                    }
+                });
+                gradient.fillColor = createGradientObject(
+                    this.color,
+                    this.color2,
+                    this.gradientType,
+                    gradient.bounds,
+                    event.point);
+                const rasterGradient = gradient.rasterize(paper.view.resolution, false /* insert */);
+
+                // Mask gradient
+                raster.getContext().globalCompositeOperation = 'source-in';
+                raster.drawImage(rasterGradient.canvas, rasterGradient.bounds.topLeft);
+
+                // Draw masked gradient into raster layer
+                getRaster().drawImage(raster.canvas, new paper.Point());
+            };
         }
     }
     handleMouseUp () {

@@ -11,6 +11,7 @@ import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
 import {changeFillColor2, getRandomColor} from '../reducers/fill-color-2';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
+import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {clearSelection} from '../helper/selection';
 import FillTool from '../helper/bit-tools/fill-tool';
 import {MIXED} from '../helper/style-path';
@@ -63,6 +64,7 @@ class BitFillMode extends React.Component {
             color2 = getRandomColor();
             this.props.onChangeFillColor(color2, 1);
         }
+        this.props.changeGradientType(this.props.fillModeGradientType);
         this.tool = new FillTool(this.props.onUpdateImage);
         this.tool.setColor(color);
         this.tool.setColor2(color2);
@@ -85,6 +87,7 @@ class BitFillMode extends React.Component {
 }
 
 BitFillMode.propTypes = {
+    changeGradientType: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     color: PropTypes.string,
     color2: PropTypes.string,
@@ -108,11 +111,18 @@ const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
+    changeGradientType: gradientType => {
+        dispatch(changeGradientType(gradientType));
+    },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.BIT_FILL));
     },
-    onChangeFillColor: fillColor => {
-        dispatch(changeFillColor(fillColor));
+    onChangeFillColor: (fillColor, index) => {
+        if (index === 0) {
+            dispatch(changeFillColor(fillColor));
+        } else if (index === 1) {
+            dispatch(changeFillColor2(fillColor));
+        }
     }
 });
 
