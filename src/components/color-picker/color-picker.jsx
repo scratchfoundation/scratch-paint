@@ -112,7 +112,10 @@ class ColorPickerComponent extends React.Component {
                                             [styles.largeSwatch]: true,
                                             [styles.activeSwatch]: this.props.colorIndex === 0
                                         })}
-                                        style={{backgroundColor: this.props.color}}
+                                        style={{
+                                            backgroundColor: this.props.color === null || this.props.color === MIXED ?
+                                                'white' : this.props.color
+                                        }}
                                         onClick={this.props.onSelectColor}
                                     >
                                         {this.props.color === null ? (
@@ -142,7 +145,10 @@ class ColorPickerComponent extends React.Component {
                                             [styles.largeSwatch]: true,
                                             [styles.activeSwatch]: this.props.colorIndex === 1
                                         })}
-                                        style={{backgroundColor: this.props.color2}}
+                                        style={{
+                                            backgroundColor: this.props.color2 === null || this.props.color2 === MIXED ?
+                                                'white' : this.props.color2
+                                        }}
                                         onClick={this.props.onSelectColor2}
                                     >
                                         {this.props.color2 === null ? (
