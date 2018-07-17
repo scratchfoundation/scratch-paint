@@ -121,7 +121,7 @@ FillMode.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    fillModeGradientType: state.scratchPaint.fillMode.gradientType, // Last user-selected gradient type
+    fillModeGradientType: state.scratchPaint.fillMode, // Last user-selected gradient type
     fillColor: state.scratchPaint.color.fillColor,
     fillColor2: state.scratchPaint.color.fillColor2,
     hoveredItemId: state.scratchPaint.hoveredItemId,
