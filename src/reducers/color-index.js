@@ -1,4 +1,6 @@
 import log from '../log/log';
+import {CHANGE_GRADIENT_TYPE} from './fill-mode-gradient-type';
+import GradientTypes from '../lib/gradient-types';
 
 const CHANGE_COLOR_INDEX = 'scratch-paint/color-index/CHANGE_COLOR_INDEX';
 const initialState = 0;
@@ -12,6 +14,9 @@ const reducer = function (state, action) {
             return state;
         }
         return action.index;
+    case CHANGE_GRADIENT_TYPE:
+        if (action.gradientType === GradientTypes.SOLID) return 0;
+        /* falls through */
     default:
         return state;
     }

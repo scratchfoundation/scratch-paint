@@ -205,8 +205,8 @@ const applyGradientTypeToSelection = function (gradientType, bitmapMode, textEdi
                     item.fillColor.gradient.stops[0].color.toCSS();
         let itemColor2 = !item.fillColor || !item.fillColor.gradient || !item.fillColor.gradient.stops[1] ?
             getRotatedColor(itemColor1) :
-                item.fillColor.gradient.stops[1].color.alpha === 0 ? null :
-                    item.fillColor.gradient.stops[1].color.toCSS();
+            item.fillColor.gradient.stops[1].color.alpha === 0 ? null :
+                item.fillColor.gradient.stops[1].color.toCSS();
 
         if (bitmapMode) {
             // @todo

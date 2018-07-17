@@ -64,12 +64,20 @@ class FillMode extends React.Component {
             fillColor = DEFAULT_COLOR;
             this.props.onChangeFillColor(DEFAULT_COLOR, 0);
         }
+        const gradientType = this.props.fillModeGradientType ?
+            this.props.fillModeGradientType : this.props.selectModeGradientType;
         let fillColor2 = this.props.fillColor2;
+        if (gradientType !== this.props.selectModeGradientType) {
+            if (this.props.selectModeGradientType === GradientTypes.SOLID) {
+                fillColor2 = getRotatedColor(fillColor);
+                this.props.onChangeFillColor(fillColor2, 1);
+            }
+            this.props.changeGradientType(gradientType);
+        }
         if (this.props.fillColor2 === MIXED) {
             fillColor2 = getRotatedColor(fillColor);
             this.props.onChangeFillColor(fillColor2, 1);
         }
-        this.props.changeGradientType(this.props.fillModeGradientType);
         this.tool = new FillTool(
             this.props.setHoveredItem,
             this.props.clearHoveredItem,
@@ -77,7 +85,7 @@ class FillMode extends React.Component {
         );
         this.tool.setFillColor(fillColor);
         this.tool.setFillColor2(fillColor2);
-        this.tool.setGradientType(this.props.fillModeGradientType);
+        this.tool.setGradientType(gradientType);
         this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
         this.tool.activate();
     }
@@ -108,18 +116,17 @@ FillMode.propTypes = {
     isFillModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
+    selectModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     setHoveredItem: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-    // If there is a last user-selected gradient type, switch to that. This way,
-    // fill gradient type isn't lost by switching tools and back.
-    fillModeGradientType: state.scratchPaint.fillMode.gradientType ?
-        state.scratchPaint.fillMode.gradientType : state.scratchPaint.color.gradientType,
+    fillModeGradientType: state.scratchPaint.fillMode.gradientType, // Last user-selected gradient type
     fillColor: state.scratchPaint.color.fillColor,
     fillColor2: state.scratchPaint.color.fillColor2,
     hoveredItemId: state.scratchPaint.hoveredItemId,
-    isFillModeActive: state.scratchPaint.mode === Modes.FILL
+    isFillModeActive: state.scratchPaint.mode === Modes.FILL,
+    selectModeGradientType: state.scratchPaint.color.gradientType
 });
 const mapDispatchToProps = dispatch => ({
     setHoveredItem: hoveredItemId => {
