@@ -110,7 +110,7 @@ FillMode.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     fillColor: PropTypes.string,
     fillColor2: PropTypes.string,
-    fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
+    fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)),
     handleMouseDown: PropTypes.func.isRequired,
     hoveredItemId: PropTypes.number,
     isFillModeActive: PropTypes.bool.isRequired,
@@ -121,7 +121,7 @@ FillMode.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    fillModeGradientType: state.scratchPaint.fillMode, // Last user-selected gradient type
+    fillModeGradientType: state.scratchPaint.fillMode.gradientType, // Last user-selected gradient type
     fillColor: state.scratchPaint.color.fillColor,
     fillColor2: state.scratchPaint.color.fillColor2,
     hoveredItemId: state.scratchPaint.hoveredItemId,
