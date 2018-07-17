@@ -86,7 +86,7 @@ class FillTool extends paper.Tool {
                     this.gradientType,
                     gradient.bounds,
                     event.point);
-                const rasterGradient = gradient.rasterize(paper.view.resolution, false /* insert */);
+                const rasterGradient = gradient.rasterize(getRaster().resolution.width, false /* insert */);
 
                 // Mask gradient
                 raster.getContext().globalCompositeOperation = 'source-in';
