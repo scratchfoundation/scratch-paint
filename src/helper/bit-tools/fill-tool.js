@@ -20,12 +20,10 @@ class FillTool extends paper.Tool {
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseDown = this.handleMouseDown;
         this.onMouseDrag = this.handleMouseDrag;
-        this.onMouseUp = this.handleMouseUp;
 
         this.color = null;
         this.color2 = null;
         this.gradientType = null;
-        this.changed = false;
         this.active = false;
     }
     setColor (color) {
@@ -56,14 +54,13 @@ class FillTool extends paper.Tool {
             // Null color means transparent because that is the standard in vector
             color = TRANSPARENT;
         }
+        let changed = false;
         if (event.event.shiftKey) {
-            this.changed = floodFillAll(event.point.x, event.point.y, color, sourceContext, destContext) ||
-                this.changed;
+            changed = floodFillAll(event.point.x, event.point.y, color, sourceContext, destContext);
         } else {
-            this.changed = floodFill(event.point.x, event.point.y, color, sourceContext, destContext) ||
-                this.changed;
+            changed = floodFill(event.point.x, event.point.y, color, sourceContext, destContext);
         }
-        if (this.changed && this.gradientType !== GradientTypes.SOLID) {
+        if (changed && this.gradientType !== GradientTypes.SOLID) {
             const raster = new paper.Raster({insert: false});
             raster.canvas = destContext.canvas;
             raster.onLoad = () => {
@@ -97,20 +94,13 @@ class FillTool extends paper.Tool {
 
                 // Draw masked gradient into raster layer
                 getRaster().drawImage(raster.canvas, new paper.Point());
+                this.onUpdateImage();
             };
-        }
-    }
-    handleMouseUp () {
-        if (this.changed) {
+        } else if (changed) {
             this.onUpdateImage();
-            this.changed = false;
         }
     }
     deactivateTool () {
-        if (this.changed) {
-            this.onUpdateImage();
-            this.changed = false;
-        }
     }
 }
 
