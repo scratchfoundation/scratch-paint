@@ -17290,7 +17290,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.BitmapModes = exports.default = undefined;
 
-var _keymirror = __webpack_require__(37);
+var _keymirror = __webpack_require__(38);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -18846,919 +18846,10 @@ bind.placeholder = {};
 
 module.exports = bindAll;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(48)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(49)))
 
 /***/ }),
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(0);
-
-// EXTERNAL MODULE: ./node_modules/prop-types/index.js
-var prop_types = __webpack_require__(1);
-var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
-
-// CONCATENATED MODULE: ./node_modules/react-redux/es/utils/PropTypes.js
-
-
-var subscriptionShape = prop_types_default.a.shape({
-  trySubscribe: prop_types_default.a.func.isRequired,
-  tryUnsubscribe: prop_types_default.a.func.isRequired,
-  notifyNestedSubs: prop_types_default.a.func.isRequired,
-  isSubscribed: prop_types_default.a.func.isRequired
-});
-
-var storeShape = prop_types_default.a.shape({
-  subscribe: prop_types_default.a.func.isRequired,
-  dispatch: prop_types_default.a.func.isRequired,
-  getState: prop_types_default.a.func.isRequired
-});
-// CONCATENATED MODULE: ./node_modules/react-redux/es/utils/warning.js
-/**
- * Prints a warning in the console if it exists.
- *
- * @param {String} message The warning message.
- * @returns {void}
- */
-function warning(message) {
-  /* eslint-disable no-console */
-  if (typeof console !== 'undefined' && typeof console.error === 'function') {
-    console.error(message);
-  }
-  /* eslint-enable no-console */
-  try {
-    // This error was thrown as a convenience so that if you enable
-    // "break on all exceptions" in your console,
-    // it would pause the execution at this line.
-    throw new Error(message);
-    /* eslint-disable no-empty */
-  } catch (e) {}
-  /* eslint-enable no-empty */
-}
-// CONCATENATED MODULE: ./node_modules/react-redux/es/components/Provider.js
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-
-
-
-
-
-var didWarnAboutReceivingStore = false;
-function warnAboutReceivingStore() {
-  if (didWarnAboutReceivingStore) {
-    return;
-  }
-  didWarnAboutReceivingStore = true;
-
-  warning('<Provider> does not support changing `store` on the fly. ' + 'It is most likely that you see this error because you updated to ' + 'Redux 2.x and React Redux 2.x which no longer hot reload reducers ' + 'automatically. See https://github.com/reactjs/react-redux/releases/' + 'tag/v2.0.0 for the migration instructions.');
-}
-
-function createProvider() {
-  var _Provider$childContex;
-
-  var storeKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'store';
-  var subKey = arguments[1];
-
-  var subscriptionKey = subKey || storeKey + 'Subscription';
-
-  var Provider = function (_Component) {
-    _inherits(Provider, _Component);
-
-    Provider.prototype.getChildContext = function getChildContext() {
-      var _ref;
-
-      return _ref = {}, _ref[storeKey] = this[storeKey], _ref[subscriptionKey] = null, _ref;
-    };
-
-    function Provider(props, context) {
-      _classCallCheck(this, Provider);
-
-      var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
-
-      _this[storeKey] = props.store;
-      return _this;
-    }
-
-    Provider.prototype.render = function render() {
-      return react["Children"].only(this.props.children);
-    };
-
-    return Provider;
-  }(react["Component"]);
-
-  if (false) {}
-
-  Provider.propTypes = {
-    store: storeShape.isRequired,
-    children: prop_types_default.a.element.isRequired
-  };
-  Provider.childContextTypes = (_Provider$childContex = {}, _Provider$childContex[storeKey] = storeShape.isRequired, _Provider$childContex[subscriptionKey] = subscriptionShape, _Provider$childContex);
-
-  return Provider;
-}
-
-/* harmony default export */ var components_Provider = (createProvider());
-// EXTERNAL MODULE: ./node_modules/hoist-non-react-statics/index.js
-var hoist_non_react_statics = __webpack_require__(106);
-var hoist_non_react_statics_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics);
-
-// EXTERNAL MODULE: ./node_modules/invariant/browser.js
-var browser = __webpack_require__(22);
-var browser_default = /*#__PURE__*/__webpack_require__.n(browser);
-
-// CONCATENATED MODULE: ./node_modules/react-redux/es/utils/Subscription.js
-function Subscription_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-// encapsulates the subscription logic for connecting a component to the redux store, as
-// well as nesting subscriptions of descendant components, so that we can ensure the
-// ancestor components re-render before descendants
-
-var CLEARED = null;
-var nullListeners = {
-  notify: function notify() {}
-};
-
-function createListenerCollection() {
-  // the current/next pattern is copied from redux's createStore code.
-  // TODO: refactor+expose that code to be reusable here?
-  var current = [];
-  var next = [];
-
-  return {
-    clear: function clear() {
-      next = CLEARED;
-      current = CLEARED;
-    },
-    notify: function notify() {
-      var listeners = current = next;
-      for (var i = 0; i < listeners.length; i++) {
-        listeners[i]();
-      }
-    },
-    get: function get() {
-      return next;
-    },
-    subscribe: function subscribe(listener) {
-      var isSubscribed = true;
-      if (next === current) next = current.slice();
-      next.push(listener);
-
-      return function unsubscribe() {
-        if (!isSubscribed || current === CLEARED) return;
-        isSubscribed = false;
-
-        if (next === current) next = current.slice();
-        next.splice(next.indexOf(listener), 1);
-      };
-    }
-  };
-}
-
-var Subscription = function () {
-  function Subscription(store, parentSub, onStateChange) {
-    Subscription_classCallCheck(this, Subscription);
-
-    this.store = store;
-    this.parentSub = parentSub;
-    this.onStateChange = onStateChange;
-    this.unsubscribe = null;
-    this.listeners = nullListeners;
-  }
-
-  Subscription.prototype.addNestedSub = function addNestedSub(listener) {
-    this.trySubscribe();
-    return this.listeners.subscribe(listener);
-  };
-
-  Subscription.prototype.notifyNestedSubs = function notifyNestedSubs() {
-    this.listeners.notify();
-  };
-
-  Subscription.prototype.isSubscribed = function isSubscribed() {
-    return Boolean(this.unsubscribe);
-  };
-
-  Subscription.prototype.trySubscribe = function trySubscribe() {
-    if (!this.unsubscribe) {
-      this.unsubscribe = this.parentSub ? this.parentSub.addNestedSub(this.onStateChange) : this.store.subscribe(this.onStateChange);
-
-      this.listeners = createListenerCollection();
-    }
-  };
-
-  Subscription.prototype.tryUnsubscribe = function tryUnsubscribe() {
-    if (this.unsubscribe) {
-      this.unsubscribe();
-      this.unsubscribe = null;
-      this.listeners.clear();
-      this.listeners = nullListeners;
-    }
-  };
-
-  return Subscription;
-}();
-
-
-// CONCATENATED MODULE: ./node_modules/react-redux/es/components/connectAdvanced.js
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-function connectAdvanced_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function connectAdvanced_possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function connectAdvanced_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-
-
-
-
-
-
-
-var hotReloadingVersion = 0;
-var dummyState = {};
-function noop() {}
-function makeSelectorStateful(sourceSelector, store) {
-  // wrap the selector in an object that tracks its results between runs.
-  var selector = {
-    run: function runComponentSelector(props) {
-      try {
-        var nextProps = sourceSelector(store.getState(), props);
-        if (nextProps !== selector.props || selector.error) {
-          selector.shouldComponentUpdate = true;
-          selector.props = nextProps;
-          selector.error = null;
-        }
-      } catch (error) {
-        selector.shouldComponentUpdate = true;
-        selector.error = error;
-      }
-    }
-  };
-
-  return selector;
-}
-
-function connectAdvanced(
-/*
-  selectorFactory is a func that is responsible for returning the selector function used to
-  compute new props from state, props, and dispatch. For example:
-     export default connectAdvanced((dispatch, options) => (state, props) => ({
-      thing: state.things[props.thingId],
-      saveThing: fields => dispatch(actionCreators.saveThing(props.thingId, fields)),
-    }))(YourComponent)
-   Access to dispatch is provided to the factory so selectorFactories can bind actionCreators
-  outside of their selector as an optimization. Options passed to connectAdvanced are passed to
-  the selectorFactory, along with displayName and WrappedComponent, as the second argument.
-   Note that selectorFactory is responsible for all caching/memoization of inbound and outbound
-  props. Do not use connectAdvanced directly without memoizing results between calls to your
-  selector, otherwise the Connect component will re-render on every state or props change.
-*/
-selectorFactory) {
-  var _contextTypes, _childContextTypes;
-
-  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-      _ref$getDisplayName = _ref.getDisplayName,
-      getDisplayName = _ref$getDisplayName === undefined ? function (name) {
-    return 'ConnectAdvanced(' + name + ')';
-  } : _ref$getDisplayName,
-      _ref$methodName = _ref.methodName,
-      methodName = _ref$methodName === undefined ? 'connectAdvanced' : _ref$methodName,
-      _ref$renderCountProp = _ref.renderCountProp,
-      renderCountProp = _ref$renderCountProp === undefined ? undefined : _ref$renderCountProp,
-      _ref$shouldHandleStat = _ref.shouldHandleStateChanges,
-      shouldHandleStateChanges = _ref$shouldHandleStat === undefined ? true : _ref$shouldHandleStat,
-      _ref$storeKey = _ref.storeKey,
-      storeKey = _ref$storeKey === undefined ? 'store' : _ref$storeKey,
-      _ref$withRef = _ref.withRef,
-      withRef = _ref$withRef === undefined ? false : _ref$withRef,
-      connectOptions = _objectWithoutProperties(_ref, ['getDisplayName', 'methodName', 'renderCountProp', 'shouldHandleStateChanges', 'storeKey', 'withRef']);
-
-  var subscriptionKey = storeKey + 'Subscription';
-  var version = hotReloadingVersion++;
-
-  var contextTypes = (_contextTypes = {}, _contextTypes[storeKey] = storeShape, _contextTypes[subscriptionKey] = subscriptionShape, _contextTypes);
-  var childContextTypes = (_childContextTypes = {}, _childContextTypes[subscriptionKey] = subscriptionShape, _childContextTypes);
-
-  return function wrapWithConnect(WrappedComponent) {
-    browser_default()(typeof WrappedComponent == 'function', 'You must pass a component to the function returned by ' + (methodName + '. Instead received ' + JSON.stringify(WrappedComponent)));
-
-    var wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
-
-    var displayName = getDisplayName(wrappedComponentName);
-
-    var selectorFactoryOptions = _extends({}, connectOptions, {
-      getDisplayName: getDisplayName,
-      methodName: methodName,
-      renderCountProp: renderCountProp,
-      shouldHandleStateChanges: shouldHandleStateChanges,
-      storeKey: storeKey,
-      withRef: withRef,
-      displayName: displayName,
-      wrappedComponentName: wrappedComponentName,
-      WrappedComponent: WrappedComponent
-    });
-
-    var Connect = function (_Component) {
-      connectAdvanced_inherits(Connect, _Component);
-
-      function Connect(props, context) {
-        connectAdvanced_classCallCheck(this, Connect);
-
-        var _this = connectAdvanced_possibleConstructorReturn(this, _Component.call(this, props, context));
-
-        _this.version = version;
-        _this.state = {};
-        _this.renderCount = 0;
-        _this.store = props[storeKey] || context[storeKey];
-        _this.propsMode = Boolean(props[storeKey]);
-        _this.setWrappedInstance = _this.setWrappedInstance.bind(_this);
-
-        browser_default()(_this.store, 'Could not find "' + storeKey + '" in either the context or props of ' + ('"' + displayName + '". Either wrap the root component in a <Provider>, ') + ('or explicitly pass "' + storeKey + '" as a prop to "' + displayName + '".'));
-
-        _this.initSelector();
-        _this.initSubscription();
-        return _this;
-      }
-
-      Connect.prototype.getChildContext = function getChildContext() {
-        var _ref2;
-
-        // If this component received store from props, its subscription should be transparent
-        // to any descendants receiving store+subscription from context; it passes along
-        // subscription passed to it. Otherwise, it shadows the parent subscription, which allows
-        // Connect to control ordering of notifications to flow top-down.
-        var subscription = this.propsMode ? null : this.subscription;
-        return _ref2 = {}, _ref2[subscriptionKey] = subscription || this.context[subscriptionKey], _ref2;
-      };
-
-      Connect.prototype.componentDidMount = function componentDidMount() {
-        if (!shouldHandleStateChanges) return;
-
-        // componentWillMount fires during server side rendering, but componentDidMount and
-        // componentWillUnmount do not. Because of this, trySubscribe happens during ...didMount.
-        // Otherwise, unsubscription would never take place during SSR, causing a memory leak.
-        // To handle the case where a child component may have triggered a state change by
-        // dispatching an action in its componentWillMount, we have to re-run the select and maybe
-        // re-render.
-        this.subscription.trySubscribe();
-        this.selector.run(this.props);
-        if (this.selector.shouldComponentUpdate) this.forceUpdate();
-      };
-
-      Connect.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-        this.selector.run(nextProps);
-      };
-
-      Connect.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
-        return this.selector.shouldComponentUpdate;
-      };
-
-      Connect.prototype.componentWillUnmount = function componentWillUnmount() {
-        if (this.subscription) this.subscription.tryUnsubscribe();
-        this.subscription = null;
-        this.notifyNestedSubs = noop;
-        this.store = null;
-        this.selector.run = noop;
-        this.selector.shouldComponentUpdate = false;
-      };
-
-      Connect.prototype.getWrappedInstance = function getWrappedInstance() {
-        browser_default()(withRef, 'To access the wrapped instance, you need to specify ' + ('{ withRef: true } in the options argument of the ' + methodName + '() call.'));
-        return this.wrappedInstance;
-      };
-
-      Connect.prototype.setWrappedInstance = function setWrappedInstance(ref) {
-        this.wrappedInstance = ref;
-      };
-
-      Connect.prototype.initSelector = function initSelector() {
-        var sourceSelector = selectorFactory(this.store.dispatch, selectorFactoryOptions);
-        this.selector = makeSelectorStateful(sourceSelector, this.store);
-        this.selector.run(this.props);
-      };
-
-      Connect.prototype.initSubscription = function initSubscription() {
-        if (!shouldHandleStateChanges) return;
-
-        // parentSub's source should match where store came from: props vs. context. A component
-        // connected to the store via props shouldn't use subscription from context, or vice versa.
-        var parentSub = (this.propsMode ? this.props : this.context)[subscriptionKey];
-        this.subscription = new Subscription(this.store, parentSub, this.onStateChange.bind(this));
-
-        // `notifyNestedSubs` is duplicated to handle the case where the component is  unmounted in
-        // the middle of the notification loop, where `this.subscription` will then be null. An
-        // extra null check every change can be avoided by copying the method onto `this` and then
-        // replacing it with a no-op on unmount. This can probably be avoided if Subscription's
-        // listeners logic is changed to not call listeners that have been unsubscribed in the
-        // middle of the notification loop.
-        this.notifyNestedSubs = this.subscription.notifyNestedSubs.bind(this.subscription);
-      };
-
-      Connect.prototype.onStateChange = function onStateChange() {
-        this.selector.run(this.props);
-
-        if (!this.selector.shouldComponentUpdate) {
-          this.notifyNestedSubs();
-        } else {
-          this.componentDidUpdate = this.notifyNestedSubsOnComponentDidUpdate;
-          this.setState(dummyState);
-        }
-      };
-
-      Connect.prototype.notifyNestedSubsOnComponentDidUpdate = function notifyNestedSubsOnComponentDidUpdate() {
-        // `componentDidUpdate` is conditionally implemented when `onStateChange` determines it
-        // needs to notify nested subs. Once called, it unimplements itself until further state
-        // changes occur. Doing it this way vs having a permanent `componentDidUpdate` that does
-        // a boolean check every time avoids an extra method call most of the time, resulting
-        // in some perf boost.
-        this.componentDidUpdate = undefined;
-        this.notifyNestedSubs();
-      };
-
-      Connect.prototype.isSubscribed = function isSubscribed() {
-        return Boolean(this.subscription) && this.subscription.isSubscribed();
-      };
-
-      Connect.prototype.addExtraProps = function addExtraProps(props) {
-        if (!withRef && !renderCountProp && !(this.propsMode && this.subscription)) return props;
-        // make a shallow copy so that fields added don't leak to the original selector.
-        // this is especially important for 'ref' since that's a reference back to the component
-        // instance. a singleton memoized selector would then be holding a reference to the
-        // instance, preventing the instance from being garbage collected, and that would be bad
-        var withExtras = _extends({}, props);
-        if (withRef) withExtras.ref = this.setWrappedInstance;
-        if (renderCountProp) withExtras[renderCountProp] = this.renderCount++;
-        if (this.propsMode && this.subscription) withExtras[subscriptionKey] = this.subscription;
-        return withExtras;
-      };
-
-      Connect.prototype.render = function render() {
-        var selector = this.selector;
-        selector.shouldComponentUpdate = false;
-
-        if (selector.error) {
-          throw selector.error;
-        } else {
-          return Object(react["createElement"])(WrappedComponent, this.addExtraProps(selector.props));
-        }
-      };
-
-      return Connect;
-    }(react["Component"]);
-
-    Connect.WrappedComponent = WrappedComponent;
-    Connect.displayName = displayName;
-    Connect.childContextTypes = childContextTypes;
-    Connect.contextTypes = contextTypes;
-    Connect.propTypes = contextTypes;
-
-    if (false) {}
-
-    return hoist_non_react_statics_default()(Connect, WrappedComponent);
-  };
-}
-// CONCATENATED MODULE: ./node_modules/react-redux/es/utils/shallowEqual.js
-var hasOwn = Object.prototype.hasOwnProperty;
-
-function is(x, y) {
-  if (x === y) {
-    return x !== 0 || y !== 0 || 1 / x === 1 / y;
-  } else {
-    return x !== x && y !== y;
-  }
-}
-
-function shallowEqual(objA, objB) {
-  if (is(objA, objB)) return true;
-
-  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
-    return false;
-  }
-
-  var keysA = Object.keys(objA);
-  var keysB = Object.keys(objB);
-
-  if (keysA.length !== keysB.length) return false;
-
-  for (var i = 0; i < keysA.length; i++) {
-    if (!hasOwn.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
-      return false;
-    }
-  }
-
-  return true;
-}
-// EXTERNAL MODULE: ./node_modules/redux/es/index.js + 6 modules
-var es = __webpack_require__(29);
-
-// EXTERNAL MODULE: ./node_modules/lodash-es/isPlainObject.js + 8 modules
-var isPlainObject = __webpack_require__(34);
-
-// CONCATENATED MODULE: ./node_modules/react-redux/es/utils/verifyPlainObject.js
-
-
-
-function verifyPlainObject(value, displayName, methodName) {
-  if (!Object(isPlainObject["a" /* default */])(value)) {
-    warning(methodName + '() in ' + displayName + ' must return a plain object. Instead received ' + value + '.');
-  }
-}
-// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/wrapMapToProps.js
-
-
-function wrapMapToPropsConstant(getConstant) {
-  return function initConstantSelector(dispatch, options) {
-    var constant = getConstant(dispatch, options);
-
-    function constantSelector() {
-      return constant;
-    }
-    constantSelector.dependsOnOwnProps = false;
-    return constantSelector;
-  };
-}
-
-// dependsOnOwnProps is used by createMapToPropsProxy to determine whether to pass props as args
-// to the mapToProps function being wrapped. It is also used by makePurePropsSelector to determine
-// whether mapToProps needs to be invoked when props have changed.
-// 
-// A length of one signals that mapToProps does not depend on props from the parent component.
-// A length of zero is assumed to mean mapToProps is getting args via arguments or ...args and
-// therefore not reporting its length accurately..
-function getDependsOnOwnProps(mapToProps) {
-  return mapToProps.dependsOnOwnProps !== null && mapToProps.dependsOnOwnProps !== undefined ? Boolean(mapToProps.dependsOnOwnProps) : mapToProps.length !== 1;
-}
-
-// Used by whenMapStateToPropsIsFunction and whenMapDispatchToPropsIsFunction,
-// this function wraps mapToProps in a proxy function which does several things:
-// 
-//  * Detects whether the mapToProps function being called depends on props, which
-//    is used by selectorFactory to decide if it should reinvoke on props changes.
-//    
-//  * On first call, handles mapToProps if returns another function, and treats that
-//    new function as the true mapToProps for subsequent calls.
-//    
-//  * On first call, verifies the first result is a plain object, in order to warn
-//    the developer that their mapToProps function is not returning a valid result.
-//    
-function wrapMapToPropsFunc(mapToProps, methodName) {
-  return function initProxySelector(dispatch, _ref) {
-    var displayName = _ref.displayName;
-
-    var proxy = function mapToPropsProxy(stateOrDispatch, ownProps) {
-      return proxy.dependsOnOwnProps ? proxy.mapToProps(stateOrDispatch, ownProps) : proxy.mapToProps(stateOrDispatch);
-    };
-
-    // allow detectFactoryAndVerify to get ownProps
-    proxy.dependsOnOwnProps = true;
-
-    proxy.mapToProps = function detectFactoryAndVerify(stateOrDispatch, ownProps) {
-      proxy.mapToProps = mapToProps;
-      proxy.dependsOnOwnProps = getDependsOnOwnProps(mapToProps);
-      var props = proxy(stateOrDispatch, ownProps);
-
-      if (typeof props === 'function') {
-        proxy.mapToProps = props;
-        proxy.dependsOnOwnProps = getDependsOnOwnProps(props);
-        props = proxy(stateOrDispatch, ownProps);
-      }
-
-      if (false) {}
-
-      return props;
-    };
-
-    return proxy;
-  };
-}
-// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/mapDispatchToProps.js
-
-
-
-function whenMapDispatchToPropsIsFunction(mapDispatchToProps) {
-  return typeof mapDispatchToProps === 'function' ? wrapMapToPropsFunc(mapDispatchToProps, 'mapDispatchToProps') : undefined;
-}
-
-function whenMapDispatchToPropsIsMissing(mapDispatchToProps) {
-  return !mapDispatchToProps ? wrapMapToPropsConstant(function (dispatch) {
-    return { dispatch: dispatch };
-  }) : undefined;
-}
-
-function whenMapDispatchToPropsIsObject(mapDispatchToProps) {
-  return mapDispatchToProps && typeof mapDispatchToProps === 'object' ? wrapMapToPropsConstant(function (dispatch) {
-    return Object(es["bindActionCreators"])(mapDispatchToProps, dispatch);
-  }) : undefined;
-}
-
-/* harmony default export */ var connect_mapDispatchToProps = ([whenMapDispatchToPropsIsFunction, whenMapDispatchToPropsIsMissing, whenMapDispatchToPropsIsObject]);
-// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/mapStateToProps.js
-
-
-function whenMapStateToPropsIsFunction(mapStateToProps) {
-  return typeof mapStateToProps === 'function' ? wrapMapToPropsFunc(mapStateToProps, 'mapStateToProps') : undefined;
-}
-
-function whenMapStateToPropsIsMissing(mapStateToProps) {
-  return !mapStateToProps ? wrapMapToPropsConstant(function () {
-    return {};
-  }) : undefined;
-}
-
-/* harmony default export */ var connect_mapStateToProps = ([whenMapStateToPropsIsFunction, whenMapStateToPropsIsMissing]);
-// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/mergeProps.js
-var mergeProps_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-
-
-function defaultMergeProps(stateProps, dispatchProps, ownProps) {
-  return mergeProps_extends({}, ownProps, stateProps, dispatchProps);
-}
-
-function wrapMergePropsFunc(mergeProps) {
-  return function initMergePropsProxy(dispatch, _ref) {
-    var displayName = _ref.displayName,
-        pure = _ref.pure,
-        areMergedPropsEqual = _ref.areMergedPropsEqual;
-
-    var hasRunOnce = false;
-    var mergedProps = void 0;
-
-    return function mergePropsProxy(stateProps, dispatchProps, ownProps) {
-      var nextMergedProps = mergeProps(stateProps, dispatchProps, ownProps);
-
-      if (hasRunOnce) {
-        if (!pure || !areMergedPropsEqual(nextMergedProps, mergedProps)) mergedProps = nextMergedProps;
-      } else {
-        hasRunOnce = true;
-        mergedProps = nextMergedProps;
-
-        if (false) {}
-      }
-
-      return mergedProps;
-    };
-  };
-}
-
-function whenMergePropsIsFunction(mergeProps) {
-  return typeof mergeProps === 'function' ? wrapMergePropsFunc(mergeProps) : undefined;
-}
-
-function whenMergePropsIsOmitted(mergeProps) {
-  return !mergeProps ? function () {
-    return defaultMergeProps;
-  } : undefined;
-}
-
-/* harmony default export */ var connect_mergeProps = ([whenMergePropsIsFunction, whenMergePropsIsOmitted]);
-// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/verifySubselectors.js
-
-
-function verify(selector, methodName, displayName) {
-  if (!selector) {
-    throw new Error('Unexpected value for ' + methodName + ' in ' + displayName + '.');
-  } else if (methodName === 'mapStateToProps' || methodName === 'mapDispatchToProps') {
-    if (!selector.hasOwnProperty('dependsOnOwnProps')) {
-      warning('The selector for ' + methodName + ' of ' + displayName + ' did not specify a value for dependsOnOwnProps.');
-    }
-  }
-}
-
-function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, displayName) {
-  verify(mapStateToProps, 'mapStateToProps', displayName);
-  verify(mapDispatchToProps, 'mapDispatchToProps', displayName);
-  verify(mergeProps, 'mergeProps', displayName);
-}
-// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/selectorFactory.js
-function selectorFactory_objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-
-
-function impureFinalPropsSelectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch) {
-  return function impureFinalPropsSelector(state, ownProps) {
-    return mergeProps(mapStateToProps(state, ownProps), mapDispatchToProps(dispatch, ownProps), ownProps);
-  };
-}
-
-function pureFinalPropsSelectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, _ref) {
-  var areStatesEqual = _ref.areStatesEqual,
-      areOwnPropsEqual = _ref.areOwnPropsEqual,
-      areStatePropsEqual = _ref.areStatePropsEqual;
-
-  var hasRunAtLeastOnce = false;
-  var state = void 0;
-  var ownProps = void 0;
-  var stateProps = void 0;
-  var dispatchProps = void 0;
-  var mergedProps = void 0;
-
-  function handleFirstCall(firstState, firstOwnProps) {
-    state = firstState;
-    ownProps = firstOwnProps;
-    stateProps = mapStateToProps(state, ownProps);
-    dispatchProps = mapDispatchToProps(dispatch, ownProps);
-    mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
-    hasRunAtLeastOnce = true;
-    return mergedProps;
-  }
-
-  function handleNewPropsAndNewState() {
-    stateProps = mapStateToProps(state, ownProps);
-
-    if (mapDispatchToProps.dependsOnOwnProps) dispatchProps = mapDispatchToProps(dispatch, ownProps);
-
-    mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
-    return mergedProps;
-  }
-
-  function handleNewProps() {
-    if (mapStateToProps.dependsOnOwnProps) stateProps = mapStateToProps(state, ownProps);
-
-    if (mapDispatchToProps.dependsOnOwnProps) dispatchProps = mapDispatchToProps(dispatch, ownProps);
-
-    mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
-    return mergedProps;
-  }
-
-  function handleNewState() {
-    var nextStateProps = mapStateToProps(state, ownProps);
-    var statePropsChanged = !areStatePropsEqual(nextStateProps, stateProps);
-    stateProps = nextStateProps;
-
-    if (statePropsChanged) mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
-
-    return mergedProps;
-  }
-
-  function handleSubsequentCalls(nextState, nextOwnProps) {
-    var propsChanged = !areOwnPropsEqual(nextOwnProps, ownProps);
-    var stateChanged = !areStatesEqual(nextState, state);
-    state = nextState;
-    ownProps = nextOwnProps;
-
-    if (propsChanged && stateChanged) return handleNewPropsAndNewState();
-    if (propsChanged) return handleNewProps();
-    if (stateChanged) return handleNewState();
-    return mergedProps;
-  }
-
-  return function pureFinalPropsSelector(nextState, nextOwnProps) {
-    return hasRunAtLeastOnce ? handleSubsequentCalls(nextState, nextOwnProps) : handleFirstCall(nextState, nextOwnProps);
-  };
-}
-
-// TODO: Add more comments
-
-// If pure is true, the selector returned by selectorFactory will memoize its results,
-// allowing connectAdvanced's shouldComponentUpdate to return false if final
-// props have not changed. If false, the selector will always return a new
-// object and shouldComponentUpdate will always return true.
-
-function finalPropsSelectorFactory(dispatch, _ref2) {
-  var initMapStateToProps = _ref2.initMapStateToProps,
-      initMapDispatchToProps = _ref2.initMapDispatchToProps,
-      initMergeProps = _ref2.initMergeProps,
-      options = selectorFactory_objectWithoutProperties(_ref2, ['initMapStateToProps', 'initMapDispatchToProps', 'initMergeProps']);
-
-  var mapStateToProps = initMapStateToProps(dispatch, options);
-  var mapDispatchToProps = initMapDispatchToProps(dispatch, options);
-  var mergeProps = initMergeProps(dispatch, options);
-
-  if (false) {}
-
-  var selectorFactory = options.pure ? pureFinalPropsSelectorFactory : impureFinalPropsSelectorFactory;
-
-  return selectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, options);
-}
-// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/connect.js
-var connect_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-function connect_objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-
-
-
-
-
-
-
-/*
-  connect is a facade over connectAdvanced. It turns its args into a compatible
-  selectorFactory, which has the signature:
-
-    (dispatch, options) => (nextState, nextOwnProps) => nextFinalProps
-  
-  connect passes its args to connectAdvanced as options, which will in turn pass them to
-  selectorFactory each time a Connect component instance is instantiated or hot reloaded.
-
-  selectorFactory returns a final props selector from its mapStateToProps,
-  mapStateToPropsFactories, mapDispatchToProps, mapDispatchToPropsFactories, mergeProps,
-  mergePropsFactories, and pure args.
-
-  The resulting final props selector is called by the Connect component instance whenever
-  it receives new props or store state.
- */
-
-function match(arg, factories, name) {
-  for (var i = factories.length - 1; i >= 0; i--) {
-    var result = factories[i](arg);
-    if (result) return result;
-  }
-
-  return function (dispatch, options) {
-    throw new Error('Invalid value of type ' + typeof arg + ' for ' + name + ' argument when connecting component ' + options.wrappedComponentName + '.');
-  };
-}
-
-function strictEqual(a, b) {
-  return a === b;
-}
-
-// createConnect with default args builds the 'official' connect behavior. Calling it with
-// different options opens up some testing and extensibility scenarios
-function createConnect() {
-  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-      _ref$connectHOC = _ref.connectHOC,
-      connectHOC = _ref$connectHOC === undefined ? connectAdvanced : _ref$connectHOC,
-      _ref$mapStateToPropsF = _ref.mapStateToPropsFactories,
-      mapStateToPropsFactories = _ref$mapStateToPropsF === undefined ? connect_mapStateToProps : _ref$mapStateToPropsF,
-      _ref$mapDispatchToPro = _ref.mapDispatchToPropsFactories,
-      mapDispatchToPropsFactories = _ref$mapDispatchToPro === undefined ? connect_mapDispatchToProps : _ref$mapDispatchToPro,
-      _ref$mergePropsFactor = _ref.mergePropsFactories,
-      mergePropsFactories = _ref$mergePropsFactor === undefined ? connect_mergeProps : _ref$mergePropsFactor,
-      _ref$selectorFactory = _ref.selectorFactory,
-      selectorFactory = _ref$selectorFactory === undefined ? finalPropsSelectorFactory : _ref$selectorFactory;
-
-  return function connect(mapStateToProps, mapDispatchToProps, mergeProps) {
-    var _ref2 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
-        _ref2$pure = _ref2.pure,
-        pure = _ref2$pure === undefined ? true : _ref2$pure,
-        _ref2$areStatesEqual = _ref2.areStatesEqual,
-        areStatesEqual = _ref2$areStatesEqual === undefined ? strictEqual : _ref2$areStatesEqual,
-        _ref2$areOwnPropsEqua = _ref2.areOwnPropsEqual,
-        areOwnPropsEqual = _ref2$areOwnPropsEqua === undefined ? shallowEqual : _ref2$areOwnPropsEqua,
-        _ref2$areStatePropsEq = _ref2.areStatePropsEqual,
-        areStatePropsEqual = _ref2$areStatePropsEq === undefined ? shallowEqual : _ref2$areStatePropsEq,
-        _ref2$areMergedPropsE = _ref2.areMergedPropsEqual,
-        areMergedPropsEqual = _ref2$areMergedPropsE === undefined ? shallowEqual : _ref2$areMergedPropsE,
-        extraOptions = connect_objectWithoutProperties(_ref2, ['pure', 'areStatesEqual', 'areOwnPropsEqual', 'areStatePropsEqual', 'areMergedPropsEqual']);
-
-    var initMapStateToProps = match(mapStateToProps, mapStateToPropsFactories, 'mapStateToProps');
-    var initMapDispatchToProps = match(mapDispatchToProps, mapDispatchToPropsFactories, 'mapDispatchToProps');
-    var initMergeProps = match(mergeProps, mergePropsFactories, 'mergeProps');
-
-    return connectHOC(selectorFactory, connect_extends({
-      // used in error messages
-      methodName: 'connect',
-
-      // used to compute Connect's displayName from the wrapped component's displayName.
-      getDisplayName: function getDisplayName(name) {
-        return 'Connect(' + name + ')';
-      },
-
-      // if mapStateToProps is falsy, the Connect component doesn't subscribe to store state changes
-      shouldHandleStateChanges: Boolean(mapStateToProps),
-
-      // passed through to selectorFactory
-      initMapStateToProps: initMapStateToProps,
-      initMapDispatchToProps: initMapDispatchToProps,
-      initMergeProps: initMergeProps,
-      pure: pure,
-      areStatesEqual: areStatesEqual,
-      areOwnPropsEqual: areOwnPropsEqual,
-      areStatePropsEqual: areStatePropsEqual,
-      areMergedPropsEqual: areMergedPropsEqual
-
-    }, extraOptions));
-  };
-}
-
-/* harmony default export */ var connect_connect = (createConnect());
-// CONCATENATED MODULE: ./node_modules/react-redux/es/index.js
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "Provider", function() { return components_Provider; });
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "createProvider", function() { return createProvider; });
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "connectAdvanced", function() { return connectAdvanced; });
-/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "connect", function() { return connect_connect; });
-
-
-
-
-
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19767,7 +18858,7 @@ function createConnect() {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.swapColorsInSelection = exports.styleCursorPreview = exports.stylePath = exports.styleShape = exports.styleBlob = exports.MIXED = exports.getRotatedColor = exports.getColorStringForTransparent = exports.getColorsFromSelection = exports.applyStrokeWidthToSelection = exports.applyStrokeColorToSelection = exports.applyGradientTypeToSelection = exports.applyFillColorToSelection = undefined;
+exports.swapColorsInSelection = exports.styleCursorPreview = exports.stylePath = exports.styleShape = exports.styleBlob = exports.MIXED = exports.getRotatedColor = exports.getColorsFromSelection = exports.createGradientObject = exports.applyStrokeWidthToSelection = exports.applyStrokeColorToSelection = exports.applyGradientTypeToSelection = exports.applyFillColorToSelection = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -19779,7 +18870,7 @@ var _item = __webpack_require__(31);
 
 var _group = __webpack_require__(25);
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -19837,6 +18928,36 @@ var getRotatedColor = function getRotatedColor(firstColor) {
     var color = new _paper2.default.Color(firstColor);
     if (!firstColor || color.alpha === 0) return _fillColor.DEFAULT_COLOR;
     return (0, _parseColor2.default)('hsl(' + (color.hue - 72) % 360 + ', ' + color.saturation * 100 + ', ' + Math.max(color.lightness * 100, 10) + ')').hex;
+};
+
+/**
+ * Convert params to a paper.Color gradient object
+ * @param {?string} color1 CSS string, or null for transparent
+ * @param {?string} color2 CSS string, or null for transparent
+ * @param {GradientType} gradientType gradient type
+ * @param {paper.Rectangle} bounds Bounds of the object
+ * @param {paper.Point} radialCenter Where the center of a radial gradient should be, if the gradient is radial
+ * @return {paper.Color} Color object with gradient, may be null or color string if the gradient type is solid
+ */
+var createGradientObject = function createGradientObject(color1, color2, gradientType, bounds, radialCenter) {
+    if (gradientType === _gradientTypes2.default.SOLID) return color1;
+    if (color1 === null) {
+        color1 = getColorStringForTransparent(color2);
+    }
+    if (color2 === null) {
+        color2 = getColorStringForTransparent(color1);
+    }
+    var halfLongestDimension = Math.max(bounds.width, bounds.height) / 2;
+    var start = gradientType === _gradientTypes2.default.RADIAL ? radialCenter : gradientType === _gradientTypes2.default.VERTICAL ? bounds.topCenter : gradientType === _gradientTypes2.default.HORIZONTAL ? bounds.leftCenter : null;
+    var end = gradientType === _gradientTypes2.default.RADIAL ? start.add(new _paper2.default.Point(halfLongestDimension, 0)) : gradientType === _gradientTypes2.default.VERTICAL ? bounds.bottomCenter : gradientType === _gradientTypes2.default.HORIZONTAL ? bounds.rightCenter : null;
+    return {
+        gradient: {
+            stops: [color1, color2],
+            radial: gradientType === _gradientTypes2.default.RADIAL
+        },
+        origin: start,
+        destination: end
+    };
 };
 
 /**
@@ -20437,8 +19558,8 @@ exports.applyFillColorToSelection = applyFillColorToSelection;
 exports.applyGradientTypeToSelection = applyGradientTypeToSelection;
 exports.applyStrokeColorToSelection = applyStrokeColorToSelection;
 exports.applyStrokeWidthToSelection = applyStrokeWidthToSelection;
+exports.createGradientObject = createGradientObject;
 exports.getColorsFromSelection = getColorsFromSelection;
-exports.getColorStringForTransparent = getColorStringForTransparent;
 exports.getRotatedColor = getRotatedColor;
 exports.MIXED = MIXED;
 exports.styleBlob = styleBlob;
@@ -20446,6 +19567,915 @@ exports.styleShape = styleShape;
 exports.stylePath = stylePath;
 exports.styleCursorPreview = styleCursorPreview;
 exports.swapColorsInSelection = swapColorsInSelection;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(0);
+
+// EXTERNAL MODULE: ./node_modules/prop-types/index.js
+var prop_types = __webpack_require__(1);
+var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
+
+// CONCATENATED MODULE: ./node_modules/react-redux/es/utils/PropTypes.js
+
+
+var subscriptionShape = prop_types_default.a.shape({
+  trySubscribe: prop_types_default.a.func.isRequired,
+  tryUnsubscribe: prop_types_default.a.func.isRequired,
+  notifyNestedSubs: prop_types_default.a.func.isRequired,
+  isSubscribed: prop_types_default.a.func.isRequired
+});
+
+var storeShape = prop_types_default.a.shape({
+  subscribe: prop_types_default.a.func.isRequired,
+  dispatch: prop_types_default.a.func.isRequired,
+  getState: prop_types_default.a.func.isRequired
+});
+// CONCATENATED MODULE: ./node_modules/react-redux/es/utils/warning.js
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+    /* eslint-disable no-empty */
+  } catch (e) {}
+  /* eslint-enable no-empty */
+}
+// CONCATENATED MODULE: ./node_modules/react-redux/es/components/Provider.js
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+
+
+
+
+
+var didWarnAboutReceivingStore = false;
+function warnAboutReceivingStore() {
+  if (didWarnAboutReceivingStore) {
+    return;
+  }
+  didWarnAboutReceivingStore = true;
+
+  warning('<Provider> does not support changing `store` on the fly. ' + 'It is most likely that you see this error because you updated to ' + 'Redux 2.x and React Redux 2.x which no longer hot reload reducers ' + 'automatically. See https://github.com/reactjs/react-redux/releases/' + 'tag/v2.0.0 for the migration instructions.');
+}
+
+function createProvider() {
+  var _Provider$childContex;
+
+  var storeKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'store';
+  var subKey = arguments[1];
+
+  var subscriptionKey = subKey || storeKey + 'Subscription';
+
+  var Provider = function (_Component) {
+    _inherits(Provider, _Component);
+
+    Provider.prototype.getChildContext = function getChildContext() {
+      var _ref;
+
+      return _ref = {}, _ref[storeKey] = this[storeKey], _ref[subscriptionKey] = null, _ref;
+    };
+
+    function Provider(props, context) {
+      _classCallCheck(this, Provider);
+
+      var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
+
+      _this[storeKey] = props.store;
+      return _this;
+    }
+
+    Provider.prototype.render = function render() {
+      return react["Children"].only(this.props.children);
+    };
+
+    return Provider;
+  }(react["Component"]);
+
+  if (false) {}
+
+  Provider.propTypes = {
+    store: storeShape.isRequired,
+    children: prop_types_default.a.element.isRequired
+  };
+  Provider.childContextTypes = (_Provider$childContex = {}, _Provider$childContex[storeKey] = storeShape.isRequired, _Provider$childContex[subscriptionKey] = subscriptionShape, _Provider$childContex);
+
+  return Provider;
+}
+
+/* harmony default export */ var components_Provider = (createProvider());
+// EXTERNAL MODULE: ./node_modules/hoist-non-react-statics/index.js
+var hoist_non_react_statics = __webpack_require__(106);
+var hoist_non_react_statics_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics);
+
+// EXTERNAL MODULE: ./node_modules/invariant/browser.js
+var browser = __webpack_require__(22);
+var browser_default = /*#__PURE__*/__webpack_require__.n(browser);
+
+// CONCATENATED MODULE: ./node_modules/react-redux/es/utils/Subscription.js
+function Subscription_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// encapsulates the subscription logic for connecting a component to the redux store, as
+// well as nesting subscriptions of descendant components, so that we can ensure the
+// ancestor components re-render before descendants
+
+var CLEARED = null;
+var nullListeners = {
+  notify: function notify() {}
+};
+
+function createListenerCollection() {
+  // the current/next pattern is copied from redux's createStore code.
+  // TODO: refactor+expose that code to be reusable here?
+  var current = [];
+  var next = [];
+
+  return {
+    clear: function clear() {
+      next = CLEARED;
+      current = CLEARED;
+    },
+    notify: function notify() {
+      var listeners = current = next;
+      for (var i = 0; i < listeners.length; i++) {
+        listeners[i]();
+      }
+    },
+    get: function get() {
+      return next;
+    },
+    subscribe: function subscribe(listener) {
+      var isSubscribed = true;
+      if (next === current) next = current.slice();
+      next.push(listener);
+
+      return function unsubscribe() {
+        if (!isSubscribed || current === CLEARED) return;
+        isSubscribed = false;
+
+        if (next === current) next = current.slice();
+        next.splice(next.indexOf(listener), 1);
+      };
+    }
+  };
+}
+
+var Subscription = function () {
+  function Subscription(store, parentSub, onStateChange) {
+    Subscription_classCallCheck(this, Subscription);
+
+    this.store = store;
+    this.parentSub = parentSub;
+    this.onStateChange = onStateChange;
+    this.unsubscribe = null;
+    this.listeners = nullListeners;
+  }
+
+  Subscription.prototype.addNestedSub = function addNestedSub(listener) {
+    this.trySubscribe();
+    return this.listeners.subscribe(listener);
+  };
+
+  Subscription.prototype.notifyNestedSubs = function notifyNestedSubs() {
+    this.listeners.notify();
+  };
+
+  Subscription.prototype.isSubscribed = function isSubscribed() {
+    return Boolean(this.unsubscribe);
+  };
+
+  Subscription.prototype.trySubscribe = function trySubscribe() {
+    if (!this.unsubscribe) {
+      this.unsubscribe = this.parentSub ? this.parentSub.addNestedSub(this.onStateChange) : this.store.subscribe(this.onStateChange);
+
+      this.listeners = createListenerCollection();
+    }
+  };
+
+  Subscription.prototype.tryUnsubscribe = function tryUnsubscribe() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+      this.unsubscribe = null;
+      this.listeners.clear();
+      this.listeners = nullListeners;
+    }
+  };
+
+  return Subscription;
+}();
+
+
+// CONCATENATED MODULE: ./node_modules/react-redux/es/components/connectAdvanced.js
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function connectAdvanced_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function connectAdvanced_possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function connectAdvanced_inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+
+
+
+
+
+
+
+var hotReloadingVersion = 0;
+var dummyState = {};
+function noop() {}
+function makeSelectorStateful(sourceSelector, store) {
+  // wrap the selector in an object that tracks its results between runs.
+  var selector = {
+    run: function runComponentSelector(props) {
+      try {
+        var nextProps = sourceSelector(store.getState(), props);
+        if (nextProps !== selector.props || selector.error) {
+          selector.shouldComponentUpdate = true;
+          selector.props = nextProps;
+          selector.error = null;
+        }
+      } catch (error) {
+        selector.shouldComponentUpdate = true;
+        selector.error = error;
+      }
+    }
+  };
+
+  return selector;
+}
+
+function connectAdvanced(
+/*
+  selectorFactory is a func that is responsible for returning the selector function used to
+  compute new props from state, props, and dispatch. For example:
+     export default connectAdvanced((dispatch, options) => (state, props) => ({
+      thing: state.things[props.thingId],
+      saveThing: fields => dispatch(actionCreators.saveThing(props.thingId, fields)),
+    }))(YourComponent)
+   Access to dispatch is provided to the factory so selectorFactories can bind actionCreators
+  outside of their selector as an optimization. Options passed to connectAdvanced are passed to
+  the selectorFactory, along with displayName and WrappedComponent, as the second argument.
+   Note that selectorFactory is responsible for all caching/memoization of inbound and outbound
+  props. Do not use connectAdvanced directly without memoizing results between calls to your
+  selector, otherwise the Connect component will re-render on every state or props change.
+*/
+selectorFactory) {
+  var _contextTypes, _childContextTypes;
+
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref$getDisplayName = _ref.getDisplayName,
+      getDisplayName = _ref$getDisplayName === undefined ? function (name) {
+    return 'ConnectAdvanced(' + name + ')';
+  } : _ref$getDisplayName,
+      _ref$methodName = _ref.methodName,
+      methodName = _ref$methodName === undefined ? 'connectAdvanced' : _ref$methodName,
+      _ref$renderCountProp = _ref.renderCountProp,
+      renderCountProp = _ref$renderCountProp === undefined ? undefined : _ref$renderCountProp,
+      _ref$shouldHandleStat = _ref.shouldHandleStateChanges,
+      shouldHandleStateChanges = _ref$shouldHandleStat === undefined ? true : _ref$shouldHandleStat,
+      _ref$storeKey = _ref.storeKey,
+      storeKey = _ref$storeKey === undefined ? 'store' : _ref$storeKey,
+      _ref$withRef = _ref.withRef,
+      withRef = _ref$withRef === undefined ? false : _ref$withRef,
+      connectOptions = _objectWithoutProperties(_ref, ['getDisplayName', 'methodName', 'renderCountProp', 'shouldHandleStateChanges', 'storeKey', 'withRef']);
+
+  var subscriptionKey = storeKey + 'Subscription';
+  var version = hotReloadingVersion++;
+
+  var contextTypes = (_contextTypes = {}, _contextTypes[storeKey] = storeShape, _contextTypes[subscriptionKey] = subscriptionShape, _contextTypes);
+  var childContextTypes = (_childContextTypes = {}, _childContextTypes[subscriptionKey] = subscriptionShape, _childContextTypes);
+
+  return function wrapWithConnect(WrappedComponent) {
+    browser_default()(typeof WrappedComponent == 'function', 'You must pass a component to the function returned by ' + (methodName + '. Instead received ' + JSON.stringify(WrappedComponent)));
+
+    var wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+
+    var displayName = getDisplayName(wrappedComponentName);
+
+    var selectorFactoryOptions = _extends({}, connectOptions, {
+      getDisplayName: getDisplayName,
+      methodName: methodName,
+      renderCountProp: renderCountProp,
+      shouldHandleStateChanges: shouldHandleStateChanges,
+      storeKey: storeKey,
+      withRef: withRef,
+      displayName: displayName,
+      wrappedComponentName: wrappedComponentName,
+      WrappedComponent: WrappedComponent
+    });
+
+    var Connect = function (_Component) {
+      connectAdvanced_inherits(Connect, _Component);
+
+      function Connect(props, context) {
+        connectAdvanced_classCallCheck(this, Connect);
+
+        var _this = connectAdvanced_possibleConstructorReturn(this, _Component.call(this, props, context));
+
+        _this.version = version;
+        _this.state = {};
+        _this.renderCount = 0;
+        _this.store = props[storeKey] || context[storeKey];
+        _this.propsMode = Boolean(props[storeKey]);
+        _this.setWrappedInstance = _this.setWrappedInstance.bind(_this);
+
+        browser_default()(_this.store, 'Could not find "' + storeKey + '" in either the context or props of ' + ('"' + displayName + '". Either wrap the root component in a <Provider>, ') + ('or explicitly pass "' + storeKey + '" as a prop to "' + displayName + '".'));
+
+        _this.initSelector();
+        _this.initSubscription();
+        return _this;
+      }
+
+      Connect.prototype.getChildContext = function getChildContext() {
+        var _ref2;
+
+        // If this component received store from props, its subscription should be transparent
+        // to any descendants receiving store+subscription from context; it passes along
+        // subscription passed to it. Otherwise, it shadows the parent subscription, which allows
+        // Connect to control ordering of notifications to flow top-down.
+        var subscription = this.propsMode ? null : this.subscription;
+        return _ref2 = {}, _ref2[subscriptionKey] = subscription || this.context[subscriptionKey], _ref2;
+      };
+
+      Connect.prototype.componentDidMount = function componentDidMount() {
+        if (!shouldHandleStateChanges) return;
+
+        // componentWillMount fires during server side rendering, but componentDidMount and
+        // componentWillUnmount do not. Because of this, trySubscribe happens during ...didMount.
+        // Otherwise, unsubscription would never take place during SSR, causing a memory leak.
+        // To handle the case where a child component may have triggered a state change by
+        // dispatching an action in its componentWillMount, we have to re-run the select and maybe
+        // re-render.
+        this.subscription.trySubscribe();
+        this.selector.run(this.props);
+        if (this.selector.shouldComponentUpdate) this.forceUpdate();
+      };
+
+      Connect.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+        this.selector.run(nextProps);
+      };
+
+      Connect.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
+        return this.selector.shouldComponentUpdate;
+      };
+
+      Connect.prototype.componentWillUnmount = function componentWillUnmount() {
+        if (this.subscription) this.subscription.tryUnsubscribe();
+        this.subscription = null;
+        this.notifyNestedSubs = noop;
+        this.store = null;
+        this.selector.run = noop;
+        this.selector.shouldComponentUpdate = false;
+      };
+
+      Connect.prototype.getWrappedInstance = function getWrappedInstance() {
+        browser_default()(withRef, 'To access the wrapped instance, you need to specify ' + ('{ withRef: true } in the options argument of the ' + methodName + '() call.'));
+        return this.wrappedInstance;
+      };
+
+      Connect.prototype.setWrappedInstance = function setWrappedInstance(ref) {
+        this.wrappedInstance = ref;
+      };
+
+      Connect.prototype.initSelector = function initSelector() {
+        var sourceSelector = selectorFactory(this.store.dispatch, selectorFactoryOptions);
+        this.selector = makeSelectorStateful(sourceSelector, this.store);
+        this.selector.run(this.props);
+      };
+
+      Connect.prototype.initSubscription = function initSubscription() {
+        if (!shouldHandleStateChanges) return;
+
+        // parentSub's source should match where store came from: props vs. context. A component
+        // connected to the store via props shouldn't use subscription from context, or vice versa.
+        var parentSub = (this.propsMode ? this.props : this.context)[subscriptionKey];
+        this.subscription = new Subscription(this.store, parentSub, this.onStateChange.bind(this));
+
+        // `notifyNestedSubs` is duplicated to handle the case where the component is  unmounted in
+        // the middle of the notification loop, where `this.subscription` will then be null. An
+        // extra null check every change can be avoided by copying the method onto `this` and then
+        // replacing it with a no-op on unmount. This can probably be avoided if Subscription's
+        // listeners logic is changed to not call listeners that have been unsubscribed in the
+        // middle of the notification loop.
+        this.notifyNestedSubs = this.subscription.notifyNestedSubs.bind(this.subscription);
+      };
+
+      Connect.prototype.onStateChange = function onStateChange() {
+        this.selector.run(this.props);
+
+        if (!this.selector.shouldComponentUpdate) {
+          this.notifyNestedSubs();
+        } else {
+          this.componentDidUpdate = this.notifyNestedSubsOnComponentDidUpdate;
+          this.setState(dummyState);
+        }
+      };
+
+      Connect.prototype.notifyNestedSubsOnComponentDidUpdate = function notifyNestedSubsOnComponentDidUpdate() {
+        // `componentDidUpdate` is conditionally implemented when `onStateChange` determines it
+        // needs to notify nested subs. Once called, it unimplements itself until further state
+        // changes occur. Doing it this way vs having a permanent `componentDidUpdate` that does
+        // a boolean check every time avoids an extra method call most of the time, resulting
+        // in some perf boost.
+        this.componentDidUpdate = undefined;
+        this.notifyNestedSubs();
+      };
+
+      Connect.prototype.isSubscribed = function isSubscribed() {
+        return Boolean(this.subscription) && this.subscription.isSubscribed();
+      };
+
+      Connect.prototype.addExtraProps = function addExtraProps(props) {
+        if (!withRef && !renderCountProp && !(this.propsMode && this.subscription)) return props;
+        // make a shallow copy so that fields added don't leak to the original selector.
+        // this is especially important for 'ref' since that's a reference back to the component
+        // instance. a singleton memoized selector would then be holding a reference to the
+        // instance, preventing the instance from being garbage collected, and that would be bad
+        var withExtras = _extends({}, props);
+        if (withRef) withExtras.ref = this.setWrappedInstance;
+        if (renderCountProp) withExtras[renderCountProp] = this.renderCount++;
+        if (this.propsMode && this.subscription) withExtras[subscriptionKey] = this.subscription;
+        return withExtras;
+      };
+
+      Connect.prototype.render = function render() {
+        var selector = this.selector;
+        selector.shouldComponentUpdate = false;
+
+        if (selector.error) {
+          throw selector.error;
+        } else {
+          return Object(react["createElement"])(WrappedComponent, this.addExtraProps(selector.props));
+        }
+      };
+
+      return Connect;
+    }(react["Component"]);
+
+    Connect.WrappedComponent = WrappedComponent;
+    Connect.displayName = displayName;
+    Connect.childContextTypes = childContextTypes;
+    Connect.contextTypes = contextTypes;
+    Connect.propTypes = contextTypes;
+
+    if (false) {}
+
+    return hoist_non_react_statics_default()(Connect, WrappedComponent);
+  };
+}
+// CONCATENATED MODULE: ./node_modules/react-redux/es/utils/shallowEqual.js
+var hasOwn = Object.prototype.hasOwnProperty;
+
+function is(x, y) {
+  if (x === y) {
+    return x !== 0 || y !== 0 || 1 / x === 1 / y;
+  } else {
+    return x !== x && y !== y;
+  }
+}
+
+function shallowEqual(objA, objB) {
+  if (is(objA, objB)) return true;
+
+  if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+    return false;
+  }
+
+  var keysA = Object.keys(objA);
+  var keysB = Object.keys(objB);
+
+  if (keysA.length !== keysB.length) return false;
+
+  for (var i = 0; i < keysA.length; i++) {
+    if (!hasOwn.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+// EXTERNAL MODULE: ./node_modules/redux/es/index.js + 6 modules
+var es = __webpack_require__(29);
+
+// EXTERNAL MODULE: ./node_modules/lodash-es/isPlainObject.js + 8 modules
+var isPlainObject = __webpack_require__(35);
+
+// CONCATENATED MODULE: ./node_modules/react-redux/es/utils/verifyPlainObject.js
+
+
+
+function verifyPlainObject(value, displayName, methodName) {
+  if (!Object(isPlainObject["a" /* default */])(value)) {
+    warning(methodName + '() in ' + displayName + ' must return a plain object. Instead received ' + value + '.');
+  }
+}
+// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/wrapMapToProps.js
+
+
+function wrapMapToPropsConstant(getConstant) {
+  return function initConstantSelector(dispatch, options) {
+    var constant = getConstant(dispatch, options);
+
+    function constantSelector() {
+      return constant;
+    }
+    constantSelector.dependsOnOwnProps = false;
+    return constantSelector;
+  };
+}
+
+// dependsOnOwnProps is used by createMapToPropsProxy to determine whether to pass props as args
+// to the mapToProps function being wrapped. It is also used by makePurePropsSelector to determine
+// whether mapToProps needs to be invoked when props have changed.
+// 
+// A length of one signals that mapToProps does not depend on props from the parent component.
+// A length of zero is assumed to mean mapToProps is getting args via arguments or ...args and
+// therefore not reporting its length accurately..
+function getDependsOnOwnProps(mapToProps) {
+  return mapToProps.dependsOnOwnProps !== null && mapToProps.dependsOnOwnProps !== undefined ? Boolean(mapToProps.dependsOnOwnProps) : mapToProps.length !== 1;
+}
+
+// Used by whenMapStateToPropsIsFunction and whenMapDispatchToPropsIsFunction,
+// this function wraps mapToProps in a proxy function which does several things:
+// 
+//  * Detects whether the mapToProps function being called depends on props, which
+//    is used by selectorFactory to decide if it should reinvoke on props changes.
+//    
+//  * On first call, handles mapToProps if returns another function, and treats that
+//    new function as the true mapToProps for subsequent calls.
+//    
+//  * On first call, verifies the first result is a plain object, in order to warn
+//    the developer that their mapToProps function is not returning a valid result.
+//    
+function wrapMapToPropsFunc(mapToProps, methodName) {
+  return function initProxySelector(dispatch, _ref) {
+    var displayName = _ref.displayName;
+
+    var proxy = function mapToPropsProxy(stateOrDispatch, ownProps) {
+      return proxy.dependsOnOwnProps ? proxy.mapToProps(stateOrDispatch, ownProps) : proxy.mapToProps(stateOrDispatch);
+    };
+
+    // allow detectFactoryAndVerify to get ownProps
+    proxy.dependsOnOwnProps = true;
+
+    proxy.mapToProps = function detectFactoryAndVerify(stateOrDispatch, ownProps) {
+      proxy.mapToProps = mapToProps;
+      proxy.dependsOnOwnProps = getDependsOnOwnProps(mapToProps);
+      var props = proxy(stateOrDispatch, ownProps);
+
+      if (typeof props === 'function') {
+        proxy.mapToProps = props;
+        proxy.dependsOnOwnProps = getDependsOnOwnProps(props);
+        props = proxy(stateOrDispatch, ownProps);
+      }
+
+      if (false) {}
+
+      return props;
+    };
+
+    return proxy;
+  };
+}
+// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/mapDispatchToProps.js
+
+
+
+function whenMapDispatchToPropsIsFunction(mapDispatchToProps) {
+  return typeof mapDispatchToProps === 'function' ? wrapMapToPropsFunc(mapDispatchToProps, 'mapDispatchToProps') : undefined;
+}
+
+function whenMapDispatchToPropsIsMissing(mapDispatchToProps) {
+  return !mapDispatchToProps ? wrapMapToPropsConstant(function (dispatch) {
+    return { dispatch: dispatch };
+  }) : undefined;
+}
+
+function whenMapDispatchToPropsIsObject(mapDispatchToProps) {
+  return mapDispatchToProps && typeof mapDispatchToProps === 'object' ? wrapMapToPropsConstant(function (dispatch) {
+    return Object(es["bindActionCreators"])(mapDispatchToProps, dispatch);
+  }) : undefined;
+}
+
+/* harmony default export */ var connect_mapDispatchToProps = ([whenMapDispatchToPropsIsFunction, whenMapDispatchToPropsIsMissing, whenMapDispatchToPropsIsObject]);
+// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/mapStateToProps.js
+
+
+function whenMapStateToPropsIsFunction(mapStateToProps) {
+  return typeof mapStateToProps === 'function' ? wrapMapToPropsFunc(mapStateToProps, 'mapStateToProps') : undefined;
+}
+
+function whenMapStateToPropsIsMissing(mapStateToProps) {
+  return !mapStateToProps ? wrapMapToPropsConstant(function () {
+    return {};
+  }) : undefined;
+}
+
+/* harmony default export */ var connect_mapStateToProps = ([whenMapStateToPropsIsFunction, whenMapStateToPropsIsMissing]);
+// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/mergeProps.js
+var mergeProps_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+function defaultMergeProps(stateProps, dispatchProps, ownProps) {
+  return mergeProps_extends({}, ownProps, stateProps, dispatchProps);
+}
+
+function wrapMergePropsFunc(mergeProps) {
+  return function initMergePropsProxy(dispatch, _ref) {
+    var displayName = _ref.displayName,
+        pure = _ref.pure,
+        areMergedPropsEqual = _ref.areMergedPropsEqual;
+
+    var hasRunOnce = false;
+    var mergedProps = void 0;
+
+    return function mergePropsProxy(stateProps, dispatchProps, ownProps) {
+      var nextMergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+
+      if (hasRunOnce) {
+        if (!pure || !areMergedPropsEqual(nextMergedProps, mergedProps)) mergedProps = nextMergedProps;
+      } else {
+        hasRunOnce = true;
+        mergedProps = nextMergedProps;
+
+        if (false) {}
+      }
+
+      return mergedProps;
+    };
+  };
+}
+
+function whenMergePropsIsFunction(mergeProps) {
+  return typeof mergeProps === 'function' ? wrapMergePropsFunc(mergeProps) : undefined;
+}
+
+function whenMergePropsIsOmitted(mergeProps) {
+  return !mergeProps ? function () {
+    return defaultMergeProps;
+  } : undefined;
+}
+
+/* harmony default export */ var connect_mergeProps = ([whenMergePropsIsFunction, whenMergePropsIsOmitted]);
+// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/verifySubselectors.js
+
+
+function verify(selector, methodName, displayName) {
+  if (!selector) {
+    throw new Error('Unexpected value for ' + methodName + ' in ' + displayName + '.');
+  } else if (methodName === 'mapStateToProps' || methodName === 'mapDispatchToProps') {
+    if (!selector.hasOwnProperty('dependsOnOwnProps')) {
+      warning('The selector for ' + methodName + ' of ' + displayName + ' did not specify a value for dependsOnOwnProps.');
+    }
+  }
+}
+
+function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, displayName) {
+  verify(mapStateToProps, 'mapStateToProps', displayName);
+  verify(mapDispatchToProps, 'mapDispatchToProps', displayName);
+  verify(mergeProps, 'mergeProps', displayName);
+}
+// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/selectorFactory.js
+function selectorFactory_objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+
+
+function impureFinalPropsSelectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch) {
+  return function impureFinalPropsSelector(state, ownProps) {
+    return mergeProps(mapStateToProps(state, ownProps), mapDispatchToProps(dispatch, ownProps), ownProps);
+  };
+}
+
+function pureFinalPropsSelectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, _ref) {
+  var areStatesEqual = _ref.areStatesEqual,
+      areOwnPropsEqual = _ref.areOwnPropsEqual,
+      areStatePropsEqual = _ref.areStatePropsEqual;
+
+  var hasRunAtLeastOnce = false;
+  var state = void 0;
+  var ownProps = void 0;
+  var stateProps = void 0;
+  var dispatchProps = void 0;
+  var mergedProps = void 0;
+
+  function handleFirstCall(firstState, firstOwnProps) {
+    state = firstState;
+    ownProps = firstOwnProps;
+    stateProps = mapStateToProps(state, ownProps);
+    dispatchProps = mapDispatchToProps(dispatch, ownProps);
+    mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+    hasRunAtLeastOnce = true;
+    return mergedProps;
+  }
+
+  function handleNewPropsAndNewState() {
+    stateProps = mapStateToProps(state, ownProps);
+
+    if (mapDispatchToProps.dependsOnOwnProps) dispatchProps = mapDispatchToProps(dispatch, ownProps);
+
+    mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+    return mergedProps;
+  }
+
+  function handleNewProps() {
+    if (mapStateToProps.dependsOnOwnProps) stateProps = mapStateToProps(state, ownProps);
+
+    if (mapDispatchToProps.dependsOnOwnProps) dispatchProps = mapDispatchToProps(dispatch, ownProps);
+
+    mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+    return mergedProps;
+  }
+
+  function handleNewState() {
+    var nextStateProps = mapStateToProps(state, ownProps);
+    var statePropsChanged = !areStatePropsEqual(nextStateProps, stateProps);
+    stateProps = nextStateProps;
+
+    if (statePropsChanged) mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+
+    return mergedProps;
+  }
+
+  function handleSubsequentCalls(nextState, nextOwnProps) {
+    var propsChanged = !areOwnPropsEqual(nextOwnProps, ownProps);
+    var stateChanged = !areStatesEqual(nextState, state);
+    state = nextState;
+    ownProps = nextOwnProps;
+
+    if (propsChanged && stateChanged) return handleNewPropsAndNewState();
+    if (propsChanged) return handleNewProps();
+    if (stateChanged) return handleNewState();
+    return mergedProps;
+  }
+
+  return function pureFinalPropsSelector(nextState, nextOwnProps) {
+    return hasRunAtLeastOnce ? handleSubsequentCalls(nextState, nextOwnProps) : handleFirstCall(nextState, nextOwnProps);
+  };
+}
+
+// TODO: Add more comments
+
+// If pure is true, the selector returned by selectorFactory will memoize its results,
+// allowing connectAdvanced's shouldComponentUpdate to return false if final
+// props have not changed. If false, the selector will always return a new
+// object and shouldComponentUpdate will always return true.
+
+function finalPropsSelectorFactory(dispatch, _ref2) {
+  var initMapStateToProps = _ref2.initMapStateToProps,
+      initMapDispatchToProps = _ref2.initMapDispatchToProps,
+      initMergeProps = _ref2.initMergeProps,
+      options = selectorFactory_objectWithoutProperties(_ref2, ['initMapStateToProps', 'initMapDispatchToProps', 'initMergeProps']);
+
+  var mapStateToProps = initMapStateToProps(dispatch, options);
+  var mapDispatchToProps = initMapDispatchToProps(dispatch, options);
+  var mergeProps = initMergeProps(dispatch, options);
+
+  if (false) {}
+
+  var selectorFactory = options.pure ? pureFinalPropsSelectorFactory : impureFinalPropsSelectorFactory;
+
+  return selectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, options);
+}
+// CONCATENATED MODULE: ./node_modules/react-redux/es/connect/connect.js
+var connect_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function connect_objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+
+
+
+
+
+
+
+/*
+  connect is a facade over connectAdvanced. It turns its args into a compatible
+  selectorFactory, which has the signature:
+
+    (dispatch, options) => (nextState, nextOwnProps) => nextFinalProps
+  
+  connect passes its args to connectAdvanced as options, which will in turn pass them to
+  selectorFactory each time a Connect component instance is instantiated or hot reloaded.
+
+  selectorFactory returns a final props selector from its mapStateToProps,
+  mapStateToPropsFactories, mapDispatchToProps, mapDispatchToPropsFactories, mergeProps,
+  mergePropsFactories, and pure args.
+
+  The resulting final props selector is called by the Connect component instance whenever
+  it receives new props or store state.
+ */
+
+function match(arg, factories, name) {
+  for (var i = factories.length - 1; i >= 0; i--) {
+    var result = factories[i](arg);
+    if (result) return result;
+  }
+
+  return function (dispatch, options) {
+    throw new Error('Invalid value of type ' + typeof arg + ' for ' + name + ' argument when connecting component ' + options.wrappedComponentName + '.');
+  };
+}
+
+function strictEqual(a, b) {
+  return a === b;
+}
+
+// createConnect with default args builds the 'official' connect behavior. Calling it with
+// different options opens up some testing and extensibility scenarios
+function createConnect() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref$connectHOC = _ref.connectHOC,
+      connectHOC = _ref$connectHOC === undefined ? connectAdvanced : _ref$connectHOC,
+      _ref$mapStateToPropsF = _ref.mapStateToPropsFactories,
+      mapStateToPropsFactories = _ref$mapStateToPropsF === undefined ? connect_mapStateToProps : _ref$mapStateToPropsF,
+      _ref$mapDispatchToPro = _ref.mapDispatchToPropsFactories,
+      mapDispatchToPropsFactories = _ref$mapDispatchToPro === undefined ? connect_mapDispatchToProps : _ref$mapDispatchToPro,
+      _ref$mergePropsFactor = _ref.mergePropsFactories,
+      mergePropsFactories = _ref$mergePropsFactor === undefined ? connect_mergeProps : _ref$mergePropsFactor,
+      _ref$selectorFactory = _ref.selectorFactory,
+      selectorFactory = _ref$selectorFactory === undefined ? finalPropsSelectorFactory : _ref$selectorFactory;
+
+  return function connect(mapStateToProps, mapDispatchToProps, mergeProps) {
+    var _ref2 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
+        _ref2$pure = _ref2.pure,
+        pure = _ref2$pure === undefined ? true : _ref2$pure,
+        _ref2$areStatesEqual = _ref2.areStatesEqual,
+        areStatesEqual = _ref2$areStatesEqual === undefined ? strictEqual : _ref2$areStatesEqual,
+        _ref2$areOwnPropsEqua = _ref2.areOwnPropsEqual,
+        areOwnPropsEqual = _ref2$areOwnPropsEqua === undefined ? shallowEqual : _ref2$areOwnPropsEqua,
+        _ref2$areStatePropsEq = _ref2.areStatePropsEqual,
+        areStatePropsEqual = _ref2$areStatePropsEq === undefined ? shallowEqual : _ref2$areStatePropsEq,
+        _ref2$areMergedPropsE = _ref2.areMergedPropsEqual,
+        areMergedPropsEqual = _ref2$areMergedPropsE === undefined ? shallowEqual : _ref2$areMergedPropsE,
+        extraOptions = connect_objectWithoutProperties(_ref2, ['pure', 'areStatesEqual', 'areOwnPropsEqual', 'areStatePropsEqual', 'areMergedPropsEqual']);
+
+    var initMapStateToProps = match(mapStateToProps, mapStateToPropsFactories, 'mapStateToProps');
+    var initMapDispatchToProps = match(mapDispatchToProps, mapDispatchToPropsFactories, 'mapDispatchToProps');
+    var initMergeProps = match(mergeProps, mergePropsFactories, 'mergeProps');
+
+    return connectHOC(selectorFactory, connect_extends({
+      // used in error messages
+      methodName: 'connect',
+
+      // used to compute Connect's displayName from the wrapped component's displayName.
+      getDisplayName: function getDisplayName(name) {
+        return 'Connect(' + name + ')';
+      },
+
+      // if mapStateToProps is falsy, the Connect component doesn't subscribe to store state changes
+      shouldHandleStateChanges: Boolean(mapStateToProps),
+
+      // passed through to selectorFactory
+      initMapStateToProps: initMapStateToProps,
+      initMapDispatchToProps: initMapDispatchToProps,
+      initMergeProps: initMergeProps,
+      pure: pure,
+      areStatesEqual: areStatesEqual,
+      areOwnPropsEqual: areOwnPropsEqual,
+      areStatePropsEqual: areStatePropsEqual,
+      areMergedPropsEqual: areMergedPropsEqual
+
+    }, extraOptions));
+  };
+}
+
+/* harmony default export */ var connect_connect = (createConnect());
+// CONCATENATED MODULE: ./node_modules/react-redux/es/index.js
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "Provider", function() { return components_Provider; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "createProvider", function() { return createProvider; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "connectAdvanced", function() { return connectAdvanced; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "connect", function() { return connect_connect; });
+
+
+
+
+
 
 /***/ }),
 /* 8 */
@@ -21066,7 +21096,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -21389,6 +21419,31 @@ exports.setupLayers = setupLayers;
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _keymirror = __webpack_require__(38);
+
+var _keymirror2 = _interopRequireDefault(_keymirror);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var GradientTypes = (0, _keymirror2.default)({
+    SOLID: null,
+    HORIZONTAL: null,
+    VERTICAL: null,
+    RADIAL: null
+});
+exports.default = GradientTypes;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
   Copyright (c) 2016 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -21439,31 +21494,6 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _keymirror = __webpack_require__(37);
-
-var _keymirror2 = _interopRequireDefault(_keymirror);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var GradientTypes = (0, _keymirror2.default)({
-    SOLID: null,
-    HORIZONTAL: null,
-    VERTICAL: null,
-    RADIAL: null
-});
-exports.default = GradientTypes;
-
-/***/ }),
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21481,7 +21511,7 @@ var _log2 = _interopRequireDefault(_log);
 
 var _selectedItems = __webpack_require__(8);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21535,15 +21565,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clearGradient = exports.CLEAR_GRADIENT = exports.default = undefined;
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _selectedItems = __webpack_require__(8);
 
-var _fillModeGradientType = __webpack_require__(39);
+var _fillModeGradientType = __webpack_require__(32);
 
 var _log = __webpack_require__(9);
 
@@ -21600,7 +21630,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.isBitmap = exports.isVector = exports.default = undefined;
 
-var _keymirror = __webpack_require__(37);
+var _keymirror = __webpack_require__(38);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -21648,7 +21678,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _locale_data_index_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_locale_data_index_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(30);
 /* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(intl_messageformat__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var intl_relativeformat__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(35);
+/* harmony import */ var intl_relativeformat__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(36);
 /* harmony import */ var intl_relativeformat__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(intl_relativeformat__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
@@ -21656,7 +21686,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(22);
 /* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(invariant__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var intl_format_cache__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(36);
+/* harmony import */ var intl_format_cache__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(37);
 /* harmony import */ var intl_format_cache__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(intl_format_cache__WEBPACK_IMPORTED_MODULE_6__);
 /*
  * Copyright 2017, Yahoo Inc.
@@ -23581,7 +23611,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _layer = __webpack_require__(14);
 
-var _guides = __webpack_require__(32);
+var _guides = __webpack_require__(33);
 
 var _scratchSvgRenderer = __webpack_require__(168);
 
@@ -23999,23 +24029,26 @@ var colorPixel_ = function colorPixel_(x, y, imageData, newColor) {
  *
  * @param {!int} x The x coordinate on the context at which to begin
  * @param {!int} y The y coordinate on the context at which to begin
- * @param {!ImageData} imageData The image data to edit
+ * @param {!ImageData} sourceImageData The image data to sample from. This is edited by the function.
+ * @param {!ImageData} destImageData The image data to edit. May match sourceImageData. Should match
+ *     size of sourceImageData.
  * @param {!Array<number>} newColor The color to replace with. A length 4 array [r, g, b, a].
  * @param {!Array<number>} oldColor The color to replace. A length 4 array [r, g, b, a].
  *     This must be different from newColor.
  * @param {!Array<Array<int>>} stack The stack of pixels we need to look at
  */
-var floodFillInternal_ = function floodFillInternal_(x, y, imageData, newColor, oldColor, stack) {
-    while (y > 0 && matchesColor_(x, y - 1, imageData, oldColor)) {
+var floodFillInternal_ = function floodFillInternal_(x, y, sourceImageData, destImageData, newColor, oldColor, stack) {
+    while (y > 0 && matchesColor_(x, y - 1, sourceImageData, oldColor)) {
         y--;
     }
     var lastLeftMatchedColor = false;
     var lastRightMatchedColor = false;
-    for (; y < imageData.height; y++) {
-        if (!matchesColor_(x, y, imageData, oldColor)) break;
-        colorPixel_(x, y, imageData, newColor);
+    for (; y < sourceImageData.height; y++) {
+        if (!matchesColor_(x, y, sourceImageData, oldColor)) break;
+        colorPixel_(x, y, sourceImageData, newColor);
+        colorPixel_(x, y, destImageData, newColor);
         if (x > 0) {
-            if (matchesColor_(x - 1, y, imageData, oldColor)) {
+            if (matchesColor_(x - 1, y, sourceImageData, oldColor)) {
                 if (!lastLeftMatchedColor) {
                     stack.push([x - 1, y]);
                     lastLeftMatchedColor = true;
@@ -24024,8 +24057,8 @@ var floodFillInternal_ = function floodFillInternal_(x, y, imageData, newColor, 
                 lastLeftMatchedColor = false;
             }
         }
-        if (x < imageData.width - 1) {
-            if (matchesColor_(x + 1, y, imageData, oldColor)) {
+        if (x < sourceImageData.width - 1) {
+            if (matchesColor_(x + 1, y, sourceImageData, oldColor)) {
                 if (!lastRightMatchedColor) {
                     stack.push([x + 1, y]);
                     lastRightMatchedColor = true;
@@ -24057,15 +24090,21 @@ var fillStyleToColor_ = function fillStyleToColor_(fillStyleString) {
  * @param {!number} x The x coordinate on the context at which to begin
  * @param {!number} y The y coordinate on the context at which to begin
  * @param {!string} color A color string, which would go into context.fillStyle
- * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @param {!HTMLCanvas2DContext} sourceContext The context from which to sample to determine where to flood fill
+ * @param {!HTMLCanvas2DContext} destContext The context to which to draw. May match sourceContext. Should match
+ *     the size of sourceContext.
  * @return {boolean} True if image changed, false otherwise
  */
-var floodFill = function floodFill(x, y, color, context) {
+var floodFill = function floodFill(x, y, color, sourceContext, destContext) {
     x = ~~x;
     y = ~~y;
     var newColor = fillStyleToColor_(color);
-    var oldColor = getColor_(x, y, context);
-    var imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    var oldColor = getColor_(x, y, sourceContext);
+    var sourceImageData = sourceContext.getImageData(0, 0, sourceContext.canvas.width, sourceContext.canvas.height);
+    var destImageData = sourceImageData;
+    if (destContext !== sourceContext) {
+        destImageData = new ImageData(sourceContext.canvas.width, sourceContext.canvas.height);
+    }
     if (oldColor[0] === newColor[0] && oldColor[1] === newColor[1] && oldColor[2] === newColor[2] && oldColor[3] === newColor[3]) {
         // no-op
         return false;
@@ -24073,9 +24112,9 @@ var floodFill = function floodFill(x, y, color, context) {
     var stack = [[x, y]];
     while (stack.length) {
         var pop = stack.pop();
-        floodFillInternal_(pop[0], pop[1], imageData, newColor, oldColor, stack);
+        floodFillInternal_(pop[0], pop[1], sourceImageData, destImageData, newColor, oldColor, stack);
     }
-    context.putImageData(imageData, 0, 0);
+    destContext.putImageData(destImageData, 0, 0);
     return true;
 };
 
@@ -24084,27 +24123,32 @@ var floodFill = function floodFill(x, y, color, context) {
  * @param {!number} x The x coordinate on the context of the start color
  * @param {!number} y The y coordinate on the context of the start color
  * @param {!string} color A color string, which would go into context.fillStyle
- * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @param {!HTMLCanvas2DContext} sourceContext The context from which to sample to determine where to flood fill
+ * @param {!HTMLCanvas2DContext} destContext The context to which to draw. May match sourceContext. Should match
  * @return {boolean} True if image changed, false otherwise
  */
-var floodFillAll = function floodFillAll(x, y, color, context) {
+var floodFillAll = function floodFillAll(x, y, color, sourceContext, destContext) {
     x = ~~x;
     y = ~~y;
     var newColor = fillStyleToColor_(color);
-    var oldColor = getColor_(x, y, context);
-    var imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    var oldColor = getColor_(x, y, sourceContext);
+    var sourceImageData = sourceContext.getImageData(0, 0, sourceContext.canvas.width, sourceContext.canvas.height);
+    var destImageData = sourceImageData;
+    if (destContext !== sourceContext) {
+        destImageData = new ImageData(sourceContext.canvas.width, sourceContext.canvas.height);
+    }
     if (oldColor[0] === newColor[0] && oldColor[1] === newColor[1] && oldColor[2] === newColor[2] && oldColor[3] === newColor[3]) {
         // no-op
         return false;
     }
-    for (var i = 0; i < imageData.width; i++) {
-        for (var j = 0; j < imageData.height; j++) {
-            if (matchesColor_(i, j, imageData, oldColor)) {
-                colorPixel_(i, j, imageData, newColor);
+    for (var i = 0; i < sourceImageData.width; i++) {
+        for (var j = 0; j < sourceImageData.height; j++) {
+            if (matchesColor_(i, j, sourceImageData, oldColor)) {
+                colorPixel_(i, j, destImageData, newColor);
             }
         }
     }
-    context.putImageData(imageData, 0, 0);
+    destContext.putImageData(destImageData, 0, 0);
     return true;
 };
 
@@ -24410,13 +24454,13 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _keymirror = __webpack_require__(37);
+var _keymirror = __webpack_require__(38);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
 var _selection = __webpack_require__(3);
 
-var _guides = __webpack_require__(32);
+var _guides = __webpack_require__(33);
 
 var _layer = __webpack_require__(14);
 
@@ -24853,7 +24897,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -24899,7 +24943,7 @@ exports.default = InputGroup;
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ./node_modules/lodash-es/isPlainObject.js + 8 modules
-var isPlainObject = __webpack_require__(34);
+var isPlainObject = __webpack_require__(35);
 
 // EXTERNAL MODULE: ./node_modules/symbol-observable/es/index.js
 var es = __webpack_require__(68);
@@ -25563,6 +25607,61 @@ exports.getRootItem = getRootItem;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.changeGradientType = exports.CHANGE_GRADIENT_TYPE = exports.default = undefined;
+
+var _gradientTypes = __webpack_require__(15);
+
+var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
+
+var _log = __webpack_require__(9);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Gradient type shown in the fill tool. This is the last gradient type explicitly chosen by the user,
+// and isn't overwritten by changing the selection.
+var CHANGE_GRADIENT_TYPE = 'scratch-paint/fill-mode-gradient-type/CHANGE_GRADIENT_TYPE';
+var initialState = null;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_GRADIENT_TYPE:
+            if (action.gradientType in _gradientTypes2.default) {
+                return action.gradientType;
+            }
+            _log2.default.warn('Gradient type does not exist: ' + action.gradientType);
+        /* falls through */
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+// Use this for user-initiated gradient type selections only.
+// See reducers/selection-gradient-type.js for other ways gradient type changes.
+var changeGradientType = function changeGradientType(gradientType) {
+    return {
+        type: CHANGE_GRADIENT_TYPE,
+        gradientType: gradientType
+    };
+};
+
+exports.default = reducer;
+exports.CHANGE_GRADIENT_TYPE = CHANGE_GRADIENT_TYPE;
+exports.changeGradientType = changeGradientType;
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.setDefaultGuideStyle = exports.getGuideColor = exports.removeHitPoint = exports.drawHitPoint = exports.removeBoundsPath = exports.removeBoundsHandles = exports.removeAllGuides = exports.rectSelect = exports.hoverBounds = exports.hoverItem = undefined;
 
 var _paper = __webpack_require__(2);
@@ -25786,7 +25885,7 @@ exports.getGuideColor = getGuideColor;
 exports.setDefaultGuideStyle = setDefaultGuideStyle;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25803,7 +25902,7 @@ var _log2 = _interopRequireDefault(_log);
 
 var _selectedItems = __webpack_require__(8);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25848,7 +25947,7 @@ exports.default = reducer;
 exports.changeStrokeColor = changeStrokeColor;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -26099,7 +26198,7 @@ function isPlainObject(value) {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26121,7 +26220,7 @@ exports['default'] = exports;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26132,7 +26231,7 @@ exports['default'] = exports;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26192,7 +26291,7 @@ module.exports = keyMirror;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26254,61 +26353,6 @@ exports.setHoveredItem = setHoveredItem;
 exports.clearHoveredItem = clearHoveredItem;
 
 /***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.changeGradientType = exports.CHANGE_GRADIENT_TYPE = exports.default = undefined;
-
-var _gradientTypes = __webpack_require__(16);
-
-var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
-
-var _log = __webpack_require__(9);
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Gradient type shown in the fill tool. This is the last gradient type explicitly chosen by the user,
-// and isn't overwritten by changing the selection.
-var CHANGE_GRADIENT_TYPE = 'scratch-paint/fill-mode-gradient-type/CHANGE_GRADIENT_TYPE';
-var initialState = null;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_GRADIENT_TYPE:
-            if (action.gradientType in _gradientTypes2.default) {
-                return action.gradientType;
-            }
-            _log2.default.warn('Gradient type does not exist: ' + action.gradientType);
-        /* falls through */
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-// Use this for user-initiated gradient type selections only.
-// See reducers/selection-gradient-type.js for other ways gradient type changes.
-var changeGradientType = function changeGradientType(gradientType) {
-    return {
-        type: CHANGE_GRADIENT_TYPE,
-        gradientType: gradientType
-    };
-};
-
-exports.default = reducer;
-exports.CHANGE_GRADIENT_TYPE = CHANGE_GRADIENT_TYPE;
-exports.changeGradientType = changeGradientType;
-
-/***/ }),
 /* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -26321,7 +26365,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -26400,7 +26444,7 @@ var _log2 = _interopRequireDefault(_log);
 
 var _selectedItems = __webpack_require__(8);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26782,6 +26826,80 @@ module.exports = function (cstr) {
 
 
 Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.changeFillColor2 = exports.default = undefined;
+
+var _log = __webpack_require__(9);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _selectedItems = __webpack_require__(8);
+
+var _selectionGradientType = __webpack_require__(18);
+
+var _stylePath = __webpack_require__(6);
+
+var _gradientTypes = __webpack_require__(15);
+
+var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_FILL_COLOR_2 = 'scratch-paint/fill-color/CHANGE_FILL_COLOR_2';
+// Matches hex colors
+var regExp = /^#([0-9a-f]{3}){1,2}$/i;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = null;
+    switch (action.type) {
+        case CHANGE_FILL_COLOR_2:
+            if (!regExp.test(action.fillColor) && action.fillColor !== null && action.fillColor !== _stylePath.MIXED) {
+                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
+                return state;
+            }
+            return action.fillColor;
+        case _selectedItems.CHANGE_SELECTED_ITEMS:
+            {
+                // Don't change state if no selection
+                if (!action.selectedItems || !action.selectedItems.length) {
+                    return state;
+                }
+                var colors = (0, _stylePath.getColorsFromSelection)(action.selectedItems);
+                if (colors.gradientType === _gradientTypes2.default.SOLID) {
+                    // Gradient type may be solid when multiple gradient types are selected.
+                    // In this case, changing the first color should not change the second color.
+                    if (colors.fillColor2 === _stylePath.MIXED) return _stylePath.MIXED;
+                    return state;
+                }
+                return colors.fillColor2;
+            }
+        case _selectionGradientType.CLEAR_GRADIENT:
+            return null;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeFillColor2 = function changeFillColor2(fillColor) {
+    return {
+        type: CHANGE_FILL_COLOR_2,
+        fillColor: fillColor
+    };
+};
+
+exports.default = reducer;
+exports.changeFillColor2 = changeFillColor2;
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
@@ -26802,7 +26920,7 @@ exports.window = WINDOW;
 exports.document = DOCUMENT;
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26854,7 +26972,7 @@ Label.defaultProps = {
 exports.default = Label;
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26878,7 +26996,7 @@ var Fonts = {
 exports.default = Fonts;
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports) {
 
 var g;
@@ -26904,7 +27022,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26946,7 +27064,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 module.exports = emptyFunction;
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27024,7 +27142,7 @@ exports.incrementPasteOffset = incrementPasteOffset;
 exports.clearPasteOffset = clearPasteOffset;
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27079,7 +27197,7 @@ exports.default = reducer;
 exports.updateViewBounds = updateViewBounds;
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27136,7 +27254,7 @@ exports.default = reducer;
 exports.changeFormat = changeFormat;
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27152,7 +27270,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _guides = __webpack_require__(32);
+var _guides = __webpack_require__(33);
 
 var _selection = __webpack_require__(3);
 
@@ -27246,7 +27364,7 @@ var SelectionBoxTool = function () {
 exports.default = SelectionBoxTool;
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27292,7 +27410,7 @@ exports.default = reducer;
 exports.changeBrushSize = changeBrushSize;
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27307,9 +27425,9 @@ var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _fillModeGradientType = __webpack_require__(39);
+var _fillModeGradientType = __webpack_require__(32);
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -27345,80 +27463,6 @@ var changeColorIndex = function changeColorIndex(index) {
 
 exports.default = reducer;
 exports.changeColorIndex = changeColorIndex;
-
-/***/ }),
-/* 56 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.changeFillColor2 = exports.default = undefined;
-
-var _log = __webpack_require__(9);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _selectedItems = __webpack_require__(8);
-
-var _selectionGradientType = __webpack_require__(18);
-
-var _stylePath = __webpack_require__(7);
-
-var _gradientTypes = __webpack_require__(16);
-
-var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_FILL_COLOR_2 = 'scratch-paint/fill-color/CHANGE_FILL_COLOR_2';
-// Matches hex colors
-var regExp = /^#([0-9a-f]{3}){1,2}$/i;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = null;
-    switch (action.type) {
-        case CHANGE_FILL_COLOR_2:
-            if (!regExp.test(action.fillColor) && action.fillColor !== null && action.fillColor !== _stylePath.MIXED) {
-                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
-                return state;
-            }
-            return action.fillColor;
-        case _selectedItems.CHANGE_SELECTED_ITEMS:
-            {
-                // Don't change state if no selection
-                if (!action.selectedItems || !action.selectedItems.length) {
-                    return state;
-                }
-                var colors = (0, _stylePath.getColorsFromSelection)(action.selectedItems);
-                if (colors.gradientType === _gradientTypes2.default.SOLID) {
-                    // Gradient type may be solid when multiple gradient types are selected.
-                    // In this case, changing the first color should not change the second color.
-                    if (colors.fillColor2 === _stylePath.MIXED) return _stylePath.MIXED;
-                    return state;
-                }
-                return colors.fillColor2;
-            }
-        case _selectionGradientType.CLEAR_GRADIENT:
-            return null;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var changeFillColor2 = function changeFillColor2(fillColor) {
-    return {
-        type: CHANGE_FILL_COLOR_2,
-        fillColor: fillColor
-    };
-};
-
-exports.default = reducer;
-exports.changeFillColor2 = changeFillColor2;
 
 /***/ }),
 /* 57 */
@@ -27584,7 +27628,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clientOnly = exports.noop = exports.equalRecords = exports.find = undefined;
 
-var _platform = __webpack_require__(45);
+var _platform = __webpack_require__(46);
 
 var find = function find(f, xs) {
   return xs.reduce(function (b, x) {
@@ -27686,7 +27730,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -27769,7 +27813,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _item = __webpack_require__(31);
 
-var _guides = __webpack_require__(32);
+var _guides = __webpack_require__(33);
 
 var _group = __webpack_require__(25);
 
@@ -27857,7 +27901,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -27914,7 +27958,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeFont = exports.default = undefined;
 
-var _fonts = __webpack_require__(47);
+var _fonts = __webpack_require__(48);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -28024,7 +28068,7 @@ if (typeof self !== 'undefined') {
 var result = Object(_ponyfill_js__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(root);
 /* harmony default export */ __webpack_exports__["a"] = (result);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(48), __webpack_require__(137)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(49), __webpack_require__(137)(module)))
 
 /***/ }),
 /* 69 */
@@ -29229,7 +29273,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -29293,7 +29337,7 @@ var _segmentBrushHelper = __webpack_require__(210);
 
 var _segmentBrushHelper2 = _interopRequireDefault(_segmentBrushHelper);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _selection = __webpack_require__(3);
 
@@ -29816,11 +29860,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _noFill = __webpack_require__(92);
 
@@ -29834,7 +29878,7 @@ var _colorButton = __webpack_require__(230);
 
 var _colorButton2 = _interopRequireDefault(_colorButton);
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -29940,7 +29984,7 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _paper = __webpack_require__(2);
 
@@ -29958,13 +30002,13 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _colorIndex = __webpack_require__(55);
+var _colorIndex = __webpack_require__(56);
 
 var _selectedItems = __webpack_require__(8);
 
 var _eyeDropper = __webpack_require__(62);
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -29972,7 +30016,7 @@ var _colorPicker = __webpack_require__(232);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30449,7 +30493,7 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -30628,7 +30672,7 @@ var _log2 = _interopRequireDefault(_log);
 
 var _selectedItems = __webpack_require__(8);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30956,7 +31000,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _reactIntl = __webpack_require__(20);
 
@@ -31084,7 +31128,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(48)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(49)))
 
 /***/ }),
 /* 109 */
@@ -31119,7 +31163,7 @@ var _ = __webpack_require__(72);
 
 var _2 = _interopRequireDefault(_);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _redux = __webpack_require__(29);
 
@@ -31225,7 +31269,7 @@ _reactDom2.default.render(_react2.default.createElement(
  * LICENSE file in the root directory of this source tree.
  */
 
-var m=__webpack_require__(69),n=__webpack_require__(70),p=__webpack_require__(49),q="function"===typeof Symbol&&Symbol["for"],r=q?Symbol["for"]("react.element"):60103,t=q?Symbol["for"]("react.call"):60104,u=q?Symbol["for"]("react.return"):60105,v=q?Symbol["for"]("react.portal"):60106,w=q?Symbol["for"]("react.fragment"):60107,x="function"===typeof Symbol&&Symbol.iterator;
+var m=__webpack_require__(69),n=__webpack_require__(70),p=__webpack_require__(50),q="function"===typeof Symbol&&Symbol["for"],r=q?Symbol["for"]("react.element"):60103,t=q?Symbol["for"]("react.call"):60104,u=q?Symbol["for"]("react.return"):60105,v=q?Symbol["for"]("react.portal"):60106,w=q?Symbol["for"]("react.fragment"):60107,x="function"===typeof Symbol&&Symbol.iterator;
 function y(a){for(var b=arguments.length-1,e="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,c=0;c<b;c++)e+="\x26args[]\x3d"+encodeURIComponent(arguments[c+1]);b=Error(e+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}
 var z={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}};function A(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||z}A.prototype.isReactComponent={};A.prototype.setState=function(a,b){"object"!==typeof a&&"function"!==typeof a&&null!=a?y("85"):void 0;this.updater.enqueueSetState(this,a,b,"setState")};A.prototype.forceUpdate=function(a){this.updater.enqueueForceUpdate(this,a,"forceUpdate")};
 function B(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||z}function C(){}C.prototype=A.prototype;var D=B.prototype=new C;D.constructor=B;m(D,A.prototype);D.isPureReactComponent=!0;function E(a,b,e){this.props=a;this.context=b;this.refs=n;this.updater=e||z}var F=E.prototype=new C;F.constructor=E;m(F,A.prototype);F.unstable_isAsyncReactComponent=!0;F.render=function(){return this.props.children};var G={current:null},H=Object.prototype.hasOwnProperty,I={key:!0,ref:!0,__self:!0,__source:!0};
@@ -31256,7 +31300,7 @@ isValidElement:K,version:"16.2.0",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_F
 /*
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(0),l=__webpack_require__(113),B=__webpack_require__(69),C=__webpack_require__(49),ba=__webpack_require__(114),da=__webpack_require__(115),ea=__webpack_require__(116),fa=__webpack_require__(117),ia=__webpack_require__(120),D=__webpack_require__(70);
+var aa=__webpack_require__(0),l=__webpack_require__(113),B=__webpack_require__(69),C=__webpack_require__(50),ba=__webpack_require__(114),da=__webpack_require__(115),ea=__webpack_require__(116),fa=__webpack_require__(117),ia=__webpack_require__(120),D=__webpack_require__(70);
 function E(a){for(var b=arguments.length-1,c="Minified React error #"+a+"; visit http://facebook.github.io/react/docs/error-decoder.html?invariant\x3d"+a,d=0;d<b;d++)c+="\x26args[]\x3d"+encodeURIComponent(arguments[d+1]);b=Error(c+" for the full message or use the non-minified dev environment for full errors and additional helpful warnings.");b.name="Invariant Violation";b.framesToPop=1;throw b;}aa?void 0:E("227");
 var oa={children:!0,dangerouslySetInnerHTML:!0,defaultValue:!0,defaultChecked:!0,innerHTML:!0,suppressContentEditableWarning:!0,suppressHydrationWarning:!0,style:!0};function pa(a,b){return(a&b)===b}
 var ta={MUST_USE_PROPERTY:1,HAS_BOOLEAN_VALUE:4,HAS_NUMERIC_VALUE:8,HAS_POSITIVE_NUMERIC_VALUE:24,HAS_OVERLOADED_BOOLEAN_VALUE:32,HAS_STRING_BOOLEAN_VALUE:64,injectDOMPropertyConfig:function(a){var b=ta,c=a.Properties||{},d=a.DOMAttributeNamespaces||{},e=a.DOMAttributeNames||{};a=a.DOMMutationMethods||{};for(var f in c){ua.hasOwnProperty(f)?E("48",f):void 0;var g=f.toLowerCase(),h=c[f];g={attributeName:g,attributeNamespace:null,propertyName:f,mutationMethod:null,mustUseProperty:pa(h,b.MUST_USE_PROPERTY),
@@ -31530,7 +31574,7 @@ module.exports = ExecutionEnvironment;
  * @typechecks
  */
 
-var emptyFunction = __webpack_require__(49);
+var emptyFunction = __webpack_require__(50);
 
 /**
  * Upstream version of event listener. Does not take into account specific
@@ -31863,7 +31907,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _paintEditor = __webpack_require__(138);
 
@@ -31871,7 +31915,7 @@ var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(52);
+var _format = __webpack_require__(53);
 
 var _undo = __webpack_require__(43);
 
@@ -31881,7 +31925,7 @@ var _eyeDropper = __webpack_require__(62);
 
 var _textEditTarget = __webpack_require__(67);
 
-var _viewBounds = __webpack_require__(51);
+var _viewBounds = __webpack_require__(52);
 
 var _layer = __webpack_require__(14);
 
@@ -36741,7 +36785,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -39885,7 +39929,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _paper = __webpack_require__(2);
 
@@ -39919,13 +39963,13 @@ var _view = __webpack_require__(42);
 
 var _math = __webpack_require__(21);
 
-var _hover = __webpack_require__(38);
+var _hover = __webpack_require__(39);
 
-var _clipboard = __webpack_require__(50);
+var _clipboard = __webpack_require__(51);
 
-var _viewBounds = __webpack_require__(51);
+var _viewBounds = __webpack_require__(52);
 
-var _format3 = __webpack_require__(52);
+var _format3 = __webpack_require__(53);
 
 var _paperCanvas = __webpack_require__(157);
 
@@ -40500,7 +40544,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -40510,7 +40554,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _fillColor = __webpack_require__(17);
 
@@ -42375,7 +42419,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -42385,7 +42429,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _fillColor = __webpack_require__(17);
 
@@ -42780,7 +42824,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -42790,7 +42834,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _fillColor = __webpack_require__(17);
 
@@ -43671,7 +43715,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -43681,7 +43725,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _fillColor = __webpack_require__(17);
 
@@ -44178,7 +44222,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -44188,17 +44232,23 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
+var _gradientTypes = __webpack_require__(15);
+
+var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
+
 var _bitFillMode = __webpack_require__(195);
 
 var _bitFillMode2 = _interopRequireDefault(_bitFillMode);
 
 var _fillColor = __webpack_require__(17);
 
+var _fillColor2 = __webpack_require__(45);
+
 var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(8);
 
-var _selectionGradientType = __webpack_require__(18);
+var _fillModeGradientType = __webpack_require__(32);
 
 var _selection = __webpack_require__(3);
 
@@ -44206,7 +44256,7 @@ var _fillTool = __webpack_require__(197);
 
 var _fillTool2 = _interopRequireDefault(_fillTool);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44238,8 +44288,16 @@ var BitFillMode = function (_React$Component) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
-            if (this.tool && nextProps.color !== this.props.color) {
-                this.tool.setColor(nextProps.color);
+            if (this.tool) {
+                if (nextProps.color !== this.props.color) {
+                    this.tool.setColor(nextProps.color);
+                }
+                if (nextProps.color2 !== this.props.color2) {
+                    this.tool.setColor2(nextProps.color2);
+                }
+                if (nextProps.fillModeGradientType !== this.props.fillModeGradientType) {
+                    this.tool.setGradientType(nextProps.fillModeGradientType);
+                }
             }
 
             if (nextProps.isFillModeActive && !this.props.isFillModeActive) {
@@ -44257,14 +44315,30 @@ var BitFillMode = function (_React$Component) {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
-            this.props.clearGradient();
+
             // Force the default brush color if fill is MIXED or transparent
-            var fillColorPresent = this.props.color !== _stylePath.MIXED && this.props.color !== null;
-            if (!fillColorPresent) {
-                this.props.onChangeFillColor(_fillColor.DEFAULT_COLOR);
+            var color = this.props.color;
+            if (this.props.color === _stylePath.MIXED) {
+                color = _fillColor.DEFAULT_COLOR;
+                this.props.onChangeFillColor(_fillColor.DEFAULT_COLOR, 0);
+            }
+            var gradientType = this.props.fillModeGradientType ? this.props.fillModeGradientType : this.props.selectModeGradientType;
+            var color2 = this.props.color2;
+            if (gradientType !== this.props.selectModeGradientType) {
+                if (this.props.selectModeGradientType === _gradientTypes2.default.SOLID) {
+                    color2 = (0, _stylePath.getRotatedColor)(color);
+                    this.props.onChangeFillColor(color2, 1);
+                }
+                this.props.changeGradientType(gradientType);
+            }
+            if (this.props.color2 === _stylePath.MIXED) {
+                color2 = (0, _stylePath.getRotatedColor)();
+                this.props.onChangeFillColor(color2, 1);
             }
             this.tool = new _fillTool2.default(this.props.onUpdateImage);
-            this.tool.setColor(this.props.color);
+            this.tool.setColor(color);
+            this.tool.setColor2(color2);
+            this.tool.setGradientType(gradientType);
             this.tool.activate();
         }
     }, {
@@ -44288,34 +44362,44 @@ var BitFillMode = function (_React$Component) {
 }(_react2.default.Component);
 
 BitFillMode.propTypes = {
-    clearGradient: _propTypes2.default.func.isRequired,
+    changeGradientType: _propTypes2.default.func.isRequired,
     clearSelectedItems: _propTypes2.default.func.isRequired,
     color: _propTypes2.default.string,
+    color2: _propTypes2.default.string,
+    fillModeGradientType: _propTypes2.default.oneOf(Object.keys(_gradientTypes2.default)),
     handleMouseDown: _propTypes2.default.func.isRequired,
     isFillModeActive: _propTypes2.default.bool.isRequired,
     onChangeFillColor: _propTypes2.default.func.isRequired,
-    onUpdateImage: _propTypes2.default.func.isRequired
+    onUpdateImage: _propTypes2.default.func.isRequired,
+    selectModeGradientType: _propTypes2.default.oneOf(Object.keys(_gradientTypes2.default)).isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
+        fillModeGradientType: state.scratchPaint.fillMode.gradientType, // Last user-selected gradient type
         color: state.scratchPaint.color.fillColor,
-        isFillModeActive: state.scratchPaint.mode === _modes2.default.BIT_FILL
+        color2: state.scratchPaint.color.fillColor2,
+        isFillModeActive: state.scratchPaint.mode === _modes2.default.BIT_FILL,
+        selectModeGradientType: state.scratchPaint.color.gradientType
     };
 };
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
-        clearGradient: function clearGradient() {
-            dispatch((0, _selectionGradientType.clearGradient)());
-        },
         clearSelectedItems: function clearSelectedItems() {
             dispatch((0, _selectedItems.clearSelectedItems)());
+        },
+        changeGradientType: function changeGradientType(gradientType) {
+            dispatch((0, _fillModeGradientType.changeGradientType)(gradientType));
         },
         handleMouseDown: function handleMouseDown() {
             dispatch((0, _modes3.changeMode)(_modes2.default.BIT_FILL));
         },
-        onChangeFillColor: function onChangeFillColor(fillColor) {
-            dispatch((0, _fillColor.changeFillColor)(fillColor));
+        onChangeFillColor: function onChangeFillColor(fillColor, index) {
+            if (index === 0) {
+                dispatch((0, _fillColor.changeFillColor)(fillColor));
+            } else if (index === 1) {
+                dispatch((0, _fillColor2.changeFillColor2)(fillColor));
+            }
         }
     };
 };
@@ -44396,7 +44480,13 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _bitmap = __webpack_require__(24);
 
+var _stylePath = __webpack_require__(6);
+
 var _layer = __webpack_require__(14);
+
+var _gradientTypes = __webpack_require__(15);
+
+var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44428,10 +44518,10 @@ var FillTool = function (_paper$Tool) {
         // paper.js tools hook up the listeners in the setter functions.
         _this.onMouseDown = _this.handleMouseDown;
         _this.onMouseDrag = _this.handleMouseDrag;
-        _this.onMouseUp = _this.handleMouseUp;
 
         _this.color = null;
-        _this.changed = false;
+        _this.color2 = null;
+        _this.gradientType = null;
         _this.active = false;
         return _this;
     }
@@ -44439,45 +44529,89 @@ var FillTool = function (_paper$Tool) {
     _createClass(FillTool, [{
         key: 'setColor',
         value: function setColor(color) {
-            // Null color means transparent because that is the standard in vector
-            this.color = color ? color : TRANSPARENT;
+            this.color = color;
+        }
+    }, {
+        key: 'setColor2',
+        value: function setColor2(color2) {
+            this.color2 = color2;
+        }
+    }, {
+        key: 'setGradientType',
+        value: function setGradientType(gradientType) {
+            this.gradientType = gradientType;
         }
     }, {
         key: 'handleMouseDown',
         value: function handleMouseDown(event) {
-            var context = (0, _layer.getRaster)().getContext('2d');
-            if (event.event.shiftKey) {
-                this.changed = (0, _bitmap.floodFillAll)(event.point.x, event.point.y, this.color, context) || this.changed;
-            } else {
-                this.changed = (0, _bitmap.floodFill)(event.point.x, event.point.y, this.color, context) || this.changed;
-            }
+            this.paint(event);
         }
     }, {
         key: 'handleMouseDrag',
         value: function handleMouseDrag(event) {
-            var context = (0, _layer.getRaster)().getContext('2d');
-            if (event.event.shiftKey) {
-                this.changed = (0, _bitmap.floodFillAll)(event.point.x, event.point.y, this.color, context) || this.changed;
-            } else {
-                this.changed = (0, _bitmap.floodFill)(event.point.x, event.point.y, this.color, context) || this.changed;
-            }
+            this.paint(event);
         }
     }, {
-        key: 'handleMouseUp',
-        value: function handleMouseUp() {
-            if (this.changed) {
+        key: 'paint',
+        value: function paint(event) {
+            var _this2 = this;
+
+            var sourceContext = (0, _layer.getRaster)().getContext('2d');
+            var destContext = sourceContext;
+            var color = this.color;
+            // Paint to a mask instead of the original canvas when drawing
+            if (this.gradientType !== _gradientTypes2.default.SOLID) {
+                var tmpCanvas = (0, _layer.createCanvas)();
+                destContext = tmpCanvas.getContext('2d');
+                color = 'black';
+            } else if (!color) {
+                // Null color means transparent because that is the standard in vector
+                color = TRANSPARENT;
+            }
+            var changed = false;
+            if (event.event.shiftKey) {
+                changed = (0, _bitmap.floodFillAll)(event.point.x, event.point.y, color, sourceContext, destContext);
+            } else {
+                changed = (0, _bitmap.floodFill)(event.point.x, event.point.y, color, sourceContext, destContext);
+            }
+            if (changed && this.gradientType !== _gradientTypes2.default.SOLID) {
+                var raster = new _paper2.default.Raster({ insert: false });
+                raster.canvas = destContext.canvas;
+                raster.onLoad = function () {
+                    raster.position = (0, _layer.getRaster)().position;
+                    // Erase what's already there
+                    (0, _layer.getRaster)().getContext().globalCompositeOperation = 'destination-out';
+                    (0, _layer.getRaster)().drawImage(raster.canvas, new _paper2.default.Point());
+                    (0, _layer.getRaster)().getContext().globalCompositeOperation = 'source-over';
+
+                    // Create the gradient to be masked
+                    var hitBounds = (0, _bitmap.getHitBounds)(raster);
+                    if (!hitBounds.area) return;
+                    var gradient = new _paper2.default.Shape.Rectangle({
+                        insert: false,
+                        rectangle: {
+                            topLeft: hitBounds.topLeft,
+                            bottomRight: hitBounds.bottomRight
+                        }
+                    });
+                    gradient.fillColor = (0, _stylePath.createGradientObject)(_this2.color, _this2.color2, _this2.gradientType, gradient.bounds, event.point);
+                    var rasterGradient = gradient.rasterize((0, _layer.getRaster)().resolution.width, false /* insert */);
+
+                    // Mask gradient
+                    raster.getContext().globalCompositeOperation = 'source-in';
+                    raster.drawImage(rasterGradient.canvas, rasterGradient.bounds.topLeft);
+
+                    // Draw masked gradient into raster layer
+                    (0, _layer.getRaster)().drawImage(raster.canvas, new _paper2.default.Point());
+                    _this2.onUpdateImage();
+                };
+            } else if (changed) {
                 this.onUpdateImage();
-                this.changed = false;
             }
         }
     }, {
         key: 'deactivateTool',
-        value: function deactivateTool() {
-            if (this.changed) {
-                this.onUpdateImage();
-                this.changed = false;
-            }
-        }
+        value: function deactivateTool() {}
     }]);
 
     return FillTool;
@@ -44506,7 +44640,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -44706,7 +44840,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -44872,7 +45006,7 @@ var _nudgeTool = __webpack_require__(27);
 
 var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
-var _selectionBoxTool = __webpack_require__(53);
+var _selectionBoxTool = __webpack_require__(54);
 
 var _selectionBoxTool2 = _interopRequireDefault(_selectionBoxTool);
 
@@ -46834,7 +46968,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -46848,7 +46982,7 @@ var _blob = __webpack_require__(88);
 
 var _blob2 = _interopRequireDefault(_blob);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _fillColor = __webpack_require__(17);
 
@@ -47006,7 +47140,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _log = __webpack_require__(9);
 
@@ -47295,7 +47429,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47476,7 +47610,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -47490,7 +47624,7 @@ var _blob = __webpack_require__(88);
 
 var _blob2 = _interopRequireDefault(_blob);
 
-var _eraserMode = __webpack_require__(54);
+var _eraserMode = __webpack_require__(55);
 
 var _selectedItems = __webpack_require__(8);
 
@@ -47665,7 +47799,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _propTypes = __webpack_require__(1);
 
@@ -47683,13 +47817,13 @@ var _parseColor = __webpack_require__(44);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
-var _colorIndex = __webpack_require__(55);
+var _colorIndex = __webpack_require__(56);
 
 var _fillColor = __webpack_require__(17);
 
-var _fillColor2 = __webpack_require__(56);
+var _fillColor2 = __webpack_require__(45);
 
-var _fillModeGradientType = __webpack_require__(39);
+var _fillModeGradientType = __webpack_require__(32);
 
 var _modals = __webpack_require__(57);
 
@@ -47705,7 +47839,7 @@ var _format = __webpack_require__(19);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -47713,7 +47847,7 @@ var _fillColorIndicator = __webpack_require__(215);
 
 var _fillColorIndicator2 = _interopRequireDefault(_fillColorIndicator);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47830,7 +47964,7 @@ var mapStateToProps = function mapStateToProps(state) {
         gradientType: state.scratchPaint.color.gradientType,
         isEyeDropping: state.scratchPaint.color.eyeDropper.active,
         mode: state.scratchPaint.mode,
-        shouldShowGradientTools: (0, _format.isVector)(state.scratchPaint.format) && (state.scratchPaint.mode === _modes2.default.SELECT || state.scratchPaint.mode === _modes2.default.RESHAPE || state.scratchPaint.mode === _modes2.default.FILL),
+        shouldShowGradientTools: state.scratchPaint.mode === _modes2.default.SELECT || state.scratchPaint.mode === _modes2.default.RESHAPE || state.scratchPaint.mode === _modes2.default.FILL || state.scratchPaint.mode === _modes2.default.BIT_FILL,
         textEditTarget: state.scratchPaint.textEditTarget
     };
 };
@@ -47919,11 +48053,11 @@ var _inputGroup = __webpack_require__(28);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(46);
+var _label = __webpack_require__(47);
 
 var _label2 = _interopRequireDefault(_label);
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -48038,7 +48172,7 @@ var _layout = __webpack_require__(228);
 
 var _layout2 = _interopRequireDefault(_layout);
 
-var _platform = __webpack_require__(45);
+var _platform = __webpack_require__(46);
 
 var _platform2 = _interopRequireDefault(_platform);
 
@@ -49840,7 +49974,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.removeEventListener = exports.addEventListener = exports.off = exports.on = undefined;
 
-var _platform = __webpack_require__(45);
+var _platform = __webpack_require__(46);
 
 var _utils = __webpack_require__(61);
 
@@ -49965,7 +50099,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.equalCoords = exports.doesFitWithin = exports.centerOfBoundsFromBounds = exports.centerOfBounds = exports.centerOfSize = exports.axes = exports.pickZone = exports.place = exports.calcRelPos = exports.validTypeValues = exports.types = exports.El = undefined;
 
-var _platform = __webpack_require__(45);
+var _platform = __webpack_require__(46);
 
 var _utils = __webpack_require__(61);
 
@@ -50316,7 +50450,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactIntl = __webpack_require__(20);
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -50336,11 +50470,11 @@ var _colorPicker = __webpack_require__(239);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _eyeDropper = __webpack_require__(241);
 
@@ -50716,7 +50850,7 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -51166,7 +51300,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -51176,7 +51310,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -51184,11 +51318,11 @@ var _fillTool = __webpack_require__(252);
 
 var _fillTool2 = _interopRequireDefault(_fillTool);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _fillColor = __webpack_require__(17);
 
-var _fillColor2 = __webpack_require__(56);
+var _fillColor2 = __webpack_require__(45);
 
 var _modes3 = __webpack_require__(10);
 
@@ -51196,9 +51330,9 @@ var _selectedItems = __webpack_require__(8);
 
 var _selection = __webpack_require__(3);
 
-var _hover = __webpack_require__(38);
+var _hover = __webpack_require__(39);
 
-var _fillModeGradientType = __webpack_require__(39);
+var _fillModeGradientType = __webpack_require__(32);
 
 var _fillMode = __webpack_require__(253);
 
@@ -51387,9 +51521,9 @@ var _hover = __webpack_require__(64);
 
 var _math = __webpack_require__(21);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -51597,31 +51731,13 @@ var FillTool = function (_paper$Tool) {
     }, {
         key: '_setFillItemColor',
         value: function _setFillItemColor(color1, color2, gradientType, pointerLocation) {
-            var fillColor = void 0;
             var item = this._getFillItem();
             if (!item) return;
             if (color1 instanceof _paper2.default.Color || gradientType === _gradientTypes2.default.SOLID) {
-                fillColor = color1;
+                item.fillColor = color1;
             } else {
-                if (color1 === null) {
-                    color1 = (0, _stylePath.getColorStringForTransparent)(color2);
-                }
-                if (color2 === null) {
-                    color2 = (0, _stylePath.getColorStringForTransparent)(color1);
-                }
-                var halfLongestDimension = Math.max(item.bounds.width, item.bounds.height) / 2;
-                var start = gradientType === _gradientTypes2.default.RADIAL ? pointerLocation : gradientType === _gradientTypes2.default.VERTICAL ? item.bounds.topCenter : gradientType === _gradientTypes2.default.HORIZONTAL ? item.bounds.leftCenter : null;
-                var end = gradientType === _gradientTypes2.default.RADIAL ? start.add(new _paper2.default.Point(halfLongestDimension, 0)) : gradientType === _gradientTypes2.default.VERTICAL ? item.bounds.bottomCenter : gradientType === _gradientTypes2.default.HORIZONTAL ? item.bounds.rightCenter : null;
-                fillColor = {
-                    gradient: {
-                        stops: [color1, color2],
-                        radial: gradientType === _gradientTypes2.default.RADIAL
-                    },
-                    origin: start,
-                    destination: end
-                };
+                item.fillColor = (0, _stylePath.createGradientObject)(color1, color2, gradientType, item.bounds, pointerLocation);
             }
-            item.fillColor = fillColor;
         }
     }, {
         key: '_getFillItem',
@@ -51732,7 +51848,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -51746,11 +51862,11 @@ var _selection = __webpack_require__(3);
 
 var _snapping = __webpack_require__(256);
 
-var _guides = __webpack_require__(32);
+var _guides = __webpack_require__(33);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
-var _strokeColor = __webpack_require__(33);
+var _strokeColor = __webpack_require__(34);
 
 var _strokeWidth = __webpack_require__(41);
 
@@ -52400,11 +52516,11 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _propTypes = __webpack_require__(1);
 
@@ -52452,7 +52568,7 @@ var _inputGroup = __webpack_require__(28);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(46);
+var _label = __webpack_require__(47);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -53870,7 +53986,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -53882,7 +53998,7 @@ var _modeTools2 = _interopRequireDefault(_modeTools);
 
 var _selectedItems = __webpack_require__(8);
 
-var _clipboard = __webpack_require__(50);
+var _clipboard = __webpack_require__(51);
 
 var _selection = __webpack_require__(3);
 
@@ -54381,11 +54497,11 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _propTypes = __webpack_require__(1);
 
@@ -54397,7 +54513,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _brushMode = __webpack_require__(98);
 
-var _eraserMode = __webpack_require__(54);
+var _eraserMode = __webpack_require__(55);
 
 var _bitBrushSize = __webpack_require__(99);
 
@@ -54413,7 +54529,7 @@ var _liveInputHoc = __webpack_require__(103);
 
 var _liveInputHoc2 = _interopRequireDefault(_liveInputHoc);
 
-var _label = __webpack_require__(46);
+var _label = __webpack_require__(47);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -54861,7 +54977,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -54879,7 +54995,7 @@ var _fontDropdown = __webpack_require__(284);
 
 var _fontDropdown2 = _interopRequireDefault(_fontDropdown);
 
-var _fonts = __webpack_require__(47);
+var _fonts = __webpack_require__(48);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -55130,7 +55246,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _classnames = __webpack_require__(15);
+var _classnames = __webpack_require__(16);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
@@ -55154,7 +55270,7 @@ var _inputGroup = __webpack_require__(28);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _fonts = __webpack_require__(47);
+var _fonts = __webpack_require__(48);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -55486,7 +55602,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -55496,11 +55612,11 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _fillColor = __webpack_require__(17);
 
-var _strokeColor = __webpack_require__(33);
+var _strokeColor = __webpack_require__(34);
 
 var _modes3 = __webpack_require__(10);
 
@@ -55683,7 +55799,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _selection = __webpack_require__(3);
 
@@ -55939,7 +56055,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -55949,11 +56065,11 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _fillColor = __webpack_require__(17);
 
-var _strokeColor = __webpack_require__(33);
+var _strokeColor = __webpack_require__(34);
 
 var _modes3 = __webpack_require__(10);
 
@@ -56136,7 +56252,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _selection = __webpack_require__(3);
 
@@ -56387,7 +56503,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -56399,7 +56515,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(10);
 
-var _hover = __webpack_require__(38);
+var _hover = __webpack_require__(39);
 
 var _selectedItems = __webpack_require__(8);
 
@@ -56546,7 +56662,7 @@ var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _keymirror = __webpack_require__(37);
+var _keymirror = __webpack_require__(38);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -56572,7 +56688,7 @@ var _handleTool = __webpack_require__(308);
 
 var _handleTool2 = _interopRequireDefault(_handleTool);
 
-var _selectionBoxTool = __webpack_require__(53);
+var _selectionBoxTool = __webpack_require__(54);
 
 var _selectionBoxTool2 = _interopRequireDefault(_selectionBoxTool);
 
@@ -57492,7 +57608,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -57504,7 +57620,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(10);
 
-var _hover = __webpack_require__(38);
+var _hover = __webpack_require__(39);
 
 var _selectedItems = __webpack_require__(8);
 
@@ -57662,7 +57778,7 @@ var _nudgeTool = __webpack_require__(27);
 
 var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
-var _selectionBoxTool = __webpack_require__(53);
+var _selectionBoxTool = __webpack_require__(54);
 
 var _selectionBoxTool2 = _interopRequireDefault(_selectionBoxTool);
 
@@ -57919,7 +58035,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _propTypes = __webpack_require__(1);
 
@@ -57933,7 +58049,7 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _strokeColor = __webpack_require__(33);
+var _strokeColor = __webpack_require__(34);
 
 var _modals = __webpack_require__(57);
 
@@ -57949,7 +58065,7 @@ var _strokeColorIndicator = __webpack_require__(316);
 
 var _strokeColorIndicator2 = _interopRequireDefault(_strokeColorIndicator);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -58091,11 +58207,11 @@ var _inputGroup = __webpack_require__(28);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(46);
+var _label = __webpack_require__(47);
 
 var _label2 = _interopRequireDefault(_label);
 
-var _gradientTypes = __webpack_require__(16);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -58172,7 +58288,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _propTypes = __webpack_require__(1);
 
@@ -58192,7 +58308,7 @@ var _strokeWidthIndicator = __webpack_require__(318);
 
 var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _modes = __webpack_require__(4);
 
@@ -58351,13 +58467,13 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _fonts = __webpack_require__(47);
+var _fonts = __webpack_require__(48);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -58365,13 +58481,13 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _stylePath = __webpack_require__(7);
+var _stylePath = __webpack_require__(6);
 
 var _font = __webpack_require__(66);
 
 var _fillColor = __webpack_require__(17);
 
-var _strokeColor = __webpack_require__(33);
+var _strokeColor = __webpack_require__(34);
 
 var _modes3 = __webpack_require__(10);
 
@@ -58610,7 +58726,7 @@ var _nudgeTool = __webpack_require__(27);
 
 var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
-var _guides = __webpack_require__(32);
+var _guides = __webpack_require__(33);
 
 var _layer = __webpack_require__(14);
 
@@ -59319,7 +59435,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _lodash = __webpack_require__(5);
 
@@ -59428,7 +59544,7 @@ var _brushMode = __webpack_require__(98);
 
 var _brushMode2 = _interopRequireDefault(_brushMode);
 
-var _eraserMode = __webpack_require__(54);
+var _eraserMode = __webpack_require__(55);
 
 var _eraserMode2 = _interopRequireDefault(_eraserMode);
 
@@ -59436,7 +59552,7 @@ var _color = __webpack_require__(333);
 
 var _color2 = _interopRequireDefault(_color);
 
-var _clipboard = __webpack_require__(50);
+var _clipboard = __webpack_require__(51);
 
 var _clipboard2 = _interopRequireDefault(_clipboard);
 
@@ -59452,11 +59568,11 @@ var _font = __webpack_require__(66);
 
 var _font2 = _interopRequireDefault(_font);
 
-var _format = __webpack_require__(52);
+var _format = __webpack_require__(53);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _hover = __webpack_require__(38);
+var _hover = __webpack_require__(39);
 
 var _hover2 = _interopRequireDefault(_hover);
 
@@ -59472,7 +59588,7 @@ var _textEditTarget = __webpack_require__(67);
 
 var _textEditTarget2 = _interopRequireDefault(_textEditTarget);
 
-var _viewBounds = __webpack_require__(51);
+var _viewBounds = __webpack_require__(52);
 
 var _viewBounds2 = _interopRequireDefault(_viewBounds);
 
@@ -59523,7 +59639,7 @@ var _fillColor = __webpack_require__(17);
 
 var _fillColor2 = _interopRequireDefault(_fillColor);
 
-var _fillColor3 = __webpack_require__(56);
+var _fillColor3 = __webpack_require__(45);
 
 var _fillColor4 = _interopRequireDefault(_fillColor3);
 
@@ -59531,7 +59647,7 @@ var _selectionGradientType = __webpack_require__(18);
 
 var _selectionGradientType2 = _interopRequireDefault(_selectionGradientType);
 
-var _strokeColor = __webpack_require__(33);
+var _strokeColor = __webpack_require__(34);
 
 var _strokeColor2 = _interopRequireDefault(_strokeColor);
 
@@ -59563,11 +59679,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(29);
 
-var _fillModeGradientType = __webpack_require__(39);
+var _fillModeGradientType = __webpack_require__(32);
 
 var _fillModeGradientType2 = _interopRequireDefault(_fillModeGradientType);
 
-var _colorIndex = __webpack_require__(55);
+var _colorIndex = __webpack_require__(56);
 
 var _colorIndex2 = _interopRequireDefault(_colorIndex);
 
@@ -59671,7 +59787,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _reactRedux = __webpack_require__(6);
+var _reactRedux = __webpack_require__(7);
 
 var _react = __webpack_require__(0);
 
