@@ -8,13 +8,13 @@ import GradientTypes from '../lib/gradient-types';
 import FillModeComponent from '../components/bit-fill-mode/bit-fill-mode.jsx';
 
 import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
-import {changeFillColor2, getRandomColor} from '../reducers/fill-color-2';
+import {changeFillColor2} from '../reducers/fill-color-2';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {clearSelection} from '../helper/selection';
 import FillTool from '../helper/bit-tools/fill-tool';
-import {MIXED} from '../helper/style-path';
+import {getRotatedColor, MIXED} from '../helper/style-path';
 
 class BitFillMode extends React.Component {
     constructor (props) {
@@ -53,22 +53,31 @@ class BitFillMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
+
         // Force the default brush color if fill is MIXED or transparent
         let color = this.props.color;
         if (this.props.color === MIXED) {
             color = DEFAULT_COLOR;
             this.props.onChangeFillColor(DEFAULT_COLOR, 0);
         }
+        const gradientType = this.props.fillModeGradientType ?
+            this.props.fillModeGradientType : this.props.selectModeGradientType;
         let color2 = this.props.color2;
+        if (gradientType !== this.props.selectModeGradientType) {
+            if (this.props.selectModeGradientType === GradientTypes.SOLID) {
+                color2 = getRotatedColor(color);
+                this.props.onChangeFillColor(color2, 1);
+            }
+            this.props.changeGradientType(gradientType);
+        }
         if (this.props.color2 === MIXED) {
-            color2 = getRandomColor();
+            color2 = getRotatedColor();
             this.props.onChangeFillColor(color2, 1);
         }
-        this.props.changeGradientType(this.props.fillModeGradientType);
         this.tool = new FillTool(this.props.onUpdateImage);
         this.tool.setColor(color);
         this.tool.setColor2(color2);
-        this.tool.setGradientType(this.props.fillModeGradientType);
+        this.tool.setGradientType(gradientType);
         this.tool.activate();
     }
     deactivateTool () {
@@ -95,17 +104,16 @@ BitFillMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isFillModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    selectModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired
 };
 
 const mapStateToProps = state => ({
-    // If there is a last user-selected gradient type, switch to that. This way,
-    // fill gradient type isn't lost by switching tools and back.
-    fillModeGradientType: state.scratchPaint.fillMode.gradientType ?
-        state.scratchPaint.fillMode.gradientType : state.scratchPaint.color.gradientType,
+    fillModeGradientType: state.scratchPaint.fillMode.gradientType, // Last user-selected gradient type
     color: state.scratchPaint.color.fillColor,
     color2: state.scratchPaint.color.fillColor2,
-    isFillModeActive: state.scratchPaint.mode === Modes.BIT_FILL
+    isFillModeActive: state.scratchPaint.mode === Modes.BIT_FILL,
+    selectModeGradientType: state.scratchPaint.color.gradientType
 });
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
