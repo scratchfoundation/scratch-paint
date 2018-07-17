@@ -64,7 +64,7 @@ class FillTool extends paper.Tool {
             const raster = new paper.Raster({insert: false});
             raster.canvas = destContext.canvas;
             raster.onLoad = () => {
-                raster.position = paper.view.center;
+                raster.position = getRaster().position;
                 // Erase what's already there
                 getRaster().getContext().globalCompositeOperation = 'destination-out';
                 getRaster().drawImage(raster.canvas, new paper.Point());
