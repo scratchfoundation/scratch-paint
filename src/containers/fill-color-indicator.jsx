@@ -62,16 +62,18 @@ class FillColorIndicator extends React.Component {
             isBitmap(this.props.format),
             this.props.textEditTarget);
         this._hasChanged = this._hasChanged || isDifferent;
-        if (getSelectedLeafItems().length) {
+        const hasSelectedItems = getSelectedLeafItems().length > 0;
+        if (hasSelectedItems) {
             if (isDifferent) {
                 // Recalculates the swatch colors
                 this.props.setSelectedItems();
             }
-        } else {
-            this.props.onChangeFillColor(getRotatedColor(this.props.fillColor), 1);
         }
         if (this.props.gradientType === GradientTypes.SOLID && gradientType !== GradientTypes.SOLID) {
-            // Change to the 2nd swatch when switching from solid to gradient
+            // Generate color 2 and change to the 2nd swatch when switching from solid to gradient
+            if (!hasSelectedItems) {
+                this.props.onChangeFillColor(getRotatedColor(this.props.fillColor), 1);
+            }
             this.props.onChangeColorIndex(1);
         }
         this.props.onChangeGradientType(gradientType);
