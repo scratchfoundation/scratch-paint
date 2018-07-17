@@ -1,5 +1,4 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
 
@@ -300,4 +299,4 @@ ColorPickerComponent.propTypes = {
     shouldShowGradientTools: PropTypes.bool.isRequired
 };
 
-export default connect()(injectIntl(ColorPickerComponent));
+export default injectIntl(ColorPickerComponent);

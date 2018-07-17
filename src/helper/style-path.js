@@ -163,17 +163,35 @@ const applyGradientTypeToSelection = function (gradientType, bitmapMode, textEdi
             item = item.parent;
         }
 
-        let itemColor1 = item.fillColor === null || item.fillColor.alpha === 0 ? null :
-            !item.fillColor.gradient ? item.fillColor.toCSS() : // eslint-disable-line no-negated-condition
-                !item.fillColor.gradient.stops[0] || item.fillColor.gradient.stops[0].color.alpha === 0 ? null :
-                    item.fillColor.gradient.stops[0].color.toCSS();
-        let itemColor2 = !item.fillColor || !item.fillColor.gradient || !item.fillColor.gradient.stops[1] ?
-            getRotatedColor(itemColor1) :
-            item.fillColor.gradient.stops[1].color.alpha === 0 ? null :
-                item.fillColor.gradient.stops[1].color.toCSS();
+        let itemColor1;
+        if (item.fillColor === null || item.fillColor.alpha === 0) {
+            // Transparent
+            itemColor1 = null;
+        } else if (!item.fillColor.gradient) {
+            // Solid color
+            itemColor1 = item.fillColor.toCSS();
+        } else if (!item.fillColor.gradient.stops[0] || item.fillColor.gradient.stops[0].color.alpha === 0) {
+            // Gradient where first color is transparent
+            itemColor1 = null;
+        } else {
+            // Gradient where first color is not transparent
+            itemColor1 = item.fillColor.gradient.stops[0].color.toCSS();
+        }
+
+        let itemColor2;
+        if (!item.fillColor || !item.fillColor.gradient || !item.fillColor.gradient.stops[1]) {
+            // If item color is solid or a gradient that has no 2nd color, set the 2nd color based on the first color
+            itemColor2 = getRotatedColor(itemColor1);
+        } else if (item.fillColor.gradient.stops[1].color.alpha === 0) {
+            // Gradient has 2nd color which is transparent
+            itemColor2 = null;
+        } else {
+            // Gradient has 2nd color which is not transparent
+            itemColor2 = item.fillColor.gradient.stops[1].color.toCSS();
+        }
 
         if (bitmapMode) {
-            // @todo
+            // @todo Add when we apply gradients to selections in bitmap mode
             continue;
         } else if (gradientType === GradientTypes.SOLID) {
             if (item.fillColor && item.fillColor.gradient) {

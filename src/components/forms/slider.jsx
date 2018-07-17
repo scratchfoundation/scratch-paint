@@ -64,7 +64,10 @@ class SliderComponent extends React.Component {
             halfHandleWidth;
         return (
             <div
-                className={this.props.lastSlider ? classNames(styles.container, styles.last) : styles.container}
+                className={classNames({
+                    [styles.container]: true,
+                    [styles.last]: this.props.lastSlider
+                })}
                 ref={this.setBackground}
                 style={{
                     backgroundImage: this.props.background
