@@ -100,7 +100,7 @@ BitFillMode.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     color: PropTypes.string,
     color2: PropTypes.string,
-    fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
+    fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)),
     handleMouseDown: PropTypes.func.isRequired,
     isFillModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
