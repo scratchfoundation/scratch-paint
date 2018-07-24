@@ -429,23 +429,26 @@ const colorPixel_ = function (x, y, imageData, newColor) {
  *
  * @param {!int} x The x coordinate on the context at which to begin
  * @param {!int} y The y coordinate on the context at which to begin
- * @param {!ImageData} imageData The image data to edit
+ * @param {!ImageData} sourceImageData The image data to sample from. This is edited by the function.
+ * @param {!ImageData} destImageData The image data to edit. May match sourceImageData. Should match
+ *     size of sourceImageData.
  * @param {!Array<number>} newColor The color to replace with. A length 4 array [r, g, b, a].
  * @param {!Array<number>} oldColor The color to replace. A length 4 array [r, g, b, a].
  *     This must be different from newColor.
  * @param {!Array<Array<int>>} stack The stack of pixels we need to look at
  */
-const floodFillInternal_ = function (x, y, imageData, newColor, oldColor, stack) {
-    while (y > 0 && matchesColor_(x, y - 1, imageData, oldColor)) {
+const floodFillInternal_ = function (x, y, sourceImageData, destImageData, newColor, oldColor, stack) {
+    while (y > 0 && matchesColor_(x, y - 1, sourceImageData, oldColor)) {
         y--;
     }
     let lastLeftMatchedColor = false;
     let lastRightMatchedColor = false;
-    for (; y < imageData.height; y++) {
-        if (!matchesColor_(x, y, imageData, oldColor)) break;
-        colorPixel_(x, y, imageData, newColor);
+    for (; y < sourceImageData.height; y++) {
+        if (!matchesColor_(x, y, sourceImageData, oldColor)) break;
+        colorPixel_(x, y, sourceImageData, newColor);
+        colorPixel_(x, y, destImageData, newColor);
         if (x > 0) {
-            if (matchesColor_(x - 1, y, imageData, oldColor)) {
+            if (matchesColor_(x - 1, y, sourceImageData, oldColor)) {
                 if (!lastLeftMatchedColor) {
                     stack.push([x - 1, y]);
                     lastLeftMatchedColor = true;
@@ -454,8 +457,8 @@ const floodFillInternal_ = function (x, y, imageData, newColor, oldColor, stack)
                 lastLeftMatchedColor = false;
             }
         }
-        if (x < imageData.width - 1) {
-            if (matchesColor_(x + 1, y, imageData, oldColor)) {
+        if (x < sourceImageData.width - 1) {
+            if (matchesColor_(x + 1, y, sourceImageData, oldColor)) {
                 if (!lastRightMatchedColor) {
                     stack.push([x + 1, y]);
                     lastRightMatchedColor = true;
@@ -487,15 +490,21 @@ const fillStyleToColor_ = function (fillStyleString) {
  * @param {!number} x The x coordinate on the context at which to begin
  * @param {!number} y The y coordinate on the context at which to begin
  * @param {!string} color A color string, which would go into context.fillStyle
- * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @param {!HTMLCanvas2DContext} sourceContext The context from which to sample to determine where to flood fill
+ * @param {!HTMLCanvas2DContext} destContext The context to which to draw. May match sourceContext. Should match
+ *     the size of sourceContext.
  * @return {boolean} True if image changed, false otherwise
  */
-const floodFill = function (x, y, color, context) {
+const floodFill = function (x, y, color, sourceContext, destContext) {
     x = ~~x;
     y = ~~y;
     const newColor = fillStyleToColor_(color);
-    const oldColor = getColor_(x, y, context);
-    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    const oldColor = getColor_(x, y, sourceContext);
+    const sourceImageData = sourceContext.getImageData(0, 0, sourceContext.canvas.width, sourceContext.canvas.height);
+    let destImageData = sourceImageData;
+    if (destContext !== sourceContext) {
+        destImageData = new ImageData(sourceContext.canvas.width, sourceContext.canvas.height);
+    }
     if (oldColor[0] === newColor[0] &&
             oldColor[1] === newColor[1] &&
             oldColor[2] === newColor[2] &&
@@ -505,9 +514,9 @@ const floodFill = function (x, y, color, context) {
     const stack = [[x, y]];
     while (stack.length) {
         const pop = stack.pop();
-        floodFillInternal_(pop[0], pop[1], imageData, newColor, oldColor, stack);
+        floodFillInternal_(pop[0], pop[1], sourceImageData, destImageData, newColor, oldColor, stack);
     }
-    context.putImageData(imageData, 0, 0);
+    destContext.putImageData(destImageData, 0, 0);
     return true;
 };
 
@@ -516,29 +525,34 @@ const floodFill = function (x, y, color, context) {
  * @param {!number} x The x coordinate on the context of the start color
  * @param {!number} y The y coordinate on the context of the start color
  * @param {!string} color A color string, which would go into context.fillStyle
- * @param {!HTMLCanvas2DContext} context The context in which to draw
+ * @param {!HTMLCanvas2DContext} sourceContext The context from which to sample to determine where to flood fill
+ * @param {!HTMLCanvas2DContext} destContext The context to which to draw. May match sourceContext. Should match
  * @return {boolean} True if image changed, false otherwise
  */
-const floodFillAll = function (x, y, color, context) {
+const floodFillAll = function (x, y, color, sourceContext, destContext) {
     x = ~~x;
     y = ~~y;
     const newColor = fillStyleToColor_(color);
-    const oldColor = getColor_(x, y, context);
-    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+    const oldColor = getColor_(x, y, sourceContext);
+    const sourceImageData = sourceContext.getImageData(0, 0, sourceContext.canvas.width, sourceContext.canvas.height);
+    let destImageData = sourceImageData;
+    if (destContext !== sourceContext) {
+        destImageData = new ImageData(sourceContext.canvas.width, sourceContext.canvas.height);
+    }
     if (oldColor[0] === newColor[0] &&
             oldColor[1] === newColor[1] &&
             oldColor[2] === newColor[2] &&
             oldColor[3] === newColor[3]) { // no-op
         return false;
     }
-    for (let i = 0; i < imageData.width; i++) {
-        for (let j = 0; j < imageData.height; j++) {
-            if (matchesColor_(i, j, imageData, oldColor)) {
-                colorPixel_(i, j, imageData, newColor);
+    for (let i = 0; i < sourceImageData.width; i++) {
+        for (let j = 0; j < sourceImageData.height; j++) {
+            if (matchesColor_(i, j, sourceImageData, oldColor)) {
+                colorPixel_(i, j, destImageData, newColor);
             }
         }
     }
-    context.putImageData(imageData, 0, 0);
+    destContext.putImageData(destImageData, 0, 0);
     return true;
 };
 

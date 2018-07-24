@@ -56,6 +56,42 @@ const getRotatedColor = function (firstColor) {
 };
 
 /**
+ * Convert params to a paper.Color gradient object
+ * @param {?string} color1 CSS string, or null for transparent
+ * @param {?string} color2 CSS string, or null for transparent
+ * @param {GradientType} gradientType gradient type
+ * @param {paper.Rectangle} bounds Bounds of the object
+ * @param {paper.Point} radialCenter Where the center of a radial gradient should be, if the gradient is radial
+ * @return {paper.Color} Color object with gradient, may be null or color string if the gradient type is solid
+ */
+const createGradientObject = function (color1, color2, gradientType, bounds, radialCenter) {
+    if (gradientType === GradientTypes.SOLID) return color1;
+    if (color1 === null) {
+        color1 = getColorStringForTransparent(color2);
+    }
+    if (color2 === null) {
+        color2 = getColorStringForTransparent(color1);
+    }
+    const halfLongestDimension = Math.max(bounds.width, bounds.height) / 2;
+    const start = gradientType === GradientTypes.RADIAL ? radialCenter :
+        gradientType === GradientTypes.VERTICAL ? bounds.topCenter :
+            gradientType === GradientTypes.HORIZONTAL ? bounds.leftCenter :
+                null;
+    const end = gradientType === GradientTypes.RADIAL ? start.add(new paper.Point(halfLongestDimension, 0)) :
+        gradientType === GradientTypes.VERTICAL ? bounds.bottomCenter :
+            gradientType === GradientTypes.HORIZONTAL ? bounds.rightCenter :
+                null;
+    return {
+        gradient: {
+            stops: [color1, color2],
+            radial: gradientType === GradientTypes.RADIAL
+        },
+        origin: start,
+        destination: end
+    };
+};
+
+/**
  * Called when setting fill color
  * @param {string} colorString color, css format, or null if completely transparent
  * @param {number} colorIndex index of color being changed
@@ -497,8 +533,8 @@ export {
     applyGradientTypeToSelection,
     applyStrokeColorToSelection,
     applyStrokeWidthToSelection,
+    createGradientObject,
     getColorsFromSelection,
-    getColorStringForTransparent,
     getRotatedColor,
     MIXED,
     styleBlob,

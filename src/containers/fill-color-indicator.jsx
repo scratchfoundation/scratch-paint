@@ -13,7 +13,7 @@ import {getSelectedLeafItems} from '../helper/selection';
 import {setSelectedItems} from '../reducers/selected-items';
 import Modes from '../lib/modes';
 import Formats from '../lib/format';
-import {isBitmap, isVector} from '../lib/format';
+import {isBitmap} from '../lib/format';
 import GradientTypes from '../lib/gradient-types';
 
 import FillColorIndicatorComponent from '../components/fill-color-indicator.jsx';
@@ -122,10 +122,10 @@ const mapStateToProps = state => ({
     gradientType: state.scratchPaint.color.gradientType,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     mode: state.scratchPaint.mode,
-    shouldShowGradientTools: isVector(state.scratchPaint.format) &&
-        (state.scratchPaint.mode === Modes.SELECT ||
+    shouldShowGradientTools: state.scratchPaint.mode === Modes.SELECT ||
         state.scratchPaint.mode === Modes.RESHAPE ||
-        state.scratchPaint.mode === Modes.FILL),
+        state.scratchPaint.mode === Modes.FILL ||
+        state.scratchPaint.mode === Modes.BIT_FILL,
     textEditTarget: state.scratchPaint.textEditTarget
 });
 
