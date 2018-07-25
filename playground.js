@@ -23603,7 +23603,7 @@ module.exports = Transform;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.scaleBitmap = exports.flipBitmapVertical = exports.flipBitmapHorizontal = exports.forEachLinePoint = exports.drawEllipse = exports.getHitBounds = exports.getBrushMark = exports.floodFillAll = exports.floodFill = exports.outlineRect = exports.fillRect = exports.convertToVector = exports.convertToBitmap = undefined;
+exports.scaleBitmap = exports.flipBitmapVertical = exports.flipBitmapHorizontal = exports.forEachLinePoint = exports.drawEllipse = exports.getHitBounds = exports.getBrushMark = exports.floodFillAll = exports.floodFill = exports.outlineRect = exports.fillRect = exports.convertToVector = exports.convertToBitmap = exports.commitSelectionToBitmap = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -24243,6 +24243,75 @@ var scaleBitmap = function scaleBitmap(canvas, scale) {
     return tmpCanvas;
 };
 
+/**
+ * Given a raster, take the scale on the transform and apply it to the raster's canvas, then remove
+ * the scale from the item's transform matrix. Do this only if scale.x or scale.y is less than 1.
+ * @param {paper.Raster} item raster to change
+ */
+var maybeApplyScaleToCanvas_ = function maybeApplyScaleToCanvas_(item) {
+    if (!item.matrix.isInvertible()) {
+        item.remove();
+        return;
+    }
+
+    // context.drawImage will anti-alias the image if both width and height are reduced.
+    // However, it will preserve pixel colors if only one or the other is reduced, and
+    // imageSmoothingEnabled is set to false. Therefore, we can avoid aliasing by scaling
+    // down images in a 2 step process.
+    var decomposed = item.matrix.decompose(); // Decomposition order: translate, rotate, scale, skew
+    if (Math.abs(decomposed.scaling.x) < 1 && Math.abs(decomposed.scaling.y) < 1 && decomposed.scaling.x !== 0 && decomposed.scaling.y !== 0) {
+        item.canvas = scaleBitmap(item.canvas, decomposed.scaling);
+        if (item.data && item.data.expanded) {
+            item.data.expanded.canvas = scaleBitmap(item.data.expanded.canvas, decomposed.scaling);
+        }
+        // Remove the scale from the item's matrix
+        item.matrix.append(new _paper2.default.Matrix().scale(new _paper2.default.Point(1 / decomposed.scaling.x, 1 / decomposed.scaling.y)));
+    }
+};
+
+/**
+ * Given a raster, apply its transformation matrix to its canvas. Call maybeApplyScaleToCanvas_ first
+ * to avoid introducing anti-aliasing to scaled-down rasters.
+ * @param {paper.Raster} item raster to resolve transform of
+ * @param {paper.Raster} destination raster to draw selection to
+ */
+var commitArbitraryTransformation_ = function commitArbitraryTransformation_(item, destination) {
+    // Create a canvas to perform masking
+    var tmpCanvas = (0, _layer.createCanvas)();
+    var context = tmpCanvas.getContext('2d');
+    // Draw mask
+    var rect = new _paper2.default.Shape.Rectangle(new _paper2.default.Point(), item.size);
+    rect.matrix = item.matrix;
+    fillRect(rect, context);
+    rect.remove();
+    context.globalCompositeOperation = 'source-in';
+
+    // Draw image onto mask
+    var m = item.matrix;
+    context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+    var canvas = item.canvas;
+    if (item.data && item.data.expanded) {
+        canvas = item.data.expanded.canvas;
+    }
+    context.transform(1, 0, 0, 1, -canvas.width / 2, -canvas.height / 2);
+    context.drawImage(canvas, 0, 0);
+
+    // Draw temp canvas onto raster layer
+    destination.drawImage(tmpCanvas, new _paper2.default.Point());
+};
+
+/**
+ * Given a raster item, take its transform matrix and apply it to its canvas. Try to avoid
+ * introducing anti-aliasing.
+ * @param {paper.Raster} selection raster to resolve transform of
+ * @param {paper.Raster} bitmap raster to draw selection to
+ */
+var commitSelectionToBitmap = function commitSelectionToBitmap(selection, bitmap) {
+    maybeApplyScaleToCanvas_(selection);
+    commitArbitraryTransformation_(selection, bitmap);
+};
+
+exports.commitSelectionToBitmap = commitSelectionToBitmap;
 exports.convertToBitmap = convertToBitmap;
 exports.convertToVector = convertToVector;
 exports.fillRect = fillRect;
@@ -28339,6 +28408,8 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _layer = __webpack_require__(14);
 
+var _selection = __webpack_require__(3);
+
 var _format = __webpack_require__(19);
 
 var _format2 = _interopRequireDefault(_format);
@@ -28354,6 +28425,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param {function} dispatchPerformSnapshot Callback to dispatch a state update
  * @param {Formats} format Either Formats.BITMAP or Formats.VECTOR
  */
+// undo functionality
+// modifed from https://github.com/memononen/stylii
 var performSnapshot = function performSnapshot(dispatchPerformSnapshot, format) {
     if (!format) {
         _log2.default.error('Format must be specified.');
@@ -28364,11 +28437,9 @@ var performSnapshot = function performSnapshot(dispatchPerformSnapshot, format) 
         paintEditorFormat: format
     });
     (0, _layer.showGuideLayers)(guideLayers);
-}; // undo functionality
-// modifed from https://github.com/memononen/stylii
+};
 
-
-var _restore = function _restore(entry, setSelectedItems, onUpdateImage) {
+var _restore = function _restore(entry, setSelectedItems, onUpdateImage, isBitmapMode) {
     for (var i = _paper2.default.project.layers.length - 1; i >= 0; i--) {
         var layer = _paper2.default.project.layers[i];
         if (!layer.data.isBackgroundGuideLayer) {
@@ -28377,20 +28448,84 @@ var _restore = function _restore(entry, setSelectedItems, onUpdateImage) {
         }
     }
     _paper2.default.project.importJSON(entry.json);
-
     setSelectedItems();
-    (0, _layer.getRaster)().onLoad = function () {
+
+    // Ensure that all rasters are loaded before updating storage with new image data.
+    var rastersThatNeedToLoad = [];
+    var onLoad = function onLoad() {
+        if (!(0, _layer.getRaster)().loaded) return;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = rastersThatNeedToLoad[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var raster = _step.value;
+
+                if (!raster.loaded) return;
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+
         onUpdateImage(true /* skipSnapshot */);
     };
-    if ((0, _layer.getRaster)().loaded) {
-        (0, _layer.getRaster)().onLoad();
+
+    // Bitmap mode should have at most 1 selected item
+    if (isBitmapMode) {
+        var selectedItems = (0, _selection.getSelectedLeafItems)();
+        if (selectedItems.length === 1 && selectedItems[0] instanceof _paper2.default.Raster) {
+            rastersThatNeedToLoad.push(selectedItems[0]);
+            if (selectedItems[0].data && selectedItems[0].data.expanded instanceof _paper2.default.Raster) {
+                rastersThatNeedToLoad.push(selectedItems[0].data.expanded);
+            }
+        }
+    }
+
+    (0, _layer.getRaster)().onLoad = onLoad;
+    if ((0, _layer.getRaster)().loaded) (0, _layer.getRaster)().onLoad();
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+        for (var _iterator2 = rastersThatNeedToLoad[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var raster = _step2.value;
+
+            raster.onLoad = onLoad;
+            if (raster.loaded) raster.onLoad();
+        }
+    } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
+            }
+        } finally {
+            if (_didIteratorError2) {
+                throw _iteratorError2;
+            }
+        }
     }
 };
 
 var performUndo = function performUndo(undoState, dispatchPerformUndo, setSelectedItems, onUpdateImage) {
     if (undoState.pointer > 0) {
         var state = undoState.stack[undoState.pointer - 1];
-        _restore(state, setSelectedItems, onUpdateImage);
+        _restore(state, setSelectedItems, onUpdateImage, (0, _format.isBitmap)(state.paintEditorFormat));
         var format = (0, _format.isVector)(state.paintEditorFormat) ? _format2.default.VECTOR_SKIP_CONVERT : (0, _format.isBitmap)(state.paintEditorFormat) ? _format2.default.BITMAP_SKIP_CONVERT : null;
         dispatchPerformUndo(format);
     }
@@ -28399,7 +28534,7 @@ var performUndo = function performUndo(undoState, dispatchPerformUndo, setSelect
 var performRedo = function performRedo(undoState, dispatchPerformRedo, setSelectedItems, onUpdateImage) {
     if (undoState.pointer >= 0 && undoState.pointer < undoState.stack.length - 1) {
         var state = undoState.stack[undoState.pointer + 1];
-        _restore(state, setSelectedItems, onUpdateImage);
+        _restore(state, setSelectedItems, onUpdateImage, (0, _format.isBitmap)(state.paintEditorFormat));
         var format = (0, _format.isVector)(state.paintEditorFormat) ? _format2.default.VECTOR_SKIP_CONVERT : (0, _format.isBitmap)(state.paintEditorFormat) ? _format2.default.BITMAP_SKIP_CONVERT : null;
         dispatchPerformRedo(format);
     }
@@ -32004,7 +32139,7 @@ var PaintEditor = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaintEditor.__proto__ || Object.getPrototypeOf(PaintEditor)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['handleUpdateImage', 'handleUndo', 'handleRedo', 'handleSendBackward', 'handleSendForward', 'handleSendToBack', 'handleSendToFront', 'handleSetSelectedItems', 'handleGroup', 'handleUngroup', 'handleZoomIn', 'handleZoomOut', 'handleZoomReset', 'canRedo', 'canUndo', 'switchMode', 'onMouseDown', 'setCanvas', 'setTextArea', 'startEyeDroppingLoop', 'stopEyeDroppingLoop']);
+        (0, _lodash2.default)(_this, ['handleUpdateImage', 'handleUpdateBitmap', 'handleUpdateVector', 'handleUndo', 'handleRedo', 'handleSendBackward', 'handleSendForward', 'handleSendToBack', 'handleSendToFront', 'handleSetSelectedItems', 'handleGroup', 'handleUngroup', 'handleZoomIn', 'handleZoomOut', 'handleZoomReset', 'canRedo', 'canUndo', 'switchMode', 'onMouseDown', 'setCanvas', 'setTextArea', 'startEyeDroppingLoop', 'stopEyeDroppingLoop']);
         _this.state = {
             canvas: null,
             colorInfo: null
@@ -32146,30 +32281,63 @@ var PaintEditor = function (_React$Component) {
                 actualFormat = _modes2.BitmapModes[this.props.mode] ? _format3.default.BITMAP : _format3.default.VECTOR;
             }
             if ((0, _format2.isBitmap)(actualFormat)) {
-                var rect = (0, _bitmap.getHitBounds)((0, _layer.getRaster)());
-                this.props.onUpdateImage(false /* isVector */
-                , (0, _layer.getRaster)().getImageData(rect), _view.ART_BOARD_WIDTH / 2 - rect.x, _view.ART_BOARD_HEIGHT / 2 - rect.y);
+                this.handleUpdateBitmap(skipSnapshot);
             } else if ((0, _format2.isVector)(actualFormat)) {
-                var guideLayers = (0, _layer.hideGuideLayers)(true /* includeRaster */);
-
-                // Export at 0.5x
-                (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, .5, new _paper2.default.Point());
-                var bounds = _paper2.default.project.activeLayer.bounds;
-                // @todo generate view box
-                this.props.onUpdateImage(true /* isVector */
-                , _paper2.default.project.exportSVG({
-                    asString: true,
-                    bounds: 'content',
-                    matrix: new _paper2.default.Matrix().translate(-bounds.x, -bounds.y)
-                }), _view.SVG_ART_BOARD_WIDTH / 2 - bounds.x, _view.SVG_ART_BOARD_HEIGHT / 2 - bounds.y);
-                (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, 2, new _paper2.default.Point());
-                _paper2.default.project.activeLayer.applyMatrix = true;
-
-                (0, _layer.showGuideLayers)(guideLayers);
+                this.handleUpdateVector(skipSnapshot);
             }
+        }
+    }, {
+        key: 'handleUpdateBitmap',
+        value: function handleUpdateBitmap(skipSnapshot) {
+            if (!(0, _layer.getRaster)().loaded) {
+                // In general, callers of updateImage should wait for getRaster().loaded = true before
+                // calling updateImage.
+                // However, this may happen if the user is rapidly undoing/redoing. In this case it's safe
+                // to skip the update.
+                _log2.default.warn('Bitmap layer should be loaded before calling updateImage.');
+                return;
+            }
+            // Plaster the selection onto the raster layer before exporting, if there is a selection.
+            var plasteredRaster = (0, _layer.getRaster)().getSubRaster((0, _layer.getRaster)().bounds);
+            plasteredRaster.remove(); // Don't insert
+            var selectedItems = (0, _selection.getSelectedLeafItems)();
+            if (selectedItems.length === 1 && selectedItems[0] instanceof _paper2.default.Raster) {
+                if (!selectedItems[0].loaded || selectedItems[0].data && selectedItems[0].data.expanded && !selectedItems[0].data.expanded.loaded) {
+                    _log2.default.warn('Bitmap layer should be loaded before calling updateImage.');
+                    return;
+                }
+                (0, _bitmap.commitSelectionToBitmap)(selectedItems[0], plasteredRaster);
+            }
+            var rect = (0, _bitmap.getHitBounds)(plasteredRaster);
+            this.props.onUpdateImage(false /* isVector */
+            , plasteredRaster.getImageData(rect), _view.ART_BOARD_WIDTH / 2 - rect.x, _view.ART_BOARD_HEIGHT / 2 - rect.y);
 
             if (!skipSnapshot) {
-                (0, _undo2.performSnapshot)(this.props.undoSnapshot, actualFormat);
+                (0, _undo2.performSnapshot)(this.props.undoSnapshot, _format3.default.BITMAP);
+            }
+        }
+    }, {
+        key: 'handleUpdateVector',
+        value: function handleUpdateVector(skipSnapshot) {
+            var guideLayers = (0, _layer.hideGuideLayers)(true /* includeRaster */);
+
+            // Export at 0.5x
+            (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, .5, new _paper2.default.Point());
+            var bounds = _paper2.default.project.activeLayer.bounds;
+            // @todo generate view box
+            this.props.onUpdateImage(true /* isVector */
+            , _paper2.default.project.exportSVG({
+                asString: true,
+                bounds: 'content',
+                matrix: new _paper2.default.Matrix().translate(-bounds.x, -bounds.y)
+            }), _view.SVG_ART_BOARD_WIDTH / 2 - bounds.x, _view.SVG_ART_BOARD_HEIGHT / 2 - bounds.y);
+            (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, 2, new _paper2.default.Point());
+            _paper2.default.project.activeLayer.applyMatrix = true;
+
+            (0, _layer.showGuideLayers)(guideLayers);
+
+            if (!skipSnapshot) {
+                (0, _undo2.performSnapshot)(this.props.undoSnapshot, _format3.default.VECTOR);
             }
         }
     }, {
@@ -45170,59 +45338,10 @@ var SelectTool = function (_paper$Tool) {
         value: function commitSelection() {
             if (!this.selection || !this.selection.parent) return;
 
-            this.maybeApplyScaleToCanvas(this.selection);
-            this.commitArbitraryTransformation(this.selection);
-            this.onUpdateImage();
-        }
-    }, {
-        key: 'maybeApplyScaleToCanvas',
-        value: function maybeApplyScaleToCanvas(item) {
-            if (!item.matrix.isInvertible()) {
-                item.remove();
-                return;
-            }
-
-            // context.drawImage will anti-alias the image if both width and height are reduced.
-            // However, it will preserve pixel colors if only one or the other is reduced, and
-            // imageSmoothingEnabled is set to false. Therefore, we can avoid aliasing by scaling
-            // down images in a 2 step process.
-            var decomposed = item.matrix.decompose(); // Decomposition order: translate, rotate, scale, skew
-            if (Math.abs(decomposed.scaling.x) < 1 && Math.abs(decomposed.scaling.y) < 1 && decomposed.scaling.x !== 0 && decomposed.scaling.y !== 0) {
-                item.canvas = (0, _bitmap.scaleBitmap)(item.canvas, decomposed.scaling);
-                if (item.data && item.data.expanded) {
-                    item.data.expanded.canvas = (0, _bitmap.scaleBitmap)(item.data.expanded.canvas, decomposed.scaling);
-                }
-                // Remove the scale from the item's matrix
-                item.matrix.append(new _paper2.default.Matrix().scale(new _paper2.default.Point(1 / decomposed.scaling.x, 1 / decomposed.scaling.y)));
-            }
-        }
-    }, {
-        key: 'commitArbitraryTransformation',
-        value: function commitArbitraryTransformation(item) {
-            // Create a canvas to perform masking
-            var tmpCanvas = (0, _layer.createCanvas)();
-            var context = tmpCanvas.getContext('2d');
-            // Draw mask
-            var rect = new _paper2.default.Shape.Rectangle(new _paper2.default.Point(), item.size);
-            rect.matrix = item.matrix;
-            (0, _bitmap.fillRect)(rect, context);
-            rect.remove();
-            context.globalCompositeOperation = 'source-in';
-
-            // Draw image onto mask
-            var m = item.matrix;
-            context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
-            var canvas = item.canvas;
-            if (item.data && item.data.expanded) {
-                canvas = item.data.expanded.canvas;
-            }
-            context.transform(1, 0, 0, 1, -canvas.width / 2, -canvas.height / 2);
-            context.drawImage(canvas, 0, 0);
-
-            // Draw temp canvas onto raster layer
-            (0, _layer.getRaster)().drawImage(tmpCanvas, new _paper2.default.Point());
-            item.remove();
+            (0, _bitmap.commitSelectionToBitmap)(this.selection, (0, _layer.getRaster)());
+            this.selection.remove();
             this.selection = null;
+            this.onUpdateImage();
         }
     }, {
         key: 'deactivateTool',
