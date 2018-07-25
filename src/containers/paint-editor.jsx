@@ -202,6 +202,7 @@ class PaintEditor extends React.Component {
             log.warn('Bitmap layer should be loaded before calling updateImage.');
             return;
         }
+        // Plaster the selection onto the raster layer before exporting, if there is a selection.
         const plasteredRaster = getRaster().getSubRaster(getRaster().bounds);
         plasteredRaster.remove(); // Don't insert
         const selectedItems = getSelectedLeafItems();
