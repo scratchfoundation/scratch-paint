@@ -15,7 +15,7 @@ import {setTextEditTarget} from '../reducers/text-edit-target';
 import {updateViewBounds} from '../reducers/view-bounds';
 
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
-import {convertToBitmap, convertToVector, getHitBounds} from '../helper/bitmap';
+import {commitSelectionToBitmap, convertToBitmap, convertToVector, getHitBounds} from '../helper/bitmap';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
@@ -39,6 +39,8 @@ class PaintEditor extends React.Component {
         super(props);
         bindAll(this, [
             'handleUpdateImage',
+            'handleUpdateBitmap',
+            'handleUpdateVector',
             'handleUndo',
             'handleRedo',
             'handleSendBackward',
@@ -186,36 +188,66 @@ class PaintEditor extends React.Component {
             actualFormat = BitmapModes[this.props.mode] ? Formats.BITMAP : Formats.VECTOR;
         }
         if (isBitmap(actualFormat)) {
-            const rect = getHitBounds(getRaster());
-            this.props.onUpdateImage(
-                false /* isVector */,
-                getRaster().getImageData(rect),
-                (ART_BOARD_WIDTH / 2) - rect.x,
-                (ART_BOARD_HEIGHT / 2) - rect.y);
+            this.handleUpdateBitmap(skipSnapshot);
         } else if (isVector(actualFormat)) {
-            const guideLayers = hideGuideLayers(true /* includeRaster */);
-
-            // Export at 0.5x
-            scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
-            const bounds = paper.project.activeLayer.bounds;
-            // @todo generate view box
-            this.props.onUpdateImage(
-                true /* isVector */,
-                paper.project.exportSVG({
-                    asString: true,
-                    bounds: 'content',
-                    matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
-                }),
-                (SVG_ART_BOARD_WIDTH / 2) - bounds.x,
-                (SVG_ART_BOARD_HEIGHT / 2) - bounds.y);
-            scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
-            paper.project.activeLayer.applyMatrix = true;
-
-            showGuideLayers(guideLayers);
+            this.handleUpdateVector(skipSnapshot);
         }
+    }
+    handleUpdateBitmap (skipSnapshot) {
+        if (!getRaster().loaded) {
+            // In general, callers of updateImage should wait for getRaster().loaded = true before
+            // calling updateImage.
+            // However, this may happen if the user is rapidly undoing/redoing. In this case it's safe
+            // to skip the update.
+            log.warn('Bitmap layer should be loaded before calling updateImage.');
+            return;
+        }
+        // Plaster the selection onto the raster layer before exporting, if there is a selection.
+        const plasteredRaster = getRaster().getSubRaster(getRaster().bounds);
+        plasteredRaster.remove(); // Don't insert
+        const selectedItems = getSelectedLeafItems();
+        if (selectedItems.length === 1 && selectedItems[0] instanceof paper.Raster) {
+            if (!selectedItems[0].loaded ||
+                (selectedItems[0].data && selectedItems[0].data.expanded && !selectedItems[0].data.expanded.loaded)) {
+                log.warn('Bitmap layer should be loaded before calling updateImage.');
+                return;
+            }
+            commitSelectionToBitmap(selectedItems[0], plasteredRaster);
+        }
+        const rect = getHitBounds(plasteredRaster);
+        this.props.onUpdateImage(
+            false /* isVector */,
+            plasteredRaster.getImageData(rect),
+            (ART_BOARD_WIDTH / 2) - rect.x,
+            (ART_BOARD_HEIGHT / 2) - rect.y);
 
         if (!skipSnapshot) {
-            performSnapshot(this.props.undoSnapshot, actualFormat);
+            performSnapshot(this.props.undoSnapshot, Formats.BITMAP);
+        }
+    }
+    handleUpdateVector (skipSnapshot) {
+        const guideLayers = hideGuideLayers(true /* includeRaster */);
+
+        // Export at 0.5x
+        scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
+        const bounds = paper.project.activeLayer.bounds;
+        // @todo generate view box
+        this.props.onUpdateImage(
+            true /* isVector */,
+            paper.project.exportSVG({
+                asString: true,
+                bounds: 'content',
+                matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
+            }),
+            (SVG_ART_BOARD_WIDTH / 2) - bounds.x,
+            (SVG_ART_BOARD_HEIGHT / 2) - bounds.y);
+        scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
+        paper.project.activeLayer.applyMatrix = true;
+
+        showGuideLayers(guideLayers);
+
+        if (!skipSnapshot) {
+            performSnapshot(this.props.undoSnapshot, Formats.VECTOR);
         }
     }
     handleUndo () {
