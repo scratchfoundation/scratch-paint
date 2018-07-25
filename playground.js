@@ -27312,9 +27312,10 @@ var SelectionBoxTool = function () {
         key: 'onMouseDrag',
         value: function onMouseDrag(event) {
             if (event.event.button > 0) return; // only first mouse button
+            if (this.selectionRect) {
+                this.selectionRect.remove();
+            }
             this.selectionRect = (0, _guides.rectSelect)(event);
-            // Remove this rect on the next drag and up event
-            this.selectionRect.removeOnDrag();
         }
     }, {
         key: 'onMouseUpVector',
