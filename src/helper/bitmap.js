@@ -653,7 +653,78 @@ const scaleBitmap = function (canvas, scale) {
     return tmpCanvas;
 };
 
+/**
+ * Given a raster, take the scale on the transform and apply it to the raster's canvas, then remove
+ * the scale from the item's transform matrix. Do this only if scale.x or scale.y is less than 1.
+ * @param {paper.Raster} item raster to change
+ */
+const maybeApplyScaleToCanvas_ = function (item) {
+    if (!item.matrix.isInvertible()) {
+        item.remove();
+        return;
+    }
+
+    // context.drawImage will anti-alias the image if both width and height are reduced.
+    // However, it will preserve pixel colors if only one or the other is reduced, and
+    // imageSmoothingEnabled is set to false. Therefore, we can avoid aliasing by scaling
+    // down images in a 2 step process.
+    const decomposed = item.matrix.decompose(); // Decomposition order: translate, rotate, scale, skew
+    if (Math.abs(decomposed.scaling.x) < 1 && Math.abs(decomposed.scaling.y) < 1 &&
+            decomposed.scaling.x !== 0 && decomposed.scaling.y !== 0) {
+        item.canvas = scaleBitmap(item.canvas, decomposed.scaling);
+        if (item.data && item.data.expanded) {
+            item.data.expanded.canvas = scaleBitmap(item.data.expanded.canvas, decomposed.scaling);
+        }
+        // Remove the scale from the item's matrix
+        item.matrix.append(
+            new paper.Matrix().scale(new paper.Point(1 / decomposed.scaling.x, 1 / decomposed.scaling.y)));
+    }
+};
+
+/**
+ * Given a raster, apply its transformation matrix to its canvas. Call maybeApplyScaleToCanvas_ first
+ * to avoid introducing anti-aliasing to scaled-down rasters.
+ * @param {paper.Raster} item raster to resolve transform of
+ * @param {paper.Raster} destination raster to draw selection to
+ */
+const commitArbitraryTransformation_ = function (item, destination) {
+    // Create a canvas to perform masking
+    const tmpCanvas = createCanvas();
+    const context = tmpCanvas.getContext('2d');
+    // Draw mask
+    const rect = new paper.Shape.Rectangle(new paper.Point(), item.size);
+    rect.matrix = item.matrix;
+    fillRect(rect, context);
+    rect.remove();
+    context.globalCompositeOperation = 'source-in';
+
+    // Draw image onto mask
+    const m = item.matrix;
+    context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
+    let canvas = item.canvas;
+    if (item.data && item.data.expanded) {
+        canvas = item.data.expanded.canvas;
+    }
+    context.transform(1, 0, 0, 1, -canvas.width / 2, -canvas.height / 2);
+    context.drawImage(canvas, 0, 0);
+
+    // Draw temp canvas onto raster layer
+    destination.drawImage(tmpCanvas, new paper.Point());
+};
+
+/**
+ * Given a raster item, take its transform matrix and apply it to its canvas. Try to avoid
+ * introducing anti-aliasing.
+ * @param {paper.Raster} selection raster to resolve transform of
+ * @param {paper.Raster} bitmap raster to draw selection to
+ */
+const commitSelectionToBitmap = function (selection, bitmap) {
+    maybeApplyScaleToCanvas_(selection);
+    commitArbitraryTransformation_(selection, bitmap);
+};
+
 export {
+    commitSelectionToBitmap,
     convertToBitmap,
     convertToVector,
     fillRect,
