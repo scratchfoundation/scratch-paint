@@ -9,7 +9,7 @@ const messages = defineMessages({
     line: {
         defaultMessage: 'Line',
         description: 'Label for the line tool',
-        id: 'paint.brushMode.line'
+        id: 'paint.lineMode.line'
     }
 }); 
 
