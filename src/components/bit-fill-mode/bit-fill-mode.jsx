@@ -10,7 +10,7 @@ const messages = defineMessages({
     fill: {
         defaultMessage: 'Fill',
         description: 'Label for the fill tool',
-        id: 'paint.brushMode.fill'
+        id: 'paint.fillMode.fill'
     }
 }); 
 
