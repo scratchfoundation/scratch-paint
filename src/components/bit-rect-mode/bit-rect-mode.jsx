@@ -1,17 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {defineMessages} from 'react-intl';
 
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
 
 import rectIcon from './rectangle.svg';
 
+const messages = defineMessages({
+    rect: {
+        defaultMessage: 'Rectangle',
+        description: 'Label for the rectangle tool',
+        id: 'paint.brushMode.rect'
+    }
+}); 
+
 const BitRectComponent = props => (
     <ToolSelectComponent
-        imgDescriptor={{
-            defaultMessage: 'Rectangle',
-            description: 'Label for the rectangle tool',
-            id: 'paint.rectMode.rect'
-        }}
+        imgDescriptor={messages.rect}
         imgSrc={rectIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
