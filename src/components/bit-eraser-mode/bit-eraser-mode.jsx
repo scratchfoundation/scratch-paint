@@ -10,7 +10,7 @@ const messages = defineMessages({
     eraser: {
         defaultMessage: 'Eraser',
         description: 'Label for the eraser tool',
-        id: 'paint.brushMode.eraser'
+        id: 'paint.eraserMode.eraser'
     }
 }); 
 
