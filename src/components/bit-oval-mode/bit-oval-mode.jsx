@@ -9,7 +9,7 @@ const messages = defineMessages({
     oval: {
         defaultMessage: 'Circle',
         description: 'Label for the oval-drawing tool',
-        id: 'paint.brushMode.oval'
+        id: 'paint.ovalMode.oval'
     }
 }); 
 
