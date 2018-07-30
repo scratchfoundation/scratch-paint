@@ -15,11 +15,7 @@ const messages = defineMessages({
 
 const BitSelectComponent = props => (
     <ToolSelectComponent
-        imgDescriptor={{
-            defaultMessage: 'Select',
-            description: 'Label for the select tool, which allows selecting, moving, and resizing shapes',
-            id: 'paint.selectMode.select'
-        }}
+        imgDescriptor={messages.select}
         imgSrc={selectIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
