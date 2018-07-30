@@ -1,16 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {defineMessages} from 'react-intl';
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
 
 import eraserIcon from './eraser.svg';
 
+const messages = defineMessages({
+    eraser: {
+        defaultMessage: 'Eraser',
+        description: 'Label for the eraser tool',
+        id: 'paint.eraserMode.eraser'
+    }
+}); 
+
 const EraserModeComponent = props => (
     <ToolSelectComponent
-        imgDescriptor={{
-            defaultMessage: 'Eraser',
-            description: 'Label for the eraser tool',
-            id: 'paint.eraserMode.eraser'
-        }}
+        imgDescriptor={messages.eraser}
         imgSrc={eraserIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
