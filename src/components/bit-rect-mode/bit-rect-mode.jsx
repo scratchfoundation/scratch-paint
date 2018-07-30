@@ -10,7 +10,7 @@ const messages = defineMessages({
     rect: {
         defaultMessage: 'Rectangle',
         description: 'Label for the rectangle tool',
-        id: 'paint.brushMode.rect'
+        id: 'paint.rectMode.rect'
     }
 }); 
 
