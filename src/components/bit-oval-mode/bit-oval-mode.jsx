@@ -11,7 +11,7 @@ const messages = defineMessages({
         description: 'Label for the oval-drawing tool',
         id: 'paint.ovalMode.oval'
     }
-}); 
+});
 
 const BitOvalComponent = props => (
     <ToolSelectComponent
