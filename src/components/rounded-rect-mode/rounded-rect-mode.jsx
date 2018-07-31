@@ -11,7 +11,7 @@ const messages = defineMessages({
         description: 'Label for the rounded rectangle tool',
         id: 'paint.roundedRectMode.roundedRect'
     }
-}); 
+});
 
 const RoundedRectModeComponent = props => (
     <ToolSelectComponent
