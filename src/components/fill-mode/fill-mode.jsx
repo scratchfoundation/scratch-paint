@@ -11,7 +11,7 @@ const messages = defineMessages({
         description: 'Label for the fill tool',
         id: 'paint.fillMode.fill'
     }
-}); 
+});
 
 const FillModeComponent = props => (
     <ToolSelectComponent
