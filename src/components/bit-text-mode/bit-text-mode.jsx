@@ -12,7 +12,7 @@ const messages = defineMessages({
         description: 'Label for the text tool',
         id: 'paint.textMode.text'
     }
-}); 
+});
 
 const BitTextComponent = props => (
     <ToolSelectComponent
