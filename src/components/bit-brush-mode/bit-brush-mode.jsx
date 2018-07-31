@@ -11,7 +11,7 @@ const messages = defineMessages({
         description: 'Label for the brush tool',
         id: 'paint.brushMode.brush'
     }
-}); 
+});
 
 const BitBrushModeComponent = props => (
     <ToolSelectComponent
