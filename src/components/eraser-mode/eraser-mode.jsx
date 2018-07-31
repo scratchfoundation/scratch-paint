@@ -11,7 +11,7 @@ const messages = defineMessages({
         description: 'Label for the eraser tool',
         id: 'paint.eraserMode.eraser'
     }
-}); 
+});
 
 const EraserModeComponent = props => (
     <ToolSelectComponent
