@@ -12,7 +12,7 @@ const messages = defineMessages({
         description: 'Label for the eraser tool',
         id: 'paint.eraserMode.eraser'
     }
-}); 
+});
 
 const BitEraserComponent = props => (
     <ToolSelectComponent
