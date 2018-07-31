@@ -11,7 +11,7 @@ const messages = defineMessages({
         description: 'Label for the line tool',
         id: 'paint.lineMode.line'
     }
-}); 
+});
 
 const BitLineComponent = props => (
     <ToolSelectComponent
