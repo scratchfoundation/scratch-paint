@@ -12,7 +12,7 @@ const messages = defineMessages({
         description: 'Label for the rectangle tool',
         id: 'paint.rectMode.rect'
     }
-}); 
+});
 
 const BitRectComponent = props => (
     <ToolSelectComponent
