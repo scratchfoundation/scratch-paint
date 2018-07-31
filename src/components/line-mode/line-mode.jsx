@@ -11,7 +11,7 @@ const messages = defineMessages({
         description: 'Label for the line tool, which draws straigh line segments',
         id: 'paint.lineMode.line'
     }
-}); 
+});
 
 const LineModeComponent = props => (
     <ToolSelectComponent
