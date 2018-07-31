@@ -12,7 +12,7 @@ const messages = defineMessages({
         description: 'Label for the fill tool',
         id: 'paint.fillMode.fill'
     }
-}); 
+});
 
 const BitFillComponent = props => (
     <ToolSelectComponent
