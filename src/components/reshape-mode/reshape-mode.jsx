@@ -11,7 +11,7 @@ const messages = defineMessages({
         description: 'Label for the reshape tool, which allows changing the points in the lines of the vectors',
         id: 'paint.reshapeMode.reshape'
     }
-}); 
+});
 
 const ReshapeModeComponent = props => (
     <ToolSelectComponent
