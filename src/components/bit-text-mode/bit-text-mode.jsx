@@ -3,16 +3,8 @@ import PropTypes from 'prop-types';
 import {defineMessages} from 'react-intl';
 
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
-
+import {messages} from '../../lib/messages.js';
 import textIcon from './text.svg';
-
-const messages = defineMessages({
-    text: {
-        defaultMessage: 'Text',
-        description: 'Label for the text tool',
-        id: 'paint.textMode.text'
-    }
-});
 
 const BitTextComponent = props => (
     <ToolSelectComponent
