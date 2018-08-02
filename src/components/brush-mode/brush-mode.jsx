@@ -2,16 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {defineMessages} from 'react-intl';
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
-
+import {messages} from '../../lib/messages.js';
 import brushIcon from './brush.svg';
-
-const messages = defineMessages({
-    brush: {
-        defaultMessage: 'Brush',
-        description: 'Label for the brush tool',
-        id: 'paint.brushMode.brush'
-    }
-});
 
 const BrushModeComponent = props => (
     <ToolSelectComponent
