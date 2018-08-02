@@ -129,7 +129,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Tue Jul 17 11:45:42 2018 -0400
+ * Date: Thu Aug 2 16:07:26 2018 -0400
  *
  ***
  *
@@ -5370,8 +5370,16 @@ var Raster = Item.extend({
 	getSubCanvas: function() {
 		var rect = Rectangle.read(arguments),
 			ctx = CanvasProvider.getContext(rect.getSize());
-		ctx.drawImage(this.getCanvas(), rect.x, rect.y,
-				rect.width, rect.height, 0, 0, rect.width, rect.height);
+		var clippedStartX = Math.max(0, rect.x);
+		var clippedStartY = Math.max(0, rect.y);
+		var clippedEndX = Math.min(this.getCanvas().width, rect.x + rect.width);
+		var clippedEndY = Math.min(this.getCanvas().height, rect.y + rect.height);
+		ctx.drawImage(this.getCanvas(),
+			clippedStartX, clippedStartY,
+			clippedEndX - clippedStartX, clippedEndY - clippedStartY,
+			clippedStartX - rect.x, clippedStartY - rect.y,
+			clippedEndX - clippedStartX, clippedEndY - clippedStartY
+		);
 		return ctx.canvas;
 	},
 
