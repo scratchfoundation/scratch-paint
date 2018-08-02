@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
-import {messages} from '../../lib/messages.js';
+import messages from '../../lib/messages.js';
 import lineIcon from './line.svg';
 
 const LineModeComponent = props => (
