@@ -1,18 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {defineMessages} from 'react-intl';
-
+import {messages} from '../../lib/messages.js';
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
 
 import eraserIcon from './eraser.svg';
-
-const messages = defineMessages({
-    eraser: {
-        defaultMessage: 'Eraser',
-        description: 'Label for the eraser tool',
-        id: 'paint.eraserMode.eraser'
-    }
-});
 
 const BitEraserComponent = props => (
     <ToolSelectComponent
