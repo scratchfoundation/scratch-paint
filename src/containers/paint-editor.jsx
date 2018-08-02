@@ -1,7 +1,9 @@
 import paper from '@scratch/paper';
 import PropTypes from 'prop-types';
+import log from '../log/log';
 
 import React from 'react';
+import {connect} from 'react-redux';
 import PaintEditorComponent from '../components/paint-editor/paint-editor.jsx';
 
 import {changeMode} from '../reducers/modes';
@@ -13,18 +15,20 @@ import {setTextEditTarget} from '../reducers/text-edit-target';
 import {updateViewBounds} from '../reducers/view-bounds';
 
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
-import {trim} from '../helper/bitmap';
+import {commitSelectionToBitmap, convertToBitmap, convertToVector, getHitBounds} from '../helper/bitmap';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
+import {scaleWithStrokes} from '../helper/math';
 import {getSelectedLeafItems} from '../helper/selection';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
 import Modes from '../lib/modes';
+import {BitmapModes} from '../lib/modes';
 import Formats from '../lib/format';
-import {isBitmap} from '../lib/format';
-import {connect} from 'react-redux';
+import {isBitmap, isVector} from '../lib/format';
 import bindAll from 'lodash.bindall';
 
 class PaintEditor extends React.Component {
@@ -34,13 +38,16 @@ class PaintEditor extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleUpdateSvg',
+            'handleUpdateImage',
+            'handleUpdateBitmap',
+            'handleUpdateVector',
             'handleUndo',
             'handleRedo',
             'handleSendBackward',
             'handleSendForward',
             'handleSendToBack',
             'handleSendToFront',
+            'handleSetSelectedItems',
             'handleGroup',
             'handleUngroup',
             'handleZoomIn',
@@ -48,6 +55,7 @@ class PaintEditor extends React.Component {
             'handleZoomReset',
             'canRedo',
             'canUndo',
+            'switchMode',
             'onMouseDown',
             'setCanvas',
             'setTextArea',
@@ -58,6 +66,9 @@ class PaintEditor extends React.Component {
             canvas: null,
             colorInfo: null
         };
+        // When isSwitchingFormats is true, the format is about to switch, but isn't done switching.
+        // This gives currently active tools a chance to finish what they were doing.
+        this.isSwitchingFormats = false;
     }
     componentDidMount () {
         document.addEventListener('keydown', (/* event */) => {
@@ -73,11 +84,30 @@ class PaintEditor extends React.Component {
         document.addEventListener('mousedown', this.onMouseDown);
         document.addEventListener('touchstart', this.onMouseDown);
     }
+    componentWillReceiveProps (newProps) {
+        if ((isVector(this.props.format) && newProps.format === Formats.BITMAP) ||
+                (isBitmap(this.props.format) && newProps.format === Formats.VECTOR)) {
+            this.isSwitchingFormats = true;
+        }
+        if (isVector(this.props.format) && isBitmap(newProps.format)) {
+            this.switchMode(Formats.BITMAP);
+        } else if (isVector(newProps.format) && isBitmap(this.props.format)) {
+            this.switchMode(Formats.VECTOR);
+        }
+    }
     componentDidUpdate (prevProps) {
         if (this.props.isEyeDropping && !prevProps.isEyeDropping) {
             this.startEyeDroppingLoop();
         } else if (!this.props.isEyeDropping && prevProps.isEyeDropping) {
             this.stopEyeDroppingLoop();
+        }
+
+        if (this.props.format === Formats.VECTOR && isBitmap(prevProps.format)) {
+            this.isSwitchingFormats = false;
+            convertToVector(this.props.clearSelectedItems, this.handleUpdateImage);
+        } else if (isVector(prevProps.format) && this.props.format === Formats.BITMAP) {
+            this.isSwitchingFormats = false;
+            convertToBitmap(this.props.clearSelectedItems, this.handleUpdateImage);
         }
     }
     componentWillUnmount () {
@@ -86,70 +116,166 @@ class PaintEditor extends React.Component {
         document.removeEventListener('mousedown', this.onMouseDown);
         document.removeEventListener('touchstart', this.onMouseDown);
     }
-    handleUpdateSvg (skipSnapshot) {
-        // Store the zoom/pan and restore it after snapshotting
-        // TODO Only doing this because snapshotting at zoom/pan makes export wrong
-        const oldZoom = paper.project.view.zoom;
-        const oldCenter = paper.project.view.center.clone();
-        resetZoom();
-
-        let raster;
-        if (isBitmap(this.props.format)) {
-            // @todo export bitmap here
-            raster = trim(getRaster());
-            if (raster.width === 0 || raster.height === 0) {
-                raster.remove();
-            } else {
-                paper.project.activeLayer.addChild(raster);
+    switchMode (newFormat) {
+        if (isVector(newFormat)) {
+            switch (this.props.mode) {
+            case Modes.BIT_BRUSH:
+                this.props.changeMode(Modes.BRUSH);
+                break;
+            case Modes.BIT_LINE:
+                this.props.changeMode(Modes.LINE);
+                break;
+            case Modes.BIT_OVAL:
+                this.props.changeMode(Modes.OVAL);
+                break;
+            case Modes.BIT_RECT:
+                this.props.changeMode(Modes.RECT);
+                break;
+            case Modes.BIT_TEXT:
+                this.props.changeMode(Modes.TEXT);
+                break;
+            case Modes.BIT_FILL:
+                this.props.changeMode(Modes.FILL);
+                break;
+            case Modes.BIT_ERASER:
+                this.props.changeMode(Modes.ERASER);
+                break;
+            case Modes.BIT_SELECT:
+                this.props.changeMode(Modes.SELECT);
+                break;
+            default:
+                log.error(`Mode not handled: ${this.props.mode}`);
+                this.props.changeMode(Modes.BRUSH);
+            }
+        } else if (isBitmap(newFormat)) {
+            switch (this.props.mode) {
+            case Modes.BRUSH:
+                this.props.changeMode(Modes.BIT_BRUSH);
+                break;
+            case Modes.LINE:
+                this.props.changeMode(Modes.BIT_LINE);
+                break;
+            case Modes.OVAL:
+                this.props.changeMode(Modes.BIT_OVAL);
+                break;
+            case Modes.RECT:
+                this.props.changeMode(Modes.BIT_RECT);
+                break;
+            case Modes.TEXT:
+                this.props.changeMode(Modes.BIT_TEXT);
+                break;
+            case Modes.FILL:
+                this.props.changeMode(Modes.BIT_FILL);
+                break;
+            case Modes.ERASER:
+                this.props.changeMode(Modes.BIT_ERASER);
+                break;
+            case Modes.RESHAPE:
+                /* falls through */
+            case Modes.SELECT:
+                this.props.changeMode(Modes.BIT_SELECT);
+                break;
+            default:
+                log.error(`Mode not handled: ${this.props.mode}`);
+                this.props.changeMode(Modes.BIT_BRUSH);
             }
         }
-        
-        const guideLayers = hideGuideLayers(true /* includeRaster */);
-        const bounds = paper.project.activeLayer.bounds;
+    }
+    handleUpdateImage (skipSnapshot) {
+        // If in the middle of switching formats, rely on the current mode instead of format.
+        let actualFormat = this.props.format;
+        if (this.isSwitchingFormats) {
+            actualFormat = BitmapModes[this.props.mode] ? Formats.BITMAP : Formats.VECTOR;
+        }
+        if (isBitmap(actualFormat)) {
+            this.handleUpdateBitmap(skipSnapshot);
+        } else if (isVector(actualFormat)) {
+            this.handleUpdateVector(skipSnapshot);
+        }
+    }
+    handleUpdateBitmap (skipSnapshot) {
+        if (!getRaster().loaded) {
+            // In general, callers of updateImage should wait for getRaster().loaded = true before
+            // calling updateImage.
+            // However, this may happen if the user is rapidly undoing/redoing. In this case it's safe
+            // to skip the update.
+            log.warn('Bitmap layer should be loaded before calling updateImage.');
+            return;
+        }
+        // Plaster the selection onto the raster layer before exporting, if there is a selection.
+        const plasteredRaster = getRaster().getSubRaster(getRaster().bounds);
+        plasteredRaster.remove(); // Don't insert
+        const selectedItems = getSelectedLeafItems();
+        if (selectedItems.length === 1 && selectedItems[0] instanceof paper.Raster) {
+            if (!selectedItems[0].loaded ||
+                (selectedItems[0].data && selectedItems[0].data.expanded && !selectedItems[0].data.expanded.loaded)) {
+                log.warn('Bitmap layer should be loaded before calling updateImage.');
+                return;
+            }
+            commitSelectionToBitmap(selectedItems[0], plasteredRaster);
+        }
+        const rect = getHitBounds(plasteredRaster);
+        this.props.onUpdateImage(
+            false /* isVector */,
+            plasteredRaster.getImageData(rect),
+            (ART_BOARD_WIDTH / 2) - rect.x,
+            (ART_BOARD_HEIGHT / 2) - rect.y);
 
-        this.props.onUpdateSvg(
+        if (!skipSnapshot) {
+            performSnapshot(this.props.undoSnapshot, Formats.BITMAP);
+        }
+    }
+    handleUpdateVector (skipSnapshot) {
+        const guideLayers = hideGuideLayers(true /* includeRaster */);
+
+        // Export at 0.5x
+        scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
+        const bounds = paper.project.activeLayer.bounds;
+        // @todo generate view box
+        this.props.onUpdateImage(
+            true /* isVector */,
             paper.project.exportSVG({
                 asString: true,
                 bounds: 'content',
                 matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
             }),
-            paper.project.view.center.x - bounds.x,
-            paper.project.view.center.y - bounds.y);
+            (SVG_ART_BOARD_WIDTH / 2) - bounds.x,
+            (SVG_ART_BOARD_HEIGHT / 2) - bounds.y);
+        scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
+        paper.project.activeLayer.applyMatrix = true;
 
         showGuideLayers(guideLayers);
-        if (raster) raster.remove();
 
         if (!skipSnapshot) {
-            performSnapshot(this.props.undoSnapshot, this.props.format);
+            performSnapshot(this.props.undoSnapshot, Formats.VECTOR);
         }
-
-        // Restore old zoom
-        paper.project.view.zoom = oldZoom;
-        paper.project.view.center = oldCenter;
     }
     handleUndo () {
-        performUndo(this.props.undoState, this.props.onUndo, this.props.setSelectedItems, this.handleUpdateSvg);
+        performUndo(this.props.undoState, this.props.onUndo, this.handleSetSelectedItems, this.handleUpdateImage);
     }
     handleRedo () {
-        performRedo(this.props.undoState, this.props.onRedo, this.props.setSelectedItems, this.handleUpdateSvg);
+        performRedo(this.props.undoState, this.props.onRedo, this.handleSetSelectedItems, this.handleUpdateImage);
     }
     handleGroup () {
-        groupSelection(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateSvg);
+        groupSelection(this.props.clearSelectedItems, this.handleSetSelectedItems, this.handleUpdateImage);
     }
     handleUngroup () {
-        ungroupSelection(this.props.clearSelectedItems, this.props.setSelectedItems, this.handleUpdateSvg);
+        ungroupSelection(this.props.clearSelectedItems, this.handleSetSelectedItems, this.handleUpdateImage);
     }
     handleSendBackward () {
-        sendBackward(this.handleUpdateSvg);
+        sendBackward(this.handleUpdateImage);
     }
     handleSendForward () {
-        bringForward(this.handleUpdateSvg);
+        bringForward(this.handleUpdateImage);
     }
     handleSendToBack () {
-        sendToBack(this.handleUpdateSvg);
+        sendToBack(this.handleUpdateImage);
     }
     handleSendToFront () {
-        bringToFront(this.handleUpdateSvg);
+        bringToFront(this.handleUpdateImage);
+    }
+    handleSetSelectedItems () {
+        this.props.setSelectedItems(this.props.format);
     }
     canUndo () {
         return shouldShowUndo(this.props.undoState);
@@ -160,17 +286,17 @@ class PaintEditor extends React.Component {
     handleZoomIn () {
         zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
         this.props.updateViewBounds(paper.view.matrix);
-        this.props.setSelectedItems();
+        this.handleSetSelectedItems();
     }
     handleZoomOut () {
         zoomOnSelection(-PaintEditor.ZOOM_INCREMENT);
         this.props.updateViewBounds(paper.view.matrix);
-        this.props.setSelectedItems();
+        this.handleSetSelectedItems();
     }
     handleZoomReset () {
         resetZoom();
         this.props.updateViewBounds(paper.view.matrix);
-        this.props.setSelectedItems();
+        this.handleSetSelectedItems();
     }
     setCanvas (canvas) {
         this.setState({canvas: canvas});
@@ -220,7 +346,7 @@ class PaintEditor extends React.Component {
         this.eyeDropper.pickX = -1;
         this.eyeDropper.pickY = -1;
         this.eyeDropper.activate();
-        
+
         this.intervalId = setInterval(() => {
             const colorInfo = this.eyeDropper.getColorInfo(
                 this.eyeDropper.pickX,
@@ -250,14 +376,15 @@ class PaintEditor extends React.Component {
                 canvas={this.state.canvas}
                 colorInfo={this.state.colorInfo}
                 format={this.props.format}
+                image={this.props.image}
+                imageFormat={this.props.imageFormat}
+                imageId={this.props.imageId}
                 isEyeDropping={this.props.isEyeDropping}
                 name={this.props.name}
                 rotationCenterX={this.props.rotationCenterX}
                 rotationCenterY={this.props.rotationCenterY}
                 setCanvas={this.setCanvas}
                 setTextArea={this.setTextArea}
-                svg={this.props.svg}
-                svgId={this.props.svgId}
                 textArea={this.state.textArea}
                 onGroup={this.handleGroup}
                 onRedo={this.handleRedo}
@@ -269,8 +396,8 @@ class PaintEditor extends React.Component {
                 onSwitchToVector={this.props.handleSwitchToVector}
                 onUndo={this.handleUndo}
                 onUngroup={this.handleUngroup}
+                onUpdateImage={this.handleUpdateImage}
                 onUpdateName={this.props.onUpdateName}
-                onUpdateSvg={this.handleUpdateSvg}
                 onZoomIn={this.handleZoomIn}
                 onZoomOut={this.handleZoomOut}
                 onZoomReset={this.handleZoomReset}
@@ -281,18 +408,26 @@ class PaintEditor extends React.Component {
 
 PaintEditor.propTypes = {
     changeColorToEyeDropper: PropTypes.func,
+    changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
+    format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
     handleSwitchToBitmap: PropTypes.func.isRequired,
     handleSwitchToVector: PropTypes.func.isRequired,
+    image: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.instanceOf(HTMLImageElement)
+    ]),
+    imageFormat: PropTypes.string, // The incoming image's data format, used during import
+    imageId: PropTypes.string,
     isEyeDropping: PropTypes.bool,
+    mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
     name: PropTypes.string,
     onDeactivateEyeDropper: PropTypes.func.isRequired,
     onKeyPress: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
     previousTool: PropTypes.shape({ // paper.Tool
         activate: PropTypes.func.isRequired,
         remove: PropTypes.func.isRequired
@@ -301,8 +436,6 @@ PaintEditor.propTypes = {
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     setSelectedItems: PropTypes.func.isRequired,
-    svg: PropTypes.string,
-    svgId: PropTypes.string,
     textEditing: PropTypes.bool.isRequired,
     undoSnapshot: PropTypes.func.isRequired,
     undoState: PropTypes.shape({
@@ -317,6 +450,7 @@ const mapStateToProps = state => ({
     clipboardItems: state.scratchPaint.clipboard.items,
     format: state.scratchPaint.format,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
+    mode: state.scratchPaint.mode,
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
     previousTool: state.scratchPaint.color.eyeDropper.previousTool,
     selectedItems: state.scratchPaint.selectedItems,
@@ -345,6 +479,9 @@ const mapDispatchToProps = dispatch => ({
             dispatch(changeMode(Modes.RECT));
         }
     },
+    changeMode: mode => {
+        dispatch(changeMode(mode));
+    },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
@@ -357,8 +494,8 @@ const mapDispatchToProps = dispatch => ({
     removeTextEditTarget: () => {
         dispatch(setTextEditTarget());
     },
-    setSelectedItems: () => {
-        dispatch(setSelectedItems(getSelectedLeafItems()));
+    setSelectedItems: format => {
+        dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(format)));
     },
     onDeactivateEyeDropper: () => {
         // set redux values to default for eye dropper reducer

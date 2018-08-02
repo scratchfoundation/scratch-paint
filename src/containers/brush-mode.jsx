@@ -7,9 +7,9 @@ import Blobbiness from '../helper/blob-tools/blob';
 import {MIXED} from '../helper/style-path';
 
 import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
-import {changeBrushSize} from '../reducers/brush-mode';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
+import {clearGradient} from '../reducers/selection-gradient-type';
 import {clearSelection} from '../helper/selection';
 
 import BrushModeComponent from '../components/brush-mode/brush-mode.jsx';
@@ -22,7 +22,7 @@ class BrushMode extends React.Component {
             'deactivateTool'
         ]);
         this.blob = new Blobbiness(
-            this.props.onUpdateSvg, this.props.clearSelectedItems);
+            this.props.onUpdateImage, this.props.clearSelectedItems);
     }
     componentDidMount () {
         if (this.props.isBrushModeActive) {
@@ -49,6 +49,7 @@ class BrushMode extends React.Component {
         // TODO: Instead of clearing selection, consider a kind of "draw inside"
         // analogous to how selection works with eraser
         clearSelection(this.props.clearSelectedItems);
+        this.props.clearGradient();
         // Force the default brush color if fill is MIXED or transparent
         const {fillColor} = this.props.colorState;
         if (fillColor === MIXED || fillColor === null) {
@@ -77,6 +78,7 @@ BrushMode.propTypes = {
     brushModeState: PropTypes.shape({
         brushSize: PropTypes.number.isRequired
     }),
+    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,
@@ -86,7 +88,7 @@ BrushMode.propTypes = {
     handleMouseDown: PropTypes.func.isRequired,
     isBrushModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -98,8 +100,8 @@ const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
-    changeBrushSize: brushSize => {
-        dispatch(changeBrushSize(brushSize));
+    clearGradient: () => {
+        dispatch(clearGradient());
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.BRUSH));

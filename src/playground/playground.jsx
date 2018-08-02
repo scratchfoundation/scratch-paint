@@ -28,30 +28,44 @@ class Playground extends React.Component {
         super(props);
         bindAll(this, [
             'handleUpdateName',
-            'handleUpdateSvg'
+            'handleUpdateImage'
         ]);
         this.state = {
             name: 'meow',
             rotationCenterX: 20,
             rotationCenterY: 400,
-            svg: svgString
+            imageFormat: 'svg', // 'svg', 'png', or 'jpg'
+            image: svgString // svg string or data URI
         };
     }
     handleUpdateName (name) {
         this.setState({name});
     }
-    handleUpdateSvg (svg, rotationCenterX, rotationCenterY) {
-        console.log(svg);
+    handleUpdateImage (isVector, image, rotationCenterX, rotationCenterY) {
+        console.log(image);
         console.log(`rotationCenterX: ${rotationCenterX}    rotationCenterY: ${rotationCenterY}`);
-        this.setState({svg, rotationCenterX, rotationCenterY});
+        if (isVector) {
+            this.setState({image, rotationCenterX, rotationCenterY});
+        } else { // is Bitmap
+            // image parameter has type ImageData
+            // paint editor takes dataURI as input
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            context.putImageData(image, 0, 0);
+            this.setState({
+                image: canvas.toDataURL('image/png'),
+                rotationCenterX: rotationCenterX,
+                rotationCenterY: rotationCenterY
+            });
+        }
     }
     render () {
         return (
             <PaintEditor
                 {...this.state}
-                svgId="meow"
+                imageId="meow"
                 onUpdateName={this.handleUpdateName}
-                onUpdateSvg={this.handleUpdateSvg}
+                onUpdateImage={this.handleUpdateImage}
             />
         );
     }

@@ -7,9 +7,9 @@ import {getItems} from '../selection';
  */
 class ScaleTool {
     /**
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (onUpdateSvg) {
+    constructor (onUpdateImage) {
         this.active = false;
         this.boundsPath = null;
         this.pivot = null;
@@ -20,7 +20,7 @@ class ScaleTool {
         this.itemGroup = null;
         // Lowest item above all scale items in z index
         this.itemToInsertBelow = null;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
     }
 
     /**
@@ -144,7 +144,7 @@ class ScaleTool {
         }
         this.itemGroup.remove();
         
-        this.onUpdateSvg();
+        this.onUpdateImage();
         this.active = false;
     }
     _getRectCornerNameByIndex (index) {

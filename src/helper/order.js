@@ -1,22 +1,22 @@
 import {getSelectedRootItems} from './selection';
 
-const bringToFront = function (onUpdateSvg) {
+const bringToFront = function (onUpdateImage) {
     const items = getSelectedRootItems();
     for (const item of items) {
         item.bringToFront();
     }
-    onUpdateSvg();
+    onUpdateImage();
 };
 
-const sendToBack = function (onUpdateSvg) {
+const sendToBack = function (onUpdateImage) {
     const items = getSelectedRootItems();
     for (let i = items.length - 1; i >= 0; i--) {
         items[i].sendToBack();
     }
-    onUpdateSvg();
+    onUpdateImage();
 };
 
-const bringForward = function (onUpdateSvg) {
+const bringForward = function (onUpdateImage) {
     const items = getSelectedRootItems();
     // Already at front
     if (items.length === 0 || !items[items.length - 1].nextSibling) {
@@ -27,10 +27,10 @@ const bringForward = function (onUpdateSvg) {
     for (let i = items.length - 1; i >= 0; i--) {
         items[i].insertAbove(nextSibling);
     }
-    onUpdateSvg();
+    onUpdateImage();
 };
 
-const sendBackward = function (onUpdateSvg) {
+const sendBackward = function (onUpdateImage) {
     const items = getSelectedRootItems();
     // Already at front
     if (items.length === 0 || !items[0].previousSibling) {
@@ -41,7 +41,7 @@ const sendBackward = function (onUpdateSvg) {
     for (const item of items) {
         item.insertBelow(previousSibling);
     }
-    onUpdateSvg();
+    onUpdateImage();
 };
 
 const shouldShowSendBackward = function () {

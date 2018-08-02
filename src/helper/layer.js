@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
-import rasterSrc from './transparent.png';
 import log from '../log/log';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from './view';
 
 const _getLayer = function (layerString) {
     for (const layer of paper.project.layers) {
@@ -14,19 +14,39 @@ const _getPaintingLayer = function () {
     return _getLayer('isPaintingLayer');
 };
 
+/**
+ * Creates a canvas with width and height matching the art board size.
+ * @param {?number} width Width of the canvas. Defaults to ART_BOARD_WIDTH.
+ * @param {?number} height Height of the canvas. Defaults to ART_BOARD_HEIGHT.
+ * @return {HTMLCanvasElement} the canvas
+ */
+const createCanvas = function (width, height) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width ? width : ART_BOARD_WIDTH;
+    canvas.height = height ? height : ART_BOARD_HEIGHT;
+    canvas.getContext('2d').imageSmoothingEnabled = false;
+    return canvas;
+};
+
 const clearRaster = function () {
     const layer = _getLayer('isRasterLayer');
     layer.removeChildren();
     
     // Generate blank raster
-    const raster = new paper.Raster(rasterSrc);
+    const raster = new paper.Raster(createCanvas());
+    raster.canvas.getContext('2d').imageSmoothingEnabled = false;
     raster.parent = layer;
     raster.guide = true;
     raster.locked = true;
-    raster.position = paper.view.center;
+    raster.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
 };
 
 const getRaster = function () {
+    const layer = _getLayer('isRasterLayer');
+    // Generate blank raster
+    if (layer.children.length === 0) {
+        clearRaster();
+    }
     return _getLayer('isRasterLayer').children[0];
 };
 
@@ -148,29 +168,29 @@ const _makeBackgroundGuideLayer = function () {
     guideLayer.locked = true;
 
     const vBackground = _makeBackgroundPaper(120, 90, '#E5E5E5');
-    vBackground.position = paper.view.center;
-    vBackground.scaling = new paper.Point(4, 4);
+    vBackground.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
+    vBackground.scaling = new paper.Point(8, 8);
     vBackground.guide = true;
     vBackground.locked = true;
 
     const vLine = new paper.Path.Line(new paper.Point(0, -7), new paper.Point(0, 7));
     vLine.strokeWidth = 2;
     vLine.strokeColor = '#ccc';
-    vLine.position = paper.view.center;
+    vLine.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     vLine.guide = true;
     vLine.locked = true;
 
     const hLine = new paper.Path.Line(new paper.Point(-7, 0), new paper.Point(7, 0));
     hLine.strokeWidth = 2;
     hLine.strokeColor = '#ccc';
-    hLine.position = paper.view.center;
+    hLine.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     hLine.guide = true;
     hLine.locked = true;
 
     const circle = new paper.Shape.Circle(new paper.Point(0, 0), 5);
     circle.strokeWidth = 2;
     circle.strokeColor = '#ccc';
-    circle.position = paper.view.center;
+    circle.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     circle.guide = true;
     circle.locked = true;
 
@@ -189,6 +209,7 @@ const setupLayers = function () {
 };
 
 export {
+    createCanvas,
     hideGuideLayers,
     showGuideLayers,
     getGuideLayer,

@@ -15,15 +15,15 @@ class RectTool extends paper.Tool {
     /**
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setSelectedItems, clearSelectedItems, onUpdateImage) {
         super();
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
-        this.onUpdateSvg = onUpdateSvg;
-        this.boundingBoxTool = new BoundingBoxTool(Modes.RECT, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateSvg);
+        this.onUpdateImage = onUpdateImage;
+        this.boundingBoxTool = new BoundingBoxTool(Modes.RECT, setSelectedItems, clearSelectedItems, onUpdateImage);
+        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -84,14 +84,18 @@ class RectTool extends paper.Tool {
             this.rect.remove();
         }
 
+        const dimensions = event.point.subtract(event.downPoint);
         const rect = new paper.Rectangle(event.downPoint, event.point);
         if (event.modifiers.shift) {
             rect.height = rect.width;
+            dimensions.y = event.downPoint.y > event.point.y ? -Math.abs(rect.width) : Math.abs(rect.width);
         }
         this.rect = new paper.Path.Rectangle(rect);
         
         if (event.modifiers.alt) {
             this.rect.position = event.downPoint;
+        } else {
+            this.rect.position = event.downPoint.add(dimensions.multiply(.5));
         }
         
         styleShape(this.rect, this.colorState);
@@ -113,7 +117,7 @@ class RectTool extends paper.Tool {
             } else {
                 this.rect.selected = true;
                 this.setSelectedItems();
-                this.onUpdateSvg();
+                this.onUpdateImage();
                 this.rect = null;
             }
         }

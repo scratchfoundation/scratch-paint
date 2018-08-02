@@ -5,13 +5,13 @@ class HandleTool {
     /**
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setSelectedItems, clearSelectedItems, onUpdateImage) {
         this.hitType = null;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
         this.selectedItems = [];
     }
     /**
@@ -80,7 +80,7 @@ class HandleTool {
         }
         if (moved) {
             this.setSelectedItems();
-            this.onUpdateSvg();
+            this.onUpdateImage();
         }
         this.selectedItems = [];
     }

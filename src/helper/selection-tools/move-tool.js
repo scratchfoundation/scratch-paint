@@ -13,14 +13,14 @@ class MoveTool {
      * @param {Modes} mode Paint editor mode
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateImage) {
         this.mode = mode;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
         this.boundsPath = null;
     }
 
@@ -56,7 +56,7 @@ class MoveTool {
             }
             this._select(item, true, hitProperties.subselect);
         }
-        if (hitProperties.clone) cloneSelection(hitProperties.subselect, this.onUpdateSvg);
+        if (hitProperties.clone) cloneSelection(hitProperties.subselect, this.onUpdateImage);
         this.selectedItems = this.mode === Modes.RESHAPE ? getSelectedLeafItems() : getSelectedRootItems();
         if (this.boundsPath) {
             this.selectedItems.push(this.boundsPath);
@@ -116,7 +116,7 @@ class MoveTool {
         this.selectedItems = null;
 
         if (moved) {
-            this.onUpdateSvg();
+            this.onUpdateImage();
         }
     }
 }

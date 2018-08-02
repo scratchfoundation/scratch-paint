@@ -10,6 +10,7 @@ import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
 import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
+import {clearGradient} from '../reducers/selection-gradient-type';
 
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
 import OvalTool from '../helper/tools/oval-tool';
@@ -47,6 +48,7 @@ class OvalMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
+        this.props.clearGradient();
         // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
         // If exactly one of fill or stroke color is set, set the other one to transparent.
         // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
@@ -65,7 +67,7 @@ class OvalMode extends React.Component {
         this.tool = new OvalTool(
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
-            this.props.onUpdateSvg
+            this.props.onUpdateImage
         );
         this.tool.setColorState(this.props.colorState);
         this.tool.activate();
@@ -86,6 +88,7 @@ class OvalMode extends React.Component {
 }
 
 OvalMode.propTypes = {
+    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,
@@ -96,7 +99,7 @@ OvalMode.propTypes = {
     isOvalModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
-    onUpdateSvg: PropTypes.func.isRequired,
+    onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setSelectedItems: PropTypes.func.isRequired
 };
@@ -110,8 +113,11 @@ const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
+    clearGradient: () => {
+        dispatch(clearGradient());
+    },
     setSelectedItems: () => {
-        dispatch(setSelectedItems(getSelectedLeafItems()));
+        dispatch(setSelectedItems(getSelectedLeafItems(), false /* bitmapMode */));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.OVAL));

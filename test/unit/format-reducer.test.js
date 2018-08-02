@@ -6,7 +6,7 @@ import {undo, redo} from '../../src/reducers/undo';
 
 test('initialState', () => {
     let defaultState;
-    expect(reducer(defaultState /* state */, {type: 'anything'} /* action */) in Formats).toBeTruthy();
+    expect(reducer(defaultState /* state */, {type: 'anything'} /* action */)).toBeNull();
 });
 
 test('changeFormat', () => {

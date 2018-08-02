@@ -3,8 +3,8 @@ import {CHANGE_SELECTED_ITEMS} from './selected-items';
 import {getColorsFromSelection} from '../helper/style-path';
 
 const CHANGE_STROKE_WIDTH = 'scratch-paint/stroke-width/CHANGE_STROKE_WIDTH';
-const MAX_STROKE_WIDTH = 400;
-const initialState = 2;
+const MAX_STROKE_WIDTH = 800;
+const initialState = 4;
 
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
@@ -20,7 +20,11 @@ const reducer = function (state, action) {
         if (!action.selectedItems || !action.selectedItems.length) {
             return state;
         }
-        return getColorsFromSelection(action.selectedItems).strokeWidth;
+        // Bitmap mode doesn't have stroke width
+        if (action.bitmapMode) {
+            return state;
+        }
+        return getColorsFromSelection(action.selectedItems, action.bitmapMode).strokeWidth;
     default:
         return state;
     }

@@ -8,11 +8,11 @@ import paper from '@scratch/paper';
 class NudgeTool {
     /**
      * @param {function} boundingBoxTool to control the bounding box
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (boundingBoxTool, onUpdateSvg) {
+    constructor (boundingBoxTool, onUpdateImage) {
         this.boundingBoxTool = boundingBoxTool;
-        this.onUpdateSvg = onUpdateSvg;
+        this.onUpdateImage = onUpdateImage;
     }
     onKeyDown (event) {
         if (event.event.target instanceof HTMLInputElement) {
@@ -47,7 +47,7 @@ class NudgeTool {
         if (selected.length === 0) return;
 
         if (event.key === 'up' || event.key === 'down' || event.key === 'left' || event.key === 'right') {
-            this.onUpdateSvg();
+            this.onUpdateImage();
         }
     }
 }

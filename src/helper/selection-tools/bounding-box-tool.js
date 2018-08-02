@@ -28,25 +28,25 @@ const BoundingBoxModes = keyMirror({
  * On mouse down, the type of function (move, scale, rotate) is determined based on what is clicked
  * (scale handle, rotate handle, the object itself). This determines the mode of the tool, which then
  * delegates actions to the MoveTool, RotateTool or ScaleTool accordingly.
- * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+ * @param {!function} onUpdateImage A callback to call when the image visibly changes
  */
 class BoundingBoxTool {
     /**
      * @param {Modes} mode Paint editor mode
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateSvg) {
-        this.onUpdateSvg = onUpdateSvg;
+    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateImage) {
+        this.onUpdateImage = onUpdateImage;
         this.mode = null;
         this.boundsPath = null;
         this.boundsScaleHandles = [];
         this.boundsRotHandles = [];
         this._modeMap = {};
-        this._modeMap[BoundingBoxModes.SCALE] = new ScaleTool(onUpdateSvg);
-        this._modeMap[BoundingBoxModes.ROTATE] = new RotateTool(onUpdateSvg);
-        this._modeMap[BoundingBoxModes.MOVE] = new MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateSvg);
+        this._modeMap[BoundingBoxModes.SCALE] = new ScaleTool(onUpdateImage);
+        this._modeMap[BoundingBoxModes.ROTATE] = new RotateTool(onUpdateImage);
+        this._modeMap[BoundingBoxModes.MOVE] = new MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage);
     }
 
     /**
@@ -128,19 +128,24 @@ class BoundingBoxTool {
     }
     setSelectionBounds () {
         this.removeBoundsPath();
-        
+
         const items = getSelectedRootItems();
         if (items.length <= 0) return;
-        
+
         let rect = null;
         for (const item of items) {
+            if (item instanceof paper.Raster && item.loaded === false) {
+                item.onLoad = this.setSelectionBounds.bind(this);
+                return;
+            }
+
             if (rect) {
                 rect = rect.unite(item.bounds);
             } else {
                 rect = item.bounds;
             }
         }
-        
+
         if (!this.boundsPath) {
             this.boundsPath = new paper.Path.Rectangle(rect);
             this.boundsPath.curves[0].divideAtTime(0.5);
@@ -156,7 +161,7 @@ class BoundingBoxTool {
         this.boundsPath.parent = getGuideLayer();
         this.boundsPath.strokeWidth = 1 / paper.view.zoom;
         this.boundsPath.strokeColor = getGuideColor();
-        
+
         // Make a template to copy
         const boundsScaleCircleShadow =
             new paper.Path.Circle({
@@ -187,13 +192,13 @@ class BoundingBoxTool {
 
         for (let index = 0; index < this.boundsPath.segments.length; index++) {
             const segment = this.boundsPath.segments[index];
-            
+
             if (index === 7) {
                 const offset = new paper.Point(0, 20);
-                
+
                 const arrows = new paper.Path(ARROW_PATH);
                 arrows.translate(segment.point.add(offset).add(-10.5, -5));
-                
+
                 const line = new paper.Path.Rectangle(
                     segment.point.add(offset).subtract(1, 0),
                     segment.point);
@@ -213,7 +218,7 @@ class BoundingBoxTool {
                 rotHandle.parent = getGuideLayer();
                 this.boundsRotHandles[index] = rotHandle;
             }
-            
+
             this.boundsScaleHandles[index] = boundsScaleHandle.clone();
             this.boundsScaleHandles[index].position = segment.point;
             for (const child of this.boundsScaleHandles[index].children) {

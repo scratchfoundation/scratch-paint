@@ -24,20 +24,20 @@ class SelectTool extends paper.Tool {
      * @param {function} clearHoveredItem Callback to clear the hovered item
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-     * @param {!function} onUpdateSvg A callback to call when the image visibly changes
+     * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateSvg) {
+    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage) {
         super();
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
-        this.onUpdateSvg = onUpdateSvg;
-        this.boundingBoxTool = new BoundingBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems, onUpdateSvg);
-        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateSvg);
+        this.onUpdateImage = onUpdateImage;
+        this.boundingBoxTool = new BoundingBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems, onUpdateImage);
+        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         this.selectionBoxTool = new SelectionBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems);
         this.selectionBoxMode = false;
         this.prevHoveredItemId = null;
         this.active = false;
-        
+
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseDown = this.handleMouseDown;
@@ -128,7 +128,7 @@ class SelectTool extends paper.Tool {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
 
         if (this.selectionBoxMode) {
-            this.selectionBoxTool.onMouseUp(event);
+            this.selectionBoxTool.onMouseUpVector(event);
         } else {
             this.boundingBoxTool.onMouseUp(event);
         }
@@ -140,7 +140,7 @@ class SelectTool extends paper.Tool {
         this.boundingBoxTool.removeBoundsPath();
         this.setHoveredItem = null;
         this.clearHoveredItem = null;
-        this.onUpdateSvg = null;
+        this.onUpdateImage = null;
         this.boundingBoxTool = null;
         this.selectionBoxTool = null;
     }
