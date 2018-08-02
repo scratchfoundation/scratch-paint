@@ -1,17 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
+import {messages} from '../../lib/messages.js';
 import {defineMessages} from 'react-intl';
 
 import brushIcon from './brush.svg';
-
-const messages = defineMessages({
-    brush: {
-        defaultMessage: 'Brush',
-        description: 'Label for the brush tool',
-        id: 'paint.brushMode.brush'
-    }
-});
 
 const BitBrushModeComponent = props => (
     <ToolSelectComponent
