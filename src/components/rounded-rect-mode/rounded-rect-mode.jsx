@@ -1,17 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {defineMessages} from 'react-intl';
+import {messages} from '../../lib/messages.js';
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
 
 import roundedRectIcon from './rounded-rectangle.svg';
-
-const messages = defineMessages({
-    roundedRect: {
-        defaultMessage: 'Rounded Rectangle',
-        description: 'Label for the rounded rectangle tool',
-        id: 'paint.roundedRectMode.roundedRect'
-    }
-});
 
 const RoundedRectModeComponent = props => (
     <ToolSelectComponent
