@@ -5,7 +5,6 @@ import bindAll from 'lodash.bindall';
 import Box from '../box/box.jsx';
 
 import {LOUPE_RADIUS, ZOOM_SCALE} from '../../helper/tools/eye-dropper';
-import {getGuideColor} from '../../helper/guides';
 
 import styles from './loupe.css';
 
@@ -31,7 +30,7 @@ class LoupeComponent extends React.Component {
         const ctx = this.canvas.getContext('2d');
         this.canvas.width = loupeDiameter;
         this.canvas.height = loupeDiameter;
-        ctx.fillStyle = getGuideColor();
+        ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, loupeDiameter, loupeDiameter);
 
         // In order to scale the image data, must draw to a tmp canvas first
