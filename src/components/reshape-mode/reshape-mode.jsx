@@ -1,17 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {defineMessages} from 'react-intl';
+import {messages} from '../../lib/messages.js';
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
 
 import reshapeIcon from './reshape.svg';
-
-const messages = defineMessages({
-    reshape: {
-        defaultMessage: 'Reshape',
-        description: 'Label for the reshape tool, which allows changing the points in the lines of the vectors',
-        id: 'paint.reshapeMode.reshape'
-    }
-});
 
 const ReshapeModeComponent = props => (
     <ToolSelectComponent
