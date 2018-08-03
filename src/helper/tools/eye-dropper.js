@@ -1,5 +1,5 @@
 import paper from '@scratch/paper';
-import {getRaster, getBackgroundGuideLayer} from '../layer';
+import {createCanvas, getRaster, getBackgroundGuideLayer} from '../layer';
 
 const LOUPE_RADIUS = 20;
 const ZOOM_SCALE = 3;
@@ -10,34 +10,23 @@ class EyeDropperTool extends paper.Tool {
 
         const layer = isBitmap ? getRaster().layer : paper.project.activeLayer;
         const contentRaster3x = layer.rasterize(
-            paper.view.getResolution() * ZOOM_SCALE /* resolution */, false /* insert */);
-        const contentRaster = layer.rasterize(
-            paper.view.getResolution() /* resolution */, false /* insert */);
+            72 * ZOOM_SCALE * paper.view.zoom, false /* insert */, paper.view.bounds);
         const backgroundRaster3x = getBackgroundGuideLayer().rasterize(
-            paper.view.getResolution() * ZOOM_SCALE /* resolution */, false /* insert */);
-        
-        this.bufferCanvas = document.createElement('canvas');
-        this.bufferCanvas.width = canvas.width * ZOOM_SCALE;
-        this.bufferCanvas.height = canvas.height * ZOOM_SCALE;
-        const bufferRaster = new paper.Raster(this.bufferCanvas);
-        
-        this.colorCanvas = document.createElement('canvas');
-        this.colorCanvas.width = canvas.width;
-        this.colorCanvas.height = canvas.height;
-        const colorRaster = new paper.Raster(this.colorCanvas);
+            72 * ZOOM_SCALE * paper.view.zoom, false /* insert */, paper.view.bounds);
 
-        contentRaster.onLoad = () => {
-            colorRaster.drawImage(contentRaster.canvas, contentRaster.bounds.topLeft);
-            colorRaster.remove();
-        };
+        // Canvas from which loupe is cut, shows art and grid
+        this.bufferCanvas = createCanvas(canvas.width * ZOOM_SCALE, canvas.height * ZOOM_SCALE);
+        const bufferCanvasContext = this.bufferCanvas.getContext('2d');
+        // Canvas to sample colors from; just the art
+        this.colorCanvas = createCanvas(canvas.width * ZOOM_SCALE, canvas.height * ZOOM_SCALE);
+        const colorCanvasContext = this.colorCanvas.getContext('2d');
+
         backgroundRaster3x.onLoad = () => {
-            bufferRaster.drawImage(backgroundRaster3x.canvas, backgroundRaster3x.bounds.topLeft.multiply(ZOOM_SCALE));
+            bufferCanvasContext.drawImage(backgroundRaster3x.canvas, 0, 0);
             contentRaster3x.onLoad = () => {
-                bufferRaster.drawImage(contentRaster3x.canvas, contentRaster3x.bounds.topLeft.multiply(ZOOM_SCALE));
-                bufferRaster.remove();
-                bufferRaster.onLoad = () => {
-                    this.bufferLoaded = true;
-                };
+                colorCanvasContext.drawImage(contentRaster3x.canvas, 0, 0);
+                bufferCanvasContext.drawImage(this.colorCanvas, 0, 0);
+                this.bufferLoaded = true;
             };
             if (contentRaster3x.loaded) contentRaster3x.onLoad();
         };
@@ -73,6 +62,11 @@ class EyeDropperTool extends paper.Tool {
         if (!this.hideLoupe) {
             const colorInfo = this.getColorInfo(this.pickX, this.pickY, this.hideLoupe);
             if (!colorInfo) return;
+            if (colorInfo.color[3] === 0) {
+                // Alpha 0
+                this.colorString = null;
+                return;
+            }
             const r = colorInfo.color[0];
             const g = colorInfo.color[1];
             const b = colorInfo.color[2];
@@ -87,17 +81,19 @@ class EyeDropperTool extends paper.Tool {
         }
     }
     getColorInfo (x, y, hideLoupe) {
+        const artX = x / 2;
+        const artY = y / 2;
         if (!this.bufferLoaded) return null;
         const colorContext = this.colorCanvas.getContext('2d');
-        const loopContext = this.bufferCanvas.getContext('2d');
-        const colors = colorContext.getImageData(x, y, 1, 1);
+        const bufferContext = this.bufferCanvas.getContext('2d');
+        const colors = colorContext.getImageData(artX * ZOOM_SCALE, artY * ZOOM_SCALE, 1, 1);
         return {
             x: x,
             y: y,
             color: colors.data,
-            data: loopContext.getImageData(
-                (x * ZOOM_SCALE) - (LOUPE_RADIUS * ZOOM_SCALE),
-                (y * ZOOM_SCALE) - (LOUPE_RADIUS * ZOOM_SCALE),
+            data: bufferContext.getImageData(
+                (artX * ZOOM_SCALE) - (LOUPE_RADIUS * ZOOM_SCALE),
+                (artY * ZOOM_SCALE) - (LOUPE_RADIUS * ZOOM_SCALE),
                 LOUPE_RADIUS * 2 * ZOOM_SCALE,
                 LOUPE_RADIUS * 2 * ZOOM_SCALE
             ).data,
