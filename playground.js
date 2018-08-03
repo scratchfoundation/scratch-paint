@@ -21118,7 +21118,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactIntl = __webpack_require__(20);
 
-var _button = __webpack_require__(40);
+var _button = __webpack_require__(41);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -21184,7 +21184,7 @@ var _log = __webpack_require__(9);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _view = __webpack_require__(42);
+var _view = __webpack_require__(39);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -24257,11 +24257,6 @@ var scaleBitmap = function scaleBitmap(canvas, scale) {
  * @param {paper.Raster} item raster to change
  */
 var maybeApplyScaleToCanvas_ = function maybeApplyScaleToCanvas_(item) {
-    if (!item.matrix.isInvertible()) {
-        item.remove();
-        return;
-    }
-
     // context.drawImage will anti-alias the image if both width and height are reduced.
     // However, it will preserve pixel colors if only one or the other is reduced, and
     // imageSmoothingEnabled is set to false. Therefore, we can avoid aliasing by scaling
@@ -24315,6 +24310,10 @@ var commitArbitraryTransformation_ = function commitArbitraryTransformation_(ite
  * @param {paper.Raster} bitmap raster to draw selection to
  */
 var commitSelectionToBitmap = function commitSelectionToBitmap(selection, bitmap) {
+    if (!selection.matrix.isInvertible()) {
+        return;
+    }
+
     maybeApplyScaleToCanvas_(selection);
     commitArbitraryTransformation_(selection, bitmap);
 };
@@ -26377,204 +26376,6 @@ module.exports = keyMirror;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.clearHoveredItem = exports.setHoveredItem = exports.default = undefined;
-
-var _log = __webpack_require__(9);
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_HOVERED = 'scratch-paint/hover/CHANGE_HOVERED';
-var initialState = null;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_HOVERED:
-            if (typeof action.hoveredItemId === 'undefined') {
-                _log2.default.warn('Hovered item should not be set to undefined. Use null.');
-                return state;
-            } else if (typeof action.hoveredItemId === 'undefined' || isNaN(action.hoveredItemId)) {
-                _log2.default.warn('Hovered item should be an item ID number. Got: ' + action.hoveredItemId);
-                return state;
-            }
-            return action.hoveredItemId;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-/**
- * Set the hovered item state to the given item ID
- * @param {number} hoveredItemId The paper.Item ID of the hover indicator item.
- * @return {object} Redux action to change the hovered item.
- */
-var setHoveredItem = function setHoveredItem(hoveredItemId) {
-    return {
-        type: CHANGE_HOVERED,
-        hoveredItemId: hoveredItemId
-    };
-};
-
-var clearHoveredItem = function clearHoveredItem() {
-    return {
-        type: CHANGE_HOVERED,
-        hoveredItemId: null
-    };
-};
-
-exports.default = reducer;
-exports.setHoveredItem = setHoveredItem;
-exports.clearHoveredItem = clearHoveredItem;
-
-/***/ }),
-/* 40 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _classnames = __webpack_require__(16);
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-var _propTypes = __webpack_require__(1);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _button = __webpack_require__(165);
-
-var _button2 = _interopRequireDefault(_button);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; } /* DO NOT EDIT
-                                                                                                                                                                                                                             @todo This file is copied from GUI and should be pulled out into a shared library.
-                                                                                                                                                                                                                             See #13 */
-
-/* ACTUALLY, THIS IS EDITED ;)
-THIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD HANDLING FOR DISABLED STATES.*/
-
-var ButtonComponent = function ButtonComponent(_ref) {
-    var _classNames;
-
-    var className = _ref.className,
-        highlighted = _ref.highlighted,
-        onClick = _ref.onClick,
-        children = _ref.children,
-        props = _objectWithoutProperties(_ref, ['className', 'highlighted', 'onClick', 'children']);
-
-    var disabled = props.disabled || false;
-    if (disabled === false) {
-        // if not disabled, add `onClick()` to be applied
-        // in props. If disabled, don't add `onClick()`
-        props.onClick = onClick;
-    }
-    return _react2.default.createElement(
-        'span',
-        _extends({
-            className: (0, _classnames2.default)(_button2.default.button, className, (_classNames = {}, _defineProperty(_classNames, _button2.default.modDisabled, disabled), _defineProperty(_classNames, _button2.default.highlighted, highlighted), _classNames)),
-            role: 'button'
-        }, props),
-        children
-    );
-};
-
-ButtonComponent.propTypes = {
-    children: _propTypes2.default.node,
-    className: _propTypes2.default.string,
-    disabled: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.bool]),
-    highlighted: _propTypes2.default.bool,
-    onClick: _propTypes2.default.func.isRequired
-};
-exports.default = ButtonComponent;
-
-/***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.MAX_STROKE_WIDTH = exports.changeStrokeWidth = exports.default = undefined;
-
-var _log = __webpack_require__(9);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _selectedItems = __webpack_require__(8);
-
-var _stylePath = __webpack_require__(6);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_STROKE_WIDTH = 'scratch-paint/stroke-width/CHANGE_STROKE_WIDTH';
-var MAX_STROKE_WIDTH = 800;
-var initialState = 4;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_STROKE_WIDTH:
-            if (isNaN(action.strokeWidth)) {
-                _log2.default.warn('Invalid brush size: ' + action.strokeWidth);
-                return state;
-            }
-            return Math.min(MAX_STROKE_WIDTH, Math.max(0, action.strokeWidth));
-        case _selectedItems.CHANGE_SELECTED_ITEMS:
-            // Don't change state if no selection
-            if (!action.selectedItems || !action.selectedItems.length) {
-                return state;
-            }
-            // Bitmap mode doesn't have stroke width
-            if (action.bitmapMode) {
-                return state;
-            }
-            return (0, _stylePath.getColorsFromSelection)(action.selectedItems, action.bitmapMode).strokeWidth;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var changeStrokeWidth = function changeStrokeWidth(strokeWidth) {
-    return {
-        type: CHANGE_STROKE_WIDTH,
-        strokeWidth: strokeWidth
-    };
-};
-
-exports.default = reducer;
-exports.changeStrokeWidth = changeStrokeWidth;
-exports.MAX_STROKE_WIDTH = MAX_STROKE_WIDTH;
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resetZoom = exports.pan = exports.SVG_ART_BOARD_HEIGHT = exports.SVG_ART_BOARD_WIDTH = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = undefined;
 
 var _paper = __webpack_require__(2);
@@ -26689,6 +26490,204 @@ exports.pan = pan;
 exports.resetZoom = resetZoom;
 exports.zoomOnSelection = zoomOnSelection;
 exports.zoomOnFixedPoint = zoomOnFixedPoint;
+
+/***/ }),
+/* 40 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.clearHoveredItem = exports.setHoveredItem = exports.default = undefined;
+
+var _log = __webpack_require__(9);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_HOVERED = 'scratch-paint/hover/CHANGE_HOVERED';
+var initialState = null;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_HOVERED:
+            if (typeof action.hoveredItemId === 'undefined') {
+                _log2.default.warn('Hovered item should not be set to undefined. Use null.');
+                return state;
+            } else if (typeof action.hoveredItemId === 'undefined' || isNaN(action.hoveredItemId)) {
+                _log2.default.warn('Hovered item should be an item ID number. Got: ' + action.hoveredItemId);
+                return state;
+            }
+            return action.hoveredItemId;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+/**
+ * Set the hovered item state to the given item ID
+ * @param {number} hoveredItemId The paper.Item ID of the hover indicator item.
+ * @return {object} Redux action to change the hovered item.
+ */
+var setHoveredItem = function setHoveredItem(hoveredItemId) {
+    return {
+        type: CHANGE_HOVERED,
+        hoveredItemId: hoveredItemId
+    };
+};
+
+var clearHoveredItem = function clearHoveredItem() {
+    return {
+        type: CHANGE_HOVERED,
+        hoveredItemId: null
+    };
+};
+
+exports.default = reducer;
+exports.setHoveredItem = setHoveredItem;
+exports.clearHoveredItem = clearHoveredItem;
+
+/***/ }),
+/* 41 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _classnames = __webpack_require__(16);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _button = __webpack_require__(165);
+
+var _button2 = _interopRequireDefault(_button);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; } /* DO NOT EDIT
+                                                                                                                                                                                                                             @todo This file is copied from GUI and should be pulled out into a shared library.
+                                                                                                                                                                                                                             See #13 */
+
+/* ACTUALLY, THIS IS EDITED ;)
+THIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD HANDLING FOR DISABLED STATES.*/
+
+var ButtonComponent = function ButtonComponent(_ref) {
+    var _classNames;
+
+    var className = _ref.className,
+        highlighted = _ref.highlighted,
+        onClick = _ref.onClick,
+        children = _ref.children,
+        props = _objectWithoutProperties(_ref, ['className', 'highlighted', 'onClick', 'children']);
+
+    var disabled = props.disabled || false;
+    if (disabled === false) {
+        // if not disabled, add `onClick()` to be applied
+        // in props. If disabled, don't add `onClick()`
+        props.onClick = onClick;
+    }
+    return _react2.default.createElement(
+        'span',
+        _extends({
+            className: (0, _classnames2.default)(_button2.default.button, className, (_classNames = {}, _defineProperty(_classNames, _button2.default.modDisabled, disabled), _defineProperty(_classNames, _button2.default.highlighted, highlighted), _classNames)),
+            role: 'button'
+        }, props),
+        children
+    );
+};
+
+ButtonComponent.propTypes = {
+    children: _propTypes2.default.node,
+    className: _propTypes2.default.string,
+    disabled: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.bool]),
+    highlighted: _propTypes2.default.bool,
+    onClick: _propTypes2.default.func.isRequired
+};
+exports.default = ButtonComponent;
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.MAX_STROKE_WIDTH = exports.changeStrokeWidth = exports.default = undefined;
+
+var _log = __webpack_require__(9);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _selectedItems = __webpack_require__(8);
+
+var _stylePath = __webpack_require__(6);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_STROKE_WIDTH = 'scratch-paint/stroke-width/CHANGE_STROKE_WIDTH';
+var MAX_STROKE_WIDTH = 800;
+var initialState = 4;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_STROKE_WIDTH:
+            if (isNaN(action.strokeWidth)) {
+                _log2.default.warn('Invalid brush size: ' + action.strokeWidth);
+                return state;
+            }
+            return Math.min(MAX_STROKE_WIDTH, Math.max(0, action.strokeWidth));
+        case _selectedItems.CHANGE_SELECTED_ITEMS:
+            // Don't change state if no selection
+            if (!action.selectedItems || !action.selectedItems.length) {
+                return state;
+            }
+            // Bitmap mode doesn't have stroke width
+            if (action.bitmapMode) {
+                return state;
+            }
+            return (0, _stylePath.getColorsFromSelection)(action.selectedItems, action.bitmapMode).strokeWidth;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeStrokeWidth = function changeStrokeWidth(strokeWidth) {
+    return {
+        type: CHANGE_STROKE_WIDTH,
+        strokeWidth: strokeWidth
+    };
+};
+
+exports.default = reducer;
+exports.changeStrokeWidth = changeStrokeWidth;
+exports.MAX_STROKE_WIDTH = MAX_STROKE_WIDTH;
 
 /***/ }),
 /* 43 */
@@ -27353,6 +27352,8 @@ var _selection = __webpack_require__(3);
 
 var _layer = __webpack_require__(14);
 
+var _view = __webpack_require__(39);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27410,7 +27411,10 @@ var SelectionBoxTool = function () {
         value: function onMouseUpBitmap(event) {
             if (event.event.button > 0) return; // only first mouse button
             if (this.selectionRect) {
-                var rect = new _paper2.default.Rectangle(Math.round(this.selectionRect.bounds.x), Math.round(this.selectionRect.bounds.y), Math.round(this.selectionRect.bounds.width), Math.round(this.selectionRect.bounds.height));
+                var rect = new _paper2.default.Rectangle({
+                    from: new _paper2.default.Point(Math.max(0, Math.round(this.selectionRect.bounds.topLeft.x)), Math.max(0, Math.round(this.selectionRect.bounds.topLeft.y))),
+                    to: new _paper2.default.Point(Math.min(_view.ART_BOARD_WIDTH, Math.round(this.selectionRect.bounds.bottomRight.x)), Math.min(_view.ART_BOARD_HEIGHT, Math.round(this.selectionRect.bounds.bottomRight.y)))
+                });
 
                 // Remove dotted rectangle
                 this.selectionRect.remove();
@@ -27820,7 +27824,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _button = __webpack_require__(40);
+var _button = __webpack_require__(41);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -32106,7 +32110,7 @@ var _math = __webpack_require__(21);
 
 var _selection = __webpack_require__(3);
 
-var _view = __webpack_require__(42);
+var _view = __webpack_require__(39);
 
 var _eyeDropper2 = __webpack_require__(95);
 
@@ -37033,7 +37037,7 @@ var _box = __webpack_require__(85);
 
 var _box2 = _interopRequireDefault(_box);
 
-var _button = __webpack_require__(40);
+var _button = __webpack_require__(41);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -40157,11 +40161,11 @@ var _selection = __webpack_require__(3);
 
 var _selectedItems = __webpack_require__(8);
 
-var _view = __webpack_require__(42);
+var _view = __webpack_require__(39);
 
 var _math = __webpack_require__(21);
 
-var _hover = __webpack_require__(39);
+var _hover = __webpack_require__(40);
 
 var _clipboard = __webpack_require__(51);
 
@@ -42839,7 +42843,7 @@ var _layer = __webpack_require__(14);
 
 var _bitmap = __webpack_require__(24);
 
-var _view = __webpack_require__(42);
+var _view = __webpack_require__(39);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -51479,7 +51483,7 @@ var _selectedItems = __webpack_require__(8);
 
 var _selection = __webpack_require__(3);
 
-var _hover = __webpack_require__(39);
+var _hover = __webpack_require__(40);
 
 var _fillModeGradientType = __webpack_require__(32);
 
@@ -52017,7 +52021,7 @@ var _stylePath = __webpack_require__(6);
 
 var _strokeColor = __webpack_require__(34);
 
-var _strokeWidth = __webpack_require__(41);
+var _strokeWidth = __webpack_require__(42);
 
 var _modes3 = __webpack_require__(10);
 
@@ -52691,7 +52695,7 @@ var _bufferedInputHoc = __webpack_require__(265);
 
 var _bufferedInputHoc2 = _interopRequireDefault(_bufferedInputHoc);
 
-var _button = __webpack_require__(40);
+var _button = __webpack_require__(41);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -54782,7 +54786,7 @@ var _rectangleOutlined = __webpack_require__(297);
 
 var _rectangleOutlined2 = _interopRequireDefault(_rectangleOutlined);
 
-var _strokeWidth = __webpack_require__(41);
+var _strokeWidth = __webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -55425,7 +55429,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _button = __webpack_require__(40);
+var _button = __webpack_require__(41);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -56682,7 +56686,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(10);
 
-var _hover = __webpack_require__(39);
+var _hover = __webpack_require__(40);
 
 var _selectedItems = __webpack_require__(8);
 
@@ -57787,7 +57791,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(10);
 
-var _hover = __webpack_require__(39);
+var _hover = __webpack_require__(40);
 
 var _selectedItems = __webpack_require__(8);
 
@@ -58469,7 +58473,7 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _strokeWidth = __webpack_require__(41);
+var _strokeWidth = __webpack_require__(42);
 
 var _strokeWidthIndicator = __webpack_require__(319);
 
@@ -58579,7 +58583,7 @@ var _liveInputHoc = __webpack_require__(104);
 
 var _liveInputHoc2 = _interopRequireDefault(_liveInputHoc);
 
-var _strokeWidth = __webpack_require__(41);
+var _strokeWidth = __webpack_require__(42);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59739,7 +59743,7 @@ var _format = __webpack_require__(53);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _hover = __webpack_require__(39);
+var _hover = __webpack_require__(40);
 
 var _hover2 = _interopRequireDefault(_hover);
 
@@ -59818,7 +59822,7 @@ var _strokeColor = __webpack_require__(34);
 
 var _strokeColor2 = _interopRequireDefault(_strokeColor);
 
-var _strokeWidth = __webpack_require__(41);
+var _strokeWidth = __webpack_require__(42);
 
 var _strokeWidth2 = _interopRequireDefault(_strokeWidth);
 
