@@ -48740,8 +48740,10 @@ var Popover = function (_React$Component) {
       this.setState({ exiting: true });
       this.exitingAnimationTimer2 = setTimeout(function () {
         setTimeout(function () {
-          _this2.containerEl.style.transform = flowToPopoverTranslations[_this2.zone.flow] + "(" + _this2.zone.order * 50 + "px)";
-          _this2.containerEl.style.opacity = "0";
+          if (_this2.containerEl) {
+            _this2.containerEl.style.transform = flowToPopoverTranslations[_this2.zone.flow] + "(" + _this2.zone.order * 50 + "px)";
+            _this2.containerEl.style.opacity = "0";
+          }
         }, 0);
       }, 0);
 
@@ -50211,6 +50213,7 @@ var createElementHack = function createElementHack() {
   el.className = "resize-sensor";
   el.setAttribute("style", "display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; pointer-events: none; z-index: -1;");
   el.setAttribute("class", "resize-sensor");
+  el.setAttribute("tabindex", "-1");
   el.type = "text/html";
   el.data = "about:blank";
   return el;
@@ -50250,9 +50253,11 @@ var initialize = function initialize(el) {
     };
     detector.destroy = function () {
       if (detector.elWasStaticPosition) el.style.position = "";
-      // Event handlers will be automatically removed.
-      // http://stackoverflow.com/questions/12528049/if-a-dom-element-is-removed-are-its-listeners-also-removed-from-memory
-      el.removeChild(objEl);
+      if (el.contains(objEl)) {
+        // Event handlers will be automatically removed.
+        // http://stackoverflow.com/questions/12528049/if-a-dom-element-is-removed-are-its-listeners-also-removed-from-memory
+        el.removeChild(objEl);
+      }
     };
 
     el.appendChild(objEl);
