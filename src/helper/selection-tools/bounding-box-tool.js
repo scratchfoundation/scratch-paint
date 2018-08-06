@@ -67,7 +67,7 @@ class BoundingBoxTool {
      * @param {!MouseEvent} event The mouse event
      * @param {boolean} clone Whether to clone on mouse down (e.g. alt key held)
      * @param {boolean} multiselect Whether to multiselect on mouse down (e.g. shift key held)
-     * @param {?boolean} hitProperties.doubleClicked True if this is the second click in a short amout of time
+     * @param {?boolean} doubleClicked True if this is the second click in a short amout of time
      * @param {paper.hitOptions} hitOptions The options with which to detect whether mouse down has hit
      *     anything editable
      * @return {boolean} True if there was a hit, false otherwise

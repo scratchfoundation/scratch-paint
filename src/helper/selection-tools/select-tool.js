@@ -32,7 +32,7 @@ class SelectTool extends paper.Tool {
      * @param {!function} switchToTextTool A callback to call to switch to the text tool
      */
     constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage,
-            switchToTextTool) {
+        switchToTextTool) {
         super();
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
