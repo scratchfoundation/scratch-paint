@@ -1,3 +1,4 @@
+import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
 import {isGroup} from '../group';
 import {isCompoundPathItem, getRootItem} from '../item';
@@ -14,13 +15,15 @@ class MoveTool {
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
+     * @param {?function} switchToTextTool A callback to call to switch to the text tool
      */
-    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateImage) {
+    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool) {
         this.mode = mode;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
         this.onUpdateImage = onUpdateImage;
+        this.switchToTextTool = switchToTextTool;
         this.boundsPath = null;
     }
 
@@ -40,9 +43,14 @@ class MoveTool {
             item = isCompoundPathItem(root) || isGroup(root) ? root : hitProperties.hitResult.item;
         }
         if (item.selected) {
-            // Double click causes all points to be selected in subselect mode.
+            // Double click causes all points to be selected in subselect mode. If the target is text, it
+            // enters text edit.
             if (hitProperties.doubleClicked) {
                 if (!hitProperties.multiselect) {
+                    if (this.switchToTextTool && item instanceof paper.PointText) {
+                        this.switchToTextTool();
+                        return;
+                    }
                     clearSelection(this.clearSelectedItems);
                 }
                 this._select(item, true /* state */, hitProperties.subselect, true /* fullySelect */);

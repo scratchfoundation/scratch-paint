@@ -60,6 +60,11 @@ class TextMode extends React.Component {
         return nextProps.isTextModeActive !== this.props.isTextModeActive;
     }
     activateTool (nextProps) {
+        const selected = getSelectedLeafItems();
+        let textBoxToStartEditing = null;
+        if (selected.length === 1 && selected[0] instanceof paper.PointText) {
+            textBoxToStartEditing = selected[0];
+        }
         clearSelection(this.props.clearSelectedItems);
         this.props.clearGradient();
 
@@ -95,6 +100,10 @@ class TextMode extends React.Component {
         this.tool.setColorState(nextProps.colorState);
         this.tool.setFont(nextProps.font);
         this.tool.activate();
+        if (textBoxToStartEditing) {
+            this.tool.beginTextEdit(textBoxToStartEditing);
+            this.props.textArea.select();
+        }
     }
     deactivateTool () {
         this.tool.deactivateTool();

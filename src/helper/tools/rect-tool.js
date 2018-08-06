@@ -24,7 +24,7 @@ class RectTool extends paper.Tool {
         this.onUpdateImage = onUpdateImage;
         this.boundingBoxTool = new BoundingBoxTool(Modes.RECT, setSelectedItems, clearSelectedItems, onUpdateImage);
         const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
-        
+
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseDown = this.handleMouseDown;
@@ -65,7 +65,8 @@ class RectTool extends paper.Tool {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
 
-        if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions())) {
+        if (this.boundingBoxTool.onMouseDown(
+            event, false /* clone */, false /* multiselect */, false /* doubleClicked */, this.getHitOptions())) {
             this.isBoundingBoxMode = true;
         } else {
             this.isBoundingBoxMode = false;
@@ -91,18 +92,18 @@ class RectTool extends paper.Tool {
             dimensions.y = event.downPoint.y > event.point.y ? -Math.abs(rect.width) : Math.abs(rect.width);
         }
         this.rect = new paper.Path.Rectangle(rect);
-        
+
         if (event.modifiers.alt) {
             this.rect.position = event.downPoint;
         } else {
             this.rect.position = event.downPoint.add(dimensions.multiply(.5));
         }
-        
+
         styleShape(this.rect, this.colorState);
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
-        
+
         if (this.isBoundingBoxMode) {
             this.boundingBoxTool.onMouseUp(event);
             this.isBoundingBoxMode = null;
