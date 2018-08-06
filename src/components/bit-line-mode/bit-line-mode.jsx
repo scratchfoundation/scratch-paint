@@ -1,16 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
-
+import messages from '../../lib/messages.js';
 import lineIcon from './line.svg';
 
 const BitLineComponent = props => (
     <ToolSelectComponent
-        imgDescriptor={{
-            defaultMessage: 'Line',
-            description: 'Label for the line tool, which draws straight line segments',
-            id: 'paint.lineMode.line'
-        }}
+        imgDescriptor={messages.line}
         imgSrc={lineIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}

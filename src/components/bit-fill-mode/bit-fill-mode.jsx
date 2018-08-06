@@ -2,16 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
-
+import messages from '../../lib/messages.js';
 import fillIcon from './fill.svg';
 
 const BitFillComponent = props => (
     <ToolSelectComponent
-        imgDescriptor={{
-            defaultMessage: 'Fill',
-            description: 'Label for the fill tool',
-            id: 'paint.fillMode.fill'
-        }}
+        imgDescriptor={messages.fill}
         imgSrc={fillIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}
