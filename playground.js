@@ -31226,22 +31226,32 @@ exports.updateIntl = updateIntl;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
 
 var _reactRedux = __webpack_require__(7);
 
 var _reactIntl = __webpack_require__(20);
 
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function defaultSelector(state) {
-  return state.intl;
+  var intl = state.intl;
+  return _objectSpread({
+    key: intl.locale
+  }, intl);
 }
 
 var mapStateToProps = function mapStateToProps(state, _ref) {
   var _ref$intlSelector = _ref.intlSelector,
-      intlSelector = _ref$intlSelector === undefined ? defaultSelector : _ref$intlSelector;
+      intlSelector = _ref$intlSelector === void 0 ? defaultSelector : _ref$intlSelector;
   return intlSelector(state);
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, null, null, { pure: false })(_reactIntl.IntlProvider);
+var _default = (0, _reactRedux.connect)(mapStateToProps)(_reactIntl.IntlProvider);
+
+exports.default = _default;
 
 /***/ }),
 /* 108 */
@@ -53340,7 +53350,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps)((0, _reactIntl.injec
                     if ("function" == typeof this.props.children) return this.props.children(this.state.matches);
                     if (!1 === this.state.matches) return null;
                     var props = omit(this.props, excludedPropKeys), hasMergeProps = Object.keys(props).length > 0, childrenCount = _react2.default.Children.count(this.props.children);
-                    return this.props.component || null == this.props.children ? _react2.default.createElement(this.props.component || "div", props, this.props.children) : hasMergeProps ? _react2.default.cloneElement(this.props.children, props) : childrenCount ? this.props.children : null;
+                    return this.props.component || null == this.props.children || hasMergeProps && childrenCount > 1 ? _react2.default.createElement(this.props.component || "div", props, this.props.children) : hasMergeProps ? _react2.default.cloneElement(this.props.children, props) : childrenCount ? this.props.children : null;
                 }
             } ]), MediaQuery;
         }(_react2.default.Component);
@@ -59918,50 +59928,64 @@ exports.default = (0, _redux.combineReducers)({
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.initialState = exports.updateIntl = exports.UPDATE = exports.Provider = exports.IntlProvider = undefined;
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 exports.intlReducer = intlReducer;
+Object.defineProperty(exports, "IntlProvider", {
+  enumerable: true,
+  get: function get() {
+    return _IntlProvider2.default;
+  }
+});
+Object.defineProperty(exports, "Provider", {
+  enumerable: true,
+  get: function get() {
+    return _Provider2.default;
+  }
+});
+exports.initialState = exports.updateIntl = exports.UPDATE = void 0;
 
-var _IntlProvider2 = __webpack_require__(107);
+var _IntlProvider2 = _interopRequireDefault(__webpack_require__(107));
 
-var _IntlProvider3 = _interopRequireDefault(_IntlProvider2);
-
-var _Provider2 = __webpack_require__(338);
-
-var _Provider3 = _interopRequireDefault(_Provider2);
+var _Provider2 = _interopRequireDefault(__webpack_require__(338));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.IntlProvider = _IntlProvider3.default;
-exports.Provider = _Provider3.default;
-var UPDATE = exports.UPDATE = '@@intl/UPDATE';
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
-var updateIntl = exports.updateIntl = function updateIntl(_ref) {
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var UPDATE = '@@intl/UPDATE';
+exports.UPDATE = UPDATE;
+
+var updateIntl = function updateIntl(_ref) {
   var locale = _ref.locale,
       formats = _ref.formats,
       messages = _ref.messages;
   return {
     type: UPDATE,
-    payload: { locale: locale, formats: formats, messages: messages }
+    payload: {
+      locale: locale,
+      formats: formats,
+      messages: messages
+    }
   };
 };
 
-var initialState = exports.initialState = {
+exports.updateIntl = updateIntl;
+var initialState = {
   locale: 'en',
   messages: {}
 };
+exports.initialState = initialState;
 
 function intlReducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-  var action = arguments[1];
+  var action = arguments.length > 1 ? arguments[1] : undefined;
 
   if (action.type !== UPDATE) {
     return state;
   }
 
-  return _extends({}, state, action.payload);
+  return _objectSpread({}, state, action.payload);
 }
 
 /***/ }),
@@ -59974,40 +59998,29 @@ function intlReducer() {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
 
 var _reactRedux = __webpack_require__(7);
 
-var _react = __webpack_require__(0);
+var _react = _interopRequireDefault(__webpack_require__(0));
 
-var _react2 = _interopRequireDefault(_react);
+var _propTypes = _interopRequireDefault(__webpack_require__(1));
 
-var _propTypes = __webpack_require__(1);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _IntlProvider = __webpack_require__(107);
-
-var _IntlProvider2 = _interopRequireDefault(_IntlProvider);
+var _IntlProvider = _interopRequireDefault(__webpack_require__(107));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Provider = function Provider(_ref) {
   var store = _ref.store,
       children = _ref.children;
-  return _react2.default.createElement(
-    _reactRedux.Provider,
-    { store: store },
-    _react2.default.createElement(
-      _IntlProvider2.default,
-      null,
-      children
-    )
-  );
+  return _react.default.createElement(_reactRedux.Provider, {
+    store: store
+  }, _react.default.createElement(_IntlProvider.default, null, children));
 };
 
 Provider.propTypes =  false ? undefined : {};
-
-exports.default = Provider;
+var _default = Provider;
+exports.default = _default;
 
 /***/ }),
 /* 339 */
