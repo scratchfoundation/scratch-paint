@@ -1,5 +1,8 @@
+import paper from '@scratch/paper';
 import {rectSelect} from '../guides';
 import {clearSelection, processRectangularSelection} from '../selection';
+import {getRaster} from '../layer';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
 
 /** Tool to handle drag selection. A dotted line box appears and everything enclosed is selected. */
 class SelectionBoxTool {
@@ -25,17 +28,52 @@ class SelectionBoxTool {
     }
     onMouseDrag (event) {
         if (event.event.button > 0) return; // only first mouse button
+        if (this.selectionRect) {
+            this.selectionRect.remove();
+        }
         this.selectionRect = rectSelect(event);
-        // Remove this rect on the next drag and up event
-        this.selectionRect.removeOnDrag();
     }
-    onMouseUp (event) {
+    onMouseUpVector (event) {
         if (event.event.button > 0) return; // only first mouse button
         if (this.selectionRect) {
             processRectangularSelection(event, this.selectionRect, this.mode);
             this.selectionRect.remove();
             this.selectionRect = null;
             this.setSelectedItems();
+        }
+    }
+    onMouseUpBitmap (event) {
+        if (event.event.button > 0) return; // only first mouse button
+        if (this.selectionRect) {
+            const rect = new paper.Rectangle({
+                from: new paper.Point(
+                    Math.max(0, Math.round(this.selectionRect.bounds.topLeft.x)),
+                    Math.max(0, Math.round(this.selectionRect.bounds.topLeft.y))),
+                to: new paper.Point(
+                    Math.min(ART_BOARD_WIDTH, Math.round(this.selectionRect.bounds.bottomRight.x)),
+                    Math.min(ART_BOARD_HEIGHT, Math.round(this.selectionRect.bounds.bottomRight.y)))
+            });
+
+            // Remove dotted rectangle
+            this.selectionRect.remove();
+            this.selectionRect = null;
+
+            if (rect.area) {
+                // Pull selected raster to active layer
+                const raster = getRaster().getSubRaster(rect);
+                raster.parent = paper.project.activeLayer;
+                raster.canvas.getContext('2d').imageSmoothingEnabled = false;
+                raster.selected = true;
+                // Gather a bit of extra data so that we can avoid aliasing at edges
+                const expanded = getRaster().getSubRaster(rect.expand(4));
+                expanded.remove();
+                raster.data = {expanded: expanded};
+
+                // Clear area from raster layer
+                const context = getRaster().getContext(true /* modify */);
+                context.clearRect(rect.x, rect.y, rect.width, rect.height);
+                this.setSelectedItems();
+            }
         }
     }
 }

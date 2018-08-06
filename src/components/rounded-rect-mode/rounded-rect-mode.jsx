@@ -1,16 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import messages from '../../lib/messages.js';
 import ToolSelectComponent from '../tool-select-base/tool-select-base.jsx';
 
 import roundedRectIcon from './rounded-rectangle.svg';
 
 const RoundedRectModeComponent = props => (
     <ToolSelectComponent
-        imgDescriptor={{
-            defaultMessage: 'Rounded Rectangle',
-            description: 'Label for the rounded rectangle tool',
-            id: 'paint.roundedRectMode.roundedRect'
-        }}
+        imgDescriptor={messages.roundedRect}
         imgSrc={roundedRectIcon}
         isSelected={props.isSelected}
         onMouseDown={props.onMouseDown}

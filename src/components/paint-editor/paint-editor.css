@@ -140,12 +140,6 @@ $border-radius: 0.25rem;
     font-weight: bold;
     color: white;
     justify-content: center;
-    opacity: .75;
-}
-
-.bitmap-button:active {
-    background-color: $motion-primary;
-    opacity: 1;
 }
 
 .bitmap-button-icon {
@@ -168,13 +162,13 @@ $border-radius: 0.25rem;
     background: transparent;
     border: none;
     display: none;
+    margin: 0px;
+    opacity: .8;
     outline: none;
     overflow: hidden;
     padding: 0px;
     position: absolute;
     resize: none;
-    white-space: nowrap;
-    margin: 0px;
     -webkit-text-fill-color: transparent;
     text-fill-color: transparent;
 }
