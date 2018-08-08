@@ -81,8 +81,8 @@ class EyeDropperTool extends paper.Tool {
         }
     }
     getColorInfo (x, y, hideLoupe) {
-        const artX = x / 2;
-        const artY = y / 2;
+        const artX = x / this.pixelRatio;
+        const artY = y / this.pixelRatio;
         if (!this.bufferLoaded) return null;
         const colorContext = this.colorCanvas.getContext('2d');
         const bufferContext = this.bufferCanvas.getContext('2d');
