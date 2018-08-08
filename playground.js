@@ -129,7 +129,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Thu Aug 2 16:07:26 2018 -0400
+ * Date: Mon Aug 6 17:16:17 2018 -0400
  *
  ***
  *
@@ -3769,8 +3769,8 @@ new function() {
 			this.setName(name);
 	},
 
-	rasterize: function(resolution, insert) {
-		var bounds = this.getStrokeBounds(),
+	rasterize: function(resolution, insert, boundRect) {
+		var bounds = boundRect ? boundRect : this.getStrokeBounds(),
 			scale = (resolution || this.getView().getResolution()) / 72,
 			topLeft = bounds.getTopLeft().floor(),
 			bottomRight = bounds.getBottomRight().ceil(),
@@ -3780,6 +3780,7 @@ new function() {
 			var canvas = CanvasProvider.getCanvas(size.multiply(scale)),
 				ctx = canvas.getContext('2d'),
 				matrix = new Matrix().scale(scale).translate(topLeft.negate());
+			ctx.imageSmoothingEnabled = false;
 			ctx.save();
 			matrix.applyToContext(ctx);
 			this.draw(ctx, new Base({ matrices: [matrix] }));
@@ -20627,6 +20628,266 @@ exports.changeMode = changeMode;
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.setupLayers = exports.getRaster = exports.clearRaster = exports.getBackgroundGuideLayer = exports.getGuideLayer = exports.showGuideLayers = exports.hideGuideLayers = exports.createCanvas = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _log = __webpack_require__(9);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _view = __webpack_require__(40);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _getLayer = function _getLayer(layerString) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = _paper2.default.project.layers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var layer = _step.value;
+
+            if (layer.data && layer.data[layerString]) {
+                return layer;
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+};
+
+var _getPaintingLayer = function _getPaintingLayer() {
+    return _getLayer('isPaintingLayer');
+};
+
+/**
+ * Creates a canvas with width and height matching the art board size.
+ * @param {?number} width Width of the canvas. Defaults to ART_BOARD_WIDTH.
+ * @param {?number} height Height of the canvas. Defaults to ART_BOARD_HEIGHT.
+ * @return {HTMLCanvasElement} the canvas
+ */
+var createCanvas = function createCanvas(width, height) {
+    var canvas = document.createElement('canvas');
+    canvas.width = width ? width : _view.ART_BOARD_WIDTH;
+    canvas.height = height ? height : _view.ART_BOARD_HEIGHT;
+    canvas.getContext('2d').imageSmoothingEnabled = false;
+    return canvas;
+};
+
+var clearRaster = function clearRaster() {
+    var layer = _getLayer('isRasterLayer');
+    layer.removeChildren();
+
+    // Generate blank raster
+    var raster = new _paper2.default.Raster(createCanvas());
+    raster.canvas.getContext('2d').imageSmoothingEnabled = false;
+    raster.parent = layer;
+    raster.guide = true;
+    raster.locked = true;
+    raster.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
+};
+
+var getRaster = function getRaster() {
+    var layer = _getLayer('isRasterLayer');
+    // Generate blank raster
+    if (layer.children.length === 0) {
+        clearRaster();
+    }
+    return _getLayer('isRasterLayer').children[0];
+};
+
+var getBackgroundGuideLayer = function getBackgroundGuideLayer() {
+    return _getLayer('isBackgroundGuideLayer');
+};
+
+var _makeGuideLayer = function _makeGuideLayer() {
+    var guideLayer = new _paper2.default.Layer();
+    guideLayer.data.isGuideLayer = true;
+    return guideLayer;
+};
+
+var getGuideLayer = function getGuideLayer() {
+    var layer = _getLayer('isGuideLayer');
+    if (!layer) {
+        layer = _makeGuideLayer();
+        _getPaintingLayer().activate();
+    }
+    return layer;
+};
+
+/**
+ * Removes the guide layers, e.g. for purposes of exporting the image. Must call showGuideLayers to re-add them.
+ * @param {boolean} includeRaster true if the raster layer should also be hidden
+ * @return {object} an object of the removed layers, which should be passed to showGuideLayers to re-add them.
+ */
+var hideGuideLayers = function hideGuideLayers(includeRaster) {
+    var backgroundGuideLayer = getBackgroundGuideLayer();
+    var guideLayer = getGuideLayer();
+    guideLayer.remove();
+    backgroundGuideLayer.remove();
+    var rasterLayer = void 0;
+    if (includeRaster) {
+        rasterLayer = _getLayer('isRasterLayer');
+        rasterLayer.remove();
+    }
+    return {
+        guideLayer: guideLayer,
+        backgroundGuideLayer: backgroundGuideLayer,
+        rasterLayer: rasterLayer
+    };
+};
+
+/**
+ * Add back the guide layers removed by calling hideGuideLayers. This must be done before any editing operations are
+ * taken in the paint editor.
+ * @param {!object} guideLayers object of the removed layers, which was returned by hideGuideLayers
+ */
+var showGuideLayers = function showGuideLayers(guideLayers) {
+    var backgroundGuideLayer = guideLayers.backgroundGuideLayer;
+    var guideLayer = guideLayers.guideLayer;
+    var rasterLayer = guideLayers.rasterLayer;
+    if (rasterLayer && !rasterLayer.index) {
+        _paper2.default.project.addLayer(rasterLayer);
+        rasterLayer.sendToBack();
+    }
+    if (!backgroundGuideLayer.index) {
+        _paper2.default.project.addLayer(backgroundGuideLayer);
+        backgroundGuideLayer.sendToBack();
+    }
+    if (!guideLayer.index) {
+        _paper2.default.project.addLayer(guideLayer);
+        guideLayer.bringToFront();
+    }
+    if (_paper2.default.project.activeLayer !== _getPaintingLayer()) {
+        _log2.default.error('Wrong active layer');
+        _log2.default.error(_paper2.default.project.activeLayer.data);
+    }
+};
+
+var _makePaintingLayer = function _makePaintingLayer() {
+    var paintingLayer = new _paper2.default.Layer();
+    paintingLayer.data.isPaintingLayer = true;
+    return paintingLayer;
+};
+
+var _makeRasterLayer = function _makeRasterLayer() {
+    var rasterLayer = new _paper2.default.Layer();
+    rasterLayer.data.isRasterLayer = true;
+    clearRaster();
+    return rasterLayer;
+};
+
+var _makeBackgroundPaper = function _makeBackgroundPaper(width, height, color) {
+    // creates a checkerboard path of width * height squares in color on white
+    var x = 0;
+    var y = 0;
+    var pathPoints = [];
+    while (x < width) {
+        pathPoints.push(new _paper2.default.Point(x, y));
+        x++;
+        pathPoints.push(new _paper2.default.Point(x, y));
+        y = y === 0 ? height : 0;
+    }
+    y = height - 1;
+    x = width;
+    while (y > 0) {
+        pathPoints.push(new _paper2.default.Point(x, y));
+        x = x === 0 ? width : 0;
+        pathPoints.push(new _paper2.default.Point(x, y));
+        y--;
+    }
+    var vRect = new _paper2.default.Shape.Rectangle(new _paper2.default.Point(0, 0), new _paper2.default.Point(120, 90));
+    vRect.fillColor = '#fff';
+    vRect.guide = true;
+    vRect.locked = true;
+    var vPath = new _paper2.default.Path(pathPoints);
+    vPath.fillRule = 'evenodd';
+    vPath.fillColor = color;
+    vPath.guide = true;
+    vPath.locked = true;
+    var vGroup = new _paper2.default.Group([vRect, vPath]);
+    return vGroup;
+};
+
+var _makeBackgroundGuideLayer = function _makeBackgroundGuideLayer() {
+    var guideLayer = new _paper2.default.Layer();
+    guideLayer.locked = true;
+
+    var vBackground = _makeBackgroundPaper(120, 90, '#E5E5E5');
+    vBackground.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
+    vBackground.scaling = new _paper2.default.Point(8, 8);
+    vBackground.guide = true;
+    vBackground.locked = true;
+
+    var vLine = new _paper2.default.Path.Line(new _paper2.default.Point(0, -7), new _paper2.default.Point(0, 7));
+    vLine.strokeWidth = 2;
+    vLine.strokeColor = '#ccc';
+    vLine.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
+    vLine.guide = true;
+    vLine.locked = true;
+
+    var hLine = new _paper2.default.Path.Line(new _paper2.default.Point(-7, 0), new _paper2.default.Point(7, 0));
+    hLine.strokeWidth = 2;
+    hLine.strokeColor = '#ccc';
+    hLine.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
+    hLine.guide = true;
+    hLine.locked = true;
+
+    var circle = new _paper2.default.Shape.Circle(new _paper2.default.Point(0, 0), 5);
+    circle.strokeWidth = 2;
+    circle.strokeColor = '#ccc';
+    circle.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
+    circle.guide = true;
+    circle.locked = true;
+
+    guideLayer.data.isBackgroundGuideLayer = true;
+    return guideLayer;
+};
+
+var setupLayers = function setupLayers() {
+    var backgroundGuideLayer = _makeBackgroundGuideLayer();
+    _makeRasterLayer();
+    var paintLayer = _makePaintingLayer();
+    var guideLayer = _makeGuideLayer();
+    backgroundGuideLayer.sendToBack();
+    guideLayer.bringToFront();
+    paintLayer.activate();
+};
+
+exports.createCanvas = createCanvas;
+exports.hideGuideLayers = hideGuideLayers;
+exports.showGuideLayers = showGuideLayers;
+exports.getGuideLayer = getGuideLayer;
+exports.getBackgroundGuideLayer = getBackgroundGuideLayer;
+exports.clearRaster = clearRaster;
+exports.getRaster = getRaster;
+exports.setupLayers = setupLayers;
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports) {
 
 /*
@@ -20708,7 +20969,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -20922,7 +21183,7 @@ function createStyleElement (options) {
 	}
 
 	if(options.attrs.nonce === undefined) {
-		const nonce = getNonce();
+		var nonce = getNonce();
 		if (nonce) {
 			options.attrs.nonce = nonce;
 		}
@@ -21110,7 +21371,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21181,7 +21442,7 @@ ToolSelectComponent.propTypes = {
 exports.default = (0, _reactIntl.injectIntl)(ToolSelectComponent);
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21237,265 +21498,6 @@ var messages = (0, _reactIntl.defineMessages)({
 });
 
 exports.default = messages;
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.setupLayers = exports.getRaster = exports.clearRaster = exports.getGuideLayer = exports.showGuideLayers = exports.hideGuideLayers = exports.createCanvas = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _log = __webpack_require__(9);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _view = __webpack_require__(40);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _getLayer = function _getLayer(layerString) {
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = _paper2.default.project.layers[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var layer = _step.value;
-
-            if (layer.data && layer.data[layerString]) {
-                return layer;
-            }
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
-    }
-};
-
-var _getPaintingLayer = function _getPaintingLayer() {
-    return _getLayer('isPaintingLayer');
-};
-
-/**
- * Creates a canvas with width and height matching the art board size.
- * @param {?number} width Width of the canvas. Defaults to ART_BOARD_WIDTH.
- * @param {?number} height Height of the canvas. Defaults to ART_BOARD_HEIGHT.
- * @return {HTMLCanvasElement} the canvas
- */
-var createCanvas = function createCanvas(width, height) {
-    var canvas = document.createElement('canvas');
-    canvas.width = width ? width : _view.ART_BOARD_WIDTH;
-    canvas.height = height ? height : _view.ART_BOARD_HEIGHT;
-    canvas.getContext('2d').imageSmoothingEnabled = false;
-    return canvas;
-};
-
-var clearRaster = function clearRaster() {
-    var layer = _getLayer('isRasterLayer');
-    layer.removeChildren();
-
-    // Generate blank raster
-    var raster = new _paper2.default.Raster(createCanvas());
-    raster.canvas.getContext('2d').imageSmoothingEnabled = false;
-    raster.parent = layer;
-    raster.guide = true;
-    raster.locked = true;
-    raster.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
-};
-
-var getRaster = function getRaster() {
-    var layer = _getLayer('isRasterLayer');
-    // Generate blank raster
-    if (layer.children.length === 0) {
-        clearRaster();
-    }
-    return _getLayer('isRasterLayer').children[0];
-};
-
-var _getBackgroundGuideLayer = function _getBackgroundGuideLayer() {
-    return _getLayer('isBackgroundGuideLayer');
-};
-
-var _makeGuideLayer = function _makeGuideLayer() {
-    var guideLayer = new _paper2.default.Layer();
-    guideLayer.data.isGuideLayer = true;
-    return guideLayer;
-};
-
-var getGuideLayer = function getGuideLayer() {
-    var layer = _getLayer('isGuideLayer');
-    if (!layer) {
-        layer = _makeGuideLayer();
-        _getPaintingLayer().activate();
-    }
-    return layer;
-};
-
-/**
- * Removes the guide layers, e.g. for purposes of exporting the image. Must call showGuideLayers to re-add them.
- * @param {boolean} includeRaster true if the raster layer should also be hidden
- * @return {object} an object of the removed layers, which should be passed to showGuideLayers to re-add them.
- */
-var hideGuideLayers = function hideGuideLayers(includeRaster) {
-    var backgroundGuideLayer = _getBackgroundGuideLayer();
-    var guideLayer = getGuideLayer();
-    guideLayer.remove();
-    backgroundGuideLayer.remove();
-    var rasterLayer = void 0;
-    if (includeRaster) {
-        rasterLayer = _getLayer('isRasterLayer');
-        rasterLayer.remove();
-    }
-    return {
-        guideLayer: guideLayer,
-        backgroundGuideLayer: backgroundGuideLayer,
-        rasterLayer: rasterLayer
-    };
-};
-
-/**
- * Add back the guide layers removed by calling hideGuideLayers. This must be done before any editing operations are
- * taken in the paint editor.
- * @param {!object} guideLayers object of the removed layers, which was returned by hideGuideLayers
- */
-var showGuideLayers = function showGuideLayers(guideLayers) {
-    var backgroundGuideLayer = guideLayers.backgroundGuideLayer;
-    var guideLayer = guideLayers.guideLayer;
-    var rasterLayer = guideLayers.rasterLayer;
-    if (rasterLayer && !rasterLayer.index) {
-        _paper2.default.project.addLayer(rasterLayer);
-        rasterLayer.sendToBack();
-    }
-    if (!backgroundGuideLayer.index) {
-        _paper2.default.project.addLayer(backgroundGuideLayer);
-        backgroundGuideLayer.sendToBack();
-    }
-    if (!guideLayer.index) {
-        _paper2.default.project.addLayer(guideLayer);
-        guideLayer.bringToFront();
-    }
-    if (_paper2.default.project.activeLayer !== _getPaintingLayer()) {
-        _log2.default.error('Wrong active layer');
-        _log2.default.error(_paper2.default.project.activeLayer.data);
-    }
-};
-
-var _makePaintingLayer = function _makePaintingLayer() {
-    var paintingLayer = new _paper2.default.Layer();
-    paintingLayer.data.isPaintingLayer = true;
-    return paintingLayer;
-};
-
-var _makeRasterLayer = function _makeRasterLayer() {
-    var rasterLayer = new _paper2.default.Layer();
-    rasterLayer.data.isRasterLayer = true;
-    clearRaster();
-    return rasterLayer;
-};
-
-var _makeBackgroundPaper = function _makeBackgroundPaper(width, height, color) {
-    // creates a checkerboard path of width * height squares in color on white
-    var x = 0;
-    var y = 0;
-    var pathPoints = [];
-    while (x < width) {
-        pathPoints.push(new _paper2.default.Point(x, y));
-        x++;
-        pathPoints.push(new _paper2.default.Point(x, y));
-        y = y === 0 ? height : 0;
-    }
-    y = height - 1;
-    x = width;
-    while (y > 0) {
-        pathPoints.push(new _paper2.default.Point(x, y));
-        x = x === 0 ? width : 0;
-        pathPoints.push(new _paper2.default.Point(x, y));
-        y--;
-    }
-    var vRect = new _paper2.default.Shape.Rectangle(new _paper2.default.Point(0, 0), new _paper2.default.Point(120, 90));
-    vRect.fillColor = '#fff';
-    vRect.guide = true;
-    vRect.locked = true;
-    var vPath = new _paper2.default.Path(pathPoints);
-    vPath.fillRule = 'evenodd';
-    vPath.fillColor = color;
-    vPath.guide = true;
-    vPath.locked = true;
-    var vGroup = new _paper2.default.Group([vRect, vPath]);
-    return vGroup;
-};
-
-var _makeBackgroundGuideLayer = function _makeBackgroundGuideLayer() {
-    var guideLayer = new _paper2.default.Layer();
-    guideLayer.locked = true;
-
-    var vBackground = _makeBackgroundPaper(120, 90, '#E5E5E5');
-    vBackground.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
-    vBackground.scaling = new _paper2.default.Point(8, 8);
-    vBackground.guide = true;
-    vBackground.locked = true;
-
-    var vLine = new _paper2.default.Path.Line(new _paper2.default.Point(0, -7), new _paper2.default.Point(0, 7));
-    vLine.strokeWidth = 2;
-    vLine.strokeColor = '#ccc';
-    vLine.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
-    vLine.guide = true;
-    vLine.locked = true;
-
-    var hLine = new _paper2.default.Path.Line(new _paper2.default.Point(-7, 0), new _paper2.default.Point(7, 0));
-    hLine.strokeWidth = 2;
-    hLine.strokeColor = '#ccc';
-    hLine.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
-    hLine.guide = true;
-    hLine.locked = true;
-
-    var circle = new _paper2.default.Shape.Circle(new _paper2.default.Point(0, 0), 5);
-    circle.strokeWidth = 2;
-    circle.strokeColor = '#ccc';
-    circle.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
-    circle.guide = true;
-    circle.locked = true;
-
-    guideLayer.data.isBackgroundGuideLayer = true;
-    return guideLayer;
-};
-
-var setupLayers = function setupLayers() {
-    var backgroundGuideLayer = _makeBackgroundGuideLayer();
-    _makeRasterLayer();
-    var paintLayer = _makePaintingLayer();
-    var guideLayer = _makeGuideLayer();
-    backgroundGuideLayer.sendToBack();
-    guideLayer.bringToFront();
-    paintLayer.activate();
-};
-
-exports.createCanvas = createCanvas;
-exports.hideGuideLayers = hideGuideLayers;
-exports.showGuideLayers = showGuideLayers;
-exports.getGuideLayer = getGuideLayer;
-exports.clearRaster = clearRaster;
-exports.getRaster = getRaster;
-exports.setupLayers = setupLayers;
 
 /***/ }),
 /* 16 */
@@ -23691,7 +23693,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _guides = __webpack_require__(34);
 
@@ -24612,7 +24614,7 @@ var _selection = __webpack_require__(3);
 
 var _guides = __webpack_require__(34);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _scaleTool = __webpack_require__(189);
 
@@ -25818,7 +25820,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _selection = __webpack_require__(3);
 
@@ -27382,7 +27384,7 @@ var _guides = __webpack_require__(34);
 
 var _selection = __webpack_require__(3);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _view = __webpack_require__(40);
 
@@ -28492,7 +28494,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _selection = __webpack_require__(3);
 
@@ -28663,7 +28665,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(25);
 
@@ -29566,7 +29568,7 @@ var _stylePath = __webpack_require__(6);
 
 var _selection = __webpack_require__(3);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30462,13 +30464,15 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.LOUPE_RADIUS = exports.default = undefined;
+exports.ZOOM_SCALE = exports.LOUPE_RADIUS = exports.default = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
+
+var _layer = __webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30479,14 +30483,36 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var LOUPE_RADIUS = 20;
+var ZOOM_SCALE = 3;
 
 var EyeDropperTool = function (_paper$Tool) {
     _inherits(EyeDropperTool, _paper$Tool);
 
-    function EyeDropperTool(canvas, width, height, pixelRatio, zoom, offsetX, offsetY) {
+    function EyeDropperTool(canvas, width, height, pixelRatio, zoom, offsetX, offsetY, isBitmap) {
         _classCallCheck(this, EyeDropperTool);
 
         var _this = _possibleConstructorReturn(this, (EyeDropperTool.__proto__ || Object.getPrototypeOf(EyeDropperTool)).call(this));
+
+        var layer = isBitmap ? (0, _layer.getRaster)().layer : _paper2.default.project.activeLayer;
+        var contentRaster3x = layer.rasterize(72 * ZOOM_SCALE * _paper2.default.view.zoom, false /* insert */, _paper2.default.view.bounds);
+        var backgroundRaster3x = (0, _layer.getBackgroundGuideLayer)().rasterize(72 * ZOOM_SCALE * _paper2.default.view.zoom, false /* insert */, _paper2.default.view.bounds);
+
+        // Canvas from which loupe is cut, shows art and grid
+        _this.bufferCanvas = (0, _layer.createCanvas)(canvas.width * ZOOM_SCALE, canvas.height * ZOOM_SCALE);
+        var bufferCanvasContext = _this.bufferCanvas.getContext('2d');
+        // Canvas to sample colors from; just the art
+        _this.colorCanvas = (0, _layer.createCanvas)(canvas.width * ZOOM_SCALE, canvas.height * ZOOM_SCALE);
+        var colorCanvasContext = _this.colorCanvas.getContext('2d');
+
+        backgroundRaster3x.onLoad = function () {
+            bufferCanvasContext.drawImage(backgroundRaster3x.canvas, 0, 0);
+            contentRaster3x.onLoad = function () {
+                colorCanvasContext.drawImage(contentRaster3x.canvas, 0, 0);
+                bufferCanvasContext.drawImage(_this.colorCanvas, 0, 0);
+                _this.bufferLoaded = true;
+            };
+            if (contentRaster3x.loaded) contentRaster3x.onLoad();
+        };
 
         _this.onMouseDown = _this.handleMouseDown;
         _this.onMouseMove = _this.handleMouseMove;
@@ -30503,23 +30529,6 @@ var EyeDropperTool = function (_paper$Tool) {
         _this.pickX = -1;
         _this.pickY = -1;
         _this.hideLoupe = true;
-
-        /*
-            Chrome 64 has a bug that makes it impossible to use getImageData directly
-            a 2d canvas. Until that is resolved, copy the canvas to a buffer canvas
-            and read the data from there.
-            https://github.com/LLK/scratch-paint/issues/276
-        */
-        _this.bufferLoaded = false;
-        _this.bufferCanvas = document.createElement('canvas');
-        _this.bufferCanvas.width = canvas.width;
-        _this.bufferCanvas.height = canvas.height;
-        _this.bufferImage = new Image();
-        _this.bufferImage.onload = function () {
-            _this.bufferCanvas.getContext('2d').drawImage(_this.bufferImage, 0, 0);
-            _this.bufferLoaded = true;
-        };
-        _this.bufferImage.src = canvas.toDataURL();
         return _this;
     }
 
@@ -30539,6 +30548,11 @@ var EyeDropperTool = function (_paper$Tool) {
             if (!this.hideLoupe) {
                 var colorInfo = this.getColorInfo(this.pickX, this.pickY, this.hideLoupe);
                 if (!colorInfo) return;
+                if (colorInfo.color[3] === 0) {
+                    // Alpha 0
+                    this.colorString = null;
+                    return;
+                }
                 var r = colorInfo.color[0];
                 var g = colorInfo.color[1];
                 var b = colorInfo.color[2];
@@ -30555,14 +30569,17 @@ var EyeDropperTool = function (_paper$Tool) {
     }, {
         key: 'getColorInfo',
         value: function getColorInfo(x, y, hideLoupe) {
+            var artX = x / this.pixelRatio;
+            var artY = y / this.pixelRatio;
             if (!this.bufferLoaded) return null;
-            var ctx = this.bufferCanvas.getContext('2d');
-            var colors = ctx.getImageData(x, y, 1, 1);
+            var colorContext = this.colorCanvas.getContext('2d');
+            var bufferContext = this.bufferCanvas.getContext('2d');
+            var colors = colorContext.getImageData(artX * ZOOM_SCALE, artY * ZOOM_SCALE, 1, 1);
             return {
                 x: x,
                 y: y,
                 color: colors.data,
-                data: ctx.getImageData(x - LOUPE_RADIUS, y - LOUPE_RADIUS, LOUPE_RADIUS * 2, LOUPE_RADIUS * 2).data,
+                data: bufferContext.getImageData(artX * ZOOM_SCALE - LOUPE_RADIUS * ZOOM_SCALE, artY * ZOOM_SCALE - LOUPE_RADIUS * ZOOM_SCALE, LOUPE_RADIUS * 2 * ZOOM_SCALE, LOUPE_RADIUS * 2 * ZOOM_SCALE).data,
                 hideLoupe: hideLoupe
             };
         }
@@ -30573,6 +30590,7 @@ var EyeDropperTool = function (_paper$Tool) {
 
 exports.default = EyeDropperTool;
 exports.LOUPE_RADIUS = LOUPE_RADIUS;
+exports.ZOOM_SCALE = ZOOM_SCALE;
 
 /***/ }),
 /* 97 */
@@ -31062,7 +31080,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -32134,7 +32152,7 @@ var _textEditTarget = __webpack_require__(67);
 
 var _viewBounds = __webpack_require__(52);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(25);
 
@@ -32510,7 +32528,7 @@ var PaintEditor = function (_React$Component) {
         value: function startEyeDroppingLoop() {
             var _this3 = this;
 
-            this.eyeDropper = new _eyeDropper3.default(this.canvas, _paper2.default.project.view.bounds.width, _paper2.default.project.view.bounds.height, _paper2.default.project.view.pixelRatio, _paper2.default.view.zoom, _paper2.default.project.view.bounds.x, _paper2.default.project.view.bounds.y);
+            this.eyeDropper = new _eyeDropper3.default(this.canvas, _paper2.default.project.view.bounds.width, _paper2.default.project.view.bounds.height, _paper2.default.project.view.pixelRatio, _paper2.default.view.zoom, _paper2.default.project.view.bounds.x, _paper2.default.project.view.bounds.y, (0, _format2.isBitmap)(this.props.format));
             this.eyeDropper.pickX = -1;
             this.eyeDropper.pickY = -1;
             this.eyeDropper.activate();
@@ -40193,7 +40211,7 @@ var _undo2 = __webpack_require__(44);
 
 var _group = __webpack_require__(26);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _selection = __webpack_require__(3);
 
@@ -40645,7 +40663,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -40655,7 +40673,7 @@ if(false) {}
 /* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -41756,11 +41774,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -41805,7 +41823,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -41815,7 +41833,7 @@ if(false) {}
 /* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -41849,7 +41867,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -41859,7 +41877,7 @@ if(false) {}
 /* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -42830,11 +42848,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -42877,7 +42895,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(25);
 
@@ -43256,7 +43274,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _bitmap = __webpack_require__(25);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _selection = __webpack_require__(3);
 
@@ -43900,11 +43918,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -44147,7 +44165,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _bitmap = __webpack_require__(25);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _selection = __webpack_require__(3);
 
@@ -44411,11 +44429,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -44665,11 +44683,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -44722,7 +44740,7 @@ var _bitmap = __webpack_require__(25);
 
 var _stylePath = __webpack_require__(6);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _gradientTypes = __webpack_require__(16);
 
@@ -45025,11 +45043,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -45234,7 +45252,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(25);
 
@@ -45427,11 +45445,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -47113,7 +47131,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -47123,7 +47141,7 @@ if(false) {}
 /* 208 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -47748,11 +47766,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -47945,11 +47963,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -50592,7 +50610,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -50602,7 +50620,7 @@ if(false) {}
 /* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -51214,7 +51232,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -51224,7 +51242,7 @@ if(false) {}
 /* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -51257,7 +51275,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -51267,7 +51285,7 @@ if(false) {}
 /* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -51303,7 +51321,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -51313,7 +51331,7 @@ if(false) {}
 /* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -51405,7 +51423,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -51415,7 +51433,7 @@ if(false) {}
 /* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -51448,7 +51466,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -51458,7 +51476,7 @@ if(false) {}
 /* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -51983,11 +52001,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -52468,11 +52486,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -52551,8 +52569,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ZOOM_SCALE = 3;
-
 var LoupeComponent = function (_React$Component) {
     _inherits(LoupeComponent, _React$Component);
 
@@ -52573,36 +52589,38 @@ var LoupeComponent = function (_React$Component) {
     }, {
         key: 'draw',
         value: function draw() {
-            var boxSize = 6 / ZOOM_SCALE;
-            var boxLineWidth = 1 / ZOOM_SCALE;
-            var colorRingWidth = 15 / ZOOM_SCALE;
+            var boxSize = 5;
+            var boxLineWidth = 1;
+            var colorRingWidth = 15;
+            var loupeRadius = _eyeDropper.ZOOM_SCALE * _eyeDropper.LOUPE_RADIUS;
+            var loupeDiameter = loupeRadius * 2;
 
             var color = this.props.colorInfo.color;
 
             var ctx = this.canvas.getContext('2d');
-            this.canvas.width = ZOOM_SCALE * (_eyeDropper.LOUPE_RADIUS * 2);
-            this.canvas.height = ZOOM_SCALE * (_eyeDropper.LOUPE_RADIUS * 2);
+            this.canvas.width = loupeDiameter;
+            this.canvas.height = loupeDiameter;
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, loupeDiameter, loupeDiameter);
 
             // In order to scale the image data, must draw to a tmp canvas first
             var tmpCanvas = document.createElement('canvas');
-            tmpCanvas.width = _eyeDropper.LOUPE_RADIUS * 2;
-            tmpCanvas.height = _eyeDropper.LOUPE_RADIUS * 2;
+            tmpCanvas.width = loupeDiameter;
+            tmpCanvas.height = loupeDiameter;
             var tmpCtx = tmpCanvas.getContext('2d');
-            var imageData = tmpCtx.createImageData(_eyeDropper.LOUPE_RADIUS * 2, _eyeDropper.LOUPE_RADIUS * 2);
+            var imageData = tmpCtx.createImageData(loupeDiameter, loupeDiameter);
             imageData.data.set(this.props.colorInfo.data);
             tmpCtx.putImageData(imageData, 0, 0);
 
             // Scale the loupe canvas and draw the zoomed image
-            ctx.save();
-            ctx.scale(ZOOM_SCALE, ZOOM_SCALE);
-            ctx.drawImage(tmpCanvas, 0, 0, _eyeDropper.LOUPE_RADIUS * 2, _eyeDropper.LOUPE_RADIUS * 2);
+            ctx.drawImage(tmpCanvas, 0, 0);
 
             // Draw an outlined square at the cursor position (cursor is hidden)
             ctx.lineWidth = boxLineWidth;
             ctx.strokeStyle = 'black';
             ctx.fillStyle = 'rgba(' + color[0] + ', ' + color[1] + ', ' + color[2] + ', ' + color[3] + ')';
             ctx.beginPath();
-            ctx.rect(20 - boxSize / 2, 20 - boxSize / 2, boxSize, boxSize);
+            ctx.rect(loupeRadius - boxSize / 2, loupeRadius - boxSize / 2, boxSize, boxSize);
             ctx.fill();
             ctx.stroke();
 
@@ -52610,10 +52628,9 @@ var LoupeComponent = function (_React$Component) {
             ctx.strokeStyle = 'rgba(' + color[0] + ', ' + color[1] + ', ' + color[2] + ', ' + color[3] + ')';
             ctx.lineWidth = colorRingWidth;
             ctx.beginPath();
-            ctx.moveTo(_eyeDropper.LOUPE_RADIUS * 2, _eyeDropper.LOUPE_RADIUS);
-            ctx.arc(_eyeDropper.LOUPE_RADIUS, _eyeDropper.LOUPE_RADIUS, _eyeDropper.LOUPE_RADIUS, 0, 2 * Math.PI);
+            ctx.moveTo(loupeDiameter, loupeDiameter);
+            ctx.arc(loupeRadius, loupeRadius, loupeRadius, 0, 2 * Math.PI);
             ctx.stroke();
-            ctx.restore();
         }
     }, {
         key: 'setCanvas',
@@ -52628,16 +52645,17 @@ var LoupeComponent = function (_React$Component) {
                 pixelRatio = _props.pixelRatio,
                 boxProps = _objectWithoutProperties(_props, ['colorInfo', 'pixelRatio']);
 
+            var loupeDiameter = _eyeDropper.ZOOM_SCALE * _eyeDropper.LOUPE_RADIUS * 2;
             return _react2.default.createElement(_box2.default, _extends({}, boxProps, {
                 className: _loupe2.default.eyeDropper,
                 componentRef: this.setCanvas,
                 element: 'canvas',
                 height: _eyeDropper.LOUPE_RADIUS * 2,
                 style: {
-                    top: colorInfo.y / pixelRatio - ZOOM_SCALE * (_eyeDropper.LOUPE_RADIUS * 2) / 2,
-                    left: colorInfo.x / pixelRatio - ZOOM_SCALE * (_eyeDropper.LOUPE_RADIUS * 2) / 2,
-                    width: _eyeDropper.LOUPE_RADIUS * 2 * ZOOM_SCALE,
-                    height: _eyeDropper.LOUPE_RADIUS * 2 * ZOOM_SCALE
+                    top: colorInfo.y / pixelRatio - loupeDiameter / 2,
+                    left: colorInfo.x / pixelRatio - loupeDiameter / 2,
+                    width: loupeDiameter,
+                    height: loupeDiameter
                 },
                 width: _eyeDropper.LOUPE_RADIUS * 2
             }));
@@ -52678,7 +52696,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -52688,7 +52706,7 @@ if(false) {}
 /* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -53958,7 +53976,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -53968,7 +53986,7 @@ if(false) {}
 /* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -54011,7 +54029,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -54021,7 +54039,7 @@ if(false) {}
 /* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -54071,7 +54089,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -54081,7 +54099,7 @@ if(false) {}
 /* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -54208,7 +54226,7 @@ var _selection = __webpack_require__(3);
 
 var _math = __webpack_require__(22);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(25);
 
@@ -55658,7 +55676,7 @@ exports.default = ModeToolsComponent;
 /* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -55708,7 +55726,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -55718,7 +55736,7 @@ if(false) {}
 /* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
@@ -56208,11 +56226,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -56660,11 +56678,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -57761,11 +57779,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -58198,11 +58216,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -58942,7 +58960,7 @@ var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
 var _guides = __webpack_require__(34);
 
-var _layer = __webpack_require__(15);
+var _layer = __webpack_require__(11);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -59425,11 +59443,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -59480,11 +59498,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(13);
+var _toolSelectBase = __webpack_require__(14);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(14);
+var _messages = __webpack_require__(15);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -59535,7 +59553,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(12)(content, options);
+var update = __webpack_require__(13)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -59545,12 +59563,12 @@ if(false) {}
 /* 327 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(11)(false);
+exports = module.exports = __webpack_require__(12)(false);
 // imports
 
 
 // module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.paint-editor_editor-container_3ajxi {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    padding: calc(3 * .25rem);\n}\n\n.paint-editor_row_1psvV {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.paint-editor_editor-container-top_23HHq {\n    border-bottom: 1px dashed #D9D9D9;\n    padding-bottom: calc(2 * .25rem);\n}\n\n.paint-editor_top-align-row_2Ky-F {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    padding-top: calc(5 * .25rem);\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n}\n\n.paint-editor_row_1psvV + .paint-editor_row_1psvV {\n    margin-top: calc(2 * .25rem);\n}\n\n.paint-editor_mod-dashed-border_1xeKo {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(2 * .25rem);\n}\n\n.paint-editor_mod-labeled-icon-height_3hBCl {\n    height: 2.85rem; /* for the second row so the dashed borders are equal in size */\n}\n\n.paint-editor_button-group-button_1gq5A {\n    display: inline-block;\n    border: 1px solid #D9D9D9;\n    border-radius: 0;\n    border-left: none;\n    padding: .35rem;\n}\n\n.paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n.paint-editor_button-group-button_1gq5A:first-of-type {\n    border-left: 1px solid #D9D9D9;\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n.paint-editor_button-group-button_1gq5A.paint-editor_mod-left-border_3Rpmd {\n    border-left: 1px solid #D9D9D9;\n}\n\n.paint-editor_button-group-button_1gq5A.paint-editor_mod-no-right-border_3lvr3 {\n    border-right: none;\n}\n\n.paint-editor_button-group-button-icon_3BPxO {\n    width: 1.25rem;\n    height: 1.25rem;\n    vertical-align: middle;\n}\n\n.paint-editor_mod-mode-tools_1IXSj {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_mod-margin-right_1sq5N {\n    margin-right: calc(2 * .25rem);\n}\n\n.paint-editor_canvas-container_2rN98 {\n    width: 480px;\n    height: 360px;\n    -webkit-box-sizing: content-box;\n            box-sizing: content-box;\n    border: 1px solid #e8edf1;\n    border-radius: .25rem;\n    position: relative;\n    overflow: visible;\n}\n\n.paint-editor_with-eye-dropper_10z8i {\n    cursor: none;\n}\n\n.paint-editor_mode-selector_1edhd {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin-right: calc(2 * .25rem);\n    max-width: 6rem;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-flex-wrap: wrap;\n        -ms-flex-wrap: wrap;\n            flex-wrap: wrap;\n    -webkit-box-align: start;\n    -webkit-align-items: flex-start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-align-content: flex-start;\n        -ms-flex-line-pack: start;\n            align-content: flex-start;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n.paint-editor_hidden_2XQlT {\n    display: none;\n}\n\n.paint-editor_zoom-controls_3Qe-- {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: reverse;\n    -webkit-flex-direction: row-reverse;\n        -ms-flex-direction: row-reverse;\n            flex-direction: row-reverse;\n}\n\n.paint-editor_color-picker-wrapper_1IC0W {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    pointer-events: none;\n    overflow: hidden;\n}\n\n.paint-editor_canvas-controls_e2K-q {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin-top: .25rem;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n.paint-editor_bitmap-button_GsX3L {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    border-radius: 5px;\n    background-color: #4C97FF;\n    padding: calc(2 * .25rem);\n    line-height: 1.5rem;\n    font-size: calc(3 * .25rem);\n    font-weight: bold;\n    color: white;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n\n.paint-editor_bitmap-button-icon_wPoPh {\n    margin-right: calc(2 * .25rem);\n}\n\n@media only screen and (max-width: 1249px) {\n    .paint-editor_editor-container_3ajxi {\n        padding: calc(3 * .25rem) .25rem;\n    }\n\n    .paint-editor_mode-selector_1edhd {\n        margin-right: .25rem;\n        -webkit-box-orient: vertical;\n        -webkit-box-direction: normal;\n        -webkit-flex-direction: column;\n            -ms-flex-direction: column;\n                flex-direction: column;\n        -webkit-box-pack: start;\n        -webkit-justify-content: flex-start;\n            -ms-flex-pack: start;\n                justify-content: flex-start;\n    }\n}\n\n.paint-editor_text-area_3VRLj {\n    background: transparent;\n    border: none;\n    display: none;\n    margin: 0px;\n    opacity: .8;\n    outline: none;\n    overflow: hidden;\n    padding: 0px;\n    position: absolute;\n    resize: none;\n    -webkit-text-fill-color: transparent;\n    text-fill-color: transparent;\n}\n\n.paint-editor_button-text_2sm18 {\n    width: 100%; /* Fixes button text wrapping in Edge */\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.paint-editor_editor-container_3ajxi {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    padding: calc(3 * .25rem);\n}\n\n.paint-editor_row_1psvV {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.paint-editor_editor-container-top_23HHq {\n    border-bottom: 1px dashed #D9D9D9;\n    padding-bottom: calc(2 * .25rem);\n}\n\n.paint-editor_top-align-row_2Ky-F {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    padding-top: calc(5 * .25rem);\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n}\n\n.paint-editor_row_1psvV + .paint-editor_row_1psvV {\n    margin-top: calc(2 * .25rem);\n}\n\n.paint-editor_mod-dashed-border_1xeKo {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(2 * .25rem);\n}\n\n.paint-editor_mod-labeled-icon-height_3hBCl {\n    height: 2.85rem; /* for the second row so the dashed borders are equal in size */\n}\n\n.paint-editor_button-group-button_1gq5A {\n    display: inline-block;\n    border: 1px solid #D9D9D9;\n    border-radius: 0;\n    border-left: none;\n    padding: .35rem;\n}\n\n.paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n.paint-editor_button-group-button_1gq5A:first-of-type {\n    border-left: 1px solid #D9D9D9;\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n.paint-editor_button-group-button_1gq5A.paint-editor_mod-left-border_3Rpmd {\n    border-left: 1px solid #D9D9D9;\n}\n\n.paint-editor_button-group-button_1gq5A.paint-editor_mod-no-right-border_3lvr3 {\n    border-right: none;\n}\n\n.paint-editor_button-group-button-icon_3BPxO {\n    width: 1.25rem;\n    height: 1.25rem;\n    vertical-align: middle;\n}\n\n.paint-editor_mod-mode-tools_1IXSj {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_mod-margin-right_1sq5N {\n    margin-right: calc(2 * .25rem);\n}\n\n.paint-editor_canvas-container_2rN98 {\n    width: 480px;\n    height: 360px;\n    -webkit-box-sizing: content-box;\n            box-sizing: content-box;\n    border: 1px solid #e8edf1;\n    border-radius: .25rem;\n    position: relative;\n    overflow: visible;\n}\n\n.paint-editor_with-eye-dropper_10z8i {\n    cursor: none;\n}\n\n.paint-editor_mode-selector_1edhd {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin-right: calc(2 * .25rem);\n    max-width: 6rem;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-flex-wrap: wrap;\n        -ms-flex-wrap: wrap;\n            flex-wrap: wrap;\n    -webkit-box-align: start;\n    -webkit-align-items: flex-start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-align-content: flex-start;\n        -ms-flex-line-pack: start;\n            align-content: flex-start;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n.paint-editor_hidden_2XQlT {\n    display: none;\n}\n\n.paint-editor_zoom-controls_3Qe-- {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: reverse;\n    -webkit-flex-direction: row-reverse;\n        -ms-flex-direction: row-reverse;\n            flex-direction: row-reverse;\n}\n\n.paint-editor_color-picker-wrapper_1IC0W {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    pointer-events: none;\n}\n\n.paint-editor_canvas-controls_e2K-q {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin-top: .25rem;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n.paint-editor_bitmap-button_GsX3L {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    border-radius: 5px;\n    background-color: #4C97FF;\n    padding: calc(2 * .25rem);\n    line-height: 1.5rem;\n    font-size: calc(3 * .25rem);\n    font-weight: bold;\n    color: white;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n\n.paint-editor_bitmap-button-icon_wPoPh {\n    margin-right: calc(2 * .25rem);\n}\n\n@media only screen and (max-width: 1249px) {\n    .paint-editor_editor-container_3ajxi {\n        padding: calc(3 * .25rem) .25rem;\n    }\n\n    .paint-editor_mode-selector_1edhd {\n        margin-right: .25rem;\n        -webkit-box-orient: vertical;\n        -webkit-box-direction: normal;\n        -webkit-flex-direction: column;\n            -ms-flex-direction: column;\n                flex-direction: column;\n        -webkit-box-pack: start;\n        -webkit-justify-content: flex-start;\n            -ms-flex-pack: start;\n                justify-content: flex-start;\n    }\n}\n\n.paint-editor_text-area_3VRLj {\n    background: transparent;\n    border: none;\n    display: none;\n    margin: 0px;\n    opacity: .8;\n    outline: none;\n    overflow: hidden;\n    padding: 0px;\n    position: absolute;\n    resize: none;\n    -webkit-text-fill-color: transparent;\n    text-fill-color: transparent;\n}\n\n.paint-editor_button-text_2sm18 {\n    width: 100%; /* Fixes button text wrapping in Edge */\n}\n", ""]);
 
 // exports
 exports.locals = {
