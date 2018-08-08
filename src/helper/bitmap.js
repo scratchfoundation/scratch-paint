@@ -659,11 +659,6 @@ const scaleBitmap = function (canvas, scale) {
  * @param {paper.Raster} item raster to change
  */
 const maybeApplyScaleToCanvas_ = function (item) {
-    if (!item.matrix.isInvertible()) {
-        item.remove();
-        return;
-    }
-
     // context.drawImage will anti-alias the image if both width and height are reduced.
     // However, it will preserve pixel colors if only one or the other is reduced, and
     // imageSmoothingEnabled is set to false. Therefore, we can avoid aliasing by scaling
@@ -719,6 +714,10 @@ const commitArbitraryTransformation_ = function (item, destination) {
  * @param {paper.Raster} bitmap raster to draw selection to
  */
 const commitSelectionToBitmap = function (selection, bitmap) {
+    if (!selection.matrix.isInvertible()) {
+        return;
+    }
+
     maybeApplyScaleToCanvas_(selection);
     commitArbitraryTransformation_(selection, bitmap);
 };
