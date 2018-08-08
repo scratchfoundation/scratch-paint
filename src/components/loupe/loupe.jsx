@@ -4,11 +4,9 @@ import bindAll from 'lodash.bindall';
 
 import Box from '../box/box.jsx';
 
-import {LOUPE_RADIUS} from '../../helper/tools/eye-dropper';
+import {LOUPE_RADIUS, ZOOM_SCALE} from '../../helper/tools/eye-dropper';
 
 import styles from './loupe.css';
-
-const ZOOM_SCALE = 3;
 
 class LoupeComponent extends React.Component {
     constructor (props) {
@@ -21,38 +19,40 @@ class LoupeComponent extends React.Component {
         this.draw();
     }
     draw () {
-        const boxSize = 6 / ZOOM_SCALE;
-        const boxLineWidth = 1 / ZOOM_SCALE;
-        const colorRingWidth = 15 / ZOOM_SCALE;
+        const boxSize = 5;
+        const boxLineWidth = 1;
+        const colorRingWidth = 15;
+        const loupeRadius = ZOOM_SCALE * LOUPE_RADIUS;
+        const loupeDiameter = loupeRadius * 2;
 
         const color = this.props.colorInfo.color;
 
         const ctx = this.canvas.getContext('2d');
-        this.canvas.width = ZOOM_SCALE * (LOUPE_RADIUS * 2);
-        this.canvas.height = ZOOM_SCALE * (LOUPE_RADIUS * 2);
+        this.canvas.width = loupeDiameter;
+        this.canvas.height = loupeDiameter;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, loupeDiameter, loupeDiameter);
 
         // In order to scale the image data, must draw to a tmp canvas first
         const tmpCanvas = document.createElement('canvas');
-        tmpCanvas.width = LOUPE_RADIUS * 2;
-        tmpCanvas.height = LOUPE_RADIUS * 2;
+        tmpCanvas.width = loupeDiameter;
+        tmpCanvas.height = loupeDiameter;
         const tmpCtx = tmpCanvas.getContext('2d');
         const imageData = tmpCtx.createImageData(
-            LOUPE_RADIUS * 2, LOUPE_RADIUS * 2
+            loupeDiameter, loupeDiameter
         );
         imageData.data.set(this.props.colorInfo.data);
         tmpCtx.putImageData(imageData, 0, 0);
 
         // Scale the loupe canvas and draw the zoomed image
-        ctx.save();
-        ctx.scale(ZOOM_SCALE, ZOOM_SCALE);
-        ctx.drawImage(tmpCanvas, 0, 0, LOUPE_RADIUS * 2, LOUPE_RADIUS * 2);
+        ctx.drawImage(tmpCanvas, 0, 0);
 
         // Draw an outlined square at the cursor position (cursor is hidden)
         ctx.lineWidth = boxLineWidth;
         ctx.strokeStyle = 'black';
         ctx.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`;
         ctx.beginPath();
-        ctx.rect((20) - (boxSize / 2), (20) - (boxSize / 2), boxSize, boxSize);
+        ctx.rect(loupeRadius - (boxSize / 2), loupeRadius - (boxSize / 2), boxSize, boxSize);
         ctx.fill();
         ctx.stroke();
 
@@ -60,10 +60,9 @@ class LoupeComponent extends React.Component {
         ctx.strokeStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`;
         ctx.lineWidth = colorRingWidth;
         ctx.beginPath();
-        ctx.moveTo(LOUPE_RADIUS * 2, LOUPE_RADIUS);
-        ctx.arc(LOUPE_RADIUS, LOUPE_RADIUS, LOUPE_RADIUS, 0, 2 * Math.PI);
+        ctx.moveTo(loupeDiameter, loupeDiameter);
+        ctx.arc(loupeRadius, loupeRadius, loupeRadius, 0, 2 * Math.PI);
         ctx.stroke();
-        ctx.restore();
     }
     setCanvas (element) {
         this.canvas = element;
@@ -74,6 +73,7 @@ class LoupeComponent extends React.Component {
             pixelRatio,
             ...boxProps
         } = this.props;
+        const loupeDiameter = ZOOM_SCALE * LOUPE_RADIUS * 2;
         return (
             <Box
                 {...boxProps}
@@ -82,10 +82,10 @@ class LoupeComponent extends React.Component {
                 element="canvas"
                 height={LOUPE_RADIUS * 2}
                 style={{
-                    top: (colorInfo.y / pixelRatio) - ((ZOOM_SCALE * (LOUPE_RADIUS * 2)) / 2),
-                    left: (colorInfo.x / pixelRatio) - ((ZOOM_SCALE * (LOUPE_RADIUS * 2)) / 2),
-                    width: (LOUPE_RADIUS * 2) * ZOOM_SCALE,
-                    height: (LOUPE_RADIUS * 2) * ZOOM_SCALE
+                    top: (colorInfo.y / pixelRatio) - (loupeDiameter / 2),
+                    left: (colorInfo.x / pixelRatio) - (loupeDiameter / 2),
+                    width: loupeDiameter,
+                    height: loupeDiameter
                 }}
                 width={LOUPE_RADIUS * 2}
             />

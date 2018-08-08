@@ -1,10 +1,35 @@
 import paper from '@scratch/paper';
+import {createCanvas, getRaster, getBackgroundGuideLayer} from '../layer';
 
 const LOUPE_RADIUS = 20;
+const ZOOM_SCALE = 3;
 
 class EyeDropperTool extends paper.Tool {
-    constructor (canvas, width, height, pixelRatio, zoom, offsetX, offsetY) {
+    constructor (canvas, width, height, pixelRatio, zoom, offsetX, offsetY, isBitmap) {
         super();
+
+        const layer = isBitmap ? getRaster().layer : paper.project.activeLayer;
+        const contentRaster3x = layer.rasterize(
+            72 * ZOOM_SCALE * paper.view.zoom, false /* insert */, paper.view.bounds);
+        const backgroundRaster3x = getBackgroundGuideLayer().rasterize(
+            72 * ZOOM_SCALE * paper.view.zoom, false /* insert */, paper.view.bounds);
+
+        // Canvas from which loupe is cut, shows art and grid
+        this.bufferCanvas = createCanvas(canvas.width * ZOOM_SCALE, canvas.height * ZOOM_SCALE);
+        const bufferCanvasContext = this.bufferCanvas.getContext('2d');
+        // Canvas to sample colors from; just the art
+        this.colorCanvas = createCanvas(canvas.width * ZOOM_SCALE, canvas.height * ZOOM_SCALE);
+        const colorCanvasContext = this.colorCanvas.getContext('2d');
+
+        backgroundRaster3x.onLoad = () => {
+            bufferCanvasContext.drawImage(backgroundRaster3x.canvas, 0, 0);
+            contentRaster3x.onLoad = () => {
+                colorCanvasContext.drawImage(contentRaster3x.canvas, 0, 0);
+                bufferCanvasContext.drawImage(this.colorCanvas, 0, 0);
+                this.bufferLoaded = true;
+            };
+            if (contentRaster3x.loaded) contentRaster3x.onLoad();
+        };
 
         this.onMouseDown = this.handleMouseDown;
         this.onMouseMove = this.handleMouseMove;
@@ -21,23 +46,6 @@ class EyeDropperTool extends paper.Tool {
         this.pickX = -1;
         this.pickY = -1;
         this.hideLoupe = true;
-
-        /*
-            Chrome 64 has a bug that makes it impossible to use getImageData directly
-            a 2d canvas. Until that is resolved, copy the canvas to a buffer canvas
-            and read the data from there.
-            https://github.com/LLK/scratch-paint/issues/276
-        */
-        this.bufferLoaded = false;
-        this.bufferCanvas = document.createElement('canvas');
-        this.bufferCanvas.width = canvas.width;
-        this.bufferCanvas.height = canvas.height;
-        this.bufferImage = new Image();
-        this.bufferImage.onload = () => {
-            this.bufferCanvas.getContext('2d').drawImage(this.bufferImage, 0, 0);
-            this.bufferLoaded = true;
-        };
-        this.bufferImage.src = canvas.toDataURL();
     }
     handleMouseMove (event) {
         // Set the pickX/Y for the color picker loop to pick up
@@ -54,6 +62,11 @@ class EyeDropperTool extends paper.Tool {
         if (!this.hideLoupe) {
             const colorInfo = this.getColorInfo(this.pickX, this.pickY, this.hideLoupe);
             if (!colorInfo) return;
+            if (colorInfo.color[3] === 0) {
+                // Alpha 0
+                this.colorString = null;
+                return;
+            }
             const r = colorInfo.color[0];
             const g = colorInfo.color[1];
             const b = colorInfo.color[2];
@@ -68,18 +81,21 @@ class EyeDropperTool extends paper.Tool {
         }
     }
     getColorInfo (x, y, hideLoupe) {
+        const artX = x / this.pixelRatio;
+        const artY = y / this.pixelRatio;
         if (!this.bufferLoaded) return null;
-        const ctx = this.bufferCanvas.getContext('2d');
-        const colors = ctx.getImageData(x, y, 1, 1);
+        const colorContext = this.colorCanvas.getContext('2d');
+        const bufferContext = this.bufferCanvas.getContext('2d');
+        const colors = colorContext.getImageData(artX * ZOOM_SCALE, artY * ZOOM_SCALE, 1, 1);
         return {
             x: x,
             y: y,
             color: colors.data,
-            data: ctx.getImageData(
-                x - LOUPE_RADIUS,
-                y - LOUPE_RADIUS,
-                LOUPE_RADIUS * 2,
-                LOUPE_RADIUS * 2
+            data: bufferContext.getImageData(
+                (artX * ZOOM_SCALE) - (LOUPE_RADIUS * ZOOM_SCALE),
+                (artY * ZOOM_SCALE) - (LOUPE_RADIUS * ZOOM_SCALE),
+                LOUPE_RADIUS * 2 * ZOOM_SCALE,
+                LOUPE_RADIUS * 2 * ZOOM_SCALE
             ).data,
             hideLoupe: hideLoupe
         };
@@ -88,5 +104,6 @@ class EyeDropperTool extends paper.Tool {
 
 export {
     EyeDropperTool as default,
-    LOUPE_RADIUS
+    LOUPE_RADIUS,
+    ZOOM_SCALE
 };
