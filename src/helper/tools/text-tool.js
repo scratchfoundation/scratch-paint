@@ -173,13 +173,15 @@ class TextTool extends paper.Tool {
                 this.textBox.hitTest(event.point)) {
             // Double click in select mode moves you to text edit mode
             this.endSelect();
-            this.beginTextEdit(this.textBox.content, this.textBox.matrix);
+            this.beginTextEdit(this.textBox);
+            this.element.select();
             return;
         }
 
         // In select mode staying in select mode
         if (this.boundingBoxTool.onMouseDown(
-            event, false /* clone */, false /* multiselect */, this.getBoundingBoxHitOptions())) {
+            event, false /* clone */, false /* multiselect */, false /* doubleClicked */,
+            this.getBoundingBoxHitOptions())) {
             return;
         }
 
@@ -197,8 +199,7 @@ class TextTool extends paper.Tool {
         const hitResults = paper.project.hitTestAll(event.point, this.getTextEditHitOptions());
         if (hitResults.length) {
             // Clicking a different text item to begin text edit mode on that item
-            this.textBox = hitResults[0].item;
-            this.beginTextEdit(this.textBox.content, this.textBox.matrix);
+            this.beginTextEdit(hitResults[0].item);
         } else if (lastMode === TextTool.TEXT_EDIT_MODE) {
             // In text mode clicking away to begin select mode
             this.beginSelect();
@@ -215,7 +216,7 @@ class TextTool extends paper.Tool {
                 // This value was obtained experimentally.
                 leading: 46.15
             });
-            this.beginTextEdit(this.textBox.content, this.textBox.matrix);
+            this.beginTextEdit(this.textBox);
         }
     }
     handleMouseDrag (event) {
@@ -293,11 +294,10 @@ class TextTool extends paper.Tool {
         this.mode = null;
     }
     /**
-     * @param {string} initialText Text to initialize the text area with
-     * @param {paper.Matrix} matrix Transform matrix for the element. Defaults
-     *     to the identity matrix.
+     * @param {paper.PointText} textBox Text object to begin text edit on
      */
-    beginTextEdit (initialText, matrix) {
+    beginTextEdit (textBox) {
+        this.textBox = textBox;
         this.mode = TextTool.TEXT_EDIT_MODE;
         this.setTextEditTarget(this.textBox.id);
         if (this.font !== this.textBox.font) {
@@ -309,15 +309,15 @@ class TextTool extends paper.Tool {
         const viewMtx = paper.view.matrix;
 
         this.element.style.display = 'initial';
-        this.element.value = initialText ? initialText : '';
+        this.element.value = textBox.content ? textBox.content : '';
         this.element.style.transformOrigin =
             `${-this.textBox.internalBounds.x}px ${-this.textBox.internalBounds.y}px`;
         this.element.style.transform =
             `translate(0px, ${this.textBox.internalBounds.y}px)
             matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
             ${viewMtx.tx}, ${viewMtx.ty})
-            matrix(${matrix.a}, ${matrix.b}, ${matrix.c}, ${matrix.d},
-            ${matrix.tx}, ${matrix.ty})`;
+            matrix(${textBox.matrix.a}, ${textBox.matrix.b}, ${textBox.matrix.c}, ${textBox.matrix.d},
+            ${textBox.matrix.tx}, ${textBox.matrix.ty})`;
         this.element.focus({preventScroll: true});
         this.eventListener = this.handleTextInput.bind(this);
         this.element.addEventListener('input', this.eventListener);

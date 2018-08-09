@@ -105,7 +105,8 @@ class RectTool extends paper.Tool {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
 
-        if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions())) {
+        if (this.boundingBoxTool.onMouseDown(
+            event, false /* clone */, false /* multiselect */, false /* doubleClicked */, this.getHitOptions())) {
             this.isBoundingBoxMode = true;
         } else {
             this.isBoundingBoxMode = false;

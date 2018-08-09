@@ -49,7 +49,8 @@ class SelectMode extends React.Component {
             this.props.clearHoveredItem,
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
-            this.props.onUpdateImage
+            this.props.onUpdateImage,
+            this.props.switchToTextTool
         );
         this.tool.activate();
     }
@@ -77,7 +78,8 @@ SelectMode.propTypes = {
     onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setHoveredItem: PropTypes.func.isRequired,
-    setSelectedItems: PropTypes.func.isRequired
+    setSelectedItems: PropTypes.func.isRequired,
+    switchToTextTool: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -100,6 +102,9 @@ const mapDispatchToProps = dispatch => ({
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.SELECT));
+    },
+    switchToTextTool: () => {
+        dispatch(changeMode(Modes.TEXT));
     }
 });
 

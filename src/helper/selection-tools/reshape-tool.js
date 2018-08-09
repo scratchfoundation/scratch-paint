@@ -44,8 +44,10 @@ class ReshapeTool extends paper.Tool {
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
+     * @param {!function} switchToTextTool A callback to call to switch to the text tool
      */
-    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage) {
+    constructor (setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage,
+        switchToTextTool) {
         super();
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
@@ -56,7 +58,7 @@ class ReshapeTool extends paper.Tool {
         this.mode = ReshapeModes.SELECTION_BOX;
         this._modeMap = {};
         this._modeMap[ReshapeModes.FILL] =
-            new MoveTool(Modes.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateImage);
+            new MoveTool(Modes.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool);
         this._modeMap[ReshapeModes.POINT] = new PointTool(setSelectedItems, clearSelectedItems, onUpdateImage);
         this._modeMap[ReshapeModes.HANDLE] = new HandleTool(setSelectedItems, clearSelectedItems, onUpdateImage);
         this._modeMap[ReshapeModes.SELECTION_BOX] =
@@ -169,7 +171,7 @@ class ReshapeTool extends paper.Tool {
                 break;
             }
         }
-        
+
         // Don't allow detail-selection of PGTextItem
         if (isPGTextItem(getRootItem(hitResult.item))) {
             return;
@@ -209,7 +211,7 @@ class ReshapeTool extends paper.Tool {
             this.mode = ReshapeModes.FILL;
             this._modeMap[this.mode].onMouseDown(hitProperties);
         }
-    
+
         // @todo Trigger selection changed. Update styles based on selection.
     }
     handleMouseMove (event) {

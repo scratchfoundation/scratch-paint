@@ -36,8 +36,9 @@ class BoundingBoxTool {
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
+     * @param {?function} switchToTextTool A callback to call to switch to the text tool
      */
-    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateImage) {
+    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool) {
         this.onUpdateImage = onUpdateImage;
         this.mode = null;
         this.boundsPath = null;
@@ -46,7 +47,8 @@ class BoundingBoxTool {
         this._modeMap = {};
         this._modeMap[BoundingBoxModes.SCALE] = new ScaleTool(onUpdateImage);
         this._modeMap[BoundingBoxModes.ROTATE] = new RotateTool(onUpdateImage);
-        this._modeMap[BoundingBoxModes.MOVE] = new MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage);
+        this._modeMap[BoundingBoxModes.MOVE] =
+            new MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool);
     }
 
     /**
@@ -65,11 +67,12 @@ class BoundingBoxTool {
      * @param {!MouseEvent} event The mouse event
      * @param {boolean} clone Whether to clone on mouse down (e.g. alt key held)
      * @param {boolean} multiselect Whether to multiselect on mouse down (e.g. shift key held)
+     * @param {?boolean} doubleClicked True if this is the second click in a short amout of time
      * @param {paper.hitOptions} hitOptions The options with which to detect whether mouse down has hit
      *     anything editable
      * @return {boolean} True if there was a hit, false otherwise
      */
-    onMouseDown (event, clone, multiselect, hitOptions) {
+    onMouseDown (event, clone, multiselect, doubleClicked, hitOptions) {
         if (event.event.button > 0) return; // only first mouse button
         const hitResults = paper.project.hitTestAll(event.point, hitOptions);
         if (!hitResults || hitResults.length === 0) {
@@ -98,7 +101,8 @@ class BoundingBoxTool {
         const hitProperties = {
             hitResult: hitResult,
             clone: clone,
-            multiselect: multiselect
+            multiselect: multiselect,
+            doubleClicked: doubleClicked
         };
         if (this.mode === BoundingBoxModes.MOVE) {
             this._modeMap[this.mode].onMouseDown(hitProperties);

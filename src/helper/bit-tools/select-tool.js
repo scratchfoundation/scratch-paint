@@ -88,6 +88,7 @@ class SelectTool extends paper.Tool {
                 event,
                 event.modifiers.alt,
                 event.modifiers.shift,
+                false /* doubleClicked */,
                 this.getHitOptions())) {
             this.commitSelection();
             this.selectionBoxMode = true;
