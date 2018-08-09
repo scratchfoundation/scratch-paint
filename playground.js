@@ -24655,8 +24655,9 @@ var BoundingBoxTool = function () {
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
+     * @param {?function} switchToTextTool A callback to call to switch to the text tool
      */
-    function BoundingBoxTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage) {
+    function BoundingBoxTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool) {
         _classCallCheck(this, BoundingBoxTool);
 
         this.onUpdateImage = onUpdateImage;
@@ -24667,7 +24668,7 @@ var BoundingBoxTool = function () {
         this._modeMap = {};
         this._modeMap[BoundingBoxModes.SCALE] = new _scaleTool2.default(onUpdateImage);
         this._modeMap[BoundingBoxModes.ROTATE] = new _rotateTool2.default(onUpdateImage);
-        this._modeMap[BoundingBoxModes.MOVE] = new _moveTool2.default(mode, setSelectedItems, clearSelectedItems, onUpdateImage);
+        this._modeMap[BoundingBoxModes.MOVE] = new _moveTool2.default(mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool);
     }
 
     /**
@@ -24690,6 +24691,7 @@ var BoundingBoxTool = function () {
          * @param {!MouseEvent} event The mouse event
          * @param {boolean} clone Whether to clone on mouse down (e.g. alt key held)
          * @param {boolean} multiselect Whether to multiselect on mouse down (e.g. shift key held)
+         * @param {?boolean} doubleClicked True if this is the second click in a short amout of time
          * @param {paper.hitOptions} hitOptions The options with which to detect whether mouse down has hit
          *     anything editable
          * @return {boolean} True if there was a hit, false otherwise
@@ -24697,7 +24699,7 @@ var BoundingBoxTool = function () {
 
     }, {
         key: 'onMouseDown',
-        value: function onMouseDown(event, clone, multiselect, hitOptions) {
+        value: function onMouseDown(event, clone, multiselect, doubleClicked, hitOptions) {
             if (event.event.button > 0) return; // only first mouse button
             var hitResults = _paper2.default.project.hitTestAll(event.point, hitOptions);
             if (!hitResults || hitResults.length === 0) {
@@ -24726,7 +24728,8 @@ var BoundingBoxTool = function () {
             var hitProperties = {
                 hitResult: hitResult,
                 clone: clone,
-                multiselect: multiselect
+                multiselect: multiselect,
+                doubleClicked: doubleClicked
             };
             if (this.mode === BoundingBoxModes.MOVE) {
                 this._modeMap[this.mode].onMouseDown(hitProperties);
@@ -28947,6 +28950,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
 var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
@@ -28972,8 +28979,9 @@ var MoveTool = function () {
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
+     * @param {?function} switchToTextTool A callback to call to switch to the text tool
      */
-    function MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage) {
+    function MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool) {
         _classCallCheck(this, MoveTool);
 
         this.mode = mode;
@@ -28981,6 +28989,7 @@ var MoveTool = function () {
         this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
         this.onUpdateImage = onUpdateImage;
+        this.switchToTextTool = switchToTextTool;
         this.boundsPath = null;
     }
 
@@ -29004,9 +29013,14 @@ var MoveTool = function () {
                 item = (0, _item.isCompoundPathItem)(root) || (0, _group.isGroup)(root) ? root : hitProperties.hitResult.item;
             }
             if (item.selected) {
-                // Double click causes all points to be selected in subselect mode.
+                // Double click causes all points to be selected in subselect mode. If the target is text, it
+                // enters text edit.
                 if (hitProperties.doubleClicked) {
                     if (!hitProperties.multiselect) {
+                        if (this.switchToTextTool && item instanceof _paper2.default.PointText) {
+                            this.switchToTextTool();
+                            return;
+                        }
                         (0, _selection.clearSelection)(this.clearSelectedItems);
                     }
                     this._select(item, true /* state */, hitProperties.subselect, true /* fullySelect */);
@@ -43419,7 +43433,7 @@ var OvalTool = function (_paper$Tool) {
             if (event.event.button > 0) return; // only first mouse button
             this.active = true;
 
-            if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions())) {
+            if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, false /* doubleClicked */, this.getHitOptions())) {
                 this.isBoundingBoxMode = true;
             } else {
                 this.isBoundingBoxMode = false;
@@ -44310,7 +44324,7 @@ var RectTool = function (_paper$Tool) {
             if (event.event.button > 0) return; // only first mouse button
             this.active = true;
 
-            if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions())) {
+            if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, false /* doubleClicked */, this.getHitOptions())) {
                 this.isBoundingBoxMode = true;
             } else {
                 this.isBoundingBoxMode = false;
@@ -45371,7 +45385,8 @@ var SelectTool = function (_paper$Tool) {
 
             // If bounding box tool does not find an item that was hit, rasterize the old selection,
             // then use selection box tool.
-            if (!this.boundingBoxTool.onMouseDown(event, event.modifiers.alt, event.modifiers.shift, this.getHitOptions())) {
+            if (!this.boundingBoxTool.onMouseDown(event, event.modifiers.alt, event.modifiers.shift, false /* doubleClicked */
+            , this.getHitOptions())) {
                 this.commitSelection();
                 this.selectionBoxMode = true;
                 this.selectionBoxTool.onMouseDown(event.modifiers.shift);
@@ -56132,7 +56147,7 @@ var OvalTool = function (_paper$Tool) {
             if (event.event.button > 0) return; // only first mouse button
             this.active = true;
 
-            if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions())) {
+            if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, false /* doubleClicked */, this.getHitOptions())) {
                 this.isBoundingBoxMode = true;
             } else {
                 this.isBoundingBoxMode = false;
@@ -56585,7 +56600,7 @@ var RectTool = function (_paper$Tool) {
             if (event.event.button > 0) return; // only first mouse button
             this.active = true;
 
-            if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getHitOptions())) {
+            if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, false /* doubleClicked */, this.getHitOptions())) {
                 this.isBoundingBoxMode = true;
             } else {
                 this.isBoundingBoxMode = false;
@@ -56809,7 +56824,7 @@ var ReshapeMode = function (_React$Component) {
     }, {
         key: 'activateTool',
         value: function activateTool() {
-            this.tool = new _reshapeTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage);
+            this.tool = new _reshapeTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage, this.props.switchToTextTool);
             this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
             this.tool.activate();
         }
@@ -56842,7 +56857,8 @@ ReshapeMode.propTypes = {
     isReshapeModeActive: _propTypes2.default.bool.isRequired,
     onUpdateImage: _propTypes2.default.func.isRequired,
     setHoveredItem: _propTypes2.default.func.isRequired,
-    setSelectedItems: _propTypes2.default.func.isRequired
+    setSelectedItems: _propTypes2.default.func.isRequired,
+    switchToTextTool: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -56867,6 +56883,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         },
         handleMouseDown: function handleMouseDown() {
             dispatch((0, _modes3.changeMode)(_modes2.default.RESHAPE));
+        },
+        switchToTextTool: function switchToTextTool() {
+            dispatch((0, _modes3.changeMode)(_modes2.default.TEXT));
         }
     };
 };
@@ -56974,11 +56993,12 @@ var ReshapeTool = function (_paper$Tool) {
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
          * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
          * @param {!function} onUpdateImage A callback to call when the image visibly changes
+         * @param {!function} switchToTextTool A callback to call to switch to the text tool
          */
 
     }]);
 
-    function ReshapeTool(setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage) {
+    function ReshapeTool(setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool) {
         _classCallCheck(this, ReshapeTool);
 
         var _this = _possibleConstructorReturn(this, (ReshapeTool.__proto__ || Object.getPrototypeOf(ReshapeTool)).call(this));
@@ -56991,7 +57011,7 @@ var ReshapeTool = function (_paper$Tool) {
         _this.active = false;
         _this.mode = ReshapeModes.SELECTION_BOX;
         _this._modeMap = {};
-        _this._modeMap[ReshapeModes.FILL] = new _moveTool2.default(_modes2.default.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateImage);
+        _this._modeMap[ReshapeModes.FILL] = new _moveTool2.default(_modes2.default.RESHAPE, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool);
         _this._modeMap[ReshapeModes.POINT] = new _pointTool2.default(setSelectedItems, clearSelectedItems, onUpdateImage);
         _this._modeMap[ReshapeModes.HANDLE] = new _handleTool2.default(setSelectedItems, clearSelectedItems, onUpdateImage);
         _this._modeMap[ReshapeModes.SELECTION_BOX] = new _selectionBoxTool2.default(_modes2.default.RESHAPE, setSelectedItems, clearSelectedItems);
@@ -57917,7 +57937,7 @@ var SelectMode = function (_React$Component) {
     }, {
         key: 'activateTool',
         value: function activateTool() {
-            this.tool = new _selectTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage);
+            this.tool = new _selectTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage, this.props.switchToTextTool);
             this.tool.activate();
         }
     }, {
@@ -57949,7 +57969,8 @@ SelectMode.propTypes = {
     onUpdateImage: _propTypes2.default.func.isRequired,
     selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setHoveredItem: _propTypes2.default.func.isRequired,
-    setSelectedItems: _propTypes2.default.func.isRequired
+    setSelectedItems: _propTypes2.default.func.isRequired,
+    switchToTextTool: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -57975,6 +57996,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         },
         handleMouseDown: function handleMouseDown() {
             dispatch((0, _modes3.changeMode)(_modes2.default.SELECT));
+        },
+        switchToTextTool: function switchToTextTool() {
+            dispatch((0, _modes3.changeMode)(_modes2.default.TEXT));
         }
     };
 };
@@ -58043,17 +58067,25 @@ var SelectTool = function (_paper$Tool) {
         get: function get() {
             return 6;
         }
+        /** Clicks registered within this amount of time are registered as double clicks */
+
+    }, {
+        key: 'DOUBLE_CLICK_MILLIS',
+        get: function get() {
+            return 250;
+        }
         /**
          * @param {function} setHoveredItem Callback to set the hovered item
          * @param {function} clearHoveredItem Callback to clear the hovered item
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
          * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
          * @param {!function} onUpdateImage A callback to call when the image visibly changes
+         * @param {!function} switchToTextTool A callback to call to switch to the text tool
          */
 
     }]);
 
-    function SelectTool(setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage) {
+    function SelectTool(setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool) {
         _classCallCheck(this, SelectTool);
 
         var _this = _possibleConstructorReturn(this, (SelectTool.__proto__ || Object.getPrototypeOf(SelectTool)).call(this));
@@ -58061,7 +58093,7 @@ var SelectTool = function (_paper$Tool) {
         _this.setHoveredItem = setHoveredItem;
         _this.clearHoveredItem = clearHoveredItem;
         _this.onUpdateImage = onUpdateImage;
-        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.SELECT, setSelectedItems, clearSelectedItems, onUpdateImage);
+        _this.boundingBoxTool = new _boundingBoxTool2.default(_modes2.default.SELECT, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool);
         var nudgeTool = new _nudgeTool2.default(_this.boundingBoxTool, onUpdateImage);
         _this.selectionBoxTool = new _selectionBoxTool2.default(_modes2.default.SELECT, setSelectedItems, clearSelectedItems);
         _this.selectionBoxMode = false;
@@ -58136,10 +58168,21 @@ var SelectTool = function (_paper$Tool) {
         value: function handleMouseDown(event) {
             if (event.event.button > 0) return; // only first mouse button
             this.active = true;
+            this.clearHoveredItem();
+
+            // Check if double clicked
+            var doubleClicked = false;
+            if (this.lastEvent) {
+                if (event.event.timeStamp - this.lastEvent.event.timeStamp < SelectTool.DOUBLE_CLICK_MILLIS) {
+                    doubleClicked = true;
+                } else {
+                    doubleClicked = false;
+                }
+            }
+            this.lastEvent = event;
 
             // If bounding box tool does not find an item that was hit, use selection box tool.
-            this.clearHoveredItem();
-            if (!this.boundingBoxTool.onMouseDown(event, event.modifiers.alt, event.modifiers.shift, this.getHitOptions(false /* preseelectedOnly */))) {
+            if (!this.boundingBoxTool.onMouseDown(event, event.modifiers.alt, event.modifiers.shift, doubleClicked, this.getHitOptions(false /* preseelectedOnly */))) {
                 this.selectionBoxMode = true;
                 this.selectionBoxTool.onMouseDown(event.modifiers.shift);
             }
@@ -58803,6 +58846,11 @@ var TextMode = function (_React$Component) {
     }, {
         key: 'activateTool',
         value: function activateTool(nextProps) {
+            var selected = (0, _selection.getSelectedLeafItems)();
+            var textBoxToStartEditing = null;
+            if (selected.length === 1 && selected[0] instanceof _paper2.default.PointText) {
+                textBoxToStartEditing = selected[0];
+            }
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
             this.props.clearGradient();
 
@@ -58834,6 +58882,10 @@ var TextMode = function (_React$Component) {
             this.tool.setColorState(nextProps.colorState);
             this.tool.setFont(nextProps.font);
             this.tool.activate();
+            if (textBoxToStartEditing) {
+                this.tool.beginTextEdit(textBoxToStartEditing);
+                this.props.textArea.select();
+            }
         }
     }, {
         key: 'deactivateTool',
@@ -59196,12 +59248,14 @@ var TextTool = function (_paper$Tool) {
             if (doubleClicked && this.mode === TextTool.SELECT_MODE && this.textBox.hitTest(event.point)) {
                 // Double click in select mode moves you to text edit mode
                 this.endSelect();
-                this.beginTextEdit(this.textBox.content, this.textBox.matrix);
+                this.beginTextEdit(this.textBox);
+                this.element.select();
                 return;
             }
 
             // In select mode staying in select mode
-            if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, this.getBoundingBoxHitOptions())) {
+            if (this.boundingBoxTool.onMouseDown(event, false /* clone */, false /* multiselect */, false /* doubleClicked */
+            , this.getBoundingBoxHitOptions())) {
                 return;
             }
 
@@ -59219,8 +59273,7 @@ var TextTool = function (_paper$Tool) {
             var hitResults = _paper2.default.project.hitTestAll(event.point, this.getTextEditHitOptions());
             if (hitResults.length) {
                 // Clicking a different text item to begin text edit mode on that item
-                this.textBox = hitResults[0].item;
-                this.beginTextEdit(this.textBox.content, this.textBox.matrix);
+                this.beginTextEdit(hitResults[0].item);
             } else if (lastMode === TextTool.TEXT_EDIT_MODE) {
                 // In text mode clicking away to begin select mode
                 this.beginSelect();
@@ -59237,7 +59290,7 @@ var TextTool = function (_paper$Tool) {
                     // This value was obtained experimentally.
                     leading: 46.15
                 });
-                this.beginTextEdit(this.textBox.content, this.textBox.matrix);
+                this.beginTextEdit(this.textBox);
             }
         }
     }, {
@@ -59331,14 +59384,13 @@ var TextTool = function (_paper$Tool) {
             this.mode = null;
         }
         /**
-         * @param {string} initialText Text to initialize the text area with
-         * @param {paper.Matrix} matrix Transform matrix for the element. Defaults
-         *     to the identity matrix.
+         * @param {paper.PointText} textBox Text object to begin text edit on
          */
 
     }, {
         key: 'beginTextEdit',
-        value: function beginTextEdit(initialText, matrix) {
+        value: function beginTextEdit(textBox) {
+            this.textBox = textBox;
             this.mode = TextTool.TEXT_EDIT_MODE;
             this.setTextEditTarget(this.textBox.id);
             if (this.font !== this.textBox.font) {
@@ -59350,9 +59402,9 @@ var TextTool = function (_paper$Tool) {
             var viewMtx = _paper2.default.view.matrix;
 
             this.element.style.display = 'initial';
-            this.element.value = initialText ? initialText : '';
+            this.element.value = textBox.content ? textBox.content : '';
             this.element.style.transformOrigin = -this.textBox.internalBounds.x + 'px ' + -this.textBox.internalBounds.y + 'px';
-            this.element.style.transform = 'translate(0px, ' + this.textBox.internalBounds.y + 'px)\n            matrix(' + viewMtx.a + ', ' + viewMtx.b + ', ' + viewMtx.c + ', ' + viewMtx.d + ',\n            ' + viewMtx.tx + ', ' + viewMtx.ty + ')\n            matrix(' + matrix.a + ', ' + matrix.b + ', ' + matrix.c + ', ' + matrix.d + ',\n            ' + matrix.tx + ', ' + matrix.ty + ')';
+            this.element.style.transform = 'translate(0px, ' + this.textBox.internalBounds.y + 'px)\n            matrix(' + viewMtx.a + ', ' + viewMtx.b + ', ' + viewMtx.c + ', ' + viewMtx.d + ',\n            ' + viewMtx.tx + ', ' + viewMtx.ty + ')\n            matrix(' + textBox.matrix.a + ', ' + textBox.matrix.b + ', ' + textBox.matrix.c + ', ' + textBox.matrix.d + ',\n            ' + textBox.matrix.tx + ', ' + textBox.matrix.ty + ')';
             this.element.focus({ preventScroll: true });
             this.eventListener = this.handleTextInput.bind(this);
             this.element.addEventListener('input', this.eventListener);
