@@ -83,7 +83,7 @@ class ScrollableCanvas extends React.Component {
             const fixedPoint = paper.view.viewToProject(
                 new paper.Point(offsetX, offsetY)
             );
-            zoomOnFixedPoint(-deltaY / 100, fixedPoint);
+            zoomOnFixedPoint(-deltaY / 1000, fixedPoint);
             this.props.updateViewBounds(paper.view.matrix);
             this.props.redrawSelectionBox(); // Selection handles need to be resized after zoom
         } else if (event.shiftKey && event.deltaX === 0) {
