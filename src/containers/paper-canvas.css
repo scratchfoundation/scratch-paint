@@ -16,7 +16,7 @@ $scrollbar-padding: 1px;
 
 .vertical-scrollbar, .horizontal-scrollbar {
     position: absolute;
-    background: #CECDCE;
+    background: #BEBEBECD;
     border-radius: 3px;
     cursor: pointer;
 }
