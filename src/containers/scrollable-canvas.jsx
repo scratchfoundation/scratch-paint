@@ -80,7 +80,7 @@ class ScrollableCanvas extends React.Component {
             const canvasRect = this.props.canvas.getBoundingClientRect();
             const offsetX = event.clientX - canvasRect.left;
             const offsetY = event.clientY - canvasRect.top;
-            const fixedPoint = paper.project.view.viewToProject(
+            const fixedPoint = paper.view.viewToProject(
                 new paper.Point(offsetX, offsetY)
             );
             zoomOnFixedPoint(-deltaY / 100, fixedPoint);
@@ -90,12 +90,12 @@ class ScrollableCanvas extends React.Component {
             // Scroll horizontally (based on vertical scroll delta)
             // This is needed as for some browser/system combinations which do not set deltaX.
             // See #156.
-            const dx = deltaY / paper.project.view.zoom;
+            const dx = deltaY / paper.view.zoom;
             pan(dx, 0);
             this.props.updateViewBounds(paper.view.matrix);
         } else {
-            const dx = deltaX / paper.project.view.zoom;
-            const dy = deltaY / paper.project.view.zoom;
+            const dx = deltaX / paper.view.zoom;
+            const dy = deltaY / paper.view.zoom;
             pan(dx, dy);
             this.props.updateViewBounds(paper.view.matrix);
         }
@@ -107,7 +107,7 @@ class ScrollableCanvas extends React.Component {
         let topPercent = 0;
         let leftPercent = 0;
         if (paper.project) {
-            const {x, y, width, height} = paper.project.view.bounds;
+            const {x, y, width, height} = paper.view.bounds;
             widthPercent = Math.floor(100 * width / ART_BOARD_WIDTH);
             heightPercent = Math.floor(100 * height / ART_BOARD_HEIGHT);
             const centerX = (x + (width / 2)) / ART_BOARD_WIDTH;
