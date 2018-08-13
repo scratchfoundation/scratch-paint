@@ -309,22 +309,26 @@ class PaperCanvas extends React.Component {
                     width="480px"
                     onWheel={this.handleWheel}
                 />
-                <div
-                    className={styles.horizontalScrollbar}
-                    style={{
-                        width: `${widthPercent}%`,
-                        left: `${leftPercent}%`
-                    }}
-                    onMouseDown={this.handleHorizontalScrollbarMouseDown}
-                />
-                <div
-                    className={styles.verticalScrollbar}
-                    style={{
-                        height: `${heightPercent}%`,
-                        top: `${topPercent}%`
-                    }}
-                    onMouseDown={this.handleVerticalScrollbarMouseDown}
-                />
+                <div className={styles.horizontalScrollbarWrapper}>
+                    <div
+                        className={styles.horizontalScrollbar}
+                        style={{
+                            width: `${widthPercent}%`,
+                            left: `${leftPercent}%`
+                        }}
+                        onMouseDown={this.handleHorizontalScrollbarMouseDown}
+                    />
+                </div>
+                <div className={styles.verticalScrollbarWrapper}>
+                    <div
+                        className={styles.verticalScrollbar}
+                        style={{
+                            height: `${heightPercent}%`,
+                            top: `${topPercent}%`
+                        }}
+                        onMouseDown={this.handleVerticalScrollbarMouseDown}
+                    />
+                </div>
             </div>
         );
     }
