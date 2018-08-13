@@ -14,13 +14,12 @@ import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, getRaster, setupLayers} from '../helper/layer';
 import {deleteSelection, getSelectedLeafItems} from '../helper/selection';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, pan, resetZoom, zoomOnFixedPoint} from '../helper/view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, resetZoom} from '../helper/view';
 import {ensureClockwise, scaleWithStrokes} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
-import {updateViewBounds} from '../reducers/view-bounds';
 import {changeFormat} from '../reducers/format';
-import {getEventXY} from '../lib/touch-utils';
+import {updateViewBounds} from '../reducers/view-bounds';
 import styles from './paper-canvas.css';
 
 class PaperCanvas extends React.Component {
@@ -30,14 +29,7 @@ class PaperCanvas extends React.Component {
             'setCanvas',
             'importSvg',
             'handleKeyDown',
-            'handleWheel',
-            'switchCostume',
-            'handleHorizontalScrollbarMouseDown',
-            'handleHorizontalScrollbarMouseMove',
-            'handleHorizontalScrollbarMouseUp',
-            'handleVerticalScrollbarMouseDown',
-            'handleVerticalScrollbarMouseMove',
-            'handleVerticalScrollbarMouseUp'
+            'switchCostume'
         ]);
     }
     componentDidMount () {
@@ -220,116 +212,14 @@ class PaperCanvas extends React.Component {
             this.props.canvasRef(canvas);
         }
     }
-
-    handleHorizontalScrollbarMouseDown (event) {
-        window.addEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
-        window.addEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
-        this.initialX = getEventXY(event).x;
-        event.preventDefault();
-    }
-
-    handleHorizontalScrollbarMouseMove (event) {
-        const dx = this.initialX - getEventXY(event).x;
-
-        // console.log('horizontal', this.mouseDownPosition, mousePosition);
-    }
-
-    handleHorizontalScrollbarMouseUp (event) {
-        window.removeEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
-        window.removeEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
-    }
-
-    handleVerticalScrollbarMouseDown (event) {
-        window.addEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
-        window.addEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
-        this.initialY = getEventXY(event).y;
-        event.preventDefault();
-    }
-    handleVerticalScrollbarMouseMove (event) {
-        const mousePosition = getEventXY(event);
-        // console.log('vertical', this.mouseDownPosition, mousePosition);
-    }
-    handleVerticalScrollbarMouseUp (event) {
-        window.removeEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
-        window.removeEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
-    }
-    handleWheel (event) {
-        // Multiplier variable, so that non-pixel-deltaModes are supported. Needed for Firefox.
-        // See #529 (or LLK/scratch-blocks#1190).
-        const multiplier = event.deltaMode === 0x1 ? 15 : 1;
-        const deltaX = event.deltaX * multiplier;
-        const deltaY = event.deltaY * multiplier;
-        if (event.metaKey || event.ctrlKey) {
-            // Zoom keeping mouse location fixed
-            const canvasRect = this.canvas.getBoundingClientRect();
-            const offsetX = event.clientX - canvasRect.left;
-            const offsetY = event.clientY - canvasRect.top;
-            const fixedPoint = paper.project.view.viewToProject(
-                new paper.Point(offsetX, offsetY)
-            );
-            zoomOnFixedPoint(-deltaY / 100, fixedPoint);
-            this.props.updateViewBounds(paper.view.matrix);
-            this.props.setSelectedItems(this.props.format);
-        } else if (event.shiftKey && event.deltaX === 0) {
-            // Scroll horizontally (based on vertical scroll delta)
-            // This is needed as for some browser/system combinations which do not set deltaX.
-            // See #156.
-            const dx = deltaY / paper.project.view.zoom;
-            pan(dx, 0);
-            this.props.updateViewBounds(paper.view.matrix);
-        } else {
-            const dx = deltaX / paper.project.view.zoom;
-            const dy = deltaY / paper.project.view.zoom;
-            pan(dx, dy);
-            this.props.updateViewBounds(paper.view.matrix);
-        }
-        event.preventDefault();
-    }
     render () {
-        let widthPercent = 0;
-        let heightPercent = 0;
-        let topPercent = 0;
-        let leftPercent = 0;
-        if (paper.project) {
-            const {x, y, width, height} = paper.project.view.bounds;
-            widthPercent = Math.floor(100 * width / ART_BOARD_WIDTH);
-            heightPercent = Math.floor(100 * height / ART_BOARD_HEIGHT);
-            const centerX = (x + (width / 2)) / ART_BOARD_WIDTH;
-            const centerY = (y + (height / 2)) / ART_BOARD_HEIGHT;
-            topPercent = Math.floor(100 * centerY) - (heightPercent / 2);
-            leftPercent = Math.floor(100 * centerX) - (widthPercent / 2);
-        }
-
         return (
-            <div className={styles.scrollbarWrapper}>
-                <canvas
-                    className={styles.paperCanvas}
-                    height="360px"
-                    ref={this.setCanvas}
-                    width="480px"
-                    onWheel={this.handleWheel}
-                />
-                <div className={styles.horizontalScrollbarWrapper}>
-                    <div
-                        className={styles.horizontalScrollbar}
-                        style={{
-                            width: `${widthPercent}%`,
-                            left: `${leftPercent}%`
-                        }}
-                        onMouseDown={this.handleHorizontalScrollbarMouseDown}
-                    />
-                </div>
-                <div className={styles.verticalScrollbarWrapper}>
-                    <div
-                        className={styles.verticalScrollbar}
-                        style={{
-                            height: `${heightPercent}%`,
-                            top: `${topPercent}%`
-                        }}
-                        onMouseDown={this.handleVerticalScrollbarMouseDown}
-                    />
-                </div>
-            </div>
+            <canvas
+                className={styles.paperCanvas}
+                height="360px"
+                ref={this.setCanvas}
+                width="480px"
+            />
         );
     }
 }
@@ -358,8 +248,7 @@ PaperCanvas.propTypes = {
 };
 const mapStateToProps = state => ({
     mode: state.scratchPaint.mode,
-    format: state.scratchPaint.format,
-    viewBounds: state.scratchPaint.viewBounds
+    format: state.scratchPaint.format
 });
 const mapDispatchToProps = dispatch => ({
     undoSnapshot: snapshot => {
