@@ -124,12 +124,12 @@ class ScrollableCanvas extends React.Component {
         let leftPercent = 0;
         if (paper.project) {
             const {x, y, width, height} = paper.view.bounds;
-            widthPercent = Math.floor(100 * width / ART_BOARD_WIDTH);
-            heightPercent = Math.floor(100 * height / ART_BOARD_HEIGHT);
+            widthPercent = 100 * width / ART_BOARD_WIDTH;
+            heightPercent = 100 * height / ART_BOARD_HEIGHT;
             const centerX = (x + (width / 2)) / ART_BOARD_WIDTH;
             const centerY = (y + (height / 2)) / ART_BOARD_HEIGHT;
-            topPercent = Math.floor(100 * centerY) - (heightPercent / 2);
-            leftPercent = Math.floor(100 * centerX) - (widthPercent / 2);
+            topPercent = Math.max(0, (100 * centerY) - (heightPercent / 2));
+            leftPercent = Math.max(0, (100 * centerX) - (widthPercent / 2));
         }
         return (
             <ScrollableCanvasComponent
