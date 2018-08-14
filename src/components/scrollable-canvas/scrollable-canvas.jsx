@@ -18,7 +18,8 @@ const ScrollableCanvasComponent = props => (
                 style={{
                     width: `${props.horizontalScrollLengthPercent}%`,
                     left: `${props.horizontalScrollStartPercent}%`,
-                    visibility: `${props.hideCursor ? 'hidden' : 'visible'}`
+                    visibility: `${props.hideCursor ||
+                        Math.abs(props.horizontalScrollLengthPercent - 100) < 1e-8 ? 'hidden' : 'visible'}`
                 }}
                 onMouseDown={props.onHorizontalScrollbarMouseDown}
             />
@@ -29,7 +30,8 @@ const ScrollableCanvasComponent = props => (
                 style={{
                     height: `${props.verticalScrollLengthPercent}%`,
                     top: `${props.verticalScrollStartPercent}%`,
-                    visibility: `${props.hideCursor ? 'hidden' : 'visible'}`
+                    visibility: `${props.hideCursor ||
+                        Math.abs(props.verticalScrollLengthPercent - 100) < 1e-8 ? 'hidden' : 'visible'}`
                 }}
                 onMouseDown={props.onVerticalScrollbarMouseDown}
             />
