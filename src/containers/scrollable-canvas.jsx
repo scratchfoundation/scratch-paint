@@ -5,7 +5,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import ScrollableCanvasComponent from '../components/scrollable-canvas/scrollable-canvas.jsx';
 
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, pan, zoomOnFixedPoint} from '../helper/view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, clampViewBounds, pan, zoomOnFixedPoint} from '../helper/view';
 import {updateViewBounds} from '../reducers/view-bounds';
 import {redrawSelectionBox} from '../reducers/selected-items';
 
@@ -44,30 +44,46 @@ class ScrollableCanvas extends React.Component {
     handleHorizontalScrollbarMouseDown (event) {
         window.addEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
         window.addEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
-        this.initialX = getEventXY(event).x;
+        this.initialMouseX = getEventXY(event).x;
+        this.initialScreenX = paper.view.matrix.tx;
         event.preventDefault();
     }
     handleHorizontalScrollbarMouseMove (event) {
-        const dx = this.initialX - getEventXY(event).x;
-        //console.log('horizontal', this.mouseDownPosition, mousePosition);
+        const dx = this.initialMouseX - getEventXY(event).x;
+        paper.view.matrix.tx =
+            (this.initialScreenX + (dx * paper.view.zoom * ART_BOARD_WIDTH / paper.view.bounds.width));
+        clampViewBounds();
+        this.props.updateViewBounds(paper.view.matrix);
+        event.preventDefault();
     }
-    handleHorizontalScrollbarMouseUp (event) {
+    handleHorizontalScrollbarMouseUp () {
+        this.initialMouseX = null;
+        this.initialScreenX = null;
         window.removeEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
         window.removeEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
+        event.preventDefault();
     }
     handleVerticalScrollbarMouseDown (event) {
         window.addEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
         window.addEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
-        this.initialY = getEventXY(event).y;
+        this.initialMouseY = getEventXY(event).y;
+        this.initialScreenY = paper.view.matrix.ty;
         event.preventDefault();
     }
     handleVerticalScrollbarMouseMove (event) {
-        const mousePosition = getEventXY(event);
-        //console.log('vertical', this.mouseDownPosition, mousePosition);
+        const dy = this.initialMouseY - getEventXY(event).y;
+        paper.view.matrix.ty =
+            (this.initialScreenY + (dy * paper.view.zoom * ART_BOARD_HEIGHT / paper.view.bounds.height));
+        clampViewBounds();
+        this.props.updateViewBounds(paper.view.matrix);
+        event.preventDefault();
     }
     handleVerticalScrollbarMouseUp (event) {
+        this.initialMouseY = null;
+        this.initialScreenY = null;
         window.removeEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
         window.removeEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
+        event.preventDefault();
     }
     handleWheel (event) {
         // Multiplier variable, so that non-pixel-deltaModes are supported. Needed for Firefox.
