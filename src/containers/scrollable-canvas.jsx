@@ -50,8 +50,7 @@ class ScrollableCanvas extends React.Component {
     }
     handleHorizontalScrollbarMouseMove (event) {
         const dx = this.initialMouseX - getEventXY(event).x;
-        paper.view.matrix.tx =
-            (this.initialScreenX + (dx * paper.view.zoom * ART_BOARD_WIDTH / paper.view.bounds.width));
+        paper.view.matrix.tx = this.initialScreenX + (dx * paper.view.zoom * 2);
         clampViewBounds();
         this.props.updateViewBounds(paper.view.matrix);
         event.preventDefault();
@@ -72,8 +71,7 @@ class ScrollableCanvas extends React.Component {
     }
     handleVerticalScrollbarMouseMove (event) {
         const dy = this.initialMouseY - getEventXY(event).y;
-        paper.view.matrix.ty =
-            (this.initialScreenY + (dy * paper.view.zoom * ART_BOARD_HEIGHT / paper.view.bounds.height));
+        paper.view.matrix.ty = this.initialScreenY + (dy * paper.view.zoom * 2);
         clampViewBounds();
         this.props.updateViewBounds(paper.view.matrix);
         event.preventDefault();
