@@ -43317,7 +43317,7 @@ var OvalTool = function (_paper$Tool) {
     _createClass(OvalTool, null, [{
         key: 'TOLERANCE',
         get: function get() {
-            return 6;
+            return 2;
         }
         /**
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
@@ -43355,8 +43355,6 @@ var OvalTool = function (_paper$Tool) {
     _createClass(OvalTool, [{
         key: 'getHitOptions',
         value: function getHitOptions() {
-            var _this2 = this;
-
             return {
                 segments: false,
                 stroke: true,
@@ -43364,8 +43362,8 @@ var OvalTool = function (_paper$Tool) {
                 fill: true,
                 guide: false,
                 match: function match(hitResult) {
-                    return hitResult.item.data && hitResult.item.data.isHelperItem || hitResult.item === _this2.oval;
-                }, // Allow hits on bounding box and oval only
+                    return hitResult.item.data && (hitResult.item.data.isScaleHandle || hitResult.item.data.isRotHandle) || hitResult.item.selected;
+                }, // Allow hits on bounding box and selected only
                 tolerance: OvalTool.TOLERANCE / _paper2.default.view.zoom
             };
         }
@@ -44208,7 +44206,7 @@ var RectTool = function (_paper$Tool) {
     _createClass(RectTool, null, [{
         key: 'TOLERANCE',
         get: function get() {
-            return 6;
+            return 2;
         }
         /**
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
@@ -44246,8 +44244,6 @@ var RectTool = function (_paper$Tool) {
     _createClass(RectTool, [{
         key: 'getHitOptions',
         value: function getHitOptions() {
-            var _this2 = this;
-
             return {
                 segments: false,
                 stroke: true,
@@ -44255,8 +44251,8 @@ var RectTool = function (_paper$Tool) {
                 fill: true,
                 guide: false,
                 match: function match(hitResult) {
-                    return hitResult.item.data && hitResult.item.data.isHelperItem || hitResult.item === _this2.rect;
-                }, // Allow hits on bounding box and rect only
+                    return hitResult.item.data && (hitResult.item.data.isScaleHandle || hitResult.item.data.isRotHandle) || hitResult.item.selected;
+                }, // Allow hits on bounding box and selected only
                 tolerance: RectTool.TOLERANCE / _paper2.default.view.zoom
             };
         }
@@ -45305,7 +45301,7 @@ var SelectTool = function (_paper$Tool) {
 
         /** The distance within which mouse events count as a hit against an item */
         get: function get() {
-            return 6;
+            return 2;
         }
         /**
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
@@ -45374,7 +45370,12 @@ var SelectTool = function (_paper$Tool) {
                 curves: true,
                 fill: true,
                 guide: false,
-                tolerance: SelectTool.TOLERANCE / _paper2.default.view.zoom
+                tolerance: SelectTool.TOLERANCE / _paper2.default.view.zoom,
+                match: function match(hitResult) {
+                    // Don't match helper items, unless they are handles.
+                    if (!hitResult.item.data || !hitResult.item.data.isHelperItem) return true;
+                    return hitResult.item.data.isScaleHandle || hitResult.item.data.isRotHandle;
+                }
             };
         }
     }, {
@@ -56075,7 +56076,7 @@ var OvalTool = function (_paper$Tool) {
     _createClass(OvalTool, null, [{
         key: 'TOLERANCE',
         get: function get() {
-            return 6;
+            return 2;
         }
         /**
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
@@ -56121,7 +56122,7 @@ var OvalTool = function (_paper$Tool) {
                 fill: true,
                 guide: false,
                 match: function match(hitResult) {
-                    return hitResult.item.data && hitResult.item.data.isHelperItem || hitResult.item.selected;
+                    return hitResult.item.data && (hitResult.item.data.isScaleHandle || hitResult.item.data.isRotHandle) || hitResult.item.selected;
                 }, // Allow hits on bounding box and selected only
                 tolerance: OvalTool.TOLERANCE / _paper2.default.view.zoom
             };
@@ -56528,7 +56529,7 @@ var RectTool = function (_paper$Tool) {
     _createClass(RectTool, null, [{
         key: 'TOLERANCE',
         get: function get() {
-            return 6;
+            return 2;
         }
         /**
          * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
@@ -56574,7 +56575,7 @@ var RectTool = function (_paper$Tool) {
                 fill: true,
                 guide: false,
                 match: function match(hitResult) {
-                    return hitResult.item.data && hitResult.item.data.isHelperItem || hitResult.item.selected;
+                    return hitResult.item.data && (hitResult.item.data.isScaleHandle || hitResult.item.data.isRotHandle) || hitResult.item.selected;
                 }, // Allow hits on bounding box and selected only
                 tolerance: RectTool.TOLERANCE / _paper2.default.view.zoom
             };
@@ -56978,7 +56979,7 @@ var ReshapeTool = function (_paper$Tool) {
 
         /** Distance within which mouse is considered to be hitting an item */
         get: function get() {
-            return 8;
+            return 4;
         }
         /** Clicks registered within this amount of time are registered as double clicks */
 
@@ -58065,7 +58066,7 @@ var SelectTool = function (_paper$Tool) {
 
         /** The distance within which mouse events count as a hit against an item */
         get: function get() {
-            return 6;
+            return 2;
         }
         /** Clicks registered within this amount of time are registered as double clicks */
 
@@ -58156,7 +58157,12 @@ var SelectTool = function (_paper$Tool) {
                 curves: true,
                 fill: true,
                 guide: false,
-                tolerance: SelectTool.TOLERANCE / _paper2.default.view.zoom
+                tolerance: SelectTool.TOLERANCE / _paper2.default.view.zoom,
+                match: function match(hitResult) {
+                    // Don't match helper items, unless they are handles.
+                    if (!hitResult.item.data || !hitResult.item.data.isHelperItem) return true;
+                    return hitResult.item.data.isScaleHandle || hitResult.item.data.isRotHandle;
+                }
             };
             if (preselectedOnly) {
                 hitOptions.selected = true;
@@ -59032,7 +59038,7 @@ var TextTool = function (_paper$Tool) {
     _createClass(TextTool, null, [{
         key: 'TOLERANCE',
         get: function get() {
-            return 6;
+            return 2;
         }
     }, {
         key: 'TEXT_EDIT_MODE',
@@ -59122,7 +59128,7 @@ var TextTool = function (_paper$Tool) {
                 fill: true,
                 guide: false,
                 match: function match(hitResult) {
-                    return hitResult.item.data && hitResult.item.data.isHelperItem || hitResult.item.selected;
+                    return hitResult.item.data && (hitResult.item.data.isScaleHandle || hitResult.item.data.isRotHandle) || hitResult.item.selected;
                 }, // Allow hits on bounding box and selected only
                 tolerance: TextTool.TOLERANCE / _paper2.default.view.zoom
             };
@@ -59138,7 +59144,7 @@ var TextTool = function (_paper$Tool) {
                 fill: true,
                 guide: false,
                 match: function match(hitResult) {
-                    return hitResult.item && !hitResult.item.selected;
+                    return hitResult.item && !(hitResult.item.data && hitResult.item.data.isHelperItem) && !hitResult.item.selected;
                 }, // Unselected only
                 tolerance: TextTool.TOLERANCE / _paper2.default.view.zoom
             };
