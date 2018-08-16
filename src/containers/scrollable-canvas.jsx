@@ -42,10 +42,10 @@ class ScrollableCanvas extends React.Component {
         }
     }
     handleHorizontalScrollbarMouseDown (event) {
-        window.addEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
-        window.addEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
         this.initialMouseX = getEventXY(event).x;
         this.initialScreenX = paper.view.matrix.tx;
+        window.addEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
+        window.addEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
         event.preventDefault();
     }
     handleHorizontalScrollbarMouseMove (event) {
@@ -56,17 +56,17 @@ class ScrollableCanvas extends React.Component {
         event.preventDefault();
     }
     handleHorizontalScrollbarMouseUp () {
-        this.initialMouseX = null;
-        this.initialScreenX = null;
         window.removeEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
         window.removeEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
+        this.initialMouseX = null;
+        this.initialScreenX = null;
         event.preventDefault();
     }
     handleVerticalScrollbarMouseDown (event) {
-        window.addEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
-        window.addEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
         this.initialMouseY = getEventXY(event).y;
         this.initialScreenY = paper.view.matrix.ty;
+        window.addEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
+        window.addEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
         event.preventDefault();
     }
     handleVerticalScrollbarMouseMove (event) {
@@ -77,10 +77,10 @@ class ScrollableCanvas extends React.Component {
         event.preventDefault();
     }
     handleVerticalScrollbarMouseUp (event) {
-        this.initialMouseY = null;
-        this.initialScreenY = null;
         window.removeEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
         window.removeEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
+        this.initialMouseY = null;
+        this.initialScreenY = null;
         event.preventDefault();
     }
     handleWheel (event) {
