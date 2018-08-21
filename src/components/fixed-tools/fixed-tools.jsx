@@ -121,7 +121,7 @@ const FixedToolsComponent = props => {
                             classNames(
                                 styles.buttonGroupButton,
                                 {
-                                    [styles.modNoRightBorder]: !redoDisabled
+                                    [styles.modNoEndBorder]: !redoDisabled
                                 }
                             )
                         }
@@ -130,7 +130,10 @@ const FixedToolsComponent = props => {
                     >
                         <img
                             alt={props.intl.formatMessage(messages.undo)}
-                            className={styles.buttonGroupButtonIcon}
+                            className={classNames(
+                                styles.buttonGroupButtonIcon,
+                                styles.undoIcon
+                            )}
                             draggable={false}
                             src={undoIcon}
                         />
@@ -140,7 +143,7 @@ const FixedToolsComponent = props => {
                             classNames(
                                 styles.buttonGroupButton,
                                 {
-                                    [styles.modLeftBorder]: !redoDisabled
+                                    [styles.modStartBorder]: !redoDisabled
                                 }
                             )
                         }
