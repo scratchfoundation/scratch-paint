@@ -90,7 +90,7 @@ const PaintEditorComponent = props => (
                         >
                             {/* fill */}
                             <FillColorIndicatorComponent
-                                className={styles.modMarginRight}
+                                className={styles.modMarginAfter}
                                 onUpdateImage={props.onUpdateImage}
                             />
                             {/* stroke */}
@@ -119,7 +119,7 @@ const PaintEditorComponent = props => (
                             >
                                 {/* fill */}
                                 <FillColorIndicatorComponent
-                                    className={styles.modMarginRight}
+                                    className={styles.modMarginAfter}
                                     onUpdateImage={props.onUpdateImage}
                                 />
                             </InputGroup>

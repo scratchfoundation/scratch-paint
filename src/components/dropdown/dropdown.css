@@ -18,9 +18,16 @@ $arrow-border-width: 14px;
 .dropdown-icon {
     width: .5rem;
     height: .5rem;
-    margin-left: .5rem;
     vertical-align: middle;
     padding-bottom: .2rem;
+}
+
+[dir="ltr"] .dropdown-icon {
+    margin-left: .5rem;
+}
+
+[dir="rtl"] .dropdown-icon {
+    margin-right: .5rem;
 }
 
 .mod-caret-up {
