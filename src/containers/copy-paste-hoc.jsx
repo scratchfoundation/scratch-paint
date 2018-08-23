@@ -1,0 +1,122 @@
+import paper from '@scratch/paper';
+import bindAll from 'lodash.bindall';
+import PropTypes from 'prop-types';
+import React from 'react';
+import omit from 'lodash.omit';
+import {connect} from 'react-redux';
+
+import {
+    clearSelection,
+    getSelectedLeafItems,
+    getSelectedRootItems
+} from '../helper/selection';
+import {isBitmap} from '../lib/format';
+import Formats from '../lib/format';
+
+import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
+import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
+
+const CopyPasteHOC = function (WrappedComponent) {
+    class CopyPasteWrapper extends React.Component {
+        constructor (props) {
+            super(props);
+            bindAll(this, [
+                'handleCopy',
+                'handlePaste'
+            ]);
+        }
+        handleCopy () {
+            const selectedItems = getSelectedRootItems();
+            if (selectedItems.length > 0) {
+                const clipboardItems = [];
+                for (let i = 0; i < selectedItems.length; i++) {
+                    const jsonItem = selectedItems[i].exportJSON({asString: false});
+                    clipboardItems.push(jsonItem);
+                }
+                this.props.setClipboardItems(clipboardItems);
+            }
+        }
+        // Returns true if anything was pasted, false if nothing changed
+        handlePaste () {
+            clearSelection(this.props.clearSelectedItems);
+
+            if (this.props.clipboardItems.length === 0) return false;
+
+            let items = [];
+            for (let i = 0; i < this.props.clipboardItems.length; i++) {
+                const item = paper.Base.importJSON(this.props.clipboardItems[i]);
+                if (item) {
+                    items.push(item);
+                }
+            }
+            if (!items.length) return false;
+            // If pasting a group or non-raster to bitmap, rasterize firsts
+            if (isBitmap(this.props.format) && !(items.length === 1 && items[0] instanceof paper.Raster)) {
+                const group = new paper.Group(items);
+                items = [group.rasterize()];
+                group.remove();
+            }
+            for (const item of items) {
+                const placedItem = paper.project.getActiveLayer().addChild(item);
+                placedItem.selected = true;
+                placedItem.position.x += 10 * this.props.pasteOffset;
+                placedItem.position.y += 10 * this.props.pasteOffset;
+            }
+            this.props.incrementPasteOffset();
+            this.props.setSelectedItems(this.props.format);
+            return true;
+        }
+        render () {
+            const componentProps = omit(this.props, [
+                'clearSelectedItems',
+                'clipboardItems',
+                'incrementPasteOffset',
+                'pasteOffset',
+                'setClipboardItems',
+                'setSelectedItems']);
+            return (
+                <WrappedComponent
+                    onCopyToClipboard={this.handleCopy}
+                    onPasteFromClipboard={this.handlePaste}
+                    {...componentProps}
+                />
+            );
+        }
+    }
+
+    CopyPasteWrapper.propTypes = {
+        clearSelectedItems: PropTypes.func.isRequired,
+        clipboardItems: PropTypes.arrayOf(PropTypes.array),
+        format: PropTypes.oneOf(Object.keys(Formats)),
+        incrementPasteOffset: PropTypes.func.isRequired,
+        pasteOffset: PropTypes.number,
+        setClipboardItems: PropTypes.func.isRequired,
+        setSelectedItems: PropTypes.func.isRequired
+    };
+    const mapStateToProps = state => ({
+        clipboardItems: state.scratchPaint.clipboard.items,
+        format: state.scratchPaint.format,
+        pasteOffset: state.scratchPaint.clipboard.pasteOffset
+    });
+    const mapDispatchToProps = dispatch => ({
+        setClipboardItems: items => {
+            dispatch(setClipboardItems(items));
+        },
+        incrementPasteOffset: () => {
+            dispatch(incrementPasteOffset());
+        },
+        clearSelectedItems: () => {
+            dispatch(clearSelectedItems());
+        },
+        setSelectedItems: format => {
+            dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(format)));
+        }
+    });
+
+    return connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )(CopyPasteWrapper);
+};
+
+export default CopyPasteHOC;
