@@ -107,3 +107,7 @@
 [dir="rtl"] .gradient-picker-row > img + img {
     margin-right: calc(2 * $grid-unit);
 }
+
+[dir="rtl"] .gradient-swatches-row {
+    flex-direction: row-reverse;
+}

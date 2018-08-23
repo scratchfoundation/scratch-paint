@@ -106,7 +106,12 @@ class ColorPickerComponent extends React.Component {
                         <div className={styles.divider} />
                         {this.props.gradientType === GradientTypes.SOLID ? null : (
                             <div className={styles.row}>
-                                <div className={styles.gradientPickerRow}>
+                                <div
+                                    className={classNames(
+                                        styles.gradientPickerRow,
+                                        styles.gradientSwatchesRow
+                                    )}
+                                >
                                     <div
                                         className={classNames({
                                             [styles.clickable]: true,
