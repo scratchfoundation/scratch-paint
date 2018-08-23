@@ -18,6 +18,7 @@ import Box from '../box/box.jsx';
 import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
 import BrushMode from '../../containers/brush-mode.jsx';
+import CopyPasteHOC from '../../containers/copy-paste-hoc.jsx';
 import EraserMode from '../../containers/eraser-mode.jsx';
 import FillColorIndicatorComponent from '../../containers/fill-color-indicator.jsx';
 import FillMode from '../../containers/fill-mode.jsx';
@@ -56,6 +57,7 @@ const messages = defineMessages({
     }
 });
 
+const WrappedModeTools = CopyPasteHOC(ModeToolsContainer);
 const PaintEditorComponent = props => (
     <div className={styles.editorContainer}>
         {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
@@ -103,7 +105,7 @@ const PaintEditorComponent = props => (
                             />
                         </InputGroup>
                         <InputGroup className={styles.modModeTools}>
-                            <ModeToolsContainer
+                            <WrappedModeTools
                                 onUpdateImage={props.onUpdateImage}
                             />
                         </InputGroup>
@@ -124,7 +126,7 @@ const PaintEditorComponent = props => (
                                 />
                             </InputGroup>
                             <InputGroup className={styles.modModeTools}>
-                                <ModeToolsContainer
+                                <WrappedModeTools
                                     onUpdateImage={props.onUpdateImage}
                                 />
                             </InputGroup>
