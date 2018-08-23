@@ -57,7 +57,10 @@ const messages = defineMessages({
 });
 
 const PaintEditorComponent = props => (
-    <div className={styles.editorContainer}>
+    <div
+        className={styles.editorContainer}
+        dir={props.rtl ? 'rtl' : 'ltr'}
+    >
         {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
             <div className={styles.editorContainerTop}>
                 {/* First row */}
@@ -338,6 +341,7 @@ PaintEditorComponent.propTypes = {
     onZoomReset: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
+    rtl: PropTypes.bool,
     setCanvas: PropTypes.func.isRequired,
     setTextArea: PropTypes.func.isRequired,
     textArea: PropTypes.instanceOf(Element)

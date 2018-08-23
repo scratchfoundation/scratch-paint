@@ -32,8 +32,12 @@
     margin: 8px;
 }
 
-.label-readout {
+[dir="ltr"] .label-readout {
     margin-left: 10px;
+}
+
+[dir="rtl"] .label-readout {
+    margin-right: 10px;
 }
 
 .label-name {
@@ -96,6 +100,10 @@
     margin: 8px;
 }
 
-.gradient-picker-row > img + img {
+[dir="ltr"] .gradient-picker-row > img + img {
     margin-left: calc(2 * $grid-unit);
+}
+
+[dir="rtl"] .gradient-picker-row > img + img {
+    margin-right: calc(2 * $grid-unit);
 }

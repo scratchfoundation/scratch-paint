@@ -56,7 +56,10 @@ class ColorPickerComponent extends React.Component {
     }
     render () {
         return (
-            <div className={styles.colorPickerContainer}>
+            <div
+                className={styles.colorPickerContainer}
+                dir={this.props.rtl ? 'rtl' : 'ltr'}
+            >
                 {this.props.shouldShowGradientTools ? (
                     <div>
                         <div className={styles.row}>
@@ -295,6 +298,7 @@ ColorPickerComponent.propTypes = {
     onSelectColor2: PropTypes.func.isRequired,
     onSwap: PropTypes.func,
     onTransparent: PropTypes.func.isRequired,
+    rtl: PropTypes.bool.isRequired,
     saturation: PropTypes.number.isRequired,
     shouldShowGradientTools: PropTypes.bool.isRequired
 };
