@@ -13,6 +13,7 @@ import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {deactivateEyeDropper} from '../reducers/eye-dropper';
 import {setTextEditTarget} from '../reducers/text-edit-target';
 import {updateViewBounds} from '../reducers/view-bounds';
+import {setLayout} from '../reducers/layout';
 
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
 import {commitSelectionToBitmap, convertToBitmap, convertToVector, getHitBounds} from '../helper/bitmap';
@@ -69,6 +70,7 @@ class PaintEditor extends React.Component {
         // When isSwitchingFormats is true, the format is about to switch, but isn't done switching.
         // This gives currently active tools a chance to finish what they were doing.
         this.isSwitchingFormats = false;
+        this.props.setLayout(this.props.rtl ? 'rtl' : 'ltr');
     }
     componentDidMount () {
         document.addEventListener('keydown', (/* event */) => {
@@ -93,6 +95,9 @@ class PaintEditor extends React.Component {
             this.switchMode(Formats.BITMAP);
         } else if (isVector(newProps.format) && isBitmap(this.props.format)) {
             this.switchMode(Formats.VECTOR);
+        }
+        if (newProps.rtl !== this.props.rtl) {
+            this.props.setLayout(newProps.rtl ? 'rtl' : 'ltr');
         }
     }
     componentDidUpdate (prevProps) {
@@ -386,6 +391,7 @@ class PaintEditor extends React.Component {
                 name={this.props.name}
                 rotationCenterX={this.props.rotationCenterX}
                 rotationCenterY={this.props.rotationCenterY}
+                rtl={this.props.rtl}
                 setCanvas={this.setCanvas}
                 setTextArea={this.setTextArea}
                 textArea={this.state.textArea}
@@ -438,6 +444,8 @@ PaintEditor.propTypes = {
     removeTextEditTarget: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
+    rtl: PropTypes.bool,
+    setLayout: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
     textEditing: PropTypes.bool.isRequired,
     undoSnapshot: PropTypes.func.isRequired,
@@ -498,6 +506,9 @@ const mapDispatchToProps = dispatch => ({
     },
     removeTextEditTarget: () => {
         dispatch(setTextEditTarget());
+    },
+    setLayout: layout => {
+        dispatch(setLayout(layout));
     },
     setSelectedItems: format => {
         dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(format)));

@@ -237,7 +237,10 @@ const FixedToolsComponent = props => {
                             className={styles.modUnselect}
                             enterExitTransitionDurationMs={20}
                             popoverContent={
-                                <InputGroup className={styles.modContextMenu}>
+                                <InputGroup
+                                    className={styles.modContextMenu}
+                                    rtl={props.rtl}
+                                >
                                     <Button
                                         className={classNames(styles.modMenuItem, {
                                             [styles.modDisabled]: !shouldShowBringForward()
@@ -306,11 +309,13 @@ FixedToolsComponent.propTypes = {
     onSendToFront: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
     onUngroup: PropTypes.func.isRequired,
-    onUpdateName: PropTypes.func.isRequired
+    onUpdateName: PropTypes.func.isRequired,
+    rtl: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
     format: state.scratchPaint.format,
+    rtl: state.scratchPaint.layout.rtl,
     selectedItems: state.scratchPaint.selectedItems,
     undoState: state.scratchPaint.undo
 });
