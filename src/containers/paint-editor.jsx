@@ -20,7 +20,7 @@ import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRed
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
 import {scaleWithStrokes} from '../helper/math';
-import {getSelectedLeafItems, getAllSelectableRootItems} from '../helper/selection';
+import {clearSelection, getSelectedLeafItems, getAllSelectableRootItems} from '../helper/selection';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
@@ -319,13 +319,19 @@ class PaintEditor extends React.Component {
                 }
             } else if (event.key === 'a') {
                 // Select all
-                const items = getAllSelectableRootItems();
-                if (items.length === 0) return;
+                if (isBitmap(this.props.format)) {
 
-                for (const item of items) {
-                    item.selected = true;
+                } else {
+                const items = getAllSelectableRootItems();
+                    if (items.length === 0) return;
+
+                    for (const item of items) {
+                        item.selected = true;
+                    }
+                    this.handleSetSelectedItems();
                 }
-                this.handleSetSelectedItems();
+            } else if (event.key === 'escape') {
+                clearSelection(this.props.clearSelectedItems);
             }
         }
     }
