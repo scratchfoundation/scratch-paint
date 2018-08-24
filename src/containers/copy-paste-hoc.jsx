@@ -64,7 +64,7 @@ const CopyPasteHOC = function (WrappedComponent) {
                 }
             }
             if (!items.length) return false;
-            // If pasting a group or non-raster to bitmap, rasterize firsts
+            // If pasting a group or non-raster to bitmap, rasterize first
             if (isBitmap(this.props.format) && !(items.length === 1 && items[0] instanceof paper.Raster)) {
                 const group = new paper.Group(items);
                 items = [group.rasterize()];

@@ -15,12 +15,14 @@ import {setTextEditTarget} from '../reducers/text-edit-target';
 import {updateViewBounds} from '../reducers/view-bounds';
 
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
-import {commitSelectionToBitmap, convertToBitmap, convertToVector, getHitBounds} from '../helper/bitmap';
+import {commitSelectionToBitmap, convertToBitmap, convertToVector, getHitBounds,
+    selectAllBitmap} from '../helper/bitmap';
 import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
 import {scaleWithStrokes} from '../helper/math';
-import {clearSelection, deleteSelection, getSelectedLeafItems, getAllSelectableRootItems} from '../helper/selection';
+import {clearSelection, deleteSelection, getSelectedLeafItems,
+    selectAllItems, selectAllSegments} from '../helper/selection';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
@@ -328,18 +330,7 @@ class PaintEditor extends React.Component {
             } else if (event.key === 'a') {
                 this.changeToASelectMode();
                 event.preventDefault();
-                // Select all
-                if (isBitmap(this.props.format)) {
-
-                } else {
-                const items = getAllSelectableRootItems();
-                    if (items.length === 0) return;
-
-                    for (const item of items) {
-                        item.selected = true;
-                    }
-                    this.handleSetSelectedItems();
-                }
+                this.selectAll();
             }
         }
     }
@@ -350,6 +341,17 @@ class PaintEditor extends React.Component {
             }
         } else if (this.props.mode !== Modes.SELECT && this.props.mode !== Modes.RESHAPE) {
             this.props.changeMode(Modes.SELECT);
+        }
+    }
+    selectAll () {
+        if (isBitmap(this.props.format)) {
+            selectAllBitmap(this.props.clearSelectedItems);
+            this.handleSetSelectedItems();
+        } else if (this.props.mode === Modes.RESHAPE) {
+            if (selectAllSegments()) this.handleSetSelectedItems();
+        } else {
+            // Disable lint for easier to read logic
+            if (selectAllItems()) this.handleSetSelectedItems(); // eslint-disable-line no-lonely-if
         }
     }
     onMouseDown (event) {

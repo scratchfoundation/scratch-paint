@@ -108,30 +108,34 @@ const setItemSelection = function (item, state, fullySelected) {
         }
         _setGroupSelection(item, state, fullySelected);
     }
-    // @todo: Update toolbar state on change
     
 };
 
+/** @return {boolean} true if anything was selected */
 const selectAllItems = function () {
     const items = getAllSelectableRootItems();
+    if (items.length === 0) return false;
     
     for (let i = 0; i < items.length; i++) {
         setItemSelection(items[i], true);
     }
+    return true;
 };
 
+/** @return {boolean} true if anything was selected */
 const selectAllSegments = function () {
     const items = getAllSelectableRootItems();
+    if (items.length === 0) return false;
     
     for (let i = 0; i < items.length; i++) {
         selectItemSegments(items[i], true);
     }
+    return true;
 };
 
 /** @param {!function} dispatchClearSelect Function to update the Redux select state */
 const clearSelection = function (dispatchClearSelect) {
     paper.project.deselectAll();
-    // @todo: Update toolbar state on change
     dispatchClearSelect();
 };
 
@@ -420,10 +424,6 @@ const selectRootItem = function () {
     }
 };
 
-const shouldShowSelectAll = function () {
-    return paper.project.getItems({class: paper.PathItem}).length > 0;
-};
-
 export {
     getItems,
     getAllRootItems,
@@ -438,6 +438,5 @@ export {
     getSelectedRootItems,
     getSelectedSegments,
     processRectangularSelection,
-    selectRootItem,
-    shouldShowSelectAll
+    selectRootItem
 };
