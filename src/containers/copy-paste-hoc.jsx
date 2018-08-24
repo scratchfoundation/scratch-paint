@@ -12,6 +12,7 @@ import {
 } from '../helper/selection';
 import {isBitmap} from '../lib/format';
 import Formats from '../lib/format';
+import Modes from '../lib/modes';
 
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
@@ -26,7 +27,20 @@ const CopyPasteHOC = function (WrappedComponent) {
             ]);
         }
         handleCopy () {
-            const selectedItems = getSelectedRootItems();
+            let selectedItems = [];
+            if (this.props.mode === Modes.RESHAPE) {
+                const leafItems = getSelectedLeafItems();
+                // Copy root of compound paths
+                for (const item of leafItems) {
+                    if (item.parent && item.parent instanceof paper.CompoundPath) {
+                        selectedItems.push(item.parent);
+                    } else {
+                        selectedItems.push(item);
+                    }
+                }
+            } else {
+                selectedItems = getSelectedRootItems();
+            }
             if (selectedItems.length > 0) {
                 const clipboardItems = [];
                 for (let i = 0; i < selectedItems.length; i++) {
@@ -89,6 +103,7 @@ const CopyPasteHOC = function (WrappedComponent) {
         clipboardItems: PropTypes.arrayOf(PropTypes.array),
         format: PropTypes.oneOf(Object.keys(Formats)),
         incrementPasteOffset: PropTypes.func.isRequired,
+        mode: PropTypes.oneOf(Object.keys(Modes)),
         pasteOffset: PropTypes.number,
         setClipboardItems: PropTypes.func.isRequired,
         setSelectedItems: PropTypes.func.isRequired
@@ -96,6 +111,7 @@ const CopyPasteHOC = function (WrappedComponent) {
     const mapStateToProps = state => ({
         clipboardItems: state.scratchPaint.clipboard.items,
         format: state.scratchPaint.format,
+        mode: state.scratchPaint.mode,
         pasteOffset: state.scratchPaint.clipboard.pasteOffset
     });
     const mapDispatchToProps = dispatch => ({

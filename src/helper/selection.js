@@ -148,6 +148,14 @@ const getSelectedRootItems = function () {
     for (const item of allItems) {
         if (item.selected) {
             items.push(item);
+        } else if (item instanceof paper.CompoundPath) {
+            // Consider a compound path selected if any of its paths are selected
+            for (const child of item.children) {
+                if (child.selected) {
+                    items.push(item);
+                    break;
+                }
+            }
         }
     }
 

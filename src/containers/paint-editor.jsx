@@ -20,7 +20,7 @@ import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRed
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
 import {scaleWithStrokes} from '../helper/math';
-import {clearSelection, getSelectedLeafItems, getAllSelectableRootItems} from '../helper/selection';
+import {clearSelection, deleteSelection, getSelectedLeafItems, getAllSelectableRootItems} from '../helper/selection';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
@@ -306,7 +306,14 @@ class PaintEditor extends React.Component {
         // Don't activate keyboard shortcuts during text editing
         if (this.props.textEditing) return;
 
-        if (event.metaKey || event.ctrlKey) {
+        if (event.key === 'Escape') {
+            event.preventDefault();
+            clearSelection(this.props.clearSelectedItems);
+        } else if (event.key === 'Delete' || event.key === 'Backspace') {
+            if (deleteSelection(this.props.mode, this.handleUpdateImage)) {
+                this.handleSetSelectedItems();
+            }
+        } else if (event.metaKey || event.ctrlKey) {
             if (event.shiftKey && event.key === 'z') {
                 this.handleRedo();
             } else if (event.key === 'z') {
@@ -314,10 +321,13 @@ class PaintEditor extends React.Component {
             } else if (event.key === 'c') {
                 this.props.onCopyToClipboard();
             } else if (event.key === 'v') {
+                this.changeToASelectMode();
                 if (this.props.onPasteFromClipboard()) {
                     this.handleUpdateImage();
                 }
             } else if (event.key === 'a') {
+                this.changeToASelectMode();
+                event.preventDefault();
                 // Select all
                 if (isBitmap(this.props.format)) {
 
@@ -330,9 +340,16 @@ class PaintEditor extends React.Component {
                     }
                     this.handleSetSelectedItems();
                 }
-            } else if (event.key === 'escape') {
-                clearSelection(this.props.clearSelectedItems);
             }
+        }
+    }
+    changeToASelectMode () {
+        if (isBitmap(this.props.format)) {
+            if (this.props.mode !== Modes.BIT_SELECT) {
+                this.props.changeMode(Modes.BIT_SELECT);
+            }
+        } else if (this.props.mode !== Modes.SELECT && this.props.mode !== Modes.RESHAPE) {
+            this.props.changeMode(Modes.SELECT);
         }
     }
     onMouseDown (event) {

@@ -4,16 +4,13 @@ import React from 'react';
 import {connect} from 'react-redux';
 import paper from '@scratch/paper';
 import Formats from '../lib/format';
-import {isBitmap} from '../lib/format';
-import Modes from '../lib/modes';
 import log from '../log/log';
 
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, getRaster, setupLayers} from '../helper/layer';
-import {deleteSelection, getSelectedLeafItems} from '../helper/selection';
-import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
+import {clearSelectedItems} from '../reducers/selected-items';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, resetZoom} from '../helper/view';
 import {ensureClockwise, scaleWithStrokes} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
@@ -28,12 +25,10 @@ class PaperCanvas extends React.Component {
         bindAll(this, [
             'setCanvas',
             'importSvg',
-            'handleKeyDown',
             'switchCostume'
         ]);
     }
     componentDidMount () {
-        document.addEventListener('keydown', this.handleKeyDown);
         paper.setup(this.canvas);
         resetZoom();
         this.props.updateViewBounds(paper.view.matrix);
@@ -57,19 +52,6 @@ class PaperCanvas extends React.Component {
     }
     componentWillUnmount () {
         paper.remove();
-        document.removeEventListener('keydown', this.handleKeyDown);
-    }
-    handleKeyDown (event) {
-        if (event.target instanceof HTMLInputElement) {
-            // Ignore delete if a text input field is focused
-            return;
-        }
-        // Backspace, delete
-        if (event.key === 'Delete' || event.key === 'Backspace') {
-            if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
-                this.props.setSelectedItems(this.props.format);
-            }
-        }
     }
     switchCostume (format, image, rotationCenterX, rotationCenterY) {
         for (const layer of paper.project.layers) {
@@ -231,18 +213,14 @@ PaperCanvas.propTypes = {
     clearPasteOffset: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     clearUndo: PropTypes.func.isRequired,
-    format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
     image: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.instanceOf(HTMLImageElement)
     ]),
     imageFormat: PropTypes.string, // The incoming image's data format, used during import. The user could switch this.
     imageId: PropTypes.string,
-    mode: PropTypes.oneOf(Object.keys(Modes)),
-    onUpdateImage: PropTypes.func.isRequired,
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
-    setSelectedItems: PropTypes.func.isRequired,
     undoSnapshot: PropTypes.func.isRequired,
     updateViewBounds: PropTypes.func.isRequired
 };
@@ -256,9 +234,6 @@ const mapDispatchToProps = dispatch => ({
     },
     clearUndo: () => {
         dispatch(clearUndoState());
-    },
-    setSelectedItems: format => {
-        dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(format)));
     },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
