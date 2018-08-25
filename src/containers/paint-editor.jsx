@@ -395,6 +395,7 @@ class PaintEditor extends React.Component {
                 setCanvas={this.setCanvas}
                 setTextArea={this.setTextArea}
                 textArea={this.state.textArea}
+                zoomClassId={this.props.zoomClassId}
                 onGroup={this.handleGroup}
                 onRedo={this.handleRedo}
                 onSendBackward={this.handleSendBackward}
@@ -454,7 +455,8 @@ PaintEditor.propTypes = {
         pointer: PropTypes.number.isRequired
     }),
     updateViewBounds: PropTypes.func.isRequired,
-    viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired
+    viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired,
+    zoomClassId: PropTypes.string
 };
 
 const mapStateToProps = state => ({

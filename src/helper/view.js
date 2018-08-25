@@ -8,6 +8,7 @@ const SVG_ART_BOARD_WIDTH = 480;
 const SVG_ART_BOARD_HEIGHT = 360;
 const ART_BOARD_WIDTH = 480 * 2;
 const ART_BOARD_HEIGHT = 360 * 2;
+const PADDING_PERCENT = 25; // Padding as a percent of the max of width/height of the sprite
 
 const clampViewBounds = () => {
     const {left, right, top, bottom} = paper.project.view.bounds;
@@ -28,7 +29,7 @@ const clampViewBounds = () => {
 // Zoom keeping a project-space point fixed.
 // This article was helpful http://matthiasberth.com/tech/stable-zoom-and-pan-in-paperjs
 const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
-    const {view} = paper.project;
+    const view = paper.view;
     const preZoomCenter = view.center;
     const newZoom = Math.max(0.5, view.zoom + deltaZoom);
     const scaling = view.zoom / newZoom;
@@ -70,6 +71,17 @@ const pan = (dx, dy) => {
     clampViewBounds();
 };
 
+const zoomToFit = () => {
+    resetZoom();
+    const bounds = paper.project.activeLayer.bounds;
+    if (bounds.width && bounds.height) {
+        let ratio = Math.max(bounds.width * (1 + (2 * PADDING_PERCENT / 100)) / ART_BOARD_WIDTH / paper.view.zoom,
+            bounds.height * (1 + (2 * PADDING_PERCENT / 100)) / ART_BOARD_HEIGHT / paper.view.zoom);
+        ratio = Math.min(1, ratio);
+        zoomOnFixedPoint((1 / ratio) - paper.view.zoom, bounds.center);
+    }
+};
+
 export {
     ART_BOARD_HEIGHT,
     ART_BOARD_WIDTH,
@@ -79,5 +91,6 @@ export {
     pan,
     resetZoom,
     zoomOnSelection,
-    zoomOnFixedPoint
+    zoomOnFixedPoint,
+    zoomToFit
 };
