@@ -77,7 +77,7 @@ const zoomToFit = () => {
     if (bounds.width && bounds.height) {
         let ratio = Math.max(bounds.width * (1 + (2 * PADDING_PERCENT / 100)) / ART_BOARD_WIDTH / paper.view.zoom,
             bounds.height * (1 + (2 * PADDING_PERCENT / 100)) / ART_BOARD_HEIGHT / paper.view.zoom);
-        ratio = Math.min(1, ratio);
+        ratio = Math.max(Math.min(1, ratio), .125);
         zoomOnFixedPoint((1 / ratio) - paper.view.zoom, bounds.center);
     }
 };

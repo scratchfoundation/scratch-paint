@@ -41,7 +41,13 @@ class PaperCanvas extends React.Component {
         this.props.updateViewBounds(paper.view.matrix);
         if (this.props.zoomClassId) {
             this.props.setZoomClass(this.props.zoomClassId);
-            this.shouldZoomToFit = true;
+            if (this.props.zoomLevels[this.props.zoomClassId]) {
+                // This is the matrix that the view should be zoomed to after image import
+                this.shouldZoomToFit = this.props.zoomLevels[this.props.zoomClassId];
+            } else {
+                // Zoom to fit true means find a comfortable zoom level for viewing the costume
+                this.shouldZoomToFit = true;
+            }
         }
 
         const context = this.canvas.getContext('2d');
@@ -59,10 +65,11 @@ class PaperCanvas extends React.Component {
         if (this.props.imageId !== newProps.imageId) {
             this.switchCostume(newProps.imageFormat, newProps.image,
                 newProps.rotationCenterX, newProps.rotationCenterY,
-                this.props.zoomClassId, newProps.zoomClassId, newProps.savedZoomLevel);
+                this.props.zoomClassId, newProps.zoomClassId);
         }
     }
     componentWillUnmount () {
+        this.props.saveZoomLevel();
         paper.remove();
         document.removeEventListener('keydown', this.handleKeyDown);
     }
@@ -78,13 +85,13 @@ class PaperCanvas extends React.Component {
             }
         }
     }
-    switchCostume (format, image, rotationCenterX, rotationCenterY, oldZoomClass, newZoomClass, savedZoomLevel) {
+    switchCostume (format, image, rotationCenterX, rotationCenterY, oldZoomClass, newZoomClass) {
         if (oldZoomClass && oldZoomClass !== newZoomClass) {
             this.props.saveZoomLevel();
         }
         if (newZoomClass && oldZoomClass !== newZoomClass) {
-            if (savedZoomLevel) {
-                this.shouldZoomToFit = savedZoomLevel;
+            if (this.props.zoomLevels[newZoomClass]) {
+                this.shouldZoomToFit = this.props.zoomLevels[newZoomClass];
             } else {
                 this.shouldZoomToFit = true;
             }
@@ -275,12 +282,15 @@ PaperCanvas.propTypes = {
     setZoomClass: PropTypes.func.isRequired,
     undoSnapshot: PropTypes.func.isRequired,
     updateViewBounds: PropTypes.func.isRequired,
-    zoomClassId: PropTypes.string
+    zoomClassId: PropTypes.string,
+    zoomLevels: PropTypes.shape({
+        currentZoomClass: PropTypes.string
+    })
 };
-const mapStateToProps = (state, {zoomClassId}) => ({
+const mapStateToProps = state => ({
     mode: state.scratchPaint.mode,
     format: state.scratchPaint.format,
-    savedZoomLevel: state.scratchPaint.zoomLevels[zoomClassId]
+    zoomLevels: state.scratchPaint.zoomLevels
 });
 const mapDispatchToProps = dispatch => ({
     undoSnapshot: snapshot => {
