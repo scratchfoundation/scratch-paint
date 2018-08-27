@@ -130,7 +130,7 @@ class PaperCanvas extends React.Component {
                     imgElement,
                     (ART_BOARD_WIDTH / 2) - rotationCenterX,
                     (ART_BOARD_HEIGHT / 2) - rotationCenterY);
-                this.maybeZoomToFit();
+                this.maybeZoomToFit(true /* isBitmap */);
                 performSnapshot(this.props.undoSnapshot, Formats.BITMAP_SKIP_CONVERT);
             };
             imgElement.src = image;
@@ -144,11 +144,11 @@ class PaperCanvas extends React.Component {
             performSnapshot(this.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
         }
     }
-    maybeZoomToFit () {
+    maybeZoomToFit (isBitmapMode) {
         if (this.shouldZoomToFit instanceof paper.Matrix) {
             paper.view.matrix = this.shouldZoomToFit;
         } else if (this.shouldZoomToFit === true) {
-            zoomToFit();
+            zoomToFit(isBitmapMode);
         }
         this.shouldZoomToFit = false;
     }
