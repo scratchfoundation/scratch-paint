@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 
 import {
     clearSelection,
+    getAllRootItems,
     getSelectedLeafItems,
     getSelectedRootItems
 } from '../helper/selection';
@@ -41,14 +42,15 @@ const CopyPasteHOC = function (WrappedComponent) {
             } else {
                 selectedItems = getSelectedRootItems();
             }
-            if (selectedItems.length > 0) {
-                const clipboardItems = [];
-                for (let i = 0; i < selectedItems.length; i++) {
-                    const jsonItem = selectedItems[i].exportJSON({asString: false});
-                    clipboardItems.push(jsonItem);
-                }
-                this.props.setClipboardItems(clipboardItems);
+            if (selectedItems.length === 0) {
+                selectedItems = getAllRootItems();
             }
+            const clipboardItems = [];
+            for (let i = 0; i < selectedItems.length; i++) {
+                const jsonItem = selectedItems[i].exportJSON({asString: false});
+                clipboardItems.push(jsonItem);
+            }
+            this.props.setClipboardItems(clipboardItems);
         }
         // Returns true if anything was pasted, false if nothing changed
         handlePaste () {
