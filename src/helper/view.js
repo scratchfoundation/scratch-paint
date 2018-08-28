@@ -89,7 +89,11 @@ const zoomToFit = isBitmap => {
             bounds.height * (1 + (2 * PADDING_PERCENT / 100)) / ART_BOARD_HEIGHT);
         // Clamp ratio
         ratio = Math.max(Math.min(1, ratio), MIN_RATIO);
-        if (ratio < 1) zoomOnFixedPoint((paper.view.zoom / ratio) - paper.view.zoom, bounds.center);
+        if (ratio < 1) {
+            paper.view.center = bounds.center;
+            paper.view.zoom = paper.view.zoom / ratio;
+            clampViewBounds();
+        }
     }
 };
 
