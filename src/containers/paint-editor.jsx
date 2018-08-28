@@ -5,6 +5,8 @@ import log from '../log/log';
 import React from 'react';
 import {connect} from 'react-redux';
 import PaintEditorComponent from '../components/paint-editor/paint-editor.jsx';
+import CopyPasteHOC from './copy-paste-hoc.jsx';
+import SelectionHOC from './selection-hoc.jsx';
 
 import {changeMode} from '../reducers/modes';
 import {changeFormat} from '../reducers/format';
@@ -546,7 +548,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(
+export default SelectionHOC(CopyPasteHOC(connect(
     mapStateToProps,
     mapDispatchToProps
-)(PaintEditor);
+)(PaintEditor)));

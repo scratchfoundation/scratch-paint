@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 
+import CopyPasteHOC from './copy-paste-hoc.jsx';
 import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {incrementPasteOffset, setClipboardItems} from '../reducers/clipboard';
@@ -251,7 +252,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(
+export default CopyPasteHOC(connect(
     mapStateToProps,
     mapDispatchToProps
-)(ModeTools);
+)(ModeTools));
