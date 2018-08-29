@@ -66,7 +66,6 @@ class PaintEditor extends React.Component {
         document.addEventListener('touchstart', this.onMouseDown);
     }
     componentWillReceiveProps (newProps) {
-        console.log('paint editor is switching formats true');
         if (isVector(this.props.format) && isBitmap(newProps.format)) {
             this.switchMode(Formats.BITMAP);
         } else if (isVector(newProps.format) && isBitmap(this.props.format)) {
@@ -85,10 +84,8 @@ class PaintEditor extends React.Component {
         }
 
         if (this.props.format === Formats.VECTOR && isBitmap(prevProps.format)) {
-            console.log('paint editor is switching formats false');
             convertToVector(this.props.clearSelectedItems, this.props.onUpdateImage);
         } else if (isVector(prevProps.format) && this.props.format === Formats.BITMAP) {
-            console.log('paint editor is switching formats false');
             convertToBitmap(this.props.clearSelectedItems, this.props.onUpdateImage);
         }
     }
@@ -382,16 +379,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-const connected = connect(
+export default UpdateImageHOC(SelectionHOC(UndoHOC(KeyboardShortcutsHOC(connect(
     mapStateToProps,
     mapDispatchToProps
-)(PaintEditor);
-const shortCutted = KeyboardShortcutsHOC(connected);
-const unDood = UndoHOC(shortCutted);
-const selectered = SelectionHOC(unDood);
-const updated = UpdateImageHOC(selectered);
-export default updated;
-// export default UpdateImageHOC(SelectionHOC(UndoHOC(KeyboardShortcutsHOC(connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(PaintEditor)))));
+)(PaintEditor)))));

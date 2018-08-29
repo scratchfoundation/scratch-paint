@@ -50,7 +50,6 @@ const CopyPasteHOC = function (WrappedComponent) {
                 this.props.setClipboardItems(clipboardItems);
             }
         }
-        // Returns true if anything was pasted, false if nothing changed
         handlePaste () {
             clearSelection(this.props.clearSelectedItems);
 
@@ -63,7 +62,7 @@ const CopyPasteHOC = function (WrappedComponent) {
                     items.push(item);
                 }
             }
-            if (!items.length) return false;
+            if (!items.length) return;
             // If pasting a group or non-raster to bitmap, rasterize first
             if (isBitmap(this.props.format) && !(items.length === 1 && items[0] instanceof paper.Raster)) {
                 const group = new paper.Group(items);
@@ -78,7 +77,7 @@ const CopyPasteHOC = function (WrappedComponent) {
             }
             this.props.incrementPasteOffset();
             this.props.setSelectedItems(this.props.format);
-            return true;
+            this.props.onUpdateImage();
         }
         render () {
             const componentProps = omit(this.props, [
@@ -108,7 +107,8 @@ const CopyPasteHOC = function (WrappedComponent) {
         mode: PropTypes.oneOf(Object.keys(Modes)),
         pasteOffset: PropTypes.number,
         setClipboardItems: PropTypes.func.isRequired,
-        setSelectedItems: PropTypes.func.isRequired
+        setSelectedItems: PropTypes.func.isRequired,
+        onUpdateImage: PropTypes.func.isRequired
     };
     const mapStateToProps = state => ({
         clipboardItems: state.scratchPaint.clipboard.items,

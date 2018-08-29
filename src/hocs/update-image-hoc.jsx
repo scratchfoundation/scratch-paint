@@ -30,34 +30,18 @@ const UpdateImageHOC = function (WrappedComponent) {
                 'handleUpdateBitmap',
                 'handleUpdateVector'
             ]);
-            // When isSwitchingFormats is true, the format is about to switch, but isn't done switching.
-            // This gives currently active tools a chance to finish what they were doing.
-            this.isSwitchingFormats = false;
         }
-        componentWillReceiveProps (newProps) {
-            if ((isVector(this.props.format) && newProps.format === Formats.BITMAP) ||
-                    (isBitmap(this.props.format) && newProps.format === Formats.VECTOR)) {
-                console.log('update image hoc is switching formats true');
-                this.isSwitchingFormats = true;
-            }
-        }
-        componentDidUpdate (prevProps) {
-            if (this.props.format === Formats.VECTOR && isBitmap(prevProps.format)) {
-                console.log('update image hoc is switching formats false');
-                this.isSwitchingFormats = false;
-            } else if (isVector(prevProps.format) && this.props.format === Formats.BITMAP) {
-                console.log('update image hoc is switching formats false');
-                this.isSwitchingFormats = false;
-            }
-        }
-        handleUpdateImage (skipSnapshot) {
-            console.log('handleUpdateImage');
-            console.trace();
+        /**
+         * @param {?boolean} skipSnapshot True if the call to update image should not trigger saving
+         * an undo state. For instance after calling undo.
+         * @param {?Formats} formatOverride Normally the mode is used to determine the format of the image,
+         * but the format used can be overridden here. In particular when converting between formats,
+         * the does not accurately represent the format.
+         */
+        handleUpdateImage (skipSnapshot, formatOverride) {
             // If in the middle of switching formats, rely on the current mode instead of format.
-            let actualFormat = this.props.format;
-            if (this.isSwitchingFormats) {
-                actualFormat = BitmapModes[this.props.mode] ? Formats.BITMAP : Formats.VECTOR;
-            }
+            const actualFormat = formatOverride ? formatOverride :
+                BitmapModes[this.props.mode] ? Formats.BITMAP : Formats.VECTOR;
             if (isBitmap(actualFormat)) {
                 this.handleUpdateBitmap(skipSnapshot);
             } else if (isVector(actualFormat)) {

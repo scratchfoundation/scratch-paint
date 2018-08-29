@@ -46,9 +46,7 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
                     this.props.onCopyToClipboard();
                 } else if (event.key === 'v') {
                     this.changeToASelectMode();
-                    if (this.props.onPasteFromClipboard()) {
-                        return true;
-                    }
+                    this.props.onPasteFromClipboard();
                 } else if (event.key === 'a') {
                     this.changeToASelectMode();
                     event.preventDefault();
