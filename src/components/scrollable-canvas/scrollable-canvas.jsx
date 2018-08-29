@@ -37,7 +37,7 @@ const ScrollableCanvasComponent = props => (
                 style={{
                     'height': `${props.verticalScrollLengthPercent}%`,
                     'top': `${props.verticalScrollStartPercent}%`,
-                    'pointer-events': 'all',
+                    'pointer-events': 'auto',
                     'display': `${props.hideCursor ||
                         Math.abs(props.verticalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block'}`
                 }}
