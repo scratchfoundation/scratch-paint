@@ -20,7 +20,7 @@ import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
 import {changeFormat} from '../reducers/format';
 import {updateViewBounds} from '../reducers/view-bounds';
-import {saveZoomLevel, setZoomClass} from '../reducers/zoom-levels';
+import {saveZoomLevel, setZoomLevelId} from '../reducers/zoom-levels';
 import styles from './paper-canvas.css';
 
 class PaperCanvas extends React.Component {
@@ -39,11 +39,11 @@ class PaperCanvas extends React.Component {
         paper.setup(this.canvas);
         resetZoom();
         this.props.updateViewBounds(paper.view.matrix);
-        if (this.props.zoomClassId) {
-            this.props.setZoomClass(this.props.zoomClassId);
-            if (this.props.zoomLevels[this.props.zoomClassId]) {
+        if (this.props.zoomLevelId) {
+            this.props.setZoomLevelId(this.props.zoomLevelId);
+            if (this.props.zoomLevels[this.props.zoomLevelId]) {
                 // This is the matrix that the view should be zoomed to after image import
-                this.shouldZoomToFit = this.props.zoomLevels[this.props.zoomClassId];
+                this.shouldZoomToFit = this.props.zoomLevels[this.props.zoomLevelId];
             } else {
                 // Zoom to fit true means find a comfortable zoom level for viewing the costume
                 this.shouldZoomToFit = true;
@@ -65,7 +65,7 @@ class PaperCanvas extends React.Component {
         if (this.props.imageId !== newProps.imageId) {
             this.switchCostume(newProps.imageFormat, newProps.image,
                 newProps.rotationCenterX, newProps.rotationCenterY,
-                this.props.zoomClassId, newProps.zoomClassId);
+                this.props.zoomLevelId, newProps.zoomLevelId);
         }
     }
     componentWillUnmount () {
@@ -85,17 +85,17 @@ class PaperCanvas extends React.Component {
             }
         }
     }
-    switchCostume (format, image, rotationCenterX, rotationCenterY, oldZoomClass, newZoomClass) {
-        if (oldZoomClass && oldZoomClass !== newZoomClass) {
+    switchCostume (format, image, rotationCenterX, rotationCenterY, oldZoomLevelId, newZoomLevelId) {
+        if (oldZoomLevelId && oldZoomLevelId !== newZoomLevelId) {
             this.props.saveZoomLevel();
         }
-        if (newZoomClass && oldZoomClass !== newZoomClass) {
-            if (this.props.zoomLevels[newZoomClass]) {
-                this.shouldZoomToFit = this.props.zoomLevels[newZoomClass];
+        if (newZoomLevelId && oldZoomLevelId !== newZoomLevelId) {
+            if (this.props.zoomLevels[newZoomLevelId]) {
+                this.shouldZoomToFit = this.props.zoomLevels[newZoomLevelId];
             } else {
                 this.shouldZoomToFit = true;
             }
-            this.props.setZoomClass(newZoomClass);
+            this.props.setZoomLevelId(newZoomLevelId);
         }
         for (const layer of paper.project.layers) {
             if (layer.data.isRasterLayer) {
@@ -279,12 +279,12 @@ PaperCanvas.propTypes = {
     rotationCenterY: PropTypes.number,
     saveZoomLevel: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
-    setZoomClass: PropTypes.func.isRequired,
+    setZoomLevelId: PropTypes.func.isRequired,
     undoSnapshot: PropTypes.func.isRequired,
     updateViewBounds: PropTypes.func.isRequired,
-    zoomClassId: PropTypes.string,
+    zoomLevelId: PropTypes.string,
     zoomLevels: PropTypes.shape({
-        currentZoomClass: PropTypes.string
+        currentZoomLevelId: PropTypes.string
     })
 };
 const mapStateToProps = state => ({
@@ -317,8 +317,8 @@ const mapDispatchToProps = dispatch => ({
     saveZoomLevel: () => {
         dispatch(saveZoomLevel(paper.view.matrix));
     },
-    setZoomClass: zoomClassId => {
-        dispatch(setZoomClass(zoomClassId));
+    setZoomLevelId: zoomLevelId => {
+        dispatch(setZoomLevelId(zoomLevelId));
     },
     updateViewBounds: matrix => {
         dispatch(updateViewBounds(matrix));

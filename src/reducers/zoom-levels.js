@@ -2,23 +2,23 @@ import paper from '@scratch/paper';
 import log from '../log/log';
 
 const SAVE_ZOOM_LEVEL = 'scratch-paint/zoom-levels/SAVE_ZOOM_LEVEL';
-const SET_ZOOM_CLASS = 'scratch-paint/zoom-levels/SET_ZOOM_CLASS';
+const SET_ZOOM_LEVEL_ID = 'scratch-paint/zoom-levels/SET_ZOOM_LEVEL_ID';
 const initialState = {};
 
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
-    case SET_ZOOM_CLASS:
-        if (action.zoomClass === 'currentZoomClass') {
-            log.warn(`currentZoomClass is an invalid string for zoomClass`);
+    case SET_ZOOM_LEVEL_ID:
+        if (action.zoomLevelId === 'currentZoomLevelId') {
+            log.warn(`currentZoomLevelId is an invalid string for zoomLevel`);
             return state;
         }
         return Object.assign({}, state, {
-            currentZoomClass: action.zoomClass
+            currentZoomLevelId: action.zoomLevelId
         });
     case SAVE_ZOOM_LEVEL:
         return Object.assign({}, state, {
-            [state.currentZoomClass]: action.zoomLevel
+            [state.currentZoomLevelId]: action.zoomLevel
         });
     default:
         return state;
@@ -35,15 +35,15 @@ const saveZoomLevel = function (zoomLevel) {
         zoomLevel: new paper.Matrix(zoomLevel)
     };
 };
-const setZoomClass = function (zoomClass) {
+const setZoomLevelId = function (zoomLevelId) {
     return {
-        type: SET_ZOOM_CLASS,
-        zoomClass: zoomClass
+        type: SET_ZOOM_LEVEL_ID,
+        zoomLevelId: zoomLevelId
     };
 };
 
 export {
     reducer as default,
     saveZoomLevel,
-    setZoomClass
+    setZoomLevelId
 };

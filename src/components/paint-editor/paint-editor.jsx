@@ -216,7 +216,7 @@ const PaintEditorComponent = props => (
                         imageId={props.imageId}
                         rotationCenterX={props.rotationCenterX}
                         rotationCenterY={props.rotationCenterY}
-                        zoomClassId={props.zoomClassId}
+                        zoomLevelId={props.zoomLevelId}
                         onUpdateImage={props.onUpdateImage}
                     />
                     <textarea
@@ -346,7 +346,7 @@ PaintEditorComponent.propTypes = {
     setCanvas: PropTypes.func.isRequired,
     setTextArea: PropTypes.func.isRequired,
     textArea: PropTypes.instanceOf(Element),
-    zoomClassId: PropTypes.string
+    zoomLevelId: PropTypes.string
 };
 
 export default injectIntl(PaintEditorComponent);
