@@ -9,6 +9,7 @@ const InputGroup = props => (
         className={classNames(props.className, styles.inputGroup, {
             [styles.disabled]: props.disabled
         })}
+        dir={props.rtl ? 'rtl' : ''}
     >
         {props.children}
     </div>
@@ -17,7 +18,8 @@ const InputGroup = props => (
 InputGroup.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    rtl: PropTypes.bool
 };
 
 export default InputGroup;

@@ -126,3 +126,8 @@ $border-radius: 0.25rem;
 .menu-item-icon {
     margin-right: calc(2 * $grid-unit);
 }
+
+[dir="rtl"] .menu-item-icon {
+    margin-right: 0;
+    margin-left: calc(2 * $grid-unit);
+}
