@@ -10,7 +10,7 @@ import {changeFont} from '../reducers/font';
 import {getSelectedLeafItems} from '../helper/selection';
 import styles from '../components/font-dropdown/font-dropdown.css';
 
-class ModeToolsComponent extends React.Component {
+class FontDropdown extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
@@ -164,7 +164,7 @@ class ModeToolsComponent extends React.Component {
     }
 }
 
-ModeToolsComponent.propTypes = {
+FontDropdown.propTypes = {
     changeFont: PropTypes.func.isRequired,
     font: PropTypes.string,
     onUpdateImage: PropTypes.func.isRequired
@@ -182,4 +182,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ModeToolsComponent);
+)(FontDropdown);
