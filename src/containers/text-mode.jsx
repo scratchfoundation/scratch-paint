@@ -95,7 +95,8 @@ class TextMode extends React.Component {
             this.props.onUpdateImage,
             this.props.setTextEditTarget,
             this.props.changeFont,
-            nextProps.isBitmap
+            nextProps.isBitmap,
+            this.props.rtl
         );
         this.tool.setColorState(nextProps.colorState);
         this.tool.setFont(nextProps.font);
@@ -142,6 +143,7 @@ TextMode.propTypes = {
     onChangeFillColor: PropTypes.func.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
+    rtl: PropTypes.bool,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setSelectedItems: PropTypes.func.isRequired,
     setTextEditTarget: PropTypes.func.isRequired,
@@ -156,6 +158,7 @@ const mapStateToProps = (state, ownProps) => ({
     isTextModeActive: ownProps.isBitmap ?
         state.scratchPaint.mode === Modes.BIT_TEXT :
         state.scratchPaint.mode === Modes.TEXT,
+    rtl: state.scratchPaint.layout.rtl,
     selectedItems: state.scratchPaint.selectedItems,
     textEditTarget: state.scratchPaint.textEditTarget,
     viewBounds: state.scratchPaint.viewBounds

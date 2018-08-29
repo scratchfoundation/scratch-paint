@@ -209,8 +209,8 @@ $border-radius: 0.25rem;
     padding: 0px;
     position: absolute;
     resize: none;
-    -webkit-text-fill-color: transparent;
-    text-fill-color: transparent;
+    /* -webkit-text-fill-color: transparent;
+    text-fill-color: transparent; */
 }
 
 .button-text {
