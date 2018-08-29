@@ -5,26 +5,25 @@ import log from '../log/log';
 import React from 'react';
 import {connect} from 'react-redux';
 import PaintEditorComponent from '../components/paint-editor/paint-editor.jsx';
-import CopyPasteHOC from './copy-paste-hoc.jsx';
+import KeyboardShortcutsHOC from './keyboard-shortcuts-hoc.jsx';
 import SelectionHOC from './selection-hoc.jsx';
+import UndoHOC from './undo-hoc.jsx';
 
 import {changeMode} from '../reducers/modes';
 import {changeFormat} from '../reducers/format';
-import {undo, redo, undoSnapshot} from '../reducers/undo';
+import {undoSnapshot} from '../reducers/undo';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {deactivateEyeDropper} from '../reducers/eye-dropper';
 import {setTextEditTarget} from '../reducers/text-edit-target';
 import {updateViewBounds} from '../reducers/view-bounds';
 
+import {getSelectedLeafItems} from '../helper/selection';
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
-import {commitSelectionToBitmap, convertToBitmap, convertToVector, getHitBounds,
-    selectAllBitmap} from '../helper/bitmap';
-import {performUndo, performRedo, performSnapshot, shouldShowUndo, shouldShowRedo} from '../helper/undo';
+import {commitSelectionToBitmap, convertToBitmap, convertToVector, getHitBounds} from '../helper/bitmap';
+import {performSnapshot} from '../helper/undo';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
 import {scaleWithStrokes} from '../helper/math';
-import {clearSelection, deleteSelection, getSelectedLeafItems,
-    selectAllItems, selectAllSegments} from '../helper/selection';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
@@ -45,8 +44,6 @@ class PaintEditor extends React.Component {
             'handleUpdateImage',
             'handleUpdateBitmap',
             'handleUpdateVector',
-            'handleUndo',
-            'handleRedo',
             'handleSendBackward',
             'handleSendForward',
             'handleSendToBack',
@@ -57,10 +54,7 @@ class PaintEditor extends React.Component {
             'handleZoomIn',
             'handleZoomOut',
             'handleZoomReset',
-            'canRedo',
-            'canUndo',
             'switchMode',
-            'onKeyPress',
             'onMouseDown',
             'setCanvas',
             'setTextArea',
@@ -76,7 +70,7 @@ class PaintEditor extends React.Component {
         this.isSwitchingFormats = false;
     }
     componentDidMount () {
-        document.addEventListener('keydown', this.onKeyPress);
+        document.addEventListener('keydown', this.props.onKeyPress);
         // document listeners used to detect if a mouse is down outside of the
         // canvas, and should therefore stop the eye dropper
         document.addEventListener('mousedown', this.onMouseDown);
@@ -251,12 +245,6 @@ class PaintEditor extends React.Component {
             performSnapshot(this.props.undoSnapshot, Formats.VECTOR);
         }
     }
-    handleUndo () {
-        performUndo(this.props.undoState, this.props.onUndo, this.handleSetSelectedItems, this.handleUpdateImage);
-    }
-    handleRedo () {
-        performRedo(this.props.undoState, this.props.onRedo, this.handleSetSelectedItems, this.handleUpdateImage);
-    }
     handleGroup () {
         groupSelection(this.props.clearSelectedItems, this.handleSetSelectedItems, this.handleUpdateImage);
     }
@@ -277,12 +265,6 @@ class PaintEditor extends React.Component {
     }
     handleSetSelectedItems () {
         this.props.setSelectedItems(this.props.format);
-    }
-    canUndo () {
-        return shouldShowUndo(this.props.undoState);
-    }
-    canRedo () {
-        return shouldShowRedo(this.props.undoState);
     }
     handleZoomIn () {
         zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
@@ -305,56 +287,6 @@ class PaintEditor extends React.Component {
     }
     setTextArea (element) {
         this.setState({textArea: element});
-    }
-    onKeyPress (event) {
-        // Don't activate keyboard shortcuts during text editing
-        if (this.props.textEditing) return;
-
-        if (event.key === 'Escape') {
-            event.preventDefault();
-            clearSelection(this.props.clearSelectedItems);
-        } else if (event.key === 'Delete' || event.key === 'Backspace') {
-            if (deleteSelection(this.props.mode, this.handleUpdateImage)) {
-                this.handleSetSelectedItems();
-            }
-        } else if (event.metaKey || event.ctrlKey) {
-            if (event.shiftKey && event.key === 'z') {
-                this.handleRedo();
-            } else if (event.key === 'z') {
-                this.handleUndo();
-            } else if (event.key === 'c') {
-                this.props.onCopyToClipboard();
-            } else if (event.key === 'v') {
-                this.changeToASelectMode();
-                if (this.props.onPasteFromClipboard()) {
-                    this.handleUpdateImage();
-                }
-            } else if (event.key === 'a') {
-                this.changeToASelectMode();
-                event.preventDefault();
-                this.selectAll();
-            }
-        }
-    }
-    changeToASelectMode () {
-        if (isBitmap(this.props.format)) {
-            if (this.props.mode !== Modes.BIT_SELECT) {
-                this.props.changeMode(Modes.BIT_SELECT);
-            }
-        } else if (this.props.mode !== Modes.SELECT && this.props.mode !== Modes.RESHAPE) {
-            this.props.changeMode(Modes.SELECT);
-        }
-    }
-    selectAll () {
-        if (isBitmap(this.props.format)) {
-            selectAllBitmap(this.props.clearSelectedItems);
-            this.handleSetSelectedItems();
-        } else if (this.props.mode === Modes.RESHAPE) {
-            if (selectAllSegments()) this.handleSetSelectedItems();
-        } else {
-            // Disable lint for easier to read logic
-            if (selectAllItems()) this.handleSetSelectedItems(); // eslint-disable-line no-lonely-if
-        }
     }
     onMouseDown (event) {
         if (event.target === paper.view.element &&
@@ -422,8 +354,8 @@ class PaintEditor extends React.Component {
     render () {
         return (
             <PaintEditorComponent
-                canRedo={this.canRedo}
-                canUndo={this.canUndo}
+                canRedo={this.props.shouldShowRedo}
+                canUndo={this.props.shouldShowUndo}
                 canvas={this.state.canvas}
                 colorInfo={this.state.colorInfo}
                 format={this.props.format}
@@ -438,14 +370,14 @@ class PaintEditor extends React.Component {
                 setTextArea={this.setTextArea}
                 textArea={this.state.textArea}
                 onGroup={this.handleGroup}
-                onRedo={this.handleRedo}
+                onRedo={this.props.onRedo}
                 onSendBackward={this.handleSendBackward}
                 onSendForward={this.handleSendForward}
                 onSendToBack={this.handleSendToBack}
                 onSendToFront={this.handleSendToFront}
                 onSwitchToBitmap={this.props.handleSwitchToBitmap}
                 onSwitchToVector={this.props.handleSwitchToVector}
-                onUndo={this.handleUndo}
+                onUndo={this.props.onUndo}
                 onUngroup={this.handleUngroup}
                 onUpdateImage={this.handleUpdateImage}
                 onUpdateName={this.props.onUpdateName}
@@ -473,9 +405,8 @@ PaintEditor.propTypes = {
     isEyeDropping: PropTypes.bool,
     mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
     name: PropTypes.string,
-    onCopyToClipboard: PropTypes.func.isRequired,
     onDeactivateEyeDropper: PropTypes.func.isRequired,
-    onPasteFromClipboard: PropTypes.func.isRequired,
+    onKeyPress: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
@@ -488,12 +419,9 @@ PaintEditor.propTypes = {
     rotationCenterX: PropTypes.number,
     rotationCenterY: PropTypes.number,
     setSelectedItems: PropTypes.func.isRequired,
-    textEditing: PropTypes.bool.isRequired,
+    shouldShowRedo: PropTypes.func.isRequired,
+    shouldShowUndo: PropTypes.func.isRequired,
     undoSnapshot: PropTypes.func.isRequired,
-    undoState: PropTypes.shape({
-        stack: PropTypes.arrayOf(PropTypes.object).isRequired,
-        pointer: PropTypes.number.isRequired
-    }),
     updateViewBounds: PropTypes.func.isRequired,
     viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired
 };
@@ -507,8 +435,6 @@ const mapStateToProps = state => ({
     pasteOffset: state.scratchPaint.clipboard.pasteOffset,
     previousTool: state.scratchPaint.color.eyeDropper.previousTool,
     selectedItems: state.scratchPaint.selectedItems,
-    textEditing: state.scratchPaint.textEditTarget !== null,
-    undoState: state.scratchPaint.undo,
     viewBounds: state.scratchPaint.viewBounds
 });
 const mapDispatchToProps = dispatch => ({
@@ -534,12 +460,6 @@ const mapDispatchToProps = dispatch => ({
         // set redux values to default for eye dropper reducer
         dispatch(deactivateEyeDropper());
     },
-    onUndo: format => {
-        dispatch(undo(format));
-    },
-    onRedo: format => {
-        dispatch(redo(format));
-    },
     undoSnapshot: snapshot => {
         dispatch(undoSnapshot(snapshot));
     },
@@ -548,7 +468,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default SelectionHOC(CopyPasteHOC(connect(
+export default UpdateImageHOC(SelectionHOC(UndoHOC(KeyboardShortcutsHOC(connect(
     mapStateToProps,
     mapDispatchToProps
-)(PaintEditor)));
+)(PaintEditor)))));
