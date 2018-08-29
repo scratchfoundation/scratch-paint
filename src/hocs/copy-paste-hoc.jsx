@@ -84,7 +84,9 @@ const CopyPasteHOC = function (WrappedComponent) {
             const componentProps = omit(this.props, [
                 'clearSelectedItems',
                 'clipboardItems',
+                'format',
                 'incrementPasteOffset',
+                'mode',
                 'pasteOffset',
                 'setClipboardItems',
                 'setSelectedItems']);

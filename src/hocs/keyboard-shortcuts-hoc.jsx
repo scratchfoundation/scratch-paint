@@ -21,7 +21,7 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
         constructor (props) {
             super(props);
             bindAll(this, [
-                'onKeyPress',
+                'handleKeyPress',
                 'changeToASelectMode',
                 'selectAll'
             ]);
@@ -125,10 +125,10 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
         }
     });
 
-    return connect(
+    return CopyPasteHOC(connect(
         mapStateToProps,
         mapDispatchToProps
-    )(KeyboardShortcutsWrapper);
+    )(KeyboardShortcutsWrapper));
 };
 
-export default CopyPasteHOC(KeyboardShortcutsHOC);
+export default KeyboardShortcutsHOC;
