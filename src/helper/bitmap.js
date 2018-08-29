@@ -1,6 +1,7 @@
 import paper from '@scratch/paper';
 import {createCanvas, clearRaster, getRaster, hideGuideLayers, showGuideLayers} from './layer';
 import {getGuideColor} from './guides';
+import {clearSelection} from './selection';
 import {inlineSvgFonts} from 'scratch-svg-renderer';
 
 const forEachLinePoint = function (point1, point2, callback) {
@@ -347,7 +348,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
     // @todo if the active layer contains only rasters, drawing them directly to the raster layer
     // would be more efficient.
 
-    clearSelectedItems();
+    clearSelection(clearSelectedItems);
 
     // Export svg
     const guideLayers = hideGuideLayers(true /* includeRaster */);
@@ -392,7 +393,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
 };
 
 const convertToVector = function (clearSelectedItems, onUpdateImage) {
-    clearSelectedItems();
+    clearSelection(clearSelectedItems);
     const trimmedRaster = trim_(getRaster());
     if (trimmedRaster) {
         paper.project.activeLayer.addChild(trimmedRaster);
@@ -722,6 +723,20 @@ const commitSelectionToBitmap = function (selection, bitmap) {
     commitArbitraryTransformation_(selection, bitmap);
 };
 
+const selectAllBitmap = function (clearSelectedItems) {
+    clearSelection(clearSelectedItems);
+
+    // Pull raster to active layer
+    const raster = getRaster();
+    raster.guide = false;
+    raster.locked = false;
+    raster.parent = paper.project.activeLayer;
+    raster.selected = true;
+
+    // Clear raster layer
+    clearRaster();
+};
+
 export {
     commitSelectionToBitmap,
     convertToBitmap,
@@ -736,5 +751,6 @@ export {
     forEachLinePoint,
     flipBitmapHorizontal,
     flipBitmapVertical,
-    scaleBitmap
+    scaleBitmap,
+    selectAllBitmap
 };

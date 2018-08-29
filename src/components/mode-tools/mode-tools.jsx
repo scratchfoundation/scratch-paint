@@ -317,7 +317,7 @@ ModeToolsComponent.propTypes = {
     clipboardItems: PropTypes.arrayOf(PropTypes.array),
     eraserValue: PropTypes.number,
     fillBitmapShapes: PropTypes.bool,
-    format: PropTypes.oneOf(Object.keys(Formats)).isRequired,
+    format: PropTypes.oneOf(Object.keys(Formats)),
     hasSelectedUncurvedPoints: PropTypes.bool,
     hasSelectedUnpointedPoints: PropTypes.bool,
     intl: intlShape.isRequired,
