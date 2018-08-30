@@ -56,7 +56,10 @@ class ColorPickerComponent extends React.Component {
     }
     render () {
         return (
-            <div className={styles.colorPickerContainer}>
+            <div
+                className={styles.colorPickerContainer}
+                dir={this.props.rtl ? 'rtl' : 'ltr'}
+            >
                 {this.props.shouldShowGradientTools ? (
                     <div>
                         <div className={styles.row}>
@@ -103,7 +106,12 @@ class ColorPickerComponent extends React.Component {
                         <div className={styles.divider} />
                         {this.props.gradientType === GradientTypes.SOLID ? null : (
                             <div className={styles.row}>
-                                <div className={styles.gradientPickerRow}>
+                                <div
+                                    className={classNames(
+                                        styles.gradientPickerRow,
+                                        styles.gradientSwatchesRow
+                                    )}
+                                >
                                     <div
                                         className={classNames({
                                             [styles.clickable]: true,
@@ -295,6 +303,7 @@ ColorPickerComponent.propTypes = {
     onSelectColor2: PropTypes.func.isRequired,
     onSwap: PropTypes.func,
     onTransparent: PropTypes.func.isRequired,
+    rtl: PropTypes.bool.isRequired,
     saturation: PropTypes.number.isRequired,
     shouldShowGradientTools: PropTypes.bool.isRequired
 };

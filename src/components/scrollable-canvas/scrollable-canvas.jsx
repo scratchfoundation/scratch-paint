@@ -12,26 +12,34 @@ const ScrollableCanvasComponent = props => (
         )}
     >
         {props.children}
-        <div className={styles.horizontalScrollbarWrapper}>
+        <div
+            className={styles.horizontalScrollbarWrapper}
+            style={{'pointer-events': 'none'}}
+        >
             <div
                 className={styles.horizontalScrollbar}
                 style={{
-                    width: `${props.horizontalScrollLengthPercent}%`,
-                    left: `${props.horizontalScrollStartPercent}%`,
-                    visibility: `${props.hideCursor ||
-                        Math.abs(props.horizontalScrollLengthPercent - 100) < 1e-8 ? 'hidden' : 'visible'}`
+                    'width': `${props.horizontalScrollLengthPercent}%`,
+                    'left': `${props.horizontalScrollStartPercent}%`,
+                    'pointer-events': 'all',
+                    'display': `${props.hideCursor ||
+                        Math.abs(props.horizontalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block'}`
                 }}
                 onMouseDown={props.onHorizontalScrollbarMouseDown}
             />
         </div>
-        <div className={styles.verticalScrollbarWrapper}>
+        <div
+            className={styles.verticalScrollbarWrapper}
+            style={{'pointer-events': 'none'}}
+        >
             <div
                 className={styles.verticalScrollbar}
                 style={{
-                    height: `${props.verticalScrollLengthPercent}%`,
-                    top: `${props.verticalScrollStartPercent}%`,
-                    visibility: `${props.hideCursor ||
-                        Math.abs(props.verticalScrollLengthPercent - 100) < 1e-8 ? 'hidden' : 'visible'}`
+                    'height': `${props.verticalScrollLengthPercent}%`,
+                    'top': `${props.verticalScrollStartPercent}%`,
+                    'pointer-events': 'auto',
+                    'display': `${props.hideCursor ||
+                        Math.abs(props.verticalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block'}`
                 }}
                 onMouseDown={props.onVerticalScrollbarMouseDown}
             />

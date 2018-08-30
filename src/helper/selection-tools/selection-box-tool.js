@@ -64,6 +64,10 @@ class SelectionBoxTool {
                 raster.parent = paper.project.activeLayer;
                 raster.canvas.getContext('2d').imageSmoothingEnabled = false;
                 raster.selected = true;
+                // Gather a bit of extra data so that we can avoid aliasing at edges
+                const expanded = getRaster().getSubRaster(rect.expand(4));
+                expanded.remove();
+                raster.data = {expanded: expanded};
 
                 // Clear area from raster layer
                 const context = getRaster().getContext(true /* modify */);

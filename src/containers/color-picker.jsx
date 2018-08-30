@@ -129,6 +129,7 @@ class ColorPicker extends React.Component {
                 gradientType={this.props.gradientType}
                 hue={this.state.hue}
                 isEyeDropping={this.props.isEyeDropping}
+                rtl={this.props.rtl}
                 saturation={this.state.saturation}
                 shouldShowGradientTools={this.props.shouldShowGradientTools}
                 onActivateEyeDropper={this.handleActivateEyeDropper}
@@ -160,12 +161,14 @@ ColorPicker.propTypes = {
     onSelectColor: PropTypes.func.isRequired,
     onSelectColor2: PropTypes.func.isRequired,
     onSwap: PropTypes.func,
+    rtl: PropTypes.bool.isRequired,
     shouldShowGradientTools: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
     colorIndex: state.scratchPaint.fillMode.colorIndex,
-    isEyeDropping: state.scratchPaint.color.eyeDropper.active
+    isEyeDropping: state.scratchPaint.color.eyeDropper.active,
+    rtl: state.scratchPaint.layout.rtl
 });
 
 const mapDispatchToProps = dispatch => ({
