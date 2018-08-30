@@ -59,11 +59,10 @@ const CopyPasteHOC = function (WrappedComponent) {
             }
             this.props.setClipboardItems(clipboardItems);
         }
-        // Returns true if anything was pasted, false if nothing changed
         handlePaste () {
             clearSelection(this.props.clearSelectedItems);
 
-            if (this.props.clipboardItems.length === 0) return false;
+            if (this.props.clipboardItems.length === 0) return;
 
             let items = [];
             for (let i = 0; i < this.props.clipboardItems.length; i++) {
@@ -72,7 +71,7 @@ const CopyPasteHOC = function (WrappedComponent) {
                     items.push(item);
                 }
             }
-            if (!items.length) return false;
+            if (!items.length) return;
             // If pasting a group or non-raster to bitmap, rasterize first
             if (isBitmap(this.props.format) && !(items.length === 1 && items[0] instanceof paper.Raster)) {
                 const group = new paper.Group(items);
@@ -87,13 +86,15 @@ const CopyPasteHOC = function (WrappedComponent) {
             }
             this.props.incrementPasteOffset();
             this.props.setSelectedItems(this.props.format);
-            return true;
+            this.props.onUpdateImage();
         }
         render () {
             const componentProps = omit(this.props, [
                 'clearSelectedItems',
                 'clipboardItems',
+                'format',
                 'incrementPasteOffset',
+                'mode',
                 'pasteOffset',
                 'setClipboardItems',
                 'setSelectedItems']);
@@ -113,6 +114,7 @@ const CopyPasteHOC = function (WrappedComponent) {
         format: PropTypes.oneOf(Object.keys(Formats)),
         incrementPasteOffset: PropTypes.func.isRequired,
         mode: PropTypes.oneOf(Object.keys(Modes)),
+        onUpdateImage: PropTypes.func.isRequired,
         pasteOffset: PropTypes.number,
         setClipboardItems: PropTypes.func.isRequired,
         setSelectedItems: PropTypes.func.isRequired

@@ -3,6 +3,7 @@ import {createCanvas, clearRaster, getRaster, hideGuideLayers, showGuideLayers} 
 import {getGuideColor} from './guides';
 import {clearSelection} from './selection';
 import {inlineSvgFonts} from 'scratch-svg-renderer';
+import Formats from '../lib/format';
 
 const forEachLinePoint = function (point1, point2, callback) {
     // Bresenham line algorithm
@@ -390,7 +391,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
                 new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
         }
         paper.project.activeLayer.removeChildren();
-        onUpdateImage();
+        onUpdateImage(false /* skipSnapshot */, Formats.BITMAP /* formatOverride */);
     };
     img.onerror = () => {
         // Fallback if browser does not support SVG data URIs in images.
@@ -401,7 +402,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
                 getRaster().drawImage(raster.canvas, raster.bounds.topLeft);
             }
             paper.project.activeLayer.removeChildren();
-            onUpdateImage();
+            onUpdateImage(false /* skipSnapshot */, Formats.BITMAP /* formatOverride */);
         };
     };
     // Hash tags will break image loading without being encoded first
@@ -412,7 +413,7 @@ const convertToVector = function (clearSelectedItems, onUpdateImage) {
     clearSelection(clearSelectedItems);
     getTrimmedRaster(true /* shouldInsert */);
     clearRaster();
-    onUpdateImage();
+    onUpdateImage(false /* skipSnapshot */, Formats.VECTOR /* formatOverride */);
 };
 
 const getColor_ = function (x, y, context) {
