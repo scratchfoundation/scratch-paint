@@ -26,7 +26,6 @@ const UndoHOC = function (WrappedComponent) {
         }
         handleUndo () {
             performUndo(this.props.undoState, this.props.onUndo, this.handleSetSelectedItems, this.props.onUpdateImage);
-            // TODO this.handleUpdateImage
         }
         handleRedo () {
             performRedo(this.props.undoState, this.props.onRedo, this.handleSetSelectedItems, this.props.onUpdateImage);
