@@ -41441,15 +41441,15 @@ var ScrollableCanvasComponent = function ScrollableCanvasComponent(props) {
             'div',
             {
                 className: _scrollableCanvas2.default.horizontalScrollbarWrapper,
-                style: { 'pointer-events': 'none' }
+                style: { pointerEvents: 'none' }
             },
             _react2.default.createElement('div', {
                 className: _scrollableCanvas2.default.horizontalScrollbar,
                 style: {
-                    'width': props.horizontalScrollLengthPercent + '%',
-                    'left': props.horizontalScrollStartPercent + '%',
-                    'pointer-events': 'all',
-                    'display': '' + (props.hideCursor || Math.abs(props.horizontalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block')
+                    width: props.horizontalScrollLengthPercent + '%',
+                    left: props.horizontalScrollStartPercent + '%',
+                    pointerEvents: 'auto',
+                    display: '' + (props.hideCursor || Math.abs(props.horizontalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block')
                 },
                 onMouseDown: props.onHorizontalScrollbarMouseDown
             })
@@ -41458,15 +41458,15 @@ var ScrollableCanvasComponent = function ScrollableCanvasComponent(props) {
             'div',
             {
                 className: _scrollableCanvas2.default.verticalScrollbarWrapper,
-                style: { 'pointer-events': 'none' }
+                style: { pointerEvents: 'none' }
             },
             _react2.default.createElement('div', {
                 className: _scrollableCanvas2.default.verticalScrollbar,
                 style: {
-                    'height': props.verticalScrollLengthPercent + '%',
-                    'top': props.verticalScrollStartPercent + '%',
-                    'pointer-events': 'auto',
-                    'display': '' + (props.hideCursor || Math.abs(props.verticalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block')
+                    height: props.verticalScrollLengthPercent + '%',
+                    top: props.verticalScrollStartPercent + '%',
+                    pointerEvents: 'auto',
+                    display: '' + (props.hideCursor || Math.abs(props.verticalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block')
                 },
                 onMouseDown: props.onVerticalScrollbarMouseDown
             })
