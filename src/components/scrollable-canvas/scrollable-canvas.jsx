@@ -14,15 +14,15 @@ const ScrollableCanvasComponent = props => (
         {props.children}
         <div
             className={styles.horizontalScrollbarWrapper}
-            style={{'pointer-events': 'none'}}
+            style={{pointerEvents: 'none'}}
         >
             <div
                 className={styles.horizontalScrollbar}
                 style={{
-                    'width': `${props.horizontalScrollLengthPercent}%`,
-                    'left': `${props.horizontalScrollStartPercent}%`,
-                    'pointer-events': 'all',
-                    'display': `${props.hideCursor ||
+                    width: `${props.horizontalScrollLengthPercent}%`,
+                    left: `${props.horizontalScrollStartPercent}%`,
+                    pointerEvents: 'auto',
+                    display: `${props.hideCursor ||
                         Math.abs(props.horizontalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block'}`
                 }}
                 onMouseDown={props.onHorizontalScrollbarMouseDown}
@@ -30,15 +30,15 @@ const ScrollableCanvasComponent = props => (
         </div>
         <div
             className={styles.verticalScrollbarWrapper}
-            style={{'pointer-events': 'none'}}
+            style={{pointerEvents: 'none'}}
         >
             <div
                 className={styles.verticalScrollbar}
                 style={{
-                    'height': `${props.verticalScrollLengthPercent}%`,
-                    'top': `${props.verticalScrollStartPercent}%`,
-                    'pointer-events': 'auto',
-                    'display': `${props.hideCursor ||
+                    height: `${props.verticalScrollLengthPercent}%`,
+                    top: `${props.verticalScrollStartPercent}%`,
+                    pointerEvents: 'auto',
+                    display: `${props.hideCursor ||
                         Math.abs(props.verticalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block'}`
                 }}
                 onMouseDown={props.onVerticalScrollbarMouseDown}
