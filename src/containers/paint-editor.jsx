@@ -20,8 +20,6 @@ import {setLayout} from '../reducers/layout';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
-import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
-import {groupSelection, ungroupSelection} from '../helper/group';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
@@ -37,22 +35,16 @@ class PaintEditor extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleSendBackward',
-            'handleSendForward',
-            'handleSendToBack',
-            'handleSendToFront',
-            'handleSetSelectedItems',
-            'handleGroup',
-            'handleUngroup',
-            'handleZoomIn',
-            'handleZoomOut',
-            'handleZoomReset',
             'switchMode',
             'onMouseDown',
             'setCanvas',
             'setTextArea',
             'startEyeDroppingLoop',
-            'stopEyeDroppingLoop'
+            'stopEyeDroppingLoop',
+            'handleSetSelectedItems',
+            'handleZoomIn',
+            'handleZoomOut',
+            'handleZoomReset'
         ]);
         this.state = {
             canvas: null,
@@ -166,27 +158,6 @@ class PaintEditor extends React.Component {
             }
         }
     }
-    handleGroup () {
-        groupSelection(this.props.clearSelectedItems, this.handleSetSelectedItems, this.props.onUpdateImage);
-    }
-    handleUngroup () {
-        ungroupSelection(this.props.clearSelectedItems, this.handleSetSelectedItems, this.props.onUpdateImage);
-    }
-    handleSendBackward () {
-        sendBackward(this.props.onUpdateImage);
-    }
-    handleSendForward () {
-        bringForward(this.props.onUpdateImage);
-    }
-    handleSendToBack () {
-        sendToBack(this.props.onUpdateImage);
-    }
-    handleSendToFront () {
-        bringToFront(this.props.onUpdateImage);
-    }
-    handleSetSelectedItems () {
-        this.props.setSelectedItems(this.props.format);
-    }
     handleZoomIn () {
         zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
         this.props.updateViewBounds(paper.view.matrix);
@@ -201,6 +172,9 @@ class PaintEditor extends React.Component {
         resetZoom();
         this.props.updateViewBounds(paper.view.matrix);
         this.handleSetSelectedItems();
+    }
+    handleSetSelectedItems () {
+        this.props.setSelectedItems(this.props.format);
     }
     setCanvas (canvas) {
         this.setState({canvas: canvas});
@@ -291,16 +265,10 @@ class PaintEditor extends React.Component {
                 setCanvas={this.setCanvas}
                 setTextArea={this.setTextArea}
                 textArea={this.state.textArea}
-                onGroup={this.handleGroup}
                 onRedo={this.props.onRedo}
-                onSendBackward={this.handleSendBackward}
-                onSendForward={this.handleSendForward}
-                onSendToBack={this.handleSendToBack}
-                onSendToFront={this.handleSendToFront}
                 onSwitchToBitmap={this.props.handleSwitchToBitmap}
                 onSwitchToVector={this.props.handleSwitchToVector}
                 onUndo={this.props.onUndo}
-                onUngroup={this.handleUngroup}
                 onUpdateImage={this.props.onUpdateImage}
                 onUpdateName={this.props.onUpdateName}
                 onZoomIn={this.handleZoomIn}
@@ -351,13 +319,10 @@ PaintEditor.propTypes = {
 
 const mapStateToProps = state => ({
     changeColorToEyeDropper: state.scratchPaint.color.eyeDropper.callback,
-    clipboardItems: state.scratchPaint.clipboard.items,
     format: state.scratchPaint.format,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     mode: state.scratchPaint.mode,
-    pasteOffset: state.scratchPaint.clipboard.pasteOffset,
     previousTool: state.scratchPaint.color.eyeDropper.previousTool,
-    selectedItems: state.scratchPaint.selectedItems,
     viewBounds: state.scratchPaint.viewBounds
 });
 const mapDispatchToProps = dispatch => ({
