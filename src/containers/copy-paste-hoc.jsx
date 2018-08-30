@@ -11,6 +11,7 @@ import {
     getSelectedLeafItems,
     getSelectedRootItems
 } from '../helper/selection';
+import {getTrimmedRaster} from '../helper/bitmap';
 import {isBitmap} from '../lib/format';
 import Formats from '../lib/format';
 import Modes from '../lib/modes';
@@ -43,7 +44,13 @@ const CopyPasteHOC = function (WrappedComponent) {
                 selectedItems = getSelectedRootItems();
             }
             if (selectedItems.length === 0) {
-                selectedItems = getAllRootItems();
+                if (isBitmap(this.props.format)) {
+                    const raster = getTrimmedRaster(false /* shouldInsert */);
+                    if (!raster) return;
+                    selectedItems.push(raster);
+                } else {
+                    selectedItems = getAllRootItems();
+                }
             }
             const clipboardItems = [];
             for (let i = 0; i < selectedItems.length; i++) {
