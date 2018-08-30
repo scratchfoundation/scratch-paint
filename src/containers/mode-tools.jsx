@@ -11,7 +11,9 @@ import {
     deleteSelection,
     getSelectedLeafItems,
     getSelectedRootItems,
-    getAllRootItems
+    getAllRootItems,
+    selectAllItems,
+    selectAllSegments
 } from '../helper/selection';
 import {HANDLE_RATIO, ensureClockwise} from '../helper/math';
 import {getRaster} from '../helper/layer';
@@ -195,6 +197,13 @@ class ModeTools extends React.Component {
         }
     }
     handleDelete () {
+        if (!this.props.selectedItems.length) {
+            if (this.props.mode === Modes.RESHAPE) {
+                selectAllSegments();
+            } else {
+                selectAllItems();
+            }
+        }
         if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
             this.props.setSelectedItems(this.props.format);
         }
