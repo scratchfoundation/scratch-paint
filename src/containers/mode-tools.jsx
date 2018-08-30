@@ -7,7 +7,6 @@ import bindAll from 'lodash.bindall';
 import CopyPasteHOC from './copy-paste-hoc.jsx';
 import ModeToolsComponent from '../components/mode-tools/mode-tools.jsx';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
-import {incrementPasteOffset} from '../reducers/clipboard';
 import {
     deleteSelection,
     getSelectedLeafItems,
@@ -248,9 +247,6 @@ const mapStateToProps = state => ({
     selectedItems: state.scratchPaint.selectedItems
 });
 const mapDispatchToProps = dispatch => ({
-    incrementPasteOffset: () => {
-        dispatch(incrementPasteOffset());
-    },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
