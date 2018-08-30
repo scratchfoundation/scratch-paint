@@ -53,7 +53,7 @@ const CopyPasteHOC = function (WrappedComponent) {
         handlePaste () {
             clearSelection(this.props.clearSelectedItems);
 
-            if (this.props.clipboardItems.length === 0) return false;
+            if (this.props.clipboardItems.length === 0) return;
 
             let items = [];
             for (let i = 0; i < this.props.clipboardItems.length; i++) {
@@ -105,10 +105,10 @@ const CopyPasteHOC = function (WrappedComponent) {
         format: PropTypes.oneOf(Object.keys(Formats)),
         incrementPasteOffset: PropTypes.func.isRequired,
         mode: PropTypes.oneOf(Object.keys(Modes)),
+        onUpdateImage: PropTypes.func.isRequired,
         pasteOffset: PropTypes.number,
         setClipboardItems: PropTypes.func.isRequired,
-        setSelectedItems: PropTypes.func.isRequired,
-        onUpdateImage: PropTypes.func.isRequired
+        setSelectedItems: PropTypes.func.isRequired
     };
     const mapStateToProps = state => ({
         clipboardItems: state.scratchPaint.clipboard.items,
