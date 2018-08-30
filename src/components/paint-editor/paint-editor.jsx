@@ -24,7 +24,7 @@ import FillMode from '../../containers/fill-mode.jsx';
 import InputGroup from '../input-group/input-group.jsx';
 import LineMode from '../../containers/line-mode.jsx';
 import Loupe from '../loupe/loupe.jsx';
-import FixedToolsComponent from '../fixed-tools/fixed-tools.jsx';
+import FixedToolsContainer from '../../containers/fixed-tools.jsx';
 import ModeToolsContainer from '../../containers/mode-tools.jsx';
 import OvalMode from '../../containers/oval-mode.jsx';
 import RectMode from '../../containers/rect-mode.jsx';
@@ -65,18 +65,12 @@ const PaintEditorComponent = props => (
             <div className={styles.editorContainerTop}>
                 {/* First row */}
                 <div className={styles.row}>
-                    <FixedToolsComponent
+                    <FixedToolsContainer
                         canRedo={props.canRedo}
                         canUndo={props.canUndo}
                         name={props.name}
-                        onGroup={props.onGroup}
                         onRedo={props.onRedo}
-                        onSendBackward={props.onSendBackward}
-                        onSendForward={props.onSendForward}
-                        onSendToBack={props.onSendToBack}
-                        onSendToFront={props.onSendToFront}
                         onUndo={props.onUndo}
-                        onUngroup={props.onUngroup}
                         onUpdateImage={props.onUpdateImage}
                         onUpdateName={props.onUpdateName}
                     />
@@ -325,16 +319,10 @@ PaintEditorComponent.propTypes = {
     intl: intlShape,
     isEyeDropping: PropTypes.bool,
     name: PropTypes.string,
-    onGroup: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
-    onSendBackward: PropTypes.func.isRequired,
-    onSendForward: PropTypes.func.isRequired,
-    onSendToBack: PropTypes.func.isRequired,
-    onSendToFront: PropTypes.func.isRequired,
     onSwitchToBitmap: PropTypes.func.isRequired,
     onSwitchToVector: PropTypes.func.isRequired,
     onUndo: PropTypes.func.isRequired,
-    onUngroup: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
     onZoomIn: PropTypes.func.isRequired,
