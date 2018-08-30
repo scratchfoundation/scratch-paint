@@ -1,4 +1,3 @@
-import paper from '@scratch/paper';
 import classNames from 'classnames';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
