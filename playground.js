@@ -62099,7 +62099,7 @@ var KeyboardShortcutsHOC = function KeyboardShortcutsHOC(WrappedComponent) {
         _createClass(KeyboardShortcutsWrapper, [{
             key: 'handleKeyPress',
             value: function handleKeyPress(event) {
-                if (event.event.target instanceof HTMLInputElement) {
+                if (event.target instanceof HTMLInputElement) {
                     // Ignore keyboard shortcuts if a text input field is focused
                     return;
                 }
