@@ -30,12 +30,16 @@ class Playground extends React.Component {
             'handleUpdateName',
             'handleUpdateImage'
         ]);
+        // Append ?dir=rtl to URL to get RTL layout
+        const match = location.search.match(/dir=([^&]+)/);
+        const rtl = match && match[1] == 'rtl';
         this.state = {
             name: 'meow',
             rotationCenterX: 20,
             rotationCenterY: 400,
             imageFormat: 'svg', // 'svg', 'png', or 'jpg'
-            image: svgString // svg string or data URI
+            image: svgString, // svg string or data URI
+            rtl: rtl
         };
     }
     handleUpdateName (name) {

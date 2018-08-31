@@ -143,16 +143,25 @@ class TextTool extends paper.Tool {
         if (this.mode !== TextTool.TEXT_EDIT_MODE) {
             return;
         }
-        const matrix = this.textBox.matrix;
+        this.calculateMatrix(viewMtx);
+    }
+    calculateMatrix (viewMtx) {
+        const textBoxMtx = this.textBox.matrix;
+        this.element.style.transformOrigin =
+            `${-this.textBox.internalBounds.x}px ${-this.textBox.internalBounds.y}px`;
         this.element.style.transform =
             `translate(0px, ${this.textBox.internalBounds.y}px)
             matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
             ${viewMtx.tx}, ${viewMtx.ty})
-            matrix(${matrix.a}, ${matrix.b}, ${matrix.c}, ${matrix.d},
-            ${matrix.tx}, ${matrix.ty})`;
+            matrix(${textBoxMtx.a}, ${textBoxMtx.b}, ${textBoxMtx.c}, ${textBoxMtx.d},
+            ${textBoxMtx.tx}, ${textBoxMtx.ty})`;
     }
     setColorState (colorState) {
         this.colorState = colorState;
+    }
+    /** @param {boolean} isRtl True if paint editor is in right-to-left layout (e.g. Hebrew language) */
+    setRtl (isRtl) {
+        this.rtl = isRtl;
     }
     handleMouseMove (event) {
         const hitResults = paper.project.hitTestAll(event.point, this.getTextEditHitOptions());
@@ -308,18 +317,17 @@ class TextTool extends paper.Tool {
         this.element.style.fontSize = `${this.textBox.fontSize}px`;
         this.element.style.lineHeight = this.textBox.leading / this.textBox.fontSize;
 
-        const viewMtx = paper.view.matrix;
-
         this.element.style.display = 'initial';
         this.element.value = textBox.content ? textBox.content : '';
-        this.element.style.transformOrigin =
-            `${-this.textBox.internalBounds.x}px ${-this.textBox.internalBounds.y}px`;
-        this.element.style.transform =
-            `translate(0px, ${this.textBox.internalBounds.y}px)
-            matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
-            ${viewMtx.tx}, ${viewMtx.ty})
-            matrix(${textBox.matrix.a}, ${textBox.matrix.b}, ${textBox.matrix.c}, ${textBox.matrix.d},
-            ${textBox.matrix.tx}, ${textBox.matrix.ty})`;
+        this.calculateMatrix(paper.view.matrix);
+
+        if (this.rtl) {
+            // make both the textbox and the textarea element grow to the left
+            this.textBox.justification = 'right';
+        } else {
+            this.textBox.justification = 'left';
+        }
+
         this.element.focus({preventScroll: true});
         this.eventListener = this.handleTextInput.bind(this);
         this.element.addEventListener('input', this.eventListener);

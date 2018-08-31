@@ -34,20 +34,25 @@ class TextMode extends React.Component {
         }
     }
     componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.colorState !== this.props.colorState) {
-            this.tool.setColorState(nextProps.colorState);
-        }
-        if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
-            this.tool.onSelectionChanged(nextProps.selectedItems);
-        }
-        if (this.tool && !nextProps.textEditTarget && this.props.textEditTarget) {
-            this.tool.onTextEditCancelled();
-        }
-        if (this.tool && !nextProps.viewBounds.equals(this.props.viewBounds)) {
-            this.tool.onViewBoundsChanged(nextProps.viewBounds);
-        }
-        if (this.tool && nextProps.font !== this.props.font) {
-            this.tool.setFont(nextProps.font);
+        if (this.tool) {
+            if (nextProps.colorState !== this.props.colorState) {
+                this.tool.setColorState(nextProps.colorState);
+            }
+            if (nextProps.selectedItems !== this.props.selectedItems) {
+                this.tool.onSelectionChanged(nextProps.selectedItems);
+            }
+            if (!nextProps.textEditTarget && this.props.textEditTarget) {
+                this.tool.onTextEditCancelled();
+            }
+            if (!nextProps.viewBounds.equals(this.props.viewBounds)) {
+                this.tool.onViewBoundsChanged(nextProps.viewBounds);
+            }
+            if (nextProps.font !== this.props.font) {
+                this.tool.setFont(nextProps.font);
+            }
+            if (nextProps.rtl !== this.props.rtl) {
+                this.tool.setRtl(nextProps.rtl);
+            }
         }
 
         if (nextProps.isTextModeActive && !this.props.isTextModeActive) {
@@ -97,6 +102,7 @@ class TextMode extends React.Component {
             this.props.changeFont,
             nextProps.isBitmap
         );
+        this.tool.setRtl(this.props.rtl);
         this.tool.setColorState(nextProps.colorState);
         this.tool.setFont(nextProps.font);
         this.tool.activate();
@@ -142,6 +148,7 @@ TextMode.propTypes = {
     onChangeFillColor: PropTypes.func.isRequired,
     onChangeStrokeColor: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
+    rtl: PropTypes.bool,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
     setSelectedItems: PropTypes.func.isRequired,
     setTextEditTarget: PropTypes.func.isRequired,
@@ -156,6 +163,7 @@ const mapStateToProps = (state, ownProps) => ({
     isTextModeActive: ownProps.isBitmap ?
         state.scratchPaint.mode === Modes.BIT_TEXT :
         state.scratchPaint.mode === Modes.TEXT,
+    rtl: state.scratchPaint.layout.rtl,
     selectedItems: state.scratchPaint.selectedItems,
     textEditTarget: state.scratchPaint.textEditTarget,
     viewBounds: state.scratchPaint.viewBounds
