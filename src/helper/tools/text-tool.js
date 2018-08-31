@@ -39,9 +39,10 @@ class TextTool extends paper.Tool {
      * @param {!function} setTextEditTarget Call to set text editing target whenever text editing is active
      * @param {!function} changeFont Call to change the font in the dropdown
      * @param {?boolean} isBitmap True if text should be rasterized once it's deselected
+     * @param {?boolean} rtl True if paint editor is in right-to-left layout (e.g. Hebrew language)
      */
     constructor (textAreaElement, setSelectedItems, clearSelectedItems, onUpdateImage, setTextEditTarget, changeFont,
-        isBitmap) {
+        isBitmap, rtl) {
         super();
         this.element = textAreaElement;
         this.setSelectedItems = setSelectedItems;
@@ -52,6 +53,7 @@ class TextTool extends paper.Tool {
         this.boundingBoxTool = new BoundingBoxTool(Modes.TEXT, setSelectedItems, clearSelectedItems, onUpdateImage);
         this.nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         this.isBitmap = isBitmap;
+        this.rtl = rtl;
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.
@@ -144,8 +146,9 @@ class TextTool extends paper.Tool {
             return;
         }
         const matrix = this.textBox.matrix;
+        const tx = 480 - this.textBox.internalBounds.width;
         this.element.style.transform =
-            `translate(0px, ${this.textBox.internalBounds.y}px)
+            `translate(${tx}px, ${this.textBox.internalBounds.y}px)
             matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
             ${viewMtx.tx}, ${viewMtx.ty})
             matrix(${matrix.a}, ${matrix.b}, ${matrix.c}, ${matrix.d},
@@ -283,6 +286,7 @@ class TextTool extends paper.Tool {
         // Prevent line from wrapping
         this.element.style.width = `${this.textBox.internalBounds.width + 1}px`;
         this.element.style.height = `${this.textBox.internalBounds.height}px`;
+        this.setElementTransform();
     }
     beginSelect () {
         if (this.textBox) {
@@ -308,22 +312,58 @@ class TextTool extends paper.Tool {
         this.element.style.fontSize = `${this.textBox.fontSize}px`;
         this.element.style.lineHeight = this.textBox.leading / this.textBox.fontSize;
 
-        const viewMtx = paper.view.matrix;
-
         this.element.style.display = 'initial';
         this.element.value = textBox.content ? textBox.content : '';
         this.element.style.transformOrigin =
             `${-this.textBox.internalBounds.x}px ${-this.textBox.internalBounds.y}px`;
-        this.element.style.transform =
-            `translate(0px, ${this.textBox.internalBounds.y}px)
-            matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
-            ${viewMtx.tx}, ${viewMtx.ty})
-            matrix(${textBox.matrix.a}, ${textBox.matrix.b}, ${textBox.matrix.c}, ${textBox.matrix.d},
-            ${textBox.matrix.tx}, ${textBox.matrix.ty})`;
+
+        if (this.rtl) {
+            // make both the textbox and the textarea(element) grow to the left
+            this.textBox.justification = 'right';
+            this.element.dir = 'rtl';
+
+            // setting the origin offset by the width seems to help with the x position
+            this.element.style.transformOrigin =
+                `${-this.textBox.internalBounds.x - this.textBox.internalBounds.width}px
+                ${-this.textBox.internalBounds.y}px`;
+        }
+
         this.element.focus({preventScroll: true});
         this.eventListener = this.handleTextInput.bind(this);
         this.element.addEventListener('input', this.eventListener);
         this.resizeGuide();
+    }
+    /**
+     * Set the transform attribute for the textarea element to line up with text on the canvas
+     */
+    setElementTransform () {
+        const viewMtx = paper.view.matrix;
+        const zoomLevel = paper.view.zoom;
+
+        if (this.element.style.transform === '' && !this.rtl) {
+            // initialize LTR transform
+            this.element.style.transform =
+            `translate(0px, ${this.textBox.internalBounds.y}px)
+            matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
+            ${viewMtx.tx}, ${viewMtx.ty})
+            matrix(${this.textBox.matrix.a}, ${this.textBox.matrix.b}, ${this.textBox.matrix.c},
+            ${this.textBox.matrix.d}, ${this.textBox.matrix.tx}, ${this.textBox.matrix.ty})`;
+        } else if (this.element.style.transform !== '' && !this.rtl) {
+            // LTR transform is already set, just return
+            return;
+        } else {
+            // RTL needs to be recalculated each time the element is changed
+            let transform = '';
+            const tx = (this.element.clientWidth * zoomLevel) - 480;
+            transform += `translate(${tx}px, ${this.textBox.internalBounds.y}px) `;
+            transform += `matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
+            ${viewMtx.tx}, ${viewMtx.ty}) `;
+            transform += `matrix(${this.textBox.matrix.a}, ${this.textBox.matrix.b},
+                ${this.textBox.matrix.c}, ${this.textBox.matrix.d},
+                ${this.textBox.matrix.tx}, ${this.textBox.matrix.ty}) `;
+            // transform += `translate(-${this.textBox.internalBounds.width}px, 0px) `;
+            this.element.style.transform = transform;
+        }
     }
     endTextEdit () {
         if (this.mode !== TextTool.TEXT_EDIT_MODE) {
