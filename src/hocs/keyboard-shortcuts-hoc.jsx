@@ -42,7 +42,7 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
                     this.props.setSelectedItems(this.props.format);
                 }
             } else if (event.metaKey || event.ctrlKey) {
-                /* @todo (fsih) add back when bugs are fixed
+                // @todo (fsih) add back when bugs are fixed
                 if (event.shiftKey && event.key === 'z') {
                     this.props.onRedo();
                 } else if (event.key === 'z') {
@@ -56,7 +56,7 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
                     this.changeToASelectMode();
                     event.preventDefault();
                     this.selectAll();
-                }*/
+                }
             }
         }
         changeToASelectMode () {
