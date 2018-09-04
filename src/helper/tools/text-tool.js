@@ -147,14 +147,25 @@ class TextTool extends paper.Tool {
     }
     calculateMatrix (viewMtx) {
         const textBoxMtx = this.textBox.matrix;
-        this.element.style.transformOrigin =
-            `${-this.textBox.internalBounds.x}px ${-this.textBox.internalBounds.y}px`;
-        this.element.style.transform =
-            `translate(0px, ${this.textBox.internalBounds.y}px)
-            matrix(${viewMtx.a}, ${viewMtx.b}, ${viewMtx.c}, ${viewMtx.d},
-            ${viewMtx.tx}, ${viewMtx.ty})
-            matrix(${textBoxMtx.a}, ${textBoxMtx.b}, ${textBoxMtx.c}, ${textBoxMtx.d},
-            ${textBoxMtx.tx}, ${textBoxMtx.ty})`;
+        const calculated = new paper.Matrix();
+
+        // In RTL, the element is moved relative to its parent's right edge instead of its left
+        // edge. We need to correct for this in order for the element to overlap the object in paper.
+        let tx = 0;
+        if (this.rtl && this.element.parentElement) {
+            tx = -this.element.parentElement.clientWidth;
+        }
+        // The transform origin in paper is x at justification side, y at the baseline of the text.
+        // The offset from (0, 0) to the upper left corner is recorded by internalBounds
+        // (so this.textBox.internalBounds.y is negative).
+        // Move the transform origin down to the text baseline to match paper
+        this.element.style.transformOrigin = `${-this.textBox.internalBounds.x}px ${-this.textBox.internalBounds.y}px`;
+        // Start by translating the element up so that its (0, 0) is now at the text baseline, like in paper
+        calculated.translate(tx, this.textBox.internalBounds.y);
+        calculated.append(viewMtx);
+        calculated.append(textBoxMtx);
+        this.element.style.transform = `matrix(${calculated.a}, ${calculated.b}, ${calculated.c}, ${calculated.d},
+             ${calculated.tx}, ${calculated.ty})`;
     }
     setColorState (colorState) {
         this.colorState = colorState;
@@ -292,6 +303,12 @@ class TextTool extends paper.Tool {
         // Prevent line from wrapping
         this.element.style.width = `${this.textBox.internalBounds.width + 1}px`;
         this.element.style.height = `${this.textBox.internalBounds.height}px`;
+        // The transform origin needs to be updated in RTL because this.textBox.internalBounds.x
+        // changes as you type
+        if (this.rtl) {
+            this.element.style.transformOrigin =
+                `${-this.textBox.internalBounds.x}px ${-this.textBox.internalBounds.y}px`;
+        }
     }
     beginSelect () {
         if (this.textBox) {
