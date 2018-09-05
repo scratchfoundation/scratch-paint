@@ -33460,12 +33460,16 @@ var Playground = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Playground.__proto__ || Object.getPrototypeOf(Playground)).call(this, props));
 
         (0, _lodash2.default)(_this, ['handleUpdateName', 'handleUpdateImage']);
+        // Append ?dir=rtl to URL to get RTL layout
+        var match = location.search.match(/dir=([^&]+)/);
+        var rtl = match && match[1] == 'rtl';
         _this.state = {
             name: 'meow',
             rotationCenterX: 20,
             rotationCenterY: 400,
             imageFormat: 'svg', // 'svg', 'png', or 'jpg'
-            image: svgString // svg string or data URI
+            image: svgString, // svg string or data URI
+            rtl: rtl
         };
         return _this;
     }
@@ -61159,20 +61163,25 @@ var TextMode = function (_React$Component) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(nextProps) {
-            if (this.tool && nextProps.colorState !== this.props.colorState) {
-                this.tool.setColorState(nextProps.colorState);
-            }
-            if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
-                this.tool.onSelectionChanged(nextProps.selectedItems);
-            }
-            if (this.tool && !nextProps.textEditTarget && this.props.textEditTarget) {
-                this.tool.onTextEditCancelled();
-            }
-            if (this.tool && !nextProps.viewBounds.equals(this.props.viewBounds)) {
-                this.tool.onViewBoundsChanged(nextProps.viewBounds);
-            }
-            if (this.tool && nextProps.font !== this.props.font) {
-                this.tool.setFont(nextProps.font);
+            if (this.tool) {
+                if (nextProps.colorState !== this.props.colorState) {
+                    this.tool.setColorState(nextProps.colorState);
+                }
+                if (nextProps.selectedItems !== this.props.selectedItems) {
+                    this.tool.onSelectionChanged(nextProps.selectedItems);
+                }
+                if (!nextProps.textEditTarget && this.props.textEditTarget) {
+                    this.tool.onTextEditCancelled();
+                }
+                if (!nextProps.viewBounds.equals(this.props.viewBounds)) {
+                    this.tool.onViewBoundsChanged(nextProps.viewBounds);
+                }
+                if (nextProps.font !== this.props.font) {
+                    this.tool.setFont(nextProps.font);
+                }
+                if (nextProps.rtl !== this.props.rtl) {
+                    this.tool.setRtl(nextProps.rtl);
+                }
             }
 
             if (nextProps.isTextModeActive && !this.props.isTextModeActive) {
@@ -61222,6 +61231,7 @@ var TextMode = function (_React$Component) {
             }
 
             this.tool = new _textTool2.default(this.props.textArea, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage, this.props.setTextEditTarget, this.props.changeFont, nextProps.isBitmap);
+            this.tool.setRtl(this.props.rtl);
             this.tool.setColorState(nextProps.colorState);
             this.tool.setFont(nextProps.font);
             this.tool.activate();
@@ -61270,6 +61280,7 @@ TextMode.propTypes = {
     onChangeFillColor: _propTypes2.default.func.isRequired,
     onChangeStrokeColor: _propTypes2.default.func.isRequired,
     onUpdateImage: _propTypes2.default.func.isRequired,
+    rtl: _propTypes2.default.bool,
     selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item)),
     setSelectedItems: _propTypes2.default.func.isRequired,
     setTextEditTarget: _propTypes2.default.func.isRequired,
@@ -61283,6 +61294,7 @@ var mapStateToProps = function mapStateToProps(state, ownProps) {
         colorState: state.scratchPaint.color,
         font: state.scratchPaint.font,
         isTextModeActive: ownProps.isBitmap ? state.scratchPaint.mode === _modes2.default.BIT_TEXT : state.scratchPaint.mode === _modes2.default.TEXT,
+        rtl: state.scratchPaint.layout.rtl,
         selectedItems: state.scratchPaint.selectedItems,
         textEditTarget: state.scratchPaint.textEditTarget,
         viewBounds: state.scratchPaint.viewBounds
@@ -61561,13 +61573,42 @@ var TextTool = function (_paper$Tool) {
             if (this.mode !== TextTool.TEXT_EDIT_MODE) {
                 return;
             }
-            var matrix = this.textBox.matrix;
-            this.element.style.transform = 'translate(0px, ' + this.textBox.internalBounds.y + 'px)\n            matrix(' + viewMtx.a + ', ' + viewMtx.b + ', ' + viewMtx.c + ', ' + viewMtx.d + ',\n            ' + viewMtx.tx + ', ' + viewMtx.ty + ')\n            matrix(' + matrix.a + ', ' + matrix.b + ', ' + matrix.c + ', ' + matrix.d + ',\n            ' + matrix.tx + ', ' + matrix.ty + ')';
+            this.calculateMatrix(viewMtx);
+        }
+    }, {
+        key: 'calculateMatrix',
+        value: function calculateMatrix(viewMtx) {
+            var textBoxMtx = this.textBox.matrix;
+            var calculated = new _paper2.default.Matrix();
+
+            // In RTL, the element is moved relative to its parent's right edge instead of its left
+            // edge. We need to correct for this in order for the element to overlap the object in paper.
+            var tx = 0;
+            if (this.rtl && this.element.parentElement) {
+                tx = -this.element.parentElement.clientWidth;
+            }
+            // The transform origin in paper is x at justification side, y at the baseline of the text.
+            // The offset from (0, 0) to the upper left corner is recorded by internalBounds
+            // (so this.textBox.internalBounds.y is negative).
+            // Move the transform origin down to the text baseline to match paper
+            this.element.style.transformOrigin = -this.textBox.internalBounds.x + 'px ' + -this.textBox.internalBounds.y + 'px';
+            // Start by translating the element up so that its (0, 0) is now at the text baseline, like in paper
+            calculated.translate(tx, this.textBox.internalBounds.y);
+            calculated.append(viewMtx);
+            calculated.append(textBoxMtx);
+            this.element.style.transform = 'matrix(' + calculated.a + ', ' + calculated.b + ', ' + calculated.c + ', ' + calculated.d + ',\n             ' + calculated.tx + ', ' + calculated.ty + ')';
         }
     }, {
         key: 'setColorState',
         value: function setColorState(colorState) {
             this.colorState = colorState;
+        }
+        /** @param {boolean} isRtl True if paint editor is in right-to-left layout (e.g. Hebrew language) */
+
+    }, {
+        key: 'setRtl',
+        value: function setRtl(isRtl) {
+            this.rtl = isRtl;
         }
     }, {
         key: 'handleMouseMove',
@@ -61710,6 +61751,11 @@ var TextTool = function (_paper$Tool) {
             // Prevent line from wrapping
             this.element.style.width = this.textBox.internalBounds.width + 1 + 'px';
             this.element.style.height = this.textBox.internalBounds.height + 'px';
+            // The transform origin needs to be updated in RTL because this.textBox.internalBounds.x
+            // changes as you type
+            if (this.rtl) {
+                this.element.style.transformOrigin = -this.textBox.internalBounds.x + 'px ' + -this.textBox.internalBounds.y + 'px';
+            }
         }
     }, {
         key: 'beginSelect',
@@ -61742,12 +61788,17 @@ var TextTool = function (_paper$Tool) {
             this.element.style.fontSize = this.textBox.fontSize + 'px';
             this.element.style.lineHeight = this.textBox.leading / this.textBox.fontSize;
 
-            var viewMtx = _paper2.default.view.matrix;
-
             this.element.style.display = 'initial';
             this.element.value = textBox.content ? textBox.content : '';
-            this.element.style.transformOrigin = -this.textBox.internalBounds.x + 'px ' + -this.textBox.internalBounds.y + 'px';
-            this.element.style.transform = 'translate(0px, ' + this.textBox.internalBounds.y + 'px)\n            matrix(' + viewMtx.a + ', ' + viewMtx.b + ', ' + viewMtx.c + ', ' + viewMtx.d + ',\n            ' + viewMtx.tx + ', ' + viewMtx.ty + ')\n            matrix(' + textBox.matrix.a + ', ' + textBox.matrix.b + ', ' + textBox.matrix.c + ', ' + textBox.matrix.d + ',\n            ' + textBox.matrix.tx + ', ' + textBox.matrix.ty + ')';
+            this.calculateMatrix(_paper2.default.view.matrix);
+
+            if (this.rtl) {
+                // make both the textbox and the textarea element grow to the left
+                this.textBox.justification = 'right';
+            } else {
+                this.textBox.justification = 'left';
+            }
+
             this.element.focus({ preventScroll: true });
             this.eventListener = this.handleTextInput.bind(this);
             this.element.addEventListener('input', this.eventListener);
