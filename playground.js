@@ -34279,7 +34279,7 @@ var PaintEditor = function (_React$Component) {
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
-            document.removeEventListener('keydown', this.onKeyPress);
+            document.removeEventListener('keydown', this.props.onKeyPress);
             this.stopEyeDroppingLoop();
             document.removeEventListener('mousedown', this.onMouseDown);
             document.removeEventListener('touchstart', this.onMouseDown);
