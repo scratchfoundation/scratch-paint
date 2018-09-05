@@ -19921,7 +19921,7 @@ var _gradientTypes = __webpack_require__(18);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
-var _parseColor = __webpack_require__(49);
+var _parseColor = __webpack_require__(48);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -21724,7 +21724,7 @@ exports.DEFAULT_COLOR = DEFAULT_COLOR;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.selectAllBitmap = exports.scaleBitmap = exports.flipBitmapVertical = exports.flipBitmapHorizontal = exports.forEachLinePoint = exports.drawEllipse = exports.getHitBounds = exports.getBrushMark = exports.floodFillAll = exports.floodFill = exports.outlineRect = exports.fillRect = exports.convertToVector = exports.convertToBitmap = exports.commitSelectionToBitmap = undefined;
+exports.selectAllBitmap = exports.scaleBitmap = exports.flipBitmapVertical = exports.flipBitmapHorizontal = exports.forEachLinePoint = exports.drawEllipse = exports.getTrimmedRaster = exports.getHitBounds = exports.getBrushMark = exports.floodFillAll = exports.floodFill = exports.outlineRect = exports.fillRect = exports.convertToVector = exports.convertToBitmap = exports.commitSelectionToBitmap = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -22077,6 +22077,22 @@ var trim_ = function trim_(raster) {
     return null;
 };
 
+/**
+ * @param {boolean} shouldInsert True if the trimmed raster should be added to the active layer.
+ * @returns {paper.Raster} raster layer with whitespace trimmed from ends, or null if there is
+ * nothing on the raster layer.
+ */
+var getTrimmedRaster = function getTrimmedRaster(shouldInsert) {
+    var trimmedRaster = trim_((0, _layer.getRaster)());
+    if (!trimmedRaster) return null;
+    if (shouldInsert) {
+        _paper2.default.project.activeLayer.addChild(trimmedRaster);
+    } else {
+        trimmedRaster.remove();
+    }
+    return trimmedRaster;
+};
+
 var convertToBitmap = function convertToBitmap(clearSelectedItems, onUpdateImage) {
     // @todo if the active layer contains only rasters, drawing them directly to the raster layer
     // would be more efficient.
@@ -22125,10 +22141,7 @@ var convertToBitmap = function convertToBitmap(clearSelectedItems, onUpdateImage
 
 var convertToVector = function convertToVector(clearSelectedItems, onUpdateImage) {
     (0, _selection.clearSelection)(clearSelectedItems);
-    var trimmedRaster = trim_((0, _layer.getRaster)());
-    if (trimmedRaster) {
-        _paper2.default.project.activeLayer.addChild(trimmedRaster);
-    }
+    getTrimmedRaster(true /* shouldInsert */);
     (0, _layer.clearRaster)();
     onUpdateImage(false /* skipSnapshot */, _format2.default.VECTOR /* formatOverride */);
 };
@@ -22440,12 +22453,11 @@ var commitSelectionToBitmap = function commitSelectionToBitmap(selection, bitmap
 var selectAllBitmap = function selectAllBitmap(clearSelectedItems) {
     (0, _selection.clearSelection)(clearSelectedItems);
 
-    // Pull raster to active layer
-    var raster = (0, _layer.getRaster)();
-    raster.guide = false;
-    raster.locked = false;
-    raster.parent = _paper2.default.project.activeLayer;
-    raster.selected = true;
+    // Copy trimmed raster to active layer. If the raster layer was empty, nothing is selected.
+    var trimmedRaster = getTrimmedRaster(true /* shouldInsert */);
+    if (trimmedRaster) {
+        trimmedRaster.selected = true;
+    }
 
     // Clear raster layer
     (0, _layer.clearRaster)();
@@ -22460,6 +22472,7 @@ exports.floodFill = floodFill;
 exports.floodFillAll = floodFillAll;
 exports.getBrushMark = getBrushMark;
 exports.getHitBounds = getHitBounds;
+exports.getTrimmedRaster = getTrimmedRaster;
 exports.drawEllipse = drawEllipse;
 exports.forEachLinePoint = forEachLinePoint;
 exports.flipBitmapHorizontal = flipBitmapHorizontal;
@@ -27011,84 +27024,6 @@ module.exports = g;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.clearPasteOffset = exports.incrementPasteOffset = exports.setClipboardItems = exports.default = undefined;
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SET = 'scratch-paint/clipboard/SET';
-var INCREMENT_PASTE_OFFSET = 'scratch-paint/clipboard/INCREMENT_PASTE_OFFSET';
-var CLEAR_PASTE_OFFSET = 'scratch-paint/clipboard/CLEAR_PASTE_OFFSET';
-var initialState = {
-    items: [],
-    pasteOffset: 0
-};
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case SET:
-            if (!action.clipboardItems || !(action.clipboardItems instanceof Array) || action.clipboardItems.length === 0) {
-                _log2.default.warn('Invalid clipboard item format');
-                return state;
-            }
-            return {
-                items: action.clipboardItems,
-                pasteOffset: 1
-            };
-        case INCREMENT_PASTE_OFFSET:
-            return {
-                items: state.items,
-                pasteOffset: state.pasteOffset + 1
-            };
-        case CLEAR_PASTE_OFFSET:
-            return {
-                items: state.items,
-                pasteOffset: 0
-            };
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var setClipboardItems = function setClipboardItems(clipboardItems) {
-    return {
-        type: SET,
-        clipboardItems: clipboardItems
-    };
-};
-
-var incrementPasteOffset = function incrementPasteOffset() {
-    return {
-        type: INCREMENT_PASTE_OFFSET
-    };
-};
-
-var clearPasteOffset = function clearPasteOffset() {
-    return {
-        type: CLEAR_PASTE_OFFSET
-    };
-};
-
-exports.default = reducer;
-exports.setClipboardItems = setClipboardItems;
-exports.incrementPasteOffset = incrementPasteOffset;
-exports.clearPasteOffset = clearPasteOffset;
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 exports.changeFormat = exports.default = undefined;
 
 var _format = __webpack_require__(16);
@@ -27137,7 +27072,7 @@ exports.default = reducer;
 exports.changeFormat = changeFormat;
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27192,7 +27127,7 @@ exports.default = reducer;
 exports.updateViewBounds = updateViewBounds;
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var convert = __webpack_require__(186);
@@ -27281,7 +27216,7 @@ module.exports = function (cstr) {
 
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27355,7 +27290,7 @@ exports.default = reducer;
 exports.changeFillColor2 = changeFillColor2;
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27382,7 +27317,7 @@ exports.window = WINDOW;
 exports.document = DOCUMENT;
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27438,7 +27373,7 @@ exports.activateEyeDropper = activateEyeDropper;
 exports.deactivateEyeDropper = deactivateEyeDropper;
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27490,7 +27425,7 @@ Label.defaultProps = {
 exports.default = Label;
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27545,7 +27480,7 @@ exports.default = reducer;
 exports.setTextEditTarget = setTextEditTarget;
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -29040,7 +28975,7 @@ module.exports = omit;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45)))
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29064,7 +28999,7 @@ var Fonts = {
 exports.default = Fonts;
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29226,6 +29161,84 @@ exports.performUndo = performUndo;
 exports.performRedo = performRedo;
 exports.shouldShowUndo = shouldShowUndo;
 exports.shouldShowRedo = shouldShowRedo;
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.clearPasteOffset = exports.incrementPasteOffset = exports.setClipboardItems = exports.default = undefined;
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SET = 'scratch-paint/clipboard/SET';
+var INCREMENT_PASTE_OFFSET = 'scratch-paint/clipboard/INCREMENT_PASTE_OFFSET';
+var CLEAR_PASTE_OFFSET = 'scratch-paint/clipboard/CLEAR_PASTE_OFFSET';
+var initialState = {
+    items: [],
+    pasteOffset: 0
+};
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case SET:
+            if (!action.clipboardItems || !(action.clipboardItems instanceof Array) || action.clipboardItems.length === 0) {
+                _log2.default.warn('Invalid clipboard item format');
+                return state;
+            }
+            return {
+                items: action.clipboardItems,
+                pasteOffset: 1
+            };
+        case INCREMENT_PASTE_OFFSET:
+            return {
+                items: state.items,
+                pasteOffset: state.pasteOffset + 1
+            };
+        case CLEAR_PASTE_OFFSET:
+            return {
+                items: state.items,
+                pasteOffset: 0
+            };
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var setClipboardItems = function setClipboardItems(clipboardItems) {
+    return {
+        type: SET,
+        clipboardItems: clipboardItems
+    };
+};
+
+var incrementPasteOffset = function incrementPasteOffset() {
+    return {
+        type: INCREMENT_PASTE_OFFSET
+    };
+};
+
+var clearPasteOffset = function clearPasteOffset() {
+    return {
+        type: CLEAR_PASTE_OFFSET
+    };
+};
+
+exports.default = reducer;
+exports.setClipboardItems = setClipboardItems;
+exports.incrementPasteOffset = incrementPasteOffset;
+exports.clearPasteOffset = clearPasteOffset;
 
 /***/ }),
 /* 58 */
@@ -29608,7 +29621,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clientOnly = exports.noop = exports.equalRecords = exports.find = undefined;
 
-var _platform = __webpack_require__(51);
+var _platform = __webpack_require__(50);
 
 var find = function find(f, xs) {
   return xs.reduce(function (b, x) {
@@ -29939,7 +29952,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeFont = exports.default = undefined;
 
-var _fonts = __webpack_require__(56);
+var _fonts = __webpack_require__(55);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -31959,7 +31972,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _parseColor = __webpack_require__(49);
+var _parseColor = __webpack_require__(48);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -31975,7 +31988,7 @@ var _colorIndex = __webpack_require__(60);
 
 var _selectedItems = __webpack_require__(7);
 
-var _eyeDropper = __webpack_require__(52);
+var _eyeDropper = __webpack_require__(51);
 
 var _gradientTypes = __webpack_require__(18);
 
@@ -32645,13 +32658,15 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(55);
+var _lodash3 = __webpack_require__(54);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
 var _reactRedux = __webpack_require__(6);
 
 var _selection = __webpack_require__(3);
+
+var _bitmap = __webpack_require__(20);
 
 var _format = __webpack_require__(16);
 
@@ -32663,7 +32678,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _selectedItems = __webpack_require__(7);
 
-var _clipboard = __webpack_require__(46);
+var _clipboard = __webpack_require__(57);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32724,14 +32739,21 @@ var CopyPasteHOC = function CopyPasteHOC(WrappedComponent) {
                 } else {
                     selectedItems = (0, _selection.getSelectedRootItems)();
                 }
-                if (selectedItems.length > 0) {
-                    var clipboardItems = [];
-                    for (var i = 0; i < selectedItems.length; i++) {
-                        var jsonItem = selectedItems[i].exportJSON({ asString: false });
-                        clipboardItems.push(jsonItem);
+                if (selectedItems.length === 0) {
+                    if ((0, _format.isBitmap)(this.props.format)) {
+                        var raster = (0, _bitmap.getTrimmedRaster)(false /* shouldInsert */);
+                        if (!raster) return;
+                        selectedItems.push(raster);
+                    } else {
+                        selectedItems = (0, _selection.getAllRootItems)();
                     }
-                    this.props.setClipboardItems(clipboardItems);
                 }
+                var clipboardItems = [];
+                for (var i = 0; i < selectedItems.length; i++) {
+                    var jsonItem = selectedItems[i].exportJSON({ asString: false });
+                    clipboardItems.push(jsonItem);
+                }
+                this.props.setClipboardItems(clipboardItems);
             }
         }, {
             key: 'handlePaste',
@@ -34128,15 +34150,15 @@ var _updateImageHoc2 = _interopRequireDefault(_updateImageHoc);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(47);
+var _format = __webpack_require__(46);
 
 var _selectedItems = __webpack_require__(7);
 
-var _eyeDropper = __webpack_require__(52);
+var _eyeDropper = __webpack_require__(51);
 
-var _textEditTarget = __webpack_require__(54);
+var _textEditTarget = __webpack_require__(53);
 
-var _viewBounds = __webpack_require__(48);
+var _viewBounds = __webpack_require__(47);
 
 var _layout = __webpack_require__(69);
 
@@ -42057,7 +42079,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _undo = __webpack_require__(57);
+var _undo = __webpack_require__(56);
 
 var _undo2 = __webpack_require__(41);
 
@@ -42073,11 +42095,11 @@ var _math = __webpack_require__(23);
 
 var _hover = __webpack_require__(42);
 
-var _clipboard = __webpack_require__(46);
+var _clipboard = __webpack_require__(57);
 
-var _format3 = __webpack_require__(47);
+var _format3 = __webpack_require__(46);
 
-var _viewBounds = __webpack_require__(48);
+var _viewBounds = __webpack_require__(47);
 
 var _zoomLevels = __webpack_require__(81);
 
@@ -43415,7 +43437,7 @@ var _scrollableCanvas2 = _interopRequireDefault(_scrollableCanvas);
 
 var _view = __webpack_require__(26);
 
-var _viewBounds = __webpack_require__(48);
+var _viewBounds = __webpack_require__(47);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -46715,7 +46737,7 @@ var _bitFillMode2 = _interopRequireDefault(_bitFillMode);
 
 var _fillColor = __webpack_require__(19);
 
-var _fillColor2 = __webpack_require__(50);
+var _fillColor2 = __webpack_require__(49);
 
 var _modes3 = __webpack_require__(10);
 
@@ -50243,7 +50265,7 @@ var _lodash = __webpack_require__(4);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _parseColor = __webpack_require__(49);
+var _parseColor = __webpack_require__(48);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -50251,7 +50273,7 @@ var _colorIndex = __webpack_require__(60);
 
 var _fillColor = __webpack_require__(19);
 
-var _fillColor2 = __webpack_require__(50);
+var _fillColor2 = __webpack_require__(49);
 
 var _fillModeGradientType = __webpack_require__(35);
 
@@ -50483,7 +50505,7 @@ var _inputGroup = __webpack_require__(30);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(52);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -50602,7 +50624,7 @@ var _layout = __webpack_require__(238);
 
 var _layout2 = _interopRequireDefault(_layout);
 
-var _platform = __webpack_require__(51);
+var _platform = __webpack_require__(50);
 
 var _platform2 = _interopRequireDefault(_platform);
 
@@ -52406,7 +52428,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.removeEventListener = exports.addEventListener = exports.off = exports.on = undefined;
 
-var _platform = __webpack_require__(51);
+var _platform = __webpack_require__(50);
 
 var _utils = __webpack_require__(65);
 
@@ -52534,7 +52556,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.equalCoords = exports.doesFitWithin = exports.centerOfBoundsFromBounds = exports.centerOfBounds = exports.centerOfSize = exports.axes = exports.pickZone = exports.place = exports.calcRelPos = exports.validTypeValues = exports.types = exports.El = undefined;
 
-var _platform = __webpack_require__(51);
+var _platform = __webpack_require__(50);
 
 var _utils = __webpack_require__(65);
 
@@ -52889,7 +52911,7 @@ var _classnames = __webpack_require__(17);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _parseColor = __webpack_require__(49);
+var _parseColor = __webpack_require__(48);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -53740,7 +53762,7 @@ var _stylePath = __webpack_require__(9);
 
 var _fillColor = __webpack_require__(19);
 
-var _fillColor2 = __webpack_require__(50);
+var _fillColor2 = __webpack_require__(49);
 
 var _modes3 = __webpack_require__(10);
 
@@ -54952,13 +54974,13 @@ var _fixedTools2 = _interopRequireDefault(_fixedTools);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(47);
+var _format = __webpack_require__(46);
 
 var _selectedItems = __webpack_require__(7);
 
-var _eyeDropper = __webpack_require__(52);
+var _eyeDropper = __webpack_require__(51);
 
-var _textEditTarget = __webpack_require__(54);
+var _textEditTarget = __webpack_require__(53);
 
 var _layout = __webpack_require__(69);
 
@@ -55175,7 +55197,7 @@ var _inputGroup = __webpack_require__(30);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(52);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -56622,8 +56644,6 @@ var _modeTools2 = _interopRequireDefault(_modeTools);
 
 var _selectedItems = __webpack_require__(7);
 
-var _clipboard = __webpack_require__(46);
-
 var _selection = __webpack_require__(3);
 
 var _math = __webpack_require__(23);
@@ -56980,6 +57000,15 @@ var ModeTools = function (_React$Component) {
     }, {
         key: 'handleDelete',
         value: function handleDelete() {
+            if (!this.props.selectedItems.length) {
+                if ((0, _format.isBitmap)(this.props.format)) {
+                    (0, _bitmap.selectAllBitmap)(this.props.clearSelectedItems);
+                } else if (this.props.mode === _modes2.default.RESHAPE) {
+                    (0, _selection.selectAllSegments)();
+                } else {
+                    (0, _selection.selectAllItems)();
+                }
+            }
             if ((0, _selection.deleteSelection)(this.props.mode, this.props.onUpdateImage)) {
                 this.props.setSelectedItems(this.props.format);
             }
@@ -57006,6 +57035,7 @@ var ModeTools = function (_React$Component) {
 }(_react2.default.Component);
 
 ModeTools.propTypes = {
+    clearSelectedItems: _propTypes2.default.func.isRequired,
     format: _propTypes2.default.oneOf(Object.keys(_format2.default)),
     mode: _propTypes2.default.oneOf(Object.keys(_modes2.default)),
     onCopyToClipboard: _propTypes2.default.func.isRequired,
@@ -57018,21 +57048,13 @@ ModeTools.propTypes = {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        clipboardItems: state.scratchPaint.clipboard.items,
         format: state.scratchPaint.format,
         mode: state.scratchPaint.mode,
-        pasteOffset: state.scratchPaint.clipboard.pasteOffset,
         selectedItems: state.scratchPaint.selectedItems
     };
 };
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
-        setClipboardItems: function setClipboardItems(items) {
-            dispatch((0, _clipboard.setClipboardItems)(items));
-        },
-        incrementPasteOffset: function incrementPasteOffset() {
-            dispatch((0, _clipboard.incrementPasteOffset)());
-        },
         clearSelectedItems: function clearSelectedItems() {
             dispatch((0, _selectedItems.clearSelectedItems)());
         },
@@ -57054,10 +57076,6 @@ exports.default = (0, _copyPasteHoc2.default)((0, _reactRedux.connect)(mapStateT
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
 
 var _classnames = __webpack_require__(17);
 
@@ -57091,7 +57109,7 @@ var _liveInputHoc = __webpack_require__(110);
 
 var _liveInputHoc2 = _interopRequireDefault(_liveInputHoc);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(52);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -57336,7 +57354,6 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _inputGroup2.default,
                     { className: (0, _classnames2.default)(_modeTools2.default.modLabeledIconHeight) },
                     _react2.default.createElement(_labeledIconButton2.default, {
-                        disabled: !props.selectedItems.length,
                         hideLabel: (0, _hideLabel.hideLabel)(props.intl.locale),
                         imgSrc: _delete2.default,
                         title: props.intl.formatMessage(messages.delete),
@@ -57354,7 +57371,6 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _inputGroup2.default,
                     { className: (0, _classnames2.default)(_modeTools2.default.modDashedBorder, _modeTools2.default.modLabeledIconHeight) },
                     _react2.default.createElement(_labeledIconButton2.default, {
-                        disabled: !props.selectedItems.length,
                         hideLabel: (0, _hideLabel.hideLabel)(props.intl.locale),
                         imgSrc: _copy2.default,
                         title: props.intl.formatMessage(messages.copy),
@@ -57372,7 +57388,6 @@ var ModeToolsComponent = function ModeToolsComponent(props) {
                     _inputGroup2.default,
                     { className: (0, _classnames2.default)(_modeTools2.default.modDashedBorder, _modeTools2.default.modLabeledIconHeight) },
                     _react2.default.createElement(_labeledIconButton2.default, {
-                        disabled: !props.selectedItems.length,
                         hideLabel: (0, _hideLabel.hideLabel)(props.intl.locale),
                         imgSrc: _delete2.default,
                         title: props.intl.formatMessage(messages.delete),
@@ -57490,8 +57505,7 @@ ModeToolsComponent.propTypes = {
     onOutlineShapes: _propTypes2.default.func.isRequired,
     onPasteFromClipboard: _propTypes2.default.func.isRequired,
     onPointPoints: _propTypes2.default.func.isRequired,
-    onUpdateImage: _propTypes2.default.func.isRequired,
-    selectedItems: _propTypes2.default.arrayOf(_propTypes2.default.instanceOf(_paper2.default.Item))
+    onUpdateImage: _propTypes2.default.func.isRequired
 };
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -57503,8 +57517,7 @@ var mapStateToProps = function mapStateToProps(state) {
         bitEraserSize: state.scratchPaint.bitEraserSize,
         brushValue: state.scratchPaint.brushMode.brushSize,
         clipboardItems: state.scratchPaint.clipboard.items,
-        eraserValue: state.scratchPaint.eraserMode.brushSize,
-        selectedItems: state.scratchPaint.selectedItems
+        eraserValue: state.scratchPaint.eraserMode.brushSize
     };
 };
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
@@ -57567,7 +57580,7 @@ var _fontDropdown = __webpack_require__(294);
 
 var _fontDropdown2 = _interopRequireDefault(_fontDropdown);
 
-var _fonts = __webpack_require__(56);
+var _fonts = __webpack_require__(55);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -57842,7 +57855,7 @@ var _inputGroup = __webpack_require__(30);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _fonts = __webpack_require__(56);
+var _fonts = __webpack_require__(55);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -60812,7 +60825,7 @@ var _inputGroup = __webpack_require__(30);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(52);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -61078,7 +61091,7 @@ var _lodash = __webpack_require__(4);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _fonts = __webpack_require__(56);
+var _fonts = __webpack_require__(55);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -61096,7 +61109,7 @@ var _strokeColor = __webpack_require__(36);
 
 var _modes3 = __webpack_require__(10);
 
-var _textEditTarget = __webpack_require__(54);
+var _textEditTarget = __webpack_require__(53);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -62049,7 +62062,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(55);
+var _lodash3 = __webpack_require__(54);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -62339,7 +62352,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(55);
+var _lodash3 = __webpack_require__(54);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -62349,7 +62362,7 @@ var _selection = __webpack_require__(3);
 
 var _selectedItems = __webpack_require__(7);
 
-var _undo = __webpack_require__(57);
+var _undo = __webpack_require__(56);
 
 var _undo2 = __webpack_require__(41);
 
@@ -62491,7 +62504,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(55);
+var _lodash3 = __webpack_require__(54);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -62507,7 +62520,7 @@ var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(20);
 
-var _undo2 = __webpack_require__(57);
+var _undo2 = __webpack_require__(56);
 
 var _math = __webpack_require__(23);
 
@@ -62697,7 +62710,7 @@ var _color = __webpack_require__(346);
 
 var _color2 = _interopRequireDefault(_color);
 
-var _clipboard = __webpack_require__(46);
+var _clipboard = __webpack_require__(57);
 
 var _clipboard2 = _interopRequireDefault(_clipboard);
 
@@ -62713,7 +62726,7 @@ var _font = __webpack_require__(70);
 
 var _font2 = _interopRequireDefault(_font);
 
-var _format = __webpack_require__(47);
+var _format = __webpack_require__(46);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -62733,11 +62746,11 @@ var _selectedItems = __webpack_require__(7);
 
 var _selectedItems2 = _interopRequireDefault(_selectedItems);
 
-var _textEditTarget = __webpack_require__(54);
+var _textEditTarget = __webpack_require__(53);
 
 var _textEditTarget2 = _interopRequireDefault(_textEditTarget);
 
-var _viewBounds = __webpack_require__(48);
+var _viewBounds = __webpack_require__(47);
 
 var _viewBounds2 = _interopRequireDefault(_viewBounds);
 
@@ -62786,7 +62799,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(31);
 
-var _eyeDropper = __webpack_require__(52);
+var _eyeDropper = __webpack_require__(51);
 
 var _eyeDropper2 = _interopRequireDefault(_eyeDropper);
 
@@ -62794,7 +62807,7 @@ var _fillColor = __webpack_require__(19);
 
 var _fillColor2 = _interopRequireDefault(_fillColor);
 
-var _fillColor3 = __webpack_require__(50);
+var _fillColor3 = __webpack_require__(49);
 
 var _fillColor4 = _interopRequireDefault(_fillColor3);
 
