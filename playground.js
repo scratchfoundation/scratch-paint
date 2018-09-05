@@ -62178,8 +62178,7 @@ var KeyboardShortcutsHOC = function KeyboardShortcutsHOC(WrappedComponent) {
                         this.props.setSelectedItems(this.props.format);
                     }
                 } else if (event.metaKey || event.ctrlKey) {
-                    /* @todo (fsih) add back when bugs are fixed
-                    if (event.shiftKey && event.key === 'z') {
+                    if (event.shiftKey && event.key.toLowerCase() === 'z') {
                         this.props.onRedo();
                     } else if (event.key === 'z') {
                         this.props.onUndo();
@@ -62192,7 +62191,7 @@ var KeyboardShortcutsHOC = function KeyboardShortcutsHOC(WrappedComponent) {
                         this.changeToASelectMode();
                         event.preventDefault();
                         this.selectAll();
-                    }*/
+                    }
                 }
             }
         }, {
