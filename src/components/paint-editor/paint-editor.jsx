@@ -132,8 +132,8 @@ const PaintEditorComponent = props => (
 
         <div className={styles.topAlignRow}>
             {/* Modes */}
-            {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
-                <div className={isVector(props.format) ? styles.modeSelector : styles.hidden}>
+            {props.canvas !== null && isVector(props.format) ? ( // eslint-disable-line no-negated-condition
+                <div className={styles.modeSelector}>
                     <SelectMode
                         onUpdateImage={props.onUpdateImage}
                     />
@@ -165,8 +165,8 @@ const PaintEditorComponent = props => (
                 </div>
             ) : null}
 
-            {props.canvas !== null ? ( // eslint-disable-line no-negated-condition
-                <div className={isBitmap(props.format) ? styles.modeSelector : styles.hidden}>
+            {props.canvas !== null && isBitmap(props.format) ? ( // eslint-disable-line no-negated-condition
+                <div className={styles.modeSelector}>
                     <BitBrushMode
                         onUpdateImage={props.onUpdateImage}
                     />

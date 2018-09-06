@@ -142,10 +142,6 @@ $border-radius: 0.25rem;
     margin-left: calc(2 * $grid-unit);
 }
 
-.hidden {
-    display: none;
-}
-
 .zoom-controls {
     display: flex;
     flex-direction: row-reverse;

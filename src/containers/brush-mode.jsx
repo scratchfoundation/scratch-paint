@@ -45,6 +45,11 @@ class BrushMode extends React.Component {
     shouldComponentUpdate (nextProps) {
         return nextProps.isBrushModeActive !== this.props.isBrushModeActive;
     }
+    componentWillUnmount () {
+        if (this.blob.tool) {
+            this.deactivateTool();
+        }
+    }
     activateTool () {
         // TODO: Instead of clearing selection, consider a kind of "draw inside"
         // analogous to how selection works with eraser

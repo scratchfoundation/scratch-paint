@@ -43,6 +43,11 @@ class SelectMode extends React.Component {
     shouldComponentUpdate (nextProps) {
         return nextProps.isSelectModeActive !== this.props.isSelectModeActive;
     }
+    componentWillUnmount () {
+        if (this.tool) {
+            this.deactivateTool();
+        }
+    }
     activateTool () {
         this.tool = new SelectTool(
             this.props.setHoveredItem,

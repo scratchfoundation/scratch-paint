@@ -39,6 +39,11 @@ class RoundedRectMode extends React.Component {
     shouldComponentUpdate (nextProps) {
         return nextProps.isRoundedRectModeActive !== this.props.isRoundedRectModeActive;
     }
+    componentWillUnmount () {
+        if (this.tool) {
+            this.deactivateTool();
+        }
+    }
     activateTool () {
         this.tool = new RoundedRectTool(
             this.props.setHoveredItem,

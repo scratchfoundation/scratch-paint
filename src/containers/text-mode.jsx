@@ -64,6 +64,11 @@ class TextMode extends React.Component {
     shouldComponentUpdate (nextProps) {
         return nextProps.isTextModeActive !== this.props.isTextModeActive;
     }
+    componentWillUnmount () {
+        if (this.tool) {
+            this.deactivateTool();
+        }
+    }
     activateTool (nextProps) {
         const selected = getSelectedLeafItems();
         let textBoxToStartEditing = null;
