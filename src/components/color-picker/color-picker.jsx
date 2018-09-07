@@ -19,6 +19,7 @@ import fillRadialIcon from './icons/fill-radial-enabled.svg';
 import fillSolidIcon from './icons/fill-solid-enabled.svg';
 import fillVertGradientIcon from './icons/fill-vert-gradient-enabled.svg';
 import swapIcon from './icons/swap.svg';
+import Modes from '../../lib/modes';
 
 const hsvToHex = (h, s, v) =>
     // Scale hue back up to [0, 360] from [0, 100]
@@ -243,7 +244,11 @@ class ColorPickerComponent extends React.Component {
                 </div>
                 <div className={styles.swatchRow}>
                     <div className={styles.swatches}>
-                        <div
+                        {this.props.mode === Modes.BIT_LINE ||
+                            this.props.mode === Modes.BIT_RECT ||
+                            this.props.mode === Modes.BIT_OVAL ||
+                            this.props.mode === Modes.BIT_TEXT ? null :
+                        (<div
                             className={classNames({
                                 [styles.clickable]: true,
                                 [styles.swatch]: true,
@@ -258,7 +263,8 @@ class ColorPickerComponent extends React.Component {
                                 draggable={false}
                                 src={noFillIcon}
                             />
-                        </div>
+                        </div>)
+                        }
                     </div>
                     <div className={styles.swatches}>
                         <div
@@ -291,6 +297,7 @@ ColorPickerComponent.propTypes = {
     hue: PropTypes.number.isRequired,
     intl: intlShape.isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
+    mode: PropTypes.oneOf(Object.keys(Modes)),
     onActivateEyeDropper: PropTypes.func.isRequired,
     onBrightnessChange: PropTypes.func.isRequired,
     onChangeGradientTypeHorizontal: PropTypes.func.isRequired,
