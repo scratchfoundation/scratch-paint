@@ -53,6 +53,11 @@ class BitOvalMode extends React.Component {
     shouldComponentUpdate (nextProps) {
         return nextProps.isOvalModeActive !== this.props.isOvalModeActive;
     }
+    componentWillUnmount () {
+        if (this.tool) {
+            this.deactivateTool();
+        }
+    }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
         this.props.clearGradient();

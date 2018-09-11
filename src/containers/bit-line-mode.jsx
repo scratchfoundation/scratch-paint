@@ -44,6 +44,11 @@ class BitLineMode extends React.Component {
     shouldComponentUpdate (nextProps) {
         return nextProps.isBitLineModeActive !== this.props.isBitLineModeActive;
     }
+    componentWillUnmount () {
+        if (this.tool) {
+            this.deactivateTool();
+        }
+    }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
         this.props.clearGradient();

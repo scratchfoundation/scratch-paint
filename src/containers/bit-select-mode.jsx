@@ -39,6 +39,11 @@ class BitSelectMode extends React.Component {
     shouldComponentUpdate (nextProps) {
         return nextProps.isSelectModeActive !== this.props.isSelectModeActive;
     }
+    componentWillUnmount () {
+        if (this.tool) {
+            this.deactivateTool();
+        }
+    }
     activateTool () {
         this.props.clearGradient();
         this.tool = new BitSelectTool(

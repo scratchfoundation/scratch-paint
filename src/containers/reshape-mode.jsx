@@ -39,6 +39,11 @@ class ReshapeMode extends React.Component {
     shouldComponentUpdate (nextProps) {
         return nextProps.isReshapeModeActive !== this.props.isReshapeModeActive;
     }
+    componentWillUnmount () {
+        if (this.tool) {
+            this.deactivateTool();
+        }
+    }
     activateTool () {
         this.tool = new ReshapeTool(
             this.props.setHoveredItem,
