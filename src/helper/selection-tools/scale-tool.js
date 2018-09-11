@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
 import {getItems} from '../selection';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
 
 /**
  * Tool to handle scaling items by pulling on the handles around the edges of the bounding
@@ -20,6 +21,7 @@ class ScaleTool {
         this.itemGroup = null;
         // Lowest item above all scale items in z index
         this.itemToInsertBelow = null;
+        this.lastPoint = null;
         this.onUpdateImage = onUpdateImage;
     }
 
@@ -66,6 +68,15 @@ class ScaleTool {
     }
     onMouseDrag (event) {
         if (!this.active) return;
+        const point = event.point;
+        if (event.point.x > ART_BOARD_WIDTH || event.point.y > ART_BOARD_HEIGHT ||
+                event.point.x < 0 || event.point.y < 0) {
+            point.x = Math.max(0, Math.min(point.x, ART_BOARD_WIDTH));
+            point.y = Math.max(0, Math.min(point.y, ART_BOARD_HEIGHT));
+        }
+        if (!this.lastPoint) this.lastPoint = event.lastPoint;
+        const delta = point.subtract(this.lastPoint);
+        this.lastPoint = point;
 
         const modOrigSize = this.origSize;
 
@@ -85,7 +96,7 @@ class ScaleTool {
             this.pivot = this.origPivot;
         }
 
-        this.corner = this.corner.add(event.delta);
+        this.corner = this.corner.add(delta);
         const size = this.corner.subtract(this.pivot);
         let sx = 1.0;
         let sy = 1.0;
@@ -109,6 +120,7 @@ class ScaleTool {
     }
     onMouseUp () {
         if (!this.active) return;
+        this.lastPoint = null;
 
         this.pivot = null;
         this.origPivot = null;

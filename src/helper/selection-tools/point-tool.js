@@ -1,7 +1,7 @@
 import paper from '@scratch/paper';
-import {snapDeltaToAngle} from '../math';
+import {HANDLE_RATIO, snapDeltaToAngle} from '../math';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
 import {clearSelection, getSelectedLeafItems, getSelectedSegments} from '../selection';
-import {HANDLE_RATIO} from '../math';
 
 /** Subtool of ReshapeTool for moving control points. */
 class PointTool {
@@ -29,6 +29,7 @@ class PointTool {
         this.selectedItems = null;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
+        this.lastPoint = null;
         this.onUpdateImage = onUpdateImage;
     }
 
@@ -144,7 +145,16 @@ class PointTool {
         this.invertDeselect = false;
         this.deleteOnMouseUp = null;
         
-        const dragVector = event.point.subtract(event.downPoint);
+        const point = event.point;
+        if (event.point.x > ART_BOARD_WIDTH || event.point.y > ART_BOARD_HEIGHT ||
+                event.point.x < 0 || event.point.y < 0) {
+            point.x = Math.max(0, Math.min(point.x, ART_BOARD_WIDTH));
+            point.y = Math.max(0, Math.min(point.y, ART_BOARD_HEIGHT));
+        }
+        if (!this.lastPoint) this.lastPoint = event.lastPoint;
+        const dragVector = point.subtract(event.downPoint);
+        const delta = point.subtract(this.lastPoint);
+        this.lastPoint = point;
         
         const selectedSegments = getSelectedSegments();
         for (const seg of selectedSegments) {
@@ -157,11 +167,13 @@ class PointTool {
             if (event.modifiers.shift) {
                 seg.point = seg.origPoint.add(snapDeltaToAngle(dragVector, Math.PI / 4));
             } else {
-                seg.point = seg.point.add(event.delta);
+                seg.point = seg.point.add(delta);
             }
         }
     }
     onMouseUp () {
+        this.lastPoint = null;
+        
         // resetting the items and segments origin points for the next usage
         let moved = false;
         const selectedSegments = getSelectedSegments();
