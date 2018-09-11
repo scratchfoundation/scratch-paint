@@ -39165,10 +39165,10 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
         _react2.default.createElement(
             'div',
             { className: _paintEditor2.default.topAlignRow },
-            props.canvas !== null ? // eslint-disable-line no-negated-condition
+            props.canvas !== null && (0, _format.isVector)(props.format) ? // eslint-disable-line no-negated-condition
             _react2.default.createElement(
                 'div',
-                { className: (0, _format.isVector)(props.format) ? _paintEditor2.default.modeSelector : _paintEditor2.default.hidden },
+                { className: _paintEditor2.default.modeSelector },
                 _react2.default.createElement(_selectMode2.default, {
                     onUpdateImage: props.onUpdateImage
                 }),
@@ -39198,10 +39198,10 @@ var PaintEditorComponent = function PaintEditorComponent(props) {
                     onUpdateImage: props.onUpdateImage
                 })
             ) : null,
-            props.canvas !== null ? // eslint-disable-line no-negated-condition
+            props.canvas !== null && (0, _format.isBitmap)(props.format) ? // eslint-disable-line no-negated-condition
             _react2.default.createElement(
                 'div',
-                { className: (0, _format.isBitmap)(props.format) ? _paintEditor2.default.modeSelector : _paintEditor2.default.hidden },
+                { className: _paintEditor2.default.modeSelector },
                 _react2.default.createElement(_bitBrushMode2.default, {
                     onUpdateImage: props.onUpdateImage
                 }),
@@ -43866,6 +43866,13 @@ var BitBrushMode = function (_React$Component) {
             return nextProps.isBitBrushModeActive !== this.props.isBitBrushModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
@@ -44979,6 +44986,13 @@ var BitLineMode = function (_React$Component) {
             return nextProps.isBitLineModeActive !== this.props.isBitLineModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
@@ -45390,6 +45404,13 @@ var BitOvalMode = function (_React$Component) {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(nextProps) {
             return nextProps.isOvalModeActive !== this.props.isOvalModeActive;
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
         }
     }, {
         key: 'activateTool',
@@ -46281,6 +46302,13 @@ var BitRectMode = function (_React$Component) {
             return nextProps.isRectModeActive !== this.props.isRectModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
@@ -46789,6 +46817,13 @@ var BitFillMode = function (_React$Component) {
             return nextProps.isFillModeActive !== this.props.isFillModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
@@ -47187,6 +47222,13 @@ var BitEraserMode = function (_React$Component) {
             return nextProps.isBitEraserModeActive !== this.props.isBitEraserModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
@@ -47387,6 +47429,13 @@ var BitSelectMode = function (_React$Component) {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(nextProps) {
             return nextProps.isSelectModeActive !== this.props.isSelectModeActive;
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
         }
     }, {
         key: 'activateTool',
@@ -49479,6 +49528,13 @@ var BrushMode = function (_React$Component) {
             return nextProps.isBrushModeActive !== this.props.isBrushModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.blob.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool() {
             // TODO: Instead of clearing selection, consider a kind of "draw inside"
@@ -50113,6 +50169,13 @@ var EraserMode = function (_React$Component) {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(nextProps) {
             return nextProps.isEraserModeActive !== this.props.isEraserModeActive;
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.blob.tool) {
+                this.deactivateTool();
+            }
         }
     }, {
         key: 'activateTool',
@@ -53817,6 +53880,13 @@ var FillMode = function (_React$Component) {
             return nextProps.isFillModeActive !== this.props.isFillModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
@@ -54354,6 +54424,13 @@ var LineMode = function (_React$Component) {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(nextProps) {
             return nextProps.isLineModeActive !== this.props.isLineModeActive;
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
         }
     }, {
         key: 'activateTool',
@@ -58250,6 +58327,13 @@ var OvalMode = function (_React$Component) {
             return nextProps.isOvalModeActive !== this.props.isOvalModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
@@ -58703,6 +58787,13 @@ var RectMode = function (_React$Component) {
             return nextProps.isRectModeActive !== this.props.isRectModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
@@ -59140,6 +59231,13 @@ var ReshapeMode = function (_React$Component) {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(nextProps) {
             return nextProps.isReshapeModeActive !== this.props.isReshapeModeActive;
+        }
+    }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
         }
     }, {
         key: 'activateTool',
@@ -60255,6 +60353,13 @@ var SelectMode = function (_React$Component) {
             return nextProps.isSelectModeActive !== this.props.isSelectModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool() {
             this.tool = new _selectTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.setSelectedItems, this.props.clearSelectedItems, this.props.onUpdateImage, this.props.switchToTextTool);
@@ -61174,6 +61279,13 @@ var TextMode = function (_React$Component) {
             return nextProps.isTextModeActive !== this.props.isTextModeActive;
         }
     }, {
+        key: 'componentWillUnmount',
+        value: function componentWillUnmount() {
+            if (this.tool) {
+                this.deactivateTool();
+            }
+        }
+    }, {
         key: 'activateTool',
         value: function activateTool(nextProps) {
             var selected = (0, _selection.getSelectedLeafItems)();
@@ -61992,7 +62104,7 @@ exports = module.exports = __webpack_require__(12)(false);
 
 
 // module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.paint-editor_editor-container_3ajxi {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    padding: calc(3 * .25rem);\n}\n\n.paint-editor_row_1psvV {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.paint-editor_editor-container-top_23HHq {\n    border-bottom: 1px dashed #D9D9D9;\n    padding-bottom: calc(2 * .25rem);\n}\n\n.paint-editor_top-align-row_2Ky-F {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    padding-top: calc(5 * .25rem);\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n}\n\n.paint-editor_row_1psvV + .paint-editor_row_1psvV {\n    margin-top: calc(2 * .25rem);\n}\n\n[dir=\"ltr\"] .paint-editor_mod-dashed-border_1xeKo {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mod-dashed-border_1xeKo {\n    border-left: 1px dashed #D9D9D9;\n    padding-left: calc(2 * .25rem);\n}\n\n.paint-editor_mod-labeled-icon-height_3hBCl {\n    height: 2.85rem; /* for the second row so the dashed borders are equal in size */\n}\n\n.paint-editor_button-group-button_1gq5A {\n    display: inline-block;\n    border: 1px solid #D9D9D9;\n    border-radius: 0;\n    padding: .35rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A {\n    border-left: none;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A {\n    border-right: none;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A:first-of-type {\n    border-left: 1px solid #D9D9D9;\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A:first-of-type {\n    border-right: 1px solid #D9D9D9;\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A.paint-editor_mod-start-border_jVIRO {\n    border-left: 1px solid #D9D9D9;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A.paint-editor_mod-start-border_jVIRO {\n    border-right: 1px solid #D9D9D9;\n}\n\n[dir=\"ltr\"].paint-editor_button-group-button_1gq5A.paint-editor_mod-no-end-border_XiRoc {\n    border-right: none;\n}\n\n[dir=\"rtl\"].paint-editor_button-group-button_1gq5A.paint-editor_mod-no-end-border_XiRoc {\n    border-left: none;\n}\n\n.paint-editor_button-group-button-icon_3BPxO {\n    width: 1.25rem;\n    height: 1.25rem;\n    vertical-align: middle;\n}\n\n.paint-editor_mod-mode-tools_1IXSj {\n    margin-left: calc(2 * .25rem);\n}\n\n[dir=\"ltr\"] .paint-editor_mod-margin-after_1OgHf {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mod-margin-after_1OgHf {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_canvas-container_2rN98 {\n    width: 480px;\n    height: 360px;\n    -webkit-box-sizing: content-box;\n            box-sizing: content-box;\n    border: 1px solid #e8edf1;\n    border-radius: .25rem;\n    position: relative;\n    overflow: visible;\n}\n\n.paint-editor_mode-selector_1edhd {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    max-width: 6rem;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-flex-wrap: wrap;\n        -ms-flex-wrap: wrap;\n            flex-wrap: wrap;\n    -webkit-box-align: start;\n    -webkit-align-items: flex-start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-align-content: flex-start;\n        -ms-flex-line-pack: start;\n            align-content: flex-start;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n[dir=\"ltr\"] .paint-editor_mode-selector_1edhd {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mode-selector_1edhd {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_hidden_2XQlT {\n    display: none;\n}\n\n.paint-editor_zoom-controls_3Qe-- {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: reverse;\n    -webkit-flex-direction: row-reverse;\n        -ms-flex-direction: row-reverse;\n            flex-direction: row-reverse;\n}\n\n.paint-editor_color-picker-wrapper_1IC0W {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    pointer-events: none;\n}\n\n.paint-editor_canvas-controls_e2K-q {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin-top: .25rem;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n.paint-editor_bitmap-button_GsX3L {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    border-radius: 5px;\n    background-color: #4C97FF;\n    padding: calc(2 * .25rem);\n    line-height: 1.5rem;\n    font-size: calc(3 * .25rem);\n    font-weight: bold;\n    color: white;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n\n[dir=\"ltr\"] .paint-editor_bitmap-button-icon_wPoPh {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_bitmap-button-icon_wPoPh {\n    margin-left: calc(2 * .25rem);\n}\n\n@media only screen and (max-width: 1249px) {\n    .paint-editor_editor-container_3ajxi {\n        padding: calc(3 * .25rem) .25rem;\n    }\n\n    .paint-editor_mode-selector_1edhd {\n        margin-right: .25rem;\n        -webkit-box-orient: vertical;\n        -webkit-box-direction: normal;\n        -webkit-flex-direction: column;\n            -ms-flex-direction: column;\n                flex-direction: column;\n        -webkit-box-pack: start;\n        -webkit-justify-content: flex-start;\n            -ms-flex-pack: start;\n                justify-content: flex-start;\n    }\n}\n\n.paint-editor_text-area_3VRLj {\n    background: transparent;\n    border: none;\n    display: none;\n    margin: 0px;\n    opacity: .8;\n    outline: none;\n    overflow: hidden;\n    padding: 0px;\n    position: absolute;\n    resize: none;\n    -webkit-text-fill-color: transparent;\n    text-fill-color: transparent;\n}\n\n.paint-editor_button-text_2sm18 {\n    width: 100%; /* Fixes button text wrapping in Edge */\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.paint-editor_editor-container_3ajxi {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    padding: calc(3 * .25rem);\n}\n\n.paint-editor_row_1psvV {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.paint-editor_editor-container-top_23HHq {\n    border-bottom: 1px dashed #D9D9D9;\n    padding-bottom: calc(2 * .25rem);\n}\n\n.paint-editor_top-align-row_2Ky-F {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    padding-top: calc(5 * .25rem);\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n}\n\n.paint-editor_row_1psvV + .paint-editor_row_1psvV {\n    margin-top: calc(2 * .25rem);\n}\n\n[dir=\"ltr\"] .paint-editor_mod-dashed-border_1xeKo {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mod-dashed-border_1xeKo {\n    border-left: 1px dashed #D9D9D9;\n    padding-left: calc(2 * .25rem);\n}\n\n.paint-editor_mod-labeled-icon-height_3hBCl {\n    height: 2.85rem; /* for the second row so the dashed borders are equal in size */\n}\n\n.paint-editor_button-group-button_1gq5A {\n    display: inline-block;\n    border: 1px solid #D9D9D9;\n    border-radius: 0;\n    padding: .35rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A {\n    border-left: none;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A {\n    border-right: none;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A:first-of-type {\n    border-left: 1px solid #D9D9D9;\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A:first-of-type {\n    border-right: 1px solid #D9D9D9;\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A.paint-editor_mod-start-border_jVIRO {\n    border-left: 1px solid #D9D9D9;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A.paint-editor_mod-start-border_jVIRO {\n    border-right: 1px solid #D9D9D9;\n}\n\n[dir=\"ltr\"].paint-editor_button-group-button_1gq5A.paint-editor_mod-no-end-border_XiRoc {\n    border-right: none;\n}\n\n[dir=\"rtl\"].paint-editor_button-group-button_1gq5A.paint-editor_mod-no-end-border_XiRoc {\n    border-left: none;\n}\n\n.paint-editor_button-group-button-icon_3BPxO {\n    width: 1.25rem;\n    height: 1.25rem;\n    vertical-align: middle;\n}\n\n.paint-editor_mod-mode-tools_1IXSj {\n    margin-left: calc(2 * .25rem);\n}\n\n[dir=\"ltr\"] .paint-editor_mod-margin-after_1OgHf {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mod-margin-after_1OgHf {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_canvas-container_2rN98 {\n    width: 480px;\n    height: 360px;\n    -webkit-box-sizing: content-box;\n            box-sizing: content-box;\n    border: 1px solid #e8edf1;\n    border-radius: .25rem;\n    position: relative;\n    overflow: visible;\n}\n\n.paint-editor_mode-selector_1edhd {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    max-width: 6rem;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-flex-wrap: wrap;\n        -ms-flex-wrap: wrap;\n            flex-wrap: wrap;\n    -webkit-box-align: start;\n    -webkit-align-items: flex-start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-align-content: flex-start;\n        -ms-flex-line-pack: start;\n            align-content: flex-start;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n[dir=\"ltr\"] .paint-editor_mode-selector_1edhd {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mode-selector_1edhd {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_zoom-controls_3Qe-- {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: reverse;\n    -webkit-flex-direction: row-reverse;\n        -ms-flex-direction: row-reverse;\n            flex-direction: row-reverse;\n}\n\n.paint-editor_color-picker-wrapper_1IC0W {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    pointer-events: none;\n}\n\n.paint-editor_canvas-controls_e2K-q {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin-top: .25rem;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n.paint-editor_bitmap-button_GsX3L {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    border-radius: 5px;\n    background-color: #4C97FF;\n    padding: calc(2 * .25rem);\n    line-height: 1.5rem;\n    font-size: calc(3 * .25rem);\n    font-weight: bold;\n    color: white;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n\n[dir=\"ltr\"] .paint-editor_bitmap-button-icon_wPoPh {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_bitmap-button-icon_wPoPh {\n    margin-left: calc(2 * .25rem);\n}\n\n@media only screen and (max-width: 1249px) {\n    .paint-editor_editor-container_3ajxi {\n        padding: calc(3 * .25rem) .25rem;\n    }\n\n    .paint-editor_mode-selector_1edhd {\n        margin-right: .25rem;\n        -webkit-box-orient: vertical;\n        -webkit-box-direction: normal;\n        -webkit-flex-direction: column;\n            -ms-flex-direction: column;\n                flex-direction: column;\n        -webkit-box-pack: start;\n        -webkit-justify-content: flex-start;\n            -ms-flex-pack: start;\n                justify-content: flex-start;\n    }\n}\n\n.paint-editor_text-area_3VRLj {\n    background: transparent;\n    border: none;\n    display: none;\n    margin: 0px;\n    opacity: .8;\n    outline: none;\n    overflow: hidden;\n    padding: 0px;\n    position: absolute;\n    resize: none;\n    -webkit-text-fill-color: transparent;\n    text-fill-color: transparent;\n}\n\n.paint-editor_button-text_2sm18 {\n    width: 100%; /* Fixes button text wrapping in Edge */\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -62023,7 +62135,6 @@ exports.locals = {
 	"canvasContainer": "paint-editor_canvas-container_2rN98",
 	"mode-selector": "paint-editor_mode-selector_1edhd",
 	"modeSelector": "paint-editor_mode-selector_1edhd",
-	"hidden": "paint-editor_hidden_2XQlT",
 	"zoom-controls": "paint-editor_zoom-controls_3Qe--",
 	"zoomControls": "paint-editor_zoom-controls_3Qe--",
 	"color-picker-wrapper": "paint-editor_color-picker-wrapper_1IC0W",
