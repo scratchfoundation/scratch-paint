@@ -16710,7 +16710,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -17318,6 +17318,59 @@ exports.selectRootItem = selectRootItem;
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.BitmapModes = exports.default = undefined;
+
+var _keymirror = __webpack_require__(40);
+
+var _keymirror2 = _interopRequireDefault(_keymirror);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Modes = (0, _keymirror2.default)({
+    BIT_BRUSH: null,
+    BIT_LINE: null,
+    BIT_OVAL: null,
+    BIT_RECT: null,
+    BIT_TEXT: null,
+    BIT_FILL: null,
+    BIT_ERASER: null,
+    BIT_SELECT: null,
+    BRUSH: null,
+    ERASER: null,
+    LINE: null,
+    FILL: null,
+    SELECT: null,
+    RESHAPE: null,
+    OVAL: null,
+    RECT: null,
+    ROUNDED_RECT: null,
+    TEXT: null
+});
+
+var BitmapModes = (0, _keymirror2.default)({
+    BIT_BRUSH: null,
+    BIT_LINE: null,
+    BIT_OVAL: null,
+    BIT_RECT: null,
+    BIT_TEXT: null,
+    BIT_FILL: null,
+    BIT_ERASER: null,
+    BIT_SELECT: null
+});
+
+exports.default = Modes;
+exports.BitmapModes = BitmapModes;
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -18832,59 +18885,6 @@ bind.placeholder = {};
 module.exports = bindAll;
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45)))
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.BitmapModes = exports.default = undefined;
-
-var _keymirror = __webpack_require__(40);
-
-var _keymirror2 = _interopRequireDefault(_keymirror);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Modes = (0, _keymirror2.default)({
-    BIT_BRUSH: null,
-    BIT_LINE: null,
-    BIT_OVAL: null,
-    BIT_RECT: null,
-    BIT_TEXT: null,
-    BIT_FILL: null,
-    BIT_ERASER: null,
-    BIT_SELECT: null,
-    BRUSH: null,
-    ERASER: null,
-    LINE: null,
-    FILL: null,
-    SELECT: null,
-    RESHAPE: null,
-    OVAL: null,
-    RECT: null,
-    ROUNDED_RECT: null,
-    TEXT: null
-});
-
-var BitmapModes = (0, _keymirror2.default)({
-    BIT_BRUSH: null,
-    BIT_LINE: null,
-    BIT_OVAL: null,
-    BIT_RECT: null,
-    BIT_TEXT: null,
-    BIT_FILL: null,
-    BIT_ERASER: null,
-    BIT_SELECT: null
-});
-
-exports.default = Modes;
-exports.BitmapModes = BitmapModes;
 
 /***/ }),
 /* 6 */
@@ -20627,7 +20627,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeMode = exports.default = undefined;
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -30562,14 +30562,14 @@ var BrushTool = function (_paper$Tool) {
         key: 'setColor',
         value: function setColor(color) {
             this.color = color;
-            this.tmpCanvas = (0, _bitmap.getBrushMark)(this.size, this.color, this.isEraser);
+            this.tmpCanvas = (0, _bitmap.getBrushMark)(this.size, this.color, this.isEraser || !this.color);
         }
     }, {
         key: 'setBrushSize',
         value: function setBrushSize(size) {
             // For performance, make sure this is an integer
             this.size = Math.max(1, ~~size);
-            this.tmpCanvas = (0, _bitmap.getBrushMark)(this.size, this.color, this.isEraser);
+            this.tmpCanvas = (0, _bitmap.getBrushMark)(this.size, this.color, this.isEraser || !this.color);
         }
         // Draw a brush mark at the given point
 
@@ -30578,11 +30578,11 @@ var BrushTool = function (_paper$Tool) {
         value: function draw(x, y) {
             var roundedUpRadius = Math.ceil(this.size / 2);
             var context = (0, _layer.getRaster)().getContext('2d');
-            if (this.isEraser) {
+            if (this.isEraser || !this.color) {
                 context.globalCompositeOperation = 'destination-out';
             }
             (0, _layer.getRaster)().drawImage(this.tmpCanvas, new _paper2.default.Point(~~x - roundedUpRadius, ~~y - roundedUpRadius));
-            if (this.isEraser) {
+            if (this.isEraser || !this.color) {
                 context.globalCompositeOperation = 'source-over';
             }
         }
@@ -30604,7 +30604,7 @@ var BrushTool = function (_paper$Tool) {
                     this.cursorPreview.remove();
                 }
 
-                this.tmpCanvas = (0, _bitmap.getBrushMark)(this.size, this.color, this.isEraser);
+                this.tmpCanvas = (0, _bitmap.getBrushMark)(this.size, this.color, this.isEraser || !this.color);
                 this.cursorPreview = new _paper2.default.Raster(this.tmpCanvas);
                 this.cursorPreview.guide = true;
                 this.cursorPreview.parent = (0, _layer.getGuideLayer)();
@@ -30695,7 +30695,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -31962,7 +31962,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -31999,6 +31999,10 @@ var _colorPicker = __webpack_require__(239);
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
 var _stylePath = __webpack_require__(9);
+
+var _modes = __webpack_require__(4);
+
+var _modes2 = _interopRequireDefault(_modes);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32147,6 +32151,7 @@ var ColorPicker = function (_React$Component) {
                 gradientType: this.props.gradientType,
                 hue: this.state.hue,
                 isEyeDropping: this.props.isEyeDropping,
+                mode: this.props.mode,
                 rtl: this.props.rtl,
                 saturation: this.state.saturation,
                 shouldShowGradientTools: this.props.shouldShowGradientTools,
@@ -32175,6 +32180,7 @@ ColorPicker.propTypes = {
     colorIndex: _propTypes2.default.number.isRequired,
     gradientType: _propTypes2.default.oneOf(Object.keys(_gradientTypes2.default)).isRequired,
     isEyeDropping: _propTypes2.default.bool.isRequired,
+    mode: _propTypes2.default.oneOf(Object.keys(_modes2.default)),
     onActivateEyeDropper: _propTypes2.default.func.isRequired,
     onChangeColor: _propTypes2.default.func.isRequired,
     onChangeGradientType: _propTypes2.default.func,
@@ -32189,6 +32195,7 @@ var mapStateToProps = function mapStateToProps(state) {
     return {
         colorIndex: state.scratchPaint.fillMode.colorIndex,
         isEyeDropping: state.scratchPaint.color.eyeDropper.active,
+        mode: state.scratchPaint.mode,
         rtl: state.scratchPaint.layout.rtl
     };
 };
@@ -32490,7 +32497,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -32646,7 +32653,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -32672,7 +32679,7 @@ var _format = __webpack_require__(16);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -33167,7 +33174,7 @@ exports.default = function (Input) {
     return LiveInput;
 };
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -33412,7 +33419,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -34176,7 +34183,7 @@ var _eyeDropper2 = __webpack_require__(100);
 
 var _eyeDropper3 = _interopRequireDefault(_eyeDropper2);
 
-var _modes2 = __webpack_require__(5);
+var _modes2 = __webpack_require__(4);
 
 var _modes3 = _interopRequireDefault(_modes2);
 
@@ -34184,7 +34191,7 @@ var _format2 = __webpack_require__(16);
 
 var _format3 = _interopRequireDefault(_format2);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -42057,7 +42064,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -43425,7 +43432,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _touchUtils = __webpack_require__(82);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -43789,11 +43796,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -44909,11 +44916,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -45321,11 +45328,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -45512,7 +45519,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -46217,11 +46224,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -46408,7 +46415,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -46729,11 +46736,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -47154,11 +47161,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -47361,11 +47368,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -47516,7 +47523,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -49453,11 +49460,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -50102,11 +50109,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -50306,7 +50313,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -50328,7 +50335,7 @@ var _selection = __webpack_require__(3);
 
 var _selectedItems = __webpack_require__(7);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -53010,6 +53017,10 @@ var _swap = __webpack_require__(252);
 
 var _swap2 = _interopRequireDefault(_swap);
 
+var _modes = __webpack_require__(4);
+
+var _modes2 = _interopRequireDefault(_modes);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -53268,7 +53279,7 @@ var ColorPickerComponent = function (_React$Component) {
                     _react2.default.createElement(
                         'div',
                         { className: _colorPicker2.default.swatches },
-                        _react2.default.createElement(
+                        this.props.mode === _modes2.default.BIT_LINE || this.props.mode === _modes2.default.BIT_RECT || this.props.mode === _modes2.default.BIT_OVAL || this.props.mode === _modes2.default.BIT_TEXT ? null : _react2.default.createElement(
                             'div',
                             {
                                 className: (0, _classnames2.default)((_classNames7 = {}, _defineProperty(_classNames7, _colorPicker2.default.clickable, true), _defineProperty(_classNames7, _colorPicker2.default.swatch, true), _defineProperty(_classNames7, _colorPicker2.default.activeSwatch, this.props.colorIndex === 0 && this.props.color === null || this.props.colorIndex === 1 && this.props.color2 === null), _classNames7)),
@@ -53314,6 +53325,7 @@ ColorPickerComponent.propTypes = {
     hue: _propTypes2.default.number.isRequired,
     intl: _reactIntl.intlShape.isRequired,
     isEyeDropping: _propTypes2.default.bool.isRequired,
+    mode: _propTypes2.default.oneOf(Object.keys(_modes2.default)),
     onActivateEyeDropper: _propTypes2.default.func.isRequired,
     onBrightnessChange: _propTypes2.default.func.isRequired,
     onChangeGradientTypeHorizontal: _propTypes2.default.func.isRequired,
@@ -53354,7 +53366,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -53787,11 +53799,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -54342,11 +54354,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -54830,7 +54842,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -55053,7 +55065,7 @@ var _format2 = __webpack_require__(16);
 
 var _format3 = _interopRequireDefault(_format2);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -56408,7 +56420,7 @@ exports.default = function (Input) {
     return BufferedInput;
 };
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -56689,7 +56701,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -56715,7 +56727,7 @@ var _format = __webpack_require__(16);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -57186,7 +57198,7 @@ var _labeledIconButton = __webpack_require__(66);
 
 var _labeledIconButton2 = _interopRequireDefault(_labeledIconButton);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -57623,7 +57635,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -58248,11 +58260,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -58446,7 +58458,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -58708,11 +58720,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -58906,7 +58918,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -59163,11 +59175,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -59335,7 +59347,7 @@ var _keymirror = __webpack_require__(40);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -60280,11 +60292,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -60443,7 +60455,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -60750,7 +60762,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -60758,7 +60770,7 @@ var _strokeColor = __webpack_require__(36);
 
 var _modals = __webpack_require__(61);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -61003,7 +61015,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -61015,7 +61027,7 @@ var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
 
 var _stylePath = __webpack_require__(9);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -61174,7 +61186,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -61182,7 +61194,7 @@ var _fonts = __webpack_require__(55);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -61305,7 +61317,7 @@ var TextMode = function (_React$Component) {
                 strokeWidth = _nextProps$colorState.strokeWidth;
 
             var fillColorPresent = fillColor !== _stylePath.MIXED && fillColor !== null;
-            var strokeColorPresent = strokeColor !== _stylePath.MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
+            var strokeColorPresent = nextProps.isBitmap ? false : strokeColor !== _stylePath.MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
             if (!fillColorPresent && !strokeColorPresent) {
                 this.props.onChangeFillColor(_fillColor.DEFAULT_COLOR);
                 this.props.onChangeStrokeColor(null);
@@ -61441,7 +61453,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
@@ -62190,7 +62202,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -62224,7 +62236,7 @@ var _format = __webpack_require__(16);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _modes2 = __webpack_require__(5);
+var _modes2 = __webpack_require__(4);
 
 var _modes3 = _interopRequireDefault(_modes2);
 
@@ -62386,7 +62398,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -62479,7 +62491,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -62635,7 +62647,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _lodash = __webpack_require__(4);
+var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -62665,7 +62677,7 @@ var _math = __webpack_require__(23);
 
 var _view = __webpack_require__(26);
 
-var _modes = __webpack_require__(5);
+var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
