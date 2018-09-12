@@ -1,7 +1,7 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
-import {fillRect, outlineRect} from '../bitmap';
-import {createCanvas, getRaster} from '../layer';
+import {commitRectToBitmap} from '../bitmap';
+import {getRaster} from '../layer';
 import {clearSelection} from '../selection';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
@@ -169,23 +169,15 @@ class RectTool extends paper.Tool {
             }
         }
         this.active = false;
+        this.onUpdateImage();
     }
     commitRect () {
         if (!this.rect || !this.rect.isInserted()) return;
 
-        const tmpCanvas = createCanvas();
-        const context = tmpCanvas.getContext('2d');
-        context.fillStyle = this.color;
-        if (this.filled) {
-            fillRect(this.rect, context);
-        } else {
-            outlineRect(this.rect, this.thickness / paper.view.zoom, context);
-        }
-        getRaster().drawImage(tmpCanvas, new paper.Point());
-
+        commitRectToBitmap(this.rect, getRaster());
+        
         this.rect.remove();
         this.rect = null;
-        this.onUpdateImage();
     }
     deactivateTool () {
         this.commitRect();
