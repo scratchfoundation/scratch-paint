@@ -737,6 +737,47 @@ const commitSelectionToBitmap = function (selection, bitmap) {
     commitArbitraryTransformation_(selection, bitmap);
 };
 
+/**
+ * @param {paper.Shape.Ellipse} oval Vector oval to convert
+ * @param {paper.Raster} bitmap raster to draw selection
+ * @return {bool} true if the oval was drawn
+ */
+const commitOvalToBitmap = function (oval, bitmap) {
+    const radiusX = Math.abs(oval.size.width / 2);
+    const radiusY = Math.abs(oval.size.height / 2);
+    const context = bitmap.getContext('2d');
+    const filled = oval.strokeWidth === 0;
+    context.fillStyle = filled ? oval.fillColor.toCSS() : oval.strokeColor.toCSS();
+
+    const drew = drawEllipse({
+        position: oval.position,
+        radiusX,
+        radiusY,
+        matrix: oval.matrix,
+        isFilled: filled,
+        thickness: oval.strokeWidth / paper.view.zoom
+    }, context);
+
+    return drew;
+};
+
+/**
+ * @param {paper.Rectangle} rect Vector rectangle to convert
+ * @param {paper.Raster} bitmap raster to draw selection to
+ */
+const commitRectToBitmap = function (rect, bitmap) {
+    const tmpCanvas = createCanvas();
+    const context = tmpCanvas.getContext('2d');
+    const filled = rect.strokeWidth === 0;
+    context.fillStyle = filled ? rect.fillColor.toCSS() : rect.strokeColor.toCSS();
+    if (filled) {
+        fillRect(rect, context);
+    } else {
+        outlineRect(rect, rect.strokeWidth / paper.view.zoom, context);
+    }
+    bitmap.drawImage(tmpCanvas, new paper.Point());
+};
+
 const selectAllBitmap = function (clearSelectedItems) {
     clearSelection(clearSelectedItems);
 
@@ -752,6 +793,8 @@ const selectAllBitmap = function (clearSelectedItems) {
 
 export {
     commitSelectionToBitmap,
+    commitOvalToBitmap,
+    commitRectToBitmap,
     convertToBitmap,
     convertToVector,
     fillRect,
