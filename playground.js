@@ -43750,7 +43750,7 @@ exports = module.exports = __webpack_require__(12)(false);
 
 
 // module
-exports.push([module.i, ".scrollable-canvas_vertical-scrollbar_gyXyM, .scrollable-canvas_horizontal-scrollbar_OBOUt {\n    position: absolute;\n    background: #BEBEBECD;\n    border-radius: 3px;\n    cursor: pointer;\n}\n.scrollable-canvas_vertical-scrollbar-wrapper_1cMNm {\n    position: absolute;\n    width: 6px;\n    right: 1px;\n    top: 1px;\n    height: calc(100% - 6px - 1px);\n}\n.scrollable-canvas_horizontal-scrollbar-wrapper_2BUMa {\n    position: absolute;\n    height: 6px;\n    left: 1px;\n    bottom: 1px;\n    width: calc(100% - 6px - 1px);\n}\n.scrollable-canvas_vertical-scrollbar_gyXyM {\n    width: 6px;\n}\n.scrollable-canvas_horizontal-scrollbar_OBOUt {\n    height: 6px;\n}\n.scrollable-canvas_hide-cursor_f8-ba {\n    cursor: none;\n}\n", ""]);
+exports.push([module.i, ".scrollable-canvas_vertical-scrollbar_gyXyM, .scrollable-canvas_horizontal-scrollbar_OBOUt {\n    position: absolute;\n    background: rgba(190, 190, 190, 0.8);\n    border-radius: calc(8px / 2);\n    cursor: pointer;\n}\n.scrollable-canvas_vertical-scrollbar-wrapper_1cMNm {\n    position: absolute;\n    width: 8px;\n    right: 0;\n    top: 1px;\n    height: calc(100% - 8px - 1px);\n}\n.scrollable-canvas_horizontal-scrollbar-wrapper_2BUMa {\n    position: absolute;\n    height: 8px;\n    left: 1px;\n    bottom: 0;\n    width: calc(100% - 8px - 1px);\n}\n.scrollable-canvas_vertical-scrollbar_gyXyM {\n    width: 8px;\n}\n.scrollable-canvas_horizontal-scrollbar_OBOUt {\n    height: 8px;\n}\n.scrollable-canvas_hide-cursor_f8-ba {\n    cursor: none;\n}\n", ""]);
 
 // exports
 exports.locals = {
