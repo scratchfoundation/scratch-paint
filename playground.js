@@ -16720,7 +16720,7 @@ var _item = __webpack_require__(33);
 
 var _compoundPath = __webpack_require__(162);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(24);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -19009,7 +19009,7 @@ var hoist_non_react_statics = __webpack_require__(113);
 var hoist_non_react_statics_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics);
 
 // EXTERNAL MODULE: ./node_modules/invariant/browser.js
-var browser = __webpack_require__(24);
+var browser = __webpack_require__(25);
 var browser_default = /*#__PURE__*/__webpack_require__.n(browser);
 
 // CONCATENATED MODULE: ./node_modules/react-redux/es/utils/Subscription.js
@@ -20685,7 +20685,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _view = __webpack_require__(26);
+var _view = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21432,7 +21432,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactIntl = __webpack_require__(22);
+var _reactIntl = __webpack_require__(23);
 
 var _button = __webpack_require__(43);
 
@@ -21491,7 +21491,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _reactIntl = __webpack_require__(22);
+var _reactIntl = __webpack_require__(23);
 
 var messages = (0, _reactIntl.defineMessages)({
     brush: {
@@ -22490,6 +22490,160 @@ exports.selectAllBitmap = selectAllBitmap;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.zoomToFit = exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resetZoom = exports.pan = exports.clampViewBounds = exports.SVG_ART_BOARD_HEIGHT = exports.SVG_ART_BOARD_WIDTH = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _selection = __webpack_require__(3);
+
+var _layer = __webpack_require__(11);
+
+var _bitmap = __webpack_require__(20);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Vectors are imported and exported at SVG_ART_BOARD size.
+// Once they are imported however, both SVGs and bitmaps are on
+// canvases of ART_BOARD size.
+var SVG_ART_BOARD_WIDTH = 480;
+var SVG_ART_BOARD_HEIGHT = 360;
+var ART_BOARD_WIDTH = 480 * 2;
+var ART_BOARD_HEIGHT = 360 * 2;
+var PADDING_PERCENT = 25; // Padding as a percent of the max of width/height of the sprite
+var MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
+// zoomed in for tiny costumes.
+
+var clampViewBounds = function clampViewBounds() {
+    var _paper$project$view$b = _paper2.default.project.view.bounds,
+        left = _paper$project$view$b.left,
+        right = _paper$project$view$b.right,
+        top = _paper$project$view$b.top,
+        bottom = _paper$project$view$b.bottom;
+
+    if (left < 0) {
+        _paper2.default.project.view.scrollBy(new _paper2.default.Point(-left, 0));
+    }
+    if (top < 0) {
+        _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, -top));
+    }
+    if (bottom > ART_BOARD_HEIGHT) {
+        _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, ART_BOARD_HEIGHT - bottom));
+    }
+    if (right > ART_BOARD_WIDTH) {
+        _paper2.default.project.view.scrollBy(new _paper2.default.Point(ART_BOARD_WIDTH - right, 0));
+    }
+};
+
+// Zoom keeping a project-space point fixed.
+// This article was helpful http://matthiasberth.com/tech/stable-zoom-and-pan-in-paperjs
+var zoomOnFixedPoint = function zoomOnFixedPoint(deltaZoom, fixedPoint) {
+    var view = _paper2.default.view;
+    var preZoomCenter = view.center;
+    var newZoom = Math.max(0.5, view.zoom + deltaZoom);
+    var scaling = view.zoom / newZoom;
+    var preZoomOffset = fixedPoint.subtract(preZoomCenter);
+    var postZoomOffset = fixedPoint.subtract(preZoomOffset.multiply(scaling)).subtract(preZoomCenter);
+    view.zoom = newZoom;
+    view.translate(postZoomOffset.multiply(-1));
+    clampViewBounds();
+};
+
+// Zoom keeping the selection center (if any) fixed.
+var zoomOnSelection = function zoomOnSelection(deltaZoom) {
+    var fixedPoint = void 0;
+    var items = (0, _selection.getSelectedRootItems)();
+    if (items.length > 0) {
+        var rect = null;
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var item = _step.value;
+
+                if (rect) {
+                    rect = rect.unite(item.bounds);
+                } else {
+                    rect = item.bounds;
+                }
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+
+        fixedPoint = rect.center;
+    } else {
+        fixedPoint = _paper2.default.project.view.center;
+    }
+    zoomOnFixedPoint(deltaZoom, fixedPoint);
+};
+
+var resetZoom = function resetZoom() {
+    _paper2.default.project.view.zoom = .5;
+    clampViewBounds();
+};
+
+var pan = function pan(dx, dy) {
+    _paper2.default.project.view.scrollBy(new _paper2.default.Point(dx, dy));
+    clampViewBounds();
+};
+
+var zoomToFit = function zoomToFit(isBitmap) {
+    resetZoom();
+    var bounds = void 0;
+    if (isBitmap) {
+        bounds = (0, _bitmap.getHitBounds)((0, _layer.getRaster)());
+    } else {
+        bounds = _paper2.default.project.activeLayer.bounds;
+    }
+    if (bounds && bounds.width && bounds.height) {
+        // Ratio of (sprite length plus padding on all sides) to art board length.
+        var ratio = Math.max(bounds.width * (1 + 2 * PADDING_PERCENT / 100) / ART_BOARD_WIDTH, bounds.height * (1 + 2 * PADDING_PERCENT / 100) / ART_BOARD_HEIGHT);
+        // Clamp ratio
+        ratio = Math.max(Math.min(1, ratio), MIN_RATIO);
+        if (ratio < 1) {
+            _paper2.default.view.center = bounds.center;
+            _paper2.default.view.zoom = _paper2.default.view.zoom / ratio;
+            clampViewBounds();
+        }
+    }
+};
+
+exports.ART_BOARD_HEIGHT = ART_BOARD_HEIGHT;
+exports.ART_BOARD_WIDTH = ART_BOARD_WIDTH;
+exports.SVG_ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH;
+exports.SVG_ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT;
+exports.clampViewBounds = clampViewBounds;
+exports.pan = pan;
+exports.resetZoom = resetZoom;
+exports.zoomOnSelection = zoomOnSelection;
+exports.zoomOnFixedPoint = zoomOnFixedPoint;
+exports.zoomToFit = zoomToFit;
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.clearGradient = exports.CLEAR_GRADIENT = exports.default = undefined;
 
 var _gradientTypes = __webpack_require__(18);
@@ -22546,7 +22700,7 @@ exports.CLEAR_GRADIENT = CLEAR_GRADIENT;
 exports.clearGradient = clearGradient;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -22573,7 +22727,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(24);
+/* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(25);
 /* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(invariant__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var intl_format_cache__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(39);
 /* harmony import */ var intl_format_cache__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(intl_format_cache__WEBPACK_IMPORTED_MODULE_6__);
@@ -24156,7 +24310,7 @@ addLocaleData(_locale_data_index_js__WEBPACK_IMPORTED_MODULE_0___default.a);
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24351,7 +24505,7 @@ exports.snapDeltaToAngle = snapDeltaToAngle;
 exports.sortItemsByZIndex = sortItemsByZIndex;
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24405,7 +24559,7 @@ module.exports = invariant;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var microee = __webpack_require__(135);
@@ -24481,160 +24635,6 @@ Transform.mixin = function(dest) {
 
 module.exports = Transform;
 
-
-/***/ }),
-/* 26 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.zoomToFit = exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resetZoom = exports.pan = exports.clampViewBounds = exports.SVG_ART_BOARD_HEIGHT = exports.SVG_ART_BOARD_WIDTH = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _selection = __webpack_require__(3);
-
-var _layer = __webpack_require__(11);
-
-var _bitmap = __webpack_require__(20);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Vectors are imported and exported at SVG_ART_BOARD size.
-// Once they are imported however, both SVGs and bitmaps are on
-// canvases of ART_BOARD size.
-var SVG_ART_BOARD_WIDTH = 480;
-var SVG_ART_BOARD_HEIGHT = 360;
-var ART_BOARD_WIDTH = 480 * 2;
-var ART_BOARD_HEIGHT = 360 * 2;
-var PADDING_PERCENT = 25; // Padding as a percent of the max of width/height of the sprite
-var MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
-// zoomed in for tiny costumes.
-
-var clampViewBounds = function clampViewBounds() {
-    var _paper$project$view$b = _paper2.default.project.view.bounds,
-        left = _paper$project$view$b.left,
-        right = _paper$project$view$b.right,
-        top = _paper$project$view$b.top,
-        bottom = _paper$project$view$b.bottom;
-
-    if (left < 0) {
-        _paper2.default.project.view.scrollBy(new _paper2.default.Point(-left, 0));
-    }
-    if (top < 0) {
-        _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, -top));
-    }
-    if (bottom > ART_BOARD_HEIGHT) {
-        _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, ART_BOARD_HEIGHT - bottom));
-    }
-    if (right > ART_BOARD_WIDTH) {
-        _paper2.default.project.view.scrollBy(new _paper2.default.Point(ART_BOARD_WIDTH - right, 0));
-    }
-};
-
-// Zoom keeping a project-space point fixed.
-// This article was helpful http://matthiasberth.com/tech/stable-zoom-and-pan-in-paperjs
-var zoomOnFixedPoint = function zoomOnFixedPoint(deltaZoom, fixedPoint) {
-    var view = _paper2.default.view;
-    var preZoomCenter = view.center;
-    var newZoom = Math.max(0.5, view.zoom + deltaZoom);
-    var scaling = view.zoom / newZoom;
-    var preZoomOffset = fixedPoint.subtract(preZoomCenter);
-    var postZoomOffset = fixedPoint.subtract(preZoomOffset.multiply(scaling)).subtract(preZoomCenter);
-    view.zoom = newZoom;
-    view.translate(postZoomOffset.multiply(-1));
-    clampViewBounds();
-};
-
-// Zoom keeping the selection center (if any) fixed.
-var zoomOnSelection = function zoomOnSelection(deltaZoom) {
-    var fixedPoint = void 0;
-    var items = (0, _selection.getSelectedRootItems)();
-    if (items.length > 0) {
-        var rect = null;
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-            for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                var item = _step.value;
-
-                if (rect) {
-                    rect = rect.unite(item.bounds);
-                } else {
-                    rect = item.bounds;
-                }
-            }
-        } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion && _iterator.return) {
-                    _iterator.return();
-                }
-            } finally {
-                if (_didIteratorError) {
-                    throw _iteratorError;
-                }
-            }
-        }
-
-        fixedPoint = rect.center;
-    } else {
-        fixedPoint = _paper2.default.project.view.center;
-    }
-    zoomOnFixedPoint(deltaZoom, fixedPoint);
-};
-
-var resetZoom = function resetZoom() {
-    _paper2.default.project.view.zoom = .5;
-    clampViewBounds();
-};
-
-var pan = function pan(dx, dy) {
-    _paper2.default.project.view.scrollBy(new _paper2.default.Point(dx, dy));
-    clampViewBounds();
-};
-
-var zoomToFit = function zoomToFit(isBitmap) {
-    resetZoom();
-    var bounds = void 0;
-    if (isBitmap) {
-        bounds = (0, _bitmap.getHitBounds)((0, _layer.getRaster)());
-    } else {
-        bounds = _paper2.default.project.activeLayer.bounds;
-    }
-    if (bounds && bounds.width && bounds.height) {
-        // Ratio of (sprite length plus padding on all sides) to art board length.
-        var ratio = Math.max(bounds.width * (1 + 2 * PADDING_PERCENT / 100) / ART_BOARD_WIDTH, bounds.height * (1 + 2 * PADDING_PERCENT / 100) / ART_BOARD_HEIGHT);
-        // Clamp ratio
-        ratio = Math.max(Math.min(1, ratio), MIN_RATIO);
-        if (ratio < 1) {
-            _paper2.default.view.center = bounds.center;
-            _paper2.default.view.zoom = _paper2.default.view.zoom / ratio;
-            clampViewBounds();
-        }
-    }
-};
-
-exports.ART_BOARD_HEIGHT = ART_BOARD_HEIGHT;
-exports.ART_BOARD_WIDTH = ART_BOARD_WIDTH;
-exports.SVG_ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH;
-exports.SVG_ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT;
-exports.clampViewBounds = clampViewBounds;
-exports.pan = pan;
-exports.resetZoom = resetZoom;
-exports.zoomOnSelection = zoomOnSelection;
-exports.zoomOnFixedPoint = zoomOnFixedPoint;
-exports.zoomToFit = zoomToFit;
 
 /***/ }),
 /* 27 */
@@ -25173,20 +25173,25 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _selection = __webpack_require__(3);
-
 var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
+
+var _selection = __webpack_require__(3);
+
+var _view = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var NUDGE_MORE_MULTIPLIER = 15;
+
 /**
  * Tool containing handlers for arrow key events for nudging the selection.
  * Note that this tool is built for selection mode, not reshape mode.
  */
+
 var NudgeTool = function () {
     /**
      * @param {function} boundingBoxTool to control the bounding box
@@ -25208,47 +25213,81 @@ var NudgeTool = function () {
             }
 
             var nudgeAmount = 1 / _paper2.default.view.zoom;
+            if (event.modifiers.shift) nudgeAmount *= NUDGE_MORE_MULTIPLIER;
+
             var selected = (0, _selection.getSelectedRootItems)();
             if (selected.length === 0) return;
 
+            // Get bounds. Don't let item bounds go out of bounds.
+            var rect = void 0;
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = selected[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var item = _step.value;
+
+                    if (rect) {
+                        rect = rect.unite(item.bounds);
+                    } else {
+                        rect = item.bounds;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
             var translation = void 0;
             if (event.key === 'up') {
-                translation = new _paper2.default.Point(0, -nudgeAmount);
+                translation = new _paper2.default.Point(0, -Math.min(nudgeAmount, rect.bottom - 1));
             } else if (event.key === 'down') {
-                translation = new _paper2.default.Point(0, nudgeAmount);
+                translation = new _paper2.default.Point(0, Math.min(nudgeAmount, _view.ART_BOARD_HEIGHT - rect.top - 1));
             } else if (event.key === 'left') {
-                translation = new _paper2.default.Point(-nudgeAmount, 0);
+                translation = new _paper2.default.Point(-Math.min(nudgeAmount, rect.right - 1), 0);
             } else if (event.key === 'right') {
-                translation = new _paper2.default.Point(nudgeAmount, 0);
+                translation = new _paper2.default.Point(Math.min(nudgeAmount, _view.ART_BOARD_WIDTH - rect.left - 1), 0);
             }
 
             if (translation) {
-                var _iteratorNormalCompletion = true;
-                var _didIteratorError = false;
-                var _iteratorError = undefined;
+                var _iteratorNormalCompletion2 = true;
+                var _didIteratorError2 = false;
+                var _iteratorError2 = undefined;
 
                 try {
-                    for (var _iterator = selected[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var item = _step.value;
+                    for (var _iterator2 = selected[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        var _item = _step2.value;
 
-                        item.translate(translation);
+                        _item.translate(translation);
                     }
                 } catch (err) {
-                    _didIteratorError = true;
-                    _iteratorError = err;
+                    _didIteratorError2 = true;
+                    _iteratorError2 = err;
                 } finally {
                     try {
-                        if (!_iteratorNormalCompletion && _iterator.return) {
-                            _iterator.return();
+                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                            _iterator2.return();
                         }
                     } finally {
-                        if (_didIteratorError) {
-                            throw _iteratorError;
+                        if (_didIteratorError2) {
+                            throw _iteratorError2;
                         }
                     }
                 }
 
                 this.boundingBoxTool.setSelectionBounds();
+                event.preventDefault();
             }
         }
     }, {
@@ -27233,7 +27272,7 @@ var _log2 = _interopRequireDefault(_log);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _stylePath = __webpack_require__(9);
 
@@ -29263,7 +29302,7 @@ var _selection = __webpack_require__(3);
 
 var _layer = __webpack_require__(11);
 
-var _view = __webpack_require__(26);
+var _view = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29757,7 +29796,7 @@ var _guides = __webpack_require__(34);
 
 var _group = __webpack_require__(27);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(24);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30703,7 +30742,9 @@ var _group = __webpack_require__(27);
 
 var _item = __webpack_require__(33);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(24);
+
+var _view = __webpack_require__(21);
 
 var _selection = __webpack_require__(3);
 
@@ -30815,7 +30856,11 @@ var MoveTool = function () {
     }, {
         key: 'onMouseDrag',
         value: function onMouseDrag(event) {
-            var dragVector = event.point.subtract(event.downPoint);
+            var point = event.point;
+            point.x = Math.max(0, Math.min(point.x, _view.ART_BOARD_WIDTH));
+            point.y = Math.max(0, Math.min(point.y, _view.ART_BOARD_HEIGHT));
+            var dragVector = point.subtract(event.downPoint);
+
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -33212,7 +33257,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.updateIntl = exports.intlInitialState = exports.IntlProvider = exports.default = undefined;
 
-var _reactIntl = __webpack_require__(22);
+var _reactIntl = __webpack_require__(23);
 
 var _reactIntlRedux = __webpack_require__(346);
 
@@ -33265,7 +33310,7 @@ exports.default = void 0;
 
 var _reactRedux = __webpack_require__(6);
 
-var _reactIntl = __webpack_require__(22);
+var _reactIntl = __webpack_require__(23);
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -34177,7 +34222,7 @@ var _selection = __webpack_require__(3);
 
 var _bitmap = __webpack_require__(20);
 
-var _view = __webpack_require__(26);
+var _view = __webpack_require__(21);
 
 var _eyeDropper2 = __webpack_require__(100);
 
@@ -38510,7 +38555,7 @@ exports.backends = {
 /* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Transform = __webpack_require__(25),
+var Transform = __webpack_require__(26),
     Filter = __webpack_require__(136);
 
 var log = new Transform(),
@@ -38618,7 +38663,7 @@ module.exports = M;
 /***/ (function(module, exports, __webpack_require__) {
 
 // default filter
-var Transform = __webpack_require__(25);
+var Transform = __webpack_require__(26);
 
 var levelMap = { debug: 1, info: 2, warn: 3, error: 4 };
 
@@ -38679,7 +38724,7 @@ module.exports = Filter;
 /* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Transform = __webpack_require__(25);
+var Transform = __webpack_require__(26);
 
 var newlines = /\n+$/,
     logger = new Transform();
@@ -38717,7 +38762,7 @@ module.exports = logger;
 /* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Transform = __webpack_require__(25),
+var Transform = __webpack_require__(26),
     color = __webpack_require__(77);
 
 var colors = { debug: ['cyan'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
@@ -38741,7 +38786,7 @@ module.exports = logger;
 /* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Transform = __webpack_require__(25),
+var Transform = __webpack_require__(26),
     color = __webpack_require__(77),
     colors = { debug: ['gray'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
     logger = new Transform();
@@ -38773,7 +38818,7 @@ module.exports = logger;
 /* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Transform = __webpack_require__(25),
+var Transform = __webpack_require__(26),
     cache = [ ];
 
 var logger = new Transform();
@@ -38793,7 +38838,7 @@ module.exports = logger;
 /* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Transform = __webpack_require__(25),
+var Transform = __webpack_require__(26),
     cache = false;
 
 var logger = new Transform();
@@ -38813,7 +38858,7 @@ module.exports = logger;
 /* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Transform = __webpack_require__(25);
+var Transform = __webpack_require__(26);
 
 var cid = new Date().valueOf().toString(36);
 
@@ -38938,7 +38983,7 @@ var _classnames = __webpack_require__(17);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _reactIntl = __webpack_require__(22);
+var _reactIntl = __webpack_require__(23);
 
 var _react = __webpack_require__(0);
 
@@ -42100,9 +42145,9 @@ var _layer = __webpack_require__(11);
 
 var _selectedItems = __webpack_require__(7);
 
-var _view = __webpack_require__(26);
+var _view = __webpack_require__(21);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(24);
 
 var _hover = __webpack_require__(42);
 
@@ -43424,7 +43469,7 @@ var _scrollableCanvas = __webpack_require__(179);
 
 var _scrollableCanvas2 = _interopRequireDefault(_scrollableCanvas);
 
-var _view = __webpack_require__(26);
+var _view = __webpack_require__(21);
 
 var _viewBounds = __webpack_require__(47);
 
@@ -43814,7 +43859,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _bitBrushMode = __webpack_require__(185);
 
@@ -44934,7 +44979,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _bitLineMode = __webpack_require__(191);
 
@@ -45143,7 +45188,7 @@ var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(20);
 
-var _view = __webpack_require__(26);
+var _view = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45344,7 +45389,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -45799,6 +45844,8 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _selection = __webpack_require__(3);
 
+var _view = __webpack_require__(21);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -45824,6 +45871,7 @@ var ScaleTool = function () {
         this.itemGroup = null;
         // Lowest item above all scale items in z index
         this.itemToInsertBelow = null;
+        this.lastPoint = null;
         this.onUpdateImage = onUpdateImage;
     }
 
@@ -45898,6 +45946,13 @@ var ScaleTool = function () {
         key: 'onMouseDrag',
         value: function onMouseDrag(event) {
             if (!this.active) return;
+            var point = event.point;
+            point.x = Math.max(0, Math.min(point.x, _view.ART_BOARD_WIDTH));
+            point.y = Math.max(0, Math.min(point.y, _view.ART_BOARD_HEIGHT));
+
+            if (!this.lastPoint) this.lastPoint = event.lastPoint;
+            var delta = point.subtract(this.lastPoint);
+            this.lastPoint = point;
 
             var modOrigSize = this.origSize;
 
@@ -45917,7 +45972,7 @@ var ScaleTool = function () {
                 this.pivot = this.origPivot;
             }
 
-            this.corner = this.corner.add(event.delta);
+            this.corner = this.corner.add(delta);
             var size = this.corner.subtract(this.pivot);
             var sx = 1.0;
             var sy = 1.0;
@@ -45943,6 +45998,7 @@ var ScaleTool = function () {
         key: 'onMouseUp',
         value: function onMouseUp() {
             if (!this.active) return;
+            this.lastPoint = null;
 
             this.pivot = null;
             this.origPivot = null;
@@ -46240,7 +46296,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -47380,7 +47436,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -49480,7 +49536,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -50543,7 +50599,7 @@ var _reactPopover = __webpack_require__(62);
 
 var _reactPopover2 = _interopRequireDefault(_reactPopover);
 
-var _reactIntl = __webpack_require__(22);
+var _reactIntl = __webpack_require__(23);
 
 var _colorButton = __webpack_require__(96);
 
@@ -52957,7 +53013,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactIntl = __webpack_require__(22);
+var _reactIntl = __webpack_require__(23);
 
 var _classnames = __webpack_require__(17);
 
@@ -54023,7 +54079,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _hover = __webpack_require__(67);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(24);
 
 var _stylePath = __webpack_require__(9);
 
@@ -54378,7 +54434,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(24);
 
 var _lineMode = __webpack_require__(263);
 
@@ -55254,7 +55310,7 @@ var _dropdown = __webpack_require__(102);
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
-var _reactIntl = __webpack_require__(22);
+var _reactIntl = __webpack_require__(23);
 
 var _format = __webpack_require__(16);
 
@@ -56717,7 +56773,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(24);
 
 var _layer = __webpack_require__(11);
 
@@ -57184,7 +57240,7 @@ var _label = __webpack_require__(52);
 
 var _label2 = _interopRequireDefault(_label);
 
-var _reactIntl = __webpack_require__(22);
+var _reactIntl = __webpack_require__(23);
 
 var _input = __webpack_require__(68);
 
@@ -58278,7 +58334,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -58738,7 +58794,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -59752,7 +59808,9 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(24);
+
+var _view = __webpack_require__(21);
 
 var _selection = __webpack_require__(3);
 
@@ -59788,6 +59846,7 @@ var PointTool = function () {
         this.selectedItems = null;
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
+        this.lastPoint = null;
         this.onUpdateImage = onUpdateImage;
     }
 
@@ -59909,7 +59968,14 @@ var PointTool = function () {
             this.invertDeselect = false;
             this.deleteOnMouseUp = null;
 
-            var dragVector = event.point.subtract(event.downPoint);
+            var point = event.point;
+            point.x = Math.max(0, Math.min(point.x, _view.ART_BOARD_WIDTH));
+            point.y = Math.max(0, Math.min(point.y, _view.ART_BOARD_HEIGHT));
+
+            if (!this.lastPoint) this.lastPoint = event.lastPoint;
+            var dragVector = point.subtract(event.downPoint);
+            var delta = point.subtract(this.lastPoint);
+            this.lastPoint = point;
 
             var selectedSegments = (0, _selection.getSelectedSegments)();
             var _iteratorNormalCompletion = true;
@@ -59929,7 +59995,7 @@ var PointTool = function () {
                     if (event.modifiers.shift) {
                         seg.point = seg.origPoint.add((0, _math.snapDeltaToAngle)(dragVector, Math.PI / 4));
                     } else {
-                        seg.point = seg.point.add(event.delta);
+                        seg.point = seg.point.add(delta);
                     }
                 }
             } catch (err) {
@@ -59950,6 +60016,8 @@ var PointTool = function () {
     }, {
         key: 'onMouseUp',
         value: function onMouseUp() {
+            this.lastPoint = null;
+
             // resetting the items and segments origin points for the next usage
             var moved = false;
             var selectedSegments = (0, _selection.getSelectedSegments)();
@@ -60910,7 +60978,7 @@ var _reactPopover = __webpack_require__(62);
 
 var _reactPopover2 = _interopRequireDefault(_reactPopover);
 
-var _reactIntl = __webpack_require__(22);
+var _reactIntl = __webpack_require__(23);
 
 var _colorButton = __webpack_require__(96);
 
@@ -61212,7 +61280,7 @@ var _textEditTarget = __webpack_require__(53);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -62673,9 +62741,9 @@ var _bitmap = __webpack_require__(20);
 
 var _undo2 = __webpack_require__(56);
 
-var _math = __webpack_require__(23);
+var _math = __webpack_require__(24);
 
-var _view = __webpack_require__(26);
+var _view = __webpack_require__(21);
 
 var _modes = __webpack_require__(4);
 
@@ -62962,7 +63030,7 @@ var _fillColor3 = __webpack_require__(49);
 
 var _fillColor4 = _interopRequireDefault(_fillColor3);
 
-var _selectionGradientType = __webpack_require__(21);
+var _selectionGradientType = __webpack_require__(22);
 
 var _selectionGradientType2 = _interopRequireDefault(_selectionGradientType);
 
