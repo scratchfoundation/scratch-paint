@@ -85,7 +85,7 @@ class OvalTool extends paper.Tool {
         if (this.oval) {
             if (this.filled) {
                 this.oval.fillColor = this.color;
-                this.oval.strokeWidh = 0;
+                this.oval.strokeWidth = 0;
                 this.oval.strokeColor = null;
             } else {
                 this.oval.fillColor = null;

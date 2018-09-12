@@ -85,7 +85,7 @@ class RectTool extends paper.Tool {
         if (this.rect) {
             if (this.filled) {
                 this.rect.fillColor = this.color;
-                this.rect.strokeWidh = 0;
+                this.rect.strokeWidth = 0;
                 this.rect.strokeColor = null;
             } else {
                 this.rect.fillColor = null;
