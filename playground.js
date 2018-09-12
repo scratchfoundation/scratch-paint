@@ -21724,7 +21724,7 @@ exports.DEFAULT_COLOR = DEFAULT_COLOR;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.selectAllBitmap = exports.scaleBitmap = exports.flipBitmapVertical = exports.flipBitmapHorizontal = exports.forEachLinePoint = exports.drawEllipse = exports.getTrimmedRaster = exports.getHitBounds = exports.getBrushMark = exports.floodFillAll = exports.floodFill = exports.outlineRect = exports.fillRect = exports.convertToVector = exports.convertToBitmap = exports.commitSelectionToBitmap = undefined;
+exports.selectAllBitmap = exports.scaleBitmap = exports.flipBitmapVertical = exports.flipBitmapHorizontal = exports.forEachLinePoint = exports.drawEllipse = exports.getTrimmedRaster = exports.getHitBounds = exports.getBrushMark = exports.floodFillAll = exports.floodFill = exports.outlineRect = exports.fillRect = exports.convertToVector = exports.convertToBitmap = exports.commitRectToBitmap = exports.commitOvalToBitmap = exports.commitSelectionToBitmap = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -22450,6 +22450,47 @@ var commitSelectionToBitmap = function commitSelectionToBitmap(selection, bitmap
     commitArbitraryTransformation_(selection, bitmap);
 };
 
+/**
+ * @param {paper.Shape.Ellipse} oval Vector oval to convert
+ * @param {paper.Raster} bitmap raster to draw selection
+ * @return {bool} true if the oval was drawn
+ */
+var commitOvalToBitmap = function commitOvalToBitmap(oval, bitmap) {
+    var radiusX = Math.abs(oval.size.width / 2);
+    var radiusY = Math.abs(oval.size.height / 2);
+    var context = bitmap.getContext('2d');
+    var filled = oval.strokeWidth === 0;
+    context.fillStyle = filled ? oval.fillColor.toCSS() : oval.strokeColor.toCSS();
+
+    var drew = drawEllipse({
+        position: oval.position,
+        radiusX: radiusX,
+        radiusY: radiusY,
+        matrix: oval.matrix,
+        isFilled: filled,
+        thickness: oval.strokeWidth / _paper2.default.view.zoom
+    }, context);
+
+    return drew;
+};
+
+/**
+ * @param {paper.Rectangle} rect Vector rectangle to convert
+ * @param {paper.Raster} bitmap raster to draw selection to
+ */
+var commitRectToBitmap = function commitRectToBitmap(rect, bitmap) {
+    var tmpCanvas = (0, _layer.createCanvas)();
+    var context = tmpCanvas.getContext('2d');
+    var filled = rect.strokeWidth === 0;
+    context.fillStyle = filled ? rect.fillColor.toCSS() : rect.strokeColor.toCSS();
+    if (filled) {
+        fillRect(rect, context);
+    } else {
+        outlineRect(rect, rect.strokeWidth / _paper2.default.view.zoom, context);
+    }
+    bitmap.drawImage(tmpCanvas, new _paper2.default.Point());
+};
+
 var selectAllBitmap = function selectAllBitmap(clearSelectedItems) {
     (0, _selection.clearSelection)(clearSelectedItems);
 
@@ -22464,6 +22505,8 @@ var selectAllBitmap = function selectAllBitmap(clearSelectedItems) {
 };
 
 exports.commitSelectionToBitmap = commitSelectionToBitmap;
+exports.commitOvalToBitmap = commitOvalToBitmap;
+exports.commitRectToBitmap = commitRectToBitmap;
 exports.convertToBitmap = convertToBitmap;
 exports.convertToVector = convertToVector;
 exports.fillRect = fillRect;
@@ -45689,7 +45732,7 @@ var OvalTool = function (_paper$Tool) {
             if (this.oval) {
                 if (this.filled) {
                     this.oval.fillColor = this.color;
-                    this.oval.strokeWidh = 0;
+                    this.oval.strokeWidth = 0;
                     this.oval.strokeColor = null;
                 } else {
                     this.oval.fillColor = null;
@@ -45786,31 +45829,16 @@ var OvalTool = function (_paper$Tool) {
                 }
             }
             this.active = false;
+            this.onUpdateImage();
         }
     }, {
         key: 'commitOval',
         value: function commitOval() {
             if (!this.oval || !this.oval.isInserted()) return;
 
-            var radiusX = Math.abs(this.oval.size.width / 2);
-            var radiusY = Math.abs(this.oval.size.height / 2);
-            var context = (0, _layer.getRaster)().getContext('2d');
-            context.fillStyle = this.color;
-
-            var drew = (0, _bitmap.drawEllipse)({
-                position: this.oval.position,
-                radiusX: radiusX,
-                radiusY: radiusY,
-                matrix: this.oval.matrix,
-                isFilled: this.filled,
-                thickness: this.thickness / _paper2.default.view.zoom
-            }, context);
-
+            (0, _bitmap.commitOvalToBitmap)(this.oval, (0, _layer.getRaster)());
             this.oval.remove();
             this.oval = null;
-            if (drew) {
-                this.onUpdateImage();
-            }
         }
     }, {
         key: 'deactivateTool',
@@ -46596,7 +46624,7 @@ var RectTool = function (_paper$Tool) {
             if (this.rect) {
                 if (this.filled) {
                     this.rect.fillColor = this.color;
-                    this.rect.strokeWidh = 0;
+                    this.rect.strokeWidth = 0;
                     this.rect.strokeColor = null;
                 } else {
                     this.rect.fillColor = null;
@@ -46687,25 +46715,17 @@ var RectTool = function (_paper$Tool) {
                 }
             }
             this.active = false;
+            this.onUpdateImage();
         }
     }, {
         key: 'commitRect',
         value: function commitRect() {
             if (!this.rect || !this.rect.isInserted()) return;
 
-            var tmpCanvas = (0, _layer.createCanvas)();
-            var context = tmpCanvas.getContext('2d');
-            context.fillStyle = this.color;
-            if (this.filled) {
-                (0, _bitmap.fillRect)(this.rect, context);
-            } else {
-                (0, _bitmap.outlineRect)(this.rect, this.thickness / _paper2.default.view.zoom, context);
-            }
-            (0, _layer.getRaster)().drawImage(tmpCanvas, new _paper2.default.Point());
+            (0, _bitmap.commitRectToBitmap)(this.rect, (0, _layer.getRaster)());
 
             this.rect.remove();
             this.rect = null;
-            this.onUpdateImage();
         }
     }, {
         key: 'deactivateTool',
@@ -62804,18 +62824,26 @@ var UpdateImageHOC = function UpdateImageHOC(WrappedComponent) {
                     _log2.default.warn('Bitmap layer should be loaded before calling updateImage.');
                     return;
                 }
+                // Anything that is selected is on the vector layer waiting to be committed to the bitmap layer.
                 // Plaster the selection onto the raster layer before exporting, if there is a selection.
                 var plasteredRaster = (0, _layer.getRaster)().getSubRaster((0, _layer.getRaster)().bounds);
                 plasteredRaster.remove(); // Don't insert
                 var selectedItems = (0, _selection.getSelectedLeafItems)();
-                if (selectedItems.length === 1 && selectedItems[0] instanceof _paper2.default.Raster) {
-                    if (!selectedItems[0].loaded || selectedItems[0].data && selectedItems[0].data.expanded && !selectedItems[0].data.expanded.loaded) {
-                        // This may get logged when rapidly undoing/redoing or changing costumes,
-                        // in which case the warning is not relevant.
-                        _log2.default.warn('Bitmap layer should be loaded before calling updateImage.');
-                        return;
+                if (selectedItems.length === 1) {
+                    var item = selectedItems[0];
+                    if (item instanceof _paper2.default.Raster) {
+                        if (!item.loaded || item.data && item.data.expanded && !item.data.expanded.loaded) {
+                            // This may get logged when rapidly undoing/redoing or changing costumes,
+                            // in which case the warning is not relevant.
+                            _log2.default.warn('Bitmap layer should be loaded before calling updateImage.');
+                            return;
+                        }
+                        (0, _bitmap.commitSelectionToBitmap)(item, plasteredRaster);
+                    } else if (item instanceof _paper2.default.Shape && item.type === 'rectangle') {
+                        (0, _bitmap.commitRectToBitmap)(item, plasteredRaster);
+                    } else if (item instanceof _paper2.default.Shape && item.type === 'ellipse') {
+                        (0, _bitmap.commitOvalToBitmap)(item, plasteredRaster);
                     }
-                    (0, _bitmap.commitSelectionToBitmap)(selectedItems[0], plasteredRaster);
                 }
                 var rect = (0, _bitmap.getHitBounds)(plasteredRaster);
                 this.props.onUpdateImage(false /* isVector */
