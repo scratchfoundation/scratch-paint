@@ -64,7 +64,10 @@ class OvalTool extends paper.Tool {
             if (this.oval.data.zoomLevel !== paper.view.zoom) {
                 this.oval.strokeWidth = this.oval.strokeWidth / this.oval.data.zoomLevel * paper.view.zoom;
                 this.oval.data.zoomLevel = paper.view.zoom;
+                this.thickness = this.oval.strokeWidth;
             }
+            this.filled = this.oval.strokeWidth === 0;
+            this.color = this.filled ? this.oval.fillColor.toCSS() : this.oval.strokeColor.toCSS();
         } else if (this.oval && this.oval.isInserted() && !this.oval.selected) {
             // Oval got deselected
             this.commitOval();
@@ -81,25 +84,31 @@ class OvalTool extends paper.Tool {
         }
     }
     setFilled (filled) {
+        if (this.filled === filled) return;
         this.filled = filled;
-        if (this.oval) {
+        if (this.oval && this.oval.isInserted()) {
             if (this.filled) {
                 this.oval.fillColor = this.color;
-                this.oval.strokeWidh = 0;
+                this.oval.strokeWidth = 0;
                 this.oval.strokeColor = null;
             } else {
                 this.oval.fillColor = null;
                 this.oval.strokeWidth = this.thickness;
                 this.oval.strokeColor = this.color;
             }
+            this.onUpdateImage();
         }
     }
     setThickness (thickness) {
+        if (this.thickness === thickness * paper.view.zoom) return;
         this.thickness = thickness * paper.view.zoom;
-        if (this.oval && !this.filled) {
+        if (this.oval && this.oval.isInserted() && !this.filled) {
             this.oval.strokeWidth = this.thickness;
         }
-        if (this.oval) this.oval.data.zoomLevel = paper.view.zoom;
+        if (this.oval && this.oval.isInserted()) {
+            this.oval.data.zoomLevel = paper.view.zoom;
+            this.onUpdateImage();
+        }
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button

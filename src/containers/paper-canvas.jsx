@@ -18,6 +18,7 @@ import {clearPasteOffset} from '../reducers/clipboard';
 import {changeFormat} from '../reducers/format';
 import {updateViewBounds} from '../reducers/view-bounds';
 import {saveZoomLevel, setZoomLevelId} from '../reducers/zoom-levels';
+
 import styles from './paper-canvas.css';
 
 class PaperCanvas extends React.Component {

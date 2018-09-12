@@ -32,15 +32,15 @@ class BitOvalMode extends React.Component {
             if (nextProps.color !== this.props.color) {
                 this.tool.setColor(nextProps.color);
             }
+            if (nextProps.selectedItems !== this.props.selectedItems) {
+                this.tool.onSelectionChanged(nextProps.selectedItems);
+            }
             if (nextProps.filled !== this.props.filled) {
                 this.tool.setFilled(nextProps.filled);
             }
             if (nextProps.thickness !== this.props.thickness ||
                     nextProps.zoom !== this.props.zoom) {
                 this.tool.setThickness(nextProps.thickness);
-            }
-            if (nextProps.selectedItems !== this.props.selectedItems) {
-                this.tool.onSelectionChanged(nextProps.selectedItems);
             }
         }
 
