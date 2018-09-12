@@ -146,11 +146,9 @@ class PointTool {
         this.deleteOnMouseUp = null;
         
         const point = event.point;
-        if (event.point.x > ART_BOARD_WIDTH || event.point.y > ART_BOARD_HEIGHT ||
-                event.point.x < 0 || event.point.y < 0) {
-            point.x = Math.max(0, Math.min(point.x, ART_BOARD_WIDTH));
-            point.y = Math.max(0, Math.min(point.y, ART_BOARD_HEIGHT));
-        }
+        point.x = Math.max(0, Math.min(point.x, ART_BOARD_WIDTH));
+        point.y = Math.max(0, Math.min(point.y, ART_BOARD_HEIGHT));
+
         if (!this.lastPoint) this.lastPoint = event.lastPoint;
         const dragVector = point.subtract(event.downPoint);
         const delta = point.subtract(this.lastPoint);

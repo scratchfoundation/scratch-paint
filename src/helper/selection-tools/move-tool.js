@@ -99,12 +99,10 @@ class MoveTool {
     }
     onMouseDrag (event) {
         const point = event.point;
-        if (event.point.x > ART_BOARD_WIDTH || event.point.y > ART_BOARD_HEIGHT ||
-                event.point.x < 0 || event.point.y < 0) {
-            point.x = Math.max(0, Math.min(point.x, ART_BOARD_WIDTH));
-            point.y = Math.max(0, Math.min(point.y, ART_BOARD_HEIGHT));
-        }
+        point.x = Math.max(0, Math.min(point.x, ART_BOARD_WIDTH));
+        point.y = Math.max(0, Math.min(point.y, ART_BOARD_HEIGHT));
         const dragVector = point.subtract(event.downPoint);
+
         for (const item of this.selectedItems) {
             // add the position of the item before the drag started
             // for later use in the snap calculation

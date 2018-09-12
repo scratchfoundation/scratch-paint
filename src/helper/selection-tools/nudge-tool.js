@@ -50,7 +50,6 @@ class NudgeTool {
             translation = new paper.Point(Math.min(nudgeAmount, ART_BOARD_WIDTH - rect.left - 1), 0);
         }
 
-
         if (translation) {
             for (const item of selected) {
                 item.translate(translation);
