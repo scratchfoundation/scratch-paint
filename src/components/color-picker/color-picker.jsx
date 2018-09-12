@@ -19,6 +19,7 @@ import fillRadialIcon from './icons/fill-radial-enabled.svg';
 import fillSolidIcon from './icons/fill-solid-enabled.svg';
 import fillVertGradientIcon from './icons/fill-vert-gradient-enabled.svg';
 import swapIcon from './icons/swap.svg';
+import Modes from '../../lib/modes';
 
 const hsvToHex = (h, s, v) =>
     // Scale hue back up to [0, 360] from [0, 100]
@@ -243,22 +244,27 @@ class ColorPickerComponent extends React.Component {
                 </div>
                 <div className={styles.swatchRow}>
                     <div className={styles.swatches}>
-                        <div
-                            className={classNames({
-                                [styles.clickable]: true,
-                                [styles.swatch]: true,
-                                [styles.activeSwatch]:
-                                    (this.props.colorIndex === 0 && this.props.color === null) ||
-                                    (this.props.colorIndex === 1 && this.props.color2 === null)
-                            })}
-                            onClick={this.props.onTransparent}
-                        >
-                            <img
-                                className={styles.swatchIcon}
-                                draggable={false}
-                                src={noFillIcon}
-                            />
-                        </div>
+                        {this.props.mode === Modes.BIT_LINE ||
+                            this.props.mode === Modes.BIT_RECT ||
+                            this.props.mode === Modes.BIT_OVAL ||
+                            this.props.mode === Modes.BIT_TEXT ? null :
+                            (<div
+                                className={classNames({
+                                    [styles.clickable]: true,
+                                    [styles.swatch]: true,
+                                    [styles.activeSwatch]:
+                                        (this.props.colorIndex === 0 && this.props.color === null) ||
+                                        (this.props.colorIndex === 1 && this.props.color2 === null)
+                                })}
+                                onClick={this.props.onTransparent}
+                            >
+                                <img
+                                    className={styles.swatchIcon}
+                                    draggable={false}
+                                    src={noFillIcon}
+                                />
+                            </div>)
+                        }
                     </div>
                     <div className={styles.swatches}>
                         <div
@@ -291,6 +297,7 @@ ColorPickerComponent.propTypes = {
     hue: PropTypes.number.isRequired,
     intl: intlShape.isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
+    mode: PropTypes.oneOf(Object.keys(Modes)),
     onActivateEyeDropper: PropTypes.func.isRequired,
     onBrightnessChange: PropTypes.func.isRequired,
     onChangeGradientTypeHorizontal: PropTypes.func.isRequired,

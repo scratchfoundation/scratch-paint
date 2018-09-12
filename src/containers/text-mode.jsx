@@ -83,7 +83,7 @@ class TextMode extends React.Component {
         // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
         const {fillColor, strokeColor, strokeWidth} = nextProps.colorState;
         const fillColorPresent = fillColor !== MIXED && fillColor !== null;
-        const strokeColorPresent =
+        const strokeColorPresent = nextProps.isBitmap ? false :
             strokeColor !== MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
         if (!fillColorPresent && !strokeColorPresent) {
             this.props.onChangeFillColor(DEFAULT_COLOR);

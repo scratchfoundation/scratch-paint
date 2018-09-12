@@ -12,6 +12,7 @@ import GradientTypes from '../lib/gradient-types';
 
 import ColorPickerComponent from '../components/color-picker/color-picker.jsx';
 import {MIXED} from '../helper/style-path';
+import Modes from '../lib/modes';
 
 const colorStringToHsv = hexString => {
     const hsv = parseColor(hexString).hsv;
@@ -129,6 +130,7 @@ class ColorPicker extends React.Component {
                 gradientType={this.props.gradientType}
                 hue={this.state.hue}
                 isEyeDropping={this.props.isEyeDropping}
+                mode={this.props.mode}
                 rtl={this.props.rtl}
                 saturation={this.state.saturation}
                 shouldShowGradientTools={this.props.shouldShowGradientTools}
@@ -155,6 +157,7 @@ ColorPicker.propTypes = {
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
+    mode: PropTypes.oneOf(Object.keys(Modes)),
     onActivateEyeDropper: PropTypes.func.isRequired,
     onChangeColor: PropTypes.func.isRequired,
     onChangeGradientType: PropTypes.func,
@@ -168,6 +171,7 @@ ColorPicker.propTypes = {
 const mapStateToProps = state => ({
     colorIndex: state.scratchPaint.fillMode.colorIndex,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
+    mode: state.scratchPaint.mode,
     rtl: state.scratchPaint.layout.rtl
 });
 
