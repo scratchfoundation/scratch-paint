@@ -747,7 +747,8 @@ const commitOvalToBitmap = function (oval, bitmap) {
     const radiusY = Math.abs(oval.size.height / 2);
     const context = bitmap.getContext('2d');
     const filled = oval.strokeWidth === 0;
-    context.fillStyle = filled ? oval.fillColor.toCSS() : oval.strokeColor.toCSS();
+    context.fillStyle = filled ?
+        oval.fillColor && oval.fillColor.toCSS() : oval.strokeColor && oval.strokeColor.toCSS();
 
     const drew = drawEllipse({
         position: oval.position,
@@ -769,7 +770,8 @@ const commitRectToBitmap = function (rect, bitmap) {
     const tmpCanvas = createCanvas();
     const context = tmpCanvas.getContext('2d');
     const filled = rect.strokeWidth === 0;
-    context.fillStyle = filled ? rect.fillColor.toCSS() : rect.strokeColor.toCSS();
+    context.fillStyle = filled ?
+        rect.fillColor && rect.fillColor.toCSS() : rect.strokeColor && rect.strokeColor.toCSS();
     if (filled) {
         fillRect(rect, context);
     } else {
