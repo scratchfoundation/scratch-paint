@@ -22460,7 +22460,7 @@ var commitOvalToBitmap = function commitOvalToBitmap(oval, bitmap) {
     var radiusY = Math.abs(oval.size.height / 2);
     var context = bitmap.getContext('2d');
     var filled = oval.strokeWidth === 0;
-    context.fillStyle = filled ? oval.fillColor.toCSS() : oval.strokeColor.toCSS();
+    context.fillStyle = filled ? oval.fillColor && oval.fillColor.toCSS() : oval.strokeColor && oval.strokeColor.toCSS();
 
     var drew = drawEllipse({
         position: oval.position,
@@ -22482,7 +22482,7 @@ var commitRectToBitmap = function commitRectToBitmap(rect, bitmap) {
     var tmpCanvas = (0, _layer.createCanvas)();
     var context = tmpCanvas.getContext('2d');
     var filled = rect.strokeWidth === 0;
-    context.fillStyle = filled ? rect.fillColor.toCSS() : rect.strokeColor.toCSS();
+    context.fillStyle = filled ? rect.fillColor && rect.fillColor.toCSS() : rect.strokeColor && rect.strokeColor.toCSS();
     if (filled) {
         fillRect(rect, context);
     } else {
