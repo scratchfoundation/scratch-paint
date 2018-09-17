@@ -29184,7 +29184,6 @@ var _restore = function _restore(entry, setSelectedItems, onUpdateImage, isBitma
     }
 
     (0, _layer.getRaster)().onLoad = onLoad;
-    if ((0, _layer.getRaster)().loaded) (0, _layer.getRaster)().onLoad();
     var _iteratorNormalCompletion2 = true;
     var _didIteratorError2 = false;
     var _iteratorError2 = undefined;
@@ -33126,6 +33125,16 @@ exports.changeBitEraserSize = changeBitEraserSize;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.setShapesFilled = exports.default = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _selectedItems = __webpack_require__(7);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var SET_FILLED = 'scratch-paint/fill-bitmap-shapes/SET_FILLED';
 var initialState = true;
 
@@ -33134,6 +33143,11 @@ var reducer = function reducer(state, action) {
     switch (action.type) {
         case SET_FILLED:
             return action.filled;
+        case _selectedItems.CHANGE_SELECTED_ITEMS:
+            if (action.bitmapMode && action.selectedItems && action.selectedItems[0] instanceof _paper2.default.Shape) {
+                return action.selectedItems[0].strokeWidth === 0;
+            }
+            return state;
         default:
             return state;
     }
@@ -45478,14 +45492,14 @@ var BitOvalMode = function (_React$Component) {
                 if (nextProps.color !== this.props.color) {
                     this.tool.setColor(nextProps.color);
                 }
+                if (nextProps.selectedItems !== this.props.selectedItems) {
+                    this.tool.onSelectionChanged(nextProps.selectedItems);
+                }
                 if (nextProps.filled !== this.props.filled) {
                     this.tool.setFilled(nextProps.filled);
                 }
                 if (nextProps.thickness !== this.props.thickness || nextProps.zoom !== this.props.zoom) {
                     this.tool.setThickness(nextProps.thickness);
-                }
-                if (nextProps.selectedItems !== this.props.selectedItems) {
-                    this.tool.onSelectionChanged(nextProps.selectedItems);
                 }
             }
 
@@ -45707,7 +45721,10 @@ var OvalTool = function (_paper$Tool) {
                 if (this.oval.data.zoomLevel !== _paper2.default.view.zoom) {
                     this.oval.strokeWidth = this.oval.strokeWidth / this.oval.data.zoomLevel * _paper2.default.view.zoom;
                     this.oval.data.zoomLevel = _paper2.default.view.zoom;
+                    this.thickness = this.oval.strokeWidth;
                 }
+                this.filled = this.oval.strokeWidth === 0;
+                this.color = this.filled ? this.oval.fillColor.toCSS() : this.oval.strokeColor.toCSS();
             } else if (this.oval && this.oval.isInserted() && !this.oval.selected) {
                 // Oval got deselected
                 this.commitOval();
@@ -45728,8 +45745,9 @@ var OvalTool = function (_paper$Tool) {
     }, {
         key: 'setFilled',
         value: function setFilled(filled) {
+            if (this.filled === filled) return;
             this.filled = filled;
-            if (this.oval) {
+            if (this.oval && this.oval.isInserted()) {
                 if (this.filled) {
                     this.oval.fillColor = this.color;
                     this.oval.strokeWidth = 0;
@@ -45739,16 +45757,21 @@ var OvalTool = function (_paper$Tool) {
                     this.oval.strokeWidth = this.thickness;
                     this.oval.strokeColor = this.color;
                 }
+                this.onUpdateImage();
             }
         }
     }, {
         key: 'setThickness',
         value: function setThickness(thickness) {
+            if (this.thickness === thickness * _paper2.default.view.zoom) return;
             this.thickness = thickness * _paper2.default.view.zoom;
-            if (this.oval && !this.filled) {
+            if (this.oval && this.oval.isInserted() && !this.filled) {
                 this.oval.strokeWidth = this.thickness;
             }
-            if (this.oval) this.oval.data.zoomLevel = _paper2.default.view.zoom;
+            if (this.oval && this.oval.isInserted()) {
+                this.oval.data.zoomLevel = _paper2.default.view.zoom;
+                this.onUpdateImage();
+            }
         }
     }, {
         key: 'handleMouseDown',
@@ -46370,14 +46393,14 @@ var BitRectMode = function (_React$Component) {
                 if (nextProps.color !== this.props.color) {
                     this.tool.setColor(nextProps.color);
                 }
+                if (nextProps.selectedItems !== this.props.selectedItems) {
+                    this.tool.onSelectionChanged(nextProps.selectedItems);
+                }
                 if (nextProps.filled !== this.props.filled) {
                     this.tool.setFilled(nextProps.filled);
                 }
                 if (nextProps.thickness !== this.props.thickness || nextProps.zoom !== this.props.zoom) {
                     this.tool.setThickness(nextProps.thickness);
-                }
-                if (nextProps.selectedItems !== this.props.selectedItems) {
-                    this.tool.onSelectionChanged(nextProps.selectedItems);
                 }
             }
 
@@ -46599,7 +46622,10 @@ var RectTool = function (_paper$Tool) {
                 if (this.rect.data.zoomLevel !== _paper2.default.view.zoom) {
                     this.rect.strokeWidth = this.rect.strokeWidth / this.rect.data.zoomLevel * _paper2.default.view.zoom;
                     this.rect.data.zoomLevel = _paper2.default.view.zoom;
+                    this.thickness = this.rect.strokeWidth;
                 }
+                this.filled = this.rect.strokeWidth === 0;
+                this.color = this.filled ? this.rect.fillColor.toCSS() : this.rect.strokeColor.toCSS();
             } else if (this.rect && this.rect.isInserted() && !this.rect.selected) {
                 // Rectangle got deselected
                 this.commitRect();
@@ -46620,8 +46646,9 @@ var RectTool = function (_paper$Tool) {
     }, {
         key: 'setFilled',
         value: function setFilled(filled) {
+            if (this.filled === filled) return;
             this.filled = filled;
-            if (this.rect) {
+            if (this.rect && this.rect.isInserted()) {
                 if (this.filled) {
                     this.rect.fillColor = this.color;
                     this.rect.strokeWidth = 0;
@@ -46631,16 +46658,21 @@ var RectTool = function (_paper$Tool) {
                     this.rect.strokeWidth = this.thickness;
                     this.rect.strokeColor = this.color;
                 }
+                this.onUpdateImage();
             }
         }
     }, {
         key: 'setThickness',
         value: function setThickness(thickness) {
+            if (this.thickness === thickness * _paper2.default.view.zoom) return;
             this.thickness = thickness * _paper2.default.view.zoom;
-            if (this.rect && !this.filled) {
+            if (this.rect && this.rect.isInserted() && !this.filled) {
                 this.rect.strokeWidth = this.thickness;
             }
-            if (this.rect) this.rect.data.zoomLevel = _paper2.default.view.zoom;
+            if (this.rect && this.rect.isInserted()) {
+                this.rect.data.zoomLevel = _paper2.default.view.zoom;
+                this.onUpdateImage();
+            }
         }
     }, {
         key: 'handleMouseDown',
@@ -47691,7 +47723,7 @@ var SelectTool = function (_paper$Tool) {
                 this.commitSelection();
             }
             if ((!this.selection || !this.selection.parent) && selectedItems && selectedItems.length === 1 && selectedItems[0] instanceof _paper2.default.Raster) {
-                // Track the new active selection. This may happen via undo or paste.
+                // Track the new active selection. This may happen via undo, paste, or drag to select.
                 this.selection = selectedItems[0];
             }
         }
