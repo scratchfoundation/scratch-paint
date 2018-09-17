@@ -44,6 +44,10 @@ const _getDepth = function (item) {
     return depth;
 };
 
+const sortHitResultsByZIndex = function (a, b) {
+    return sortItemsByZIndex(a.item, b.item);
+};
+
 const sortItemsByZIndex = function (a, b) {
     if (a === null || b === null) {
         return null;
@@ -136,5 +140,6 @@ export {
     getRandomBoolean,
     scaleWithStrokes,
     snapDeltaToAngle,
-    sortItemsByZIndex
+    sortItemsByZIndex,
+    sortHitResultsByZIndex
 };
