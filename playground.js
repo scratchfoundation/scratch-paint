@@ -45945,6 +45945,7 @@ var ScaleTool = function () {
             this.corner = boundsPath.bounds[this._getRectCornerNameByIndex(index)].clone();
             this.origSize = this.corner.subtract(this.pivot);
             this.origCenter = boundsPath.bounds.center;
+            this.isCorner = this._isCorner(index);
             this.centered = false;
             this.lastSx = 1;
             this.lastSy = 1;
@@ -46034,7 +46035,7 @@ var ScaleTool = function () {
                 sy = size.y / modOrigSize.y;
             }
 
-            if (event.modifiers.shift) {
+            if (this.isCorner && !event.modifiers.shift) {
                 var signx = sx > 0 ? 1 : -1;
                 var signy = sy > 0 ? 1 : -1;
                 sx = sy = Math.max(Math.abs(sx), Math.abs(sy));
@@ -46130,6 +46131,19 @@ var ScaleTool = function () {
                     return 'topLeft';
                 case 7:
                     return 'topCenter';
+            }
+        }
+    }, {
+        key: '_isCorner',
+        value: function _isCorner(index) {
+            switch (index) {
+                case 0:
+                case 2:
+                case 4:
+                case 6:
+                    return true;
+                default:
+                    return false;
             }
         }
     }]);
