@@ -62843,6 +62843,9 @@ var UpdateImageHOC = function UpdateImageHOC(WrappedComponent) {
                         (0, _bitmap.commitRectToBitmap)(item, plasteredRaster);
                     } else if (item instanceof _paper2.default.Shape && item.type === 'ellipse') {
                         (0, _bitmap.commitOvalToBitmap)(item, plasteredRaster);
+                    } else if (item instanceof _paper2.default.PointText) {
+                        var textRaster = item.rasterize(72, false /* insert */);
+                        plasteredRaster.drawImage(textRaster.canvas, new _paper2.default.Point(Math.floor(textRaster.bounds.x), Math.floor(textRaster.bounds.y)));
                     }
                 }
                 var rect = (0, _bitmap.getHitBounds)(plasteredRaster);
