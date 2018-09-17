@@ -40,6 +40,7 @@ class ScaleTool {
         this.corner = boundsPath.bounds[this._getRectCornerNameByIndex(index)].clone();
         this.origSize = this.corner.subtract(this.pivot);
         this.origCenter = boundsPath.bounds.center;
+        this.isCorner = this._isCorner(index);
         this.centered = false;
         this.lastSx = 1;
         this.lastSy = 1;
@@ -105,7 +106,7 @@ class ScaleTool {
             sy = size.y / modOrigSize.y;
         }
 
-        if (event.modifiers.shift) {
+        if (this.isCorner && !event.modifiers.shift) {
             const signx = sx > 0 ? 1 : -1;
             const signy = sy > 0 ? 1 : -1;
             sx = sy = Math.max(Math.abs(sx), Math.abs(sy));
@@ -195,6 +196,17 @@ class ScaleTool {
             return 'topLeft';
         case 7:
             return 'topCenter';
+        }
+    }
+    _isCorner (index) {
+        switch (index) {
+        case 0:
+        case 2:
+        case 4:
+        case 6:
+            return true;
+        default:
+            return false;
         }
     }
 }
