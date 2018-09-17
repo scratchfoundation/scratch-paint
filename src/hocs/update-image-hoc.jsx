@@ -79,6 +79,12 @@ const UpdateImageHOC = function (WrappedComponent) {
                     commitRectToBitmap(item, plasteredRaster);
                 } else if (item instanceof paper.Shape && item.type === 'ellipse') {
                     commitOvalToBitmap(item, plasteredRaster);
+                } else if (item instanceof paper.PointText) {
+                    const textRaster = item.rasterize(72, false /* insert */);
+                    plasteredRaster.drawImage(
+                        textRaster.canvas,
+                        new paper.Point(Math.floor(textRaster.bounds.x), Math.floor(textRaster.bounds.y))
+                    );
                 }
             }
             const rect = getHitBounds(plasteredRaster);
