@@ -57,7 +57,7 @@ class SelectTool extends paper.Tool {
         }
         if ((!this.selection || !this.selection.parent) &&
                 selectedItems && selectedItems.length === 1 && selectedItems[0] instanceof paper.Raster) {
-            // Track the new active selection. This may happen via undo or paste.
+            // Track the new active selection. This may happen via undo, paste, or drag to select.
             this.selection = selectedItems[0];
         }
     }

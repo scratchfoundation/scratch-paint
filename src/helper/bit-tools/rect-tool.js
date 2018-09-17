@@ -64,7 +64,10 @@ class RectTool extends paper.Tool {
             if (this.rect.data.zoomLevel !== paper.view.zoom) {
                 this.rect.strokeWidth = this.rect.strokeWidth / this.rect.data.zoomLevel * paper.view.zoom;
                 this.rect.data.zoomLevel = paper.view.zoom;
+                this.thickness = this.rect.strokeWidth;
             }
+            this.filled = this.rect.strokeWidth === 0;
+            this.color = this.filled ? this.rect.fillColor.toCSS() : this.rect.strokeColor.toCSS();
         } else if (this.rect && this.rect.isInserted() && !this.rect.selected) {
             // Rectangle got deselected
             this.commitRect();
@@ -81,8 +84,9 @@ class RectTool extends paper.Tool {
         }
     }
     setFilled (filled) {
+        if (this.filled === filled) return;
         this.filled = filled;
-        if (this.rect) {
+        if (this.rect && this.rect.isInserted()) {
             if (this.filled) {
                 this.rect.fillColor = this.color;
                 this.rect.strokeWidth = 0;
@@ -92,14 +96,19 @@ class RectTool extends paper.Tool {
                 this.rect.strokeWidth = this.thickness;
                 this.rect.strokeColor = this.color;
             }
+            this.onUpdateImage();
         }
     }
     setThickness (thickness) {
+        if (this.thickness === thickness * paper.view.zoom) return;
         this.thickness = thickness * paper.view.zoom;
-        if (this.rect && !this.filled) {
+        if (this.rect && this.rect.isInserted() && !this.filled) {
             this.rect.strokeWidth = this.thickness;
         }
-        if (this.rect) this.rect.data.zoomLevel = paper.view.zoom;
+        if (this.rect && this.rect.isInserted()) {
+            this.rect.data.zoomLevel = paper.view.zoom;
+            this.onUpdateImage();
+        }
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
