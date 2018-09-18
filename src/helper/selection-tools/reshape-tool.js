@@ -246,10 +246,11 @@ class ReshapeTool extends paper.Tool {
         const hitResult = this.getHitResult(event.point);
         if (!hitResult) return;
         const item = hitResult.item;
-        if (item.selected) return;
 
         let hoveredItem;
-        if (isBoundsItem(item)) {
+        if (item.selected) {
+            hoveredItem = null;
+        } else if (isBoundsItem(item)) {
             hoveredItem = hoverBounds(item);
         } else {
             hoveredItem = hoverItem(item);

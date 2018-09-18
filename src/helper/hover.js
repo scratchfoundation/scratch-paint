@@ -20,14 +20,14 @@ const getHoveredItem = function (event, hitOptions, subselect) {
     // sort items by z-index
     const items = [];
     for (const hitResult of hitResults) {
-        if (!(hitResult.item.data && hitResult.item.data.noHover) && !hitResult.item.selected) {
+        if (!(hitResult.item.data && hitResult.item.data.noHover)) {
             items.push(hitResult.item);
         }
     }
     items.sort(sortItemsByZIndex);
 
     const item = items[items.length - 1];
-    if (!item) {
+    if (!item || item.selected) {
         return null;
     }
 
