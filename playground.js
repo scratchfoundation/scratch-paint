@@ -24530,6 +24530,10 @@ var ensureClockwise = function ensureClockwise(root) {
 // Scale item and its strokes by factor
 var scaleWithStrokes = function scaleWithStrokes(root, factor, pivot) {
     _doRecursively(root, function (item) {
+        if (item instanceof _paper2.default.PointText) {
+            // Text outline size is controlled by text transform matrix, thus it's already scaled.
+            return;
+        }
         if (item.strokeWidth) {
             item.strokeWidth = item.strokeWidth * factor;
         }
