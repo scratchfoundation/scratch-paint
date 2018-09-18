@@ -62409,6 +62409,7 @@ var KeyboardShortcutsHOC = function KeyboardShortcutsHOC(WrappedComponent) {
                     event.preventDefault();
                     (0, _selection.clearSelection)(this.props.clearSelectedItems);
                 } else if (event.key === 'Delete' || event.key === 'Backspace') {
+                    event.preventDefault();
                     if ((0, _selection.deleteSelection)(this.props.mode, this.props.onUpdateImage)) {
                         this.props.setSelectedItems(this.props.format);
                     }
