@@ -3,8 +3,7 @@ import log from '../../log/log';
 import keyMirror from 'keymirror';
 
 import Modes from '../../lib/modes';
-import {getHoveredItem} from '../hover';
-import {getRootItem, isBoundsItem, isPGTextItem} from '../item';
+import {isBoundsItem} from '../item';
 import {hoverBounds, hoverItem} from '../guides';
 import {sortHitResultsByZIndex} from '../math';
 import {getSelectedLeafItems, getSelectedSegments} from '../selection';
@@ -155,6 +154,35 @@ class ReshapeTool extends paper.Tool {
     setPrevHoveredItemId (prevHoveredItemId) {
         this.prevHoveredItemId = prevHoveredItemId;
     }
+    getHitResult (point) {
+        // Prefer hits on segments to other types of hits, since segments always overlap curves.
+        let hitResults =
+            paper.project.hitTestAll(point, this.getSegmentHitOptions());
+        if (!hitResults.length) {
+            hitResults = paper.project.hitTestAll(point, this.getHandleHitOptions());
+        }
+        if (!hitResults.length) {
+            hitResults = paper.project.hitTestAll(point, this.getNonHandleNonFillHitOptions(true /* preselected */));
+        }
+        if (!hitResults.length) {
+            hitResults = paper.project.hitTestAll(point, this.getNonHandleNonFillHitOptions());
+        }
+        if (!hitResults.length) {
+            hitResults = paper.project.hitTestAll(point, this.getFillHitOptions());
+        }
+        if (!hitResults.length) {
+            return null;
+        }
+
+        // Get highest z-index result
+        let hitResult;
+        for (const result of hitResults) {
+            if (!hitResult || sortHitResultsByZIndex(hitResult, result) > 0) {
+                hitResult = result;
+            }
+        }
+        return hitResult;
+    }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
@@ -171,30 +199,11 @@ class ReshapeTool extends paper.Tool {
         }
         this.lastEvent = event;
 
-        // Choose hit result to use ===========================================================
-        let hitResults =
-            paper.project.hitTestAll(event.point, this.getHandleHitOptions());
-        if (!hitResults.length) {
-            // Prefer hits on segments to other types of hits, to make sure handles are movable.
-            hitResults = paper.project.hitTestAll(event.point, this.getSegmentHitOptions());
-        }
-        if (!hitResults.length) {
-            hitResults = paper.project.hitTestAll(event.point, this.getNonHandleNonFillHitOptions(true));
-        }
-        if (!hitResults.length) {
-            hitResults = paper.project.hitTestAll(event.point, this.getNonHandleNonFillHitOptions());
-        }
-        if (!hitResults.length) {
-            hitResults = paper.project.hitTestAll(event.point, this.getFillHitOptions());
-        }
-        if (!hitResults.length) {
+        const hitResult = this.getHitResult(event.point);
+        if (!hitResult) {
             this._modeMap[ReshapeModes.SELECTION_BOX].onMouseDown(event.modifiers.shift);
             return;
         }
-
-        // sort items by z-index
-        hitResults.sort(sortHitResultsByZIndex); // todo maybe don't need sort here
-        let hitResult = hitResults[hitResults.length - 1];
 
         const hitProperties = {
             hitResult: hitResult,
@@ -234,17 +243,10 @@ class ReshapeTool extends paper.Tool {
         // @todo Trigger selection changed. Update styles based on selection.
     }
     handleMouseMove (event) {
-        let hitResults =
-            paper.project.hitTestAll(event.point, this.getHandleHitOptions());
-        if (!hitResults.length) hitResults = paper.project.hitTestAll(event.point, this.getSegmentHitOptions());
-        if (!hitResults.length) hitResults = paper.project.hitTestAll(event.point, this.getNonHandleNonFillHitOptions(true));
-        if (!hitResults.length) hitResults = paper.project.hitTestAll(event.point, this.getNonHandleNonFillHitOptions());
-        if (!hitResults.length) hitResults = paper.project.hitTestAll(event.point, this.getFillHitOptions());
-        if (!hitResults.length) return;
-
-        // sort items by z-index
-        hitResults.sort(sortHitResultsByZIndex);
-        const item = hitResults[hitResults.length - 1].item;
+        const hitResult = this.getHitResult(event.point);
+        if (!hitResult) return;
+        const item = hitResult.item;
+        if (item.selected) return;
 
         let hoveredItem;
         if (isBoundsItem(item)) {

@@ -44,10 +44,6 @@ const _getDepth = function (item) {
     return depth;
 };
 
-const sortHitResultsByZIndex = function (a, b) {
-    return sortItemsByZIndex(a.item, b.item);
-};
-
 const sortItemsByZIndex = function (a, b) {
     if (a === null || b === null) {
         return null;
@@ -84,6 +80,10 @@ const sortItemsByZIndex = function (a, b) {
 
     // No shared hierarchy
     return null;
+};
+
+const sortHitResultsByZIndex = function (a, b) {
+    return sortItemsByZIndex(a.item, b.item);
 };
 
 // Expand the size of the path by amount all around
