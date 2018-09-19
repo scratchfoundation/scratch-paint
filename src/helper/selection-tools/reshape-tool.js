@@ -76,6 +76,12 @@ class ReshapeTool extends paper.Tool {
 
         paper.settings.handleSize = 8;
     }
+    /**
+     * Returns the hit options for segments to use when conducting hit tests. Segments are only visible
+     * when the shape is selected. Segments take precedence, since they are always over curves and need
+     * to be grabbable. (Segments are the little curcles)
+     * @return {object} See paper.Item.hitTest for definition of options
+     */
     getSegmentHitOptions () {
         const hitOptions = {
             segments: true,
@@ -111,7 +117,8 @@ class ReshapeTool extends paper.Tool {
         return hitOptions;
     }
     /**
-     * Returns the hit options to use when conducting hit tests.
+     * Returns the hit options to use when conducting hit tests, not including handles, segments, or fills.
+     * Non-fills take precedence over fills.
      * @param {boolean} preselectedOnly True if we should only return results that are already
      *     selected.
      * @return {object} See paper.Item.hitTest for definition of options
@@ -133,6 +140,12 @@ class ReshapeTool extends paper.Tool {
         };
         return hitOptions;
     }
+    /**
+     * Returns the hit options for fills to use when conducting hit tests.
+     * @param {boolean} preselectedOnly True if we should only return results that are already
+     *     selected.
+     * @return {object} See paper.Item.hitTest for definition of options
+     */
     getFillHitOptions () {
         const hitOptions = {
             fill: true,
@@ -154,6 +167,11 @@ class ReshapeTool extends paper.Tool {
     setPrevHoveredItemId (prevHoveredItemId) {
         this.prevHoveredItemId = prevHoveredItemId;
     }
+    /**
+     * Given the point at which the mouse is, return the prioritized hit result, or null if nothing was hit.
+     * @param {paper.Point} point Point to hit test on canvas
+     * @return {?paper.HitResult} hitResult
+     */
     getHitResult (point) {
         // Prefer hits on segments to other types of hits, since segments always overlap curves.
         let hitResults =
@@ -239,8 +257,6 @@ class ReshapeTool extends paper.Tool {
             this.mode = ReshapeModes.FILL;
             this._modeMap[this.mode].onMouseDown(hitProperties);
         }
-
-        // @todo Trigger selection changed. Update styles based on selection.
     }
     handleMouseMove (event) {
         const hitResult = this.getHitResult(event.point);
