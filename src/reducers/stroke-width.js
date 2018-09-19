@@ -13,6 +13,8 @@ const reducer = function (state, action) {
     case CHANGE_STROKE_COLOR:
         if (action.strokeColor === null) {
             return 0; // If stroke color is set to transparent, set stroke width to 0
+        } else if (state === 0 && action.strokeColor !== null) {
+            return 1; // If stroke color is changed from transparent, set a stroke width
         }
         return state;
     case CHANGE_STROKE_WIDTH:

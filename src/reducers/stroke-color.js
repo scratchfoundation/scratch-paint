@@ -14,6 +14,8 @@ const reducer = function (state, action) {
     case CHANGE_STROKE_WIDTH:
         if (!isNaN(action.strokeWidth) && Math.max(0, action.strokeWidth) === 0) {
             return null; // Change color to transparent if stroke width is set to 0
+        } else if (state === null && action.strokeWidth > 0) {
+            return '#000';
         }
         return state;
     case CHANGE_STROKE_COLOR:
