@@ -177,7 +177,7 @@ class ReshapeTool extends paper.Tool {
         // Get highest z-index result
         let hitResult;
         for (const result of hitResults) {
-            if (!hitResult || sortHitResultsByZIndex(hitResult, result) > 0) {
+            if (!hitResult || sortHitResultsByZIndex(hitResult, result) < 0) {
                 hitResult = result;
             }
         }
@@ -244,16 +244,17 @@ class ReshapeTool extends paper.Tool {
     }
     handleMouseMove (event) {
         const hitResult = this.getHitResult(event.point);
-        if (!hitResult) return;
-        const item = hitResult.item;
-
         let hoveredItem;
-        if (item.selected) {
-            hoveredItem = null;
-        } else if (isBoundsItem(item)) {
-            hoveredItem = hoverBounds(item);
-        } else {
-            hoveredItem = hoverItem(item);
+
+        if (hitResult) {
+            const item = hitResult.item;
+            if (item.selected) {
+                hoveredItem = null;
+            } else if (isBoundsItem(item)) {
+                hoveredItem = hoverBounds(item);
+            } else {
+                hoveredItem = hoverItem(item);
+            }
         }
 
         if ((!hoveredItem && this.prevHoveredItemId) || // There is no longer a hovered item

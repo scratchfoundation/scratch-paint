@@ -2,7 +2,7 @@ import paper from '@scratch/paper';
 import {isBoundsItem, getRootItem} from './item';
 import {hoverBounds, hoverItem} from './guides';
 import {isGroupChild} from './group';
-import {sortItemsByZIndex} from './math';
+import {sortHitResultsByZIndex} from './math';
 
 /**
  * @param {!MouseEvent} event mouse event
@@ -12,21 +12,24 @@ import {sortItemsByZIndex} from './math';
  * @return {paper.Item} the hovered item or null if there is none
  */
 const getHoveredItem = function (event, hitOptions, subselect) {
-    // @todo make hit test only hit painting layer
+    const oldMatch = hitOptions.match;
+    hitOptions.match = hitResult => {
+        if (hitResult.item.data && hitResult.item.data.noHover) return false;
+        return oldMatch ? oldMatch(hitResult) : true;
+    };
     const hitResults = paper.project.hitTestAll(event.point, hitOptions);
     if (hitResults.length === 0) {
         return null;
     }
-    // sort items by z-index
-    const items = [];
-    for (const hitResult of hitResults) {
-        if (!(hitResult.item.data && hitResult.item.data.noHover)) {
-            items.push(hitResult.item);
+
+    // Get highest z-index result
+    let hitResult;
+    for (const result of hitResults) {
+        if (!hitResult || sortHitResultsByZIndex(hitResult, result) < 0) {
+            hitResult = result;
         }
     }
-    items.sort(sortItemsByZIndex);
-
-    const item = items[items.length - 1];
+    const item = hitResult.item;
     if (!item || item.selected) {
         return null;
     }
