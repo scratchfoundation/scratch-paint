@@ -5,7 +5,7 @@ import keyMirror from 'keymirror';
 import Modes from '../../lib/modes';
 import {isBoundsItem} from '../item';
 import {hoverBounds, hoverItem} from '../guides';
-import {sortHitResultsByZIndex} from '../math';
+import {sortItemsByZIndex} from '../math';
 import {getSelectedLeafItems, getSelectedSegments} from '../selection';
 import MoveTool from './move-tool';
 import PointTool from './point-tool';
@@ -177,7 +177,7 @@ class ReshapeTool extends paper.Tool {
         // Get highest z-index result
         let hitResult;
         for (const result of hitResults) {
-            if (!hitResult || sortHitResultsByZIndex(hitResult, result) < 0) {
+            if (!hitResult || sortItemsByZIndex(hitResult.item, result.item) < 0) {
                 hitResult = result;
             }
         }

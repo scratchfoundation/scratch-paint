@@ -82,10 +82,6 @@ const sortItemsByZIndex = function (a, b) {
     return null;
 };
 
-const sortHitResultsByZIndex = function (a, b) {
-    return sortItemsByZIndex(a.item, b.item);
-};
-
 // Expand the size of the path by amount all around
 const expandBy = function (path, amount) {
     const center = path.position;
@@ -140,6 +136,5 @@ export {
     getRandomBoolean,
     scaleWithStrokes,
     snapDeltaToAngle,
-    sortItemsByZIndex,
-    sortHitResultsByZIndex
+    sortItemsByZIndex
 };

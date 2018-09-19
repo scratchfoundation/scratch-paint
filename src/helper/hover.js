@@ -2,7 +2,7 @@ import paper from '@scratch/paper';
 import {isBoundsItem, getRootItem} from './item';
 import {hoverBounds, hoverItem} from './guides';
 import {isGroupChild} from './group';
-import {sortHitResultsByZIndex} from './math';
+import {sortItemsByZIndex} from './math';
 
 /**
  * @param {!MouseEvent} event mouse event
@@ -25,7 +25,7 @@ const getHoveredItem = function (event, hitOptions, subselect) {
     // Get highest z-index result
     let hitResult;
     for (const result of hitResults) {
-        if (!hitResult || sortHitResultsByZIndex(hitResult, result) < 0) {
+        if (!hitResult || sortItemsByZIndex(hitResult.item, result.item) < 0) {
             hitResult = result;
         }
     }
