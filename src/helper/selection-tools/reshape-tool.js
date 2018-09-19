@@ -82,7 +82,7 @@ class ReshapeTool extends paper.Tool {
      * to be grabbable. (Segments are the little curcles)
      * @return {object} See paper.Item.hitTest for definition of options
      */
-    getSegmentHitOptions () {
+    getSelectedSegmentHitOptions () {
         const hitOptions = {
             segments: true,
             tolerance: ReshapeTool.TOLERANCE / paper.view.zoom,
@@ -117,13 +117,11 @@ class ReshapeTool extends paper.Tool {
         return hitOptions;
     }
     /**
-     * Returns the hit options to use when conducting hit tests, not including handles, segments, or fills.
-     * Non-fills take precedence over fills.
-     * @param {boolean} preselectedOnly True if we should only return results that are already
-     *     selected.
+     * Returns the hit options for strokes and curves of selected objects, which take precedence over
+     * unselected things and fills.
      * @return {object} See paper.Item.hitTest for definition of options
      */
-    getNonHandleNonFillHitOptions (preselectedOnly) {
+    getSelectedStrokeHitOptions () {
         const hitOptions = {
             segments: false,
             stroke: true,
@@ -133,7 +131,7 @@ class ReshapeTool extends paper.Tool {
             guide: false,
             tolerance: ReshapeTool.TOLERANCE / paper.view.zoom,
             match: hitResult => {
-                if (preselectedOnly && !hitResult.item.selected) return false;
+                if (!hitResult.item.selected) return false;
                 if (hitResult.item.data && hitResult.item.data.noHover) return false;
                 return true;
             }
@@ -141,14 +139,16 @@ class ReshapeTool extends paper.Tool {
         return hitOptions;
     }
     /**
-     * Returns the hit options for fills to use when conducting hit tests.
+     * Returns the hit options for fills and unselected strokes/curves to use when conducting hit tests.
      * @param {boolean} preselectedOnly True if we should only return results that are already
      *     selected.
      * @return {object} See paper.Item.hitTest for definition of options
      */
-    getFillHitOptions () {
+    getUnselectedAndFillHitOptions () {
         const hitOptions = {
             fill: true,
+            stroke: true,
+            curves: true,
             tolerance: ReshapeTool.TOLERANCE / paper.view.zoom,
             match: hitResult => {
                 if (hitResult.item.data && hitResult.item.data.noHover) return false;
@@ -175,18 +175,15 @@ class ReshapeTool extends paper.Tool {
     getHitResult (point) {
         // Prefer hits on segments to other types of hits, since segments always overlap curves.
         let hitResults =
-            paper.project.hitTestAll(point, this.getSegmentHitOptions());
+            paper.project.hitTestAll(point, this.getSelectedSegmentHitOptions());
         if (!hitResults.length) {
             hitResults = paper.project.hitTestAll(point, this.getHandleHitOptions());
         }
         if (!hitResults.length) {
-            hitResults = paper.project.hitTestAll(point, this.getNonHandleNonFillHitOptions(true /* preselected */));
+            hitResults = paper.project.hitTestAll(point, this.getSelectedStrokeHitOptions());
         }
         if (!hitResults.length) {
-            hitResults = paper.project.hitTestAll(point, this.getNonHandleNonFillHitOptions());
-        }
-        if (!hitResults.length) {
-            hitResults = paper.project.hitTestAll(point, this.getFillHitOptions());
+            hitResults = paper.project.hitTestAll(point, this.getUnselectedAndFillHitOptions());
         }
         if (!hitResults.length) {
             return null;
