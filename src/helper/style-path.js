@@ -434,7 +434,6 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                 selectionFillColor2String = MIXED;
             }
             if (itemStrokeColorString !== selectionStrokeColorString) {
-                debugger;
                 selectionStrokeColorString = MIXED;
             }
             const itemStrokeWidth = itemStrokeColorString ? item.strokeWidth : 0;

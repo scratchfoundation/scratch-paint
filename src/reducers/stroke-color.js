@@ -1,6 +1,5 @@
 import log from '../log/log';
 import {CHANGE_SELECTED_ITEMS} from './selected-items';
-import {CHANGE_STROKE_WIDTH} from './stroke-width';
 import {getColorsFromSelection} from '../helper/style-path';
 
 const CHANGE_STROKE_COLOR = 'scratch-paint/stroke-color/CHANGE_STROKE_COLOR';
@@ -11,13 +10,6 @@ const regExp = /^#([0-9a-f]{3}){1,2}$/i;
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
-    case CHANGE_STROKE_WIDTH:
-        if (!isNaN(action.strokeWidth) && Math.max(0, action.strokeWidth) === 0) {
-            return null; // Change color to transparent if stroke width is set to 0
-        } else if (state === null && action.strokeWidth > 0) {
-            return '#000';
-        }
-        return state;
     case CHANGE_STROKE_COLOR:
         if (!regExp.test(action.strokeColor) && action.strokeColor !== null) {
             log.warn(`Invalid hex color code: ${action.fillColor}`);
@@ -49,6 +41,5 @@ const changeStrokeColor = function (strokeColor) {
 
 export {
     reducer as default,
-    changeStrokeColor,
-    CHANGE_STROKE_COLOR
+    changeStrokeColor
 };
