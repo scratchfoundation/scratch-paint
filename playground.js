@@ -59713,6 +59713,7 @@ var ReshapeTool = function (_paper$Tool) {
             } else if (hitResult.type === 'stroke' || hitResult.type === 'curve') {
                 this.mode = ReshapeModes.POINT;
                 this._modeMap[this.mode].addPoint(hitProperties);
+                this.onUpdateImage();
                 this._modeMap[this.mode].onMouseDown(hitProperties);
             } else if (hitResult.type === 'handle-in' || hitResult.type === 'handle-out') {
                 this.mode = ReshapeModes.HANDLE;
