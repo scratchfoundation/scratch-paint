@@ -111,7 +111,7 @@ const applyFillColorToSelection = function (colorString, colorIndex, isSolidGrad
         }
 
         // In bitmap mode, fill color applies to the stroke if there is a stroke
-        if (bitmapMode && item.strokeColor !== null && item.strokeWidth !== 0) {
+        if (bitmapMode && item.strokeColor !== null && item.strokeWidth) {
             if (!_colorMatch(item.strokeColor, colorString)) {
                 changed = true;
                 item.strokeColor = colorString;
@@ -403,7 +403,7 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                 } else if (item.strokeColor.type === 'gradient') {
                     itemStrokeColorString = MIXED;
                 } else {
-                    itemStrokeColorString = item.strokeColor.alpha === 0 || item.strokeWidth === 0 ?
+                    itemStrokeColorString = item.strokeColor.alpha === 0 || !item.strokeWidth ?
                         null :
                         item.strokeColor.toCSS();
                 }
