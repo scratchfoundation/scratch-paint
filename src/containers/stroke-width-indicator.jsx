@@ -2,10 +2,12 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
+import parseColor from 'parse-color';
 import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeStrokeWidth} from '../reducers/stroke-width';
 import StrokeWidthIndicatorComponent from '../components/stroke-width-indicator.jsx';
-import {applyStrokeColorToSelection, applyStrokeWidthToSelection} from '../helper/style-path';
+import {getSelectedLeafItems} from '../helper/selection';
+import {applyStrokeColorToSelection, applyStrokeWidthToSelection, getColorsFromSelection, MIXED} from '../helper/style-path';
 import Modes from '../lib/modes';
 import Formats from '../lib/format';
 import {isBitmap} from '../lib/format';
@@ -18,17 +20,18 @@ class StrokeWidthIndicator extends React.Component {
         ]);
     }
     handleChangeStrokeWidth (newWidth) {
-        let changed = false;
+        let changed = applyStrokeWidthToSelection(newWidth, this.props.textEditTarget);
         if (this.props.strokeWidth === 0 && newWidth > 0) {
-            changed = applyStrokeColorToSelection('#000', isBitmap(this.props.format), this.props.textEditTarget) ||
-                changed;
-            this.props.onChangeStrokeColor('#000');
-        } else if (this.props.strokeWidth > 0 && newWidth === 0) {
-            changed = applyStrokeColorToSelection(null, isBitmap(this.props.format), this.props.textEditTarget) ||
-                changed;
-            this.props.onChangeStrokeColor(null);
+            let currentColor = getColorsFromSelection(getSelectedLeafItems(), isBitmap(this.props.format)).strokeColor;
+            if (currentColor === null) {
+                changed = applyStrokeColorToSelection('#000', isBitmap(this.props.format), this.props.textEditTarget) ||
+                    changed;
+                currentColor = '#000';
+            } else if (currentColor !== MIXED) {
+                currentColor = parseColor(currentColor).hex;
+            }
+            this.props.onChangeStrokeColor(currentColor);
         }
-        changed = applyStrokeWidthToSelection(newWidth, this.props.textEditTarget) || changed;
         this.props.onChangeStrokeWidth(newWidth);
         if (changed) this.props.onUpdateImage();
     }

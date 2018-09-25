@@ -443,7 +443,7 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
         }
     }
     // Convert selection gradient type from horizontal to vertical if first item is exactly vertical
-    if (selectionGradientType !== GradientTypes.SOLID) {
+    if (selectedItems && selectedItems.length && selectionGradientType !== GradientTypes.SOLID) {
         let firstItem = selectedItems[0];
         if (firstItem.parent instanceof paper.CompoundPath) firstItem = firstItem.parent;
         const direction = firstItem.fillColor.destination.subtract(firstItem.fillColor.origin);
