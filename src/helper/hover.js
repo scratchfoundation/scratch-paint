@@ -30,6 +30,7 @@ const getHoveredItem = function (event, hitOptions, subselect) {
         }
     }
     const item = hitResult.item;
+    // If the hovered item is already selected, then there should be no hovered item.
     if (!item || item.selected) {
         return null;
     }

@@ -79,7 +79,7 @@ class ReshapeTool extends paper.Tool {
     /**
      * Returns the hit options for segments to use when conducting hit tests. Segments are only visible
      * when the shape is selected. Segments take precedence, since they are always over curves and need
-     * to be grabbable. (Segments are the little curcles)
+     * to be grabbable. (Segments are the little circles)
      * @return {object} See paper.Item.hitTest for definition of options
      */
     getSelectedSegmentHitOptions () {
@@ -97,7 +97,7 @@ class ReshapeTool extends paper.Tool {
     /**
      * Returns the hit options for handles to use when conducting hit tests. Handles need to be done
      * separately because we want to ignore hidden handles, but we don't want hidden handles to negate
-     * legitimate hits on other things (like if the handle is over part of the fill)
+     * legitimate hits on other things (like if the handle is over part of the fill). (Handles are the diamonds)
      * @return {object} See paper.Item.hitTest for definition of options
      */
     getHandleHitOptions () {
