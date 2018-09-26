@@ -11,7 +11,7 @@ import {setSelectedItems} from '../reducers/selected-items';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
-import {commitSelectionToBitmap, getHitBounds} from '../helper/bitmap';
+import {commitRectToBitmap, commitOvalToBitmap, commitSelectionToBitmap, getHitBounds} from '../helper/bitmap';
 import {performSnapshot} from '../helper/undo';
 import {scaleWithStrokes} from '../helper/math';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
@@ -57,21 +57,35 @@ const UpdateImageHOC = function (WrappedComponent) {
                 log.warn('Bitmap layer should be loaded before calling updateImage.');
                 return;
             }
+            // Anything that is selected is on the vector layer waiting to be committed to the bitmap layer.
             // Plaster the selection onto the raster layer before exporting, if there is a selection.
             const plasteredRaster = getRaster().getSubRaster(getRaster().bounds);
             plasteredRaster.remove(); // Don't insert
             const selectedItems = getSelectedLeafItems();
-            if (selectedItems.length === 1 && selectedItems[0] instanceof paper.Raster) {
-                if (!selectedItems[0].loaded ||
-                    (selectedItems[0].data &&
-                        selectedItems[0].data.expanded &&
-                        !selectedItems[0].data.expanded.loaded)) {
-                    // This may get logged when rapidly undoing/redoing or changing costumes,
-                    // in which case the warning is not relevant.
-                    log.warn('Bitmap layer should be loaded before calling updateImage.');
-                    return;
+            if (selectedItems.length === 1) {
+                const item = selectedItems[0];
+                if (item instanceof paper.Raster) {
+                    if (!item.loaded ||
+                        (item.data &&
+                            item.data.expanded &&
+                            !item.data.expanded.loaded)) {
+                        // This may get logged when rapidly undoing/redoing or changing costumes,
+                        // in which case the warning is not relevant.
+                        log.warn('Bitmap layer should be loaded before calling updateImage.');
+                        return;
+                    }
+                    commitSelectionToBitmap(item, plasteredRaster);
+                } else if (item instanceof paper.Shape && item.type === 'rectangle') {
+                    commitRectToBitmap(item, plasteredRaster);
+                } else if (item instanceof paper.Shape && item.type === 'ellipse') {
+                    commitOvalToBitmap(item, plasteredRaster);
+                } else if (item instanceof paper.PointText) {
+                    const textRaster = item.rasterize(72, false /* insert */);
+                    plasteredRaster.drawImage(
+                        textRaster.canvas,
+                        new paper.Point(Math.floor(textRaster.bounds.x), Math.floor(textRaster.bounds.y))
+                    );
                 }
-                commitSelectionToBitmap(selectedItems[0], plasteredRaster);
             }
             const rect = getHitBounds(plasteredRaster);
             this.props.onUpdateImage(

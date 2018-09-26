@@ -57,7 +57,6 @@ const _restore = function (entry, setSelectedItems, onUpdateImage, isBitmapMode)
     }
 
     getRaster().onLoad = onLoad;
-    if (getRaster().loaded) getRaster().onLoad();
     for (const raster of rastersThatNeedToLoad) {
         raster.onLoad = onLoad;
         if (raster.loaded) raster.onLoad();

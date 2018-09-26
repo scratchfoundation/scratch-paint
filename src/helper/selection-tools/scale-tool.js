@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
 import {getItems} from '../selection';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
 
 /**
  * Tool to handle scaling items by pulling on the handles around the edges of the bounding
@@ -20,6 +21,7 @@ class ScaleTool {
         this.itemGroup = null;
         // Lowest item above all scale items in z index
         this.itemToInsertBelow = null;
+        this.lastPoint = null;
         this.onUpdateImage = onUpdateImage;
     }
 
@@ -38,6 +40,7 @@ class ScaleTool {
         this.corner = boundsPath.bounds[this._getRectCornerNameByIndex(index)].clone();
         this.origSize = this.corner.subtract(this.pivot);
         this.origCenter = boundsPath.bounds.center;
+        this.isCorner = this._isCorner(index);
         this.centered = false;
         this.lastSx = 1;
         this.lastSy = 1;
@@ -66,6 +69,13 @@ class ScaleTool {
     }
     onMouseDrag (event) {
         if (!this.active) return;
+        const point = event.point;
+        point.x = Math.max(0, Math.min(point.x, ART_BOARD_WIDTH));
+        point.y = Math.max(0, Math.min(point.y, ART_BOARD_HEIGHT));
+
+        if (!this.lastPoint) this.lastPoint = event.lastPoint;
+        const delta = point.subtract(this.lastPoint);
+        this.lastPoint = point;
 
         const modOrigSize = this.origSize;
 
@@ -85,7 +95,7 @@ class ScaleTool {
             this.pivot = this.origPivot;
         }
 
-        this.corner = this.corner.add(event.delta);
+        this.corner = this.corner.add(delta);
         const size = this.corner.subtract(this.pivot);
         let sx = 1.0;
         let sy = 1.0;
@@ -96,7 +106,7 @@ class ScaleTool {
             sy = size.y / modOrigSize.y;
         }
 
-        if (event.modifiers.shift) {
+        if (this.isCorner && !event.modifiers.shift) {
             const signx = sx > 0 ? 1 : -1;
             const signy = sy > 0 ? 1 : -1;
             sx = sy = Math.max(Math.abs(sx), Math.abs(sy));
@@ -109,6 +119,7 @@ class ScaleTool {
     }
     onMouseUp () {
         if (!this.active) return;
+        this.lastPoint = null;
 
         this.pivot = null;
         this.origPivot = null;
@@ -185,6 +196,17 @@ class ScaleTool {
             return 'topLeft';
         case 7:
             return 'topCenter';
+        }
+    }
+    _isCorner (index) {
+        switch (index) {
+        case 0:
+        case 2:
+        case 4:
+        case 6:
+            return true;
+        default:
+            return false;
         }
     }
 }
