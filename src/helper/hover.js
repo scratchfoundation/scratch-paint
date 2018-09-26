@@ -12,22 +12,26 @@ import {sortItemsByZIndex} from './math';
  * @return {paper.Item} the hovered item or null if there is none
  */
 const getHoveredItem = function (event, hitOptions, subselect) {
-    // @todo make hit test only hit painting layer
+    const oldMatch = hitOptions.match;
+    hitOptions.match = hitResult => {
+        if (hitResult.item.data && hitResult.item.data.noHover) return false;
+        return oldMatch ? oldMatch(hitResult) : true;
+    };
     const hitResults = paper.project.hitTestAll(event.point, hitOptions);
     if (hitResults.length === 0) {
         return null;
     }
-    // sort items by z-index
-    const items = [];
-    for (const hitResult of hitResults) {
-        if (!(hitResult.item.data && hitResult.item.data.noHover) && !hitResult.item.selected) {
-            items.push(hitResult.item);
+
+    // Get highest z-index result
+    let hitResult;
+    for (const result of hitResults) {
+        if (!hitResult || sortItemsByZIndex(hitResult.item, result.item) < 0) {
+            hitResult = result;
         }
     }
-    items.sort(sortItemsByZIndex);
-
-    const item = items[items.length - 1];
-    if (!item) {
+    const item = hitResult.item;
+    // If the hovered item is already selected, then there should be no hovered item.
+    if (!item || item.selected) {
         return null;
     }
 

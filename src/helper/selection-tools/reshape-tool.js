@@ -3,8 +3,9 @@ import log from '../../log/log';
 import keyMirror from 'keymirror';
 
 import Modes from '../../lib/modes';
-import {getHoveredItem} from '../hover';
-import {getRootItem, isPGTextItem} from '../item';
+import {isBoundsItem} from '../item';
+import {hoverBounds, hoverItem} from '../guides';
+import {sortItemsByZIndex} from '../math';
 import {getSelectedLeafItems, getSelectedSegments} from '../selection';
 import MoveTool from './move-tool';
 import PointTool from './point-tool';
@@ -76,53 +77,84 @@ class ReshapeTool extends paper.Tool {
         paper.settings.handleSize = 8;
     }
     /**
-     * Returns the hit options to use when conducting hit tests.
+     * Returns the hit options for segments to use when conducting hit tests. Segments are only visible
+     * when the shape is selected. Segments take precedence, since they are always over curves and need
+     * to be grabbable. (Segments are the little circles)
+     * @return {object} See paper.Item.hitTest for definition of options
+     */
+    getSelectedSegmentHitOptions () {
+        const hitOptions = {
+            segments: true,
+            tolerance: ReshapeTool.TOLERANCE / paper.view.zoom,
+            match: hitResult => {
+                if (hitResult.item.data && hitResult.item.data.noHover) return false;
+                if (!hitResult.item.selected) return false;
+                return true;
+            }
+        };
+        return hitOptions;
+    }
+    /**
+     * Returns the hit options for handles to use when conducting hit tests. Handles need to be done
+     * separately because we want to ignore hidden handles, but we don't want hidden handles to negate
+     * legitimate hits on other things (like if the handle is over part of the fill). (Handles are the diamonds)
+     * @return {object} See paper.Item.hitTest for definition of options
+     */
+    getHandleHitOptions () {
+        const hitOptions = {
+            handles: true,
+            tolerance: ReshapeTool.TOLERANCE / paper.view.zoom,
+            match: hitResult => {
+                if (hitResult.item.data && hitResult.item.data.noHover) return false;
+                // Only hit test against handles that are visible, that is,
+                // their segment is selected
+                if (!hitResult.segment.selected) return false;
+                // If the entire shape is selected, handles are hidden
+                if (hitResult.item.fullySelected) return false;
+                return true;
+            }
+        };
+        return hitOptions;
+    }
+    /**
+     * Returns the hit options for strokes and curves of selected objects, which take precedence over
+     * unselected things and fills.
+     * @return {object} See paper.Item.hitTest for definition of options
+     */
+    getSelectedStrokeHitOptions () {
+        const hitOptions = {
+            segments: false,
+            stroke: true,
+            curves: true,
+            handles: false,
+            fill: false,
+            guide: false,
+            tolerance: ReshapeTool.TOLERANCE / paper.view.zoom,
+            match: hitResult => {
+                if (!hitResult.item.selected) return false;
+                if (hitResult.item.data && hitResult.item.data.noHover) return false;
+                return true;
+            }
+        };
+        return hitOptions;
+    }
+    /**
+     * Returns the hit options for fills and unselected strokes/curves to use when conducting hit tests.
      * @param {boolean} preselectedOnly True if we should only return results that are already
      *     selected.
      * @return {object} See paper.Item.hitTest for definition of options
      */
-    getHitOptions (preselectedOnly) {
+    getUnselectedAndFillHitOptions () {
         const hitOptions = {
-            segments: true,
+            fill: true,
             stroke: true,
             curves: true,
-            handles: true,
-            fill: true,
-            guide: false,
-            tolerance: ReshapeTool.TOLERANCE / paper.view.zoom
+            tolerance: ReshapeTool.TOLERANCE / paper.view.zoom,
+            match: hitResult => {
+                if (hitResult.item.data && hitResult.item.data.noHover) return false;
+                return true;
+            }
         };
-        if (preselectedOnly) {
-            hitOptions.match = item => {
-                if (!item.item || !item.item.selected) return;
-                if (item.type === 'handle-out' || item.type === 'handle-in') {
-                    // Only hit test against handles that are visible, that is,
-                    // their segment is selected
-                    if (!item.segment.selected) {
-                        return false;
-                    }
-                    // If the entire shape is selected, handles are hidden
-                    if (item.item.fullySelected) {
-                        return false;
-                    }
-                }
-                return true;
-            };
-        } else {
-            hitOptions.match = item => {
-                if (item.type === 'handle-out' || item.type === 'handle-in') {
-                    // Only hit test against handles that are visible, that is,
-                    // their segment is selected
-                    if (!item.segment.selected) {
-                        return false;
-                    }
-                    // If the entire shape is selected, handles are hidden
-                    if (item.item.fullySelected) {
-                        return false;
-                    }
-                }
-                return true;
-            };
-        }
         return hitOptions;
     }
     /**
@@ -134,6 +166,37 @@ class ReshapeTool extends paper.Tool {
      */
     setPrevHoveredItemId (prevHoveredItemId) {
         this.prevHoveredItemId = prevHoveredItemId;
+    }
+    /**
+     * Given the point at which the mouse is, return the prioritized hit result, or null if nothing was hit.
+     * @param {paper.Point} point Point to hit test on canvas
+     * @return {?paper.HitResult} hitResult
+     */
+    getHitResult (point) {
+        // Prefer hits on segments to other types of hits, since segments always overlap curves.
+        let hitResults =
+            paper.project.hitTestAll(point, this.getSelectedSegmentHitOptions());
+        if (!hitResults.length) {
+            hitResults = paper.project.hitTestAll(point, this.getHandleHitOptions());
+        }
+        if (!hitResults.length) {
+            hitResults = paper.project.hitTestAll(point, this.getSelectedStrokeHitOptions());
+        }
+        if (!hitResults.length) {
+            hitResults = paper.project.hitTestAll(point, this.getUnselectedAndFillHitOptions());
+        }
+        if (!hitResults.length) {
+            return null;
+        }
+
+        // Get highest z-index result
+        let hitResult;
+        for (const result of hitResults) {
+            if (!hitResult || sortItemsByZIndex(hitResult.item, result.item) < 0) {
+                hitResult = result;
+            }
+        }
+        return hitResult;
     }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
@@ -151,29 +214,9 @@ class ReshapeTool extends paper.Tool {
         }
         this.lastEvent = event;
 
-        // Choose hit result to use ===========================================================
-        // Prefer hits on already selected items
-        let hitResults =
-            paper.project.hitTestAll(event.point, this.getHitOptions(true /* preselectedOnly */));
-        if (hitResults.length === 0) {
-            hitResults = paper.project.hitTestAll(event.point, this.getHitOptions());
-        }
-        if (hitResults.length === 0) {
+        const hitResult = this.getHitResult(event.point);
+        if (!hitResult) {
             this._modeMap[ReshapeModes.SELECTION_BOX].onMouseDown(event.modifiers.shift);
-            return;
-        }
-
-        // Prefer hits on segments to other types of hits, to make sure handles are movable.
-        let hitResult = hitResults[0];
-        for (let i = 0; i < hitResults.length; i++) {
-            if (hitResults[i].type === 'segment') {
-                hitResult = hitResults[i];
-                break;
-            }
-        }
-
-        // Don't allow detail-selection of PGTextItem
-        if (isPGTextItem(getRootItem(hitResult.item))) {
             return;
         }
 
@@ -212,11 +255,22 @@ class ReshapeTool extends paper.Tool {
             this.mode = ReshapeModes.FILL;
             this._modeMap[this.mode].onMouseDown(hitProperties);
         }
-
-        // @todo Trigger selection changed. Update styles based on selection.
     }
     handleMouseMove (event) {
-        const hoveredItem = getHoveredItem(event, this.getHitOptions(), true /* subselect */);
+        const hitResult = this.getHitResult(event.point);
+        let hoveredItem;
+
+        if (hitResult) {
+            const item = hitResult.item;
+            if (item.selected) {
+                hoveredItem = null;
+            } else if (isBoundsItem(item)) {
+                hoveredItem = hoverBounds(item);
+            } else {
+                hoveredItem = hoverItem(item);
+            }
+        }
+
         if ((!hoveredItem && this.prevHoveredItemId) || // There is no longer a hovered item
                 (hoveredItem && !this.prevHoveredItemId) || // There is now a hovered item
                 (hoveredItem && this.prevHoveredItemId &&
