@@ -42728,6 +42728,12 @@ class SvgRenderer {
         // New svg string invalidates the cached image
         this._cachedImage = null;
 
+        // Add root svg namespace if it does not exist.
+        const svgAttrs = svgString.match(/<svg [^>]*>/);
+        if (svgAttrs && svgAttrs[0].indexOf('xmlns=') === -1) {
+            svgString = svgString.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+        }
+
         // Parse string into SVG XML.
         const parser = new DOMParser();
         this._svgDom = parser.parseFromString(svgString, 'text/xml');
@@ -42821,6 +42827,12 @@ class SvgRenderer {
                 spacing = 1.25;
                 ty = -4 * fontSize / 22;
             }
+
+            if (textElement.transform.baseVal.length === 0) {
+                const transform = this._svgTag.createSVGTransform();
+                textElement.transform.baseVal.appendItem(transform);
+            }
+
             // Right multiply matrix by a translation of (tx, ty)
             const mtx = textElement.transform.baseVal.getItem(0).matrix;
             mtx.e += (mtx.a * tx) + (mtx.c * ty);
