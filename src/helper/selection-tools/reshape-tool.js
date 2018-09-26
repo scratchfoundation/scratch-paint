@@ -243,6 +243,7 @@ class ReshapeTool extends paper.Tool {
             hitResult.type === 'curve') {
             this.mode = ReshapeModes.POINT;
             this._modeMap[this.mode].addPoint(hitProperties);
+            this.onUpdateImage();
             this._modeMap[this.mode].onMouseDown(hitProperties);
         } else if (
             hitResult.type === 'handle-in' ||
