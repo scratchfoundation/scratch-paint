@@ -6,6 +6,7 @@ const localeTooBig = [
     'et',
     'el',
     'ga',
+    'gd',
     'gl',
     'mi',
     'nl',
