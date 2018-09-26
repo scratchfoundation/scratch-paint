@@ -16716,7 +16716,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _group = __webpack_require__(27);
 
-var _item = __webpack_require__(34);
+var _item = __webpack_require__(36);
 
 var _compoundPath = __webpack_require__(162);
 
@@ -17328,7 +17328,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.BitmapModes = exports.default = undefined;
 
-var _keymirror = __webpack_require__(40);
+var _keymirror = __webpack_require__(41);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -18884,7 +18884,7 @@ bind.placeholder = {};
 
 module.exports = bindAll;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(46)))
 
 /***/ }),
 /* 6 */
@@ -19398,10 +19398,10 @@ function shallowEqual(objA, objB) {
   return true;
 }
 // EXTERNAL MODULE: ./node_modules/redux/es/index.js + 6 modules
-var es = __webpack_require__(32);
+var es = __webpack_require__(34);
 
 // EXTERNAL MODULE: ./node_modules/lodash-es/isPlainObject.js + 8 modules
-var isPlainObject = __webpack_require__(37);
+var isPlainObject = __webpack_require__(38);
 
 // CONCATENATED MODULE: ./node_modules/react-redux/es/utils/verifyPlainObject.js
 
@@ -19913,7 +19913,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _selection = __webpack_require__(3);
 
-var _item = __webpack_require__(34);
+var _item = __webpack_require__(36);
 
 var _group = __webpack_require__(27);
 
@@ -19921,7 +19921,7 @@ var _gradientTypes = __webpack_require__(18);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
-var _parseColor = __webpack_require__(48);
+var _parseColor = __webpack_require__(44);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -20034,7 +20034,7 @@ var applyFillColorToSelection = function applyFillColorToSelection(colorString, 
             }
 
             // In bitmap mode, fill color applies to the stroke if there is a stroke
-            if (bitmapMode && item.strokeColor !== null && item.strokeWidth !== 0) {
+            if (bitmapMode && item.strokeColor !== null && item.strokeWidth) {
                 if (!_colorMatch(item.strokeColor, colorString)) {
                     changed = true;
                     item.strokeColor = colorString;
@@ -20288,74 +20288,7 @@ var applyStrokeColorToSelection = function applyStrokeColorToSelection(colorStri
             if (item.parent instanceof _paper2.default.CompoundPath) {
                 item = item.parent;
             }
-            if ((0, _item.isPGTextItem)(item)) {
-                if (item.children) {
-                    var _iteratorNormalCompletion5 = true;
-                    var _didIteratorError5 = false;
-                    var _iteratorError5 = undefined;
-
-                    try {
-                        for (var _iterator5 = item.children[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                            var child = _step5.value;
-
-                            if (child.children) {
-                                var _iteratorNormalCompletion6 = true;
-                                var _didIteratorError6 = false;
-                                var _iteratorError6 = undefined;
-
-                                try {
-                                    for (var _iterator6 = child.children[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-                                        var path = _step6.value;
-
-                                        if (!path.data.isPGGlyphRect) {
-                                            if (!_colorMatch(path.strokeColor, colorString)) {
-                                                changed = true;
-                                                path.strokeColor = colorString;
-                                            }
-                                        }
-                                    }
-                                } catch (err) {
-                                    _didIteratorError6 = true;
-                                    _iteratorError6 = err;
-                                } finally {
-                                    try {
-                                        if (!_iteratorNormalCompletion6 && _iterator6.return) {
-                                            _iterator6.return();
-                                        }
-                                    } finally {
-                                        if (_didIteratorError6) {
-                                            throw _iteratorError6;
-                                        }
-                                    }
-                                }
-                            } else if (!child.data.isPGGlyphRect) {
-                                if (child.strokeColor !== colorString) {
-                                    changed = true;
-                                    child.strokeColor = colorString;
-                                }
-                            }
-                        }
-                    } catch (err) {
-                        _didIteratorError5 = true;
-                        _iteratorError5 = err;
-                    } finally {
-                        try {
-                            if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                                _iterator5.return();
-                            }
-                        } finally {
-                            if (_didIteratorError5) {
-                                throw _iteratorError5;
-                            }
-                        }
-                    }
-                } else if (!item.data.isPGGlyphRect) {
-                    if (!_colorMatch(item.strokeColor, colorString)) {
-                        changed = true;
-                        item.strokeColor = colorString;
-                    }
-                }
-            } else if (!_colorMatch(item.strokeColor, colorString)) {
+            if (!_colorMatch(item.strokeColor, colorString)) {
                 changed = true;
                 item.strokeColor = colorString;
             }
@@ -20387,13 +20320,13 @@ var applyStrokeColorToSelection = function applyStrokeColorToSelection(colorStri
 var applyStrokeWidthToSelection = function applyStrokeWidthToSelection(value, textEditTargetId) {
     var changed = false;
     var items = _getColorStateListeners(textEditTargetId);
-    var _iteratorNormalCompletion7 = true;
-    var _didIteratorError7 = false;
-    var _iteratorError7 = undefined;
+    var _iteratorNormalCompletion5 = true;
+    var _didIteratorError5 = false;
+    var _iteratorError5 = undefined;
 
     try {
-        for (var _iterator7 = items[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-            var item = _step7.value;
+        for (var _iterator5 = items[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            var item = _step5.value;
 
             if (item.parent instanceof _paper2.default.CompoundPath) {
                 item = item.parent;
@@ -20406,16 +20339,16 @@ var applyStrokeWidthToSelection = function applyStrokeWidthToSelection(value, te
             }
         }
     } catch (err) {
-        _didIteratorError7 = true;
-        _iteratorError7 = err;
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
     } finally {
         try {
-            if (!_iteratorNormalCompletion7 && _iterator7.return) {
-                _iterator7.return();
+            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                _iterator5.return();
             }
         } finally {
-            if (_didIteratorError7) {
-                throw _iteratorError7;
+            if (_didIteratorError5) {
+                throw _iteratorError5;
             }
         }
     }
@@ -20441,13 +20374,13 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
     var selectionGradientType = void 0;
     var firstChild = true;
 
-    var _iteratorNormalCompletion8 = true;
-    var _didIteratorError8 = false;
-    var _iteratorError8 = undefined;
+    var _iteratorNormalCompletion6 = true;
+    var _didIteratorError6 = false;
+    var _iteratorError6 = undefined;
 
     try {
-        for (var _iterator8 = selectedItems[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-            var item = _step8.value;
+        for (var _iterator6 = selectedItems[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+            var item = _step6.value;
 
             if (item.parent instanceof _paper2.default.CompoundPath) {
                 // Compound path children inherit fill and stroke color from their parent.
@@ -20490,8 +20423,10 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
                     } else if (item.strokeColor.type === 'gradient') {
                         itemStrokeColorString = MIXED;
                     } else {
-                        itemStrokeColorString = item.strokeColor.alpha === 0 ? null : item.strokeColor.toCSS();
+                        itemStrokeColorString = item.strokeColor.alpha === 0 || !item.strokeWidth ? null : item.strokeColor.toCSS();
                     }
+                } else {
+                    itemStrokeColorString = null;
                 }
                 // check every style against the first of the items
                 if (firstChild) {
@@ -20500,7 +20435,7 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
                     selectionFillColor2String = itemFillColor2String;
                     selectionStrokeColorString = itemStrokeColorString;
                     selectionGradientType = itemGradientType;
-                    selectionStrokeWidth = item.strokeWidth;
+                    selectionStrokeWidth = itemStrokeColorString ? item.strokeWidth : 0;
                     if (item.strokeWidth && item.data && item.data.zoomLevel) {
                         selectionThickness = item.strokeWidth / item.data.zoomLevel;
                     }
@@ -20519,28 +20454,29 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
                 if (itemStrokeColorString !== selectionStrokeColorString) {
                     selectionStrokeColorString = MIXED;
                 }
-                if (selectionStrokeWidth !== item.strokeWidth) {
+                var itemStrokeWidth = itemStrokeColorString ? item.strokeWidth : 0;
+                if (selectionStrokeWidth !== itemStrokeWidth) {
                     selectionStrokeWidth = null;
                 }
             }
         }
         // Convert selection gradient type from horizontal to vertical if first item is exactly vertical
     } catch (err) {
-        _didIteratorError8 = true;
-        _iteratorError8 = err;
+        _didIteratorError6 = true;
+        _iteratorError6 = err;
     } finally {
         try {
-            if (!_iteratorNormalCompletion8 && _iterator8.return) {
-                _iterator8.return();
+            if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                _iterator6.return();
             }
         } finally {
-            if (_didIteratorError8) {
-                throw _iteratorError8;
+            if (_didIteratorError6) {
+                throw _iteratorError6;
             }
         }
     }
 
-    if (selectionGradientType !== _gradientTypes2.default.SOLID) {
+    if (selectedItems && selectedItems.length && selectionGradientType !== _gradientTypes2.default.SOLID) {
         var firstItem = selectedItems[0];
         if (firstItem.parent instanceof _paper2.default.CompoundPath) firstItem = firstItem.parent;
         var direction = firstItem.fillColor.destination.subtract(firstItem.fillColor.origin);
@@ -21419,6 +21355,44 @@ function updateLink (link, options, obj) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.isBitmap = exports.isVector = exports.default = undefined;
+
+var _keymirror = __webpack_require__(41);
+
+var _keymirror2 = _interopRequireDefault(_keymirror);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Formats = (0, _keymirror2.default)({
+    BITMAP: null,
+    VECTOR: null,
+    // Format changes which should not trigger conversions, for instance undo
+    BITMAP_SKIP_CONVERT: null,
+    VECTOR_SKIP_CONVERT: null
+});
+
+var isVector = function isVector(format) {
+    return format === Formats.VECTOR || format === Formats.VECTOR_SKIP_CONVERT;
+};
+
+var isBitmap = function isBitmap(format) {
+    return format === Formats.BITMAP || format === Formats.BITMAP_SKIP_CONVERT;
+};
+
+exports.default = Formats;
+exports.isVector = isVector;
+exports.isBitmap = isBitmap;
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _classnames = __webpack_require__(17);
 
@@ -21434,7 +21408,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactIntl = __webpack_require__(23);
 
-var _button = __webpack_require__(43);
+var _button = __webpack_require__(45);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -21481,7 +21455,7 @@ ToolSelectComponent.propTypes = {
 exports.default = (0, _reactIntl.injectIntl)(ToolSelectComponent);
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21537,44 +21511,6 @@ var messages = (0, _reactIntl.defineMessages)({
 });
 
 exports.default = messages;
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.isBitmap = exports.isVector = exports.default = undefined;
-
-var _keymirror = __webpack_require__(40);
-
-var _keymirror2 = _interopRequireDefault(_keymirror);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Formats = (0, _keymirror2.default)({
-    BITMAP: null,
-    VECTOR: null,
-    // Format changes which should not trigger conversions, for instance undo
-    BITMAP_SKIP_CONVERT: null,
-    VECTOR_SKIP_CONVERT: null
-});
-
-var isVector = function isVector(format) {
-    return format === Formats.VECTOR || format === Formats.VECTOR_SKIP_CONVERT;
-};
-
-var isBitmap = function isBitmap(format) {
-    return format === Formats.BITMAP || format === Formats.BITMAP_SKIP_CONVERT;
-};
-
-exports.default = Formats;
-exports.isVector = isVector;
-exports.isBitmap = isBitmap;
 
 /***/ }),
 /* 17 */
@@ -21640,7 +21576,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _keymirror = __webpack_require__(40);
+var _keymirror = __webpack_require__(41);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -21738,7 +21674,7 @@ var _selection = __webpack_require__(3);
 
 var _scratchSvgRenderer = __webpack_require__(163);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -22697,7 +22633,7 @@ var _stylePath = __webpack_require__(9);
 
 var _selectedItems = __webpack_require__(7);
 
-var _fillModeGradientType = __webpack_require__(35);
+var _fillModeGradientType = __webpack_require__(37);
 
 var _log = __webpack_require__(8);
 
@@ -22762,9 +22698,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedHTMLMessage", function() { return FormattedHTMLMessage; });
 /* harmony import */ var _locale_data_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(116);
 /* harmony import */ var _locale_data_index_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_locale_data_index_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(33);
+/* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(35);
 /* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(intl_messageformat__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var intl_relativeformat__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(38);
+/* harmony import */ var intl_relativeformat__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(39);
 /* harmony import */ var intl_relativeformat__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(intl_relativeformat__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
@@ -22772,7 +22708,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(25);
 /* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(invariant__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var intl_format_cache__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(39);
+/* harmony import */ var intl_format_cache__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(40);
 /* harmony import */ var intl_format_cache__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(intl_format_cache__WEBPACK_IMPORTED_MODULE_6__);
 /*
  * Copyright 2017, Yahoo Inc.
@@ -24699,7 +24635,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _item = __webpack_require__(34);
+var _item = __webpack_require__(36);
 
 var _selection = __webpack_require__(3);
 
@@ -25112,7 +25048,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _keymirror = __webpack_require__(40);
+var _keymirror = __webpack_require__(41);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -25639,13 +25575,145 @@ exports.default = InputGroup;
 
 /***/ }),
 /* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.changeStrokeColor = exports.default = undefined;
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _selectedItems = __webpack_require__(7);
+
+var _strokeWidth = __webpack_require__(33);
+
+var _stylePath = __webpack_require__(9);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_STROKE_COLOR = 'scratch-paint/stroke-color/CHANGE_STROKE_COLOR';
+var initialState = '#000';
+// Matches hex colors
+var regExp = /^#([0-9a-f]{3}){1,2}$/i;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case _strokeWidth.CHANGE_STROKE_WIDTH:
+            if (Math.max(0, action.strokeWidth) === 0) {
+                return null;
+            }
+            return state;
+        case CHANGE_STROKE_COLOR:
+            if (!regExp.test(action.strokeColor) && action.strokeColor !== null && action.strokeColor !== _stylePath.MIXED) {
+                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
+                return state;
+            }
+            return action.strokeColor;
+        case _selectedItems.CHANGE_SELECTED_ITEMS:
+            // Don't change state if no selection
+            if (!action.selectedItems || !action.selectedItems.length) {
+                return state;
+            }
+            // Bitmap mode doesn't have stroke color
+            if (action.bitmapMode) {
+                return state;
+            }
+            return (0, _stylePath.getColorsFromSelection)(action.selectedItems, action.bitmapMode).strokeColor;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeStrokeColor = function changeStrokeColor(strokeColor) {
+    return {
+        type: CHANGE_STROKE_COLOR,
+        strokeColor: strokeColor
+    };
+};
+
+exports.default = reducer;
+exports.changeStrokeColor = changeStrokeColor;
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.MAX_STROKE_WIDTH = exports.CHANGE_STROKE_WIDTH = exports.changeStrokeWidth = exports.default = undefined;
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _selectedItems = __webpack_require__(7);
+
+var _stylePath = __webpack_require__(9);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_STROKE_WIDTH = 'scratch-paint/stroke-width/CHANGE_STROKE_WIDTH';
+var MAX_STROKE_WIDTH = 800;
+var initialState = 4;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_STROKE_WIDTH:
+            if (isNaN(action.strokeWidth)) {
+                _log2.default.warn('Invalid brush size: ' + action.strokeWidth);
+                return state;
+            }
+            return Math.min(MAX_STROKE_WIDTH, Math.max(0, action.strokeWidth));
+        case _selectedItems.CHANGE_SELECTED_ITEMS:
+            // Don't change state if no selection
+            if (!action.selectedItems || !action.selectedItems.length) {
+                return state;
+            }
+            // Bitmap mode doesn't have stroke width
+            if (action.bitmapMode) {
+                return state;
+            }
+            return (0, _stylePath.getColorsFromSelection)(action.selectedItems, action.bitmapMode).strokeWidth;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeStrokeWidth = function changeStrokeWidth(strokeWidth) {
+    return {
+        type: CHANGE_STROKE_WIDTH,
+        strokeWidth: strokeWidth
+    };
+};
+
+exports.default = reducer;
+exports.changeStrokeWidth = changeStrokeWidth;
+exports.CHANGE_STROKE_WIDTH = CHANGE_STROKE_WIDTH;
+exports.MAX_STROKE_WIDTH = MAX_STROKE_WIDTH;
+
+/***/ }),
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ./node_modules/lodash-es/isPlainObject.js + 8 modules
-var isPlainObject = __webpack_require__(37);
+var isPlainObject = __webpack_require__(38);
 
 // EXTERNAL MODULE: ./node_modules/symbol-observable/es/index.js
 var es = __webpack_require__(70);
@@ -26195,7 +26263,7 @@ if (false) {}
 
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26217,7 +26285,7 @@ exports['default'] = exports;
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26300,7 +26368,7 @@ exports.setPositionInView = setPositionInView;
 exports.getRootItem = getRootItem;
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26355,69 +26423,7 @@ exports.CHANGE_GRADIENT_TYPE = CHANGE_GRADIENT_TYPE;
 exports.changeGradientType = changeGradientType;
 
 /***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.changeStrokeColor = exports.default = undefined;
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _selectedItems = __webpack_require__(7);
-
-var _stylePath = __webpack_require__(9);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_STROKE_COLOR = 'scratch-paint/stroke-color/CHANGE_STROKE_COLOR';
-var initialState = '#000';
-// Matches hex colors
-var regExp = /^#([0-9a-f]{3}){1,2}$/i;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_STROKE_COLOR:
-            if (!regExp.test(action.strokeColor) && action.strokeColor !== null) {
-                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
-                return state;
-            }
-            return action.strokeColor;
-        case _selectedItems.CHANGE_SELECTED_ITEMS:
-            // Don't change state if no selection
-            if (!action.selectedItems || !action.selectedItems.length) {
-                return state;
-            }
-            // Bitmap mode doesn't have stroke color
-            if (action.bitmapMode) {
-                return state;
-            }
-            return (0, _stylePath.getColorsFromSelection)(action.selectedItems, action.bitmapMode).strokeColor;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var changeStrokeColor = function changeStrokeColor(strokeColor) {
-    return {
-        type: CHANGE_STROKE_COLOR,
-        strokeColor: strokeColor
-    };
-};
-
-exports.default = reducer;
-exports.changeStrokeColor = changeStrokeColor;
-
-/***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -26668,7 +26674,7 @@ function isPlainObject(value) {
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26690,7 +26696,7 @@ exports['default'] = exports;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26701,7 +26707,7 @@ exports['default'] = exports;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26761,7 +26767,7 @@ module.exports = keyMirror;
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26877,7 +26883,7 @@ exports.UNDO = UNDO;
 exports.REDO = REDO;
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26939,281 +26945,7 @@ exports.setHoveredItem = setHoveredItem;
 exports.clearHoveredItem = clearHoveredItem;
 
 /***/ }),
-/* 43 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _classnames = __webpack_require__(17);
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-var _propTypes = __webpack_require__(1);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _button = __webpack_require__(186);
-
-var _button2 = _interopRequireDefault(_button);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; } /* DO NOT EDIT
-                                                                                                                                                                                                                             @todo This file is copied from GUI and should be pulled out into a shared library.
-                                                                                                                                                                                                                             See #13 */
-
-/* ACTUALLY, THIS IS EDITED ;)
-THIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD HANDLING FOR DISABLED STATES.*/
-
-var ButtonComponent = function ButtonComponent(_ref) {
-    var _classNames;
-
-    var className = _ref.className,
-        highlighted = _ref.highlighted,
-        onClick = _ref.onClick,
-        children = _ref.children,
-        props = _objectWithoutProperties(_ref, ['className', 'highlighted', 'onClick', 'children']);
-
-    var disabled = props.disabled || false;
-    if (disabled === false) {
-        // if not disabled, add `onClick()` to be applied
-        // in props. If disabled, don't add `onClick()`
-        props.onClick = onClick;
-    }
-    return _react2.default.createElement(
-        'span',
-        _extends({
-            className: (0, _classnames2.default)(_button2.default.button, className, (_classNames = {}, _defineProperty(_classNames, _button2.default.modDisabled, disabled), _defineProperty(_classNames, _button2.default.highlighted, highlighted), _classNames)),
-            role: 'button'
-        }, props),
-        children
-    );
-};
-
-ButtonComponent.propTypes = {
-    children: _propTypes2.default.node,
-    className: _propTypes2.default.string,
-    disabled: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.bool]),
-    highlighted: _propTypes2.default.bool,
-    onClick: _propTypes2.default.func.isRequired
-};
-exports.default = ButtonComponent;
-
-/***/ }),
 /* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.MAX_STROKE_WIDTH = exports.changeStrokeWidth = exports.default = undefined;
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _selectedItems = __webpack_require__(7);
-
-var _stylePath = __webpack_require__(9);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_STROKE_WIDTH = 'scratch-paint/stroke-width/CHANGE_STROKE_WIDTH';
-var MAX_STROKE_WIDTH = 800;
-var initialState = 4;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_STROKE_WIDTH:
-            if (isNaN(action.strokeWidth)) {
-                _log2.default.warn('Invalid brush size: ' + action.strokeWidth);
-                return state;
-            }
-            return Math.min(MAX_STROKE_WIDTH, Math.max(0, action.strokeWidth));
-        case _selectedItems.CHANGE_SELECTED_ITEMS:
-            // Don't change state if no selection
-            if (!action.selectedItems || !action.selectedItems.length) {
-                return state;
-            }
-            // Bitmap mode doesn't have stroke width
-            if (action.bitmapMode) {
-                return state;
-            }
-            return (0, _stylePath.getColorsFromSelection)(action.selectedItems, action.bitmapMode).strokeWidth;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var changeStrokeWidth = function changeStrokeWidth(strokeWidth) {
-    return {
-        type: CHANGE_STROKE_WIDTH,
-        strokeWidth: strokeWidth
-    };
-};
-
-exports.default = reducer;
-exports.changeStrokeWidth = changeStrokeWidth;
-exports.MAX_STROKE_WIDTH = MAX_STROKE_WIDTH;
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.changeFormat = exports.default = undefined;
-
-var _format = __webpack_require__(16);
-
-var _format2 = _interopRequireDefault(_format);
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _undo = __webpack_require__(41);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_FORMAT = 'scratch-paint/formats/CHANGE_FORMAT';
-var initialState = null;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case _undo.UNDO:
-        /* falls through */
-        case _undo.REDO:
-        /* falls through */
-        case CHANGE_FORMAT:
-            if (!action.format) return state;
-            if (action.format in _format2.default) {
-                return action.format;
-            }
-            _log2.default.warn('Format does not exist: ' + action.format);
-        /* falls through */
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var changeFormat = function changeFormat(format) {
-    return {
-        type: CHANGE_FORMAT,
-        format: format
-    };
-};
-
-exports.default = reducer;
-exports.changeFormat = changeFormat;
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.updateViewBounds = exports.default = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var UPDATE_VIEW_BOUNDS = 'scratch-paint/view/UPDATE_VIEW_BOUNDS';
-var initialState = new _paper2.default.Matrix(); // Identity
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case UPDATE_VIEW_BOUNDS:
-            if (!(action.viewBounds instanceof _paper2.default.Matrix)) {
-                _log2.default.warn('View bounds should be a paper.Matrix.');
-                return state;
-            }
-            return action.viewBounds;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-/**
- * Set the view bounds, which defines the zoom and scroll of the paper canvas.
- * @param {paper.Matrix} matrix The matrix applied to the view
- * @return {object} Redux action to set the view bounds
- */
-var updateViewBounds = function updateViewBounds(matrix) {
-    return {
-        type: UPDATE_VIEW_BOUNDS,
-        viewBounds: matrix.clone()
-    };
-};
-
-exports.default = reducer;
-exports.updateViewBounds = updateViewBounds;
-
-/***/ }),
-/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var convert = __webpack_require__(183);
@@ -27300,6 +27032,218 @@ module.exports = function (cstr) {
     return res;
 };
 
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _classnames = __webpack_require__(17);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _button = __webpack_require__(186);
+
+var _button2 = _interopRequireDefault(_button);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; } /* DO NOT EDIT
+                                                                                                                                                                                                                             @todo This file is copied from GUI and should be pulled out into a shared library.
+                                                                                                                                                                                                                             See #13 */
+
+/* ACTUALLY, THIS IS EDITED ;)
+THIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD HANDLING FOR DISABLED STATES.*/
+
+var ButtonComponent = function ButtonComponent(_ref) {
+    var _classNames;
+
+    var className = _ref.className,
+        highlighted = _ref.highlighted,
+        onClick = _ref.onClick,
+        children = _ref.children,
+        props = _objectWithoutProperties(_ref, ['className', 'highlighted', 'onClick', 'children']);
+
+    var disabled = props.disabled || false;
+    if (disabled === false) {
+        // if not disabled, add `onClick()` to be applied
+        // in props. If disabled, don't add `onClick()`
+        props.onClick = onClick;
+    }
+    return _react2.default.createElement(
+        'span',
+        _extends({
+            className: (0, _classnames2.default)(_button2.default.button, className, (_classNames = {}, _defineProperty(_classNames, _button2.default.modDisabled, disabled), _defineProperty(_classNames, _button2.default.highlighted, highlighted), _classNames)),
+            role: 'button'
+        }, props),
+        children
+    );
+};
+
+ButtonComponent.propTypes = {
+    children: _propTypes2.default.node,
+    className: _propTypes2.default.string,
+    disabled: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.bool]),
+    highlighted: _propTypes2.default.bool,
+    onClick: _propTypes2.default.func.isRequired
+};
+exports.default = ButtonComponent;
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.changeFormat = exports.default = undefined;
+
+var _format = __webpack_require__(14);
+
+var _format2 = _interopRequireDefault(_format);
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _undo = __webpack_require__(42);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_FORMAT = 'scratch-paint/formats/CHANGE_FORMAT';
+var initialState = null;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case _undo.UNDO:
+        /* falls through */
+        case _undo.REDO:
+        /* falls through */
+        case CHANGE_FORMAT:
+            if (!action.format) return state;
+            if (action.format in _format2.default) {
+                return action.format;
+            }
+            _log2.default.warn('Format does not exist: ' + action.format);
+        /* falls through */
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeFormat = function changeFormat(format) {
+    return {
+        type: CHANGE_FORMAT,
+        format: format
+    };
+};
+
+exports.default = reducer;
+exports.changeFormat = changeFormat;
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.updateViewBounds = exports.default = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var UPDATE_VIEW_BOUNDS = 'scratch-paint/view/UPDATE_VIEW_BOUNDS';
+var initialState = new _paper2.default.Matrix(); // Identity
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case UPDATE_VIEW_BOUNDS:
+            if (!(action.viewBounds instanceof _paper2.default.Matrix)) {
+                _log2.default.warn('View bounds should be a paper.Matrix.');
+                return state;
+            }
+            return action.viewBounds;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+/**
+ * Set the view bounds, which defines the zoom and scroll of the paper canvas.
+ * @param {paper.Matrix} matrix The matrix applied to the view
+ * @return {object} Redux action to set the view bounds
+ */
+var updateViewBounds = function updateViewBounds(matrix) {
+    return {
+        type: UPDATE_VIEW_BOUNDS,
+        viewBounds: matrix.clone()
+    };
+};
+
+exports.default = reducer;
+exports.updateViewBounds = updateViewBounds;
 
 /***/ }),
 /* 49 */
@@ -29058,7 +29002,7 @@ function stubArray() {
 
 module.exports = omit;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(46)))
 
 /***/ }),
 /* 55 */
@@ -29104,7 +29048,7 @@ var _layer = __webpack_require__(11);
 
 var _selection = __webpack_require__(3);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -29503,7 +29447,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _fillModeGradientType = __webpack_require__(35);
+var _fillModeGradientType = __webpack_require__(37);
 
 var _gradientTypes = __webpack_require__(18);
 
@@ -29764,7 +29708,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _button = __webpack_require__(43);
+var _button = __webpack_require__(45);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -30007,7 +29951,7 @@ if (typeof self !== 'undefined') {
 var result = Object(_ponyfill_js__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(root);
 /* harmony default export */ __webpack_exports__["a"] = (result);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45), __webpack_require__(143)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(46), __webpack_require__(143)(module)))
 
 /***/ }),
 /* 71 */
@@ -30701,7 +30645,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _group = __webpack_require__(27);
 
-var _item = __webpack_require__(34);
+var _item = __webpack_require__(36);
 
 var _math = __webpack_require__(24);
 
@@ -31978,7 +31922,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _parseColor = __webpack_require__(48);
+var _parseColor = __webpack_require__(44);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -32241,7 +32185,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _item = __webpack_require__(34);
+var _item = __webpack_require__(36);
 
 var _guides = __webpack_require__(28);
 
@@ -32770,7 +32714,7 @@ var _selection = __webpack_require__(3);
 
 var _bitmap = __webpack_require__(20);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -33510,7 +33454,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(46)))
 
 /***/ }),
 /* 116 */
@@ -33547,7 +33491,7 @@ var _2 = _interopRequireDefault(_);
 
 var _reactRedux = __webpack_require__(6);
 
-var _redux = __webpack_require__(32);
+var _redux = __webpack_require__(34);
 
 var _combineReducers = __webpack_require__(345);
 
@@ -34271,7 +34215,7 @@ var _updateImageHoc2 = _interopRequireDefault(_updateImageHoc);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(46);
+var _format = __webpack_require__(47);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -34279,7 +34223,7 @@ var _eyeDropper = __webpack_require__(51);
 
 var _textEditTarget = __webpack_require__(53);
 
-var _viewBounds = __webpack_require__(47);
+var _viewBounds = __webpack_require__(48);
 
 var _layout = __webpack_require__(68);
 
@@ -34297,7 +34241,7 @@ var _modes2 = __webpack_require__(4);
 
 var _modes3 = _interopRequireDefault(_modes2);
 
-var _format2 = __webpack_require__(16);
+var _format2 = __webpack_require__(14);
 
 var _format3 = _interopRequireDefault(_format2);
 
@@ -39098,7 +39042,7 @@ var _box = __webpack_require__(89);
 
 var _box2 = _interopRequireDefault(_box);
 
-var _button = __webpack_require__(43);
+var _button = __webpack_require__(45);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -39170,7 +39114,7 @@ var _textMode = __webpack_require__(326);
 
 var _textMode2 = _interopRequireDefault(_textMode);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -41538,7 +41482,7 @@ See the accompanying LICENSE file for terms.
 /* jslint esnext: true */
 
 
-var intl$messageformat$$ = __webpack_require__(33), src$diff$$ = __webpack_require__(155), src$es5$$ = __webpack_require__(156);
+var intl$messageformat$$ = __webpack_require__(35), src$diff$$ = __webpack_require__(155), src$es5$$ = __webpack_require__(156);
 exports["default"] = RelativeFormat;
 
 // -----------------------------------------------------------------------------
@@ -42192,7 +42136,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -42202,7 +42146,7 @@ var _log2 = _interopRequireDefault(_log);
 
 var _undo = __webpack_require__(56);
 
-var _undo2 = __webpack_require__(41);
+var _undo2 = __webpack_require__(42);
 
 var _group = __webpack_require__(27);
 
@@ -42214,13 +42158,13 @@ var _view = __webpack_require__(21);
 
 var _math = __webpack_require__(24);
 
-var _hover = __webpack_require__(42);
+var _hover = __webpack_require__(43);
 
 var _clipboard = __webpack_require__(57);
 
-var _format3 = __webpack_require__(46);
+var _format3 = __webpack_require__(47);
 
-var _viewBounds = __webpack_require__(47);
+var _viewBounds = __webpack_require__(48);
 
 var _zoomLevels = __webpack_require__(80);
 
@@ -43548,7 +43492,7 @@ var _scrollableCanvas2 = _interopRequireDefault(_scrollableCanvas);
 
 var _view = __webpack_require__(21);
 
-var _viewBounds = __webpack_require__(47);
+var _viewBounds = __webpack_require__(48);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -44895,11 +44839,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -45214,11 +45158,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -46308,11 +46252,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -46825,11 +46769,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -46902,7 +46846,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _fillModeGradientType = __webpack_require__(35);
+var _fillModeGradientType = __webpack_require__(37);
 
 var _selection = __webpack_require__(3);
 
@@ -47086,11 +47030,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -47453,11 +47397,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -47868,11 +47812,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -50196,11 +50140,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -50400,11 +50344,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -50459,7 +50403,7 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _parseColor = __webpack_require__(48);
+var _parseColor = __webpack_require__(44);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -50469,7 +50413,7 @@ var _fillColor = __webpack_require__(19);
 
 var _fillColor2 = __webpack_require__(49);
 
-var _fillModeGradientType = __webpack_require__(35);
+var _fillModeGradientType = __webpack_require__(37);
 
 var _modals = __webpack_require__(61);
 
@@ -50481,7 +50425,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -53105,7 +53049,7 @@ var _classnames = __webpack_require__(17);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _parseColor = __webpack_require__(48);
+var _parseColor = __webpack_require__(44);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -53969,9 +53913,9 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _hover = __webpack_require__(42);
+var _hover = __webpack_require__(43);
 
-var _fillModeGradientType = __webpack_require__(35);
+var _fillModeGradientType = __webpack_require__(37);
 
 var _fillMode = __webpack_require__(259);
 
@@ -54433,11 +54377,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -54512,9 +54456,9 @@ var _guides = __webpack_require__(28);
 
 var _stylePath = __webpack_require__(9);
 
-var _strokeColor = __webpack_require__(36);
+var _strokeColor = __webpack_require__(32);
 
-var _strokeWidth = __webpack_require__(44);
+var _strokeWidth = __webpack_require__(33);
 
 var _modes3 = __webpack_require__(10);
 
@@ -54925,11 +54869,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -55187,7 +55131,7 @@ var _fixedTools2 = _interopRequireDefault(_fixedTools);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(46);
+var _format = __webpack_require__(47);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -55203,7 +55147,7 @@ var _order = __webpack_require__(101);
 
 var _group = __webpack_require__(27);
 
-var _format2 = __webpack_require__(16);
+var _format2 = __webpack_require__(14);
 
 var _format3 = _interopRequireDefault(_format2);
 
@@ -55384,7 +55328,7 @@ var _bufferedInputHoc = __webpack_require__(271);
 
 var _bufferedInputHoc2 = _interopRequireDefault(_bufferedInputHoc);
 
-var _button = __webpack_require__(43);
+var _button = __webpack_require__(45);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -55398,7 +55342,7 @@ var _dropdown2 = _interopRequireDefault(_dropdown);
 
 var _reactIntl = __webpack_require__(23);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -56865,7 +56809,7 @@ var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(20);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -57344,7 +57288,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -57418,7 +57362,7 @@ var _rectangleOutlined = __webpack_require__(303);
 
 var _rectangleOutlined2 = _interopRequireDefault(_rectangleOutlined);
 
-var _strokeWidth = __webpack_require__(44);
+var _strokeWidth = __webpack_require__(33);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -58056,7 +58000,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _button = __webpack_require__(43);
+var _button = __webpack_require__(45);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -58414,7 +58358,7 @@ var _stylePath = __webpack_require__(9);
 
 var _fillColor = __webpack_require__(19);
 
-var _strokeColor = __webpack_require__(36);
+var _strokeColor = __webpack_require__(32);
 
 var _modes3 = __webpack_require__(10);
 
@@ -58799,11 +58743,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -58874,7 +58818,7 @@ var _stylePath = __webpack_require__(9);
 
 var _fillColor = __webpack_require__(19);
 
-var _strokeColor = __webpack_require__(36);
+var _strokeColor = __webpack_require__(32);
 
 var _modes3 = __webpack_require__(10);
 
@@ -59258,11 +59202,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -59327,7 +59271,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(10);
 
-var _hover = __webpack_require__(42);
+var _hover = __webpack_require__(43);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -59485,7 +59429,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _keymirror = __webpack_require__(40);
+var _keymirror = __webpack_require__(41);
 
 var _keymirror2 = _interopRequireDefault(_keymirror);
 
@@ -59493,7 +59437,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _item = __webpack_require__(34);
+var _item = __webpack_require__(36);
 
 var _guides = __webpack_require__(28);
 
@@ -60473,11 +60417,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -60546,7 +60490,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _modes3 = __webpack_require__(10);
 
-var _hover = __webpack_require__(42);
+var _hover = __webpack_require__(43);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -60945,11 +60889,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -61010,7 +60954,9 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _strokeColor = __webpack_require__(36);
+var _strokeColor = __webpack_require__(32);
+
+var _strokeWidth = __webpack_require__(33);
 
 var _modals = __webpack_require__(61);
 
@@ -61018,7 +60964,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -61067,9 +61013,15 @@ var StrokeColorIndicator = function (_React$Component) {
     }, {
         key: 'handleChangeStrokeColor',
         value: function handleChangeStrokeColor(newColor) {
+            if (this.props.strokeColor === null && newColor !== null) {
+                this._hasChanged = (0, _stylePath.applyStrokeWidthToSelection)(1, this.props.textEditTarget) || this._hasChanged;
+                this.props.onChangeStrokeWidth(1);
+            } else if (this.props.strokeColor !== null && newColor === null) {
+                this._hasChanged = (0, _stylePath.applyStrokeWidthToSelection)(0, this.props.textEditTarget) || this._hasChanged;
+                this.props.onChangeStrokeWidth(0);
+            }
             // Apply color and update redux, but do not update svg until picker closes.
-            var isDifferent = (0, _stylePath.applyStrokeColorToSelection)(newColor, (0, _format.isBitmap)(this.props.format), this.props.textEditTarget);
-            this._hasChanged = this._hasChanged || isDifferent;
+            this._hasChanged = (0, _stylePath.applyStrokeColorToSelection)(newColor, (0, _format.isBitmap)(this.props.format), this.props.textEditTarget) || this._hasChanged;
             this.props.onChangeStrokeColor(newColor);
         }
     }, {
@@ -61108,6 +61060,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
         onChangeStrokeColor: function onChangeStrokeColor(strokeColor) {
             dispatch((0, _strokeColor.changeStrokeColor)(strokeColor));
         },
+        onChangeStrokeWidth: function onChangeStrokeWidth(strokeWidth) {
+            dispatch((0, _strokeWidth.changeStrokeWidth)(strokeWidth));
+        },
         onOpenStrokeColor: function onOpenStrokeColor() {
             dispatch((0, _modals.openStrokeColor)());
         },
@@ -61118,10 +61073,10 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 StrokeColorIndicator.propTypes = {
-    disabled: _propTypes2.default.bool.isRequired,
     format: _propTypes2.default.oneOf(Object.keys(_format2.default)),
     isEyeDropping: _propTypes2.default.bool.isRequired,
     onChangeStrokeColor: _propTypes2.default.func.isRequired,
+    onChangeStrokeWidth: _propTypes2.default.func.isRequired,
     onCloseStrokeColor: _propTypes2.default.func.isRequired,
     onUpdateImage: _propTypes2.default.func.isRequired,
     strokeColor: _propTypes2.default.string,
@@ -61263,17 +61218,29 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _strokeWidth = __webpack_require__(44);
+var _parseColor = __webpack_require__(44);
+
+var _parseColor2 = _interopRequireDefault(_parseColor);
+
+var _strokeColor = __webpack_require__(32);
+
+var _strokeWidth = __webpack_require__(33);
 
 var _strokeWidthIndicator = __webpack_require__(325);
 
 var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
+
+var _selection = __webpack_require__(3);
 
 var _stylePath = __webpack_require__(9);
 
 var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
+
+var _format = __webpack_require__(14);
+
+var _format2 = _interopRequireDefault(_format);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61298,10 +61265,19 @@ var StrokeWidthIndicator = function (_React$Component) {
     _createClass(StrokeWidthIndicator, [{
         key: 'handleChangeStrokeWidth',
         value: function handleChangeStrokeWidth(newWidth) {
-            if ((0, _stylePath.applyStrokeWidthToSelection)(newWidth, this.props.textEditTarget)) {
-                this.props.onUpdateImage();
+            var changed = (0, _stylePath.applyStrokeWidthToSelection)(newWidth, this.props.textEditTarget);
+            if ((!this.props.strokeWidth || this.props.strokeWidth === 0) && newWidth > 0) {
+                var currentColor = (0, _stylePath.getColorsFromSelection)((0, _selection.getSelectedLeafItems)(), (0, _format.isBitmap)(this.props.format)).strokeColor;
+                if (currentColor === null) {
+                    changed = (0, _stylePath.applyStrokeColorToSelection)('#000', (0, _format.isBitmap)(this.props.format), this.props.textEditTarget) || changed;
+                    currentColor = '#000';
+                } else if (currentColor !== _stylePath.MIXED) {
+                    currentColor = (0, _parseColor2.default)(currentColor).hex;
+                }
+                this.props.onChangeStrokeColor(currentColor);
             }
             this.props.onChangeStrokeWidth(newWidth);
+            if (changed) this.props.onUpdateImage();
         }
     }, {
         key: 'render',
@@ -61320,12 +61296,16 @@ var StrokeWidthIndicator = function (_React$Component) {
 var mapStateToProps = function mapStateToProps(state) {
     return {
         disabled: state.scratchPaint.mode === _modes2.default.BRUSH || state.scratchPaint.mode === _modes2.default.TEXT || state.scratchPaint.mode === _modes2.default.FILL,
+        format: state.scratchPaint.format,
         strokeWidth: state.scratchPaint.color.strokeWidth,
         textEditTarget: state.scratchPaint.textEditTarget
     };
 };
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
+        onChangeStrokeColor: function onChangeStrokeColor(strokeColor) {
+            dispatch((0, _strokeColor.changeStrokeColor)(strokeColor));
+        },
         onChangeStrokeWidth: function onChangeStrokeWidth(strokeWidth) {
             dispatch((0, _strokeWidth.changeStrokeWidth)(strokeWidth));
         }
@@ -61334,6 +61314,8 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 
 StrokeWidthIndicator.propTypes = {
     disabled: _propTypes2.default.bool.isRequired,
+    format: _propTypes2.default.oneOf(Object.keys(_format2.default)),
+    onChangeStrokeColor: _propTypes2.default.func.isRequired,
     onChangeStrokeWidth: _propTypes2.default.func.isRequired,
     onUpdateImage: _propTypes2.default.func.isRequired,
     strokeWidth: _propTypes2.default.number,
@@ -61373,7 +61355,7 @@ var _liveInputHoc = __webpack_require__(110);
 
 var _liveInputHoc2 = _interopRequireDefault(_liveInputHoc);
 
-var _strokeWidth = __webpack_require__(44);
+var _strokeWidth = __webpack_require__(33);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61448,7 +61430,7 @@ var _font = __webpack_require__(69);
 
 var _fillColor = __webpack_require__(19);
 
-var _strokeColor = __webpack_require__(36);
+var _strokeColor = __webpack_require__(32);
 
 var _modes3 = __webpack_require__(10);
 
@@ -62235,11 +62217,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -62290,11 +62272,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(14);
+var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(15);
+var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -62476,7 +62458,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -62760,9 +62742,9 @@ var _selectedItems = __webpack_require__(7);
 
 var _undo = __webpack_require__(56);
 
-var _undo2 = __webpack_require__(41);
+var _undo2 = __webpack_require__(42);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -62906,7 +62888,7 @@ var _lodash4 = _interopRequireDefault(_lodash3);
 
 var _reactRedux = __webpack_require__(6);
 
-var _undo = __webpack_require__(41);
+var _undo = __webpack_require__(42);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -62926,7 +62908,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _format = __webpack_require__(16);
+var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -63091,7 +63073,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(32);
+var _redux = __webpack_require__(34);
 
 var _modes = __webpack_require__(10);
 
@@ -63133,11 +63115,11 @@ var _font = __webpack_require__(69);
 
 var _font2 = _interopRequireDefault(_font);
 
-var _format = __webpack_require__(46);
+var _format = __webpack_require__(47);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _hover = __webpack_require__(42);
+var _hover = __webpack_require__(43);
 
 var _hover2 = _interopRequireDefault(_hover);
 
@@ -63157,11 +63139,11 @@ var _textEditTarget = __webpack_require__(53);
 
 var _textEditTarget2 = _interopRequireDefault(_textEditTarget);
 
-var _viewBounds = __webpack_require__(47);
+var _viewBounds = __webpack_require__(48);
 
 var _viewBounds2 = _interopRequireDefault(_viewBounds);
 
-var _undo = __webpack_require__(41);
+var _undo = __webpack_require__(42);
 
 var _undo2 = _interopRequireDefault(_undo);
 
@@ -63204,7 +63186,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(32);
+var _redux = __webpack_require__(34);
 
 var _eyeDropper = __webpack_require__(51);
 
@@ -63222,11 +63204,11 @@ var _selectionGradientType = __webpack_require__(22);
 
 var _selectionGradientType2 = _interopRequireDefault(_selectionGradientType);
 
-var _strokeColor = __webpack_require__(36);
+var _strokeColor = __webpack_require__(32);
 
 var _strokeColor2 = _interopRequireDefault(_strokeColor);
 
-var _strokeWidth = __webpack_require__(44);
+var _strokeWidth = __webpack_require__(33);
 
 var _strokeWidth2 = _interopRequireDefault(_strokeWidth);
 
@@ -63252,9 +63234,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(32);
+var _redux = __webpack_require__(34);
 
-var _fillModeGradientType = __webpack_require__(35);
+var _fillModeGradientType = __webpack_require__(37);
 
 var _fillModeGradientType2 = _interopRequireDefault(_fillModeGradientType);
 
@@ -63280,7 +63262,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(32);
+var _redux = __webpack_require__(34);
 
 var _intl = __webpack_require__(111);
 
