@@ -94,7 +94,7 @@
     "style-loader": "^0.22.0",
     "svg-url-loader": "^2.3.2",
     "tap": "^11.1.0",
-    "uglifyjs-webpack-plugin": "^1.2.5",
+    "uglifyjs-webpack-plugin": "^2.0.0",
     "url-loader": "^1.0.1",
     "webpack": "^4.8.0",
     "webpack-cli": "^3.1.0",
