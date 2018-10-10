@@ -27329,7 +27329,6 @@ exports.changeFillColor2 = changeFillColor2;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
 var isServer = typeof window === "undefined";
 var isClient = !isServer;
 var WINDOW = isClient ? window : null;
@@ -50730,53 +50729,53 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(0);
+var _cssVendor = __webpack_require__(224);
 
-var _react2 = _interopRequireDefault(_react);
+var cssVendor = _interopRequireWildcard(_cssVendor);
+
+var _debug = __webpack_require__(228);
+
+var _debug2 = _interopRequireDefault(_debug);
+
+var _lodash = __webpack_require__(231);
+
+var _lodash2 = _interopRequireDefault(_lodash);
 
 var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
 var _reactDom = __webpack_require__(74);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _debug = __webpack_require__(224);
-
-var _debug2 = _interopRequireDefault(_debug);
-
-var _lodash = __webpack_require__(227);
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _cssVendor = __webpack_require__(230);
-
-var cssVendor = _interopRequireWildcard(_cssVendor);
-
-var _onResize = __webpack_require__(234);
-
-var _onResize2 = _interopRequireDefault(_onResize);
-
-var _layout = __webpack_require__(235);
+var _layout = __webpack_require__(234);
 
 var _layout2 = _interopRequireDefault(_layout);
+
+var _onResize = __webpack_require__(235);
+
+var _onResize2 = _interopRequireDefault(_onResize);
 
 var _platform = __webpack_require__(50);
 
 var _platform2 = _interopRequireDefault(_platform);
 
-var _utils = __webpack_require__(65);
-
-var _utils2 = _interopRequireDefault(_utils);
-
 var _tip = __webpack_require__(236);
 
 var _tip2 = _interopRequireDefault(_tip);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _utils = __webpack_require__(65);
+
+var _utils2 = _interopRequireDefault(_utils);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -51028,17 +51027,20 @@ var Popover = function (_React$Component) {
       of the container. When tip changes orientation position due to changes from/to `row`/`column`
       width`/`height` will be impacted. Our layout monitoring will catch these cases and automatically
       recalculate layout. */
-
-      this.containerEl.style.flexFlow = zone.flow;
-      this.containerEl.style[jsprefix("FlexFlow")] = this.containerEl.style.flexFlow;
+      if (this.containerEl) {
+        this.containerEl.style.flexFlow = zone.flow;
+        this.containerEl.style[jsprefix("FlexFlow")] = this.containerEl.style.flexFlow;
+      }
       this.bodyEl.style.order = zone.order;
       this.bodyEl.style[jsprefix("Order")] = this.bodyEl.style.order;
 
       /* Apply Absolute Positioning. */
 
       log("pos", pos);
-      this.containerEl.style.top = pos.y + "px";
-      this.containerEl.style.left = pos.x + "px";
+      if (this.containerEl) {
+        this.containerEl.style.top = pos.y + "px";
+        this.containerEl.style.left = pos.x + "px";
+      }
 
       /* Calculate Tip Position */
 
@@ -51288,13 +51290,240 @@ exports.default = Popover;
 /* 224 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.supportedValue = exports.supportedProperty = exports.prefix = undefined;
+
+var _prefix = __webpack_require__(63);
+
+var _prefix2 = _interopRequireDefault(_prefix);
+
+var _supportedProperty = __webpack_require__(225);
+
+var _supportedProperty2 = _interopRequireDefault(_supportedProperty);
+
+var _supportedValue = __webpack_require__(227);
+
+var _supportedValue2 = _interopRequireDefault(_supportedValue);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+exports['default'] = {
+  prefix: _prefix2['default'],
+  supportedProperty: _supportedProperty2['default'],
+  supportedValue: _supportedValue2['default']
+}; /**
+    * CSS Vendor prefix detection and property feature testing.
+    *
+    * @copyright Oleg Slobodskoi 2015
+    * @website https://github.com/jsstyles/css-vendor
+    * @license MIT
+    */
+
+exports.prefix = _prefix2['default'];
+exports.supportedProperty = _supportedProperty2['default'];
+exports.supportedValue = _supportedValue2['default'];
+
+/***/ }),
+/* 225 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = supportedProperty;
+
+var _isInBrowser = __webpack_require__(64);
+
+var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
+
+var _prefix = __webpack_require__(63);
+
+var _prefix2 = _interopRequireDefault(_prefix);
+
+var _camelize = __webpack_require__(226);
+
+var _camelize2 = _interopRequireDefault(_camelize);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var el = void 0;
+var cache = {};
+
+if (_isInBrowser2['default']) {
+  el = document.createElement('p');
+
+  /**
+   * We test every property on vendor prefix requirement.
+   * Once tested, result is cached. It gives us up to 70% perf boost.
+   * http://jsperf.com/element-style-object-access-vs-plain-object
+   *
+   * Prefill cache with known css properties to reduce amount of
+   * properties we need to feature test at runtime.
+   * http://davidwalsh.name/vendor-prefix
+   */
+  var computed = window.getComputedStyle(document.documentElement, '');
+  for (var key in computed) {
+    if (!isNaN(key)) cache[computed[key]] = computed[key];
+  }
+}
+
+/**
+ * Test if a property is supported, returns supported property with vendor
+ * prefix if required. Returns `false` if not supported.
+ *
+ * @param {String} prop dash separated
+ * @return {String|Boolean}
+ * @api public
+ */
+function supportedProperty(prop) {
+  // For server-side rendering.
+  if (!el) return prop;
+
+  // We have not tested this prop yet, lets do the test.
+  if (cache[prop] != null) return cache[prop];
+
+  // Camelization is required because we can't test using
+  // css syntax for e.g. in FF.
+  // Test if property is supported as it is.
+  if ((0, _camelize2['default'])(prop) in el.style) {
+    cache[prop] = prop;
+  }
+  // Test if property is supported with vendor prefix.
+  else if (_prefix2['default'].js + (0, _camelize2['default'])('-' + prop) in el.style) {
+      cache[prop] = _prefix2['default'].css + prop;
+    } else {
+      cache[prop] = false;
+    }
+
+  return cache[prop];
+}
+
+/***/ }),
+/* 226 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = camelize;
+var regExp = /[-\s]+(.)?/g;
+
+/**
+ * Convert dash separated strings to camel cased.
+ *
+ * @param {String} str
+ * @return {String}
+ */
+function camelize(str) {
+  return str.replace(regExp, toUpper);
+}
+
+function toUpper(match, c) {
+  return c ? c.toUpperCase() : '';
+}
+
+/***/ }),
+/* 227 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports['default'] = supportedValue;
+
+var _isInBrowser = __webpack_require__(64);
+
+var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
+
+var _prefix = __webpack_require__(63);
+
+var _prefix2 = _interopRequireDefault(_prefix);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+var cache = {};
+var el = void 0;
+
+if (_isInBrowser2['default']) el = document.createElement('p');
+
+/**
+ * Returns prefixed value if needed. Returns `false` if value is not supported.
+ *
+ * @param {String} property
+ * @param {String} value
+ * @return {String|Boolean}
+ * @api public
+ */
+function supportedValue(property, value) {
+  // For server-side rendering.
+  if (!el) return value;
+
+  // It is a string or a number as a string like '1'.
+  // We want only prefixable values here.
+  if (typeof value !== 'string' || !isNaN(parseInt(value, 10))) return value;
+
+  var cacheKey = property + value;
+
+  if (cache[cacheKey] != null) return cache[cacheKey];
+
+  // IE can even throw an error in some cases, for e.g. style.content = 'bar'
+  try {
+    // Test value as it is.
+    el.style[property] = value;
+  } catch (err) {
+    cache[cacheKey] = false;
+    return false;
+  }
+
+  // Value is supported as it is.
+  if (el.style[property] !== '') {
+    cache[cacheKey] = value;
+  } else {
+    // Test value with vendor prefix.
+    value = _prefix2['default'].css + value;
+
+    // Hardcode test to convert "flex" to "-ms-flexbox" for IE10.
+    if (value === '-ms-flex') value = '-ms-flexbox';
+
+    el.style[property] = value;
+
+    // Value is supported with vendor prefix.
+    if (el.style[property] !== '') cache[cacheKey] = value;
+  }
+
+  if (!cache[cacheKey]) cache[cacheKey] = false;
+
+  // Reset style value.
+  el.style[property] = '';
+
+  return cache[cacheKey];
+}
+
+/***/ }),
+/* 228 */
+/***/ (function(module, exports, __webpack_require__) {
+
 /* WEBPACK VAR INJECTION */(function(process) {/**
  * This is the web browser implementation of `debug()`.
  *
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(225);
+exports = module.exports = __webpack_require__(229);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -51477,7 +51706,7 @@ function localstorage() {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(90)))
 
 /***/ }),
-/* 225 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -51493,7 +51722,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(226);
+exports.humanize = __webpack_require__(230);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -51685,7 +51914,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 226 */
+/* 230 */
 /***/ (function(module, exports) {
 
 /**
@@ -51843,7 +52072,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 227 */
+/* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -51854,7 +52083,7 @@ function plural(ms, n, name) {
  * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  * Available under MIT license <https://lodash.com/license>
  */
-var debounce = __webpack_require__(228);
+var debounce = __webpack_require__(232);
 
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -51945,7 +52174,7 @@ module.exports = throttle;
 
 
 /***/ }),
-/* 228 */
+/* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -51956,7 +52185,7 @@ module.exports = throttle;
  * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  * Available under MIT license <https://lodash.com/license>
  */
-var getNative = __webpack_require__(229);
+var getNative = __webpack_require__(233);
 
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -52185,7 +52414,7 @@ module.exports = debounce;
 
 
 /***/ }),
-/* 229 */
+/* 233 */
 /***/ (function(module, exports) {
 
 /**
@@ -52328,362 +52557,7 @@ module.exports = getNative;
 
 
 /***/ }),
-/* 230 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.supportedValue = exports.supportedProperty = exports.prefix = undefined;
-
-var _prefix = __webpack_require__(63);
-
-var _prefix2 = _interopRequireDefault(_prefix);
-
-var _supportedProperty = __webpack_require__(231);
-
-var _supportedProperty2 = _interopRequireDefault(_supportedProperty);
-
-var _supportedValue = __webpack_require__(233);
-
-var _supportedValue2 = _interopRequireDefault(_supportedValue);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-exports['default'] = {
-  prefix: _prefix2['default'],
-  supportedProperty: _supportedProperty2['default'],
-  supportedValue: _supportedValue2['default']
-}; /**
-    * CSS Vendor prefix detection and property feature testing.
-    *
-    * @copyright Oleg Slobodskoi 2015
-    * @website https://github.com/jsstyles/css-vendor
-    * @license MIT
-    */
-
-exports.prefix = _prefix2['default'];
-exports.supportedProperty = _supportedProperty2['default'];
-exports.supportedValue = _supportedValue2['default'];
-
-/***/ }),
-/* 231 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports['default'] = supportedProperty;
-
-var _isInBrowser = __webpack_require__(64);
-
-var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
-
-var _prefix = __webpack_require__(63);
-
-var _prefix2 = _interopRequireDefault(_prefix);
-
-var _camelize = __webpack_require__(232);
-
-var _camelize2 = _interopRequireDefault(_camelize);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var el = void 0;
-var cache = {};
-
-if (_isInBrowser2['default']) {
-  el = document.createElement('p');
-
-  /**
-   * We test every property on vendor prefix requirement.
-   * Once tested, result is cached. It gives us up to 70% perf boost.
-   * http://jsperf.com/element-style-object-access-vs-plain-object
-   *
-   * Prefill cache with known css properties to reduce amount of
-   * properties we need to feature test at runtime.
-   * http://davidwalsh.name/vendor-prefix
-   */
-  var computed = window.getComputedStyle(document.documentElement, '');
-  for (var key in computed) {
-    if (!isNaN(key)) cache[computed[key]] = computed[key];
-  }
-}
-
-/**
- * Test if a property is supported, returns supported property with vendor
- * prefix if required. Returns `false` if not supported.
- *
- * @param {String} prop dash separated
- * @return {String|Boolean}
- * @api public
- */
-function supportedProperty(prop) {
-  // For server-side rendering.
-  if (!el) return prop;
-
-  // We have not tested this prop yet, lets do the test.
-  if (cache[prop] != null) return cache[prop];
-
-  // Camelization is required because we can't test using
-  // css syntax for e.g. in FF.
-  // Test if property is supported as it is.
-  if ((0, _camelize2['default'])(prop) in el.style) {
-    cache[prop] = prop;
-  }
-  // Test if property is supported with vendor prefix.
-  else if (_prefix2['default'].js + (0, _camelize2['default'])('-' + prop) in el.style) {
-      cache[prop] = _prefix2['default'].css + prop;
-    } else {
-      cache[prop] = false;
-    }
-
-  return cache[prop];
-}
-
-/***/ }),
-/* 232 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports['default'] = camelize;
-var regExp = /[-\s]+(.)?/g;
-
-/**
- * Convert dash separated strings to camel cased.
- *
- * @param {String} str
- * @return {String}
- */
-function camelize(str) {
-  return str.replace(regExp, toUpper);
-}
-
-function toUpper(match, c) {
-  return c ? c.toUpperCase() : '';
-}
-
-/***/ }),
-/* 233 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports['default'] = supportedValue;
-
-var _isInBrowser = __webpack_require__(64);
-
-var _isInBrowser2 = _interopRequireDefault(_isInBrowser);
-
-var _prefix = __webpack_require__(63);
-
-var _prefix2 = _interopRequireDefault(_prefix);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var cache = {};
-var el = void 0;
-
-if (_isInBrowser2['default']) el = document.createElement('p');
-
-/**
- * Returns prefixed value if needed. Returns `false` if value is not supported.
- *
- * @param {String} property
- * @param {String} value
- * @return {String|Boolean}
- * @api public
- */
-function supportedValue(property, value) {
-  // For server-side rendering.
-  if (!el) return value;
-
-  // It is a string or a number as a string like '1'.
-  // We want only prefixable values here.
-  if (typeof value !== 'string' || !isNaN(parseInt(value, 10))) return value;
-
-  var cacheKey = property + value;
-
-  if (cache[cacheKey] != null) return cache[cacheKey];
-
-  // IE can even throw an error in some cases, for e.g. style.content = 'bar'
-  try {
-    // Test value as it is.
-    el.style[property] = value;
-  } catch (err) {
-    cache[cacheKey] = false;
-    return false;
-  }
-
-  // Value is supported as it is.
-  if (el.style[property] !== '') {
-    cache[cacheKey] = value;
-  } else {
-    // Test value with vendor prefix.
-    value = _prefix2['default'].css + value;
-
-    // Hardcode test to convert "flex" to "-ms-flexbox" for IE10.
-    if (value === '-ms-flex') value = '-ms-flexbox';
-
-    el.style[property] = value;
-
-    // Value is supported with vendor prefix.
-    if (el.style[property] !== '') cache[cacheKey] = value;
-  }
-
-  if (!cache[cacheKey]) cache[cacheKey] = false;
-
-  // Reset style value.
-  el.style[property] = '';
-
-  return cache[cacheKey];
-}
-
-/***/ }),
 /* 234 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.removeEventListener = exports.addEventListener = exports.off = exports.on = undefined;
-
-var _platform = __webpack_require__(50);
-
-var _utils = __webpack_require__(65);
-
-/* eslint no-param-reassign: 0 */
-
-var requestAnimationFrame = _platform.isServer ? _utils.noop : _platform.window.requestAnimationFrame || _platform.window.mozRequestAnimationFrame || _platform.window.webkitRequestAnimationFrame || function (fn) {
-  _platform.window.setTimeout(fn, 20);
-};
-
-var cancelAnimationFrame = _platform.isServer ? _utils.noop : _platform.window.cancelAnimationFrame || _platform.window.mozCancelAnimationFrame || _platform.window.webkitCancelAnimationFrame || _platform.window.clearTimeout;
-
-var isIE = _platform.isServer ? false : navigator.userAgent.match(/Trident/);
-
-var namespace = "__resizeDetector__";
-
-var uninitialize = function uninitialize(el) {
-  el[namespace].destroy();
-  el[namespace] = undefined;
-};
-
-var createElementHack = function createElementHack() {
-  var el = document.createElement("object");
-  el.className = "resize-sensor";
-  el.setAttribute("style", "display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; pointer-events: none; z-index: -1;");
-  el.setAttribute("class", "resize-sensor");
-  el.setAttribute("tabindex", "-1");
-  el.type = "text/html";
-  el.data = "about:blank";
-  return el;
-};
-
-var initialize = function initialize(el) {
-
-  var detector = el[namespace] = {};
-  detector.listeners = [];
-
-  var onResize = function onResize(e) {
-    /* Keep in mind e.target could be el OR objEl. In this current implementation we don't seem to need to know this but its important
-    to not forget e.g. in some future refactoring scenario. */
-    if (detector.resizeRAF) cancelAnimationFrame(detector.resizeRAF);
-    detector.resizeRAF = requestAnimationFrame(function () {
-      detector.listeners.forEach(function (fn) {
-        fn(e);
-      });
-    });
-  };
-
-  if (isIE) {
-    /* We do not support ie8 and below (or ie9 in compat mode).
-    Therefore there is no presence of `attachEvent` here. */
-    el.addEventListener("onresize", onResize);
-    detector.destroy = function () {
-      el.removeEventListener("onresize", onResize);
-    };
-  } else {
-    if (getComputedStyle(el).position === "static") {
-      detector.elWasStaticPosition = true;
-      el.style.position = "relative";
-    }
-    var objEl = createElementHack();
-    objEl.onload = function () /* event */{
-      this.contentDocument.defaultView.addEventListener("resize", onResize);
-    };
-    detector.destroy = function () {
-      if (detector.elWasStaticPosition) el.style.position = "";
-      if (el.contains(objEl)) {
-        // Event handlers will be automatically removed.
-        // http://stackoverflow.com/questions/12528049/if-a-dom-element-is-removed-are-its-listeners-also-removed-from-memory
-        el.removeChild(objEl);
-      }
-    };
-
-    el.appendChild(objEl);
-  }
-};
-
-var on = function on(el, fn) {
-
-  /* Window object natively publishes resize events. We handle it as a
-  special case here so that users do not have to think about two APIs. */
-
-  if (el === _platform.window) {
-    _platform.window.addEventListener("resize", fn);
-    return;
-  }
-
-  /* Not caching namespace read here beacuse not guaranteed that its available. */
-
-  if (!el[namespace]) initialize(el);
-  el[namespace].listeners.push(fn);
-};
-
-var off = function off(el, fn) {
-  if (el === _platform.window) {
-    _platform.window.removeEventListener("resize", fn);
-    return;
-  }
-  var detector = el[namespace];
-  if (!detector) return;
-  var i = detector.listeners.indexOf(fn);
-  if (i !== -1) detector.listeners.splice(i, 1);
-  if (!detector.listeners.length) uninitialize(el);
-};
-
-exports.default = {
-  on: on,
-  off: off,
-  addEventListener: on,
-  removeEventListener: off
-};
-exports.on = on;
-exports.off = off;
-exports.addEventListener = on;
-exports.removeEventListener = off;
-
-/***/ }),
-/* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52745,11 +52619,10 @@ var centerOfBoundsFromBounds = function centerOfBoundsFromBounds(flow, axis, bou
 
 var place = function place(flow, axis, align, bounds, size) {
   var axisProps = axes[flow][axis];
-  return align === "center" ? centerOfBounds(flow, axis, bounds) - centerOfSize(flow, axis, size) : align === "end" ? bounds[axisProps.end] : align === "start"
-  /* DOM rendering unfolds leftward. Therefore if the slave is positioned before
-  the master then the slave`s position must in addition be pulled back
-  by its [the slave`s] own length. */
-  ? bounds[axisProps.start] - size[axisProps.size] : null;
+  return align === "center" ? centerOfBounds(flow, axis, bounds) - centerOfSize(flow, axis, size) : align === "end" ? bounds[axisProps.end] : align === "start" ? /* DOM rendering unfolds leftward. Therefore if the slave is positioned before
+                                                                                                                                                                  the master then the slave`s position must in addition be pulled back
+                                                                                                                                                                  by its [the slave`s] own length. */
+  bounds[axisProps.start] - size[axisProps.size] : null;
 };
 
 /* Element Layout Queries */
@@ -52757,7 +52630,6 @@ var place = function place(flow, axis, align, bounds, size) {
 var El = {};
 
 El.calcBounds = function (el) {
-
   if (el === _platform.window) {
     return {
       x: 0,
@@ -52789,12 +52661,12 @@ El.calcScrollSize = function (el) {
   return el === _platform.window ? {
     w: el.scrollX || el.pageXOffset,
     h: el.scrollY || el.pageYOffset
-  } : { w: el.scrollLeft, h: el.scrollTop };
-};
+  } : { w: el.scrollLeft, h: el.scrollTop
 
-/* Misc Utilities */
+    /* Misc Utilities */
 
-var getPreferenceType = function getPreferenceType(preference) {
+  };
+};var getPreferenceType = function getPreferenceType(preference) {
   return types.reduce(function (found, type) {
     return found ? found : type.values.indexOf(preference) !== -1 ? type.name : null;
   }, null);
@@ -52827,7 +52699,35 @@ In the case that none fit we should pick the least-not-fitting zone. */
 var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
   var t = targetBounds;
   var f = frameBounds;
-  var zones = [{ side: "start", standing: "above", flow: "column", order: -1, w: f.x2, h: t.y }, { side: "end", standing: "right", flow: "row", order: 1, w: f.x2 - t.x2, h: f.y2 }, { side: "end", standing: "below", flow: "column", order: 1, w: f.x2, h: f.y2 - t.y2 }, { side: "start", standing: "left", flow: "row", order: -1, w: t.x, h: f.y2 }];
+  var zones = [{
+    side: "start",
+    standing: "above",
+    flow: "column",
+    order: -1,
+    w: f.x2,
+    h: t.y
+  }, {
+    side: "end",
+    standing: "right",
+    flow: "row",
+    order: 1,
+    w: f.x2 - t.x2,
+    h: f.y2
+  }, {
+    side: "end",
+    standing: "below",
+    flow: "column",
+    order: 1,
+    w: f.x2,
+    h: f.y2 - t.y2
+  }, {
+    side: "start",
+    standing: "left",
+    flow: "row",
+    order: -1,
+    w: t.x,
+    h: f.y2
+  }];
 
   /* Order the zones by the amount of popup that would be cut out if that zone is used.
      The first one in the array is the one that cuts the least amount.
@@ -52836,7 +52736,8 @@ var pickZone = function pickZone(opts, frameBounds, targetBounds, size) {
   zones.forEach(function (z) {
     // TODO Update to satisfy linter
     // eslint-disable-next-line no-param-reassign
-    z.cutOff = /* area */-Math.max(0, Math.min(z.w, size.w)) * Math.max(0, Math.min(z.h, size.h));
+    z.cutOff =
+    /* area */-Math.max(0, Math.min(z.w, size.w)) * Math.max(0, Math.min(z.h, size.h));
   });
   zones.sort(function (a, b) {
     return a.cutOff - b.cutOff;
@@ -52930,6 +52831,132 @@ exports.doesFitWithin = doesFitWithin;
 exports.equalCoords = _utils.equalRecords;
 
 /***/ }),
+/* 235 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.removeEventListener = exports.addEventListener = exports.off = exports.on = undefined;
+
+var _platform = __webpack_require__(50);
+
+var _utils = __webpack_require__(65);
+
+/* eslint no-param-reassign: 0 */
+
+var requestAnimationFrame = _platform.isServer ? _utils.noop : _platform.window.requestAnimationFrame || _platform.window.mozRequestAnimationFrame || _platform.window.webkitRequestAnimationFrame || function (fn) {
+  _platform.window.setTimeout(fn, 20);
+};
+
+var cancelAnimationFrame = _platform.isServer ? _utils.noop : _platform.window.cancelAnimationFrame || _platform.window.mozCancelAnimationFrame || _platform.window.webkitCancelAnimationFrame || _platform.window.clearTimeout;
+
+var isIE = _platform.isServer ? false : navigator.userAgent.match(/Trident/);
+
+var namespace = "__resizeDetector__";
+
+var uninitialize = function uninitialize(el) {
+  el[namespace].destroy();
+  el[namespace] = undefined;
+};
+
+var createElementHack = function createElementHack() {
+  var el = document.createElement("object");
+  el.className = "resize-sensor";
+  el.setAttribute("style", "display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; pointer-events: none; z-index: -1;");
+  el.setAttribute("class", "resize-sensor");
+  el.setAttribute("tabindex", "-1");
+  el.type = "text/html";
+  el.data = "about:blank";
+  return el;
+};
+
+var initialize = function initialize(el) {
+  var detector = el[namespace] = {};
+  detector.listeners = [];
+
+  var onResize = function onResize(e) {
+    /* Keep in mind e.target could be el OR objEl. In this current implementation we don't seem to need to know this but its important
+    to not forget e.g. in some future refactoring scenario. */
+    if (detector.resizeRAF) cancelAnimationFrame(detector.resizeRAF);
+    detector.resizeRAF = requestAnimationFrame(function () {
+      detector.listeners.forEach(function (fn) {
+        fn(e);
+      });
+    });
+  };
+
+  if (isIE) {
+    /* We do not support ie8 and below (or ie9 in compat mode).
+    Therefore there is no presence of `attachEvent` here. */
+    el.addEventListener("onresize", onResize);
+    detector.destroy = function () {
+      el.removeEventListener("onresize", onResize);
+    };
+  } else {
+    if (getComputedStyle(el).position === "static") {
+      detector.elWasStaticPosition = true;
+      el.style.position = "relative";
+    }
+    var objEl = createElementHack();
+    objEl.onload = function () /* event */{
+      this.contentDocument.defaultView.addEventListener("resize", onResize);
+    };
+    detector.destroy = function () {
+      if (detector.elWasStaticPosition) el.style.position = "";
+      if (el.contains(objEl)) {
+        // Event handlers will be automatically removed.
+        // http://stackoverflow.com/questions/12528049/if-a-dom-element-is-removed-are-its-listeners-also-removed-from-memory
+        el.removeChild(objEl);
+      }
+    };
+
+    el.appendChild(objEl);
+  }
+};
+
+var on = function on(el, fn) {
+  /* Window object natively publishes resize events. We handle it as a
+  special case here so that users do not have to think about two APIs. */
+
+  if (el === _platform.window) {
+    _platform.window.addEventListener("resize", fn);
+    return;
+  }
+
+  /* Not caching namespace read here beacuse not guaranteed that its available. */
+
+  if (!el[namespace]) initialize(el);
+  el[namespace].listeners.push(fn);
+};
+
+var off = function off(el, fn) {
+  if (el === _platform.window) {
+    _platform.window.removeEventListener("resize", fn);
+    return;
+  }
+  var detector = el[namespace];
+  if (!detector) return;
+  var i = detector.listeners.indexOf(fn);
+  if (i !== -1) detector.listeners.splice(i, 1);
+  if (!detector.listeners.length) uninitialize(el);
+};
+
+exports.default = {
+  on: on,
+  off: off,
+  addEventListener: on,
+  removeEventListener: off
+};
+exports.on = on;
+exports.off = off;
+exports.addEventListener = on;
+exports.removeEventListener = off;
+
+/***/ }),
 /* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -52963,10 +52990,7 @@ var Tip = function Tip(props) {
   return _react2.default.createElement(
     "svg",
     svgProps,
-    _react2.default.createElement("polygon", {
-      className: "Popover-tipShape",
-      points: points
-    })
+    _react2.default.createElement("polygon", { className: "Popover-tipShape", points: points })
   );
 };
 
