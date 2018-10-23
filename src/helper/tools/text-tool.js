@@ -5,6 +5,7 @@ import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 import {hoverBounds} from '../guides';
 import {getRaster} from '../layer';
+import {SvgElement} from 'scratch-svg-renderer';
 
 /**
  * Tool for adding text. Text elements have limited editability; they can't be reshaped,
@@ -386,7 +387,7 @@ class TextTool extends paper.Tool {
         if (!this.textBox || !this.textBox.parent) return;
 
         // @todo get crisp text https://github.com/LLK/scratch-paint/issues/508
-        const textRaster = this.textBox.rasterize(72, false /* insert */);
+        const textRaster = this.textBox.rasterize(72, false /* insert */, this._getTextSize(this.textBox));
         this.textBox.remove();
         this.textBox = null;
         getRaster().drawImage(
@@ -394,6 +395,61 @@ class TextTool extends paper.Tool {
             new paper.Point(Math.floor(textRaster.bounds.x), Math.floor(textRaster.bounds.y))
         );
         this.onUpdateImage();
+    }
+    _getTextSize (textBox) {
+        const numLines = textBox._lines.length;
+        const leading = textBox._style.getLeading();
+
+        // Create SVG dom element from text
+        const svg = SvgElement.create('svg', {
+            version: '1.1',
+            xmlns: SvgElement.svg
+        });
+        const node = SvgElement.create('text');
+        node.setAttributeNS('http://www.w3.org/XML/1998/namespace', 'xml:space', 'preserve');
+        svg.appendChild(node);
+        for (let i = 0; i < numLines; i++) {
+            const tspanNode = SvgElement.create('tspan', {
+                x: '0',
+                dy: i === 0 ? '0' : `${leading}px`
+            });
+            tspanNode.textContent = textBox._lines[i];
+            node.appendChild(tspanNode);
+        }
+
+        // Append to dom
+        const element = document.createElement('span');
+        element.style.visibility = ('hidden');
+        element.style.whiteSpace = 'pre';
+        element.style.fontSize = `${textBox.fontSize}px`;
+        element.style.fontFamily = textBox.font;
+        element.style.lineHeight = textBox.leading / textBox.fontSize;
+
+        // Measure bbox
+        let bbox;
+        try {
+            element.appendChild(svg);
+            // Is element width available before appending?
+            document.body.appendChild(element);
+            // Take the bounding box.
+            bbox = svg.getBBox();
+        } finally {
+            // Always destroy the element, even if, for example, getBBox throws.
+            document.body.removeChild(element);
+        }
+
+        // Enlarge the bbox from the largest found stroke width
+        // This may have false-positives, but at least the bbox will always
+        // contain the full graphic including strokes.
+        const halfStrokeWidth = textBox.strokeWidth / 2;
+        const width = bbox.width + (halfStrokeWidth * 2);
+        const height = bbox.height + (halfStrokeWidth * 2);
+        const x = bbox.x - halfStrokeWidth;
+        const y = bbox.y - halfStrokeWidth;
+
+        // Add 1 to give space for text cursor
+        const rect = new paper.Rectangle(x, y, width + 1, Math.max(height, numLines * leading));
+        return textBox.matrix ? textBox.matrix._transformBounds(rect, rect) : rect;
     }
     deactivateTool () {
         if (this.textBox && this.textBox.content.trim() === '') {
