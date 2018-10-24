@@ -369,7 +369,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
 
     // Export svg
     const guideLayers = hideGuideLayers(true /* includeRaster */);
-    const bounds = paper.project.activeLayer.visibleBounds;
+    const bounds = paper.project.activeLayer.drawnBounds;
     const svg = paper.project.exportSVG({
         bounds: 'content',
         matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
