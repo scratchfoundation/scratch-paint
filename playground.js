@@ -21555,7 +21555,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 		return classes.join(' ');
 	}
 
-	if (typeof module !== 'undefined' && module.exports) {
+	if (true && module.exports) {
 		module.exports = classNames;
 	} else if (true) {
 		// register as 'classnames', consistent with npm package name
