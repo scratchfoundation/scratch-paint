@@ -103,7 +103,7 @@ const UpdateImageHOC = function (WrappedComponent) {
 
             // Export at 0.5x
             scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
-            const bounds = paper.project.activeLayer.bounds;
+            const bounds = paper.project.activeLayer.visibleBounds;
             // @todo (https://github.com/LLK/scratch-paint/issues/445) generate view box
             this.props.onUpdateImage(
                 true /* isVector */,
