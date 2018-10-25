@@ -5,7 +5,6 @@ import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 import {hoverBounds} from '../guides';
 import {getRaster} from '../layer';
-import {SvgElement} from 'scratch-svg-renderer';
 
 /**
  * Tool for adding text. Text elements have limited editability; they can't be reshaped,
