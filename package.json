@@ -58,7 +58,7 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.22.0",
     "canvas-prebuilt": "^2.0.0-alpha.14",
-    "css-loader": "1.0.0",
+    "css-loader": "1.0.1",
     "enzyme": "^3.1.0",
     "enzyme-adapter-react-16": "^1.0.1",
     "eslint": "^4.4.1",
