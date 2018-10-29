@@ -129,7 +129,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Wed Oct 24 15:14:39 2018 -0400
+ * Date: Mon Oct 29 10:29:19 2018 -0400
  *
  ***
  *
@@ -3371,7 +3371,8 @@ new function() {
 }, Base.each({
 		getStrokeBounds: { stroke: true },
 		getHandleBounds: { handle: true },
-		getInternalBounds: { internal: true }
+		getInternalBounds: { internal: true },
+		getDrawnBounds: { stroke: true, drawnTextBounds: true },
 	},
 	function(options, key) {
 		this[key] = function(matrix) {
@@ -3428,6 +3429,7 @@ new function() {
 		return [
 			options.stroke ? 1 : 0,
 			options.handle ? 1 : 0,
+			options.drawnTextBounds? 1 : 0,
 			internal ? 1 : 0
 		].join('');
 	},
@@ -11327,6 +11329,11 @@ var PointText = TextItem.extend({
 	},
 
 	_getBounds: function(matrix, options) {
+		var rect = options.drawnTextBounds ? this._getDrawnTextSize() : this._getMeasuredTextSize();
+		return matrix ? matrix._transformBounds(rect, rect) : rect;
+	},
+
+	_getMeasuredTextSize: function() {
 		var style = this._style,
 			lines = this._lines,
 			numLines = lines.length,
@@ -11336,10 +11343,62 @@ var PointText = TextItem.extend({
 			x = 0;
 		if (justification !== 'left')
 			x -= width / (justification === 'center' ? 2: 1);
-		var rect = new Rectangle(x,
+		return new Rectangle(x,
 					numLines ? - 0.75 * leading : 0,
 					width, numLines * leading);
-		return matrix ? matrix._transformBounds(rect, rect) : rect;
+	},
+
+	_getDrawnTextSize: function() {
+		var style = this._style;
+		var lines = this._lines;
+		var numLines = lines.length;
+		var leading = style.getLeading();
+		var justification = style.getJustification();
+
+		var svg = SvgElement.create('svg', {
+					version: '1.1',
+					xmlns: SvgElement.svg
+				});
+		var node = SvgElement.create('text');
+		node.setAttributeNS('http://www.w3.org/XML/1998/namespace', 'xml:space', 'preserve');
+		svg.appendChild(node);
+		for (var i = 0; i < numLines; i++) {
+			var tspanNode = SvgElement.create('tspan', {
+				x: '0',
+				dy: i === 0 ? '0' : leading + 'px'
+			});
+			tspanNode.textContent = this._lines[i];
+			node.appendChild(tspanNode);
+		}
+
+		var element = document.createElement('span');
+		element.style.visibility = ('hidden');
+		element.style.whiteSpace = 'pre';
+		element.style.fontSize = this.fontSize + 'px';
+		element.style.fontFamily = this.font;
+		element.style.lineHeight = this.leading / this.fontSize;
+
+		var bbox;
+		try {
+			element.appendChild(svg);
+			document.body.appendChild(element);
+			bbox = svg.getBBox();
+		} finally {
+			document.body.removeChild(element);
+		}
+
+		var halfStrokeWidth = this.strokeWidth / 2;
+		var width = bbox.width + (halfStrokeWidth * 2);
+		var height = bbox.height + (halfStrokeWidth * 2);
+		var x = bbox.x - halfStrokeWidth;
+		var y = bbox.y - halfStrokeWidth;
+
+		if (justification !== 'left') {
+			var eltWidth = this.getView().getTextWidth(style.getFontStyle(), lines);
+			x -= eltWidth / (justification === 'center' ? 2: 1);
+		}
+
+		return new Rectangle(x, y, width + 1, Math.max(height, numLines * leading));
 	},
 
 	_hitTestSelf: function(point, options) {
@@ -14536,7 +14595,7 @@ new function() {
 				rect = bounds === 'view'
 					? new Rectangle([0, 0], view.getViewSize())
 					: bounds === 'content'
-						? Item._getBounds(children, matrix, { stroke: true })
+						? Item._getBounds(children, matrix, { stroke: true, drawnTextBounds: true })
 							.rect
 						: Rectangle.read([bounds], 0, { readNull: true }),
 				attrs = {
@@ -22257,7 +22316,7 @@ var convertToBitmap = function convertToBitmap(clearSelectedItems, onUpdateImage
 
     // Export svg
     var guideLayers = (0, _layer.hideGuideLayers)(true /* includeRaster */);
-    var bounds = _paper2.default.project.activeLayer.bounds;
+    var bounds = _paper2.default.project.activeLayer.drawnBounds;
     var svg = _paper2.default.project.exportSVG({
         bounds: 'content',
         matrix: new _paper2.default.Matrix().translate(-bounds.x, -bounds.y)
@@ -62686,7 +62745,7 @@ var TextTool = function (_paper$Tool) {
             if (!this.textBox || !this.textBox.parent) return;
 
             // @todo get crisp text https://github.com/LLK/scratch-paint/issues/508
-            var textRaster = this.textBox.rasterize(72, false /* insert */);
+            var textRaster = this.textBox.rasterize(72, false /* insert */, this.textBox.drawnBounds);
             this.textBox.remove();
             this.textBox = null;
             (0, _layer.getRaster)().drawImage(textRaster.canvas, new _paper2.default.Point(Math.floor(textRaster.bounds.x), Math.floor(textRaster.bounds.y)));
@@ -63479,7 +63538,7 @@ var UpdateImageHOC = function UpdateImageHOC(WrappedComponent) {
                 }
                 // Anything that is selected is on the vector layer waiting to be committed to the bitmap layer.
                 // Plaster the selection onto the raster layer before exporting, if there is a selection.
-                var plasteredRaster = (0, _layer.getRaster)().getSubRaster((0, _layer.getRaster)().bounds);
+                var plasteredRaster = (0, _layer.getRaster)().getSubRaster((0, _layer.getRaster)().bounds); // Clone the raster layer
                 plasteredRaster.remove(); // Don't insert
                 var selectedItems = (0, _selection.getSelectedLeafItems)();
                 if (selectedItems.length === 1) {
@@ -63497,8 +63556,9 @@ var UpdateImageHOC = function UpdateImageHOC(WrappedComponent) {
                     } else if (item instanceof _paper2.default.Shape && item.type === 'ellipse') {
                         (0, _bitmap.commitOvalToBitmap)(item, plasteredRaster);
                     } else if (item instanceof _paper2.default.PointText) {
-                        var textRaster = item.rasterize(72, false /* insert */);
-                        plasteredRaster.drawImage(textRaster.canvas, new _paper2.default.Point(Math.floor(textRaster.bounds.x), Math.floor(textRaster.bounds.y)));
+                        var bounds = item.drawnBounds;
+                        var textRaster = item.rasterize(72, false /* insert */, bounds);
+                        plasteredRaster.drawImage(textRaster.canvas, new _paper2.default.Point(Math.floor(bounds.x), Math.floor(bounds.y)));
                     }
                 }
                 var rect = (0, _bitmap.getHitBounds)(plasteredRaster);
@@ -63516,7 +63576,7 @@ var UpdateImageHOC = function UpdateImageHOC(WrappedComponent) {
 
                 // Export at 0.5x
                 (0, _math.scaleWithStrokes)(_paper2.default.project.activeLayer, .5, new _paper2.default.Point());
-                var bounds = _paper2.default.project.activeLayer.bounds;
+                var bounds = _paper2.default.project.activeLayer.drawnBounds;
                 // @todo (https://github.com/LLK/scratch-paint/issues/445) generate view box
                 this.props.onUpdateImage(true /* isVector */
                 , _paper2.default.project.exportSVG({
