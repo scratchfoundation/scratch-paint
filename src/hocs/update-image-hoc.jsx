@@ -59,7 +59,7 @@ const UpdateImageHOC = function (WrappedComponent) {
             }
             // Anything that is selected is on the vector layer waiting to be committed to the bitmap layer.
             // Plaster the selection onto the raster layer before exporting, if there is a selection.
-            const plasteredRaster = getRaster().getSubRaster(getRaster().bounds);
+            const plasteredRaster = getRaster().getSubRaster(getRaster().bounds); // Clone the raster layer
             plasteredRaster.remove(); // Don't insert
             const selectedItems = getSelectedLeafItems();
             if (selectedItems.length === 1) {
@@ -80,10 +80,11 @@ const UpdateImageHOC = function (WrappedComponent) {
                 } else if (item instanceof paper.Shape && item.type === 'ellipse') {
                     commitOvalToBitmap(item, plasteredRaster);
                 } else if (item instanceof paper.PointText) {
-                    const textRaster = item.rasterize(72, false /* insert */);
+                    const bounds = item.drawnBounds;
+                    const textRaster = item.rasterize(72, false /* insert */, bounds);
                     plasteredRaster.drawImage(
                         textRaster.canvas,
-                        new paper.Point(Math.floor(textRaster.bounds.x), Math.floor(textRaster.bounds.y))
+                        new paper.Point(Math.floor(bounds.x), Math.floor(bounds.y))
                     );
                 }
             }
@@ -103,7 +104,7 @@ const UpdateImageHOC = function (WrappedComponent) {
 
             // Export at 0.5x
             scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
-            const bounds = paper.project.activeLayer.bounds;
+            const bounds = paper.project.activeLayer.drawnBounds;
             // @todo (https://github.com/LLK/scratch-paint/issues/445) generate view box
             this.props.onUpdateImage(
                 true /* isVector */,

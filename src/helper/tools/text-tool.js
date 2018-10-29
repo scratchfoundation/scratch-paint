@@ -386,7 +386,7 @@ class TextTool extends paper.Tool {
         if (!this.textBox || !this.textBox.parent) return;
 
         // @todo get crisp text https://github.com/LLK/scratch-paint/issues/508
-        const textRaster = this.textBox.rasterize(72, false /* insert */);
+        const textRaster = this.textBox.rasterize(72, false /* insert */, this.textBox.drawnBounds);
         this.textBox.remove();
         this.textBox = null;
         getRaster().drawImage(
