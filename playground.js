@@ -42819,7 +42819,7 @@ var PaperCanvas = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaperCanvas.__proto__ || Object.getPrototypeOf(PaperCanvas)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['setCanvas', 'importSvg', 'maybeZoomToFit', 'switchCostume']);
+        (0, _lodash2.default)(_this, ['setCanvas', 'importSvg', 'initializeSvg', 'maybeZoomToFit', 'switchCostume']);
         return _this;
     }
 
@@ -42990,101 +42990,108 @@ var PaperCanvas = function (_React$Component) {
                         (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
                         return;
                     }
-                    var itemWidth = item.bounds.width;
-                    var itemHeight = item.bounds.height;
+                    item.remove();
 
-                    // Remove viewbox
-                    if (item.clipped) {
-                        var mask = void 0;
-                        var _iteratorNormalCompletion2 = true;
-                        var _didIteratorError2 = false;
-                        var _iteratorError2 = undefined;
-
-                        try {
-                            for (var _iterator2 = item.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                                var child = _step2.value;
-
-                                if (child.isClipMask()) {
-                                    mask = child;
-                                    break;
-                                }
-                            }
-                        } catch (err) {
-                            _didIteratorError2 = true;
-                            _iteratorError2 = err;
-                        } finally {
-                            try {
-                                if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                                    _iterator2.return();
-                                }
-                            } finally {
-                                if (_didIteratorError2) {
-                                    throw _iteratorError2;
-                                }
-                            }
-                        }
-
-                        item.clipped = false;
-                        mask.remove();
-                    }
-
-                    // Reduce single item nested in groups
-                    if (item instanceof _paper2.default.Group && item.children.length === 1) {
-                        item = item.reduce();
-                    }
-
-                    (0, _math.ensureClockwise)(item);
-                    (0, _math.scaleWithStrokes)(item, 2, new _paper2.default.Point()); // Import at 2x
-
-                    if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
-                        var rotationPoint = new _paper2.default.Point(rotationCenterX, rotationCenterY);
-                        if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
-                            rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
-                        }
-                        item.translate(new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2).subtract(rotationPoint.multiply(2)));
-                    } else {
-                        // Center
-                        item.translate(new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2).subtract(itemWidth, itemHeight));
-                    }
-                    if ((0, _group.isGroup)(item)) {
-                        // Fixes an issue where we may export empty groups
-                        var _iteratorNormalCompletion3 = true;
-                        var _didIteratorError3 = false;
-                        var _iteratorError3 = undefined;
-
-                        try {
-                            for (var _iterator3 = item.children[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                                var _child = _step3.value;
-
-                                if ((0, _group.isGroup)(_child) && _child.children.length === 0) {
-                                    _child.remove();
-                                }
-                            }
-                        } catch (err) {
-                            _didIteratorError3 = true;
-                            _iteratorError3 = err;
-                        } finally {
-                            try {
-                                if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                                    _iterator3.return();
-                                }
-                            } finally {
-                                if (_didIteratorError3) {
-                                    throw _iteratorError3;
-                                }
-                            }
-                        }
-
-                        (0, _group.ungroupItems)([item]);
-                    }
-
-                    // Without the callback, the transforms sometimes don't finish applying before the
-                    // snapshot is taken.
+                    // Without the callback, rasters' load function has not been called yet, and they are
+                    // positioned incorrectly
                     window.setTimeout(function () {
-                        return (0, _undo.performSnapshot)(paperCanvas.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
+                        paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
                     }, 0);
                 }
             });
+        }
+    }, {
+        key: 'initializeSvg',
+        value: function initializeSvg(item, rotationCenterX, rotationCenterY, viewBox) {
+            var itemWidth = item.bounds.width;
+            var itemHeight = item.bounds.height;
+
+            // Remove viewbox
+            if (item.clipped) {
+                var mask = void 0;
+                var _iteratorNormalCompletion2 = true;
+                var _didIteratorError2 = false;
+                var _iteratorError2 = undefined;
+
+                try {
+                    for (var _iterator2 = item.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        var child = _step2.value;
+
+                        if (child.isClipMask()) {
+                            mask = child;
+                            break;
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError2 = true;
+                    _iteratorError2 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                            _iterator2.return();
+                        }
+                    } finally {
+                        if (_didIteratorError2) {
+                            throw _iteratorError2;
+                        }
+                    }
+                }
+
+                item.clipped = false;
+                mask.remove();
+            }
+
+            // Reduce single item nested in groups
+            if (item instanceof _paper2.default.Group && item.children.length === 1) {
+                item = item.reduce();
+            }
+
+            (0, _math.ensureClockwise)(item);
+            (0, _math.scaleWithStrokes)(item, 2, new _paper2.default.Point()); // Import at 2x
+
+            if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
+                var rotationPoint = new _paper2.default.Point(rotationCenterX, rotationCenterY);
+                if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
+                    rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
+                }
+                item.translate(new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2).subtract(rotationPoint.multiply(2)));
+            } else {
+                // Center
+                item.translate(new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2).subtract(itemWidth, itemHeight));
+            }
+            _paper2.default.project.activeLayer.insertChild(0, item);
+            if ((0, _group.isGroup)(item)) {
+                // Fixes an issue where we may export empty groups
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
+
+                try {
+                    for (var _iterator3 = item.children[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                        var _child = _step3.value;
+
+                        if ((0, _group.isGroup)(_child) && _child.children.length === 0) {
+                            _child.remove();
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError3 = true;
+                    _iteratorError3 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                            _iterator3.return();
+                        }
+                    } finally {
+                        if (_didIteratorError3) {
+                            throw _iteratorError3;
+                        }
+                    }
+                }
+
+                (0, _group.ungroupItems)([item]);
+            }
+            (0, _undo.performSnapshot)(this.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
         }
     }, {
         key: 'setCanvas',
