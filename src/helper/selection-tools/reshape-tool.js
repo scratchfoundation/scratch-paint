@@ -87,6 +87,7 @@ class ReshapeTool extends paper.Tool {
             segments: true,
             tolerance: ReshapeTool.TOLERANCE / paper.view.zoom,
             match: hitResult => {
+                if (hitResult.type !== 'segment') return false;
                 if (hitResult.item.data && hitResult.item.data.noHover) return false;
                 if (!hitResult.item.selected) return false;
                 return true;
@@ -108,7 +109,7 @@ class ReshapeTool extends paper.Tool {
                 if (hitResult.item.data && hitResult.item.data.noHover) return false;
                 // Only hit test against handles that are visible, that is,
                 // their segment is selected
-                if (!hitResult.segment.selected) return false;
+                if (!hitResult.segment || !hitResult.segment.selected) return false;
                 // If the entire shape is selected, handles are hidden
                 if (hitResult.item.fullySelected) return false;
                 return true;
@@ -131,6 +132,7 @@ class ReshapeTool extends paper.Tool {
             guide: false,
             tolerance: ReshapeTool.TOLERANCE / paper.view.zoom,
             match: hitResult => {
+                if (hitResult.type !== 'stroke' || hitResult.type !== 'curve') return false;
                 if (!hitResult.item.selected) return false;
                 if (hitResult.item.data && hitResult.item.data.noHover) return false;
                 return true;
