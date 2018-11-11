@@ -35,10 +35,12 @@ class BoundingBoxTool {
      * @param {Modes} mode Paint editor mode
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
+     * @param {function} setCursor Callback to set the visible mouse cursor
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      * @param {?function} switchToTextTool A callback to call to switch to the text tool
      */
-    constructor (mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool) {
+    constructor (mode, setSelectedItems, clearSelectedItems, setCursor, onUpdateImage, switchToTextTool) {
+        this.setCursor = setCursor;
         this.onUpdateImage = onUpdateImage;
         this.mode = null;
         this.boundsPath = null;
@@ -74,29 +76,14 @@ class BoundingBoxTool {
      */
     onMouseDown (event, clone, multiselect, doubleClicked, hitOptions) {
         if (event.event.button > 0) return; // only first mouse button
-        const hitResults = paper.project.hitTestAll(event.point, hitOptions);
+        const {hitResult, hitResults, mode} = this._determineMode(event, multiselect, hitOptions);
         if (!hitResults || hitResults.length === 0) {
             if (!multiselect) {
                 this.removeBoundsPath();
             }
             return false;
         }
-
-        // Prefer scale to trigger over rotate, and scale and rotate to trigger over other hits
-        let hitResult = hitResults[0];
-        for (let i = 0; i < hitResults.length; i++) {
-            if (hitResults[i].item.data && hitResults[i].item.data.isScaleHandle) {
-                hitResult = hitResults[i];
-                this.mode = BoundingBoxModes.SCALE;
-                break;
-            } else if (hitResults[i].item.data && hitResults[i].item.data.isRotHandle) {
-                hitResult = hitResults[i];
-                this.mode = BoundingBoxModes.ROTATE;
-            }
-        }
-        if (!this.mode) {
-            this.mode = BoundingBoxModes.MOVE;
-        }
+        this.mode = mode;
 
         const hitProperties = {
             hitResult: hitResult,
@@ -105,12 +92,14 @@ class BoundingBoxTool {
             doubleClicked: doubleClicked
         };
         if (this.mode === BoundingBoxModes.MOVE) {
+            this.setCursor('grabbing');
             this._modeMap[this.mode].onMouseDown(hitProperties);
             this.removeBoundsHandles();
         } else if (this.mode === BoundingBoxModes.SCALE) {
             this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedRootItems());
             this.removeBoundsHandles();
         } else if (this.mode === BoundingBoxModes.ROTATE) {
+            this.setCursor('grabbing');
             this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedRootItems());
             // While transforming, don't show bounds
             this.removeBoundsPath();
@@ -118,13 +107,76 @@ class BoundingBoxTool {
 
         return true;
     }
+    onMouseMove (event, hitOptions) {
+        this._updateCursor(event, hitOptions);
+    }
+    _updateCursor (event, hitOptions) {
+        const { mode, hitResult } = this._determineMode(event, false, hitOptions);
+        if (hitResult) {
+            if (mode === BoundingBoxModes.MOVE) {
+                this.setCursor('grab');
+            } else if (mode === BoundingBoxModes.ROTATE) {
+                this.setCursor('grab');
+            } else if (mode === BoundingBoxModes.SCALE) {
+                this.setSelectionBounds();
+                if (this.boundsPath.position.x === hitResult.item.position.x) {
+                    this.setCursor('ns-resize');
+                } else if (this.boundsPath.position.y === hitResult.item.position.y) {
+                    this.setCursor('ew-resize');
+                } else if (this.boundsPath.position.y < hitResult.item.position.y) {
+                    if (this.boundsPath.position.x > hitResult.item.position.x) {
+                        this.setCursor('nesw-resize');
+                    } else {
+                        this.setCursor('nwse-resize');
+                    }
+                } else {
+                    if (this.boundsPath.position.x > hitResult.item.position.x) {
+                        this.setCursor('nwse-resize');
+                    } else {
+                        this.setCursor('nesw-resize');
+                    }
+                }
+            }
+        } else {
+            this.setCursor('default');
+        }
+    }
+    _determineMode (event, multiselect, hitOptions) {
+        const hitResults = paper.project.hitTestAll(event.point, hitOptions);
+
+        let mode;
+
+        // Prefer scale to trigger over rotate, and scale and rotate to trigger over other hits
+        let hitResult = hitResults[0];
+        for (let i = 0; i < hitResults.length; i++) {
+            if (hitResults[i].item.data && hitResults[i].item.data.isScaleHandle) {
+                hitResult = hitResults[i];
+                mode = BoundingBoxModes.SCALE;
+                break;
+            } else if (hitResults[i].item.data && hitResults[i].item.data.isRotHandle) {
+                hitResult = hitResults[i];
+                mode = BoundingBoxModes.ROTATE;
+            }
+        }
+        if (!mode) {
+            mode = BoundingBoxModes.MOVE;
+        }
+
+        return {mode, hitResults, hitResult};
+    }
     onMouseDrag (event) {
         if (event.event.button > 0 || !this.mode) return; // only first mouse button
         this._modeMap[this.mode].onMouseDrag(event);
     }
-    onMouseUp (event) {
+    onMouseUp (event, hitOptions) {
         if (event.event.button > 0 || !this.mode) return; // only first mouse button
         this._modeMap[this.mode].onMouseUp(event);
+
+        // Update the cursor to match the handle again. This has to be done a tick later because, if called
+        // immediately, the handles won't be visible yet (they are hidden while dragging).
+        setTimeout(() => {
+            this._updateCursor(event, hitOptions);
+        });
 
         // After transforming, show bounds again
         this.setSelectionBounds();
