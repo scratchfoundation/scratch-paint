@@ -66,6 +66,8 @@ class PaperCanvas extends React.Component {
         }
     }
     componentWillUnmount () {
+        if (this.queuedImport) window.clearTimeout(this.queuedImport);
+        this.queuedImport = null;
         this.props.saveZoomLevel();
         paper.remove();
     }
@@ -121,7 +123,6 @@ class PaperCanvas extends React.Component {
         } else if (format === 'svg') {
             this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
             this.importSvg(image, rotationCenterX, rotationCenterY);
-            this.maybeZoomToFit();
         } else {
             log.error(`Didn't recognize format: ${format}. Use 'jpg', 'png' or 'svg'.`);
             this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
@@ -176,13 +177,18 @@ class PaperCanvas extends React.Component {
 
                 // Without the callback, rasters' load function has not been called yet, and they are
                 // positioned incorrectly
-                window.setTimeout(() => {
-                    paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
-                }, 0);
+                if (paperCanvas.queuedImport) {
+                    clearTimeout(paperCanvas.queuedImport);
+                }
+                paperCanvas.queuedImport =
+                    window.setTimeout(() => {
+                        paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
+                    }, 0);
             }
         });
     }
     initializeSvg (item, rotationCenterX, rotationCenterY, viewBox) {
+        if (this.queuedImport) this.queuedImport = null;
         const itemWidth = item.bounds.width;
         const itemHeight = item.bounds.height;
 
@@ -230,6 +236,7 @@ class PaperCanvas extends React.Component {
             ungroupItems([item]);
         }
         performSnapshot(this.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
+        this.maybeZoomToFit();
     }
     setCanvas (canvas) {
         this.canvas = canvas;
