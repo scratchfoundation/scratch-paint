@@ -129,7 +129,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Mon Oct 29 10:29:19 2018 -0400
+ * Date: Tue Nov 13 16:56:31 2018 -0500
  *
  ***
  *
@@ -5196,7 +5196,7 @@ var Raster = Item.extend({
 		source: null
 	},
 	_prioritize: ['crossOrigin'],
-	_smoothing: true,
+	_smoothing: false,
 
 	initialize: function Raster(object, position) {
 		if (!this._initialize(object,
