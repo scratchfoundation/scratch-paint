@@ -25,6 +25,7 @@ class PaperCanvas extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'clearQueuedImport',
             'setCanvas',
             'importSvg',
             'initializeSvg',
@@ -66,10 +67,20 @@ class PaperCanvas extends React.Component {
         }
     }
     componentWillUnmount () {
-        if (this.queuedImport) window.clearTimeout(this.queuedImport);
-        this.queuedImport = null;
+        this.clearQueuedImport();
         this.props.saveZoomLevel();
         paper.remove();
+    }
+    clearQueuedImport () {
+        if (this.queuedImport) {
+            window.clearTimeout(this.queuedImport);
+            this.queuedImport = null;
+        }
+        if (this.queuedImageToLoad) {
+            this.queuedImageToLoad.src = '';
+            this.queuedImageToLoad.onload = null;
+            this.queuedImageToLoad = null;
+        }
     }
     switchCostume (format, image, rotationCenterX, rotationCenterY, oldZoomLevelId, newZoomLevelId) {
         if (oldZoomLevelId && oldZoomLevelId !== newZoomLevelId) {
@@ -97,6 +108,9 @@ class PaperCanvas extends React.Component {
         this.importImage(format, image, rotationCenterX, rotationCenterY);
     }
     importImage (format, image, rotationCenterX, rotationCenterY) {
+        // Stop any in-progress imports
+        this.clearQueuedImport();
+
         if (!image) {
             this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
             performSnapshot(this.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
@@ -107,7 +121,11 @@ class PaperCanvas extends React.Component {
             // import bitmap
             this.props.changeFormat(Formats.BITMAP_SKIP_CONVERT);
             const imgElement = new Image();
+            this.queuedImageToLoad = imgElement;
             imgElement.onload = () => {
+                if (!this.queuedImageToLoad) return;
+                this.queuedImageToLoad = null;
+
                 getRaster().drawImage(
                     imgElement,
                     (ART_BOARD_WIDTH / 2) - rotationCenterX,
@@ -177,9 +195,6 @@ class PaperCanvas extends React.Component {
 
                 // Without the callback, rasters' load function has not been called yet, and they are
                 // positioned incorrectly
-                if (paperCanvas.queuedImport) {
-                    clearTimeout(paperCanvas.queuedImport);
-                }
                 paperCanvas.queuedImport =
                     window.setTimeout(() => {
                         paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
