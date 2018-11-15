@@ -42883,7 +42883,7 @@ var PaperCanvas = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaperCanvas.__proto__ || Object.getPrototypeOf(PaperCanvas)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['setCanvas', 'importSvg', 'initializeSvg', 'maybeZoomToFit', 'switchCostume']);
+        (0, _lodash2.default)(_this, ['clearQueuedImport', 'setCanvas', 'importSvg', 'initializeSvg', 'maybeZoomToFit', 'switchCostume']);
         return _this;
     }
 
@@ -42924,8 +42924,22 @@ var PaperCanvas = function (_React$Component) {
     }, {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
+            this.clearQueuedImport();
             this.props.saveZoomLevel();
             _paper2.default.remove();
+        }
+    }, {
+        key: 'clearQueuedImport',
+        value: function clearQueuedImport() {
+            if (this.queuedImport) {
+                window.clearTimeout(this.queuedImport);
+                this.queuedImport = null;
+            }
+            if (this.queuedImageToLoad) {
+                this.queuedImageToLoad.src = '';
+                this.queuedImageToLoad.onload = null;
+                this.queuedImageToLoad = null;
+            }
         }
     }, {
         key: 'switchCostume',
@@ -42981,6 +42995,9 @@ var PaperCanvas = function (_React$Component) {
         value: function importImage(format, image, rotationCenterX, rotationCenterY) {
             var _this2 = this;
 
+            // Stop any in-progress imports
+            this.clearQueuedImport();
+
             if (!image) {
                 this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
                 (0, _undo.performSnapshot)(this.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
@@ -42991,7 +43008,11 @@ var PaperCanvas = function (_React$Component) {
                 // import bitmap
                 this.props.changeFormat(_format2.default.BITMAP_SKIP_CONVERT);
                 var imgElement = new Image();
+                this.queuedImageToLoad = imgElement;
                 imgElement.onload = function () {
+                    if (!_this2.queuedImageToLoad) return;
+                    _this2.queuedImageToLoad = null;
+
                     (0, _layer.getRaster)().drawImage(imgElement, _view.ART_BOARD_WIDTH / 2 - rotationCenterX, _view.ART_BOARD_HEIGHT / 2 - rotationCenterY);
                     (0, _layer.getRaster)().drawImage(imgElement, _view.ART_BOARD_WIDTH / 2 - rotationCenterX, _view.ART_BOARD_HEIGHT / 2 - rotationCenterY);
                     _this2.maybeZoomToFit(true /* isBitmap */);
@@ -43001,7 +43022,6 @@ var PaperCanvas = function (_React$Component) {
             } else if (format === 'svg') {
                 this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
                 this.importSvg(image, rotationCenterX, rotationCenterY);
-                this.maybeZoomToFit();
             } else {
                 _log2.default.error('Didn\'t recognize format: ' + format + '. Use \'jpg\', \'png\' or \'svg\'.');
                 this.props.changeFormat(_format2.default.VECTOR_SKIP_CONVERT);
@@ -43058,7 +43078,7 @@ var PaperCanvas = function (_React$Component) {
 
                     // Without the callback, rasters' load function has not been called yet, and they are
                     // positioned incorrectly
-                    window.setTimeout(function () {
+                    paperCanvas.queuedImport = window.setTimeout(function () {
                         paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
                     }, 0);
                 }
@@ -43067,6 +43087,7 @@ var PaperCanvas = function (_React$Component) {
     }, {
         key: 'initializeSvg',
         value: function initializeSvg(item, rotationCenterX, rotationCenterY, viewBox) {
+            if (this.queuedImport) this.queuedImport = null;
             var itemWidth = item.bounds.width;
             var itemHeight = item.bounds.height;
 
@@ -43156,6 +43177,7 @@ var PaperCanvas = function (_React$Component) {
                 (0, _group.ungroupItems)([item]);
             }
             (0, _undo.performSnapshot)(this.props.undoSnapshot, _format2.default.VECTOR_SKIP_CONVERT);
+            this.maybeZoomToFit();
         }
     }, {
         key: 'setCanvas',
