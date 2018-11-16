@@ -23,12 +23,19 @@ class SelectTool extends paper.Tool {
     /**
      * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
      * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
+     * @param {function} setCursor Callback to set the visible mouse cursor
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (setSelectedItems, clearSelectedItems, onUpdateImage) {
+    constructor (setSelectedItems, clearSelectedItems, setCursor, onUpdateImage) {
         super();
         this.onUpdateImage = onUpdateImage;
-        this.boundingBoxTool = new BoundingBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems, onUpdateImage);
+        this.boundingBoxTool = new BoundingBoxTool(
+            Modes.SELECT,
+            setSelectedItems,
+            clearSelectedItems,
+            setCursor,
+            onUpdateImage
+        );
         const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         this.selectionBoxTool = new SelectionBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems);
         this.selectionBoxMode = false;
@@ -39,6 +46,7 @@ class SelectTool extends paper.Tool {
         // paper.js tools hook up the listeners in the setter functions.
         this.onMouseDown = this.handleMouseDown;
         this.onMouseDrag = this.handleMouseDrag;
+        this.onMouseMove = this.handleMouseMove;
         this.onMouseUp = this.handleMouseUp;
         this.onKeyUp = nudgeTool.onKeyUp;
         this.onKeyDown = nudgeTool.onKeyDown;
@@ -108,6 +116,9 @@ class SelectTool extends paper.Tool {
         } else {
             this.boundingBoxTool.onMouseDrag(event);
         }
+    }
+    handleMouseMove (event) {
+        this.boundingBoxTool.onMouseMove(event, this.getHitOptions());
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
