@@ -5,6 +5,7 @@ import {getSelectedRootItems} from '../selection';
 import {getGuideColor, removeBoundsPath, removeBoundsHandles} from '../guides';
 import {getGuideLayer} from '../layer';
 
+import Cursors from '../../lib/cursors';
 import ScaleTool from './scale-tool';
 import RotateTool from './rotate-tool';
 import MoveTool from './move-tool';
@@ -92,14 +93,14 @@ class BoundingBoxTool {
             doubleClicked: doubleClicked
         };
         if (this.mode === BoundingBoxModes.MOVE) {
-            this.setCursor('grabbing');
+            this.setCursor(Cursors.GRABBING);
             this._modeMap[this.mode].onMouseDown(hitProperties);
             this.removeBoundsHandles();
         } else if (this.mode === BoundingBoxModes.SCALE) {
             this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedRootItems());
             this.removeBoundsHandles();
         } else if (this.mode === BoundingBoxModes.ROTATE) {
-            this.setCursor('grabbing');
+            this.setCursor(Cursors.GRABBING);
             this._modeMap[this.mode].onMouseDown(hitResult, this.boundsPath, getSelectedRootItems());
             // While transforming, don't show bounds
             this.removeBoundsPath();
@@ -114,29 +115,29 @@ class BoundingBoxTool {
         const {mode, hitResult} = this._determineMode(event, false, hitOptions);
         if (hitResult) {
             if (mode === BoundingBoxModes.MOVE) {
-                this.setCursor('grab');
+                this.setCursor(Cursors.GRAB);
             } else if (mode === BoundingBoxModes.ROTATE) {
-                this.setCursor('grab');
+                this.setCursor(Cursors.GRAB);
             } else if (mode === BoundingBoxModes.SCALE) {
                 this.setSelectionBounds();
                 if (this.boundsPath.position.x === hitResult.item.position.x) {
-                    this.setCursor('ns-resize');
+                    this.setCursor(Cursors.RESIZE_NS);
                 } else if (this.boundsPath.position.y === hitResult.item.position.y) {
-                    this.setCursor('ew-resize');
+                    this.setCursor(Cursors.RESIZE_EW);
                 } else if (this.boundsPath.position.y < hitResult.item.position.y) {
                     if (this.boundsPath.position.x > hitResult.item.position.x) {
-                        this.setCursor('nesw-resize');
+                        this.setCursor(Cursors.RESIZE_NESW);
                     } else {
-                        this.setCursor('nwse-resize');
+                        this.setCursor(Cursors.RESIZE_NWSE);
                     }
                 } else if (this.boundsPath.position.x > hitResult.item.position.x) {
-                    this.setCursor('nwse-resize');
+                    this.setCursor(Cursors.RESIZE_NWSE);
                 } else {
-                    this.setCursor('nesw-resize');
+                    this.setCursor(Cursors.RESIZE_NESW);
                 }
             }
         } else {
-            this.setCursor('default');
+            this.setCursor(Cursors.DEFAULT);
         }
     }
     _determineMode (event, multiselect, hitOptions) {
@@ -302,7 +303,7 @@ class BoundingBoxTool {
     }
     deactivateTool () {
         this.removeBoundsPath();
-        this.setCursor('default');
+        this.setCursor(Cursors.DEFAULT);
     }
 }
 

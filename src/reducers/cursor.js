@@ -1,7 +1,9 @@
 import log from '../log/log';
 
+import Cursors from '../lib/cursors';
+
 const CHANGE_CURSOR = 'scratch-paint/cursor/CHANGE_CURSOR';
-const initialState = 'default';
+const initialState = Cursors.DEFAULT;
 
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
