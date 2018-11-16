@@ -89,7 +89,21 @@ class OvalTool extends paper.Tool {
         const downPoint = new paper.Point(event.downPoint.x, event.downPoint.y);
         const point = new paper.Point(event.point.x, event.point.y);
         if (event.modifiers.shift) {
-            this.oval.size = new paper.Point(event.downPoint.x - event.point.x, event.downPoint.x - event.point.x);
+            // These variables are used for determining the relative quadrant that the circle will appear in.
+            // So if you drag up and right, it'll show up above and to the right of where you started dragging, etc.
+            let offsetX = event.point.x - event.downPoint.x;
+            let offsetY = event.point.y - event.downPoint.y;
+
+            // If the offset variables are zero, the circle ends up having zero width or height, which is bad.
+            // Deal with this by forcing them to be non-zero (we arbitrarily choose 1; any non-zero value would work).
+            offsetX = offsetX ? offsetX : 1;
+            offsetY = offsetY ? offsetY : 1;
+
+            const diameter = Math.abs(event.downPoint.x - event.point.x);
+            this.oval.size = new paper.Point(
+                diameter * -(offsetX / Math.abs(offsetX)),
+                diameter * -(offsetY / Math.abs(offsetY))
+            );
         } else {
             this.oval.size = downPoint.subtract(point);
         }
