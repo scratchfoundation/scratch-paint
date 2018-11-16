@@ -77,8 +77,8 @@ class BoundingBoxTool {
      */
     onMouseDown (event, clone, multiselect, doubleClicked, hitOptions) {
         if (event.event.button > 0) return; // only first mouse button
-        const {hitResult, hitResults, mode} = this._determineMode(event, multiselect, hitOptions);
-        if (!hitResults || hitResults.length === 0) {
+        const {hitResult, mode} = this._determineMode(event, multiselect, hitOptions);
+        if (!hitResult) {
             if (!multiselect) {
                 this.removeBoundsPath();
             }
@@ -158,7 +158,7 @@ class BoundingBoxTool {
             mode = BoundingBoxModes.MOVE;
         }
 
-        return {mode, hitResults, hitResult};
+        return {mode, hitResult};
     }
     onMouseDrag (event) {
         if (event.event.button > 0 || !this.mode) return; // only first mouse button
