@@ -120,20 +120,17 @@ class BoundingBoxTool {
                 this.setCursor(Cursors.GRAB);
             } else if (mode === BoundingBoxModes.SCALE) {
                 this.setSelectionBounds();
-                if (this.boundsPath.position.x === hitResult.item.position.x) {
+                if (hitResult.item.position.x === this.boundsPath.position.x) {
                     this.setCursor(Cursors.RESIZE_NS);
-                } else if (this.boundsPath.position.y === hitResult.item.position.y) {
+                } else if (hitResult.item.position.y === this.boundsPath.position.y) {
                     this.setCursor(Cursors.RESIZE_EW);
-                } else if (this.boundsPath.position.y < hitResult.item.position.y) {
-                    if (this.boundsPath.position.x > hitResult.item.position.x) {
-                        this.setCursor(Cursors.RESIZE_NESW);
-                    } else {
-                        this.setCursor(Cursors.RESIZE_NWSE);
-                    }
-                } else if (this.boundsPath.position.x > hitResult.item.position.x) {
-                    this.setCursor(Cursors.RESIZE_NWSE);
-                } else {
+                } else if (
+                    hitResult.item.position.equals(this.boundsPath.bounds.bottomLeft) ||
+                    hitResult.item.position.equals(this.boundsPath.bounds.topRight)
+                ) {
                     this.setCursor(Cursors.RESIZE_NESW);
+                } else {
+                    this.setCursor(Cursors.RESIZE_NWSE);
                 }
             }
         } else {
