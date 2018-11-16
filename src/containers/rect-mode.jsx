@@ -97,7 +97,6 @@ class RectMode extends React.Component {
 RectMode.propTypes = {
     clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    setCursor: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,
         strokeColor: PropTypes.string,
@@ -109,6 +108,7 @@ RectMode.propTypes = {
     onChangeStrokeColor: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
+    setCursor: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired
 };
 

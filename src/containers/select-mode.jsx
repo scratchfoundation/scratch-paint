@@ -79,12 +79,12 @@ class SelectMode extends React.Component {
 SelectMode.propTypes = {
     clearHoveredItem: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    setCursor: PropTypes.func.isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     hoveredItemId: PropTypes.number,
     isSelectModeActive: PropTypes.bool.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     selectedItems: PropTypes.arrayOf(PropTypes.instanceOf(paper.Item)),
+    setCursor: PropTypes.func.isRequired,
     setHoveredItem: PropTypes.func.isRequired,
     setSelectedItems: PropTypes.func.isRequired,
     switchToTextTool: PropTypes.func.isRequired

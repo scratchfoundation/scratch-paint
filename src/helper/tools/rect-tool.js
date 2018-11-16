@@ -23,7 +23,13 @@ class RectTool extends paper.Tool {
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.onUpdateImage = onUpdateImage;
-        this.boundingBoxTool = new BoundingBoxTool(Modes.RECT, setSelectedItems, clearSelectedItems, setCursor, onUpdateImage);
+        this.boundingBoxTool = new BoundingBoxTool(
+            Modes.RECT,
+            setSelectedItems,
+            clearSelectedItems,
+            setCursor,
+            onUpdateImage
+        );
         const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
 
         // We have to set these functions instead of just declaring them because

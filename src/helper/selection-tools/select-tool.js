@@ -38,8 +38,14 @@ class SelectTool extends paper.Tool {
         this.setHoveredItem = setHoveredItem;
         this.clearHoveredItem = clearHoveredItem;
         this.onUpdateImage = onUpdateImage;
-        this.boundingBoxTool =
-            new BoundingBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems, setCursor, onUpdateImage, switchToTextTool);
+        this.boundingBoxTool = new BoundingBoxTool(
+            Modes.SELECT,
+            setSelectedItems,
+            clearSelectedItems,
+            setCursor,
+            onUpdateImage,
+            switchToTextTool
+        );
         const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
         this.selectionBoxTool = new SelectionBoxTool(Modes.SELECT, setSelectedItems, clearSelectedItems);
         this.selectionBoxMode = false;

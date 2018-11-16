@@ -111,7 +111,7 @@ class BoundingBoxTool {
         this._updateCursor(event, hitOptions);
     }
     _updateCursor (event, hitOptions) {
-        const { mode, hitResult } = this._determineMode(event, false, hitOptions);
+        const {mode, hitResult} = this._determineMode(event, false, hitOptions);
         if (hitResult) {
             if (mode === BoundingBoxModes.MOVE) {
                 this.setCursor('grab');
@@ -129,12 +129,10 @@ class BoundingBoxTool {
                     } else {
                         this.setCursor('nwse-resize');
                     }
+                } else if (this.boundsPath.position.x > hitResult.item.position.x) {
+                    this.setCursor('nwse-resize');
                 } else {
-                    if (this.boundsPath.position.x > hitResult.item.position.x) {
-                        this.setCursor('nwse-resize');
-                    } else {
-                        this.setCursor('nesw-resize');
-                    }
+                    this.setCursor('nesw-resize');
                 }
             }
         } else {
