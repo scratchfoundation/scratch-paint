@@ -6,6 +6,7 @@ import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
 import {MIXED} from '../helper/style-path';
 
+import {setCursor} from '../reducers/cursor';
 import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
 import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeMode} from '../reducers/modes';
@@ -72,6 +73,7 @@ class RectMode extends React.Component {
         this.tool = new RectTool(
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
+            this.props.setCursor,
             this.props.onUpdateImage
         );
         this.tool.setColorState(this.props.colorState);
@@ -95,6 +97,7 @@ class RectMode extends React.Component {
 RectMode.propTypes = {
     clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
+    setCursor: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,
         strokeColor: PropTypes.string,
@@ -123,6 +126,9 @@ const mapDispatchToProps = dispatch => ({
     },
     setSelectedItems: () => {
         dispatch(setSelectedItems(getSelectedLeafItems(), false /* bitmapMode */));
+    },
+    setCursor: cursorString => {
+        dispatch(setCursor(cursorString));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.RECT));
