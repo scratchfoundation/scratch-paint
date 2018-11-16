@@ -168,15 +168,10 @@ class BoundingBoxTool {
         if (event.event.button > 0 || !this.mode) return; // only first mouse button
         this._modeMap[this.mode].onMouseUp(event);
 
-        // Update the cursor to match the handle again. This has to be done a tick later because, if called
-        // immediately, the handles won't be visible yet (they are hidden while dragging).
-        setTimeout(() => {
-            this._updateCursor(event, hitOptions);
-        });
-
         // After transforming, show bounds again
         this.setSelectionBounds();
         this.mode = null;
+        this._updateCursor(event, hitOptions);
     }
     setSelectionBounds () {
         this.removeBoundsPath();
