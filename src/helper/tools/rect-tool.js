@@ -136,7 +136,7 @@ class RectTool extends paper.Tool {
         this.boundingBoxTool.onMouseMove(event, this.getHitOptions());
     }
     deactivateTool () {
-        this.boundingBoxTool.removeBoundsPath();
+        this.boundingBoxTool.deactivateTool();
     }
 }
 

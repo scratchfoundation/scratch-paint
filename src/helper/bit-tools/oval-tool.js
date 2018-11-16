@@ -206,7 +206,7 @@ class OvalTool extends paper.Tool {
     }
     deactivateTool () {
         this.commitOval();
-        this.boundingBoxTool.removeBoundsPath();
+        this.boundingBoxTool.deactivateTool();
     }
 }
 

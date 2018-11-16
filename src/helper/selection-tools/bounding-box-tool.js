@@ -300,6 +300,10 @@ class BoundingBoxTool {
         this.boundsScaleHandles.length = 0;
         this.boundsRotHandles.length = 0;
     }
+    deactivateTool () {
+        this.removeBoundsPath();
+        this.setCursor('default');
+    }
 }
 
 export default BoundingBoxTool;

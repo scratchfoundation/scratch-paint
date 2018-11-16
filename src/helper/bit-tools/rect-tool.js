@@ -201,7 +201,7 @@ class RectTool extends paper.Tool {
     }
     deactivateTool () {
         this.commitRect();
-        this.boundingBoxTool.removeBoundsPath();
+        this.boundingBoxTool.deactivateTool();
     }
 }
 

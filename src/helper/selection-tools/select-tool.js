@@ -172,7 +172,7 @@ class SelectTool extends paper.Tool {
     }
     deactivateTool () {
         this.clearHoveredItem();
-        this.boundingBoxTool.removeBoundsPath();
+        this.boundingBoxTool.deactivateTool();
         this.setHoveredItem = null;
         this.clearHoveredItem = null;
         this.onUpdateImage = null;

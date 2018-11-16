@@ -141,7 +141,7 @@ class SelectTool extends paper.Tool {
     }
     deactivateTool () {
         this.commitSelection();
-        this.boundingBoxTool.removeBoundsPath();
+        this.boundingBoxTool.deactivateTool();
         this.boundingBoxTool = null;
         this.selectionBoxTool = null;
     }

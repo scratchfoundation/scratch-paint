@@ -412,7 +412,7 @@ class TextTool extends paper.Tool {
         if (this.isBitmap) {
             this.commitText();
         }
-        this.boundingBoxTool.removeBoundsPath();
+        this.boundingBoxTool.deactivateTool();
     }
 }
 
