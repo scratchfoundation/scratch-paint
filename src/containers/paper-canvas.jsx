@@ -25,8 +25,10 @@ class PaperCanvas extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'clearQueuedImport',
             'setCanvas',
             'importSvg',
+            'initializeSvg',
             'maybeZoomToFit',
             'switchCostume'
         ]);
@@ -65,8 +67,20 @@ class PaperCanvas extends React.Component {
         }
     }
     componentWillUnmount () {
+        this.clearQueuedImport();
         this.props.saveZoomLevel();
         paper.remove();
+    }
+    clearQueuedImport () {
+        if (this.queuedImport) {
+            window.clearTimeout(this.queuedImport);
+            this.queuedImport = null;
+        }
+        if (this.queuedImageToLoad) {
+            this.queuedImageToLoad.src = '';
+            this.queuedImageToLoad.onload = null;
+            this.queuedImageToLoad = null;
+        }
     }
     switchCostume (format, image, rotationCenterX, rotationCenterY, oldZoomLevelId, newZoomLevelId) {
         if (oldZoomLevelId && oldZoomLevelId !== newZoomLevelId) {
@@ -94,6 +108,9 @@ class PaperCanvas extends React.Component {
         this.importImage(format, image, rotationCenterX, rotationCenterY);
     }
     importImage (format, image, rotationCenterX, rotationCenterY) {
+        // Stop any in-progress imports
+        this.clearQueuedImport();
+
         if (!image) {
             this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
             performSnapshot(this.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
@@ -104,7 +121,11 @@ class PaperCanvas extends React.Component {
             // import bitmap
             this.props.changeFormat(Formats.BITMAP_SKIP_CONVERT);
             const imgElement = new Image();
+            this.queuedImageToLoad = imgElement;
             imgElement.onload = () => {
+                if (!this.queuedImageToLoad) return;
+                this.queuedImageToLoad = null;
+
                 getRaster().drawImage(
                     imgElement,
                     (ART_BOARD_WIDTH / 2) - rotationCenterX,
@@ -120,7 +141,6 @@ class PaperCanvas extends React.Component {
         } else if (format === 'svg') {
             this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
             this.importSvg(image, rotationCenterX, rotationCenterY);
-            this.maybeZoomToFit();
         } else {
             log.error(`Didn't recognize format: ${format}. Use 'jpg', 'png' or 'svg'.`);
             this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
@@ -171,58 +191,67 @@ class PaperCanvas extends React.Component {
                     performSnapshot(paperCanvas.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
                     return;
                 }
-                const itemWidth = item.bounds.width;
-                const itemHeight = item.bounds.height;
+                item.remove();
 
-                // Remove viewbox
-                if (item.clipped) {
-                    let mask;
-                    for (const child of item.children) {
-                        if (child.isClipMask()) {
-                            mask = child;
-                            break;
-                        }
-                    }
-                    item.clipped = false;
-                    mask.remove();
-                }
-
-                // Reduce single item nested in groups
-                if (item instanceof paper.Group && item.children.length === 1) {
-                    item = item.reduce();
-                }
-
-                ensureClockwise(item);
-                scaleWithStrokes(item, 2, new paper.Point()); // Import at 2x
-
-                if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
-                    let rotationPoint = new paper.Point(rotationCenterX, rotationCenterY);
-                    if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
-                        rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
-                    }
-                    item.translate(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2)
-                        .subtract(rotationPoint.multiply(2)));
-                } else {
-                    // Center
-                    item.translate(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2)
-                        .subtract(itemWidth, itemHeight));
-                }
-                if (isGroup(item)) {
-                    // Fixes an issue where we may export empty groups
-                    for (const child of item.children) {
-                        if (isGroup(child) && child.children.length === 0) {
-                            child.remove();
-                        }
-                    }
-                    ungroupItems([item]);
-                }
-
-                // Without the callback, the transforms sometimes don't finish applying before the
-                // snapshot is taken.
-                window.setTimeout(
-                    () => performSnapshot(paperCanvas.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT), 0);
+                // Without the callback, rasters' load function has not been called yet, and they are
+                // positioned incorrectly
+                paperCanvas.queuedImport =
+                    window.setTimeout(() => {
+                        paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
+                    }, 0);
             }
         });
+    }
+    initializeSvg (item, rotationCenterX, rotationCenterY, viewBox) {
+        if (this.queuedImport) this.queuedImport = null;
+        const itemWidth = item.bounds.width;
+        const itemHeight = item.bounds.height;
+
+        // Remove viewbox
+        if (item.clipped) {
+            let mask;
+            for (const child of item.children) {
+                if (child.isClipMask()) {
+                    mask = child;
+                    break;
+                }
+            }
+            item.clipped = false;
+            mask.remove();
+        }
+
+        // Reduce single item nested in groups
+        if (item instanceof paper.Group && item.children.length === 1) {
+            item = item.reduce();
+        }
+
+        ensureClockwise(item);
+        scaleWithStrokes(item, 2, new paper.Point()); // Import at 2x
+
+        if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
+            let rotationPoint = new paper.Point(rotationCenterX, rotationCenterY);
+            if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
+                rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
+            }
+            item.translate(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2)
+                .subtract(rotationPoint.multiply(2)));
+        } else {
+            // Center
+            item.translate(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2)
+                .subtract(itemWidth, itemHeight));
+        }
+        paper.project.activeLayer.insertChild(0, item);
+        if (isGroup(item)) {
+            // Fixes an issue where we may export empty groups
+            for (const child of item.children) {
+                if (isGroup(child) && child.children.length === 0) {
+                    child.remove();
+                }
+            }
+            ungroupItems([item]);
+        }
+        performSnapshot(this.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
+        this.maybeZoomToFit();
     }
     setCanvas (canvas) {
         this.canvas = canvas;
