@@ -41,7 +41,7 @@ class BoundingBoxTool {
      * @param {?function} switchToTextTool A callback to call to switch to the text tool
      */
     constructor (mode, setSelectedItems, clearSelectedItems, setCursor, onUpdateImage, switchToTextTool) {
-        this.setCursor = setCursor;
+        this.dispatchSetCursor = setCursor;
         this.onUpdateImage = onUpdateImage;
         this.mode = null;
         this.boundsPath = null;
@@ -52,6 +52,7 @@ class BoundingBoxTool {
         this._modeMap[BoundingBoxModes.ROTATE] = new RotateTool(onUpdateImage);
         this._modeMap[BoundingBoxModes.MOVE] =
             new MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool);
+        this._currentCursor = null;
     }
 
     /**
@@ -296,6 +297,13 @@ class BoundingBoxTool {
     deactivateTool () {
         this.removeBoundsPath();
         this.setCursor(Cursors.DEFAULT);
+    }
+
+    setCursor (cursorString) {
+        if (this._currentCursor !== cursorString) {
+            this.dispatchSetCursor(cursorString);
+            this._currentCursor = cursorString;
+        }
     }
 }
 
