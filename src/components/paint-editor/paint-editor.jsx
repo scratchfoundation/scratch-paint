@@ -200,7 +200,7 @@ const PaintEditorComponent = props => (
                 {/* Canvas */}
                 <ScrollableCanvas
                     canvas={props.canvas}
-                    hideCursor={props.isEyeDropping}
+                    isEyeDropping={props.isEyeDropping}
                     style={styles.canvasContainer}
                 >
                     <PaperCanvas

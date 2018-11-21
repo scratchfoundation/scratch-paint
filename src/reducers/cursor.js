@@ -1,6 +1,7 @@
 import log from '../log/log';
 
 import Cursors from '../lib/cursors';
+import {ACTIVATE_EYE_DROPPER, DEACTIVATE_EYE_DROPPER} from './eye-dropper';
 
 const CHANGE_CURSOR = 'scratch-paint/cursor/CHANGE_CURSOR';
 const initialState = Cursors.DEFAULT;
@@ -16,6 +17,10 @@ const reducer = function (state, action) {
             log.warn(`Cursor should be a valid cursor string. Got: ${action.cursorString}`);
         }
         return action.cursorString;
+    case ACTIVATE_EYE_DROPPER:
+        return Cursors.NONE;
+    case DEACTIVATE_EYE_DROPPER:
+        return Cursors.DEFAULT;
     default:
         return state;
     }
