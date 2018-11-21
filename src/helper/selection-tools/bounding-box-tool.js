@@ -115,7 +115,7 @@ class BoundingBoxTool {
         const {mode, hitResult} = this._determineMode(event, false, hitOptions);
         if (hitResult) {
             if (mode === BoundingBoxModes.MOVE) {
-                this.setCursor(Cursors.GRAB);
+                this.setCursor(Cursors.DEFAULT);
             } else if (mode === BoundingBoxModes.ROTATE) {
                 this.setCursor(Cursors.GRAB);
             } else if (mode === BoundingBoxModes.SCALE) {
