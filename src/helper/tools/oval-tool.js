@@ -2,6 +2,7 @@ import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
 import {styleShape} from '../style-path';
 import {clearSelection} from '../selection';
+import {getSquareDimensions} from '../math';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 
@@ -88,31 +89,20 @@ class OvalTool extends paper.Tool {
 
         const downPoint = new paper.Point(event.downPoint.x, event.downPoint.y);
         const point = new paper.Point(event.point.x, event.point.y);
+        const squareDimensions = getSquareDimensions(event.downPoint, event.point);
         if (event.modifiers.shift) {
-            // These variables are used for determining the relative quadrant that the circle will appear in.
-            // So if you drag up and right, it'll show up above and to the right of where you started dragging, etc.
-            let offsetX = event.point.x - event.downPoint.x;
-            let offsetY = event.point.y - event.downPoint.y;
-
-            // If the offset variables are zero, the circle ends up having zero width or height, which is bad.
-            // Deal with this by forcing them to be non-zero (we arbitrarily choose 1; any non-zero value would work).
-            offsetX = offsetX ? offsetX : 1;
-            offsetY = offsetY ? offsetY : 1;
-
-            const diameter = Math.abs(event.downPoint.x - event.point.x);
-            this.oval.size = new paper.Point(
-                diameter * -(offsetX / Math.abs(offsetX)),
-                diameter * -(offsetY / Math.abs(offsetY))
-            );
+            this.oval.size = squareDimensions.size.abs();
         } else {
             this.oval.size = downPoint.subtract(point);
         }
+
         if (event.modifiers.alt) {
             this.oval.position = downPoint;
+        } else if (event.modifiers.shift) {
+            this.oval.position = squareDimensions.position;
         } else {
             this.oval.position = downPoint.subtract(this.oval.size.multiply(0.5));
         }
-
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
