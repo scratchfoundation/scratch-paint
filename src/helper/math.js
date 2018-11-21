@@ -145,7 +145,9 @@ const getSquareDimensions = function (startPos, eventPoint) {
     offsetX = offsetX ? offsetX : 1;
     offsetY = offsetY ? offsetY : 1;
 
-    const length = Math.abs(eventPoint.x - startPos.x);
+    // The length of the shape is the greater of the X and Y offsets.
+    const offsetDistance = eventPoint.subtract(startPos).abs();
+    const length = Math.max(offsetDistance.x, offsetDistance.y);
 
     const size = new paper.Point(
         length * offsetX / Math.abs(offsetX),
