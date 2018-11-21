@@ -94,7 +94,6 @@ class BoundingBoxTool {
             doubleClicked: doubleClicked
         };
         if (this.mode === BoundingBoxModes.MOVE) {
-            this.setCursor(Cursors.GRABBING);
             this._modeMap[this.mode].onMouseDown(hitProperties);
             this.removeBoundsHandles();
         } else if (this.mode === BoundingBoxModes.SCALE) {
@@ -164,6 +163,12 @@ class BoundingBoxTool {
     onMouseDrag (event) {
         if (event.event.button > 0 || !this.mode) return; // only first mouse button
         this._modeMap[this.mode].onMouseDrag(event);
+
+        // Set the cursor for moving a sprite once the drag has actually started (i.e. the mouse has been moved while
+        // pressed), so that the mouse doesn't "flash" to the grabbing cursor every time a sprite is clicked.
+        if (this.mode === BoundingBoxModes.MOVE) {
+            this.setCursor(Cursors.GRABBING);
+        }
     }
     onMouseUp (event, hitOptions) {
         if (event.event.button > 0 || !this.mode) return; // only first mouse button
