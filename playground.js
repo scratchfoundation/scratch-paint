@@ -27572,7 +27572,7 @@ g = (function() {
 
 try {
 	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
+	g = g || new Function("return this")();
 } catch (e) {
 	// This works if the window reference is available
 	if (typeof window === "object") g = window;
@@ -43423,6 +43423,9 @@ class SvgRenderer {
         } else if (!this._svgTag.getAttribute('viewBox')) {
             // Renderer expects a view box.
             this._transformMeasurements();
+        } else if (!this._svgTag.getAttribute('width') || !this._svgTag.getAttribute('height')) {
+            this._svgTag.setAttribute('width', this._svgTag.viewBox.baseVal.width);
+            this._svgTag.setAttribute('height', this._svgTag.viewBox.baseVal.height);
         }
         this._measurements = {
             width: this._svgTag.viewBox.baseVal.width,
