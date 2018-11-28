@@ -16997,7 +16997,7 @@ var _item = __webpack_require__(36);
 
 var _compoundPath = __webpack_require__(166);
 
-var _math = __webpack_require__(24);
+var _math = __webpack_require__(19);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20221,7 +20221,7 @@ var _parseColor = __webpack_require__(42);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -20917,7 +20917,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21704,7 +21704,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactIntl = __webpack_require__(23);
+var _reactIntl = __webpack_require__(24);
 
 var _button = __webpack_require__(43);
 
@@ -21763,7 +21763,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _reactIntl = __webpack_require__(23);
+var _reactIntl = __webpack_require__(24);
 
 var messages = (0, _reactIntl.defineMessages)({
     brush: {
@@ -21898,6 +21898,236 @@ exports.default = GradientTypes;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.sortItemsByZIndex = exports.snapDeltaToAngle = exports.scaleWithStrokes = exports.getSquareDimensions = exports.getRandomBoolean = exports.getRandomInt = exports.expandBy = exports.ensureClockwise = exports.checkPointsClose = exports.HANDLE_RATIO = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/** The ratio of the curve length to use for the handle length to convert squares into approximately circles. */
+var HANDLE_RATIO = 0.3902628565;
+
+var checkPointsClose = function checkPointsClose(startPos, eventPoint, threshold) {
+    var xOff = Math.abs(startPos.x - eventPoint.x);
+    var yOff = Math.abs(startPos.y - eventPoint.y);
+    if (xOff < threshold && yOff < threshold) {
+        return true;
+    }
+    return false;
+};
+
+var getRandomInt = function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+};
+
+var getRandomBoolean = function getRandomBoolean() {
+    return getRandomInt(0, 2) === 1;
+};
+
+// Thanks Mikko Mononen! https://github.com/memononen/stylii
+var snapDeltaToAngle = function snapDeltaToAngle(delta, snapAngle) {
+    var angle = Math.atan2(delta.y, delta.x);
+    angle = Math.round(angle / snapAngle) * snapAngle;
+    var dirx = Math.cos(angle);
+    var diry = Math.sin(angle);
+    var d = dirx * delta.x + diry * delta.y;
+    return new _paper2.default.Point(dirx * d, diry * d);
+};
+
+var _getDepth = function _getDepth(item) {
+    var temp = item;
+    var depth = 0;
+    while (!(temp instanceof _paper2.default.Layer)) {
+        depth++;
+        if (temp.parent === null) {
+            // This item isn't attached to a layer, so it's not on the canvas and can't be compared.
+            return null;
+        }
+        temp = temp.parent;
+    }
+    return depth;
+};
+
+var sortItemsByZIndex = function sortItemsByZIndex(a, b) {
+    if (a === null || b === null) {
+        return null;
+    }
+
+    // Get to the same depth in the project tree
+    var tempA = a;
+    var tempB = b;
+    var aDepth = _getDepth(a);
+    var bDepth = _getDepth(b);
+    while (bDepth > aDepth) {
+        tempB = tempB.parent;
+        bDepth--;
+    }
+    while (aDepth > bDepth) {
+        tempA = tempA.parent;
+        aDepth--;
+    }
+
+    // Step up until they share parents. When they share parents, compare indices.
+    while (tempA && tempB) {
+        if (tempB === tempA) {
+            return 0;
+        } else if (tempB.parent === tempA.parent) {
+            if (tempB.parent instanceof _paper2.default.CompoundPath) {
+                // Neither is on top of the other in a compound path. Return in order of decreasing size.
+                return Math.abs(tempB.area) - Math.abs(tempA.area);
+            }
+            return parseFloat(tempA.index) - parseFloat(tempB.index);
+        }
+        tempB = tempB.parent;
+        tempA = tempA.parent;
+    }
+
+    // No shared hierarchy
+    return null;
+};
+
+// Expand the size of the path by amount all around
+var expandBy = function expandBy(path, amount) {
+    var center = path.position;
+    var pathArea = path.area;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = path.segments[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var seg = _step.value;
+
+            var delta = seg.point.subtract(center).normalize().multiply(amount);
+            seg.point = seg.point.add(delta);
+            // If that made the path area smaller, go the other way.
+            if (path.area < pathArea) seg.point = seg.point.subtract(delta.multiply(2));
+            pathArea = path.area;
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+};
+
+// Do for all nested items in groups
+var _doRecursively = function _doRecursively(item, func) {
+    if (item instanceof _paper2.default.Group) {
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+            for (var _iterator2 = item.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var child = _step2.value;
+
+                _doRecursively(child, func);
+            }
+        } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                    _iterator2.return();
+                }
+            } finally {
+                if (_didIteratorError2) {
+                    throw _iteratorError2;
+                }
+            }
+        }
+    } else {
+        func(item);
+    }
+};
+
+// Make item clockwise. Drill down into groups.
+var ensureClockwise = function ensureClockwise(root) {
+    _doRecursively(root, function (item) {
+        if (item instanceof _paper2.default.PathItem) {
+            item.clockwise = true;
+        }
+    });
+};
+
+// Scale item and its strokes by factor
+var scaleWithStrokes = function scaleWithStrokes(root, factor, pivot) {
+    _doRecursively(root, function (item) {
+        if (item instanceof _paper2.default.PointText) {
+            // Text outline size is controlled by text transform matrix, thus it's already scaled.
+            return;
+        }
+        if (item.strokeWidth) {
+            item.strokeWidth = item.strokeWidth * factor;
+        }
+    });
+    root.scale(factor, pivot);
+};
+
+/**
+ * Get the size and position of a square, as in if the user were holding the shift key down while drawing the shape,
+ * from the point where the drag started and the point where the mouse is currently positioned. (Note: This also works
+ * for shapes like circles ("square ovals"), which fill the same dimensions.)
+ * @param {!paper.Point} startPos The point where the user started dragging
+ * @param {!paper.Point} eventPoint The point where the user has currently dragged to
+ * @return {object} Information about the size and position of how the square should be drawn
+ */
+var getSquareDimensions = function getSquareDimensions(startPos, eventPoint) {
+    // These variables are used for determining the relative quadrant that the shape will appear in.
+    // So if you drag up and right, it'll show up above and to the right of where you started dragging, etc.
+    var offsetX = eventPoint.x - startPos.x;
+    var offsetY = eventPoint.y - startPos.y;
+
+    // If the offset variables are zero, the shape ends up having zero width or height, which is bad.
+    // Deal with this by forcing them to be non-zero (we arbitrarily choose 1; any non-zero value would work).
+    offsetX = offsetX ? offsetX : 1;
+    offsetY = offsetY ? offsetY : 1;
+
+    // The length of the shape is the greater of the X and Y offsets.
+    var offsetDistance = eventPoint.subtract(startPos).abs();
+    var length = Math.max(offsetDistance.x, offsetDistance.y);
+
+    var size = new _paper2.default.Point(length * offsetX / Math.abs(offsetX), length * offsetY / Math.abs(offsetY));
+
+    var position = startPos.add(size.multiply(0.5));
+
+    return { size: size, position: position };
+};
+
+exports.HANDLE_RATIO = HANDLE_RATIO;
+exports.checkPointsClose = checkPointsClose;
+exports.ensureClockwise = ensureClockwise;
+exports.expandBy = expandBy;
+exports.getRandomInt = getRandomInt;
+exports.getRandomBoolean = getRandomBoolean;
+exports.getSquareDimensions = getSquareDimensions;
+exports.scaleWithStrokes = scaleWithStrokes;
+exports.snapDeltaToAngle = snapDeltaToAngle;
+exports.sortItemsByZIndex = sortItemsByZIndex;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 exports.DEFAULT_COLOR = exports.changeFillColor = exports.default = undefined;
 
 var _log = __webpack_require__(8);
@@ -21949,7 +22179,7 @@ exports.changeFillColor = changeFillColor;
 exports.DEFAULT_COLOR = DEFAULT_COLOR;
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22758,7 +22988,7 @@ exports.scaleBitmap = scaleBitmap;
 exports.selectAllBitmap = selectAllBitmap;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22777,7 +23007,7 @@ var _selection = __webpack_require__(3);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22912,7 +23142,7 @@ exports.zoomOnFixedPoint = zoomOnFixedPoint;
 exports.zoomToFit = zoomToFit;
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22977,7 +23207,7 @@ exports.CLEAR_GRADIENT = CLEAR_GRADIENT;
 exports.clearGradient = clearGradient;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -24751,205 +24981,6 @@ addLocaleData(_locale_data_index_js__WEBPACK_IMPORTED_MODULE_0___default.a);
 
 
 /***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.sortItemsByZIndex = exports.snapDeltaToAngle = exports.scaleWithStrokes = exports.getRandomBoolean = exports.getRandomInt = exports.expandBy = exports.ensureClockwise = exports.checkPointsClose = exports.HANDLE_RATIO = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/** The ratio of the curve length to use for the handle length to convert squares into approximately circles. */
-var HANDLE_RATIO = 0.3902628565;
-
-var checkPointsClose = function checkPointsClose(startPos, eventPoint, threshold) {
-    var xOff = Math.abs(startPos.x - eventPoint.x);
-    var yOff = Math.abs(startPos.y - eventPoint.y);
-    if (xOff < threshold && yOff < threshold) {
-        return true;
-    }
-    return false;
-};
-
-var getRandomInt = function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-};
-
-var getRandomBoolean = function getRandomBoolean() {
-    return getRandomInt(0, 2) === 1;
-};
-
-// Thanks Mikko Mononen! https://github.com/memononen/stylii
-var snapDeltaToAngle = function snapDeltaToAngle(delta, snapAngle) {
-    var angle = Math.atan2(delta.y, delta.x);
-    angle = Math.round(angle / snapAngle) * snapAngle;
-    var dirx = Math.cos(angle);
-    var diry = Math.sin(angle);
-    var d = dirx * delta.x + diry * delta.y;
-    return new _paper2.default.Point(dirx * d, diry * d);
-};
-
-var _getDepth = function _getDepth(item) {
-    var temp = item;
-    var depth = 0;
-    while (!(temp instanceof _paper2.default.Layer)) {
-        depth++;
-        if (temp.parent === null) {
-            // This item isn't attached to a layer, so it's not on the canvas and can't be compared.
-            return null;
-        }
-        temp = temp.parent;
-    }
-    return depth;
-};
-
-var sortItemsByZIndex = function sortItemsByZIndex(a, b) {
-    if (a === null || b === null) {
-        return null;
-    }
-
-    // Get to the same depth in the project tree
-    var tempA = a;
-    var tempB = b;
-    var aDepth = _getDepth(a);
-    var bDepth = _getDepth(b);
-    while (bDepth > aDepth) {
-        tempB = tempB.parent;
-        bDepth--;
-    }
-    while (aDepth > bDepth) {
-        tempA = tempA.parent;
-        aDepth--;
-    }
-
-    // Step up until they share parents. When they share parents, compare indices.
-    while (tempA && tempB) {
-        if (tempB === tempA) {
-            return 0;
-        } else if (tempB.parent === tempA.parent) {
-            if (tempB.parent instanceof _paper2.default.CompoundPath) {
-                // Neither is on top of the other in a compound path. Return in order of decreasing size.
-                return Math.abs(tempB.area) - Math.abs(tempA.area);
-            }
-            return parseFloat(tempA.index) - parseFloat(tempB.index);
-        }
-        tempB = tempB.parent;
-        tempA = tempA.parent;
-    }
-
-    // No shared hierarchy
-    return null;
-};
-
-// Expand the size of the path by amount all around
-var expandBy = function expandBy(path, amount) {
-    var center = path.position;
-    var pathArea = path.area;
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = path.segments[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var seg = _step.value;
-
-            var delta = seg.point.subtract(center).normalize().multiply(amount);
-            seg.point = seg.point.add(delta);
-            // If that made the path area smaller, go the other way.
-            if (path.area < pathArea) seg.point = seg.point.subtract(delta.multiply(2));
-            pathArea = path.area;
-        }
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
-    }
-};
-
-// Do for all nested items in groups
-var _doRecursively = function _doRecursively(item, func) {
-    if (item instanceof _paper2.default.Group) {
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-            for (var _iterator2 = item.children[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                var child = _step2.value;
-
-                _doRecursively(child, func);
-            }
-        } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                    _iterator2.return();
-                }
-            } finally {
-                if (_didIteratorError2) {
-                    throw _iteratorError2;
-                }
-            }
-        }
-    } else {
-        func(item);
-    }
-};
-
-// Make item clockwise. Drill down into groups.
-var ensureClockwise = function ensureClockwise(root) {
-    _doRecursively(root, function (item) {
-        if (item instanceof _paper2.default.PathItem) {
-            item.clockwise = true;
-        }
-    });
-};
-
-// Scale item and its strokes by factor
-var scaleWithStrokes = function scaleWithStrokes(root, factor, pivot) {
-    _doRecursively(root, function (item) {
-        if (item instanceof _paper2.default.PointText) {
-            // Text outline size is controlled by text transform matrix, thus it's already scaled.
-            return;
-        }
-        if (item.strokeWidth) {
-            item.strokeWidth = item.strokeWidth * factor;
-        }
-    });
-    root.scale(factor, pivot);
-};
-
-exports.HANDLE_RATIO = HANDLE_RATIO;
-exports.checkPointsClose = checkPointsClose;
-exports.ensureClockwise = ensureClockwise;
-exports.expandBy = expandBy;
-exports.getRandomInt = getRandomInt;
-exports.getRandomBoolean = getRandomBoolean;
-exports.scaleWithStrokes = scaleWithStrokes;
-exports.snapDeltaToAngle = snapDeltaToAngle;
-exports.sortItemsByZIndex = sortItemsByZIndex;
-
-/***/ }),
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -25824,7 +25855,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _selection = __webpack_require__(3);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27715,7 +27746,7 @@ var _log2 = _interopRequireDefault(_log);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _stylePath = __webpack_require__(9);
 
@@ -29872,7 +29903,7 @@ var _selection = __webpack_require__(3);
 
 var _layer = __webpack_require__(11);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31039,7 +31070,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31226,9 +31257,9 @@ var _group = __webpack_require__(27);
 
 var _item = __webpack_require__(36);
 
-var _math = __webpack_require__(24);
+var _math = __webpack_require__(19);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -32770,7 +32801,7 @@ var _guides = __webpack_require__(28);
 
 var _group = __webpack_require__(27);
 
-var _math = __webpack_require__(24);
+var _math = __webpack_require__(19);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -33291,7 +33322,7 @@ var _reactRedux = __webpack_require__(6);
 
 var _selection = __webpack_require__(3);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
 var _format = __webpack_require__(14);
 
@@ -33845,7 +33876,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.updateIntl = exports.intlInitialState = exports.IntlProvider = exports.default = undefined;
 
-var _reactIntl = __webpack_require__(23);
+var _reactIntl = __webpack_require__(24);
 
 var _reactIntlRedux = __webpack_require__(350);
 
@@ -33898,7 +33929,7 @@ exports.default = void 0;
 
 var _reactRedux = __webpack_require__(6);
 
-var _reactIntl = __webpack_require__(23);
+var _reactIntl = __webpack_require__(24);
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -34894,9 +34925,9 @@ var _layout = __webpack_require__(69);
 
 var _selection = __webpack_require__(3);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _eyeDropper2 = __webpack_require__(102);
 
@@ -39678,7 +39709,7 @@ var _classnames = __webpack_require__(17);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _reactIntl = __webpack_require__(23);
+var _reactIntl = __webpack_require__(24);
 
 var _react = __webpack_require__(0);
 
@@ -42849,9 +42880,9 @@ var _layer = __webpack_require__(11);
 
 var _selectedItems = __webpack_require__(7);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
-var _math = __webpack_require__(24);
+var _math = __webpack_require__(19);
 
 var _hover = __webpack_require__(41);
 
@@ -44246,7 +44277,7 @@ var _scrollableCanvas = __webpack_require__(183);
 
 var _scrollableCanvas2 = _interopRequireDefault(_scrollableCanvas);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _viewBounds = __webpack_require__(47);
 
@@ -44628,7 +44659,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _modes3 = __webpack_require__(10);
 
@@ -44636,7 +44667,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _bitBrushMode = __webpack_require__(189);
 
@@ -45748,7 +45779,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _modes3 = __webpack_require__(10);
 
@@ -45756,7 +45787,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _bitLineMode = __webpack_require__(195);
 
@@ -45963,9 +45994,9 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -46160,13 +46191,13 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _selection = __webpack_require__(3);
 
@@ -46345,11 +46376,13 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
 var _layer = __webpack_require__(11);
 
 var _selection = __webpack_require__(3);
+
+var _math = __webpack_require__(19);
 
 var _boundingBoxTool = __webpack_require__(29);
 
@@ -46537,13 +46570,17 @@ var OvalTool = function (_paper$Tool) {
 
             var downPoint = new _paper2.default.Point(event.downPoint.x, event.downPoint.y);
             var point = new _paper2.default.Point(event.point.x, event.point.y);
+            var squareDimensions = (0, _math.getSquareDimensions)(event.downPoint, event.point);
             if (event.modifiers.shift) {
-                this.oval.size = new _paper2.default.Point(event.downPoint.x - event.point.x, event.downPoint.x - event.point.x);
+                this.oval.size = squareDimensions.size.abs();
             } else {
                 this.oval.size = downPoint.subtract(point);
             }
+
             if (event.modifiers.alt) {
                 this.oval.position = downPoint;
+            } else if (event.modifiers.shift) {
+                this.oval.position = squareDimensions.position;
             } else {
                 this.oval.position = downPoint.subtract(this.oval.size.multiply(0.5));
             }
@@ -46615,7 +46652,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _selection = __webpack_require__(3);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47075,13 +47112,13 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _selection = __webpack_require__(3);
 
@@ -47260,11 +47297,13 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
 var _layer = __webpack_require__(11);
 
 var _selection = __webpack_require__(3);
+
+var _math = __webpack_require__(19);
 
 var _boundingBoxTool = __webpack_require__(29);
 
@@ -47434,10 +47473,11 @@ var RectTool = function (_paper$Tool) {
 
             var dimensions = event.point.subtract(event.downPoint);
             var baseRect = new _paper2.default.Rectangle(event.downPoint, event.point);
+            var squareDimensions = (0, _math.getSquareDimensions)(event.downPoint, event.point);
             if (event.modifiers.shift) {
-                baseRect.height = baseRect.width;
-                dimensions.y = event.downPoint.y > event.point.y ? -Math.abs(baseRect.width) : Math.abs(baseRect.width);
+                baseRect.size = squareDimensions.size.abs();
             }
+
             if (this.rect) this.rect.remove();
             this.rect = new _paper2.default.Shape.Rectangle(baseRect);
             if (this.filled) {
@@ -47453,6 +47493,8 @@ var RectTool = function (_paper$Tool) {
 
             if (event.modifiers.alt) {
                 this.rect.position = event.downPoint;
+            } else if (event.modifiers.shift) {
+                this.rect.position = squareDimensions.position;
             } else {
                 this.rect.position = event.downPoint.add(dimensions.multiply(.5));
             }
@@ -47594,7 +47636,7 @@ var _bitFillMode = __webpack_require__(206);
 
 var _bitFillMode2 = _interopRequireDefault(_bitFillMode);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _fillColor2 = __webpack_require__(48);
 
@@ -47839,7 +47881,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
 var _stylePath = __webpack_require__(9);
 
@@ -48222,7 +48264,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _selection = __webpack_require__(3);
 
@@ -48371,7 +48413,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
 var _boundingBoxTool = __webpack_require__(29);
 
@@ -50316,13 +50358,13 @@ var _blob2 = _interopRequireDefault(_blob);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _selection = __webpack_require__(3);
 
@@ -51165,7 +51207,7 @@ var _parseColor2 = _interopRequireDefault(_parseColor);
 
 var _colorIndex = __webpack_require__(61);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _fillColor2 = __webpack_require__(48);
 
@@ -51385,7 +51427,7 @@ var _reactPopover = __webpack_require__(63);
 
 var _reactPopover2 = _interopRequireDefault(_reactPopover);
 
-var _reactIntl = __webpack_require__(23);
+var _reactIntl = __webpack_require__(24);
 
 var _colorButton = __webpack_require__(97);
 
@@ -53824,7 +53866,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactIntl = __webpack_require__(23);
+var _reactIntl = __webpack_require__(24);
 
 var _classnames = __webpack_require__(17);
 
@@ -54684,7 +54726,7 @@ var _fillTool2 = _interopRequireDefault(_fillTool);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _fillColor2 = __webpack_require__(48);
 
@@ -54890,7 +54932,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _hover = __webpack_require__(101);
 
-var _math = __webpack_require__(24);
+var _math = __webpack_require__(19);
 
 var _stylePath = __webpack_require__(9);
 
@@ -55245,7 +55287,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _math = __webpack_require__(24);
+var _math = __webpack_require__(19);
 
 var _lineMode = __webpack_require__(267);
 
@@ -56121,7 +56163,7 @@ var _dropdown = __webpack_require__(104);
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
-var _reactIntl = __webpack_require__(23);
+var _reactIntl = __webpack_require__(24);
 
 var _format = __webpack_require__(14);
 
@@ -57584,11 +57626,11 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _math = __webpack_require__(24);
+var _math = __webpack_require__(19);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
 var _format = __webpack_require__(14);
 
@@ -58051,7 +58093,7 @@ var _label = __webpack_require__(51);
 
 var _label2 = _interopRequireDefault(_label);
 
-var _reactIntl = __webpack_require__(23);
+var _reactIntl = __webpack_require__(24);
 
 var _input = __webpack_require__(68);
 
@@ -59137,7 +59179,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _strokeColor = __webpack_require__(32);
 
@@ -59145,7 +59187,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _selection = __webpack_require__(3);
 
@@ -59333,6 +59375,8 @@ var _stylePath = __webpack_require__(9);
 
 var _selection = __webpack_require__(3);
 
+var _math = __webpack_require__(19);
+
 var _boundingBoxTool = __webpack_require__(29);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
@@ -59454,13 +59498,17 @@ var OvalTool = function (_paper$Tool) {
 
             var downPoint = new _paper2.default.Point(event.downPoint.x, event.downPoint.y);
             var point = new _paper2.default.Point(event.point.x, event.point.y);
+            var squareDimensions = (0, _math.getSquareDimensions)(event.downPoint, event.point);
             if (event.modifiers.shift) {
-                this.oval.size = new _paper2.default.Point(event.downPoint.x - event.point.x, event.downPoint.x - event.point.x);
+                this.oval.size = squareDimensions.size.abs();
             } else {
                 this.oval.size = downPoint.subtract(point);
             }
+
             if (event.modifiers.alt) {
                 this.oval.position = downPoint;
+            } else if (event.modifiers.shift) {
+                this.oval.position = squareDimensions.position;
             } else {
                 this.oval.position = downPoint.subtract(this.oval.size.multiply(0.5));
             }
@@ -59597,7 +59645,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _strokeColor = __webpack_require__(32);
 
@@ -59605,7 +59653,7 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _selection = __webpack_require__(3);
 
@@ -59793,6 +59841,8 @@ var _stylePath = __webpack_require__(9);
 
 var _selection = __webpack_require__(3);
 
+var _math = __webpack_require__(19);
+
 var _boundingBoxTool = __webpack_require__(29);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
@@ -59911,18 +59961,20 @@ var RectTool = function (_paper$Tool) {
                 this.rect.remove();
             }
 
-            var dimensions = event.point.subtract(event.downPoint);
             var rect = new _paper2.default.Rectangle(event.downPoint, event.point);
+            var squareDimensions = (0, _math.getSquareDimensions)(event.downPoint, event.point);
             if (event.modifiers.shift) {
-                rect.height = rect.width;
-                dimensions.y = event.downPoint.y > event.point.y ? -Math.abs(rect.width) : Math.abs(rect.width);
+                rect.size = squareDimensions.size.abs();
             }
-            this.rect = new _paper2.default.Path.Rectangle(rect);
 
+            this.rect = new _paper2.default.Path.Rectangle(rect);
             if (event.modifiers.alt) {
                 this.rect.position = event.downPoint;
+            } else if (event.modifiers.shift) {
+                this.rect.position = squareDimensions.position;
             } else {
-                this.rect.position = event.downPoint.add(dimensions.multiply(.5));
+                var dimensions = event.point.subtract(event.downPoint);
+                this.rect.position = event.downPoint.add(dimensions.multiply(0.5));
             }
 
             (0, _stylePath.styleShape)(this.rect, this.colorState);
@@ -60222,7 +60274,7 @@ var _item = __webpack_require__(36);
 
 var _guides = __webpack_require__(28);
 
-var _math = __webpack_require__(24);
+var _math = __webpack_require__(19);
 
 var _selection = __webpack_require__(3);
 
@@ -60711,9 +60763,9 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _math = __webpack_require__(24);
+var _math = __webpack_require__(19);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -61892,7 +61944,7 @@ var _reactPopover = __webpack_require__(63);
 
 var _reactPopover2 = _interopRequireDefault(_reactPopover);
 
-var _reactIntl = __webpack_require__(23);
+var _reactIntl = __webpack_require__(24);
 
 var _colorButton = __webpack_require__(97);
 
@@ -62211,7 +62263,7 @@ var _stylePath = __webpack_require__(9);
 
 var _font = __webpack_require__(70);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _strokeColor = __webpack_require__(32);
 
@@ -62221,7 +62273,7 @@ var _textEditTarget = __webpack_require__(52);
 
 var _selectedItems = __webpack_require__(7);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _selection = __webpack_require__(3);
 
@@ -63233,7 +63285,7 @@ var _copyPasteHoc = __webpack_require__(106);
 
 var _copyPasteHoc2 = _interopRequireDefault(_copyPasteHoc);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
 var _selection = __webpack_require__(3);
 
@@ -63679,13 +63731,13 @@ var _selection = __webpack_require__(3);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(20);
+var _bitmap = __webpack_require__(21);
 
 var _undo2 = __webpack_require__(56);
 
-var _math = __webpack_require__(24);
+var _math = __webpack_require__(19);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _modes = __webpack_require__(4);
 
@@ -63976,7 +64028,7 @@ var _eyeDropper = __webpack_require__(50);
 
 var _eyeDropper2 = _interopRequireDefault(_eyeDropper);
 
-var _fillColor = __webpack_require__(19);
+var _fillColor = __webpack_require__(20);
 
 var _fillColor2 = _interopRequireDefault(_fillColor);
 
@@ -63984,7 +64036,7 @@ var _fillColor3 = __webpack_require__(48);
 
 var _fillColor4 = _interopRequireDefault(_fillColor3);
 
-var _selectionGradientType = __webpack_require__(22);
+var _selectionGradientType = __webpack_require__(23);
 
 var _selectionGradientType2 = _interopRequireDefault(_selectionGradientType);
 
