@@ -131,9 +131,14 @@ const scaleWithStrokes = function (root, factor, pivot) {
     root.scale(factor, pivot);
 };
 
-// Get the size and position of a square, as in if the user were holding the shift key down while drawing the shape,
-// from the point where the drag started and the point where the mouse is currently positioned. (Note: This also works
-// for shapes like circles ("square ovals"), which fill the same dimensions.)
+/**
+ * Get the size and position of a square, as in if the user were holding the shift key down while drawing the shape,
+ * from the point where the drag started and the point where the mouse is currently positioned. (Note: This also works
+ * for shapes like circles ("square ovals"), which fill the same dimensions.)
+ * @param {!paper.Point} startPos The point where the user started dragging
+ * @param {!paper.Point} eventPoint The point where the user has currently dragged to
+ * @return {object} Information about the size and position of how the square should be drawn
+ */
 const getSquareDimensions = function (startPos, eventPoint) {
     // These variables are used for determining the relative quadrant that the shape will appear in.
     // So if you drag up and right, it'll show up above and to the right of where you started dragging, etc.
