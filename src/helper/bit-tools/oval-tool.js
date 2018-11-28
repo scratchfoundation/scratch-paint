@@ -3,6 +3,7 @@ import Modes from '../../lib/modes';
 import {commitOvalToBitmap} from '../bitmap';
 import {getRaster} from '../layer';
 import {clearSelection} from '../selection';
+import {getSquareDimensions} from '../math';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 
@@ -151,13 +152,17 @@ class OvalTool extends paper.Tool {
 
         const downPoint = new paper.Point(event.downPoint.x, event.downPoint.y);
         const point = new paper.Point(event.point.x, event.point.y);
+        const squareDimensions = getSquareDimensions(event.downPoint, event.point);
         if (event.modifiers.shift) {
-            this.oval.size = new paper.Point(event.downPoint.x - event.point.x, event.downPoint.x - event.point.x);
+            this.oval.size = squareDimensions.size.abs();
         } else {
             this.oval.size = downPoint.subtract(point);
         }
+
         if (event.modifiers.alt) {
             this.oval.position = downPoint;
+        } else if (event.modifiers.shift) {
+            this.oval.position = squareDimensions.position;
         } else {
             this.oval.position = downPoint.subtract(this.oval.size.multiply(0.5));
         }

@@ -131,6 +131,39 @@ const scaleWithStrokes = function (root, factor, pivot) {
     root.scale(factor, pivot);
 };
 
+/**
+ * Get the size and position of a square, as in if the user were holding the shift key down while drawing the shape,
+ * from the point where the drag started and the point where the mouse is currently positioned. (Note: This also works
+ * for shapes like circles ("square ovals"), which fill the same dimensions.)
+ * @param {!paper.Point} startPos The point where the user started dragging
+ * @param {!paper.Point} eventPoint The point where the user has currently dragged to
+ * @return {object} Information about the size and position of how the square should be drawn
+ */
+const getSquareDimensions = function (startPos, eventPoint) {
+    // These variables are used for determining the relative quadrant that the shape will appear in.
+    // So if you drag up and right, it'll show up above and to the right of where you started dragging, etc.
+    let offsetX = eventPoint.x - startPos.x;
+    let offsetY = eventPoint.y - startPos.y;
+
+    // If the offset variables are zero, the shape ends up having zero width or height, which is bad.
+    // Deal with this by forcing them to be non-zero (we arbitrarily choose 1; any non-zero value would work).
+    offsetX = offsetX ? offsetX : 1;
+    offsetY = offsetY ? offsetY : 1;
+
+    // The length of the shape is the greater of the X and Y offsets.
+    const offsetDistance = eventPoint.subtract(startPos).abs();
+    const length = Math.max(offsetDistance.x, offsetDistance.y);
+
+    const size = new paper.Point(
+        length * offsetX / Math.abs(offsetX),
+        length * offsetY / Math.abs(offsetY)
+    );
+
+    const position = startPos.add(size.multiply(0.5));
+
+    return {size, position};
+};
+
 export {
     HANDLE_RATIO,
     checkPointsClose,
@@ -138,6 +171,7 @@ export {
     expandBy,
     getRandomInt,
     getRandomBoolean,
+    getSquareDimensions,
     scaleWithStrokes,
     snapDeltaToAngle,
     sortItemsByZIndex
