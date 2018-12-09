@@ -14,13 +14,13 @@ const intlInitialState = {
     intl: {
         defaultLocale: 'en',
         locale: 'en',
-        messages: paintMessages.messages.en.messages
+        messages: paintMessages.en.messages
     }
 };
 
 const updateIntl = locale => superUpdateIntl({
     locale: locale,
-    messages: paintMessages.messages[locale].messages || paintMessages.messages.en.messages
+    messages: paintMessages[locale].messages || paintMessages.en.messages
 });
 
 export {
