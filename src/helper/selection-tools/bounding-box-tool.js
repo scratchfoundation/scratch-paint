@@ -120,9 +120,9 @@ class BoundingBoxTool {
                 this.setCursor(Cursors.GRAB);
             } else if (mode === BoundingBoxModes.SCALE) {
                 this.setSelectionBounds();
-                if (hitResult.item.position.x === this.boundsPath.position.x) {
+                if (this._impreciseEqual(hitResult.item.position.x, this.boundsPath.position.x)) {
                     this.setCursor(Cursors.RESIZE_NS);
-                } else if (hitResult.item.position.y === this.boundsPath.position.y) {
+                } else if (this._impreciseEqual(hitResult.item.position.y, this.boundsPath.position.y)) {
                     this.setCursor(Cursors.RESIZE_EW);
                 } else if (
                     hitResult.item.position.equals(this.boundsPath.bounds.bottomLeft) ||
@@ -136,6 +136,10 @@ class BoundingBoxTool {
         } else {
             this.setCursor(Cursors.DEFAULT);
         }
+    }
+    _impreciseEqual (a, b) {
+        // This is the same math paper.js uses to check if two numbers are "equal".
+        return Math.abs(a - b) < 1e-8;
     }
     _determineMode (event, multiselect, hitOptions) {
         const hitResults = paper.project.hitTestAll(event.point, hitOptions);
