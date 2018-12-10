@@ -42,6 +42,7 @@ class BoundingBoxTool {
         this.onUpdateImage = onUpdateImage;
         this.mode = null;
         this.boundsPath = null;
+        this.centerHandle = null;
         this.boundsScaleHandles = [];
         this.boundsRotHandles = [];
         this._modeMap = {};
@@ -236,19 +237,47 @@ class BoundingBoxTool {
                 noHover: true
             };
         }
+
+        this.centerHandle = this.createCenterHandle(boundsScaleHandle.clone());
+
         // Remove the template
         boundsScaleHandle.remove();
+    }
+    /*
+     * Creates center handle.
+     * @param {paper.Item} templateHandle The template handle shape used to create the center handle.
+     */
+    createCenterHandle (templateHandle) {
+        const centerHandle = templateHandle;
+        centerHandle.children[1].data = {
+            isCenterHandle: true,
+            isHelperItem: true,
+            noSelect: true,
+            noHover: true
+        };
+        centerHandle.position = this.boundsPath.position;
+        centerHandle.data = {
+            isCenterHandle: true,
+            isHelperItem: true,
+            noSelect: true,
+            noHover: true
+        };
+        centerHandle.fillColor = getGuideColor();
+        centerHandle.parent = getGuideLayer();
+        return centerHandle;
     }
     removeBoundsPath () {
         removeBoundsPath();
         this.boundsPath = null;
         this.boundsScaleHandles.length = 0;
         this.boundsRotHandles.length = 0;
+        this.centerHandle = null;
     }
     removeBoundsHandles () {
         removeBoundsHandles();
         this.boundsScaleHandles.length = 0;
         this.boundsRotHandles.length = 0;
+        this.centerHandle = null;
     }
 }
 

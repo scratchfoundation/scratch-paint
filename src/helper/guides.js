@@ -91,11 +91,11 @@ const _removePaperItemsByTags = function (tags) {
 };
 
 const removeBoundsPath = function () {
-    _removePaperItemsByDataTags(['isSelectionBound', 'isRotHandle', 'isScaleHandle']);
+    _removePaperItemsByDataTags(['isSelectionBound', 'isRotHandle', 'isScaleHandle', 'isCenterHandle']);
 };
 
 const removeBoundsHandles = function () {
-    _removePaperItemsByDataTags(['isRotHandle', 'isScaleHandle']);
+    _removePaperItemsByDataTags(['isRotHandle', 'isScaleHandle', 'isCenterHandle']);
 };
 
 const removeAllGuides = function () {
