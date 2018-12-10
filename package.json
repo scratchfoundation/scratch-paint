@@ -8,7 +8,8 @@
     "build": "npm run clean && webpack --progress --colors --bail",
     "clean": "rimraf ./dist && mkdirp dist && rimraf ./playground && mkdirp playground",
     "deploy": "touch playground/.nojekyll && gh-pages -t -d playground -m \"Build for $(git log --pretty=format:%H -n1)\"",
-    "i18n:src": "babel src > tmp.js && rimraf tmp.js && ./scripts/build-i18n-source.js ./translations/messages/ ./translations/",
+    "i18n:push": "tx-push-src scratch-editor paint-editor ./translations/en.json",
+    "i18n:src": "rimraf ./translations/messages && babel src > tmp.js && rimraf tmp.js && ./scripts/build-i18n-source.js ./translations/messages/ ./translations/",
     "lint": "eslint . --ext .js,.jsx",
     "start": "webpack-dev-server",
     "test": "npm run lint && npm run unit && NODE_ENV=production npm run build",
@@ -23,7 +24,7 @@
     "url": "git+ssh://git@github.com/LLK/scratch-paint.git"
   },
   "dependencies": {
-    "@scratch/paper": "0.11.20181029143421",
+    "@scratch/paper": "0.11.20181113220307",
     "classnames": "2.2.5",
     "keymirror": "0.1.1",
     "lodash.bindall": "4.4.0",
@@ -31,8 +32,7 @@
     "minilog": "3.1.0",
     "parse-color": "1.0.0",
     "prop-types": "^15.5.10",
-    "scratch-l10n": "^2.0.0",
-    "scratch-svg-renderer": "0.2.0-prerelease.20181101210634"
+    "scratch-svg-renderer": "0.2.0-prerelease.20181126212715"
   },
   "peerDependencies": {
     "react": "^16",
@@ -90,6 +90,7 @@
     "redux-throttle": "0.1.1",
     "regenerator-runtime": "^0.12.0",
     "rimraf": "^2.6.1",
+    "scratch-l10n": "3.1.20181129221712",
     "style-loader": "^0.23.1",
     "svg-url-loader": "^2.3.2",
     "tap": "^11.1.0",
@@ -104,6 +105,7 @@
       "raf/polyfill",
       "<rootDir>/test/helpers/enzyme-setup.js"
     ],
+    "testURL": "http://localhost",
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"

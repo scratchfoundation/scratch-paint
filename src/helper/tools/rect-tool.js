@@ -2,6 +2,7 @@ import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
 import {styleShape} from '../style-path';
 import {clearSelection} from '../selection';
+import {getSquareDimensions} from '../math';
 import BoundingBoxTool from '../selection-tools/bounding-box-tool';
 import NudgeTool from '../selection-tools/nudge-tool';
 
@@ -93,18 +94,20 @@ class RectTool extends paper.Tool {
             this.rect.remove();
         }
 
-        const dimensions = event.point.subtract(event.downPoint);
         const rect = new paper.Rectangle(event.downPoint, event.point);
+        const squareDimensions = getSquareDimensions(event.downPoint, event.point);
         if (event.modifiers.shift) {
-            rect.height = rect.width;
-            dimensions.y = event.downPoint.y > event.point.y ? -Math.abs(rect.width) : Math.abs(rect.width);
+            rect.size = squareDimensions.size.abs();
         }
-        this.rect = new paper.Path.Rectangle(rect);
 
+        this.rect = new paper.Path.Rectangle(rect);
         if (event.modifiers.alt) {
             this.rect.position = event.downPoint;
+        } else if (event.modifiers.shift) {
+            this.rect.position = squareDimensions.position;
         } else {
-            this.rect.position = event.downPoint.add(dimensions.multiply(.5));
+            const dimensions = event.point.subtract(event.downPoint);
+            this.rect.position = event.downPoint.add(dimensions.multiply(0.5));
         }
 
         styleShape(this.rect, this.colorState);
