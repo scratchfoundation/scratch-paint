@@ -34069,14 +34069,14 @@ var intlInitialState = {
     intl: {
         defaultLocale: 'en',
         locale: 'en',
-        messages: _paintEditorMsgs2.default.messages.en.messages
+        messages: _paintEditorMsgs2.default.en.messages
     }
 };
 
 var updateIntl = function updateIntl(locale) {
     return (0, _reactIntlRedux.updateIntl)({
         locale: locale,
-        messages: _paintEditorMsgs2.default.messages[locale].messages || _paintEditorMsgs2.default.messages.en.messages
+        messages: _paintEditorMsgs2.default[locale].messages || _paintEditorMsgs2.default.en.messages
     });
 };
 
