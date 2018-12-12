@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 166);
+/******/ 	return __webpack_require__(__webpack_require__.s = 167);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -92,7 +92,7 @@
 
 
 if (true) {
-  module.exports = __webpack_require__(167);
+  module.exports = __webpack_require__(168);
 } else {}
 
 
@@ -110,7 +110,7 @@ if (true) {
 if (false) { var throwOnDirectAccess, isValidElement, REACT_ELEMENT_TYPE; } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(180)();
+  module.exports = __webpack_require__(181)();
 }
 
 
@@ -152,7 +152,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 var paper = function(self, undefined) {
 
-self = self || __webpack_require__(177);
+self = self || __webpack_require__(178);
 var window = self.window ? self.window : self,
 	document = self.document;
 
@@ -15203,7 +15203,7 @@ Base.exports.PaperScript = function() {
 	var global = this,
 		acorn = global.acorn;
 	if (!acorn && "function" !== 'undefined') {
-		try { acorn = __webpack_require__(178); } catch(e) {}
+		try { acorn = __webpack_require__(179); } catch(e) {}
 	}
 	if (!acorn) {
 		var exports, module;
@@ -16954,7 +16954,7 @@ var paper = new (PaperScope.inject(Base.exports, {
 }))();
 
 if (paper.agent.node) {
-	__webpack_require__(179)(paper);
+	__webpack_require__(180)(paper);
 }
 
 if (true) {
@@ -19327,11 +19327,11 @@ function _objectWithoutPropertiesLoose(source, excluded) {
   return target;
 }
 // EXTERNAL MODULE: ./node_modules/react-redux/node_modules/hoist-non-react-statics/dist/hoist-non-react-statics.cjs.js
-var hoist_non_react_statics_cjs = __webpack_require__(117);
+var hoist_non_react_statics_cjs = __webpack_require__(118);
 var hoist_non_react_statics_cjs_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics_cjs);
 
 // EXTERNAL MODULE: ./node_modules/react-redux/node_modules/invariant/browser.js
-var browser = __webpack_require__(56);
+var browser = __webpack_require__(57);
 var browser_default = /*#__PURE__*/__webpack_require__.n(browser);
 
 // EXTERNAL MODULE: ./node_modules/react-redux/node_modules/react-is/index.js
@@ -20181,7 +20181,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _minilog = __webpack_require__(182);
+var _minilog = __webpack_require__(79);
 
 var _minilog2 = _interopRequireDefault(_minilog);
 
@@ -21309,7 +21309,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(227);
+var	fixUrls = __webpack_require__(230);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -21710,7 +21710,7 @@ var _button = __webpack_require__(44);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _toolSelectBase = __webpack_require__(238);
+var _toolSelectBase = __webpack_require__(241);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -23224,7 +23224,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedPlural", function() { return FormattedPlural; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedMessage", function() { return FormattedMessage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedHTMLMessage", function() { return FormattedHTMLMessage; });
-/* harmony import */ var _locale_data_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(120);
+/* harmony import */ var _locale_data_index_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(121);
 /* harmony import */ var _locale_data_index_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_locale_data_index_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(27);
 /* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(intl_messageformat__WEBPACK_IMPORTED_MODULE_1__);
@@ -23234,7 +23234,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var hoist_non_react_statics__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(121);
+/* harmony import */ var hoist_non_react_statics__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(122);
 /* harmony import */ var hoist_non_react_statics__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(46);
 /* harmony import */ var invariant__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(invariant__WEBPACK_IMPORTED_MODULE_6__);
@@ -25074,7 +25074,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _cursors = __webpack_require__(88);
+var _cursors = __webpack_require__(89);
 
 var _cursors2 = _interopRequireDefault(_cursors);
 
@@ -25582,19 +25582,19 @@ var _guides = __webpack_require__(29);
 
 var _layer = __webpack_require__(11);
 
-var _cursors = __webpack_require__(88);
+var _cursors = __webpack_require__(89);
 
 var _cursors2 = _interopRequireDefault(_cursors);
 
-var _scaleTool = __webpack_require__(245);
+var _scaleTool = __webpack_require__(248);
 
 var _scaleTool2 = _interopRequireDefault(_scaleTool);
 
-var _rotateTool = __webpack_require__(246);
+var _rotateTool = __webpack_require__(249);
 
 var _rotateTool2 = _interopRequireDefault(_rotateTool);
 
-var _moveTool = __webpack_require__(89);
+var _moveTool = __webpack_require__(90);
 
 var _moveTool2 = _interopRequireDefault(_moveTool);
 
@@ -26151,7 +26151,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _inputGroup = __webpack_require__(303);
+var _inputGroup = __webpack_require__(306);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
@@ -26319,7 +26319,7 @@ exports.MAX_STROKE_WIDTH = MAX_STROKE_WIDTH;
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ./node_modules/lodash-es/_freeGlobal.js
-var _freeGlobal = __webpack_require__(119);
+var _freeGlobal = __webpack_require__(120);
 
 // CONCATENATED MODULE: ./node_modules/lodash-es/_root.js
 
@@ -27522,7 +27522,7 @@ exports.clearHoveredItem = clearHoveredItem;
 /* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var convert = __webpack_require__(233);
+var convert = __webpack_require__(236);
 
 module.exports = function (cstr) {
     var m, conv, parts, alpha;
@@ -27632,7 +27632,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _button = __webpack_require__(236);
+var _button = __webpack_require__(239);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -27821,6 +27821,83 @@ module.exports = g;
 
 /***/ }),
 /* 48 */
+/***/ (function(module, exports) {
+
+/* Adapted from
+ * Paper.js - The Swiss Army Knife of Vector Graphics Scripting.
+ * http://paperjs.org/
+ *
+ * Copyright (c) 2011 - 2016, Juerg Lehni & Jonathan Puckey
+ * http://scratchdisk.com/ & http://jonathanpuckey.com/
+ *
+ * Distributed under the MIT license. See LICENSE file for details.
+ *
+ * All rights reserved.
+ */
+
+/**
+ * @name SvgElement
+ * @namespace
+ * @private
+ */
+class SvgElement {
+    // SVG related namespaces
+    static get svg () {
+        return 'http://www.w3.org/2000/svg';
+    }
+    static get xmlns () {
+        return 'http://www.w3.org/2000/xmlns';
+    }
+    static get xlink () {
+        return 'http://www.w3.org/1999/xlink';
+    }
+
+    // Mapping of attribute names to required namespaces:
+    static attributeNamespace () {
+        return {
+            'href': SvgElement.xlink,
+            'xlink': SvgElement.xmlns,
+            // Only the xmlns attribute needs the trailing slash. See #984
+            'xmlns': `${SvgElement.xmlns}/`,
+            // IE needs the xmlns namespace when setting 'xmlns:xlink'. See #984
+            'xmlns:xlink': `${SvgElement.xmlns}/`
+        };
+    }
+
+    static create (tag, attributes, formatter) {
+        return SvgElement.set(document.createElementNS(SvgElement.svg, tag), attributes, formatter);
+    }
+
+    static get (node, name) {
+        const namespace = SvgElement.attributeNamespace[name];
+        const value = namespace ?
+            node.getAttributeNS(namespace, name) :
+            node.getAttribute(name);
+        return value === 'null' ? null : value;
+    }
+
+    static set (node, attributes, formatter) {
+        for (const name in attributes) {
+            let value = attributes[name];
+            const namespace = SvgElement.attributeNamespace[name];
+            if (typeof value === 'number' && formatter) {
+                value = formatter.number(value);
+            }
+            if (namespace) {
+                node.setAttributeNS(namespace, name, value);
+            } else {
+                node.setAttribute(name, value);
+            }
+        }
+        return node;
+    }
+}
+
+module.exports = SvgElement;
+
+
+/***/ }),
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27877,7 +27954,7 @@ exports.default = reducer;
 exports.changeFormat = changeFormat;
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27932,7 +28009,7 @@ exports.default = reducer;
 exports.updateViewBounds = updateViewBounds;
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28006,7 +28083,7 @@ exports.default = reducer;
 exports.changeFillColor2 = changeFillColor2;
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28032,7 +28109,7 @@ exports.window = WINDOW;
 exports.document = DOCUMENT;
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28050,7 +28127,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _label = __webpack_require__(305);
+var _label = __webpack_require__(308);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -28084,7 +28161,7 @@ Label.defaultProps = {
 exports.default = Label;
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28139,7 +28216,7 @@ exports.default = reducer;
 exports.setTextEditTarget = setTextEditTarget;
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -29634,7 +29711,7 @@ module.exports = omit;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(47)))
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29658,7 +29735,7 @@ var Fonts = {
 exports.default = Fonts;
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29710,7 +29787,7 @@ module.exports = invariant;
 
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29871,83 +29948,6 @@ exports.performUndo = performUndo;
 exports.performRedo = performRedo;
 exports.shouldShowUndo = shouldShowUndo;
 exports.shouldShowRedo = shouldShowRedo;
-
-/***/ }),
-/* 58 */
-/***/ (function(module, exports) {
-
-/* Adapted from
- * Paper.js - The Swiss Army Knife of Vector Graphics Scripting.
- * http://paperjs.org/
- *
- * Copyright (c) 2011 - 2016, Juerg Lehni & Jonathan Puckey
- * http://scratchdisk.com/ & http://jonathanpuckey.com/
- *
- * Distributed under the MIT license. See LICENSE file for details.
- *
- * All rights reserved.
- */
-
-/**
- * @name SvgElement
- * @namespace
- * @private
- */
-class SvgElement {
-    // SVG related namespaces
-    static get svg () {
-        return 'http://www.w3.org/2000/svg';
-    }
-    static get xmlns () {
-        return 'http://www.w3.org/2000/xmlns';
-    }
-    static get xlink () {
-        return 'http://www.w3.org/1999/xlink';
-    }
-
-    // Mapping of attribute names to required namespaces:
-    static attributeNamespace () {
-        return {
-            'href': SvgElement.xlink,
-            'xlink': SvgElement.xmlns,
-            // Only the xmlns attribute needs the trailing slash. See #984
-            'xmlns': `${SvgElement.xmlns}/`,
-            // IE needs the xmlns namespace when setting 'xmlns:xlink'. See #984
-            'xmlns:xlink': `${SvgElement.xmlns}/`
-        };
-    }
-
-    static create (tag, attributes, formatter) {
-        return SvgElement.set(document.createElementNS(SvgElement.svg, tag), attributes, formatter);
-    }
-
-    static get (node, name) {
-        const namespace = SvgElement.attributeNamespace[name];
-        const value = namespace ?
-            node.getAttributeNS(namespace, name) :
-            node.getAttribute(name);
-        return value === 'null' ? null : value;
-    }
-
-    static set (node, attributes, formatter) {
-        for (const name in attributes) {
-            let value = attributes[name];
-            const namespace = SvgElement.attributeNamespace[name];
-            if (typeof value === 'number' && formatter) {
-                value = formatter.number(value);
-            }
-            if (namespace) {
-                node.setAttributeNS(namespace, name, value);
-            } else {
-                node.setAttribute(name, value);
-            }
-        }
-        return node;
-    }
-}
-
-module.exports = SvgElement;
-
 
 /***/ }),
 /* 59 */
@@ -30323,7 +30323,7 @@ exports.closeStrokeColor = closeStrokeColor;
 
 // http://stackoverflow.com/questions/33505992/babel-6-changes-how-it-exports-default
 
-const lib = __webpack_require__(273)
+const lib = __webpack_require__(276)
 module.exports = lib.default
 
 
@@ -30408,7 +30408,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clientOnly = exports.noop = exports.equalRecords = exports.find = undefined;
 
-var _platform = __webpack_require__(51);
+var _platform = __webpack_require__(52);
 
 var find = function find(f, xs) {
   return xs.reduce(function (b, x) {
@@ -30470,7 +30470,7 @@ var _button = __webpack_require__(44);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _labeledIconButton = __webpack_require__(293);
+var _labeledIconButton = __webpack_require__(296);
 
 var _labeledIconButton2 = _interopRequireDefault(_labeledIconButton);
 
@@ -30547,7 +30547,7 @@ var _classnames = __webpack_require__(18);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _input = __webpack_require__(325);
+var _input = __webpack_require__(328);
 
 var _input2 = _interopRequireDefault(_input);
 
@@ -30654,7 +30654,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeFont = exports.default = undefined;
 
-var _fonts = __webpack_require__(55);
+var _fonts = __webpack_require__(56);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -30702,7 +30702,7 @@ if (true) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global, module) {/* harmony import */ var _ponyfill_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(118);
+/* WEBPACK VAR INJECTION */(function(global, module) {/* harmony import */ var _ponyfill_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(119);
 /* global window */
 
 
@@ -30913,7 +30913,7 @@ if (true) {
   // DCE check should happen before ReactDOM bundle executes so that
   // DevTools can report bad minification during injection.
   checkDCE();
-  module.exports = __webpack_require__(168);
+  module.exports = __webpack_require__(169);
 } else {}
 
 
@@ -30929,11 +30929,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ScratchPaintReducer = exports.default = undefined;
 
-var _paintEditor = __webpack_require__(176);
+var _paintEditor = __webpack_require__(177);
 
 var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
-var _scratchPaintReducer = __webpack_require__(392);
+var _scratchPaintReducer = __webpack_require__(395);
 
 var _scratchPaintReducer2 = _interopRequireDefault(_scratchPaintReducer);
 
@@ -30944,6 +30944,54 @@ exports.ScratchPaintReducer = _scratchPaintReducer2.default;
 
 /***/ }),
 /* 79 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Minilog = __webpack_require__(183);
+
+var oldEnable = Minilog.enable,
+    oldDisable = Minilog.disable,
+    isChrome = (typeof navigator != 'undefined' && /chrome/i.test(navigator.userAgent)),
+    console = __webpack_require__(186);
+
+// Use a more capable logging backend if on Chrome
+Minilog.defaultBackend = (isChrome ? console.minilog : console);
+
+// apply enable inputs from localStorage and from the URL
+if(typeof window != 'undefined') {
+  try {
+    Minilog.enable(JSON.parse(window.localStorage['minilogSettings']));
+  } catch(e) {}
+  if(window.location && window.location.search) {
+    var match = RegExp('[?&]minilog=([^&]*)').exec(window.location.search);
+    match && Minilog.enable(decodeURIComponent(match[1]));
+  }
+}
+
+// Make enable also add to localStorage
+Minilog.enable = function() {
+  oldEnable.call(Minilog, true);
+  try { window.localStorage['minilogSettings'] = JSON.stringify(true); } catch(e) {}
+  return this;
+};
+
+Minilog.disable = function() {
+  oldDisable.call(Minilog);
+  try { delete window.localStorage.minilogSettings; } catch(e) {}
+  return this;
+};
+
+exports = module.exports = Minilog;
+
+exports.backends = {
+  array: __webpack_require__(189),
+  browser: Minilog.defaultBackend,
+  localStorage: __webpack_require__(190),
+  jQuery: __webpack_require__(191)
+};
+
+
+/***/ }),
+/* 80 */
 /***/ (function(module, exports) {
 
 var hex = {
@@ -30969,7 +31017,7 @@ module.exports = color;
 
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31007,10 +31055,10 @@ exports.hop = hop;
 //# sourceMappingURL=utils.js.map
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const SvgElement = __webpack_require__(58);
+const SvgElement = __webpack_require__(48);
 /**
  * @fileOverview Import bitmap data into Scratch 3.0, resizing image as necessary.
  */
@@ -31057,7 +31105,7 @@ module.exports = inlineSvgFonts;
 
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports) {
 
 /**
@@ -31101,7 +31149,7 @@ module.exports = convertFonts;
 
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31168,7 +31216,7 @@ exports.saveZoomLevel = saveZoomLevel;
 exports.setZoomLevelId = setZoomLevelId;
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31193,13 +31241,13 @@ var getEventXY = function getEventXY(e) {
 exports.getEventXY = getEventXY;
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ebrush%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='brush' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpath d='M9.50062663,11.4981734 L10.4995734,11.4981734 L10.4995734,14.4990134 L9.49962669,14.4990134 L9.49962669,11.4991734 L6.49978668,11.4991734 L6.49978668,10.4992267 L9.50062663,10.4992267 L9.50062663,11.4981734 Z M13.4992134,3.5 L16.5000533,3.5 L16.5000533,4.49994667 L17.5,4.49994667 L17.5,7.49978668 L16.5000533,7.49978668 L16.5000533,8.4987334 L15.4991067,8.4987334 L15.4991067,9.49868007 L14.49916,9.49868007 L14.49916,10.4986267 L12.4992667,10.4986267 L12.4992667,11.4985734 L11.49932,11.4985734 L11.49932,10.4986267 L10.4993734,10.4986267 L10.4993734,9.49868007 L9.4994267,9.49868007 L9.4994267,7.49978668 L10.4993734,7.49978668 L10.4993734,6.49984001 L11.49932,6.49984001 L11.49932,5.49989334 L12.4992667,5.49989334 L12.4992667,4.49994667 L13.4992134,4.49994667 L13.4992134,3.5 Z M5.49954002,11.4987734 L6.49948669,11.4987734 L6.49948669,12.49972 L7.50043331,12.49972 L7.50043331,13.4996667 L8.50037998,13.4996667 L8.50037998,14.4996134 L9.50032665,14.4996134 L9.50032665,15.49956 L8.50037998,15.49956 L8.50037998,16.4985067 L4.49959336,16.4985067 L4.49959336,15.49956 L3.49964669,15.49956 L3.49964669,13.4996667 L5.49954002,13.4996667 L5.49954002,11.4987734 Z M2.5,13.4990667 L2.5,12.49912 L3.49994667,12.49912 L3.49994667,13.4990667 L2.5,13.4990667 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31374,13 +31422,13 @@ var BrushTool = function (_paper$Tool) {
 exports.default = BrushTool;
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eline%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='line' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpath d='M12,7.998 L12,6 L14,6 L14,8 L12.002,8 L12.002,10 L10,10 L10,7.998 L12,7.998 Z M8,12 L8,10 L10,10 L10,12 L8,12 Z M14,6 L14,4 L16,4 L16,6 L14,6 Z M4,16 L4,14 L6,14 L6,16 L4,16 Z M6,14 L6,12 L8,12 L8,14 L6,14 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 88 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31403,7 +31451,7 @@ var Cursors = {
 exports.default = Cursors;
 
 /***/ }),
-/* 89 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31628,25 +31676,25 @@ var MoveTool = function () {
 exports.default = MoveTool;
 
 /***/ }),
-/* 90 */
+/* 91 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eoval%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='oval' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpolygon id='Page-1' fill='%23575E75' points='6.66666667 4 6.66666667 5.33333333 5.33333333 5.33333333 5.33333333 6.66666667 4 6.66666667 4 13.3333333 5.33333333 13.3333333 5.33333333 14.6666667 6.66666667 14.6666667 6.66666667 16 13.3333333 16 13.3333333 14.6666667 14.6666667 14.6666667 14.6666667 13.3333333 16 13.3333333 16 6.66666667 14.6666667 6.66666667 14.6666667 5.33333333 13.3333333 5.33333333 13.3333333 4'%3E%3C/polygon%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 91 */
+/* 92 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Erectange%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='rectange' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Crect id='rectangle-icon' fill='%23575E75' x='4' y='4' width='12' height='12'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 92 */
+/* 93 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eeraser%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='eraser' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpath d='M9.30022904,14.1996946 L7.89984723,14.1996946 L7.89984723,12.7997327 L6.49988541,12.7997327 L6.49988541,11.3997709 L5.09992359,11.3997709 L5.09992359,9.99840913 L3.69996177,9.99840913 L3.69996177,8.59984728 L2.29999995,8.59984728 L2.29999995,7.19988546 L3.69996177,7.19988546 L3.69996177,5.79992364 L5.09992359,5.79992364 L5.09992359,4.39996182 L6.49988541,4.39996182 L6.49988541,3 L7.89984723,3 L7.89984723,4.39996182 L9.30120901,4.39996182 L9.30120901,5.79992364 L10.7011708,5.79992364 L10.7011708,7.19988546 L12.1011326,7.19988546 L12.1011326,8.59984728 L13.4996945,8.59984728 L13.4996945,9.99840913 L12.1011326,9.99840913 L12.1011326,11.3997709 L10.7011708,11.3997709 L10.7011708,12.7997327 L9.30120901,12.7997327 L9.30120901,14.1995546 L10.7001909,14.1995546 L10.7001909,15.5995164 L9.30022904,15.5995164 L9.30022904,14.1996946 Z M10.7001909,16.9994782 L10.7001909,15.5995164 L14.9000763,15.5995164 L14.9000763,16.9994782 L10.7001909,16.9994782 Z M14.9000763,15.5995164 L14.9000763,14.1995546 L16.3000381,14.1995546 L16.3000381,15.5995164 L14.9000763,15.5995164 Z M14.9000763,12.7995927 L14.9000763,11.3996309 L16.3000381,11.3996309 L16.3000381,12.7995927 L14.9000763,12.7995927 Z M16.3000381,14.1995546 L16.3000381,12.7995927 L17.7,12.7995927 L17.7,14.1995546 L16.3000381,14.1995546 Z M13.5001145,11.3996309 L13.5001145,9.99826914 L14.9000763,9.99826914 L14.9000763,11.3996309 L13.5001145,11.3996309 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 93 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31666,7 +31714,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactStyleProptype = __webpack_require__(261);
+var _reactStyleProptype = __webpack_require__(264);
 
 var _reactStyleProptype2 = _interopRequireDefault(_reactStyleProptype);
 
@@ -31782,10 +31830,10 @@ Box.defaultProps = {
     style: {}
 };
 exports.default = Box;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(94)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(95)))
 
 /***/ }),
-/* 94 */
+/* 95 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -31975,7 +32023,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 95 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31997,7 +32045,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _buttonGroup = __webpack_require__(263);
+var _buttonGroup = __webpack_require__(266);
 
 var _buttonGroup2 = _interopRequireDefault(_buttonGroup);
 
@@ -32019,7 +32067,7 @@ ButtonGroup.propTypes = {
 exports.default = ButtonGroup;
 
 /***/ }),
-/* 96 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32041,11 +32089,11 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _broadBrushHelper = __webpack_require__(266);
+var _broadBrushHelper = __webpack_require__(269);
 
 var _broadBrushHelper2 = _interopRequireDefault(_broadBrushHelper);
 
-var _segmentBrushHelper = __webpack_require__(267);
+var _segmentBrushHelper = __webpack_require__(270);
 
 var _segmentBrushHelper2 = _interopRequireDefault(_segmentBrushHelper);
 
@@ -32542,19 +32590,19 @@ var Blobbiness = function () {
 exports.default = Blobbiness;
 
 /***/ }),
-/* 97 */
+/* 98 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ebrush%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E %3Cg id='brush' stroke='%23575E75' stroke-width='0.5' fill='%23575E75'%3E %3Cpath d='M12.5787225,11.2102026 C11.6196284,12.1692967 10.9129274,12.6614634 10.3576624,12.8507583 C10.1936069,12.3459719 9.91597437,11.8790445 9.52476494,11.4878351 C9.12093585,11.0966257 8.65400846,10.8189932 8.14922209,10.6423179 C8.35113664,10.0870529 8.84330335,9.38035203 9.78977778,8.43387759 C12.0613164,6.14971929 16.0996074,3.36077461 16.8694066,4.13057382 C17.6392058,4.90037303 14.8502611,8.93866396 12.5787225,11.2102026 Z M8.39124334,15.4120104 C8.01569197,15.7748657 7.53110955,15.9621459 7.04652713,15.9855559 L7.04652713,15.9972609 L6.92538153,15.9972609 C3.67867934,16.114311 2.26127577,12.4389379 3.37581533,12.8252032 C4.84167714,13.3285186 5.43650205,12.602808 5.45951972,12.579398 C6.27119527,11.8068673 7.57956779,11.8068673 8.39124334,12.579398 C9.20291889,13.3636337 9.20291889,14.6394798 8.39124334,15.4120104 Z' id='bursh-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 98 */
+/* 99 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eeraser%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='eraser' fill='%23575E75'%3E %3Cpath d='M13.5370061,14.8291597 L10.9660545,14.8291597 L8.3016138,12.164719 L11.1686144,9.29771842 L15.1263216,13.2554257 L13.5370061,14.8291597 Z M16.7779633,12.6944908 L11.1686144,7.10072343 L8.3016138,4.23372287 C8.00556483,3.92209238 7.50695604,3.92209238 7.19532554,4.23372287 L3.22203673,8.20701169 C2.92598776,8.50306066 2.92598776,9.00166945 3.22203673,9.29771842 L6.10461881,12.164719 L10.0934891,16.1535893 C10.2337229,16.3094046 10.4362827,16.3873122 10.6388425,16.3873122 L13.8642181,16.3873122 C14.066778,16.3873122 14.2693378,16.3094046 14.4095715,16.1535893 L16.7779633,13.8007791 C17.0740122,13.5047301 17.0740122,13.0061213 16.7779633,12.6944908 L16.7779633,12.6944908 Z' id='eraser-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 99 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32578,15 +32626,15 @@ var _classnames2 = _interopRequireDefault(_classnames);
 
 var _stylePath = __webpack_require__(9);
 
-var _noFill = __webpack_require__(100);
+var _noFill = __webpack_require__(101);
 
 var _noFill2 = _interopRequireDefault(_noFill);
 
-var _mixedFill = __webpack_require__(101);
+var _mixedFill = __webpack_require__(102);
 
 var _mixedFill2 = _interopRequireDefault(_mixedFill);
 
-var _colorButton = __webpack_require__(287);
+var _colorButton = __webpack_require__(290);
 
 var _colorButton2 = _interopRequireDefault(_colorButton);
 
@@ -32668,19 +32716,19 @@ ColorButtonComponent.defaultProps = {
 exports.default = ColorButtonComponent;
 
 /***/ }),
-/* 100 */
+/* 101 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eno-fill%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='square'%3E %3Cg id='no-fill' stroke='%23FF661A' stroke-width='2'%3E %3Cpath d='M3,17 L17,3' id='Line'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 101 */
+/* 102 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Emixed-fill%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0.75'%3E %3Cg id='mixed-fill'%3E %3Cg id='mixed-fill-icon' transform='translate(2.000000, 2.500000)'%3E %3Ccircle id='blue' fill='%234C97FF' cx='4.5' cy='10.5' r='4.5'%3E%3C/circle%3E %3Ccircle id='red' fill='%23FF5500' cx='8' cy='4.5' r='4.5'%3E%3C/circle%3E %3Ccircle id='yellow' fill='%23FFBF00' cx='11.4099998' cy='10.5' r='4.5'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 102 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -32724,7 +32772,7 @@ var _gradientTypes = __webpack_require__(17);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
-var _colorPicker = __webpack_require__(289);
+var _colorPicker = __webpack_require__(292);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
@@ -32950,7 +32998,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ColorPicker);
 
 /***/ }),
-/* 103 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33039,7 +33087,7 @@ var getHoveredItem = function getHoveredItem(event, hitOptions, subselect) {
 exports.getHoveredItem = getHoveredItem;
 
 /***/ }),
-/* 104 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33177,7 +33225,7 @@ exports.LOUPE_RADIUS = LOUPE_RADIUS;
 exports.ZOOM_SCALE = ZOOM_SCALE;
 
 /***/ }),
-/* 105 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33302,7 +33350,7 @@ exports.shouldShowBringForward = shouldShowBringForward;
 exports.shouldShowSendBackward = shouldShowSendBackward;
 
 /***/ }),
-/* 106 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33336,11 +33384,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _dropdown = __webpack_require__(322);
+var _dropdown = __webpack_require__(325);
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
-var _dropdownCaret = __webpack_require__(324);
+var _dropdownCaret = __webpack_require__(327);
 
 var _dropdownCaret2 = _interopRequireDefault(_dropdownCaret);
 
@@ -33436,7 +33484,7 @@ Dropdown.propTypes = {
 exports.default = Dropdown;
 
 /***/ }),
-/* 107 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33454,7 +33502,7 @@ var hideLabel = function hideLabel(locale) {
 exports.hideLabel = hideLabel;
 
 /***/ }),
-/* 108 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33484,7 +33532,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(54);
+var _lodash3 = __webpack_require__(55);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -33690,7 +33738,7 @@ var CopyPasteHOC = function CopyPasteHOC(WrappedComponent) {
 exports.default = CopyPasteHOC;
 
 /***/ }),
-/* 109 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33736,7 +33784,7 @@ exports.default = reducer;
 exports.changeBrushSize = changeBrushSize;
 
 /***/ }),
-/* 110 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33802,7 +33850,7 @@ exports.default = reducer;
 exports.changeBitBrushSize = changeBitBrushSize;
 
 /***/ }),
-/* 111 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33848,7 +33896,7 @@ exports.default = reducer;
 exports.changeBitEraserSize = changeBitEraserSize;
 
 /***/ }),
-/* 112 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -33897,11 +33945,11 @@ exports.default = reducer;
 exports.setShapesFilled = setShapesFilled;
 
 /***/ }),
-/* 113 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(342);
+var content = __webpack_require__(345);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -33922,7 +33970,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 114 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34035,7 +34083,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 
 /***/ }),
-/* 115 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34048,13 +34096,13 @@ exports.updateIntl = exports.intlInitialState = exports.IntlProvider = exports.d
 
 var _reactIntl = __webpack_require__(24);
 
-var _reactIntlRedux = __webpack_require__(396);
+var _reactIntlRedux = __webpack_require__(399);
 
-var _scratchL10n = __webpack_require__(399);
+var _scratchL10n = __webpack_require__(402);
 
 var _scratchL10n2 = _interopRequireDefault(_scratchL10n);
 
-var _paintEditorMsgs = __webpack_require__(398);
+var _paintEditorMsgs = __webpack_require__(401);
 
 var _paintEditorMsgs2 = _interopRequireDefault(_paintEditorMsgs);
 
@@ -34086,7 +34134,7 @@ exports.intlInitialState = intlInitialState;
 exports.updateIntl = updateIntl;
 
 /***/ }),
-/* 116 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34123,7 +34171,7 @@ var _default = (0, _reactRedux.connect)(mapStateToProps)(_reactIntl.IntlProvider
 exports.default = _default;
 
 /***/ }),
-/* 117 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34211,7 +34259,7 @@ module.exports = hoistNonReactStatics;
 
 
 /***/ }),
-/* 118 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34236,7 +34284,7 @@ function symbolObservablePonyfill(root) {
 
 
 /***/ }),
-/* 119 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -34248,13 +34296,13 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(47)))
 
 /***/ }),
-/* 120 */
+/* 121 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 121 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34329,315 +34377,315 @@ module.exports = hoistNonReactStatics;
 
 
 /***/ }),
-/* 122 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"en",pluralRuleFunction:function(e,a){var n=String(e).split("."),l=!n[1],o=Number(n[0])==e,t=o&&n[0].slice(-1),r=o&&n[0].slice(-2);return a?1==t&&11!=r?"one":2==t&&12!=r?"two":3==t&&13!=r?"few":"other":1==e&&l?"one":"other"},fields:{year:{displayName:"year",relative:{0:"this year",1:"next year","-1":"last year"},relativeTime:{future:{one:"in {0} year",other:"in {0} years"},past:{one:"{0} year ago",other:"{0} years ago"}}},month:{displayName:"month",relative:{0:"this month",1:"next month","-1":"last month"},relativeTime:{future:{one:"in {0} month",other:"in {0} months"},past:{one:"{0} month ago",other:"{0} months ago"}}},day:{displayName:"day",relative:{0:"today",1:"tomorrow","-1":"yesterday"},relativeTime:{future:{one:"in {0} day",other:"in {0} days"},past:{one:"{0} day ago",other:"{0} days ago"}}},hour:{displayName:"hour",relative:{0:"this hour"},relativeTime:{future:{one:"in {0} hour",other:"in {0} hours"},past:{one:"{0} hour ago",other:"{0} hours ago"}}},minute:{displayName:"minute",relative:{0:"this minute"},relativeTime:{future:{one:"in {0} minute",other:"in {0} minutes"},past:{one:"{0} minute ago",other:"{0} minutes ago"}}},second:{displayName:"second",relative:{0:"now"},relativeTime:{future:{one:"in {0} second",other:"in {0} seconds"},past:{one:"{0} second ago",other:"{0} seconds ago"}}}}},{locale:"en-001",parentLocale:"en"},{locale:"en-150",parentLocale:"en-001"},{locale:"en-AG",parentLocale:"en-001"},{locale:"en-AI",parentLocale:"en-001"},{locale:"en-AS",parentLocale:"en"},{locale:"en-AT",parentLocale:"en-150"},{locale:"en-AU",parentLocale:"en-001"},{locale:"en-BB",parentLocale:"en-001"},{locale:"en-BE",parentLocale:"en-001"},{locale:"en-BI",parentLocale:"en"},{locale:"en-BM",parentLocale:"en-001"},{locale:"en-BS",parentLocale:"en-001"},{locale:"en-BW",parentLocale:"en-001"},{locale:"en-BZ",parentLocale:"en-001"},{locale:"en-CA",parentLocale:"en-001"},{locale:"en-CC",parentLocale:"en-001"},{locale:"en-CH",parentLocale:"en-150"},{locale:"en-CK",parentLocale:"en-001"},{locale:"en-CM",parentLocale:"en-001"},{locale:"en-CX",parentLocale:"en-001"},{locale:"en-CY",parentLocale:"en-001"},{locale:"en-DE",parentLocale:"en-150"},{locale:"en-DG",parentLocale:"en-001"},{locale:"en-DK",parentLocale:"en-150"},{locale:"en-DM",parentLocale:"en-001"},{locale:"en-Dsrt",pluralRuleFunction:function(e,a){return"other"},fields:{year:{displayName:"Year",relative:{0:"this year",1:"next year","-1":"last year"},relativeTime:{future:{other:"+{0} y"},past:{other:"-{0} y"}}},month:{displayName:"Month",relative:{0:"this month",1:"next month","-1":"last month"},relativeTime:{future:{other:"+{0} m"},past:{other:"-{0} m"}}},day:{displayName:"Day",relative:{0:"today",1:"tomorrow","-1":"yesterday"},relativeTime:{future:{other:"+{0} d"},past:{other:"-{0} d"}}},hour:{displayName:"Hour",relative:{0:"this hour"},relativeTime:{future:{other:"+{0} h"},past:{other:"-{0} h"}}},minute:{displayName:"Minute",relative:{0:"this minute"},relativeTime:{future:{other:"+{0} min"},past:{other:"-{0} min"}}},second:{displayName:"Second",relative:{0:"now"},relativeTime:{future:{other:"+{0} s"},past:{other:"-{0} s"}}}}},{locale:"en-ER",parentLocale:"en-001"},{locale:"en-FI",parentLocale:"en-150"},{locale:"en-FJ",parentLocale:"en-001"},{locale:"en-FK",parentLocale:"en-001"},{locale:"en-FM",parentLocale:"en-001"},{locale:"en-GB",parentLocale:"en-001"},{locale:"en-GD",parentLocale:"en-001"},{locale:"en-GG",parentLocale:"en-001"},{locale:"en-GH",parentLocale:"en-001"},{locale:"en-GI",parentLocale:"en-001"},{locale:"en-GM",parentLocale:"en-001"},{locale:"en-GU",parentLocale:"en"},{locale:"en-GY",parentLocale:"en-001"},{locale:"en-HK",parentLocale:"en-001"},{locale:"en-IE",parentLocale:"en-001"},{locale:"en-IL",parentLocale:"en-001"},{locale:"en-IM",parentLocale:"en-001"},{locale:"en-IN",parentLocale:"en-001"},{locale:"en-IO",parentLocale:"en-001"},{locale:"en-JE",parentLocale:"en-001"},{locale:"en-JM",parentLocale:"en-001"},{locale:"en-KE",parentLocale:"en-001"},{locale:"en-KI",parentLocale:"en-001"},{locale:"en-KN",parentLocale:"en-001"},{locale:"en-KY",parentLocale:"en-001"},{locale:"en-LC",parentLocale:"en-001"},{locale:"en-LR",parentLocale:"en-001"},{locale:"en-LS",parentLocale:"en-001"},{locale:"en-MG",parentLocale:"en-001"},{locale:"en-MH",parentLocale:"en"},{locale:"en-MO",parentLocale:"en-001"},{locale:"en-MP",parentLocale:"en"},{locale:"en-MS",parentLocale:"en-001"},{locale:"en-MT",parentLocale:"en-001"},{locale:"en-MU",parentLocale:"en-001"},{locale:"en-MW",parentLocale:"en-001"},{locale:"en-MY",parentLocale:"en-001"},{locale:"en-NA",parentLocale:"en-001"},{locale:"en-NF",parentLocale:"en-001"},{locale:"en-NG",parentLocale:"en-001"},{locale:"en-NL",parentLocale:"en-150"},{locale:"en-NR",parentLocale:"en-001"},{locale:"en-NU",parentLocale:"en-001"},{locale:"en-NZ",parentLocale:"en-001"},{locale:"en-PG",parentLocale:"en-001"},{locale:"en-PH",parentLocale:"en-001"},{locale:"en-PK",parentLocale:"en-001"},{locale:"en-PN",parentLocale:"en-001"},{locale:"en-PR",parentLocale:"en"},{locale:"en-PW",parentLocale:"en-001"},{locale:"en-RW",parentLocale:"en-001"},{locale:"en-SB",parentLocale:"en-001"},{locale:"en-SC",parentLocale:"en-001"},{locale:"en-SD",parentLocale:"en-001"},{locale:"en-SE",parentLocale:"en-150"},{locale:"en-SG",parentLocale:"en-001"},{locale:"en-SH",parentLocale:"en-001"},{locale:"en-SI",parentLocale:"en-150"},{locale:"en-SL",parentLocale:"en-001"},{locale:"en-SS",parentLocale:"en-001"},{locale:"en-SX",parentLocale:"en-001"},{locale:"en-SZ",parentLocale:"en-001"},{locale:"en-Shaw",pluralRuleFunction:function(e,a){return"other"},fields:{year:{displayName:"Year",relative:{0:"this year",1:"next year","-1":"last year"},relativeTime:{future:{other:"+{0} y"},past:{other:"-{0} y"}}},month:{displayName:"Month",relative:{0:"this month",1:"next month","-1":"last month"},relativeTime:{future:{other:"+{0} m"},past:{other:"-{0} m"}}},day:{displayName:"Day",relative:{0:"today",1:"tomorrow","-1":"yesterday"},relativeTime:{future:{other:"+{0} d"},past:{other:"-{0} d"}}},hour:{displayName:"Hour",relative:{0:"this hour"},relativeTime:{future:{other:"+{0} h"},past:{other:"-{0} h"}}},minute:{displayName:"Minute",relative:{0:"this minute"},relativeTime:{future:{other:"+{0} min"},past:{other:"-{0} min"}}},second:{displayName:"Second",relative:{0:"now"},relativeTime:{future:{other:"+{0} s"},past:{other:"-{0} s"}}}}},{locale:"en-TC",parentLocale:"en-001"},{locale:"en-TK",parentLocale:"en-001"},{locale:"en-TO",parentLocale:"en-001"},{locale:"en-TT",parentLocale:"en-001"},{locale:"en-TV",parentLocale:"en-001"},{locale:"en-TZ",parentLocale:"en-001"},{locale:"en-UG",parentLocale:"en-001"},{locale:"en-UM",parentLocale:"en"},{locale:"en-US",parentLocale:"en"},{locale:"en-VC",parentLocale:"en-001"},{locale:"en-VG",parentLocale:"en-001"},{locale:"en-VI",parentLocale:"en"},{locale:"en-VU",parentLocale:"en-001"},{locale:"en-WS",parentLocale:"en-001"},{locale:"en-ZA",parentLocale:"en-001"},{locale:"en-ZM",parentLocale:"en-001"},{locale:"en-ZW",parentLocale:"en-001"}]});
 
 
 /***/ }),
-/* 123 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"am",pluralRuleFunction:function(e,t){return t?"other":e>=0&&e<=1?"one":"other"},fields:{year:{displayName:"ዓመት",relative:{0:"በዚህ ዓመት",1:"የሚቀጥለው ዓመት","-1":"ያለፈው ዓመት"},relativeTime:{future:{one:"በ{0} ዓመታት ውስጥ",other:"በ{0} ዓመታት ውስጥ"},past:{one:"ከ{0} ዓመት በፊት",other:"ከ{0} ዓመታት በፊት"}}},month:{displayName:"ወር",relative:{0:"በዚህ ወር",1:"የሚቀጥለው ወር","-1":"ያለፈው ወር"},relativeTime:{future:{one:"በ{0} ወር ውስጥ",other:"በ{0} ወራት ውስጥ"},past:{one:"ከ{0} ወር በፊት",other:"ከ{0} ወራት በፊት"}}},day:{displayName:"ቀን",relative:{0:"ዛሬ",1:"ነገ",2:"ከነገ ወዲያ","-2":"ከትናንት ወዲያ","-1":"ትናንት"},relativeTime:{future:{one:"በ{0} ቀን ውስጥ",other:"በ{0} ቀናት ውስጥ"},past:{one:"ከ{0} ቀን በፊት",other:"ከ{0} ቀናት በፊት"}}},hour:{displayName:"ሰዓት",relative:{0:"ይህ ሰዓት"},relativeTime:{future:{one:"በ{0} ሰዓት ውስጥ",other:"በ{0} ሰዓቶች ውስጥ"},past:{one:"ከ{0} ሰዓት በፊት",other:"ከ{0} ሰዓቶች በፊት"}}},minute:{displayName:"ደቂቃ",relative:{0:"ይህ ደቂቃ"},relativeTime:{future:{one:"በ{0} ደቂቃ ውስጥ",other:"በ{0} ደቂቃዎች ውስጥ"},past:{one:"ከ{0} ደቂቃ በፊት",other:"ከ{0} ደቂቃዎች በፊት"}}},second:{displayName:"ሰከንድ",relative:{0:"አሁን"},relativeTime:{future:{one:"በ{0} ሰከንድ ውስጥ",other:"በ{0} ሰከንዶች ውስጥ"},past:{one:"ከ{0} ሰከንድ በፊት",other:"ከ{0} ሰከንዶች በፊት"}}}}}]});
 
 
 /***/ }),
-/* 124 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"ar",pluralRuleFunction:function(e,a){var r=String(e).split("."),o=Number(r[0])==e&&r[0].slice(-2);return a?"other":0==e?"zero":1==e?"one":2==e?"two":o>=3&&o<=10?"few":o>=11&&o<=99?"many":"other"},fields:{year:{displayName:"السنة",relative:{0:"السنة الحالية",1:"السنة القادمة","-1":"السنة الماضية"},relativeTime:{future:{zero:"خلال {0} سنة",one:"خلال سنة واحدة",two:"خلال سنتين",few:"خلال {0} سنوات",many:"خلال {0} سنة",other:"خلال {0} سنة"},past:{zero:"قبل {0} سنة",one:"قبل سنة واحدة",two:"قبل سنتين",few:"قبل {0} سنوات",many:"قبل {0} سنة",other:"قبل {0} سنة"}}},month:{displayName:"الشهر",relative:{0:"هذا الشهر",1:"الشهر القادم","-1":"الشهر الماضي"},relativeTime:{future:{zero:"خلال {0} شهر",one:"خلال شهر واحد",two:"خلال شهرين",few:"خلال {0} أشهر",many:"خلال {0} شهرًا",other:"خلال {0} شهر"},past:{zero:"قبل {0} شهر",one:"قبل شهر واحد",two:"قبل شهرين",few:"قبل {0} أشهر",many:"قبل {0} شهرًا",other:"قبل {0} شهر"}}},day:{displayName:"يوم",relative:{0:"اليوم",1:"غدًا",2:"بعد الغد","-2":"أول أمس","-1":"أمس"},relativeTime:{future:{zero:"خلال {0} يوم",one:"خلال يوم واحد",two:"خلال يومين",few:"خلال {0} أيام",many:"خلال {0} يومًا",other:"خلال {0} يوم"},past:{zero:"قبل {0} يوم",one:"قبل يوم واحد",two:"قبل يومين",few:"قبل {0} أيام",many:"قبل {0} يومًا",other:"قبل {0} يوم"}}},hour:{displayName:"الساعات",relative:{0:"الساعة الحالية"},relativeTime:{future:{zero:"خلال {0} ساعة",one:"خلال ساعة واحدة",two:"خلال ساعتين",few:"خلال {0} ساعات",many:"خلال {0} ساعة",other:"خلال {0} ساعة"},past:{zero:"قبل {0} ساعة",one:"قبل ساعة واحدة",two:"قبل ساعتين",few:"قبل {0} ساعات",many:"قبل {0} ساعة",other:"قبل {0} ساعة"}}},minute:{displayName:"الدقائق",relative:{0:"هذه الدقيقة"},relativeTime:{future:{zero:"خلال {0} دقيقة",one:"خلال دقيقة واحدة",two:"خلال دقيقتين",few:"خلال {0} دقائق",many:"خلال {0} دقيقة",other:"خلال {0} دقيقة"},past:{zero:"قبل {0} دقيقة",one:"قبل دقيقة واحدة",two:"قبل دقيقتين",few:"قبل {0} دقائق",many:"قبل {0} دقيقة",other:"قبل {0} دقيقة"}}},second:{displayName:"الثواني",relative:{0:"الآن"},relativeTime:{future:{zero:"خلال {0} ثانية",one:"خلال ثانية واحدة",two:"خلال ثانيتين",few:"خلال {0} ثوانٍ",many:"خلال {0} ثانية",other:"خلال {0} ثانية"},past:{zero:"قبل {0} ثانية",one:"قبل ثانية واحدة",two:"قبل ثانيتين",few:"قبل {0} ثوانِ",many:"قبل {0} ثانية",other:"قبل {0} ثانية"}}}}},{locale:"ar-AE",parentLocale:"ar",fields:{year:{displayName:"السنة",relative:{0:"هذه السنة",1:"السنة التالية","-1":"السنة الماضية"},relativeTime:{future:{zero:"خلال {0} سنة",one:"خلال سنة واحدة",two:"خلال سنتين",few:"خلال {0} سنوات",many:"خلال {0} سنة",other:"خلال {0} سنة"},past:{zero:"قبل {0} سنة",one:"قبل سنة واحدة",two:"قبل سنتين",few:"قبل {0} سنوات",many:"قبل {0} سنة",other:"قبل {0} سنة"}}},month:{displayName:"الشهر",relative:{0:"هذا الشهر",1:"الشهر القادم","-1":"الشهر الماضي"},relativeTime:{future:{zero:"خلال {0} شهر",one:"خلال شهر واحد",two:"خلال شهرين",few:"خلال {0} أشهر",many:"خلال {0} شهرًا",other:"خلال {0} شهر"},past:{zero:"قبل {0} شهر",one:"قبل شهر واحد",two:"قبل شهرين",few:"قبل {0} أشهر",many:"قبل {0} شهرًا",other:"قبل {0} شهر"}}},day:{displayName:"يوم",relative:{0:"اليوم",1:"غدًا",2:"بعد الغد","-2":"أول أمس","-1":"أمس"},relativeTime:{future:{zero:"خلال {0} يوم",one:"خلال يوم واحد",two:"خلال يومين",few:"خلال {0} أيام",many:"خلال {0} يومًا",other:"خلال {0} يوم"},past:{zero:"قبل {0} يوم",one:"قبل يوم واحد",two:"قبل يومين",few:"قبل {0} أيام",many:"قبل {0} يومًا",other:"قبل {0} يوم"}}},hour:{displayName:"الساعات",relative:{0:"الساعة الحالية"},relativeTime:{future:{zero:"خلال {0} ساعة",one:"خلال ساعة واحدة",two:"خلال ساعتين",few:"خلال {0} ساعات",many:"خلال {0} ساعة",other:"خلال {0} ساعة"},past:{zero:"قبل {0} ساعة",one:"قبل ساعة واحدة",two:"قبل ساعتين",few:"قبل {0} ساعات",many:"قبل {0} ساعة",other:"قبل {0} ساعة"}}},minute:{displayName:"الدقائق",relative:{0:"هذه الدقيقة"},relativeTime:{future:{zero:"خلال {0} دقيقة",one:"خلال دقيقة واحدة",two:"خلال دقيقتين",few:"خلال {0} دقائق",many:"خلال {0} دقيقة",other:"خلال {0} دقيقة"},past:{zero:"قبل {0} دقيقة",one:"قبل دقيقة واحدة",two:"قبل دقيقتين",few:"قبل {0} دقائق",many:"قبل {0} دقيقة",other:"قبل {0} دقيقة"}}},second:{displayName:"الثواني",relative:{0:"الآن"},relativeTime:{future:{zero:"خلال {0} ثانية",one:"خلال ثانية واحدة",two:"خلال ثانيتين",few:"خلال {0} ثوانٍ",many:"خلال {0} ثانية",other:"خلال {0} ثانية"},past:{zero:"قبل {0} ثانية",one:"قبل ثانية واحدة",two:"قبل ثانيتين",few:"قبل {0} ثوانِ",many:"قبل {0} ثانية",other:"قبل {0} ثانية"}}}}},{locale:"ar-BH",parentLocale:"ar"},{locale:"ar-DJ",parentLocale:"ar"},{locale:"ar-DZ",parentLocale:"ar"},{locale:"ar-EG",parentLocale:"ar"},{locale:"ar-EH",parentLocale:"ar"},{locale:"ar-ER",parentLocale:"ar"},{locale:"ar-IL",parentLocale:"ar"},{locale:"ar-IQ",parentLocale:"ar"},{locale:"ar-JO",parentLocale:"ar"},{locale:"ar-KM",parentLocale:"ar"},{locale:"ar-KW",parentLocale:"ar"},{locale:"ar-LB",parentLocale:"ar"},{locale:"ar-LY",parentLocale:"ar"},{locale:"ar-MA",parentLocale:"ar"},{locale:"ar-MR",parentLocale:"ar"},{locale:"ar-OM",parentLocale:"ar"},{locale:"ar-PS",parentLocale:"ar"},{locale:"ar-QA",parentLocale:"ar"},{locale:"ar-SA",parentLocale:"ar"},{locale:"ar-SD",parentLocale:"ar"},{locale:"ar-SO",parentLocale:"ar"},{locale:"ar-SS",parentLocale:"ar"},{locale:"ar-SY",parentLocale:"ar"},{locale:"ar-TD",parentLocale:"ar"},{locale:"ar-TN",parentLocale:"ar"},{locale:"ar-YE",parentLocale:"ar"}]});
 
 
 /***/ }),
-/* 125 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"az",pluralRuleFunction:function(e,t){var a=String(e).split(".")[0],r=a.slice(-1),i=a.slice(-2),n=a.slice(-3);return t?1==r||2==r||5==r||7==r||8==r||20==i||50==i||70==i||80==i?"one":3==r||4==r||100==n||200==n||300==n||400==n||500==n||600==n||700==n||800==n||900==n?"few":0==a||6==r||40==i||60==i||90==i?"many":"other":1==e?"one":"other"},fields:{year:{displayName:"İl",relative:{0:"bu il",1:"gələn il","-1":"keçən il"},relativeTime:{future:{one:"{0} il ərzində",other:"{0} il ərzində"},past:{one:"{0} il öncə",other:"{0} il öncə"}}},month:{displayName:"Ay",relative:{0:"bu ay",1:"gələn ay","-1":"keçən ay"},relativeTime:{future:{one:"{0} ay ərzində",other:"{0} ay ərzində"},past:{one:"{0} ay öncə",other:"{0} ay öncə"}}},day:{displayName:"Gün",relative:{0:"bu gün",1:"sabah","-1":"dünən"},relativeTime:{future:{one:"{0} gün ərzində",other:"{0} gün ərzində"},past:{one:"{0} gün öncə",other:"{0} gün öncə"}}},hour:{displayName:"Saat",relative:{0:"bu saat"},relativeTime:{future:{one:"{0} saat ərzində",other:"{0} saat ərzində"},past:{one:"{0} saat öncə",other:"{0} saat öncə"}}},minute:{displayName:"Dəqiqə",relative:{0:"bu dəqiqə"},relativeTime:{future:{one:"{0} dəqiqə ərzində",other:"{0} dəqiqə ərzində"},past:{one:"{0} dəqiqə öncə",other:"{0} dəqiqə öncə"}}},second:{displayName:"Saniyə",relative:{0:"indi"},relativeTime:{future:{one:"{0} saniyə ərzində",other:"{0} saniyə ərzində"},past:{one:"{0} saniyə öncə",other:"{0} saniyə öncə"}}}}},{locale:"az-Arab",pluralRuleFunction:function(e,t){return"other"},fields:{year:{displayName:"Year",relative:{0:"this year",1:"next year","-1":"last year"},relativeTime:{future:{other:"+{0} y"},past:{other:"-{0} y"}}},month:{displayName:"Month",relative:{0:"this month",1:"next month","-1":"last month"},relativeTime:{future:{other:"+{0} m"},past:{other:"-{0} m"}}},day:{displayName:"Day",relative:{0:"today",1:"tomorrow","-1":"yesterday"},relativeTime:{future:{other:"+{0} d"},past:{other:"-{0} d"}}},hour:{displayName:"Hour",relative:{0:"this hour"},relativeTime:{future:{other:"+{0} h"},past:{other:"-{0} h"}}},minute:{displayName:"Minute",relative:{0:"this minute"},relativeTime:{future:{other:"+{0} min"},past:{other:"-{0} min"}}},second:{displayName:"Second",relative:{0:"now"},relativeTime:{future:{other:"+{0} s"},past:{other:"-{0} s"}}}}},{locale:"az-Cyrl",pluralRuleFunction:function(e,t){return"other"},fields:{year:{displayName:"Year",relative:{0:"this year",1:"next year","-1":"last year"},relativeTime:{future:{other:"+{0} y"},past:{other:"-{0} y"}}},month:{displayName:"Month",relative:{0:"this month",1:"next month","-1":"last month"},relativeTime:{future:{other:"+{0} m"},past:{other:"-{0} m"}}},day:{displayName:"Day",relative:{0:"today",1:"tomorrow","-1":"yesterday"},relativeTime:{future:{other:"+{0} d"},past:{other:"-{0} d"}}},hour:{displayName:"Hour",relative:{0:"this hour"},relativeTime:{future:{other:"+{0} h"},past:{other:"-{0} h"}}},minute:{displayName:"Minute",relative:{0:"this minute"},relativeTime:{future:{other:"+{0} min"},past:{other:"-{0} min"}}},second:{displayName:"Second",relative:{0:"now"},relativeTime:{future:{other:"+{0} s"},past:{other:"-{0} s"}}}}},{locale:"az-Latn",parentLocale:"az"}]});
 
 
 /***/ }),
-/* 126 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"ca",pluralRuleFunction:function(e,a){var t=!String(e).split(".")[1];return a?1==e||3==e?"one":2==e?"two":4==e?"few":"other":1==e&&t?"one":"other"},fields:{year:{displayName:"any",relative:{0:"enguany",1:"l’any que ve","-1":"l’any passat"},relativeTime:{future:{one:"d’aquí a {0} any",other:"d’aquí a {0} anys"},past:{one:"fa {0} any",other:"fa {0} anys"}}},month:{displayName:"mes",relative:{0:"aquest mes",1:"el mes que ve","-1":"el mes passat"},relativeTime:{future:{one:"d’aquí a {0} mes",other:"d’aquí a {0} mesos"},past:{one:"fa {0} mes",other:"fa {0} mesos"}}},day:{displayName:"dia",relative:{0:"avui",1:"demà",2:"demà passat","-2":"abans-d’ahir","-1":"ahir"},relativeTime:{future:{one:"d’aquí a {0} dia",other:"d’aquí a {0} dies"},past:{one:"fa {0} dia",other:"fa {0} dies"}}},hour:{displayName:"hora",relative:{0:"aquesta hora"},relativeTime:{future:{one:"d’aquí a {0} hora",other:"d’aquí a {0} hores"},past:{one:"fa {0} hora",other:"fa {0} hores"}}},minute:{displayName:"minut",relative:{0:"aquest minut"},relativeTime:{future:{one:"d’aquí a {0} minut",other:"d’aquí a {0} minuts"},past:{one:"fa {0} minut",other:"fa {0} minuts"}}},second:{displayName:"segon",relative:{0:"ara"},relativeTime:{future:{one:"d’aquí a {0} segon",other:"d’aquí a {0} segons"},past:{one:"fa {0} segon",other:"fa {0} segons"}}}}},{locale:"ca-AD",parentLocale:"ca"},{locale:"ca-ES-VALENCIA",parentLocale:"ca-ES",fields:{year:{displayName:"any",relative:{0:"enguany",1:"l’any que ve","-1":"l’any passat"},relativeTime:{future:{one:"d’aquí a {0} any",other:"d’aquí a {0} anys"},past:{one:"fa {0} any",other:"fa {0} anys"}}},month:{displayName:"mes",relative:{0:"aquest mes",1:"el mes que ve","-1":"el mes passat"},relativeTime:{future:{one:"d’aquí a {0} mes",other:"d’aquí a {0} mesos"},past:{one:"fa {0} mes",other:"fa {0} mesos"}}},day:{displayName:"dia",relative:{0:"avui",1:"demà",2:"demà passat","-2":"abans-d’ahir","-1":"ahir"},relativeTime:{future:{one:"d’aquí a {0} dia",other:"d’aquí a {0} dies"},past:{one:"fa {0} dia",other:"fa {0} dies"}}},hour:{displayName:"hora",relative:{0:"aquesta hora"},relativeTime:{future:{one:"d’aquí a {0} hora",other:"d’aquí a {0} hores"},past:{one:"fa {0} hora",other:"fa {0} hores"}}},minute:{displayName:"minut",relative:{0:"aquest minut"},relativeTime:{future:{one:"d’aquí a {0} minut",other:"d’aquí a {0} minuts"},past:{one:"fa {0} minut",other:"fa {0} minuts"}}},second:{displayName:"segon",relative:{0:"ara"},relativeTime:{future:{one:"d’aquí a {0} segon",other:"d’aquí a {0} segons"},past:{one:"fa {0} segon",other:"fa {0} segons"}}}}},{locale:"ca-ES",parentLocale:"ca"},{locale:"ca-FR",parentLocale:"ca"},{locale:"ca-IT",parentLocale:"ca"}]});
 
 
 /***/ }),
-/* 127 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"cs",pluralRuleFunction:function(e,a){var n=String(e).split("."),t=n[0],o=!n[1];return a?"other":1==e&&o?"one":t>=2&&t<=4&&o?"few":o?"other":"many"},fields:{year:{displayName:"rok",relative:{0:"tento rok",1:"příští rok","-1":"minulý rok"},relativeTime:{future:{one:"za {0} rok",few:"za {0} roky",many:"za {0} roku",other:"za {0} let"},past:{one:"před {0} rokem",few:"před {0} lety",many:"před {0} roku",other:"před {0} lety"}}},month:{displayName:"měsíc",relative:{0:"tento měsíc",1:"příští měsíc","-1":"minulý měsíc"},relativeTime:{future:{one:"za {0} měsíc",few:"za {0} měsíce",many:"za {0} měsíce",other:"za {0} měsíců"},past:{one:"před {0} měsícem",few:"před {0} měsíci",many:"před {0} měsíce",other:"před {0} měsíci"}}},day:{displayName:"den",relative:{0:"dnes",1:"zítra",2:"pozítří","-2":"předevčírem","-1":"včera"},relativeTime:{future:{one:"za {0} den",few:"za {0} dny",many:"za {0} dne",other:"za {0} dní"},past:{one:"před {0} dnem",few:"před {0} dny",many:"před {0} dne",other:"před {0} dny"}}},hour:{displayName:"hodina",relative:{0:"tuto hodinu"},relativeTime:{future:{one:"za {0} hodinu",few:"za {0} hodiny",many:"za {0} hodiny",other:"za {0} hodin"},past:{one:"před {0} hodinou",few:"před {0} hodinami",many:"před {0} hodiny",other:"před {0} hodinami"}}},minute:{displayName:"minuta",relative:{0:"tuto minutu"},relativeTime:{future:{one:"za {0} minutu",few:"za {0} minuty",many:"za {0} minuty",other:"za {0} minut"},past:{one:"před {0} minutou",few:"před {0} minutami",many:"před {0} minuty",other:"před {0} minutami"}}},second:{displayName:"sekunda",relative:{0:"nyní"},relativeTime:{future:{one:"za {0} sekundu",few:"za {0} sekundy",many:"za {0} sekundy",other:"za {0} sekund"},past:{one:"před {0} sekundou",few:"před {0} sekundami",many:"před {0} sekundy",other:"před {0} sekundami"}}}}}]});
 
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,n){ true?module.exports=n():undefined}(this,function(){"use strict";return[{locale:"cy",pluralRuleFunction:function(e,n){return n?0==e||7==e||8==e||9==e?"zero":1==e?"one":2==e?"two":3==e||4==e?"few":5==e||6==e?"many":"other":0==e?"zero":1==e?"one":2==e?"two":3==e?"few":6==e?"many":"other"},fields:{year:{displayName:"blwyddyn",relative:{0:"eleni",1:"blwyddyn nesaf","-1":"llynedd"},relativeTime:{future:{zero:"ymhen {0} mlynedd",one:"ymhen blwyddyn",two:"ymhen {0} flynedd",few:"ymhen {0} blynedd",many:"ymhen {0} blynedd",other:"ymhen {0} mlynedd"},past:{zero:"{0} o flynyddoedd yn ôl",one:"blwyddyn yn ôl",two:"{0} flynedd yn ôl",few:"{0} blynedd yn ôl",many:"{0} blynedd yn ôl",other:"{0} o flynyddoedd yn ôl"}}},month:{displayName:"mis",relative:{0:"y mis hwn",1:"mis nesaf","-1":"mis diwethaf"},relativeTime:{future:{zero:"ymhen {0} mis",one:"ymhen mis",two:"ymhen deufis",few:"ymhen {0} mis",many:"ymhen {0} mis",other:"ymhen {0} mis"},past:{zero:"{0} mis yn ôl",one:"{0} mis yn ôl",two:"{0} fis yn ôl",few:"{0} mis yn ôl",many:"{0} mis yn ôl",other:"{0} mis yn ôl"}}},day:{displayName:"dydd",relative:{0:"heddiw",1:"yfory",2:"drennydd","-2":"echdoe","-1":"ddoe"},relativeTime:{future:{zero:"ymhen {0} diwrnod",one:"ymhen diwrnod",two:"ymhen deuddydd",few:"ymhen tridiau",many:"ymhen {0} diwrnod",other:"ymhen {0} diwrnod"},past:{zero:"{0} diwrnod yn ôl",one:"{0} diwrnod yn ôl",two:"{0} ddiwrnod yn ôl",few:"{0} diwrnod yn ôl",many:"{0} diwrnod yn ôl",other:"{0} diwrnod yn ôl"}}},hour:{displayName:"awr",relative:{0:"yr awr hon"},relativeTime:{future:{zero:"ymhen {0} awr",one:"ymhen awr",two:"ymhen {0} awr",few:"ymhen {0} awr",many:"ymhen {0} awr",other:"ymhen {0} awr"},past:{zero:"{0} awr yn ôl",one:"awr yn ôl",two:"{0} awr yn ôl",few:"{0} awr yn ôl",many:"{0} awr yn ôl",other:"{0} awr yn ôl"}}},minute:{displayName:"munud",relative:{0:"y funud hon"},relativeTime:{future:{zero:"ymhen {0} munud",one:"ymhen munud",two:"ymhen {0} funud",few:"ymhen {0} munud",many:"ymhen {0} munud",other:"ymhen {0} munud"},past:{zero:"{0} munud yn ôl",one:"{0} munud yn ôl",two:"{0} funud yn ôl",few:"{0} munud yn ôl",many:"{0} munud yn ôl",other:"{0} munud yn ôl"}}},second:{displayName:"eiliad",relative:{0:"nawr"},relativeTime:{future:{zero:"ymhen {0} eiliad",one:"ymhen eiliad",two:"ymhen {0} eiliad",few:"ymhen {0} eiliad",many:"ymhen {0} eiliad",other:"ymhen {0} eiliad"},past:{zero:"{0} eiliad yn ôl",one:"eiliad yn ôl",two:"{0} eiliad yn ôl",few:"{0} eiliad yn ôl",many:"{0} eiliad yn ôl",other:"{0} eiliad yn ôl"}}}}}]});
 
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"da",pluralRuleFunction:function(e,t){var r=String(e).split("."),n=r[0],o=Number(r[0])==e;return t?"other":1!=e&&(o||0!=n&&1!=n)?"other":"one"},fields:{year:{displayName:"år",relative:{0:"i år",1:"næste år","-1":"sidste år"},relativeTime:{future:{one:"om {0} år",other:"om {0} år"},past:{one:"for {0} år siden",other:"for {0} år siden"}}},month:{displayName:"måned",relative:{0:"denne måned",1:"næste måned","-1":"sidste måned"},relativeTime:{future:{one:"om {0} måned",other:"om {0} måneder"},past:{one:"for {0} måned siden",other:"for {0} måneder siden"}}},day:{displayName:"dag",relative:{0:"i dag",1:"i morgen",2:"i overmorgen","-2":"i forgårs","-1":"i går"},relativeTime:{future:{one:"om {0} dag",other:"om {0} dage"},past:{one:"for {0} dag siden",other:"for {0} dage siden"}}},hour:{displayName:"time",relative:{0:"i den kommende time"},relativeTime:{future:{one:"om {0} time",other:"om {0} timer"},past:{one:"for {0} time siden",other:"for {0} timer siden"}}},minute:{displayName:"minut",relative:{0:"i det kommende minut"},relativeTime:{future:{one:"om {0} minut",other:"om {0} minutter"},past:{one:"for {0} minut siden",other:"for {0} minutter siden"}}},second:{displayName:"sekund",relative:{0:"nu"},relativeTime:{future:{one:"om {0} sekund",other:"om {0} sekunder"},past:{one:"for {0} sekund siden",other:"for {0} sekunder siden"}}}}},{locale:"da-GL",parentLocale:"da"}]});
 
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"de",pluralRuleFunction:function(e,t){var n=!String(e).split(".")[1];return t?"other":1==e&&n?"one":"other"},fields:{year:{displayName:"Jahr",relative:{0:"dieses Jahr",1:"nächstes Jahr","-1":"letztes Jahr"},relativeTime:{future:{one:"in {0} Jahr",other:"in {0} Jahren"},past:{one:"vor {0} Jahr",other:"vor {0} Jahren"}}},month:{displayName:"Monat",relative:{0:"diesen Monat",1:"nächsten Monat","-1":"letzten Monat"},relativeTime:{future:{one:"in {0} Monat",other:"in {0} Monaten"},past:{one:"vor {0} Monat",other:"vor {0} Monaten"}}},day:{displayName:"Tag",relative:{0:"heute",1:"morgen",2:"übermorgen","-2":"vorgestern","-1":"gestern"},relativeTime:{future:{one:"in {0} Tag",other:"in {0} Tagen"},past:{one:"vor {0} Tag",other:"vor {0} Tagen"}}},hour:{displayName:"Stunde",relative:{0:"in dieser Stunde"},relativeTime:{future:{one:"in {0} Stunde",other:"in {0} Stunden"},past:{one:"vor {0} Stunde",other:"vor {0} Stunden"}}},minute:{displayName:"Minute",relative:{0:"in dieser Minute"},relativeTime:{future:{one:"in {0} Minute",other:"in {0} Minuten"},past:{one:"vor {0} Minute",other:"vor {0} Minuten"}}},second:{displayName:"Sekunde",relative:{0:"jetzt"},relativeTime:{future:{one:"in {0} Sekunde",other:"in {0} Sekunden"},past:{one:"vor {0} Sekunde",other:"vor {0} Sekunden"}}}}},{locale:"de-AT",parentLocale:"de"},{locale:"de-BE",parentLocale:"de"},{locale:"de-CH",parentLocale:"de"},{locale:"de-IT",parentLocale:"de"},{locale:"de-LI",parentLocale:"de"},{locale:"de-LU",parentLocale:"de"}]});
 
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"el",pluralRuleFunction:function(e,t){return t?"other":1==e?"one":"other"},fields:{year:{displayName:"έτος",relative:{0:"φέτος",1:"επόμενο έτος","-1":"πέρσι"},relativeTime:{future:{one:"σε {0} έτος",other:"σε {0} έτη"},past:{one:"πριν από {0} έτος",other:"πριν από {0} έτη"}}},month:{displayName:"μήνας",relative:{0:"τρέχων μήνας",1:"επόμενος μήνας","-1":"προηγούμενος μήνας"},relativeTime:{future:{one:"σε {0} μήνα",other:"σε {0} μήνες"},past:{one:"πριν από {0} μήνα",other:"πριν από {0} μήνες"}}},day:{displayName:"ημέρα",relative:{0:"σήμερα",1:"αύριο",2:"μεθαύριο","-2":"προχθές","-1":"χθες"},relativeTime:{future:{one:"σε {0} ημέρα",other:"σε {0} ημέρες"},past:{one:"πριν από {0} ημέρα",other:"πριν από {0} ημέρες"}}},hour:{displayName:"ώρα",relative:{0:"αυτήν την ώρα"},relativeTime:{future:{one:"σε {0} ώρα",other:"σε {0} ώρες"},past:{one:"πριν από {0} ώρα",other:"πριν από {0} ώρες"}}},minute:{displayName:"λεπτό",relative:{0:"αυτό το λεπτό"},relativeTime:{future:{one:"σε {0} λεπτό",other:"σε {0} λεπτά"},past:{one:"πριν από {0} λεπτό",other:"πριν από {0} λεπτά"}}},second:{displayName:"δευτερόλεπτο",relative:{0:"τώρα"},relativeTime:{future:{one:"σε {0} δευτερόλεπτο",other:"σε {0} δευτερόλεπτα"},past:{one:"πριν από {0} δευτερόλεπτο",other:"πριν από {0} δευτερόλεπτα"}}}}},{locale:"el-CY",parentLocale:"el"}]});
 
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"es",pluralRuleFunction:function(e,a){return a?"other":1==e?"one":"other"},fields:{year:{displayName:"año",relative:{0:"este año",1:"el próximo año","-1":"el año pasado"},relativeTime:{future:{one:"dentro de {0} año",other:"dentro de {0} años"},past:{one:"hace {0} año",other:"hace {0} años"}}},month:{displayName:"mes",relative:{0:"este mes",1:"el próximo mes","-1":"el mes pasado"},relativeTime:{future:{one:"dentro de {0} mes",other:"dentro de {0} meses"},past:{one:"hace {0} mes",other:"hace {0} meses"}}},day:{displayName:"día",relative:{0:"hoy",1:"mañana",2:"pasado mañana","-2":"anteayer","-1":"ayer"},relativeTime:{future:{one:"dentro de {0} día",other:"dentro de {0} días"},past:{one:"hace {0} día",other:"hace {0} días"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"hace {0} hora",other:"hace {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"hace {0} minuto",other:"hace {0} minutos"}}},second:{displayName:"segundo",relative:{0:"ahora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"hace {0} segundo",other:"hace {0} segundos"}}}}},{locale:"es-419",parentLocale:"es"},{locale:"es-AR",parentLocale:"es-419"},{locale:"es-BO",parentLocale:"es-419"},{locale:"es-BR",parentLocale:"es-419"},{locale:"es-BZ",parentLocale:"es-419"},{locale:"es-CL",parentLocale:"es-419"},{locale:"es-CO",parentLocale:"es-419"},{locale:"es-CR",parentLocale:"es-419",fields:{year:{displayName:"año",relative:{0:"este año",1:"el próximo año","-1":"el año pasado"},relativeTime:{future:{one:"dentro de {0} año",other:"dentro de {0} años"},past:{one:"hace {0} año",other:"hace {0} años"}}},month:{displayName:"mes",relative:{0:"este mes",1:"el próximo mes","-1":"el mes pasado"},relativeTime:{future:{one:"dentro de {0} mes",other:"dentro de {0} meses"},past:{one:"hace {0} mes",other:"hace {0} meses"}}},day:{displayName:"día",relative:{0:"hoy",1:"mañana",2:"pasado mañana","-2":"antier","-1":"ayer"},relativeTime:{future:{one:"dentro de {0} día",other:"dentro de {0} días"},past:{one:"hace {0} día",other:"hace {0} días"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"hace {0} hora",other:"hace {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"hace {0} minuto",other:"hace {0} minutos"}}},second:{displayName:"segundo",relative:{0:"ahora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"hace {0} segundo",other:"hace {0} segundos"}}}}},{locale:"es-CU",parentLocale:"es-419"},{locale:"es-DO",parentLocale:"es-419",fields:{year:{displayName:"Año",relative:{0:"este año",1:"el próximo año","-1":"el año pasado"},relativeTime:{future:{one:"dentro de {0} año",other:"dentro de {0} años"},past:{one:"hace {0} año",other:"hace {0} años"}}},month:{displayName:"Mes",relative:{0:"este mes",1:"el próximo mes","-1":"el mes pasado"},relativeTime:{future:{one:"dentro de {0} mes",other:"dentro de {0} meses"},past:{one:"hace {0} mes",other:"hace {0} meses"}}},day:{displayName:"Día",relative:{0:"hoy",1:"mañana",2:"pasado mañana","-2":"anteayer","-1":"ayer"},relativeTime:{future:{one:"dentro de {0} día",other:"dentro de {0} días"},past:{one:"hace {0} día",other:"hace {0} días"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"hace {0} hora",other:"hace {0} horas"}}},minute:{displayName:"Minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"hace {0} minuto",other:"hace {0} minutos"}}},second:{displayName:"Segundo",relative:{0:"ahora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"hace {0} segundo",other:"hace {0} segundos"}}}}},{locale:"es-EA",parentLocale:"es"},{locale:"es-EC",parentLocale:"es-419"},{locale:"es-GQ",parentLocale:"es"},{locale:"es-GT",parentLocale:"es-419",fields:{year:{displayName:"año",relative:{0:"este año",1:"el próximo año","-1":"el año pasado"},relativeTime:{future:{one:"dentro de {0} año",other:"dentro de {0} años"},past:{one:"hace {0} año",other:"hace {0} años"}}},month:{displayName:"mes",relative:{0:"este mes",1:"el próximo mes","-1":"el mes pasado"},relativeTime:{future:{one:"dentro de {0} mes",other:"dentro de {0} meses"},past:{one:"hace {0} mes",other:"hace {0} meses"}}},day:{displayName:"día",relative:{0:"hoy",1:"mañana",2:"pasado mañana","-2":"antier","-1":"ayer"},relativeTime:{future:{one:"dentro de {0} día",other:"dentro de {0} días"},past:{one:"hace {0} día",other:"hace {0} días"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"hace {0} hora",other:"hace {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"hace {0} minuto",other:"hace {0} minutos"}}},second:{displayName:"segundo",relative:{0:"ahora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"hace {0} segundo",other:"hace {0} segundos"}}}}},{locale:"es-HN",parentLocale:"es-419",fields:{year:{displayName:"año",relative:{0:"este año",1:"el próximo año","-1":"el año pasado"},relativeTime:{future:{one:"dentro de {0} año",other:"dentro de {0} años"},past:{one:"hace {0} año",other:"hace {0} años"}}},month:{displayName:"mes",relative:{0:"este mes",1:"el próximo mes","-1":"el mes pasado"},relativeTime:{future:{one:"dentro de {0} mes",other:"dentro de {0} meses"},past:{one:"hace {0} mes",other:"hace {0} meses"}}},day:{displayName:"día",relative:{0:"hoy",1:"mañana",2:"pasado mañana","-2":"antier","-1":"ayer"},relativeTime:{future:{one:"dentro de {0} día",other:"dentro de {0} días"},past:{one:"hace {0} día",other:"hace {0} días"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"hace {0} hora",other:"hace {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"hace {0} minuto",other:"hace {0} minutos"}}},second:{displayName:"segundo",relative:{0:"ahora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"hace {0} segundo",other:"hace {0} segundos"}}}}},{locale:"es-IC",parentLocale:"es"},{locale:"es-MX",parentLocale:"es-419",fields:{year:{displayName:"año",relative:{0:"este año",1:"el año próximo","-1":"el año pasado"},relativeTime:{future:{one:"dentro de {0} año",other:"dentro de {0} años"},past:{one:"hace {0} año",other:"hace {0} años"}}},month:{displayName:"mes",relative:{0:"este mes",1:"el mes próximo","-1":"el mes pasado"},relativeTime:{future:{one:"en {0} mes",other:"en {0} meses"},past:{one:"hace {0} mes",other:"hace {0} meses"}}},day:{displayName:"día",relative:{0:"hoy",1:"mañana",2:"pasado mañana","-2":"antier","-1":"ayer"},relativeTime:{future:{one:"dentro de {0} día",other:"dentro de {0} días"},past:{one:"hace {0} día",other:"hace {0} días"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"hace {0} hora",other:"hace {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"hace {0} minuto",other:"hace {0} minutos"}}},second:{displayName:"segundo",relative:{0:"ahora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"hace {0} segundo",other:"hace {0} segundos"}}}}},{locale:"es-NI",parentLocale:"es-419",fields:{year:{displayName:"año",relative:{0:"este año",1:"el próximo año","-1":"el año pasado"},relativeTime:{future:{one:"dentro de {0} año",other:"dentro de {0} años"},past:{one:"hace {0} año",other:"hace {0} años"}}},month:{displayName:"mes",relative:{0:"este mes",1:"el próximo mes","-1":"el mes pasado"},relativeTime:{future:{one:"dentro de {0} mes",other:"dentro de {0} meses"},past:{one:"hace {0} mes",other:"hace {0} meses"}}},day:{displayName:"día",relative:{0:"hoy",1:"mañana",2:"pasado mañana","-2":"antier","-1":"ayer"},relativeTime:{future:{one:"dentro de {0} día",other:"dentro de {0} días"},past:{one:"hace {0} día",other:"hace {0} días"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"hace {0} hora",other:"hace {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"hace {0} minuto",other:"hace {0} minutos"}}},second:{displayName:"segundo",relative:{0:"ahora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"hace {0} segundo",other:"hace {0} segundos"}}}}},{locale:"es-PA",parentLocale:"es-419",fields:{year:{displayName:"año",relative:{0:"este año",1:"el próximo año","-1":"el año pasado"},relativeTime:{future:{one:"dentro de {0} año",other:"dentro de {0} años"},past:{one:"hace {0} año",other:"hace {0} años"}}},month:{displayName:"mes",relative:{0:"este mes",1:"el próximo mes","-1":"el mes pasado"},relativeTime:{future:{one:"dentro de {0} mes",other:"dentro de {0} meses"},past:{one:"hace {0} mes",other:"hace {0} meses"}}},day:{displayName:"día",relative:{0:"hoy",1:"mañana",2:"pasado mañana","-2":"antier","-1":"ayer"},relativeTime:{future:{one:"dentro de {0} día",other:"dentro de {0} días"},past:{one:"hace {0} día",other:"hace {0} días"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"hace {0} hora",other:"hace {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"hace {0} minuto",other:"hace {0} minutos"}}},second:{displayName:"segundo",relative:{0:"ahora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"hace {0} segundo",other:"hace {0} segundos"}}}}},{locale:"es-PE",parentLocale:"es-419"},{locale:"es-PH",parentLocale:"es"},{locale:"es-PR",parentLocale:"es-419"},{locale:"es-PY",parentLocale:"es-419",fields:{year:{displayName:"año",relative:{0:"este año",1:"el próximo año","-1":"el año pasado"},relativeTime:{future:{one:"dentro de {0} año",other:"dentro de {0} años"},past:{one:"hace {0} año",other:"hace {0} años"}}},month:{displayName:"mes",relative:{0:"este mes",1:"el próximo mes","-1":"el mes pasado"},relativeTime:{future:{one:"dentro de {0} mes",other:"dentro de {0} meses"},past:{one:"hace {0} mes",other:"hace {0} meses"}}},day:{displayName:"día",relative:{0:"hoy",1:"mañana",2:"pasado mañana","-2":"antes de ayer","-1":"ayer"},relativeTime:{future:{one:"dentro de {0} día",other:"dentro de {0} días"},past:{one:"hace {0} día",other:"hace {0} días"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"hace {0} hora",other:"hace {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"hace {0} minuto",other:"hace {0} minutos"}}},second:{displayName:"segundo",relative:{0:"ahora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"hace {0} segundo",other:"hace {0} segundos"}}}}},{locale:"es-SV",parentLocale:"es-419",fields:{year:{displayName:"año",relative:{0:"este año",1:"el próximo año","-1":"el año pasado"},relativeTime:{future:{one:"dentro de {0} año",other:"dentro de {0} años"},past:{one:"hace {0} año",other:"hace {0} años"}}},month:{displayName:"mes",relative:{0:"este mes",1:"el próximo mes","-1":"el mes pasado"},relativeTime:{future:{one:"dentro de {0} mes",other:"dentro de {0} meses"},past:{one:"hace {0} mes",other:"hace {0} meses"}}},day:{displayName:"día",relative:{0:"hoy",1:"mañana",2:"pasado mañana","-2":"antier","-1":"ayer"},relativeTime:{future:{one:"dentro de {0} día",other:"dentro de {0} días"},past:{one:"hace {0} día",other:"hace {0} días"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"hace {0} hora",other:"hace {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"hace {0} minuto",other:"hace {0} minutos"}}},second:{displayName:"segundo",relative:{0:"ahora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"hace {0} segundo",other:"hace {0} segundos"}}}}},{locale:"es-US",parentLocale:"es-419"},{locale:"es-UY",parentLocale:"es-419"},{locale:"es-VE",parentLocale:"es-419"}]});
 
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"et",pluralRuleFunction:function(e,t){var a=!String(e).split(".")[1];return t?"other":1==e&&a?"one":"other"},fields:{year:{displayName:"aasta",relative:{0:"käesolev aasta",1:"järgmine aasta","-1":"eelmine aasta"},relativeTime:{future:{one:"{0} aasta pärast",other:"{0} aasta pärast"},past:{one:"{0} aasta eest",other:"{0} aasta eest"}}},month:{displayName:"kuu",relative:{0:"käesolev kuu",1:"järgmine kuu","-1":"eelmine kuu"},relativeTime:{future:{one:"{0} kuu pärast",other:"{0} kuu pärast"},past:{one:"{0} kuu eest",other:"{0} kuu eest"}}},day:{displayName:"päev",relative:{0:"täna",1:"homme",2:"ülehomme","-2":"üleeile","-1":"eile"},relativeTime:{future:{one:"{0} päeva pärast",other:"{0} päeva pärast"},past:{one:"{0} päeva eest",other:"{0} päeva eest"}}},hour:{displayName:"tund",relative:{0:"praegusel tunnil"},relativeTime:{future:{one:"{0} tunni pärast",other:"{0} tunni pärast"},past:{one:"{0} tunni eest",other:"{0} tunni eest"}}},minute:{displayName:"minut",relative:{0:"praegusel minutil"},relativeTime:{future:{one:"{0} minuti pärast",other:"{0} minuti pärast"},past:{one:"{0} minuti eest",other:"{0} minuti eest"}}},second:{displayName:"sekund",relative:{0:"nüüd"},relativeTime:{future:{one:"{0} sekundi pärast",other:"{0} sekundi pärast"},past:{one:"{0} sekundi eest",other:"{0} sekundi eest"}}}}}]});
 
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"eu",pluralRuleFunction:function(e,a){return a?"other":1==e?"one":"other"},fields:{year:{displayName:"urtea",relative:{0:"aurten",1:"hurrengo urtea","-1":"aurreko urtea"},relativeTime:{future:{one:"{0} urte barru",other:"{0} urte barru"},past:{one:"Duela {0} urte",other:"Duela {0} urte"}}},month:{displayName:"hilabetea",relative:{0:"hilabete hau",1:"hurrengo hilabetea","-1":"aurreko hilabetea"},relativeTime:{future:{one:"{0} hilabete barru",other:"{0} hilabete barru"},past:{one:"Duela {0} hilabete",other:"Duela {0} hilabete"}}},day:{displayName:"eguna",relative:{0:"gaur",1:"bihar",2:"etzi","-2":"herenegun","-1":"atzo"},relativeTime:{future:{one:"{0} egun barru",other:"{0} egun barru"},past:{one:"Duela {0} egun",other:"Duela {0} egun"}}},hour:{displayName:"ordua",relative:{0:"ordu honetan"},relativeTime:{future:{one:"{0} ordu barru",other:"{0} ordu barru"},past:{one:"Duela {0} ordu",other:"Duela {0} ordu"}}},minute:{displayName:"minutua",relative:{0:"minutu honetan"},relativeTime:{future:{one:"{0} minutu barru",other:"{0} minutu barru"},past:{one:"Duela {0} minutu",other:"Duela {0} minutu"}}},second:{displayName:"segundoa",relative:{0:"orain"},relativeTime:{future:{one:"{0} segundo barru",other:"{0} segundo barru"},past:{one:"Duela {0} segundo",other:"Duela {0} segundo"}}}}}]});
 
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(t,e){ true?module.exports=e():undefined}(this,function(){"use strict";return[{locale:"fi",pluralRuleFunction:function(t,e){var n=!String(t).split(".")[1];return e?"other":1==t&&n?"one":"other"},fields:{year:{displayName:"vuosi",relative:{0:"tänä vuonna",1:"ensi vuonna","-1":"viime vuonna"},relativeTime:{future:{one:"{0} vuoden päästä",other:"{0} vuoden päästä"},past:{one:"{0} vuosi sitten",other:"{0} vuotta sitten"}}},month:{displayName:"kuukausi",relative:{0:"tässä kuussa",1:"ensi kuussa","-1":"viime kuussa"},relativeTime:{future:{one:"{0} kuukauden päästä",other:"{0} kuukauden päästä"},past:{one:"{0} kuukausi sitten",other:"{0} kuukautta sitten"}}},day:{displayName:"päivä",relative:{0:"tänään",1:"huomenna",2:"ylihuomenna","-2":"toissa päivänä","-1":"eilen"},relativeTime:{future:{one:"{0} päivän päästä",other:"{0} päivän päästä"},past:{one:"{0} päivä sitten",other:"{0} päivää sitten"}}},hour:{displayName:"tunti",relative:{0:"tämän tunnin aikana"},relativeTime:{future:{one:"{0} tunnin päästä",other:"{0} tunnin päästä"},past:{one:"{0} tunti sitten",other:"{0} tuntia sitten"}}},minute:{displayName:"minuutti",relative:{0:"tämän minuutin aikana"},relativeTime:{future:{one:"{0} minuutin päästä",other:"{0} minuutin päästä"},past:{one:"{0} minuutti sitten",other:"{0} minuuttia sitten"}}},second:{displayName:"sekunti",relative:{0:"nyt"},relativeTime:{future:{one:"{0} sekunnin päästä",other:"{0} sekunnin päästä"},past:{one:"{0} sekunti sitten",other:"{0} sekuntia sitten"}}}}}]});
 
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"fr",pluralRuleFunction:function(e,a){return a?1==e?"one":"other":e>=0&&e<2?"one":"other"},fields:{year:{displayName:"année",relative:{0:"cette année",1:"l’année prochaine","-1":"l’année dernière"},relativeTime:{future:{one:"dans {0} an",other:"dans {0} ans"},past:{one:"il y a {0} an",other:"il y a {0} ans"}}},month:{displayName:"mois",relative:{0:"ce mois-ci",1:"le mois prochain","-1":"le mois dernier"},relativeTime:{future:{one:"dans {0} mois",other:"dans {0} mois"},past:{one:"il y a {0} mois",other:"il y a {0} mois"}}},day:{displayName:"jour",relative:{0:"aujourd’hui",1:"demain",2:"après-demain","-2":"avant-hier","-1":"hier"},relativeTime:{future:{one:"dans {0} jour",other:"dans {0} jours"},past:{one:"il y a {0} jour",other:"il y a {0} jours"}}},hour:{displayName:"heure",relative:{0:"cette heure-ci"},relativeTime:{future:{one:"dans {0} heure",other:"dans {0} heures"},past:{one:"il y a {0} heure",other:"il y a {0} heures"}}},minute:{displayName:"minute",relative:{0:"cette minute-ci"},relativeTime:{future:{one:"dans {0} minute",other:"dans {0} minutes"},past:{one:"il y a {0} minute",other:"il y a {0} minutes"}}},second:{displayName:"seconde",relative:{0:"maintenant"},relativeTime:{future:{one:"dans {0} seconde",other:"dans {0} secondes"},past:{one:"il y a {0} seconde",other:"il y a {0} secondes"}}}}},{locale:"fr-BE",parentLocale:"fr"},{locale:"fr-BF",parentLocale:"fr"},{locale:"fr-BI",parentLocale:"fr"},{locale:"fr-BJ",parentLocale:"fr"},{locale:"fr-BL",parentLocale:"fr"},{locale:"fr-CA",parentLocale:"fr",fields:{year:{displayName:"année",relative:{0:"cette année",1:"l’année prochaine","-1":"l’année dernière"},relativeTime:{future:{one:"Dans {0} an",other:"Dans {0} ans"},past:{one:"Il y a {0} an",other:"Il y a {0} ans"}}},month:{displayName:"mois",relative:{0:"ce mois-ci",1:"le mois prochain","-1":"le mois dernier"},relativeTime:{future:{one:"dans {0} mois",other:"dans {0} mois"},past:{one:"il y a {0} mois",other:"il y a {0} mois"}}},day:{displayName:"jour",relative:{0:"aujourd’hui",1:"demain",2:"après-demain","-2":"avant-hier","-1":"hier"},relativeTime:{future:{one:"dans {0} jour",other:"dans {0} jours"},past:{one:"il y a {0} jour",other:"il y a {0} jours"}}},hour:{displayName:"heure",relative:{0:"cette heure-ci"},relativeTime:{future:{one:"dans {0} heure",other:"dans {0} heures"},past:{one:"il y a {0} heure",other:"il y a {0} heures"}}},minute:{displayName:"minute",relative:{0:"cette minute-ci"},relativeTime:{future:{one:"dans {0} minute",other:"dans {0} minutes"},past:{one:"il y a {0} minute",other:"il y a {0} minutes"}}},second:{displayName:"seconde",relative:{0:"maintenant"},relativeTime:{future:{one:"dans {0} seconde",other:"dans {0} secondes"},past:{one:"il y a {0} seconde",other:"il y a {0} secondes"}}}}},{locale:"fr-CD",parentLocale:"fr"},{locale:"fr-CF",parentLocale:"fr"},{locale:"fr-CG",parentLocale:"fr"},{locale:"fr-CH",parentLocale:"fr"},{locale:"fr-CI",parentLocale:"fr"},{locale:"fr-CM",parentLocale:"fr"},{locale:"fr-DJ",parentLocale:"fr"},{locale:"fr-DZ",parentLocale:"fr"},{locale:"fr-GA",parentLocale:"fr"},{locale:"fr-GF",parentLocale:"fr"},{locale:"fr-GN",parentLocale:"fr"},{locale:"fr-GP",parentLocale:"fr"},{locale:"fr-GQ",parentLocale:"fr"},{locale:"fr-HT",parentLocale:"fr"},{locale:"fr-KM",parentLocale:"fr"},{locale:"fr-LU",parentLocale:"fr"},{locale:"fr-MA",parentLocale:"fr"},{locale:"fr-MC",parentLocale:"fr"},{locale:"fr-MF",parentLocale:"fr"},{locale:"fr-MG",parentLocale:"fr"},{locale:"fr-ML",parentLocale:"fr"},{locale:"fr-MQ",parentLocale:"fr"},{locale:"fr-MR",parentLocale:"fr"},{locale:"fr-MU",parentLocale:"fr"},{locale:"fr-NC",parentLocale:"fr"},{locale:"fr-NE",parentLocale:"fr"},{locale:"fr-PF",parentLocale:"fr"},{locale:"fr-PM",parentLocale:"fr"},{locale:"fr-RE",parentLocale:"fr"},{locale:"fr-RW",parentLocale:"fr"},{locale:"fr-SC",parentLocale:"fr"},{locale:"fr-SN",parentLocale:"fr"},{locale:"fr-SY",parentLocale:"fr"},{locale:"fr-TD",parentLocale:"fr"},{locale:"fr-TG",parentLocale:"fr"},{locale:"fr-TN",parentLocale:"fr"},{locale:"fr-VU",parentLocale:"fr"},{locale:"fr-WF",parentLocale:"fr"},{locale:"fr-YT",parentLocale:"fr"}]});
 
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(n,i){ true?module.exports=i():undefined}(this,function(){"use strict";return[{locale:"ga",pluralRuleFunction:function(n,i){var a=String(n).split("."),e=Number(a[0])==n;return i?1==n?"one":"other":1==n?"one":2==n?"two":e&&n>=3&&n<=6?"few":e&&n>=7&&n<=10?"many":"other"},fields:{year:{displayName:"Bliain",relative:{0:"an bhliain seo",1:"an bhliain seo chugainn","-1":"anuraidh"},relativeTime:{future:{one:"i gceann {0} bhliain",two:"i gceann {0} bhliain",few:"i gceann {0} bliana",many:"i gceann {0} mbliana",other:"i gceann {0} bliain"},past:{one:"{0} bhliain ó shin",two:"{0} bhliain ó shin",few:"{0} bliana ó shin",many:"{0} mbliana ó shin",other:"{0} bliain ó shin"}}},month:{displayName:"Mí",relative:{0:"an mhí seo",1:"an mhí seo chugainn","-1":"an mhí seo caite"},relativeTime:{future:{one:"i gceann {0} mhí",two:"i gceann {0} mhí",few:"i gceann {0} mhí",many:"i gceann {0} mí",other:"i gceann {0} mí"},past:{one:"{0} mhí ó shin",two:"{0} mhí ó shin",few:"{0} mhí ó shin",many:"{0} mí ó shin",other:"{0} mí ó shin"}}},day:{displayName:"Lá",relative:{0:"inniu",1:"amárach",2:"arú amárach","-2":"arú inné","-1":"inné"},relativeTime:{future:{one:"i gceann {0} lá",two:"i gceann {0} lá",few:"i gceann {0} lá",many:"i gceann {0} lá",other:"i gceann {0} lá"},past:{one:"{0} lá ó shin",two:"{0} lá ó shin",few:"{0} lá ó shin",many:"{0} lá ó shin",other:"{0} lá ó shin"}}},hour:{displayName:"Uair",relative:{0:"an uair seo"},relativeTime:{future:{one:"i gceann {0} uair an chloig",two:"i gceann {0} uair an chloig",few:"i gceann {0} huaire an chloig",many:"i gceann {0} n-uaire an chloig",other:"i gceann {0} uair an chloig"},past:{one:"{0} uair an chloig ó shin",two:"{0} uair an chloig ó shin",few:"{0} huaire an chloig ó shin",many:"{0} n-uaire an chloig ó shin",other:"{0} uair an chloig ó shin"}}},minute:{displayName:"Nóiméad",relative:{0:"an nóiméad seo"},relativeTime:{future:{one:"i gceann {0} nóiméad",two:"i gceann {0} nóiméad",few:"i gceann {0} nóiméad",many:"i gceann {0} nóiméad",other:"i gceann {0} nóiméad"},past:{one:"{0} nóiméad ó shin",two:"{0} nóiméad ó shin",few:"{0} nóiméad ó shin",many:"{0} nóiméad ó shin",other:"{0} nóiméad ó shin"}}},second:{displayName:"Soicind",relative:{0:"anois"},relativeTime:{future:{one:"i gceann {0} soicind",two:"i gceann {0} shoicind",few:"i gceann {0} shoicind",many:"i gceann {0} soicind",other:"i gceann {0} soicind"},past:{one:"{0} soicind ó shin",two:"{0} shoicind ó shin",few:"{0} shoicind ó shin",many:"{0} soicind ó shin",other:"{0} soicind ó shin"}}}}}]});
 
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(a,e){ true?module.exports=e():undefined}(this,function(){"use strict";return[{locale:"gd",pluralRuleFunction:function(a,e){var n=String(a).split("."),i=Number(n[0])==a;return e?"other":1==a||11==a?"one":2==a||12==a?"two":i&&a>=3&&a<=10||i&&a>=13&&a<=19?"few":"other"},fields:{year:{displayName:"bliadhna",relative:{0:"am bliadhna",1:"an ath-bhliadhna","-2":"a-bhòn-uiridh","-1":"an-uiridh"},relativeTime:{future:{one:"an ceann {0} bhliadhna",two:"an ceann {0} bhliadhna",few:"an ceann {0} bliadhnaichean",other:"an ceann {0} bliadhna"},past:{one:"{0} bhliadhna air ais",two:"{0} bhliadhna air ais",few:"{0} bhliadhnaichean air ais",other:"{0} bliadhna air ais"}}},month:{displayName:"mìos",relative:{0:"am mìos seo",1:"an ath-mhìos","-1":"am mìos seo chaidh"},relativeTime:{future:{one:"an ceann {0} mhìosa",two:"an ceann {0} mhìosa",few:"an ceann {0} mìosan",other:"an ceann {0} mìosa"},past:{one:"{0} mhìos air ais",two:"{0} mhìos air ais",few:"{0} mìosan air ais",other:"{0} mìos air ais"}}},day:{displayName:"latha",relative:{0:"an-diugh",1:"a-màireach",2:"an-earar",3:"an-eararais","-2":"a-bhòin-dè","-1":"an-dè"},relativeTime:{future:{one:"an ceann {0} latha",two:"an ceann {0} latha",few:"an ceann {0} làithean",other:"an ceann {0} latha"},past:{one:"{0} latha air ais",two:"{0} latha air ais",few:"{0} làithean air ais",other:"{0} latha air ais"}}},hour:{displayName:"uair a thìde",relative:{0:"this hour"},relativeTime:{future:{one:"an ceann {0} uair a thìde",two:"an ceann {0} uair a thìde",few:"an ceann {0} uairean a thìde",other:"an ceann {0} uair a thìde"},past:{one:"{0} uair a thìde air ais",two:"{0} uair a thìde air ais",few:"{0} uairean a thìde air ais",other:"{0} uair a thìde air ais"}}},minute:{displayName:"mionaid",relative:{0:"this minute"},relativeTime:{future:{one:"an ceann {0} mhionaid",two:"an ceann {0} mhionaid",few:"an ceann {0} mionaidean",other:"an ceann {0} mionaid"},past:{one:"{0} mhionaid air ais",two:"{0} mhionaid air ais",few:"{0} mionaidean air ais",other:"{0} mionaid air ais"}}},second:{displayName:"diog",relative:{0:"an-dràsta"},relativeTime:{future:{one:"an ceann {0} diog",two:"an ceann {0} dhiog",few:"an ceann {0} diogan",other:"an ceann {0} diog"},past:{one:"{0} diog air ais",two:"{0} dhiog air ais",few:"{0} diogan air ais",other:"{0} diog air ais"}}}}}]});
 
 
 /***/ }),
-/* 139 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"gl",pluralRuleFunction:function(e,a){var o=!String(e).split(".")[1];return a?"other":1==e&&o?"one":"other"},fields:{year:{displayName:"ano",relative:{0:"este ano",1:"o próximo ano","-1":"o ano pasado"},relativeTime:{future:{one:"en {0} ano",other:"en {0} anos"},past:{one:"hai {0} ano",other:"hai {0} anos"}}},month:{displayName:"mes",relative:{0:"este mes",1:"o próximo mes","-1":"o mes pasado"},relativeTime:{future:{one:"en {0} mes",other:"en {0} meses"},past:{one:"hai {0} mes",other:"hai {0} meses"}}},day:{displayName:"día",relative:{0:"hoxe",1:"mañá",2:"pasadomañá","-2":"antonte","-1":"onte"},relativeTime:{future:{one:"en {0} día",other:"en {0} días"},past:{one:"hai {0} día",other:"hai {0} días"}}},hour:{displayName:"hora",relative:{0:"nesta hora"},relativeTime:{future:{one:"en {0} hora",other:"en {0} horas"},past:{one:"hai {0} hora",other:"hai {0} horas"}}},minute:{displayName:"minuto",relative:{0:"neste minuto"},relativeTime:{future:{one:"en {0} minuto",other:"en {0} minutos"},past:{one:"hai {0} minuto",other:"hai {0} minutos"}}},second:{displayName:"segundo",relative:{0:"agora"},relativeTime:{future:{one:"en {0} segundo",other:"en {0} segundos"},past:{one:"hai {0} segundo",other:"hai {0} segundos"}}}}}]});
 
 
 /***/ }),
-/* 140 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"he",pluralRuleFunction:function(e,t){var a=String(e).split("."),o=a[0],n=!a[1],r=Number(a[0])==e,i=r&&a[0].slice(-1);return t?"other":1==e&&n?"one":2==o&&n?"two":n&&(e<0||e>10)&&r&&0==i?"many":"other"},fields:{year:{displayName:"שנה",relative:{0:"השנה",1:"השנה הבאה","-1":"השנה שעברה"},relativeTime:{future:{one:"בעוד שנה",two:"בעוד שנתיים",many:"בעוד {0} שנה",other:"בעוד {0} שנים"},past:{one:"לפני שנה",two:"לפני שנתיים",many:"לפני {0} שנה",other:"לפני {0} שנים"}}},month:{displayName:"חודש",relative:{0:"החודש",1:"החודש הבא","-1":"החודש שעבר"},relativeTime:{future:{one:"בעוד חודש",two:"בעוד חודשיים",many:"בעוד {0} חודשים",other:"בעוד {0} חודשים"},past:{one:"לפני חודש",two:"לפני חודשיים",many:"לפני {0} חודשים",other:"לפני {0} חודשים"}}},day:{displayName:"יום",relative:{0:"היום",1:"מחר",2:"מחרתיים","-2":"שלשום","-1":"אתמול"},relativeTime:{future:{one:"בעוד יום {0}",two:"בעוד יומיים",many:"בעוד {0} ימים",other:"בעוד {0} ימים"},past:{one:"לפני יום {0}",two:"לפני יומיים",many:"לפני {0} ימים",other:"לפני {0} ימים"}}},hour:{displayName:"שעה",relative:{0:"בשעה זו"},relativeTime:{future:{one:"בעוד שעה",two:"בעוד שעתיים",many:"בעוד {0} שעות",other:"בעוד {0} שעות"},past:{one:"לפני שעה",two:"לפני שעתיים",many:"לפני {0} שעות",other:"לפני {0} שעות"}}},minute:{displayName:"דקה",relative:{0:"בדקה זו"},relativeTime:{future:{one:"בעוד דקה",two:"בעוד שתי דקות",many:"בעוד {0} דקות",other:"בעוד {0} דקות"},past:{one:"לפני דקה",two:"לפני שתי דקות",many:"לפני {0} דקות",other:"לפני {0} דקות"}}},second:{displayName:"שנייה",relative:{0:"עכשיו"},relativeTime:{future:{one:"בעוד שנייה",two:"בעוד שתי שניות",many:"בעוד {0} שניות",other:"בעוד {0} שניות"},past:{one:"לפני שנייה",two:"לפני שתי שניות",many:"לפני {0} שניות",other:"לפני {0} שניות"}}}}}]});
 
 
 /***/ }),
-/* 141 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"hu",pluralRuleFunction:function(e,t){return t?1==e||5==e?"one":"other":1==e?"one":"other"},fields:{year:{displayName:"év",relative:{0:"ez az év",1:"következő év","-1":"előző év"},relativeTime:{future:{one:"{0} év múlva",other:"{0} év múlva"},past:{one:"{0} évvel ezelőtt",other:"{0} évvel ezelőtt"}}},month:{displayName:"hónap",relative:{0:"ez a hónap",1:"következő hónap","-1":"előző hónap"},relativeTime:{future:{one:"{0} hónap múlva",other:"{0} hónap múlva"},past:{one:"{0} hónappal ezelőtt",other:"{0} hónappal ezelőtt"}}},day:{displayName:"nap",relative:{0:"ma",1:"holnap",2:"holnapután","-2":"tegnapelőtt","-1":"tegnap"},relativeTime:{future:{one:"{0} nap múlva",other:"{0} nap múlva"},past:{one:"{0} nappal ezelőtt",other:"{0} nappal ezelőtt"}}},hour:{displayName:"óra",relative:{0:"ebben az órában"},relativeTime:{future:{one:"{0} óra múlva",other:"{0} óra múlva"},past:{one:"{0} órával ezelőtt",other:"{0} órával ezelőtt"}}},minute:{displayName:"perc",relative:{0:"ebben a percben"},relativeTime:{future:{one:"{0} perc múlva",other:"{0} perc múlva"},past:{one:"{0} perccel ezelőtt",other:"{0} perccel ezelőtt"}}},second:{displayName:"másodperc",relative:{0:"most"},relativeTime:{future:{one:"{0} másodperc múlva",other:"{0} másodperc múlva"},past:{one:"{0} másodperccel ezelőtt",other:"{0} másodperccel ezelőtt"}}}}}]});
 
 
 /***/ }),
-/* 142 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"hr",pluralRuleFunction:function(e,a){var i=String(e).split("."),t=i[0],r=i[1]||"",n=!i[1],o=t.slice(-1),s=t.slice(-2),u=r.slice(-1),d=r.slice(-2);return a?"other":n&&1==o&&11!=s||1==u&&11!=d?"one":n&&o>=2&&o<=4&&(s<12||s>14)||u>=2&&u<=4&&(d<12||d>14)?"few":"other"},fields:{year:{displayName:"godina",relative:{0:"ove godine",1:"sljedeće godine","-1":"prošle godine"},relativeTime:{future:{one:"za {0} godinu",few:"za {0} godine",other:"za {0} godina"},past:{one:"prije {0} godinu",few:"prije {0} godine",other:"prije {0} godina"}}},month:{displayName:"mjesec",relative:{0:"ovaj mjesec",1:"sljedeći mjesec","-1":"prošli mjesec"},relativeTime:{future:{one:"za {0} mjesec",few:"za {0} mjeseca",other:"za {0} mjeseci"},past:{one:"prije {0} mjesec",few:"prije {0} mjeseca",other:"prije {0} mjeseci"}}},day:{displayName:"dan",relative:{0:"danas",1:"sutra",2:"prekosutra","-2":"prekjučer","-1":"jučer"},relativeTime:{future:{one:"za {0} dan",few:"za {0} dana",other:"za {0} dana"},past:{one:"prije {0} dan",few:"prije {0} dana",other:"prije {0} dana"}}},hour:{displayName:"sat",relative:{0:"ovaj sat"},relativeTime:{future:{one:"za {0} sat",few:"za {0} sata",other:"za {0} sati"},past:{one:"prije {0} sat",few:"prije {0} sata",other:"prije {0} sati"}}},minute:{displayName:"minuta",relative:{0:"ova minuta"},relativeTime:{future:{one:"za {0} minutu",few:"za {0} minute",other:"za {0} minuta"},past:{one:"prije {0} minutu",few:"prije {0} minute",other:"prije {0} minuta"}}},second:{displayName:"sekunda",relative:{0:"sad"},relativeTime:{future:{one:"za {0} sekundu",few:"za {0} sekunde",other:"za {0} sekundi"},past:{one:"prije {0} sekundu",few:"prije {0} sekunde",other:"prije {0} sekundi"}}}}},{locale:"hr-BA",parentLocale:"hr"}]});
 
 
 /***/ }),
-/* 143 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(a,e){ true?module.exports=e():undefined}(this,function(){"use strict";return[{locale:"id",pluralRuleFunction:function(a,e){return"other"},fields:{year:{displayName:"Tahun",relative:{0:"tahun ini",1:"tahun depan","-1":"tahun lalu"},relativeTime:{future:{other:"Dalam {0} tahun"},past:{other:"{0} tahun yang lalu"}}},month:{displayName:"Bulan",relative:{0:"bulan ini",1:"Bulan berikutnya","-1":"bulan lalu"},relativeTime:{future:{other:"Dalam {0} bulan"},past:{other:"{0} bulan yang lalu"}}},day:{displayName:"Hari",relative:{0:"hari ini",1:"besok",2:"lusa","-2":"kemarin dulu","-1":"kemarin"},relativeTime:{future:{other:"Dalam {0} hari"},past:{other:"{0} hari yang lalu"}}},hour:{displayName:"Jam",relative:{0:"jam ini"},relativeTime:{future:{other:"Dalam {0} jam"},past:{other:"{0} jam yang lalu"}}},minute:{displayName:"Menit",relative:{0:"menit ini"},relativeTime:{future:{other:"Dalam {0} menit"},past:{other:"{0} menit yang lalu"}}},second:{displayName:"Detik",relative:{0:"sekarang"},relativeTime:{future:{other:"Dalam {0} detik"},past:{other:"{0} detik yang lalu"}}}}}]});
 
 
 /***/ }),
-/* 144 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,r){ true?module.exports=r():undefined}(this,function(){"use strict";return[{locale:"is",pluralRuleFunction:function(e,r){var t=String(e).split("."),i=t[0],u=Number(t[0])==e,a=i.slice(-1),n=i.slice(-2);return r?"other":u&&1==a&&11!=n||!u?"one":"other"},fields:{year:{displayName:"ár",relative:{0:"á þessu ári",1:"á næsta ári","-1":"á síðasta ári"},relativeTime:{future:{one:"eftir {0} ár",other:"eftir {0} ár"},past:{one:"fyrir {0} ári",other:"fyrir {0} árum"}}},month:{displayName:"mánuður",relative:{0:"í þessum mánuði",1:"í næsta mánuði","-1":"í síðasta mánuði"},relativeTime:{future:{one:"eftir {0} mánuð",other:"eftir {0} mánuði"},past:{one:"fyrir {0} mánuði",other:"fyrir {0} mánuðum"}}},day:{displayName:"dagur",relative:{0:"í dag",1:"á morgun",2:"eftir tvo daga","-2":"í fyrradag","-1":"í gær"},relativeTime:{future:{one:"eftir {0} dag",other:"eftir {0} daga"},past:{one:"fyrir {0} degi",other:"fyrir {0} dögum"}}},hour:{displayName:"klukkustund",relative:{0:"this hour"},relativeTime:{future:{one:"eftir {0} klukkustund",other:"eftir {0} klukkustundir"},past:{one:"fyrir {0} klukkustund",other:"fyrir {0} klukkustundum"}}},minute:{displayName:"mínúta",relative:{0:"this minute"},relativeTime:{future:{one:"eftir {0} mínútu",other:"eftir {0} mínútur"},past:{one:"fyrir {0} mínútu",other:"fyrir {0} mínútum"}}},second:{displayName:"sekúnda",relative:{0:"núna"},relativeTime:{future:{one:"eftir {0} sekúndu",other:"eftir {0} sekúndur"},past:{one:"fyrir {0} sekúndu",other:"fyrir {0} sekúndum"}}}}}]});
 
 
 /***/ }),
-/* 145 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,o){ true?module.exports=o():undefined}(this,function(){"use strict";return[{locale:"it",pluralRuleFunction:function(e,o){var t=!String(e).split(".")[1];return o?11==e||8==e||80==e||800==e?"many":"other":1==e&&t?"one":"other"},fields:{year:{displayName:"anno",relative:{0:"quest’anno",1:"anno prossimo","-1":"anno scorso"},relativeTime:{future:{one:"tra {0} anno",other:"tra {0} anni"},past:{one:"{0} anno fa",other:"{0} anni fa"}}},month:{displayName:"mese",relative:{0:"questo mese",1:"mese prossimo","-1":"mese scorso"},relativeTime:{future:{one:"tra {0} mese",other:"tra {0} mesi"},past:{one:"{0} mese fa",other:"{0} mesi fa"}}},day:{displayName:"giorno",relative:{0:"oggi",1:"domani",2:"dopodomani","-2":"l’altro ieri","-1":"ieri"},relativeTime:{future:{one:"tra {0} giorno",other:"tra {0} giorni"},past:{one:"{0} giorno fa",other:"{0} giorni fa"}}},hour:{displayName:"ora",relative:{0:"quest’ora"},relativeTime:{future:{one:"tra {0} ora",other:"tra {0} ore"},past:{one:"{0} ora fa",other:"{0} ore fa"}}},minute:{displayName:"minuto",relative:{0:"questo minuto"},relativeTime:{future:{one:"tra {0} minuto",other:"tra {0} minuti"},past:{one:"{0} minuto fa",other:"{0} minuti fa"}}},second:{displayName:"secondo",relative:{0:"ora"},relativeTime:{future:{one:"tra {0} secondo",other:"tra {0} secondi"},past:{one:"{0} secondo fa",other:"{0} secondi fa"}}}}},{locale:"it-CH",parentLocale:"it"},{locale:"it-SM",parentLocale:"it"},{locale:"it-VA",parentLocale:"it"}]});
 
 
 /***/ }),
-/* 146 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"ja",pluralRuleFunction:function(e,t){return"other"},fields:{year:{displayName:"年",relative:{0:"今年",1:"翌年","-1":"昨年"},relativeTime:{future:{other:"{0} 年後"},past:{other:"{0} 年前"}}},month:{displayName:"月",relative:{0:"今月",1:"翌月","-1":"先月"},relativeTime:{future:{other:"{0} か月後"},past:{other:"{0} か月前"}}},day:{displayName:"日",relative:{0:"今日",1:"明日",2:"明後日","-2":"一昨日","-1":"昨日"},relativeTime:{future:{other:"{0} 日後"},past:{other:"{0} 日前"}}},hour:{displayName:"時",relative:{0:"1 時間以内"},relativeTime:{future:{other:"{0} 時間後"},past:{other:"{0} 時間前"}}},minute:{displayName:"分",relative:{0:"1 分以内"},relativeTime:{future:{other:"{0} 分後"},past:{other:"{0} 分前"}}},second:{displayName:"秒",relative:{0:"今"},relativeTime:{future:{other:"{0} 秒後"},past:{other:"{0} 秒前"}}}}}]});
 
 
 /***/ }),
-/* 147 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"ko",pluralRuleFunction:function(e,t){return"other"},fields:{year:{displayName:"년",relative:{0:"올해",1:"내년","-1":"작년"},relativeTime:{future:{other:"{0}년 후"},past:{other:"{0}년 전"}}},month:{displayName:"월",relative:{0:"이번 달",1:"다음 달","-1":"지난달"},relativeTime:{future:{other:"{0}개월 후"},past:{other:"{0}개월 전"}}},day:{displayName:"일",relative:{0:"오늘",1:"내일",2:"모레","-2":"그저께","-1":"어제"},relativeTime:{future:{other:"{0}일 후"},past:{other:"{0}일 전"}}},hour:{displayName:"시",relative:{0:"현재 시간"},relativeTime:{future:{other:"{0}시간 후"},past:{other:"{0}시간 전"}}},minute:{displayName:"분",relative:{0:"현재 분"},relativeTime:{future:{other:"{0}분 후"},past:{other:"{0}분 전"}}},second:{displayName:"초",relative:{0:"지금"},relativeTime:{future:{other:"{0}초 후"},past:{other:"{0}초 전"}}}}},{locale:"ko-KP",parentLocale:"ko"}]});
 
 
 /***/ }),
-/* 148 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,i){ true?module.exports=i():undefined}(this,function(){"use strict";return[{locale:"lt",pluralRuleFunction:function(e,i){var n=String(e).split("."),a=n[1]||"",t=Number(n[0])==e,o=t&&n[0].slice(-1),r=t&&n[0].slice(-2);return i?"other":1==o&&(r<11||r>19)?"one":o>=2&&o<=9&&(r<11||r>19)?"few":0!=a?"many":"other"},fields:{year:{displayName:"metai",relative:{0:"šiais metais",1:"kitais metais","-1":"praėjusiais metais"},relativeTime:{future:{one:"po {0} metų",few:"po {0} metų",many:"po {0} metų",other:"po {0} metų"},past:{one:"prieš {0} metus",few:"prieš {0} metus",many:"prieš {0} metų",other:"prieš {0} metų"}}},month:{displayName:"mėnuo",relative:{0:"šį mėnesį",1:"kitą mėnesį","-1":"praėjusį mėnesį"},relativeTime:{future:{one:"po {0} mėnesio",few:"po {0} mėnesių",many:"po {0} mėnesio",other:"po {0} mėnesių"},past:{one:"prieš {0} mėnesį",few:"prieš {0} mėnesius",many:"prieš {0} mėnesio",other:"prieš {0} mėnesių"}}},day:{displayName:"diena",relative:{0:"šiandien",1:"rytoj",2:"poryt","-2":"užvakar","-1":"vakar"},relativeTime:{future:{one:"po {0} dienos",few:"po {0} dienų",many:"po {0} dienos",other:"po {0} dienų"},past:{one:"prieš {0} dieną",few:"prieš {0} dienas",many:"prieš {0} dienos",other:"prieš {0} dienų"}}},hour:{displayName:"valanda",relative:{0:"šią valandą"},relativeTime:{future:{one:"po {0} valandos",few:"po {0} valandų",many:"po {0} valandos",other:"po {0} valandų"},past:{one:"prieš {0} valandą",few:"prieš {0} valandas",many:"prieš {0} valandos",other:"prieš {0} valandų"}}},minute:{displayName:"minutė",relative:{0:"šią minutę"},relativeTime:{future:{one:"po {0} minutės",few:"po {0} minučių",many:"po {0} minutės",other:"po {0} minučių"},past:{one:"prieš {0} minutę",few:"prieš {0} minutes",many:"prieš {0} minutės",other:"prieš {0} minučių"}}},second:{displayName:"sekundė",relative:{0:"dabar"},relativeTime:{future:{one:"po {0} sekundės",few:"po {0} sekundžių",many:"po {0} sekundės",other:"po {0} sekundžių"},past:{one:"prieš {0} sekundę",few:"prieš {0} sekundes",many:"prieš {0} sekundės",other:"prieš {0} sekundžių"}}}}}]});
 
 
 /***/ }),
-/* 149 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"lv",pluralRuleFunction:function(e,a){var i=String(e).split("."),t=i[1]||"",n=t.length,m=Number(i[0])==e,r=m&&i[0].slice(-1),s=m&&i[0].slice(-2),o=t.slice(-2),p=t.slice(-1);return a?"other":m&&0==r||s>=11&&s<=19||2==n&&o>=11&&o<=19?"zero":1==r&&11!=s||2==n&&1==p&&11!=o||2!=n&&1==p?"one":"other"},fields:{year:{displayName:"gads",relative:{0:"šajā gadā",1:"nākamajā gadā","-1":"pagājušajā gadā"},relativeTime:{future:{zero:"pēc {0} gadiem",one:"pēc {0} gada",other:"pēc {0} gadiem"},past:{zero:"pirms {0} gadiem",one:"pirms {0} gada",other:"pirms {0} gadiem"}}},month:{displayName:"mēnesis",relative:{0:"šajā mēnesī",1:"nākamajā mēnesī","-1":"pagājušajā mēnesī"},relativeTime:{future:{zero:"pēc {0} mēnešiem",one:"pēc {0} mēneša",other:"pēc {0} mēnešiem"},past:{zero:"pirms {0} mēnešiem",one:"pirms {0} mēneša",other:"pirms {0} mēnešiem"}}},day:{displayName:"diena",relative:{0:"šodien",1:"rīt",2:"parīt","-2":"aizvakar","-1":"vakar"},relativeTime:{future:{zero:"pēc {0} dienām",one:"pēc {0} dienas",other:"pēc {0} dienām"},past:{zero:"pirms {0} dienām",one:"pirms {0} dienas",other:"pirms {0} dienām"}}},hour:{displayName:"stundas",relative:{0:"šajā stundā"},relativeTime:{future:{zero:"pēc {0} stundām",one:"pēc {0} stundas",other:"pēc {0} stundām"},past:{zero:"pirms {0} stundām",one:"pirms {0} stundas",other:"pirms {0} stundām"}}},minute:{displayName:"minūtes",relative:{0:"šajā minūtē"},relativeTime:{future:{zero:"pēc {0} minūtēm",one:"pēc {0} minūtes",other:"pēc {0} minūtēm"},past:{zero:"pirms {0} minūtēm",one:"pirms {0} minūtes",other:"pirms {0} minūtēm"}}},second:{displayName:"sekundes",relative:{0:"tagad"},relativeTime:{future:{zero:"pēc {0} sekundēm",one:"pēc {0} sekundes",other:"pēc {0} sekundēm"},past:{zero:"pirms {0} sekundēm",one:"pirms {0} sekundes",other:"pirms {0} sekundēm"}}}}}]});
 
 
 /***/ }),
-/* 150 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,n){ true?module.exports=n():undefined}(this,function(){"use strict";return[{locale:"nl",pluralRuleFunction:function(e,n){var a=!String(e).split(".")[1];return n?"other":1==e&&a?"one":"other"},fields:{year:{displayName:"jaar",relative:{0:"dit jaar",1:"volgend jaar","-1":"vorig jaar"},relativeTime:{future:{one:"over {0} jaar",other:"over {0} jaar"},past:{one:"{0} jaar geleden",other:"{0} jaar geleden"}}},month:{displayName:"maand",relative:{0:"deze maand",1:"volgende maand","-1":"vorige maand"},relativeTime:{future:{one:"over {0} maand",other:"over {0} maanden"},past:{one:"{0} maand geleden",other:"{0} maanden geleden"}}},day:{displayName:"dag",relative:{0:"vandaag",1:"morgen",2:"overmorgen","-2":"eergisteren","-1":"gisteren"},relativeTime:{future:{one:"over {0} dag",other:"over {0} dagen"},past:{one:"{0} dag geleden",other:"{0} dagen geleden"}}},hour:{displayName:"uur",relative:{0:"binnen een uur"},relativeTime:{future:{one:"over {0} uur",other:"over {0} uur"},past:{one:"{0} uur geleden",other:"{0} uur geleden"}}},minute:{displayName:"minuut",relative:{0:"binnen een minuut"},relativeTime:{future:{one:"over {0} minuut",other:"over {0} minuten"},past:{one:"{0} minuut geleden",other:"{0} minuten geleden"}}},second:{displayName:"seconde",relative:{0:"nu"},relativeTime:{future:{one:"over {0} seconde",other:"over {0} seconden"},past:{one:"{0} seconde geleden",other:"{0} seconden geleden"}}}}},{locale:"nl-AW",parentLocale:"nl"},{locale:"nl-BE",parentLocale:"nl"},{locale:"nl-BQ",parentLocale:"nl"},{locale:"nl-CW",parentLocale:"nl"},{locale:"nl-SR",parentLocale:"nl"},{locale:"nl-SX",parentLocale:"nl"}]});
 
 
 /***/ }),
-/* 151 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"nb",pluralRuleFunction:function(e,t){return t?"other":1==e?"one":"other"},fields:{year:{displayName:"år",relative:{0:"i år",1:"neste år","-1":"i fjor"},relativeTime:{future:{one:"om {0} år",other:"om {0} år"},past:{one:"for {0} år siden",other:"for {0} år siden"}}},month:{displayName:"måned",relative:{0:"denne måneden",1:"neste måned","-1":"forrige måned"},relativeTime:{future:{one:"om {0} måned",other:"om {0} måneder"},past:{one:"for {0} måned siden",other:"for {0} måneder siden"}}},day:{displayName:"dag",relative:{0:"i dag",1:"i morgen",2:"i overmorgen","-2":"i forgårs","-1":"i går"},relativeTime:{future:{one:"om {0} døgn",other:"om {0} døgn"},past:{one:"for {0} døgn siden",other:"for {0} døgn siden"}}},hour:{displayName:"time",relative:{0:"denne timen"},relativeTime:{future:{one:"om {0} time",other:"om {0} timer"},past:{one:"for {0} time siden",other:"for {0} timer siden"}}},minute:{displayName:"minutt",relative:{0:"dette minuttet"},relativeTime:{future:{one:"om {0} minutt",other:"om {0} minutter"},past:{one:"for {0} minutt siden",other:"for {0} minutter siden"}}},second:{displayName:"sekund",relative:{0:"nå"},relativeTime:{future:{one:"om {0} sekund",other:"om {0} sekunder"},past:{one:"for {0} sekund siden",other:"for {0} sekunder siden"}}}}},{locale:"nb-SJ",parentLocale:"nb"}]});
 
 
 /***/ }),
-/* 152 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"nn",pluralRuleFunction:function(e,t){return t?"other":1==e?"one":"other"},fields:{year:{displayName:"år",relative:{0:"this year",1:"next year","-1":"last year"},relativeTime:{future:{one:"om {0} år",other:"om {0} år"},past:{one:"for {0} år siden",other:"for {0} år siden"}}},month:{displayName:"månad",relative:{0:"this month",1:"next month","-1":"last month"},relativeTime:{future:{one:"om {0} måned",other:"om {0} måneder"},past:{one:"for {0} måned siden",other:"for {0} måneder siden"}}},day:{displayName:"dag",relative:{0:"i dag",1:"i morgon",2:"i overmorgon","-2":"i forgårs","-1":"i går"},relativeTime:{future:{one:"om {0} døgn",other:"om {0} døgn"},past:{one:"for {0} døgn siden",other:"for {0} døgn siden"}}},hour:{displayName:"time",relative:{0:"this hour"},relativeTime:{future:{one:"om {0} time",other:"om {0} timer"},past:{one:"for {0} time siden",other:"for {0} timer siden"}}},minute:{displayName:"minutt",relative:{0:"this minute"},relativeTime:{future:{one:"om {0} minutt",other:"om {0} minutter"},past:{one:"for {0} minutt siden",other:"for {0} minutter siden"}}},second:{displayName:"sekund",relative:{0:"now"},relativeTime:{future:{one:"om {0} sekund",other:"om {0} sekunder"},past:{one:"for {0} sekund siden",other:"for {0} sekunder siden"}}}}}]});
 
 
 /***/ }),
-/* 153 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"pl",pluralRuleFunction:function(e,t){var a=String(e).split("."),i=a[0],n=!a[1],m=i.slice(-1),u=i.slice(-2);return t?"other":1==e&&n?"one":n&&m>=2&&m<=4&&(u<12||u>14)?"few":n&&1!=i&&(0==m||1==m)||n&&m>=5&&m<=9||n&&u>=12&&u<=14?"many":"other"},fields:{year:{displayName:"rok",relative:{0:"w tym roku",1:"w przyszłym roku","-1":"w zeszłym roku"},relativeTime:{future:{one:"za {0} rok",few:"za {0} lata",many:"za {0} lat",other:"za {0} roku"},past:{one:"{0} rok temu",few:"{0} lata temu",many:"{0} lat temu",other:"{0} roku temu"}}},month:{displayName:"miesiąc",relative:{0:"w tym miesiącu",1:"w przyszłym miesiącu","-1":"w zeszłym miesiącu"},relativeTime:{future:{one:"za {0} miesiąc",few:"za {0} miesiące",many:"za {0} miesięcy",other:"za {0} miesiąca"},past:{one:"{0} miesiąc temu",few:"{0} miesiące temu",many:"{0} miesięcy temu",other:"{0} miesiąca temu"}}},day:{displayName:"dzień",relative:{0:"dzisiaj",1:"jutro",2:"pojutrze","-2":"przedwczoraj","-1":"wczoraj"},relativeTime:{future:{one:"za {0} dzień",few:"za {0} dni",many:"za {0} dni",other:"za {0} dnia"},past:{one:"{0} dzień temu",few:"{0} dni temu",many:"{0} dni temu",other:"{0} dnia temu"}}},hour:{displayName:"godzina",relative:{0:"ta godzina"},relativeTime:{future:{one:"za {0} godzinę",few:"za {0} godziny",many:"za {0} godzin",other:"za {0} godziny"},past:{one:"{0} godzinę temu",few:"{0} godziny temu",many:"{0} godzin temu",other:"{0} godziny temu"}}},minute:{displayName:"minuta",relative:{0:"ta minuta"},relativeTime:{future:{one:"za {0} minutę",few:"za {0} minuty",many:"za {0} minut",other:"za {0} minuty"},past:{one:"{0} minutę temu",few:"{0} minuty temu",many:"{0} minut temu",other:"{0} minuty temu"}}},second:{displayName:"sekunda",relative:{0:"teraz"},relativeTime:{future:{one:"za {0} sekundę",few:"za {0} sekundy",many:"za {0} sekund",other:"za {0} sekundy"},past:{one:"{0} sekundę temu",few:"{0} sekundy temu",many:"{0} sekund temu",other:"{0} sekundy temu"}}}}}]});
 
 
 /***/ }),
-/* 154 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"pt",pluralRuleFunction:function(e,t){var o=String(e).split(".")[0];return t?"other":0==o||1==o?"one":"other"},fields:{year:{displayName:"ano",relative:{0:"este ano",1:"próximo ano","-1":"ano passado"},relativeTime:{future:{one:"em {0} ano",other:"em {0} anos"},past:{one:"há {0} ano",other:"há {0} anos"}}},month:{displayName:"mês",relative:{0:"este mês",1:"próximo mês","-1":"mês passado"},relativeTime:{future:{one:"em {0} mês",other:"em {0} meses"},past:{one:"há {0} mês",other:"há {0} meses"}}},day:{displayName:"dia",relative:{0:"hoje",1:"amanhã",2:"depois de amanhã","-2":"anteontem","-1":"ontem"},relativeTime:{future:{one:"em {0} dia",other:"em {0} dias"},past:{one:"há {0} dia",other:"há {0} dias"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"em {0} hora",other:"em {0} horas"},past:{one:"há {0} hora",other:"há {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"em {0} minuto",other:"em {0} minutos"},past:{one:"há {0} minuto",other:"há {0} minutos"}}},second:{displayName:"segundo",relative:{0:"agora"},relativeTime:{future:{one:"em {0} segundo",other:"em {0} segundos"},past:{one:"há {0} segundo",other:"há {0} segundos"}}}}},{locale:"pt-AO",parentLocale:"pt-PT"},{locale:"pt-PT",parentLocale:"pt",fields:{year:{displayName:"ano",relative:{0:"este ano",1:"próximo ano","-1":"ano passado"},relativeTime:{future:{one:"dentro de {0} ano",other:"dentro de {0} anos"},past:{one:"há {0} ano",other:"há {0} anos"}}},month:{displayName:"mês",relative:{0:"este mês",1:"próximo mês","-1":"mês passado"},relativeTime:{future:{one:"dentro de {0} mês",other:"dentro de {0} meses"},past:{one:"há {0} mês",other:"há {0} meses"}}},day:{displayName:"dia",relative:{0:"hoje",1:"amanhã",2:"depois de amanhã","-2":"anteontem","-1":"ontem"},relativeTime:{future:{one:"dentro de {0} dia",other:"dentro de {0} dias"},past:{one:"há {0} dia",other:"há {0} dias"}}},hour:{displayName:"hora",relative:{0:"esta hora"},relativeTime:{future:{one:"dentro de {0} hora",other:"dentro de {0} horas"},past:{one:"há {0} hora",other:"há {0} horas"}}},minute:{displayName:"minuto",relative:{0:"este minuto"},relativeTime:{future:{one:"dentro de {0} minuto",other:"dentro de {0} minutos"},past:{one:"há {0} minuto",other:"há {0} minutos"}}},second:{displayName:"segundo",relative:{0:"agora"},relativeTime:{future:{one:"dentro de {0} segundo",other:"dentro de {0} segundos"},past:{one:"há {0} segundo",other:"há {0} segundos"}}}}},{locale:"pt-CH",parentLocale:"pt-PT"},{locale:"pt-CV",parentLocale:"pt-PT"},{locale:"pt-GQ",parentLocale:"pt-PT"},{locale:"pt-GW",parentLocale:"pt-PT"},{locale:"pt-LU",parentLocale:"pt-PT"},{locale:"pt-MO",parentLocale:"pt-PT"},{locale:"pt-MZ",parentLocale:"pt-PT"},{locale:"pt-ST",parentLocale:"pt-PT"},{locale:"pt-TL",parentLocale:"pt-PT"}]});
 
 
 /***/ }),
-/* 155 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"ro",pluralRuleFunction:function(e,t){var a=String(e).split("."),u=!a[1],n=Number(a[0])==e&&a[0].slice(-2);return t?1==e?"one":"other":1==e&&u?"one":!u||0==e||1!=e&&n>=1&&n<=19?"few":"other"},fields:{year:{displayName:"an",relative:{0:"anul acesta",1:"anul viitor","-1":"anul trecut"},relativeTime:{future:{one:"peste {0} an",few:"peste {0} ani",other:"peste {0} de ani"},past:{one:"acum {0} an",few:"acum {0} ani",other:"acum {0} de ani"}}},month:{displayName:"lună",relative:{0:"luna aceasta",1:"luna viitoare","-1":"luna trecută"},relativeTime:{future:{one:"peste {0} lună",few:"peste {0} luni",other:"peste {0} de luni"},past:{one:"acum {0} lună",few:"acum {0} luni",other:"acum {0} de luni"}}},day:{displayName:"zi",relative:{0:"azi",1:"mâine",2:"poimâine","-2":"alaltăieri","-1":"ieri"},relativeTime:{future:{one:"peste {0} zi",few:"peste {0} zile",other:"peste {0} de zile"},past:{one:"acum {0} zi",few:"acum {0} zile",other:"acum {0} de zile"}}},hour:{displayName:"oră",relative:{0:"ora aceasta"},relativeTime:{future:{one:"peste {0} oră",few:"peste {0} ore",other:"peste {0} de ore"},past:{one:"acum {0} oră",few:"acum {0} ore",other:"acum {0} de ore"}}},minute:{displayName:"minut",relative:{0:"minutul acesta"},relativeTime:{future:{one:"peste {0} minut",few:"peste {0} minute",other:"peste {0} de minute"},past:{one:"acum {0} minut",few:"acum {0} minute",other:"acum {0} de minute"}}},second:{displayName:"secundă",relative:{0:"acum"},relativeTime:{future:{one:"peste {0} secundă",few:"peste {0} secunde",other:"peste {0} de secunde"},past:{one:"acum {0} secundă",few:"acum {0} secunde",other:"acum {0} de secunde"}}}}},{locale:"ro-MD",parentLocale:"ro"}]});
 
 
 /***/ }),
-/* 156 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"ru",pluralRuleFunction:function(e,a){var t=String(e).split("."),r=t[0],o=!t[1],n=r.slice(-1),l=r.slice(-2);return a?"other":o&&1==n&&11!=l?"one":o&&n>=2&&n<=4&&(l<12||l>14)?"few":o&&0==n||o&&n>=5&&n<=9||o&&l>=11&&l<=14?"many":"other"},fields:{year:{displayName:"год",relative:{0:"в этом году",1:"в следующем году","-1":"в прошлом году"},relativeTime:{future:{one:"через {0} год",few:"через {0} года",many:"через {0} лет",other:"через {0} года"},past:{one:"{0} год назад",few:"{0} года назад",many:"{0} лет назад",other:"{0} года назад"}}},month:{displayName:"месяц",relative:{0:"в этом месяце",1:"в следующем месяце","-1":"в прошлом месяце"},relativeTime:{future:{one:"через {0} месяц",few:"через {0} месяца",many:"через {0} месяцев",other:"через {0} месяца"},past:{one:"{0} месяц назад",few:"{0} месяца назад",many:"{0} месяцев назад",other:"{0} месяца назад"}}},day:{displayName:"день",relative:{0:"сегодня",1:"завтра",2:"послезавтра","-2":"позавчера","-1":"вчера"},relativeTime:{future:{one:"через {0} день",few:"через {0} дня",many:"через {0} дней",other:"через {0} дня"},past:{one:"{0} день назад",few:"{0} дня назад",many:"{0} дней назад",other:"{0} дня назад"}}},hour:{displayName:"час",relative:{0:"в этом часе"},relativeTime:{future:{one:"через {0} час",few:"через {0} часа",many:"через {0} часов",other:"через {0} часа"},past:{one:"{0} час назад",few:"{0} часа назад",many:"{0} часов назад",other:"{0} часа назад"}}},minute:{displayName:"минута",relative:{0:"в эту минуту"},relativeTime:{future:{one:"через {0} минуту",few:"через {0} минуты",many:"через {0} минут",other:"через {0} минуты"},past:{one:"{0} минуту назад",few:"{0} минуты назад",many:"{0} минут назад",other:"{0} минуты назад"}}},second:{displayName:"секунда",relative:{0:"сейчас"},relativeTime:{future:{one:"через {0} секунду",few:"через {0} секунды",many:"через {0} секунд",other:"через {0} секунды"},past:{one:"{0} секунду назад",few:"{0} секунды назад",many:"{0} секунд назад",other:"{0} секунды назад"}}}}},{locale:"ru-BY",parentLocale:"ru"},{locale:"ru-KG",parentLocale:"ru"},{locale:"ru-KZ",parentLocale:"ru"},{locale:"ru-MD",parentLocale:"ru"},{locale:"ru-UA",parentLocale:"ru"}]});
 
 
 /***/ }),
-/* 157 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"sl",pluralRuleFunction:function(e,t){var r=String(e).split("."),a=r[0],o=!r[1],i=a.slice(-2);return t?"other":o&&1==i?"one":o&&2==i?"two":o&&(3==i||4==i)||!o?"few":"other"},fields:{year:{displayName:"leto",relative:{0:"letos",1:"naslednje leto","-1":"lani"},relativeTime:{future:{one:"čez {0} leto",two:"čez {0} leti",few:"čez {0} leta",other:"čez {0} let"},past:{one:"pred {0} letom",two:"pred {0} letoma",few:"pred {0} leti",other:"pred {0} leti"}}},month:{displayName:"mesec",relative:{0:"ta mesec",1:"naslednji mesec","-1":"prejšnji mesec"},relativeTime:{future:{one:"čez {0} mesec",two:"čez {0} meseca",few:"čez {0} mesece",other:"čez {0} mesecev"},past:{one:"pred {0} mesecem",two:"pred {0} mesecema",few:"pred {0} meseci",other:"pred {0} meseci"}}},day:{displayName:"dan",relative:{0:"danes",1:"jutri",2:"pojutrišnjem","-2":"predvčerajšnjim","-1":"včeraj"},relativeTime:{future:{one:"čez {0} dan",two:"čez {0} dneva",few:"čez {0} dni",other:"čez {0} dni"},past:{one:"pred {0} dnevom",two:"pred {0} dnevoma",few:"pred {0} dnevi",other:"pred {0} dnevi"}}},hour:{displayName:"ura",relative:{0:"v tej uri"},relativeTime:{future:{one:"čez {0} uro",two:"čez {0} uri",few:"čez {0} ure",other:"čez {0} ur"},past:{one:"pred {0} uro",two:"pred {0} urama",few:"pred {0} urami",other:"pred {0} urami"}}},minute:{displayName:"minuta",relative:{0:"to minuto"},relativeTime:{future:{one:"čez {0} minuto",two:"čez {0} minuti",few:"čez {0} minute",other:"čez {0} minut"},past:{one:"pred {0} minuto",two:"pred {0} minutama",few:"pred {0} minutami",other:"pred {0} minutami"}}},second:{displayName:"sekunda",relative:{0:"zdaj"},relativeTime:{future:{one:"čez {0} sekundo",two:"čez {0} sekundi",few:"čez {0} sekunde",other:"čez {0} sekund"},past:{one:"pred {0} sekundo",two:"pred {0} sekundama",few:"pred {0} sekundami",other:"pred {0} sekundami"}}}}}]});
 
 
 /***/ }),
-/* 158 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,o){ true?module.exports=o():undefined}(this,function(){"use strict";return[{locale:"sk",pluralRuleFunction:function(e,o){var a=String(e).split("."),t=a[0],i=!a[1];return o?"other":1==e&&i?"one":t>=2&&t<=4&&i?"few":i?"other":"many"},fields:{year:{displayName:"rok",relative:{0:"tento rok",1:"budúci rok","-1":"minulý rok"},relativeTime:{future:{one:"o {0} rok",few:"o {0} roky",many:"o {0} roka",other:"o {0} rokov"},past:{one:"pred {0} rokom",few:"pred {0} rokmi",many:"pred {0} roka",other:"pred {0} rokmi"}}},month:{displayName:"mesiac",relative:{0:"tento mesiac",1:"budúci mesiac","-1":"minulý mesiac"},relativeTime:{future:{one:"o {0} mesiac",few:"o {0} mesiace",many:"o {0} mesiaca",other:"o {0} mesiacov"},past:{one:"pred {0} mesiacom",few:"pred {0} mesiacmi",many:"pred {0} mesiaca",other:"pred {0} mesiacmi"}}},day:{displayName:"deň",relative:{0:"dnes",1:"zajtra",2:"pozajtra","-2":"predvčerom","-1":"včera"},relativeTime:{future:{one:"o {0} deň",few:"o {0} dni",many:"o {0} dňa",other:"o {0} dní"},past:{one:"pred {0} dňom",few:"pred {0} dňami",many:"pred {0} dňa",other:"pred {0} dňami"}}},hour:{displayName:"hodina",relative:{0:"v tejto hodine"},relativeTime:{future:{one:"o {0} hodinu",few:"o {0} hodiny",many:"o {0} hodiny",other:"o {0} hodín"},past:{one:"pred {0} hodinou",few:"pred {0} hodinami",many:"pred {0} hodinou",other:"pred {0} hodinami"}}},minute:{displayName:"minúta",relative:{0:"v tejto minúte"},relativeTime:{future:{one:"o {0} minútu",few:"o {0} minúty",many:"o {0} minúty",other:"o {0} minút"},past:{one:"pred {0} minútou",few:"pred {0} minútami",many:"pred {0} minúty",other:"pred {0} minútami"}}},second:{displayName:"sekunda",relative:{0:"teraz"},relativeTime:{future:{one:"o {0} sekundu",few:"o {0} sekundy",many:"o {0} sekundy",other:"o {0} sekúnd"},past:{one:"pred {0} sekundou",few:"pred {0} sekundami",many:"pred {0} sekundy",other:"pred {0} sekundami"}}}}}]});
 
 
 /***/ }),
-/* 159 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"sr",pluralRuleFunction:function(e,a){var t=String(e).split("."),r=t[0],o=t[1]||"",n=!t[1],i=r.slice(-1),l=r.slice(-2),s=o.slice(-1),u=o.slice(-2);return a?"other":n&&1==i&&11!=l||1==s&&11!=u?"one":n&&i>=2&&i<=4&&(l<12||l>14)||s>=2&&s<=4&&(u<12||u>14)?"few":"other"},fields:{year:{displayName:"година",relative:{0:"ове године",1:"следеће године","-1":"прошле године"},relativeTime:{future:{one:"за {0} годину",few:"за {0} године",other:"за {0} година"},past:{one:"пре {0} године",few:"пре {0} године",other:"пре {0} година"}}},month:{displayName:"месец",relative:{0:"овог месеца",1:"следећег месеца","-1":"прошлог месеца"},relativeTime:{future:{one:"за {0} месец",few:"за {0} месеца",other:"за {0} месеци"},past:{one:"пре {0} месеца",few:"пре {0} месеца",other:"пре {0} месеци"}}},day:{displayName:"дан",relative:{0:"данас",1:"сутра",2:"прекосутра","-2":"прекјуче","-1":"јуче"},relativeTime:{future:{one:"за {0} дан",few:"за {0} дана",other:"за {0} дана"},past:{one:"пре {0} дана",few:"пре {0} дана",other:"пре {0} дана"}}},hour:{displayName:"сат",relative:{0:"овог сата"},relativeTime:{future:{one:"за {0} сат",few:"за {0} сата",other:"за {0} сати"},past:{one:"пре {0} сата",few:"пре {0} сата",other:"пре {0} сати"}}},minute:{displayName:"минут",relative:{0:"овог минута"},relativeTime:{future:{one:"за {0} минут",few:"за {0} минута",other:"за {0} минута"},past:{one:"пре {0} минута",few:"пре {0} минута",other:"пре {0} минута"}}},second:{displayName:"секунд",relative:{0:"сада"},relativeTime:{future:{one:"за {0} секунду",few:"за {0} секунде",other:"за {0} секунди"},past:{one:"пре {0} секунде",few:"пре {0} секунде",other:"пре {0} секунди"}}}}},{locale:"sr-Cyrl",parentLocale:"sr"},{locale:"sr-Cyrl-BA",parentLocale:"sr-Cyrl"},{locale:"sr-Cyrl-ME",parentLocale:"sr-Cyrl"},{locale:"sr-Cyrl-XK",parentLocale:"sr-Cyrl"},{locale:"sr-Latn",pluralRuleFunction:function(e,a){return"other"},fields:{year:{displayName:"godina",relative:{0:"ove godine",1:"sledeće godine","-1":"prošle godine"},relativeTime:{future:{one:"za {0} godinu",few:"za {0} godine",other:"za {0} godina"},past:{one:"pre {0} godine",few:"pre {0} godine",other:"pre {0} godina"}}},month:{displayName:"mesec",relative:{0:"ovog meseca",1:"sledećeg meseca","-1":"prošlog meseca"},relativeTime:{future:{one:"za {0} mesec",few:"za {0} meseca",other:"za {0} meseci"},past:{one:"pre {0} meseca",few:"pre {0} meseca",other:"pre {0} meseci"}}},day:{displayName:"dan",relative:{0:"danas",1:"sutra",2:"prekosutra","-2":"prekjuče","-1":"juče"},relativeTime:{future:{one:"za {0} dan",few:"za {0} dana",other:"za {0} dana"},past:{one:"pre {0} dana",few:"pre {0} dana",other:"pre {0} dana"}}},hour:{displayName:"sat",relative:{0:"ovog sata"},relativeTime:{future:{one:"za {0} sat",few:"za {0} sata",other:"za {0} sati"},past:{one:"pre {0} sata",few:"pre {0} sata",other:"pre {0} sati"}}},minute:{displayName:"minut",relative:{0:"ovog minuta"},relativeTime:{future:{one:"za {0} minut",few:"za {0} minuta",other:"za {0} minuta"},past:{one:"pre {0} minuta",few:"pre {0} minuta",other:"pre {0} minuta"}}},second:{displayName:"sekund",relative:{0:"sada"},relativeTime:{future:{one:"za {0} sekundu",few:"za {0} sekunde",other:"za {0} sekundi"},past:{one:"pre {0} sekunde",few:"pre {0} sekunde",other:"pre {0} sekundi"}}}}},{locale:"sr-Latn-BA",parentLocale:"sr-Latn"},{locale:"sr-Latn-ME",parentLocale:"sr-Latn"},{locale:"sr-Latn-XK",parentLocale:"sr-Latn"}]});
 
 
 /***/ }),
-/* 160 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"sv",pluralRuleFunction:function(e,a){var r=String(e).split("."),n=!r[1],t=Number(r[0])==e,o=t&&r[0].slice(-1),i=t&&r[0].slice(-2);return a?1!=o&&2!=o||11==i||12==i?"other":"one":1==e&&n?"one":"other"},fields:{year:{displayName:"år",relative:{0:"i år",1:"nästa år","-1":"i fjol"},relativeTime:{future:{one:"om {0} år",other:"om {0} år"},past:{one:"för {0} år sedan",other:"för {0} år sedan"}}},month:{displayName:"månad",relative:{0:"denna månad",1:"nästa månad","-1":"förra månaden"},relativeTime:{future:{one:"om {0} månad",other:"om {0} månader"},past:{one:"för {0} månad sedan",other:"för {0} månader sedan"}}},day:{displayName:"dag",relative:{0:"i dag",1:"i morgon",2:"i övermorgon","-2":"i förrgår","-1":"i går"},relativeTime:{future:{one:"om {0} dag",other:"om {0} dagar"},past:{one:"för {0} dag sedan",other:"för {0} dagar sedan"}}},hour:{displayName:"timme",relative:{0:"denna timme"},relativeTime:{future:{one:"om {0} timme",other:"om {0} timmar"},past:{one:"för {0} timme sedan",other:"för {0} timmar sedan"}}},minute:{displayName:"minut",relative:{0:"denna minut"},relativeTime:{future:{one:"om {0} minut",other:"om {0} minuter"},past:{one:"för {0} minut sedan",other:"för {0} minuter sedan"}}},second:{displayName:"sekund",relative:{0:"nu"},relativeTime:{future:{one:"om {0} sekund",other:"om {0} sekunder"},past:{one:"för {0} sekund sedan",other:"för {0} sekunder sedan"}}}}},{locale:"sv-AX",parentLocale:"sv"},{locale:"sv-FI",parentLocale:"sv"}]});
 
 
 /***/ }),
-/* 161 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"th",pluralRuleFunction:function(e,t){return"other"},fields:{year:{displayName:"ปี",relative:{0:"ปีนี้",1:"ปีหน้า","-1":"ปีที่แล้ว"},relativeTime:{future:{other:"ในอีก {0} ปี"},past:{other:"{0} ปีที่แล้ว"}}},month:{displayName:"เดือน",relative:{0:"เดือนนี้",1:"เดือนหน้า","-1":"เดือนที่แล้ว"},relativeTime:{future:{other:"ในอีก {0} เดือน"},past:{other:"{0} เดือนที่ผ่านมา"}}},day:{displayName:"วัน",relative:{0:"วันนี้",1:"พรุ่งนี้",2:"มะรืนนี้","-2":"เมื่อวานซืน","-1":"เมื่อวาน"},relativeTime:{future:{other:"ในอีก {0} วัน"},past:{other:"{0} วันที่ผ่านมา"}}},hour:{displayName:"ชั่วโมง",relative:{0:"ชั่วโมงนี้"},relativeTime:{future:{other:"ในอีก {0} ชั่วโมง"},past:{other:"{0} ชั่วโมงที่ผ่านมา"}}},minute:{displayName:"นาที",relative:{0:"นาทีนี้"},relativeTime:{future:{other:"ในอีก {0} นาที"},past:{other:"{0} นาทีที่ผ่านมา"}}},second:{displayName:"วินาที",relative:{0:"ขณะนี้"},relativeTime:{future:{other:"ในอีก {0} วินาที"},past:{other:"{0} วินาทีที่ผ่านมา"}}}}}]});
 
 
 /***/ }),
-/* 162 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,a){ true?module.exports=a():undefined}(this,function(){"use strict";return[{locale:"tr",pluralRuleFunction:function(e,a){return a?"other":1==e?"one":"other"},fields:{year:{displayName:"yıl",relative:{0:"bu yıl",1:"gelecek yıl","-1":"geçen yıl"},relativeTime:{future:{one:"{0} yıl sonra",other:"{0} yıl sonra"},past:{one:"{0} yıl önce",other:"{0} yıl önce"}}},month:{displayName:"ay",relative:{0:"bu ay",1:"gelecek ay","-1":"geçen ay"},relativeTime:{future:{one:"{0} ay sonra",other:"{0} ay sonra"},past:{one:"{0} ay önce",other:"{0} ay önce"}}},day:{displayName:"gün",relative:{0:"bugün",1:"yarın",2:"öbür gün","-2":"evvelsi gün","-1":"dün"},relativeTime:{future:{one:"{0} gün sonra",other:"{0} gün sonra"},past:{one:"{0} gün önce",other:"{0} gün önce"}}},hour:{displayName:"saat",relative:{0:"bu saat"},relativeTime:{future:{one:"{0} saat sonra",other:"{0} saat sonra"},past:{one:"{0} saat önce",other:"{0} saat önce"}}},minute:{displayName:"dakika",relative:{0:"bu dakika"},relativeTime:{future:{one:"{0} dakika sonra",other:"{0} dakika sonra"},past:{one:"{0} dakika önce",other:"{0} dakika önce"}}},second:{displayName:"saniye",relative:{0:"şimdi"},relativeTime:{future:{one:"{0} saniye sonra",other:"{0} saniye sonra"},past:{one:"{0} saniye önce",other:"{0} saniye önce"}}}}},{locale:"tr-CY",parentLocale:"tr"}]});
 
 
 /***/ }),
-/* 163 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"uk",pluralRuleFunction:function(e,t){var a=String(e).split("."),n=a[0],o=!a[1],r=Number(a[0])==e,i=r&&a[0].slice(-1),l=r&&a[0].slice(-2),f=n.slice(-1),m=n.slice(-2);return t?3==i&&13!=l?"few":"other":o&&1==f&&11!=m?"one":o&&f>=2&&f<=4&&(m<12||m>14)?"few":o&&0==f||o&&f>=5&&f<=9||o&&m>=11&&m<=14?"many":"other"},fields:{year:{displayName:"рік",relative:{0:"цього року",1:"наступного року","-1":"торік"},relativeTime:{future:{one:"через {0} рік",few:"через {0} роки",many:"через {0} років",other:"через {0} року"},past:{one:"{0} рік тому",few:"{0} роки тому",many:"{0} років тому",other:"{0} року тому"}}},month:{displayName:"місяць",relative:{0:"цього місяця",1:"наступного місяця","-1":"минулого місяця"},relativeTime:{future:{one:"через {0} місяць",few:"через {0} місяці",many:"через {0} місяців",other:"через {0} місяця"},past:{one:"{0} місяць тому",few:"{0} місяці тому",many:"{0} місяців тому",other:"{0} місяця тому"}}},day:{displayName:"день",relative:{0:"сьогодні",1:"завтра",2:"післязавтра","-2":"позавчора","-1":"учора"},relativeTime:{future:{one:"через {0} день",few:"через {0} дні",many:"через {0} днів",other:"через {0} дня"},past:{one:"{0} день тому",few:"{0} дні тому",many:"{0} днів тому",other:"{0} дня тому"}}},hour:{displayName:"година",relative:{0:"цієї години"},relativeTime:{future:{one:"через {0} годину",few:"через {0} години",many:"через {0} годин",other:"через {0} години"},past:{one:"{0} годину тому",few:"{0} години тому",many:"{0} годин тому",other:"{0} години тому"}}},minute:{displayName:"хвилина",relative:{0:"цієї хвилини"},relativeTime:{future:{one:"через {0} хвилину",few:"через {0} хвилини",many:"через {0} хвилин",other:"через {0} хвилини"},past:{one:"{0} хвилину тому",few:"{0} хвилини тому",many:"{0} хвилин тому",other:"{0} хвилини тому"}}},second:{displayName:"секунда",relative:{0:"зараз"},relativeTime:{future:{one:"через {0} секунду",few:"через {0} секунди",many:"через {0} секунд",other:"через {0} секунди"},past:{one:"{0} секунду тому",few:"{0} секунди тому",many:"{0} секунд тому",other:"{0} секунди тому"}}}}}]});
 
 
 /***/ }),
-/* 164 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"vi",pluralRuleFunction:function(e,t){return t&&1==e?"one":"other"},fields:{year:{displayName:"Năm",relative:{0:"năm nay",1:"năm sau","-1":"năm ngoái"},relativeTime:{future:{other:"sau {0} năm nữa"},past:{other:"{0} năm trước"}}},month:{displayName:"Tháng",relative:{0:"tháng này",1:"tháng sau","-1":"tháng trước"},relativeTime:{future:{other:"sau {0} tháng nữa"},past:{other:"{0} tháng trước"}}},day:{displayName:"Ngày",relative:{0:"Hôm nay",1:"Ngày mai",2:"Ngày kia","-2":"Hôm kia","-1":"Hôm qua"},relativeTime:{future:{other:"sau {0} ngày nữa"},past:{other:"{0} ngày trước"}}},hour:{displayName:"Giờ",relative:{0:"giờ này"},relativeTime:{future:{other:"sau {0} giờ nữa"},past:{other:"{0} giờ trước"}}},minute:{displayName:"Phút",relative:{0:"phút này"},relativeTime:{future:{other:"sau {0} phút nữa"},past:{other:"{0} phút trước"}}},second:{displayName:"Giây",relative:{0:"bây giờ"},relativeTime:{future:{other:"sau {0} giây nữa"},past:{other:"{0} giây trước"}}}}}]});
 
 
 /***/ }),
-/* 165 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():undefined}(this,function(){"use strict";return[{locale:"zh",pluralRuleFunction:function(e,t){return"other"},fields:{year:{displayName:"年",relative:{0:"今年",1:"明年","-1":"去年"},relativeTime:{future:{other:"{0}年后"},past:{other:"{0}年前"}}},month:{displayName:"月",relative:{0:"本月",1:"下个月","-1":"上个月"},relativeTime:{future:{other:"{0}个月后"},past:{other:"{0}个月前"}}},day:{displayName:"日",relative:{0:"今天",1:"明天",2:"后天","-2":"前天","-1":"昨天"},relativeTime:{future:{other:"{0}天后"},past:{other:"{0}天前"}}},hour:{displayName:"小时",relative:{0:"这一时间 / 此时"},relativeTime:{future:{other:"{0}小时后"},past:{other:"{0}小时前"}}},minute:{displayName:"分钟",relative:{0:"此刻"},relativeTime:{future:{other:"{0}分钟后"},past:{other:"{0}分钟前"}}},second:{displayName:"秒",relative:{0:"现在"},relativeTime:{future:{other:"{0}秒钟后"},past:{other:"{0}秒钟前"}}}}},{locale:"zh-Hans",parentLocale:"zh"},{locale:"zh-Hans-HK",parentLocale:"zh-Hans",fields:{year:{displayName:"年",relative:{0:"今年",1:"明年","-1":"去年"},relativeTime:{future:{other:"{0}年后"},past:{other:"{0}年前"}}},month:{displayName:"月",relative:{0:"本月",1:"下个月","-1":"上个月"},relativeTime:{future:{other:"{0}个月后"},past:{other:"{0}个月前"}}},day:{displayName:"日",relative:{0:"今天",1:"明天",2:"后天","-2":"前天","-1":"昨天"},relativeTime:{future:{other:"{0}天后"},past:{other:"{0}天前"}}},hour:{displayName:"小时",relative:{0:"这一时间 / 此时"},relativeTime:{future:{other:"{0}小时后"},past:{other:"{0}小时前"}}},minute:{displayName:"分钟",relative:{0:"此刻"},relativeTime:{future:{other:"{0}分钟后"},past:{other:"{0}分钟前"}}},second:{displayName:"秒",relative:{0:"现在"},relativeTime:{future:{other:"{0}秒后"},past:{other:"{0}秒前"}}}}},{locale:"zh-Hans-MO",parentLocale:"zh-Hans",fields:{year:{displayName:"年",relative:{0:"今年",1:"明年","-1":"去年"},relativeTime:{future:{other:"{0}年后"},past:{other:"{0}年前"}}},month:{displayName:"月",relative:{0:"本月",1:"下个月","-1":"上个月"},relativeTime:{future:{other:"{0}个月后"},past:{other:"{0}个月前"}}},day:{displayName:"日",relative:{0:"今天",1:"明天",2:"后天","-2":"前天","-1":"昨天"},relativeTime:{future:{other:"{0}天后"},past:{other:"{0}天前"}}},hour:{displayName:"小时",relative:{0:"这一时间 / 此时"},relativeTime:{future:{other:"{0}小时后"},past:{other:"{0}小时前"}}},minute:{displayName:"分钟",relative:{0:"此刻"},relativeTime:{future:{other:"{0}分钟后"},past:{other:"{0}分钟前"}}},second:{displayName:"秒",relative:{0:"现在"},relativeTime:{future:{other:"{0}秒后"},past:{other:"{0}秒前"}}}}},{locale:"zh-Hans-SG",parentLocale:"zh-Hans",fields:{year:{displayName:"年",relative:{0:"今年",1:"明年","-1":"去年"},relativeTime:{future:{other:"{0}年后"},past:{other:"{0}年前"}}},month:{displayName:"月",relative:{0:"本月",1:"下个月","-1":"上个月"},relativeTime:{future:{other:"{0}个月后"},past:{other:"{0}个月前"}}},day:{displayName:"日",relative:{0:"今天",1:"明天",2:"后天","-2":"前天","-1":"昨天"},relativeTime:{future:{other:"{0}天后"},past:{other:"{0}天前"}}},hour:{displayName:"小时",relative:{0:"这一时间 / 此时"},relativeTime:{future:{other:"{0}小时后"},past:{other:"{0}小时前"}}},minute:{displayName:"分钟",relative:{0:"此刻"},relativeTime:{future:{other:"{0}分钟后"},past:{other:"{0}分钟前"}}},second:{displayName:"秒",relative:{0:"现在"},relativeTime:{future:{other:"{0}秒后"},past:{other:"{0}秒前"}}}}},{locale:"zh-Hant",pluralRuleFunction:function(e,t){return"other"},fields:{year:{displayName:"年",relative:{0:"今年",1:"明年","-1":"去年"},relativeTime:{future:{other:"{0} 年後"},past:{other:"{0} 年前"}}},month:{displayName:"月",relative:{0:"本月",1:"下個月","-1":"上個月"},relativeTime:{future:{other:"{0} 個月後"},past:{other:"{0} 個月前"}}},day:{displayName:"日",relative:{0:"今天",1:"明天",2:"後天","-2":"前天","-1":"昨天"},relativeTime:{future:{other:"{0} 天後"},past:{other:"{0} 天前"}}},hour:{displayName:"小時",relative:{0:"這一小時"},relativeTime:{future:{other:"{0} 小時後"},past:{other:"{0} 小時前"}}},minute:{displayName:"分鐘",relative:{0:"這一分鐘"},relativeTime:{future:{other:"{0} 分鐘後"},past:{other:"{0} 分鐘前"}}},second:{displayName:"秒",relative:{0:"現在"},relativeTime:{future:{other:"{0} 秒後"},past:{other:"{0} 秒前"}}}}},{locale:"zh-Hant-HK",parentLocale:"zh-Hant",fields:{year:{displayName:"年",relative:{0:"今年",1:"下年","-1":"上年"},relativeTime:{future:{other:"{0} 年後"},past:{other:"{0} 年前"}}},month:{displayName:"月",relative:{0:"本月",1:"下個月","-1":"上個月"},relativeTime:{future:{other:"{0} 個月後"},past:{other:"{0} 個月前"}}},day:{displayName:"日",relative:{0:"今日",1:"明日",2:"後日","-2":"前日","-1":"昨日"},relativeTime:{future:{other:"{0} 日後"},past:{other:"{0} 日前"}}},hour:{displayName:"小時",relative:{0:"這個小時"},relativeTime:{future:{other:"{0} 小時後"},past:{other:"{0} 小時前"}}},minute:{displayName:"分鐘",relative:{0:"這分鐘"},relativeTime:{future:{other:"{0} 分鐘後"},past:{other:"{0} 分鐘前"}}},second:{displayName:"秒",relative:{0:"現在"},relativeTime:{future:{other:"{0} 秒後"},past:{other:"{0} 秒前"}}}}},{locale:"zh-Hant-MO",parentLocale:"zh-Hant-HK"}]});
 
 
 /***/ }),
-/* 166 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34667,11 +34715,11 @@ var _reactRedux = __webpack_require__(6);
 
 var _redux = __webpack_require__(35);
 
-var _combineReducers = __webpack_require__(395);
+var _combineReducers = __webpack_require__(398);
 
 var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-var _intl = __webpack_require__(115);
+var _intl = __webpack_require__(116);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34760,7 +34808,7 @@ _reactDom2.default.render(_react2.default.createElement(
 ), appTarget);
 
 /***/ }),
-/* 167 */
+/* 168 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34788,7 +34836,7 @@ isValidElement:K,version:"16.2.0",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_F
 
 
 /***/ }),
-/* 168 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -34804,7 +34852,7 @@ isValidElement:K,version:"16.2.0",__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_F
 /*
  Modernizr 3.0.0pre (Custom Build) | MIT
 */
-var aa=__webpack_require__(169),ca=__webpack_require__(0),m=__webpack_require__(170),p=__webpack_require__(74),v=__webpack_require__(76),da=__webpack_require__(171),ea=__webpack_require__(172),fa=__webpack_require__(173),ha=__webpack_require__(75);
+var aa=__webpack_require__(170),ca=__webpack_require__(0),m=__webpack_require__(171),p=__webpack_require__(74),v=__webpack_require__(76),da=__webpack_require__(172),ea=__webpack_require__(173),fa=__webpack_require__(174),ha=__webpack_require__(75);
 function A(a){for(var b=arguments.length-1,c="https://reactjs.org/docs/error-decoder.html?invariant="+a,d=0;d<b;d++)c+="&args[]="+encodeURIComponent(arguments[d+1]);aa(!1,"Minified React error #"+a+"; visit %s for the full message or use the non-minified dev environment for full errors and additional helpful warnings. ",c)}ca?void 0:A("227");
 function ia(a,b,c,d,e,f,g,h,k){this._hasCaughtError=!1;this._caughtError=null;var n=Array.prototype.slice.call(arguments,3);try{b.apply(c,n)}catch(r){this._caughtError=r,this._hasCaughtError=!0}}
 var B={_caughtError:null,_hasCaughtError:!1,_rethrowError:null,_hasRethrowError:!1,invokeGuardedCallback:function(a,b,c,d,e,f,g,h,k){ia.apply(B,arguments)},invokeGuardedCallbackAndCatchFirstError:function(a,b,c,d,e,f,g,h,k){B.invokeGuardedCallback.apply(this,arguments);if(B.hasCaughtError()){var n=B.clearCaughtError();B._hasRethrowError||(B._hasRethrowError=!0,B._rethrowError=n)}},rethrowCaughtError:function(){return ka.apply(B,arguments)},hasCaughtError:function(){return B._hasCaughtError},clearCaughtError:function(){if(B._hasCaughtError){var a=
@@ -35033,7 +35081,7 @@ var vi={default:qi},wi=vi&&qi||vi;module.exports=wi.default?wi.default:wi;
 
 
 /***/ }),
-/* 169 */
+/* 170 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35086,7 +35134,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 /***/ }),
-/* 170 */
+/* 171 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35125,7 +35173,7 @@ var ExecutionEnvironment = {
 module.exports = ExecutionEnvironment;
 
 /***/ }),
-/* 171 */
+/* 172 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35167,7 +35215,7 @@ function getActiveElement(doc) /*?DOMElement*/{
 module.exports = getActiveElement;
 
 /***/ }),
-/* 172 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35238,7 +35286,7 @@ function shallowEqual(objA, objB) {
 module.exports = shallowEqual;
 
 /***/ }),
-/* 173 */
+/* 174 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35253,7 +35301,7 @@ module.exports = shallowEqual;
  * 
  */
 
-var isTextNode = __webpack_require__(174);
+var isTextNode = __webpack_require__(175);
 
 /*eslint-disable no-bitwise */
 
@@ -35281,7 +35329,7 @@ function containsNode(outerNode, innerNode) {
 module.exports = containsNode;
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35296,7 +35344,7 @@ module.exports = containsNode;
  * @typechecks
  */
 
-var isNode = __webpack_require__(175);
+var isNode = __webpack_require__(176);
 
 /**
  * @param {*} object The object to check.
@@ -35309,7 +35357,7 @@ function isTextNode(object) {
 module.exports = isTextNode;
 
 /***/ }),
-/* 175 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35337,7 +35385,7 @@ function isNode(object) {
 module.exports = isNode;
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -35371,33 +35419,33 @@ var _paintEditor = __webpack_require__(194);
 
 var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
-var _keyboardShortcutsHoc = __webpack_require__(388);
+var _keyboardShortcutsHoc = __webpack_require__(391);
 
 var _keyboardShortcutsHoc2 = _interopRequireDefault(_keyboardShortcutsHoc);
 
-var _selectionHoc = __webpack_require__(389);
+var _selectionHoc = __webpack_require__(392);
 
 var _selectionHoc2 = _interopRequireDefault(_selectionHoc);
 
-var _undoHoc = __webpack_require__(390);
+var _undoHoc = __webpack_require__(393);
 
 var _undoHoc2 = _interopRequireDefault(_undoHoc);
 
-var _updateImageHoc = __webpack_require__(391);
+var _updateImageHoc = __webpack_require__(394);
 
 var _updateImageHoc2 = _interopRequireDefault(_updateImageHoc);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(48);
+var _format = __webpack_require__(49);
 
 var _selectedItems = __webpack_require__(7);
 
 var _eyeDropper = __webpack_require__(45);
 
-var _textEditTarget = __webpack_require__(53);
+var _textEditTarget = __webpack_require__(54);
 
-var _viewBounds = __webpack_require__(49);
+var _viewBounds = __webpack_require__(50);
 
 var _layout = __webpack_require__(70);
 
@@ -35407,7 +35455,7 @@ var _bitmap = __webpack_require__(21);
 
 var _view = __webpack_require__(22);
 
-var _eyeDropper2 = __webpack_require__(104);
+var _eyeDropper2 = __webpack_require__(105);
 
 var _eyeDropper3 = _interopRequireDefault(_eyeDropper2);
 
@@ -35821,13 +35869,13 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _updateImageHoc2.default)((0, _selectionHoc2.default)((0, _undoHoc2.default)((0, _keyboardShortcutsHoc2.default)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PaintEditor)))));
 
 /***/ }),
-/* 177 */
+/* 178 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 178 */
+/* 179 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -39596,13 +39644,13 @@ function addLooseExports(parse, Parser$$1, plugins$$1) {
 
 
 /***/ }),
-/* 179 */
+/* 180 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
 
 /***/ }),
-/* 180 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39615,7 +39663,7 @@ function addLooseExports(parse, Parser$$1, plugins$$1) {
 
 
 
-var ReactPropTypesSecret = __webpack_require__(181);
+var ReactPropTypesSecret = __webpack_require__(182);
 
 function emptyFunction() {}
 
@@ -39668,7 +39716,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 181 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39684,54 +39732,6 @@ module.exports = function() {
 var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
-
-
-/***/ }),
-/* 182 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var Minilog = __webpack_require__(183);
-
-var oldEnable = Minilog.enable,
-    oldDisable = Minilog.disable,
-    isChrome = (typeof navigator != 'undefined' && /chrome/i.test(navigator.userAgent)),
-    console = __webpack_require__(186);
-
-// Use a more capable logging backend if on Chrome
-Minilog.defaultBackend = (isChrome ? console.minilog : console);
-
-// apply enable inputs from localStorage and from the URL
-if(typeof window != 'undefined') {
-  try {
-    Minilog.enable(JSON.parse(window.localStorage['minilogSettings']));
-  } catch(e) {}
-  if(window.location && window.location.search) {
-    var match = RegExp('[?&]minilog=([^&]*)').exec(window.location.search);
-    match && Minilog.enable(decodeURIComponent(match[1]));
-  }
-}
-
-// Make enable also add to localStorage
-Minilog.enable = function() {
-  oldEnable.call(Minilog, true);
-  try { window.localStorage['minilogSettings'] = JSON.stringify(true); } catch(e) {}
-  return this;
-};
-
-Minilog.disable = function() {
-  oldDisable.call(Minilog);
-  try { delete window.localStorage.minilogSettings; } catch(e) {}
-  return this;
-};
-
-exports = module.exports = Minilog;
-
-exports.backends = {
-  array: __webpack_require__(189),
-  browser: Minilog.defaultBackend,
-  localStorage: __webpack_require__(190),
-  jQuery: __webpack_require__(191)
-};
 
 
 /***/ }),
@@ -39946,7 +39946,7 @@ module.exports = logger;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Transform = __webpack_require__(25),
-    color = __webpack_require__(79);
+    color = __webpack_require__(80);
 
 var colors = { debug: ['cyan'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
     logger = new Transform();
@@ -39970,7 +39970,7 @@ module.exports = logger;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Transform = __webpack_require__(25),
-    color = __webpack_require__(79),
+    color = __webpack_require__(80),
     colors = { debug: ['gray'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
     logger = new Transform();
 
@@ -40201,39 +40201,39 @@ var _paperCanvas = __webpack_require__(211);
 
 var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
 
-var _scrollableCanvas = __webpack_require__(228);
+var _scrollableCanvas = __webpack_require__(231);
 
 var _scrollableCanvas2 = _interopRequireDefault(_scrollableCanvas);
 
-var _bitBrushMode = __webpack_require__(232);
+var _bitBrushMode = __webpack_require__(235);
 
 var _bitBrushMode2 = _interopRequireDefault(_bitBrushMode);
 
-var _bitLineMode = __webpack_require__(240);
+var _bitLineMode = __webpack_require__(243);
 
 var _bitLineMode2 = _interopRequireDefault(_bitLineMode);
 
-var _bitOvalMode = __webpack_require__(243);
+var _bitOvalMode = __webpack_require__(246);
 
 var _bitOvalMode2 = _interopRequireDefault(_bitOvalMode);
 
-var _bitRectMode = __webpack_require__(248);
+var _bitRectMode = __webpack_require__(251);
 
 var _bitRectMode2 = _interopRequireDefault(_bitRectMode);
 
-var _bitFillMode = __webpack_require__(251);
+var _bitFillMode = __webpack_require__(254);
 
 var _bitFillMode2 = _interopRequireDefault(_bitFillMode);
 
-var _bitEraserMode = __webpack_require__(255);
+var _bitEraserMode = __webpack_require__(258);
 
 var _bitEraserMode2 = _interopRequireDefault(_bitEraserMode);
 
-var _bitSelectMode = __webpack_require__(257);
+var _bitSelectMode = __webpack_require__(260);
 
 var _bitSelectMode2 = _interopRequireDefault(_bitSelectMode);
 
-var _box = __webpack_require__(93);
+var _box = __webpack_require__(94);
 
 var _box2 = _interopRequireDefault(_box);
 
@@ -40241,23 +40241,23 @@ var _button = __webpack_require__(44);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _buttonGroup = __webpack_require__(95);
+var _buttonGroup = __webpack_require__(96);
 
 var _buttonGroup2 = _interopRequireDefault(_buttonGroup);
 
-var _brushMode = __webpack_require__(265);
+var _brushMode = __webpack_require__(268);
 
 var _brushMode2 = _interopRequireDefault(_brushMode);
 
-var _eraserMode = __webpack_require__(269);
+var _eraserMode = __webpack_require__(272);
 
 var _eraserMode2 = _interopRequireDefault(_eraserMode);
 
-var _fillColorIndicator = __webpack_require__(271);
+var _fillColorIndicator = __webpack_require__(274);
 
 var _fillColorIndicator2 = _interopRequireDefault(_fillColorIndicator);
 
-var _fillMode = __webpack_require__(307);
+var _fillMode = __webpack_require__(310);
 
 var _fillMode2 = _interopRequireDefault(_fillMode);
 
@@ -40265,47 +40265,47 @@ var _inputGroup = __webpack_require__(32);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _lineMode = __webpack_require__(311);
+var _lineMode = __webpack_require__(314);
 
 var _lineMode2 = _interopRequireDefault(_lineMode);
 
-var _loupe = __webpack_require__(315);
+var _loupe = __webpack_require__(318);
 
 var _loupe2 = _interopRequireDefault(_loupe);
 
-var _fixedTools = __webpack_require__(318);
+var _fixedTools = __webpack_require__(321);
 
 var _fixedTools2 = _interopRequireDefault(_fixedTools);
 
-var _modeTools = __webpack_require__(338);
+var _modeTools = __webpack_require__(341);
 
 var _modeTools2 = _interopRequireDefault(_modeTools);
 
-var _ovalMode = __webpack_require__(354);
+var _ovalMode = __webpack_require__(357);
 
 var _ovalMode2 = _interopRequireDefault(_ovalMode);
 
-var _rectMode = __webpack_require__(358);
+var _rectMode = __webpack_require__(361);
 
 var _rectMode2 = _interopRequireDefault(_rectMode);
 
-var _reshapeMode = __webpack_require__(362);
+var _reshapeMode = __webpack_require__(365);
 
 var _reshapeMode2 = _interopRequireDefault(_reshapeMode);
 
-var _selectMode = __webpack_require__(368);
+var _selectMode = __webpack_require__(371);
 
 var _selectMode2 = _interopRequireDefault(_selectMode);
 
-var _strokeColorIndicator = __webpack_require__(372);
+var _strokeColorIndicator = __webpack_require__(375);
 
 var _strokeColorIndicator2 = _interopRequireDefault(_strokeColorIndicator);
 
-var _strokeWidthIndicator = __webpack_require__(374);
+var _strokeWidthIndicator = __webpack_require__(377);
 
 var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
 
-var _textMode = __webpack_require__(376);
+var _textMode = __webpack_require__(379);
 
 var _textMode2 = _interopRequireDefault(_textMode);
 
@@ -40313,23 +40313,23 @@ var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _paintEditor = __webpack_require__(382);
+var _paintEditor = __webpack_require__(385);
 
 var _paintEditor2 = _interopRequireDefault(_paintEditor);
 
-var _bitmap = __webpack_require__(384);
+var _bitmap = __webpack_require__(387);
 
 var _bitmap2 = _interopRequireDefault(_bitmap);
 
-var _zoomIn = __webpack_require__(385);
+var _zoomIn = __webpack_require__(388);
 
 var _zoomIn2 = _interopRequireDefault(_zoomIn);
 
-var _zoomOut = __webpack_require__(386);
+var _zoomOut = __webpack_require__(389);
 
 var _zoomOut2 = _interopRequireDefault(_zoomOut);
 
-var _zoomReset = __webpack_require__(387);
+var _zoomReset = __webpack_require__(390);
 
 var _zoomReset2 = _interopRequireDefault(_zoomReset);
 
@@ -40671,7 +40671,7 @@ See the accompanying LICENSE file for terms.
 /* jslint esnext: true */
 
 
-var src$utils$$ = __webpack_require__(80), src$es5$$ = __webpack_require__(197), src$compiler$$ = __webpack_require__(198), intl$messageformat$parser$$ = __webpack_require__(199);
+var src$utils$$ = __webpack_require__(81), src$es5$$ = __webpack_require__(197), src$compiler$$ = __webpack_require__(198), intl$messageformat$parser$$ = __webpack_require__(199);
 exports["default"] = MessageFormat;
 
 // -- MessageFormat --------------------------------------------------------
@@ -40954,7 +40954,7 @@ See the accompanying LICENSE file for terms.
 /* jslint esnext: true */
 
 
-var src$utils$$ = __webpack_require__(80);
+var src$utils$$ = __webpack_require__(81);
 
 // Purposely using the same implementation as the Intl.js `Intl` polyfill.
 // Copyright 2013 Andy Earnshaw, MIT License
@@ -43348,7 +43348,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _undo = __webpack_require__(57);
+var _undo = __webpack_require__(58);
 
 var _undo2 = __webpack_require__(41);
 
@@ -43366,13 +43366,13 @@ var _hover = __webpack_require__(42);
 
 var _clipboard = __webpack_require__(59);
 
-var _format3 = __webpack_require__(48);
+var _format3 = __webpack_require__(49);
 
-var _viewBounds = __webpack_require__(49);
+var _viewBounds = __webpack_require__(50);
 
-var _zoomLevels = __webpack_require__(83);
+var _zoomLevels = __webpack_require__(84);
 
-var _paperCanvas = __webpack_require__(225);
+var _paperCanvas = __webpack_require__(228);
 
 var _paperCanvas2 = _interopRequireDefault(_paperCanvas);
 
@@ -43815,10 +43815,10 @@ exports.getItemsCompoundPath = getItemsCompoundPath;
 /***/ (function(module, exports, __webpack_require__) {
 
 const SVGRenderer = __webpack_require__(214);
-const BitmapAdapter = __webpack_require__(223);
-const inlineSvgFonts = __webpack_require__(81);
-const SvgElement = __webpack_require__(58);
-const convertFonts = __webpack_require__(82);
+const BitmapAdapter = __webpack_require__(226);
+const inlineSvgFonts = __webpack_require__(82);
+const SvgElement = __webpack_require__(48);
+const convertFonts = __webpack_require__(83);
 // /**
 //  * Export for NPM & Node.js
 //  * @type {RenderWebGL}
@@ -43836,9 +43836,10 @@ module.exports = {
 /* 214 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const inlineSvgFonts = __webpack_require__(81);
-const SvgElement = __webpack_require__(58);
-const convertFonts = __webpack_require__(82);
+const inlineSvgFonts = __webpack_require__(82);
+const SvgElement = __webpack_require__(48);
+const convertFonts = __webpack_require__(83);
+const transformStrokeWidths = __webpack_require__(223);
 
 /**
  * Main quirks-mode SVG rendering code.
@@ -43926,10 +43927,16 @@ class SvgRenderer {
         }
         this._svgTag = this._svgDom.documentElement;
         if (fromVersion2) {
+            // Fix gradients. Scratch 2 exports no x2 when x2 = 0, but
+            // SVG default is that x2 is 1. This must be done before
+            // transformStrokeWidths since transformStrokeWidths affects
+            // gradients.
+            this._transformGradients();
+        }
+        transformStrokeWidths(this._svgTag, window);
+        if (fromVersion2) {
             // Transform all text elements.
             this._transformText();
-            // Fix gradients
-            this._transformGradients();
             // Transform measurements.
             this._transformMeasurements();
         } else if (!this._svgTag.getAttribute('viewBox')) {
@@ -44322,7 +44329,632 @@ module.exports = "AAEAAAAPADAAAwDAT1MvMlDtWZgAAIrUAAAAVlBDTFR2RKmvAACLLAAAADZjbW
 /* 223 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const base64js = __webpack_require__(224);
+const Matrix = __webpack_require__(224);
+const SvgElement = __webpack_require__(48);
+const log = __webpack_require__(225);
+
+/**
+ * @fileOverview Apply transforms to match stroke width appearance in 2.0 and 3.0
+ */
+
+// Adapted from paper.js's Path.applyTransform
+const _parseTransform = function (domElement) {
+    let matrix = Matrix.identity();
+    const string = domElement.attributes && domElement.attributes.transform && domElement.attributes.transform.value;
+    if (!string) return matrix;
+    // https://www.w3.org/TR/SVG/types.html#DataTypeTransformList
+    // Parse SVG transform string. First we split at /)\s*/, to separate
+    // commands
+    const transforms = string.split(/\)\s*/g);
+    for (const transform of transforms) {
+        if (!transform) break;
+        // Command come before the '(', values after
+        const parts = transform.split(/\(\s*/);
+        const command = parts[0].trim();
+        const v = parts[1].split(/[\s,]+/g);
+        // Convert values to floats
+        for (let j = 0; j < v.length; j++) {
+            v[j] = parseFloat(v[j]);
+        }
+        switch (command) {
+        case 'matrix':
+            matrix = Matrix.compose(matrix, {a: v[0], b: v[1], c: v[2], d: v[3], e: v[4], f: v[5]});
+            break;
+        case 'rotate':
+            matrix = Matrix.compose(matrix, Matrix.rotateDEG(v[0], v[1] || 0, v[2] || 0));
+            break;
+        case 'translate':
+            matrix = Matrix.compose(matrix, Matrix.translate(v[0], v[1] || 0));
+            break;
+        case 'scale':
+            matrix = Matrix.compose(matrix, Matrix.scale(v[0], v[1] || v[0]));
+            break;
+        case 'skewX':
+            matrix = Matrix.compose(matrix, Matrix.skewDEG(v[0], 0));
+            break;
+        case 'skewY':
+            matrix = Matrix.compose(matrix, Matrix.skewDEG(0, v[0]));
+            break;
+        default:
+            log.error(`Couldn't parse: ${command}`);
+        }
+    }
+    return matrix;
+};
+
+// Adapted from paper.js's Matrix.decompose
+// Given a matrix, return the x and y scale factors of the matrix
+const _getScaleFactor = function (matrix) {
+    const a = matrix.a;
+    const b = matrix.b;
+    const c = matrix.c;
+    const d = matrix.d;
+    const det = (a * d) - (b * c);
+
+    if (a !== 0 || b !== 0) {
+        const r = Math.sqrt((a * a) + (b * b));
+        return {x: r, y: det / r};
+    }
+    if (c !== 0 || d !== 0) {
+        const s = Math.sqrt((c * c) + (d * d));
+        return {x: det / s, y: s};
+    }
+    // a = b = c = d = 0
+    return {x: 0, y: 0};
+};
+
+// Returns null if matrix is not invertible. Otherwise returns given ellipse
+// transformed by transform, an object {radiusX, radiusY, rotation}.
+const _calculateTransformedEllipse = function (radiusX, radiusY, theta, transform) {
+    theta = -theta * Math.PI / 180;
+    const a = transform.a;
+    const b = -transform.c;
+    const c = -transform.b;
+    const d = transform.d;
+    // Since other parameters determine the translation of the ellipse in SVG, we do not need to worry
+    // about what e and f are.
+    const det = (a * d) - (b * c);
+    // Non-invertible matrix
+    if (det === 0) return null;
+
+    // rotA, rotB, and rotC represent Ax^2 + Bxy + Cy^2 = 1 coefficients for a rotated ellipse formula
+    const sinT = Math.sin(theta);
+    const cosT = Math.cos(theta);
+    const sin2T = Math.sin(2 * theta);
+    const rotA = (cosT * cosT / radiusX / radiusX) + (sinT * sinT / radiusY / radiusY);
+    const rotB = (sin2T / radiusX / radiusX) - (sin2T / radiusY / radiusY);
+    const rotC = (sinT * sinT / radiusX / radiusX) + (cosT * cosT / radiusY / radiusY);
+
+    // Calculate the ellipse formula of the transformed ellipse
+    // A, B, and C represent Ax^2 + Bxy + Cy^2 = 1 / det / det coefficients in a transformed ellipse formula
+    // scaled by inverse det squared (to preserve accuracy)
+    const A = ((rotA * d * d) - (rotB * d * c) + (rotC * c * c));
+    const B = ((-2 * rotA * b * d) + (rotB * a * d) + (rotB * b * c) - (2 * rotC * a * c));
+    const C = ((rotA * b * b) - (rotB * a * b) + (rotC * a * a));
+
+    // Derive new radii and theta from the transformed ellipse formula
+    const newRadiusXOverDet = Math.sqrt(2) *
+        Math.sqrt(
+            (A + C - Math.sqrt((A * A) + (B * B) - (2 * A * C) + (C * C))) /
+            ((-B * B) + (4 * A * C))
+        );
+    const newRadiusYOverDet = 1 / Math.sqrt(A + C - (1 / newRadiusXOverDet / newRadiusXOverDet));
+    let temp = (A - (1 / newRadiusXOverDet / newRadiusXOverDet)) /
+        ((1 / newRadiusYOverDet / newRadiusYOverDet) - (1 / newRadiusXOverDet / newRadiusXOverDet));
+    if (temp < 0 && Math.abs(temp) < 1e-8) temp = 0; // Fix floating point issue
+    temp = Math.sqrt(temp);
+    if (Math.abs(1 - temp) < 1e-8) temp = 1; // Fix floating point issue
+    // Solve for which of the two possible thetas is correct
+    let newTheta = Math.asin(temp);
+    temp = (B / (
+        (1 / newRadiusXOverDet / newRadiusXOverDet) -
+        (1 / newRadiusYOverDet / newRadiusYOverDet)));
+    const newTheta2 = -newTheta;
+    if (Math.abs(Math.sin(2 * newTheta2) - temp) <
+        Math.abs(Math.sin(2 * newTheta) - temp)) {
+        newTheta = newTheta2;
+    }
+
+    return {
+        radiusX: newRadiusXOverDet * det,
+        radiusY: newRadiusYOverDet * det,
+        rotation: -newTheta * 180 / Math.PI
+    };
+};
+
+// Adapted from paper.js's PathItem.setPathData
+const _transformPath = function (pathString, transform) {
+    if (!transform || Matrix.toString(transform) === Matrix.toString(Matrix.identity())) return pathString;
+    // First split the path data into parts of command-coordinates pairs
+    // Commands are any of these characters: mzlhvcsqta
+    const parts = pathString && pathString.match(/[mlhvcsqtaz][^mlhvcsqtaz]*/ig);
+    let coords;
+    let relative = false;
+    let previous;
+    let control;
+    let current = {x: 0, y: 0};
+    let start = {x: 0, y: 0};
+    let result = '';
+
+    const getCoord = function (index, coord) {
+        let val = +coords[index];
+        if (relative) {
+            val += current[coord];
+        }
+        return val;
+    };
+
+    const getPoint = function (index) {
+        return {x: getCoord(index, 'x'), y: getCoord(index + 1, 'y')};
+    };
+
+    const roundTo4Places = function (num) {
+        return Number(num.toFixed(4));
+    };
+
+    // Returns the transformed point as a string
+    const getString = function (point) {
+        const transformed = Matrix.applyToPoint(transform, point);
+        return `${roundTo4Places(transformed.x)} ${roundTo4Places(transformed.y)} `;
+    };
+
+    for (let i = 0, l = parts && parts.length; i < l; i++) {
+        const part = parts[i];
+        const command = part[0];
+        const lower = command.toLowerCase();
+        // Match all coordinate values
+        coords = part.match(/[+-]?(?:\d*\.\d+|\d+\.?)(?:[eE][+-]?\d+)?/g);
+        const length = coords && coords.length;
+        relative = command === lower;
+        // Fix issues with z in the middle of SVG path data, not followed by
+        // a m command, see paper.js#413:
+        if (previous === 'z' && !/[mz]/.test(lower)) {
+            result += `M ${current.x} ${current.y} `;
+        }
+        switch (lower) {
+        case 'm': // Move to
+        case 'l': // Line to
+        {
+            let move = lower === 'm';
+            for (let j = 0; j < length; j += 2) {
+                result += move ? 'M ' : 'L ';
+                current = getPoint(j);
+                result += getString(current);
+                if (move) {
+                    start = current;
+                    move = false;
+                }
+            }
+            control = current;
+            break;
+        }
+        case 'h': // Horizontal line
+        case 'v': // Vertical line
+        {
+            const coord = lower === 'h' ? 'x' : 'y';
+            current = {x: current.x, y: current.y}; // Clone as we're going to modify it.
+            for (let j = 0; j < length; j++) {
+                current[coord] = getCoord(j, coord);
+                result += `L ${getString(current)}`;
+            }
+            control = current;
+            break;
+        }
+        case 'c':
+            // Cubic Bezier curve
+            for (let j = 0; j < length; j += 6) {
+                const handle1 = getPoint(j);
+                control = getPoint(j + 2);
+                current = getPoint(j + 4);
+                result += `C ${getString(handle1)}${getString(control)}${getString(current)}`;
+            }
+            break;
+        case 's':
+            // Smooth cubic Bezier curve
+            for (let j = 0; j < length; j += 4) {
+                const handle1 = /[cs]/.test(previous) ?
+                    {x: (current.x * 2) - control.x, y: (current.y * 2) - control.y} :
+                    current;
+                control = getPoint(j);
+                current = getPoint(j + 2);
+
+                result += `C ${getString(handle1)}${getString(control)}${getString(current)}`;
+                previous = lower;
+            }
+            break;
+        case 'q':
+            // Quadratic Bezier curve
+            for (let j = 0; j < length; j += 4) {
+                control = getPoint(j);
+                current = getPoint(j + 2);
+                result += `Q ${getString(control)}${getString(current)}`;
+            }
+            break;
+        case 't':
+            // Smooth quadratic Bezier curve
+            for (let j = 0; j < length; j += 2) {
+                control = /[qt]/.test(previous) ?
+                    {x: (current.x * 2) - control.x, y: (current.y * 2) - control.y} :
+                    current;
+                current = getPoint(j);
+
+                result += `Q ${getString(control)}${getString(current)}`;
+                previous = lower;
+            }
+            break;
+        case 'a':
+            // Elliptical arc curve
+            for (let j = 0; j < length; j += 7) {
+                current = getPoint(j + 5);
+                const rx = +coords[j];
+                const ry = +coords[j + 1];
+                const rotation = +coords[j + 2];
+                const largeArcFlag = +coords[j + 3];
+                let clockwiseFlag = +coords[j + 4];
+                const newEllipse = _calculateTransformedEllipse(rx, ry, rotation, transform);
+                const matrixScale = _getScaleFactor(transform);
+                if (newEllipse) {
+                    if ((matrixScale.x > 0 && matrixScale.y < 0) ||
+                        (matrixScale.x < 0 && matrixScale.y > 0)) {
+                        clockwiseFlag = clockwiseFlag ^ 1;
+                    }
+                    result += `A ${roundTo4Places(Math.abs(newEllipse.radiusX))} ` +
+                        `${roundTo4Places(Math.abs(newEllipse.radiusY))} ` +
+                        `${roundTo4Places(newEllipse.rotation)} ${largeArcFlag} ` +
+                        `${clockwiseFlag} ${getString(current)}`;
+                } else {
+                    result += `L ${getString(current)}`;
+                }
+            }
+            break;
+        case 'z':
+            // Close path
+            result += `Z `;
+            // Correctly handle relative m commands, see paper.js#1101:
+            current = start;
+            break;
+        }
+        previous = lower;
+    }
+    return result;
+};
+
+const GRAPHICS_ELEMENTS = ['circle', 'ellipse', 'image', 'line', 'path', 'polygon', 'polyline', 'rect', 'text', 'use'];
+const CONTAINER_ELEMENTS = ['a', 'defs', 'g', 'marker', 'glyph', 'missing-glyph', 'pattern', 'svg', 'switch', 'symbol'];
+const _isContainerElement = function (element) {
+    return element.tagName && CONTAINER_ELEMENTS.includes(element.tagName.toLowerCase());
+};
+const _isGraphicsElement = function (element) {
+    return element.tagName && GRAPHICS_ELEMENTS.includes(element.tagName.toLowerCase());
+};
+const _isPathWithTransformAndStroke = function (element, strokeWidth) {
+    if (!element.attributes) return false;
+    strokeWidth = element.attributes['stroke-width'] ?
+        Number(element.attributes['stroke-width'].value) : Number(strokeWidth);
+    return strokeWidth &&
+        element.tagName && element.tagName.toLowerCase() === 'path' &&
+        element.attributes.d && element.attributes.d.value;
+};
+const _quadraticMean = function (a, b) {
+    return Math.sqrt(((a * a) + (b * b)) / 2);
+};
+
+const _createGradient = function (gradientId, svgTag, bbox, matrix) {
+    // Adapted from Paper.js's SvgImport.getValue
+    const getValue = function (node, name, isString, allowNull, allowPercent, defaultValue) {
+        // Interpret value as number. Never return NaN, but 0 instead.
+        // If the value is a sequence of numbers, parseFloat will
+        // return the first occurring number, which is enough for now.
+        let value = SvgElement.get(node, name);
+        let res;
+        if (value === null) {
+            if (defaultValue) {
+                res = defaultValue;
+                if (/%\s*$/.test(res)) {
+                    value = defaultValue;
+                    res = parseFloat(value);
+                }
+            } else if (allowNull) {
+                res = null;
+            } else if (isString) {
+                res = '';
+            } else {
+                res = 0;
+            }
+        } else if (isString) {
+            res = value;
+        } else {
+            res = parseFloat(value);
+        }
+        // Support for dimensions in percentage of the root size. If root-size
+        // is not set (e.g. during <defs>), just scale the percentage value to
+        // 0..1, as required by gradients with gradientUnits="objectBoundingBox"
+        if (/%\s*$/.test(value)) {
+            const size = allowPercent ? 1 : bbox[/x|^width/.test(name) ? 'width' : 'height'];
+            return res / 100 * size;
+        }
+        return res;
+    };
+    const getPoint = function (node, x, y, allowNull, allowPercent, defaultX, defaultY) {
+        x = getValue(node, x || 'x', false, allowNull, allowPercent, defaultX);
+        y = getValue(node, y || 'y', false, allowNull, allowPercent, defaultY);
+        return allowNull && (x === null || y === null) ? null : {x, y};
+    };
+
+    let defs = svgTag.getElementsByTagName('defs');
+    if (defs.length === 0) {
+        defs = SvgElement.create('defs');
+        svgTag.appendChild(defs);
+    } else {
+        defs = defs[0];
+    }
+
+    // Clone the old gradient. We'll make a new one, since the gradient might be reused elsewhere
+    // with different transform matrix
+    const oldGradient = svgTag.getElementById(gradientId);
+    if (!oldGradient) return;
+
+    const radial = oldGradient.tagName.toLowerCase() === 'radialgradient';
+    const newGradient = svgTag.getElementById(gradientId).cloneNode(true /* deep */);
+
+    // Give the new gradient a new ID
+    let matrixString = Matrix.toString(matrix);
+    matrixString = matrixString.substring(8, matrixString.length - 1);
+    const newGradientId = `${gradientId}-${matrixString}`;
+    newGradient.setAttribute('id', newGradientId);
+
+    const scaleToBounds = getValue(newGradient, 'gradientUnits', true) !==
+                'userSpaceOnUse';
+    let origin;
+    let destination;
+    let radius;
+    let focal;
+    if (radial) {
+        origin = getPoint(newGradient, 'cx', 'cy', false, scaleToBounds, '50%', '50%');
+        radius = getValue(newGradient, 'r', false, false, scaleToBounds, '50%');
+        focal = getPoint(newGradient, 'fx', 'fy', true, scaleToBounds);
+    } else {
+        origin = getPoint(newGradient, 'x1', 'y1', false, scaleToBounds);
+        destination = getPoint(newGradient, 'x2', 'y2', false, scaleToBounds, '1');
+        if (origin.x === destination.x && origin.y === destination.y) {
+            // If it's degenerate, use the color of the last stop, as described by
+            // https://www.w3.org/TR/SVG/pservers.html#LinearGradientNotes
+            const stops = newGradient.getElementsByTagName('stop');
+            if (!stops.length || !stops[stops.length - 1].attributes ||
+                    !stops[stops.length - 1].attributes['stop-color']) {
+                return null;
+            }
+            return stops[stops.length - 1].attributes['stop-color'].value;
+        }
+    }
+
+    // Transform points
+    // Emulate SVG's gradientUnits="objectBoundingBox"
+    if (scaleToBounds) {
+        const boundsMatrix = Matrix.compose(Matrix.translate(bbox.x, bbox.y), Matrix.scale(bbox.width, bbox.height));
+        origin = Matrix.applyToPoint(boundsMatrix, origin);
+        if (destination) destination = Matrix.applyToPoint(boundsMatrix, destination);
+        if (radius) {
+            radius = _quadraticMean(bbox.width, bbox.height) * radius;
+        }
+        if (focal) focal = Matrix.applyToPoint(boundsMatrix, focal);
+    }
+
+    if (radial) {
+        origin = Matrix.applyToPoint(matrix, origin);
+        const matrixScale = _getScaleFactor(matrix);
+        radius = _quadraticMean(matrixScale.x, matrixScale.y) * radius;
+        if (focal) focal = Matrix.applyToPoint(matrix, focal);
+    } else {
+        const dot = (a, b) => (a.x * b.x) + (a.y * b.y);
+        const multiply = (coefficient, v) => ({x: coefficient * v.x, y: coefficient * v.y});
+        const add = (a, b) => ({x: a.x + b.x, y: a.y + b.y});
+        const subtract = (a, b) => ({x: a.x - b.x, y: a.y - b.y});
+
+        // The line through origin and gradientPerpendicular is the line at which the gradient starts
+        let gradientPerpendicular = Math.abs(origin.x - destination.x) < 1e-8 ?
+            add(origin, {x: 1, y: (origin.x - destination.x) / (destination.y - origin.y)}) :
+            add(origin, {x: (destination.y - origin.y) / (origin.x - destination.x), y: 1});
+
+        // Transform points
+        gradientPerpendicular = Matrix.applyToPoint(matrix, gradientPerpendicular);
+        origin = Matrix.applyToPoint(matrix, origin);
+        destination = Matrix.applyToPoint(matrix, destination);
+
+        // Calculate the direction that the gradient has changed to
+        const originToPerpendicular = subtract(gradientPerpendicular, origin);
+        const originToDestination = subtract(destination, origin);
+        const gradientDirection = Math.abs(originToPerpendicular.x) < 1e-8 ?
+            {x: 1, y: -originToPerpendicular.x / originToPerpendicular.y} :
+            {x: -originToPerpendicular.y / originToPerpendicular.x, y: 1};
+
+        // Set the destination so that the gradient moves in the correct direction, by projecting the destination vector
+        // onto the gradient direction vector
+        const projectionCoeff = dot(originToDestination, gradientDirection) / dot(gradientDirection, gradientDirection);
+        const projection = multiply(projectionCoeff, gradientDirection);
+        destination = {x: origin.x + projection.x, y: origin.y + projection.y};
+    }
+
+    // Put values back into svg
+    if (radial) {
+        newGradient.setAttribute('cx', Number(origin.x.toFixed(4)));
+        newGradient.setAttribute('cy', Number(origin.y.toFixed(4)));
+        newGradient.setAttribute('r', Number(radius.toFixed(4)));
+        if (focal) {
+            newGradient.setAttribute('fx', Number(focal.x.toFixed(4)));
+            newGradient.setAttribute('fy', Number(focal.y.toFixed(4)));
+        }
+    } else {
+        newGradient.setAttribute('x1', Number(origin.x.toFixed(4)));
+        newGradient.setAttribute('y1', Number(origin.y.toFixed(4)));
+        newGradient.setAttribute('x2', Number(destination.x.toFixed(4)));
+        newGradient.setAttribute('y2', Number(destination.y.toFixed(4)));
+    }
+    newGradient.setAttribute('gradientUnits', 'userSpaceOnUse');
+    defs.appendChild(newGradient);
+
+    return `url(#${newGradientId})`;
+};
+
+// Adapted from paper.js's SvgImport.getDefinition
+const _parseUrl = (value, windowRef) => {
+    // When url() comes from a style property, '#'' seems to be missing on
+    // WebKit. We also get variations of quotes or no quotes, single or
+    // double, so handle it all with one regular expression:
+    const match = value && value.match(/\((?:["'#]*)([^"')]+)/);
+    const name = match && match[1];
+    const res = name && windowRef ?
+        // This is required by Firefox, which can produce absolute
+        // urls for local gradients, see paperjs#1001:
+        name.replace(`${windowRef.location.href.split('#')[0]}#`, '') :
+        name;
+    return res;
+};
+
+/**
+ * Scratch 2.0 displays stroke widths in a "normalized" way, that is,
+ * if a shape with a stroke width has a transform applied, it will be
+ * rendered with a stroke that is the same width all the way around,
+ * instead of stretched looking.
+ *
+ * The vector paint editor also prefers to normalize the stroke width,
+ * rather than keep track of transforms at the group level, as this
+ * simplifies editing (e.g. stroke width 3 always means the same thickness)
+ *
+ * This function performs that normalization process, pushing transforms
+ * on groups down to the leaf level and averaging out the stroke width
+ * around the shapes. Note that this doens't just change stroke widths, it
+ * changes path data and attributes throughout the SVG.
+ *
+ * @param {SVGElement} svgTag The SVG dom object
+ * @param {Window} windowRef The window to use. Need to pass in for
+ *     tests to work, as they get angry at even the mention of window.
+ * @param {object} bboxForTesting The bounds to use. Need to pass in for
+ *     tests only, because getBBox doesn't work in Node. This should
+ *     be the bounds of the svgTag without including stroke width or transforms.
+ * @return {void}
+ */
+const transformStrokeWidths = function (svgTag, windowRef, bboxForTesting) {
+    const inherited = Matrix.identity();
+    const applyTransforms = (element, matrix, strokeWidth, fill) => {
+        if (_isContainerElement(element)) {
+            // Push fills and stroke width down to leaves
+            if (element.attributes['stroke-width']) {
+                strokeWidth = element.attributes['stroke-width'].value;
+            }
+            if (element.attributes && element.attributes.fill) {
+                fill = element.attributes.fill.value;
+            }
+
+            // If any child nodes don't take attributes, leave the attributes
+            // at the parent level.
+            for (let i = 0; i < element.childNodes.length; i++) {
+                applyTransforms(
+                    element.childNodes[i],
+                    Matrix.compose(matrix, _parseTransform(element)),
+                    strokeWidth,
+                    fill
+                );
+            }
+            element.removeAttribute('transform');
+            element.removeAttribute('stroke-width');
+            element.removeAttribute('fill');
+        } else if (_isPathWithTransformAndStroke(element, strokeWidth)) {
+            if (element.attributes['stroke-width']) {
+                strokeWidth = element.attributes['stroke-width'].value;
+            }
+            if (element.attributes.fill) {
+                fill = element.attributes.fill.value;
+            }
+            matrix = Matrix.compose(matrix, _parseTransform(element));
+            if (Matrix.toString(matrix) === Matrix.toString(Matrix.identity())) {
+                element.removeAttribute('transform');
+                return;
+            }
+
+            // Transform gradient
+            const gradientId = _parseUrl(fill, windowRef);
+            if (gradientId) {
+                const doc = windowRef.document;
+                // Need path bounds to transform gradient
+                const svgSpot = doc.createElement('span');
+                let bbox;
+                if (bboxForTesting) {
+                    bbox = bboxForTesting;
+                } else {
+                    try {
+                        doc.body.appendChild(svgSpot);
+                        const svg = SvgElement.set(windowRef.document.createElementNS(SvgElement.svg, 'svg'));
+                        const path = SvgElement.set(windowRef.document.createElementNS(SvgElement.svg, 'path'));
+                        path.setAttribute('d', element.attributes.d.value);
+                        svg.appendChild(path);
+                        svgSpot.appendChild(svg);
+                        // Take the bounding box.
+                        bbox = svg.getBBox();
+                    } finally {
+                        // Always destroy the element, even if, for example, getBBox throws.
+                        doc.body.removeChild(svgSpot);
+                    }
+                }
+
+                const newRef = _createGradient(gradientId, svgTag, bbox, matrix);
+                if (newRef) fill = newRef;
+            }
+
+            // Transform path data
+            element.setAttribute('d', _transformPath(element.attributes.d.value, matrix));
+            element.removeAttribute('transform');
+
+            // Transform stroke width
+            const matrixScale = _getScaleFactor(matrix);
+            element.setAttribute('stroke-width', _quadraticMean(matrixScale.x, matrixScale.y) * strokeWidth);
+            element.setAttribute('fill', fill);
+        } else if (_isGraphicsElement(element)) {
+            // Push stroke width and fill down to leaves
+            if (strokeWidth && !element.attributes['stroke-width']) {
+                element.setAttribute('stroke-width', strokeWidth);
+            }
+            if (fill && !element.attributes.fill) {
+                element.setAttribute('fill', fill);
+            }
+
+            // Push transform down to leaves
+            matrix = Matrix.compose(matrix, _parseTransform(element));
+            if (Matrix.toString(matrix) === Matrix.toString(Matrix.identity())) {
+                element.removeAttribute('transform');
+            } else {
+                element.setAttribute('transform', Matrix.toString(matrix));
+            }
+        }
+    };
+    applyTransforms(svgTag, inherited, 1 /* default SVG stroke width */);
+};
+
+module.exports = transformStrokeWidths;
+
+
+/***/ }),
+/* 224 */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(r,n){ true?module.exports=n():undefined}(window,function(){return function(r){var n={};function t(e){if(n[e])return n[e].exports;var o=n[e]={i:e,l:!1,exports:{}};return r[e].call(o.exports,o,o.exports,t),o.l=!0,o.exports}return t.m=r,t.c=n,t.d=function(r,n,e){t.o(r,n)||Object.defineProperty(r,n,{enumerable:!0,get:e})},t.r=function(r){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(r,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(r,"__esModule",{value:!0})},t.t=function(r,n){if(1&n&&(r=t(r)),8&n)return r;if(4&n&&"object"==typeof r&&r&&r.__esModule)return r;var e=Object.create(null);if(t.r(e),Object.defineProperty(e,"default",{enumerable:!0,value:r}),2&n&&"string"!=typeof r)for(var o in r)t.d(e,o,function(n){return r[n]}.bind(null,o));return e},t.n=function(r){var n=r&&r.__esModule?function(){return r.default}:function(){return r};return t.d(n,"a",n),n},t.o=function(r,n){return Object.prototype.hasOwnProperty.call(r,n)},t.p="",t(t.s=0)}([function(r,n,t){"use strict";function e(r,n){return Array.isArray(n)?[r.a*n[0]+r.c*n[1]+r.e,r.b*n[0]+r.d*n[1]+r.f]:{x:r.a*n.x+r.c*n.y+r.e,y:r.b*n.x+r.d*n.y+r.f}}function o(r,n){return n.map(function(n){return e(r,n)})}function u(r){return{a:parseFloat(r.a),b:parseFloat(r.b),c:parseFloat(r.c),d:parseFloat(r.d),e:parseFloat(r.e),f:parseFloat(r.f)}}t.r(n);var a=/^matrix\(\s*([0-9_+-.e]+)\s*,\s*([0-9_+-.e]+)\s*,\s*([0-9_+-.e]+)\s*,\s*([0-9_+-.e]+)\s*,\s*([0-9_+-.e]+)\s*,\s*([0-9_+-.e]+)\s*\)$/i;function i(r){var n=r.match(a);if(null===n||n.length<7)throw new Error("'"+r+"' is not a matrix");return{a:parseFloat(n[1]),b:parseFloat(n[2]),c:parseFloat(n[3]),d:parseFloat(n[4]),e:parseFloat(n[5]),f:parseFloat(n[6])}}function f(){return{a:1,c:0,e:0,b:0,d:1,f:0}}function c(r){var n=r.a,t=r.b,e=r.c,o=r.d,u=r.e,a=r.f,i=n*o-t*e;return{a:o/i,b:t/-i,c:e/-i,d:n/i,e:(o*u-e*a)/-i,f:(t*u-n*a)/i}}var d="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(r){return typeof r}:function(r){return r&&"function"==typeof Symbol&&r.constructor===Symbol&&r!==Symbol.prototype?"symbol":typeof r},s=function(r){return"number"==typeof r&&!isNaN(r)&&isFinite(r)},l=function(r){return null!=r&&"object"===(void 0===r?"undefined":d(r))};function p(r){return l(r)&&r.hasOwnProperty("a")&&s(r.a)&&r.hasOwnProperty("b")&&s(r.b)&&r.hasOwnProperty("c")&&s(r.c)&&r.hasOwnProperty("d")&&s(r.d)&&r.hasOwnProperty("e")&&s(r.e)&&r.hasOwnProperty("f")&&s(r.f)}function y(r){return void 0===r}function b(r){return{a:1,c:0,e:r,b:0,d:1,f:arguments.length>1&&void 0!==arguments[1]?arguments[1]:0}}function v(){for(var r=arguments.length,n=Array(r),t=0;t<r;t++)n[t]=arguments[t];var e=function(r,n){return{a:r.a*n.a+r.c*n.b,c:r.a*n.c+r.c*n.d,e:r.a*n.e+r.c*n.f+r.e,b:r.b*n.a+r.d*n.b,d:r.b*n.c+r.d*n.d,f:r.b*n.e+r.d*n.f+r.f}};switch((n=Array.isArray(n[0])?n[0]:n).length){case 0:throw new Error("no matrices provided");case 1:return n[0];case 2:return e(n[0],n[1]);default:var o=function(r){return Array.isArray(r)?r:Array.from(r)}(n),u=o[0],a=o[1],i=o.slice(2),f=e(u,a);return v.apply(void 0,[f].concat(function(r){if(Array.isArray(r)){for(var n=0,t=Array(r.length);n<r.length;n++)t[n]=r[n];return t}return Array.from(r)}(i)))}}function m(){return v.apply(void 0,arguments)}var h=Math.cos,x=Math.sin,g=Math.PI;function w(r,n,t){var e=h(r),o=x(r),u={a:e,c:-o,e:0,b:o,d:e,f:0};return y(n)||y(t)?u:v([b(n,t),u,b(-n,-t)])}function P(r){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:void 0,t=arguments.length>2&&void 0!==arguments[2]?arguments[2]:void 0;return w(r*g/180,n,t)}function S(r){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:void 0;return y(n)&&(n=r),{a:r,c:0,e:0,b:0,d:n,f:0}}function O(r,n){return{a:1,c:r,e:0,b:n,d:1,f:0}}var A=Math.tan;function F(r,n){return{a:1,c:A(r),e:0,b:A(n),d:1,f:0}}function M(r,n){return F(r*Math.PI/180,n*Math.PI/180)}function j(r){return T(r)}function _(r){return T(r)}function T(r){return"matrix("+r.a+","+r.b+","+r.c+","+r.d+","+r.e+","+r.f+")"}t.d(n,"applyToPoint",function(){return e}),t.d(n,"applyToPoints",function(){return o}),t.d(n,"fromObject",function(){return u}),t.d(n,"fromString",function(){return i}),t.d(n,"identity",function(){return f}),t.d(n,"inverse",function(){return c}),t.d(n,"isAffineMatrix",function(){return p}),t.d(n,"rotate",function(){return w}),t.d(n,"rotateDEG",function(){return P}),t.d(n,"scale",function(){return S}),t.d(n,"shear",function(){return O}),t.d(n,"skew",function(){return F}),t.d(n,"skewDEG",function(){return M}),t.d(n,"toCSS",function(){return j}),t.d(n,"toSVG",function(){return _}),t.d(n,"toString",function(){return T}),t.d(n,"transform",function(){return v}),t.d(n,"compose",function(){return m}),t.d(n,"translate",function(){return b})}])});
+//# sourceMappingURL=transformation-matrix.min.js.map
+
+/***/ }),
+/* 225 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const minilog = __webpack_require__(79);
+minilog.enable();
+
+module.exports = minilog('scratch-svg-render');
+
+
+/***/ }),
+/* 226 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const base64js = __webpack_require__(227);
 
 /**
  * Adapts Scratch 2.0 bitmaps for use in scratch 3.0
@@ -44470,7 +45102,7 @@ module.exports = BitmapAdapter;
 
 
 /***/ }),
-/* 224 */
+/* 227 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44591,11 +45223,11 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 225 */
+/* 228 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(226);
+var content = __webpack_require__(229);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -44616,7 +45248,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 226 */
+/* 229 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -44633,7 +45265,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 227 */
+/* 230 */
 /***/ (function(module, exports) {
 
 
@@ -44728,7 +45360,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 228 */
+/* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44754,17 +45386,17 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _scrollableCanvas = __webpack_require__(229);
+var _scrollableCanvas = __webpack_require__(232);
 
 var _scrollableCanvas2 = _interopRequireDefault(_scrollableCanvas);
 
 var _view = __webpack_require__(22);
 
-var _viewBounds = __webpack_require__(49);
+var _viewBounds = __webpack_require__(50);
 
 var _selectedItems = __webpack_require__(7);
 
-var _touchUtils = __webpack_require__(84);
+var _touchUtils = __webpack_require__(85);
 
 var _lodash = __webpack_require__(5);
 
@@ -44969,7 +45601,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ScrollableCanvas);
 
 /***/ }),
-/* 229 */
+/* 232 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -44987,7 +45619,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _scrollableCanvas = __webpack_require__(230);
+var _scrollableCanvas = __webpack_require__(233);
 
 var _scrollableCanvas2 = _interopRequireDefault(_scrollableCanvas);
 
@@ -45052,11 +45684,11 @@ ScrollableCanvasComponent.propTypes = {
 exports.default = ScrollableCanvasComponent;
 
 /***/ }),
-/* 230 */
+/* 233 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(231);
+var content = __webpack_require__(234);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -45077,7 +45709,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 231 */
+/* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -45100,7 +45732,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 232 */
+/* 235 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -45142,11 +45774,11 @@ var _selection = __webpack_require__(3);
 
 var _selectionGradientType = __webpack_require__(23);
 
-var _bitBrushMode = __webpack_require__(235);
+var _bitBrushMode = __webpack_require__(238);
 
 var _bitBrushMode2 = _interopRequireDefault(_bitBrushMode);
 
-var _brushTool = __webpack_require__(86);
+var _brushTool = __webpack_require__(87);
 
 var _brushTool2 = _interopRequireDefault(_brushTool);
 
@@ -45280,10 +45912,10 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitBrushMode);
 
 /***/ }),
-/* 233 */
+/* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var conversions = __webpack_require__(234);
+var conversions = __webpack_require__(237);
 
 var convert = function() {
    return new Converter();
@@ -45377,7 +46009,7 @@ Converter.prototype.getValues = function(space) {
 module.exports = convert;
 
 /***/ }),
-/* 234 */
+/* 237 */
 /***/ (function(module, exports) {
 
 /* MIT license */
@@ -46081,7 +46713,7 @@ for (var key in cssKeywords) {
 
 
 /***/ }),
-/* 235 */
+/* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46107,7 +46739,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _brush = __webpack_require__(85);
+var _brush = __webpack_require__(86);
 
 var _brush2 = _interopRequireDefault(_brush);
 
@@ -46130,11 +46762,11 @@ BitBrushModeComponent.propTypes = {
 exports.default = BitBrushModeComponent;
 
 /***/ }),
-/* 236 */
+/* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(237);
+var content = __webpack_require__(240);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -46155,7 +46787,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 237 */
+/* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -46174,11 +46806,11 @@ exports.locals = {
 };
 
 /***/ }),
-/* 238 */
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(239);
+var content = __webpack_require__(242);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -46199,7 +46831,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 239 */
+/* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -46220,7 +46852,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 240 */
+/* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46262,11 +46894,11 @@ var _selection = __webpack_require__(3);
 
 var _selectionGradientType = __webpack_require__(23);
 
-var _bitLineMode = __webpack_require__(241);
+var _bitLineMode = __webpack_require__(244);
 
 var _bitLineMode2 = _interopRequireDefault(_bitLineMode);
 
-var _lineTool = __webpack_require__(242);
+var _lineTool = __webpack_require__(245);
 
 var _lineTool2 = _interopRequireDefault(_lineTool);
 
@@ -46400,7 +47032,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitLineMode);
 
 /***/ }),
-/* 241 */
+/* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46426,7 +47058,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _line = __webpack_require__(87);
+var _line = __webpack_require__(88);
 
 var _line2 = _interopRequireDefault(_line);
 
@@ -46449,7 +47081,7 @@ BitLineComponent.propTypes = {
 exports.default = BitLineComponent;
 
 /***/ }),
-/* 242 */
+/* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46628,7 +47260,7 @@ var LineTool = function (_paper$Tool) {
 exports.default = LineTool;
 
 /***/ }),
-/* 243 */
+/* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -46676,11 +47308,11 @@ var _cursor = __webpack_require__(26);
 
 var _selection = __webpack_require__(3);
 
-var _ovalTool = __webpack_require__(244);
+var _ovalTool = __webpack_require__(247);
 
 var _ovalTool2 = _interopRequireDefault(_ovalTool);
 
-var _bitOvalMode = __webpack_require__(247);
+var _bitOvalMode = __webpack_require__(250);
 
 var _bitOvalMode2 = _interopRequireDefault(_bitOvalMode);
 
@@ -46835,7 +47467,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitOvalMode);
 
 /***/ }),
-/* 244 */
+/* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47120,7 +47752,7 @@ var OvalTool = function (_paper$Tool) {
 exports.default = OvalTool;
 
 /***/ }),
-/* 245 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47397,7 +48029,7 @@ var ScaleTool = function () {
 exports.default = ScaleTool;
 
 /***/ }),
-/* 246 */
+/* 249 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47513,7 +48145,7 @@ var RotateTool = function () {
 exports.default = RotateTool;
 
 /***/ }),
-/* 247 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47539,7 +48171,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _oval = __webpack_require__(90);
+var _oval = __webpack_require__(91);
 
 var _oval2 = _interopRequireDefault(_oval);
 
@@ -47562,7 +48194,7 @@ BitOvalComponent.propTypes = {
 exports.default = BitOvalComponent;
 
 /***/ }),
-/* 248 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47610,11 +48242,11 @@ var _cursor = __webpack_require__(26);
 
 var _selection = __webpack_require__(3);
 
-var _rectTool = __webpack_require__(249);
+var _rectTool = __webpack_require__(252);
 
 var _rectTool2 = _interopRequireDefault(_rectTool);
 
-var _bitRectMode = __webpack_require__(250);
+var _bitRectMode = __webpack_require__(253);
 
 var _bitRectMode2 = _interopRequireDefault(_bitRectMode);
 
@@ -47769,7 +48401,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitRectMode);
 
 /***/ }),
-/* 249 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48048,7 +48680,7 @@ var RectTool = function (_paper$Tool) {
 exports.default = RectTool;
 
 /***/ }),
-/* 250 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48074,7 +48706,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _rectangle = __webpack_require__(91);
+var _rectangle = __webpack_require__(92);
 
 var _rectangle2 = _interopRequireDefault(_rectangle);
 
@@ -48097,7 +48729,7 @@ BitRectComponent.propTypes = {
 exports.default = BitRectComponent;
 
 /***/ }),
-/* 251 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48131,13 +48763,13 @@ var _gradientTypes = __webpack_require__(17);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
-var _bitFillMode = __webpack_require__(252);
+var _bitFillMode = __webpack_require__(255);
 
 var _bitFillMode2 = _interopRequireDefault(_bitFillMode);
 
 var _fillColor = __webpack_require__(20);
 
-var _fillColor2 = __webpack_require__(50);
+var _fillColor2 = __webpack_require__(51);
 
 var _modes3 = __webpack_require__(10);
 
@@ -48147,7 +48779,7 @@ var _fillModeGradientType = __webpack_require__(38);
 
 var _selection = __webpack_require__(3);
 
-var _fillTool = __webpack_require__(254);
+var _fillTool = __webpack_require__(257);
 
 var _fillTool2 = _interopRequireDefault(_fillTool);
 
@@ -48309,7 +48941,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitFillMode);
 
 /***/ }),
-/* 252 */
+/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48335,7 +48967,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _fill = __webpack_require__(253);
+var _fill = __webpack_require__(256);
 
 var _fill2 = _interopRequireDefault(_fill);
 
@@ -48358,13 +48990,13 @@ BitFillComponent.propTypes = {
 exports.default = BitFillComponent;
 
 /***/ }),
-/* 253 */
+/* 256 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='fill' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpath d='M10.7000634,5.80137446 L9.29979614,5.80137446 L9.29979614,8.59994895 L7.89980891,8.59994895 L7.89980891,4.39998724 L6.49982167,4.39998724 L6.49982167,5.80137446 L5.09983443,5.80137446 L5.09983443,3 L9.29979614,3 L9.29979614,4.39998724 L10.7011834,4.39998724 L10.7011834,5.80123446 L12.1000506,5.80123446 L12.1000506,7.2012217 L10.7000634,7.2012217 L10.7000634,5.80137446 Z M5.10011443,8.60120894 L5.10011443,7.2012217 L6.50010167,7.2012217 L6.50010167,8.60120894 L5.10011443,8.60120894 Z M16.3000123,16.9997324 L16.3000123,10.0011962 L17.6999996,10.0011962 L17.6999996,16.9997324 L16.3000123,16.9997324 Z M12.1003306,7.20080171 L13.5003179,7.20080171 L13.5003179,8.60078894 L16.3002923,8.60078894 L16.3002923,10.0007762 L14.9003051,10.0007762 L14.9003051,11.3573638 L13.5003179,11.3573638 L13.5003179,12.758751 L12.1003306,12.758751 L12.1003306,14.1587383 L10.7003434,14.1587383 L10.7003434,15.5587255 L9.29895615,15.5587255 L9.29895615,16.9587128 L7.89896891,16.9587128 L7.89896891,15.5587255 L6.49898168,15.5587255 L6.49898168,14.1587383 L5.10039442,14.1587383 L5.10039442,12.758751 L3.70040719,12.758751 L3.70040719,11.3573638 L6.49898168,11.3573638 L6.49898168,11.3713637 L9.29895615,11.3713637 L9.29895615,10.0007762 L12.1003306,10.0007762 L12.1003306,7.20080171 Z M3.69998719,8.60064895 L5.09997443,8.60064895 L5.09997443,10.0006362 L3.69998719,10.0006362 L3.69998719,11.3572238 L2.29999995,11.3572238 L2.29999995,9.95723658 L3.69998719,9.95723658 L3.69998719,8.60064895 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 254 */
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48522,7 +49154,7 @@ var FillTool = function (_paper$Tool) {
 exports.default = FillTool;
 
 /***/ }),
-/* 255 */
+/* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48558,11 +49190,11 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _bitEraserMode = __webpack_require__(256);
+var _bitEraserMode = __webpack_require__(259);
 
 var _bitEraserMode2 = _interopRequireDefault(_bitEraserMode);
 
-var _brushTool = __webpack_require__(86);
+var _brushTool = __webpack_require__(87);
 
 var _brushTool2 = _interopRequireDefault(_brushTool);
 
@@ -48676,7 +49308,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitEraserMode);
 
 /***/ }),
-/* 256 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48702,7 +49334,7 @@ var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _eraser = __webpack_require__(92);
+var _eraser = __webpack_require__(93);
 
 var _eraser2 = _interopRequireDefault(_eraser);
 
@@ -48725,7 +49357,7 @@ BitEraserComponent.propTypes = {
 exports.default = BitEraserComponent;
 
 /***/ }),
-/* 257 */
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48769,11 +49401,11 @@ var _cursor = __webpack_require__(26);
 
 var _selection = __webpack_require__(3);
 
-var _selectTool = __webpack_require__(258);
+var _selectTool = __webpack_require__(261);
 
 var _selectTool2 = _interopRequireDefault(_selectTool);
 
-var _bitSelectMode = __webpack_require__(259);
+var _bitSelectMode = __webpack_require__(262);
 
 var _bitSelectMode2 = _interopRequireDefault(_bitSelectMode);
 
@@ -48896,7 +49528,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitSelectMode);
 
 /***/ }),
-/* 258 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49104,7 +49736,7 @@ var SelectTool = function (_paper$Tool) {
 exports.default = SelectTool;
 
 /***/ }),
-/* 259 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49130,7 +49762,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _marquee = __webpack_require__(260);
+var _marquee = __webpack_require__(263);
 
 var _marquee2 = _interopRequireDefault(_marquee);
 
@@ -49153,16 +49785,16 @@ BitSelectComponent.propTypes = {
 exports.default = BitSelectComponent;
 
 /***/ }),
-/* 260 */
+/* 263 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Emarquee%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='marquee' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpath d='M4.5,4.18186116 L4.5,3 L5.68186116,3 L5.68186116,4.18186116 L4.5,4.18186116 Z M11.591167,4.18186116 L11.591167,3 L12.7730281,3 L12.7730281,4.18186116 L11.591167,4.18186116 Z M4.5,13.6367504 L4.5,12.4537074 L5.68186116,12.4537074 L5.68186116,13.6367504 L4.5,13.6367504 Z M9.22697189,6.54570166 L10.4100149,6.54570166 L10.4100149,7.72756282 L11.5918761,7.72756282 L11.5918761,8.90942398 L12.7737372,8.90942398 L12.7737372,10.0912851 L13.9555984,10.0912851 L13.9555984,11.2731463 L15.1362777,11.2731463 L15.1362777,12.4538256 L16.3181388,12.4538256 L16.3181388,13.6368686 L17.5,13.6368686 L17.5,14.8187298 L12.7737372,14.8187298 L12.7737372,16.0005909 L11.5918761,16.0005909 L11.5918761,17.1824521 L10.4100149,17.1824521 L10.4100149,18.3643132 L9.22697189,18.3643132 L9.22697189,6.54570166 Z M13.9548893,8.90930579 L13.9548893,7.72744463 L15.1367504,7.72744463 L15.1367504,8.90930579 L13.9548893,8.90930579 Z M6.86372232,4.18186116 L6.86372232,3 L8.04558348,3 L8.04558348,4.18186116 L6.86372232,4.18186116 Z M4.5,11.2730281 L4.5,10.091167 L5.68186116,10.091167 L5.68186116,11.2730281 L4.5,11.2730281 Z M13.9548893,4.18186116 L13.9548893,3 L15.1367504,3 L15.1367504,4.18186116 L13.9548893,4.18186116 Z M9.22744463,4.18186116 L9.22744463,3 L10.4104877,3 L10.4104877,4.18186116 L9.22744463,4.18186116 Z M4.5,8.90930579 L4.5,7.72744463 L5.68186116,7.72744463 L5.68186116,8.90930579 L4.5,8.90930579 Z M4.5,6.54558348 L4.5,5.36372232 L5.68186116,5.36372232 L5.68186116,6.54558348 L4.5,6.54558348 Z M13.9548893,6.54558348 L13.9548893,5.36372232 L15.1367504,5.36372232 L15.1367504,6.54558348 L13.9548893,6.54558348 Z M6.86372232,13.6367504 L6.86372232,12.4537074 L8.04558348,12.4537074 L8.04558348,13.6367504 L6.86372232,13.6367504 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 261 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var properties = __webpack_require__(262);
+var properties = __webpack_require__(265);
 var PropTypes = __webpack_require__(1);
 
 module.exports = function(props, propName, componentName) {
@@ -49196,7 +49828,7 @@ module.exports.supportingArrays = PropTypes.oneOfType([
 
 
 /***/ }),
-/* 262 */
+/* 265 */
 /***/ (function(module, exports) {
 
 // GENERATED DO NOT EDIT
@@ -50790,11 +51422,11 @@ module.exports = [
 
 
 /***/ }),
-/* 263 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(264);
+var content = __webpack_require__(267);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -50815,7 +51447,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 264 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -50832,7 +51464,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 265 */
+/* 268 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -50864,7 +51496,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _blob = __webpack_require__(96);
+var _blob = __webpack_require__(97);
 
 var _blob2 = _interopRequireDefault(_blob);
 
@@ -50880,7 +51512,7 @@ var _selectionGradientType = __webpack_require__(23);
 
 var _selection = __webpack_require__(3);
 
-var _brushMode = __webpack_require__(268);
+var _brushMode = __webpack_require__(271);
 
 var _brushMode2 = _interopRequireDefault(_brushMode);
 
@@ -51016,7 +51648,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BrushMode);
 
 /***/ }),
-/* 266 */
+/* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51306,7 +51938,7 @@ var BroadBrushHelper = function () {
 exports.default = BroadBrushHelper;
 
 /***/ }),
-/* 267 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51432,7 +52064,7 @@ var SegmentBrushHelper = function () {
 exports.default = SegmentBrushHelper;
 
 /***/ }),
-/* 268 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51458,7 +52090,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _brush = __webpack_require__(97);
+var _brush = __webpack_require__(98);
 
 var _brush2 = _interopRequireDefault(_brush);
 
@@ -51481,7 +52113,7 @@ BrushModeComponent.propTypes = {
 exports.default = BrushModeComponent;
 
 /***/ }),
-/* 269 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51513,7 +52145,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _blob = __webpack_require__(96);
+var _blob = __webpack_require__(97);
 
 var _blob2 = _interopRequireDefault(_blob);
 
@@ -51521,7 +52153,7 @@ var _eraserMode = __webpack_require__(61);
 
 var _selectedItems = __webpack_require__(7);
 
-var _eraserMode2 = __webpack_require__(270);
+var _eraserMode2 = __webpack_require__(273);
 
 var _eraserMode3 = _interopRequireDefault(_eraserMode2);
 
@@ -51636,7 +52268,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(EraserMode);
 
 /***/ }),
-/* 270 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51662,7 +52294,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _eraser = __webpack_require__(98);
+var _eraser = __webpack_require__(99);
 
 var _eraser2 = _interopRequireDefault(_eraser);
 
@@ -51685,7 +52317,7 @@ EraserModeComponent.propTypes = {
 exports.default = EraserModeComponent;
 
 /***/ }),
-/* 271 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51721,7 +52353,7 @@ var _colorIndex = __webpack_require__(62);
 
 var _fillColor = __webpack_require__(20);
 
-var _fillColor2 = __webpack_require__(50);
+var _fillColor2 = __webpack_require__(51);
 
 var _fillModeGradientType = __webpack_require__(38);
 
@@ -51743,7 +52375,7 @@ var _gradientTypes = __webpack_require__(17);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
-var _fillColorIndicator = __webpack_require__(272);
+var _fillColorIndicator = __webpack_require__(275);
 
 var _fillColorIndicator2 = _interopRequireDefault(_fillColorIndicator);
 
@@ -51917,7 +52549,7 @@ FillColorIndicator.propTypes = {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(FillColorIndicator);
 
 /***/ }),
-/* 272 */
+/* 275 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51941,11 +52573,11 @@ var _reactPopover2 = _interopRequireDefault(_reactPopover);
 
 var _reactIntl = __webpack_require__(24);
 
-var _colorButton = __webpack_require__(99);
+var _colorButton = __webpack_require__(100);
 
 var _colorButton2 = _interopRequireDefault(_colorButton);
 
-var _colorPicker = __webpack_require__(102);
+var _colorPicker = __webpack_require__(103);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
@@ -51953,7 +52585,7 @@ var _inputGroup = __webpack_require__(32);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(52);
+var _label = __webpack_require__(53);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -52026,7 +52658,7 @@ FillColorIndicatorComponent.propTypes = {
 exports.default = (0, _reactIntl.injectIntl)(FillColorIndicatorComponent);
 
 /***/ }),
-/* 273 */
+/* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52040,15 +52672,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _cssVendor = __webpack_require__(274);
+var _cssVendor = __webpack_require__(277);
 
 var cssVendor = _interopRequireWildcard(_cssVendor);
 
-var _debug = __webpack_require__(278);
+var _debug = __webpack_require__(281);
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _lodash = __webpack_require__(281);
+var _lodash = __webpack_require__(284);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -52064,19 +52696,19 @@ var _reactDom = __webpack_require__(77);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _layout = __webpack_require__(284);
+var _layout = __webpack_require__(287);
 
 var _layout2 = _interopRequireDefault(_layout);
 
-var _onResize = __webpack_require__(285);
+var _onResize = __webpack_require__(288);
 
 var _onResize2 = _interopRequireDefault(_onResize);
 
-var _platform = __webpack_require__(51);
+var _platform = __webpack_require__(52);
 
 var _platform2 = _interopRequireDefault(_platform);
 
-var _tip = __webpack_require__(286);
+var _tip = __webpack_require__(289);
 
 var _tip2 = _interopRequireDefault(_tip);
 
@@ -52598,7 +53230,7 @@ Popover.defaultProps = {
 exports.default = Popover;
 
 /***/ }),
-/* 274 */
+/* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52613,11 +53245,11 @@ var _prefix = __webpack_require__(65);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
-var _supportedProperty = __webpack_require__(275);
+var _supportedProperty = __webpack_require__(278);
 
 var _supportedProperty2 = _interopRequireDefault(_supportedProperty);
 
-var _supportedValue = __webpack_require__(277);
+var _supportedValue = __webpack_require__(280);
 
 var _supportedValue2 = _interopRequireDefault(_supportedValue);
 
@@ -52640,7 +53272,7 @@ exports.supportedProperty = _supportedProperty2['default'];
 exports.supportedValue = _supportedValue2['default'];
 
 /***/ }),
-/* 275 */
+/* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52659,7 +53291,7 @@ var _prefix = __webpack_require__(65);
 
 var _prefix2 = _interopRequireDefault(_prefix);
 
-var _camelize = __webpack_require__(276);
+var _camelize = __webpack_require__(279);
 
 var _camelize2 = _interopRequireDefault(_camelize);
 
@@ -52718,7 +53350,7 @@ function supportedProperty(prop) {
 }
 
 /***/ }),
-/* 276 */
+/* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52745,7 +53377,7 @@ function toUpper(match, c) {
 }
 
 /***/ }),
-/* 277 */
+/* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52825,7 +53457,7 @@ function supportedValue(property, value) {
 }
 
 /***/ }),
-/* 278 */
+/* 281 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -52834,7 +53466,7 @@ function supportedValue(property, value) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(279);
+exports = module.exports = __webpack_require__(282);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -53014,10 +53646,10 @@ function localstorage() {
   } catch (e) {}
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(94)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(95)))
 
 /***/ }),
-/* 279 */
+/* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -53033,7 +53665,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(280);
+exports.humanize = __webpack_require__(283);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -53225,7 +53857,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 280 */
+/* 283 */
 /***/ (function(module, exports) {
 
 /**
@@ -53383,7 +54015,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 281 */
+/* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -53394,7 +54026,7 @@ function plural(ms, n, name) {
  * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  * Available under MIT license <https://lodash.com/license>
  */
-var debounce = __webpack_require__(282);
+var debounce = __webpack_require__(285);
 
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -53485,7 +54117,7 @@ module.exports = throttle;
 
 
 /***/ }),
-/* 282 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -53496,7 +54128,7 @@ module.exports = throttle;
  * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
  * Available under MIT license <https://lodash.com/license>
  */
-var getNative = __webpack_require__(283);
+var getNative = __webpack_require__(286);
 
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
@@ -53725,7 +54357,7 @@ module.exports = debounce;
 
 
 /***/ }),
-/* 283 */
+/* 286 */
 /***/ (function(module, exports) {
 
 /**
@@ -53868,7 +54500,7 @@ module.exports = getNative;
 
 
 /***/ }),
-/* 284 */
+/* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -53879,7 +54511,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.equalCoords = exports.doesFitWithin = exports.centerOfBoundsFromBounds = exports.centerOfBounds = exports.centerOfSize = exports.axes = exports.pickZone = exports.place = exports.calcRelPos = exports.validTypeValues = exports.types = exports.El = undefined;
 
-var _platform = __webpack_require__(51);
+var _platform = __webpack_require__(52);
 
 var _utils = __webpack_require__(67);
 
@@ -54142,7 +54774,7 @@ exports.doesFitWithin = doesFitWithin;
 exports.equalCoords = _utils.equalRecords;
 
 /***/ }),
-/* 285 */
+/* 288 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54153,7 +54785,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.removeEventListener = exports.addEventListener = exports.off = exports.on = undefined;
 
-var _platform = __webpack_require__(51);
+var _platform = __webpack_require__(52);
 
 var _utils = __webpack_require__(67);
 
@@ -54268,7 +54900,7 @@ exports.addEventListener = on;
 exports.removeEventListener = off;
 
 /***/ }),
-/* 286 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54308,11 +54940,11 @@ var Tip = function Tip(props) {
 exports.default = Tip;
 
 /***/ }),
-/* 287 */
+/* 290 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(288);
+var content = __webpack_require__(291);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -54333,7 +54965,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 288 */
+/* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -54358,7 +54990,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 289 */
+/* 292 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54388,7 +55020,7 @@ var _parseColor = __webpack_require__(43);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
-var _slider = __webpack_require__(290);
+var _slider = __webpack_require__(293);
 
 var _slider2 = _interopRequireDefault(_slider);
 
@@ -54396,7 +55028,7 @@ var _labeledIconButton = __webpack_require__(68);
 
 var _labeledIconButton2 = _interopRequireDefault(_labeledIconButton);
 
-var _colorPicker = __webpack_require__(295);
+var _colorPicker = __webpack_require__(298);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
@@ -54406,35 +55038,35 @@ var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
 var _stylePath = __webpack_require__(9);
 
-var _eyeDropper = __webpack_require__(297);
+var _eyeDropper = __webpack_require__(300);
 
 var _eyeDropper2 = _interopRequireDefault(_eyeDropper);
 
-var _noFill = __webpack_require__(100);
+var _noFill = __webpack_require__(101);
 
 var _noFill2 = _interopRequireDefault(_noFill);
 
-var _mixedFill = __webpack_require__(101);
+var _mixedFill = __webpack_require__(102);
 
 var _mixedFill2 = _interopRequireDefault(_mixedFill);
 
-var _fillHorzGradientEnabled = __webpack_require__(298);
+var _fillHorzGradientEnabled = __webpack_require__(301);
 
 var _fillHorzGradientEnabled2 = _interopRequireDefault(_fillHorzGradientEnabled);
 
-var _fillRadialEnabled = __webpack_require__(299);
+var _fillRadialEnabled = __webpack_require__(302);
 
 var _fillRadialEnabled2 = _interopRequireDefault(_fillRadialEnabled);
 
-var _fillSolidEnabled = __webpack_require__(300);
+var _fillSolidEnabled = __webpack_require__(303);
 
 var _fillSolidEnabled2 = _interopRequireDefault(_fillSolidEnabled);
 
-var _fillVertGradientEnabled = __webpack_require__(301);
+var _fillVertGradientEnabled = __webpack_require__(304);
 
 var _fillVertGradientEnabled2 = _interopRequireDefault(_fillVertGradientEnabled);
 
-var _swap = __webpack_require__(302);
+var _swap = __webpack_require__(305);
 
 var _swap2 = _interopRequireDefault(_swap);
 
@@ -54767,7 +55399,7 @@ ColorPickerComponent.propTypes = {
 exports.default = (0, _reactIntl.injectIntl)(ColorPickerComponent);
 
 /***/ }),
-/* 290 */
+/* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54795,9 +55427,9 @@ var _classnames = __webpack_require__(18);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _touchUtils = __webpack_require__(84);
+var _touchUtils = __webpack_require__(85);
 
-var _slider = __webpack_require__(291);
+var _slider = __webpack_require__(294);
 
 var _slider2 = _interopRequireDefault(_slider);
 
@@ -54916,11 +55548,11 @@ SliderComponent.defaultProps = {
 exports.default = SliderComponent;
 
 /***/ }),
-/* 291 */
+/* 294 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(292);
+var content = __webpack_require__(295);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -54941,7 +55573,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 292 */
+/* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -54959,11 +55591,11 @@ exports.locals = {
 };
 
 /***/ }),
-/* 293 */
+/* 296 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(294);
+var content = __webpack_require__(297);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -54984,7 +55616,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 294 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -55005,11 +55637,11 @@ exports.locals = {
 };
 
 /***/ }),
-/* 295 */
+/* 298 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(296);
+var content = __webpack_require__(299);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -55030,7 +55662,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 296 */
+/* 299 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -55073,47 +55705,47 @@ exports.locals = {
 };
 
 /***/ }),
-/* 297 */
+/* 300 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eeye-dropper%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='eye-dropper' fill='%23575E75'%3E %3Cpath d='M9.15334605,12.4824962 C9.03394044,12.6188737 8.88041895,12.7041096 8.60749186,12.7722983 C7.90811618,12.925723 7.24285639,13.5564688 7.03816107,14.2554033 C6.9699293,14.4770167 6.74817603,14.7156773 6.50936483,14.8350076 L4.73533871,15.6703196 C4.650049,15.704414 4.58181722,15.7214612 4.54770134,15.7214612 L4.27477424,15.4657534 C4.27477424,15.4487062 4.27477424,15.3805175 4.32594807,15.2611872 L5.1617873,13.4712329 C5.26413496,13.2496195 5.50294617,13.0280061 5.74175737,12.9598174 C6.44113305,12.738204 7.07227696,12.090411 7.25991433,11.2380518 C7.29403022,11.1016743 7.37931994,10.9652968 7.49872554,10.8289193 L11.4391105,6.90806697 L13.093731,8.56164384 L9.15334605,12.4824962 Z M16.6076673,5.28858447 C16.8635365,5.03287671 17,4.67488584 17,4.33394216 C17,3.99299848 16.8635365,3.65205479 16.6076673,3.39634703 C16.0788711,2.86788432 15.2430318,2.86788432 14.7142356,3.39634703 L13.2301945,4.87945205 L13.0596151,4.70898021 L12.5137609,4.16347032 C12.172602,3.82252664 11.6096899,3.82252664 11.268531,4.16347032 L10.6032712,4.81126332 C10.2791703,5.152207 10.2621124,5.64657534 10.5520974,5.98751903 L6.59465454,9.92541857 C6.30466951,10.2322679 6.09997418,10.5902588 5.98056858,11.1016743 C5.92939475,11.357382 5.63940971,11.6471842 5.36648262,11.7324201 C4.80357049,11.9028919 4.2577163,12.3802131 4.00184715,12.9427702 L3.16600792,14.7156773 C2.89308083,15.3123288 2.9613126,15.9260274 3.33658736,16.3181126 L3.67774623,16.6590563 C3.89949949,16.8806697 4.20654247,17 4.54770134,17 C4.7694546,17 5.02532375,16.9318113 5.26413496,16.8295282 L7.05521901,15.9942161 C7.61813114,15.7214612 8.09575356,15.1929985 8.26633299,14.6304414 C8.33456477,14.3576865 8.64160775,14.0678843 9.05099839,13.9826484 C9.4092152,13.8974125 9.76743201,13.6928463 10.057417,13.385997 L14.0148599,9.44809741 C14.3560188,9.73789954 14.8677571,9.70380518 15.1748001,9.37990868 L15.8400599,8.73211568 C16.1812187,8.39117199 16.1812187,7.82861492 15.8400599,7.48767123 L15.2600898,6.90806697 L15.1236262,6.7716895 L16.6076673,5.28858447 Z' id='eye-dropper-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 298 */
+/* 301 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill-horz-gradient-enabled%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E %3ClinearGradient x1='100%25' y1='50%25' x2='0%25' y2='50%25' id='linearGradient-1'%3E %3Cstop stop-color='%23FFFFFF' offset='0%25'%3E%3C/stop%3E %3Cstop stop-color='%234C97FF' offset='100%25'%3E%3C/stop%3E %3C/linearGradient%3E %3C/defs%3E %3Cg id='fill-horz-gradient-enabled' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-opacity='0.15'%3E %3Crect id='Horizontal' stroke='%23000000' fill='url(%23linearGradient-1)' x='0.5' y='0.5' width='19' height='19' rx='4'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 299 */
+/* 302 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill-radial-enabled%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E %3CradialGradient cx='50%25' cy='50%25' fx='50%25' fy='50%25' r='39.3896484%25' id='radialGradient-1'%3E %3Cstop stop-color='%234C97FF' offset='0%25'%3E%3C/stop%3E %3Cstop stop-color='%23FFFFFF' offset='100%25'%3E%3C/stop%3E %3C/radialGradient%3E %3C/defs%3E %3Cg id='fill-radial-enabled' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-opacity='0.15'%3E %3Crect id='Radial' stroke='%23000000' fill='url(%23radialGradient-1)' x='0.5' y='0.5' width='19' height='19' rx='4'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 300 */
+/* 303 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill-solid-enabled%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='fill-solid-enabled' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-opacity='0.15'%3E %3Crect id='Solid' stroke='%23000000' fill='%234C97FF' x='0.5' y='0.5' width='19' height='19' rx='4'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 301 */
+/* 304 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill-vert-gradient-enabled%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E %3ClinearGradient x1='50%25' y1='100%25' x2='50%25' y2='3.061617e-15%25' id='linearGradient-1'%3E %3Cstop stop-color='%23FFFFFF' offset='0%25'%3E%3C/stop%3E %3Cstop stop-color='%234C97FF' offset='100%25'%3E%3C/stop%3E %3C/linearGradient%3E %3C/defs%3E %3Cg id='fill-vert-gradient-enabled' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-opacity='0.15'%3E %3Crect id='Vertical' stroke='%23000000' fill='url(%23linearGradient-1)' x='0.5' y='0.5' width='19' height='19' rx='4'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 302 */
+/* 305 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eswap%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='swap' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='Swap-v2' transform='translate(2.000000, 2.000000)' fill='%234C97FF'%3E %3Cpath d='M3.69424597,2.00682151 L7.95663608,2.66498231 C8.44536222,2.73588913 8.7900887,3.24405473 8.7176525,3.79585529 C8.66179809,4.24129561 8.34150792,4.58764819 7.95663608,4.64128284 L3.69424597,5.30126176 L3.69424597,6.79666856 C3.69424597,7.22392764 3.23781067,7.42846657 2.97250219,7.13483958 L0.120436084,3.97403142 C-0.0401453614,3.78767373 -0.0401453614,3.48404706 0.120436084,3.30587093 L2.97250219,0.135972153 C3.23781067,-0.157654834 3.69424597,0.0559747078 3.69424597,0.474143173 L3.69424597,2.00682151 Z M12.305754,10.7340942 L12.305754,9.2014159 C12.305754,8.78324744 12.7621893,8.56961789 13.0274978,8.86324488 L15.8795639,12.0331437 C16.0401454,12.2113198 16.0401454,12.5149465 15.8795639,12.7013041 L13.0274978,15.8621123 C12.7621893,16.1557393 12.305754,15.9512004 12.305754,15.5239413 L12.305754,14.0285345 L8.04336392,13.3685556 C7.65849208,13.3149209 7.33820191,12.9685683 7.2823475,12.523128 C7.2099113,11.9713275 7.55463778,11.4631619 8.04336392,11.392255 L12.305754,10.7340942 Z' id='Swap-v1'%3E%3C/path%3E %3Cpath d='M11.2727273,1.45454545 L13.4545455,1.45454545 C14.0567273,1.45454545 14.5454545,1.94327273 14.5454545,2.54545455 L14.5454545,4.72727273 C14.5454545,5.33054545 14.0567273,5.81818182 13.4545455,5.81818182 L11.2727273,5.81818182 C10.6705455,5.81818182 10.1818182,5.33054545 10.1818182,4.72727273 L10.1818182,2.54545455 C10.1818182,1.94327273 10.6705455,1.45454545 11.2727273,1.45454545' id='Fill-6' fill-opacity='0.5'%3E%3C/path%3E %3Cpath d='M2.54545455,10.1818182 L4.72727273,10.1818182 C5.32945455,10.1818182 5.81818182,10.6705455 5.81818182,11.2727273 L5.81818182,13.4545455 C5.81818182,14.0578182 5.32945455,14.5454545 4.72727273,14.5454545 L2.54545455,14.5454545 C1.94327273,14.5454545 1.45454545,14.0578182 1.45454545,13.4545455 L1.45454545,11.2727273 C1.45454545,10.6705455 1.94327273,10.1818182 2.54545455,10.1818182' id='Fill-6-Copy' fill-opacity='0.5'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 303 */
+/* 306 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(304);
+var content = __webpack_require__(307);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -55134,7 +55766,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 304 */
+/* 307 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -55152,11 +55784,11 @@ exports.locals = {
 };
 
 /***/ }),
-/* 305 */
+/* 308 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(306);
+var content = __webpack_require__(309);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -55177,7 +55809,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 306 */
+/* 309 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -55198,7 +55830,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 307 */
+/* 310 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55232,7 +55864,7 @@ var _gradientTypes = __webpack_require__(17);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
-var _fillTool = __webpack_require__(308);
+var _fillTool = __webpack_require__(311);
 
 var _fillTool2 = _interopRequireDefault(_fillTool);
 
@@ -55240,7 +55872,7 @@ var _stylePath = __webpack_require__(9);
 
 var _fillColor = __webpack_require__(20);
 
-var _fillColor2 = __webpack_require__(50);
+var _fillColor2 = __webpack_require__(51);
 
 var _modes3 = __webpack_require__(10);
 
@@ -55252,7 +55884,7 @@ var _hover = __webpack_require__(42);
 
 var _fillModeGradientType = __webpack_require__(38);
 
-var _fillMode = __webpack_require__(309);
+var _fillMode = __webpack_require__(312);
 
 var _fillMode2 = _interopRequireDefault(_fillMode);
 
@@ -55426,7 +56058,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(FillMode);
 
 /***/ }),
-/* 308 */
+/* 311 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55442,7 +56074,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _hover = __webpack_require__(103);
+var _hover = __webpack_require__(104);
 
 var _math = __webpack_require__(19);
 
@@ -55694,7 +56326,7 @@ var FillTool = function (_paper$Tool) {
 exports.default = FillTool;
 
 /***/ }),
-/* 309 */
+/* 312 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55720,7 +56352,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _fill = __webpack_require__(310);
+var _fill = __webpack_require__(313);
 
 var _fill2 = _interopRequireDefault(_fill);
 
@@ -55743,13 +56375,13 @@ FillModeComponent.propTypes = {
 exports.default = FillModeComponent;
 
 /***/ }),
-/* 310 */
+/* 313 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 48.1 (47250) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='fill' fill='%23575E75'%3E %3Cpath d='M14.0450969,9.69349504 L14.0306818,9.67916207 C13.4396629,9.36383682 12.5170968,8.69018743 11.4215496,7.60088203 C11.0900024,7.27122381 10.7872854,6.95589857 10.5422288,6.65490628 C10.71521,6.4399118 10.8881911,6.22491731 11.0611722,6.00992282 C11.3783043,6.26791621 11.7242666,6.58324146 12.084644,6.9415656 C12.3152855,7.17089305 12.5026817,7.37155458 12.690078,7.5722161 C12.7189081,7.61521499 12.7621534,7.65821389 12.8198138,7.70121279 C13.6270591,8.6185226 14.1027573,9.36383682 14.3189837,9.7938258 C14.3189837,9.80815877 14.3333988,9.82249173 14.3333988,9.8368247 C14.2469082,9.7938258 14.1460025,9.7508269 14.0450969,9.69349504 M10.5998892,10.0661521 C9.7349835,10.53914 8.91332309,10.983462 7.61596455,10.6824697 C6.17445506,10.3528115 5.4825305,9.76515987 5.19422861,9.42116869 L8.3078891,5.40793826 C8.52411553,5.83792723 8.84124762,6.28224917 9.1727948,6.69790518 C8.82683252,7.21389195 8.55294572,7.64388093 8.42320986,7.84454245 C8.27905891,8.08820287 8.35113439,8.41786108 8.6106061,8.5755237 C8.69709667,8.63285557 8.79800233,8.6615215 8.8844929,8.6615215 C9.07188913,8.6615215 9.24487027,8.56119074 9.34577594,8.40352811 C9.50434198,8.13120176 9.69173821,7.84454245 9.89354954,7.55788313 C10.1962665,7.90187431 10.4701533,8.17420066 10.6575496,8.36052922 C11.0755873,8.77618523 11.4936251,9.14884234 11.8972477,9.47850055 C11.4215496,9.60749724 11.0035119,9.85115766 10.5998892,10.0661521 M10.2106816,5.33627343 C10.0953609,5.49393605 9.96562502,5.65159868 9.85030426,5.79492834 C9.50434198,5.33627343 9.28811556,4.96361632 9.1727948,4.70562293 C9.41785141,4.80595369 9.76381369,5.02094818 10.2106816,5.33627343 M13.5117384,4.07497244 C13.6703044,4.07497244 13.8432855,4.10363837 13.8721157,4.1753032 C14.0450969,4.49062845 13.6270591,5.49393605 13.0648704,6.3969129 L12.848644,6.18191841 C12.6180025,5.95259096 12.2287949,5.59426681 11.781927,5.20727674 C12.4450213,4.53362734 13.0504553,4.07497244 13.5117384,4.07497244 M16.5533234,12.1587652 C16.337097,11.5997795 15.9911347,11.0981257 15.587512,10.6681367 C15.5442667,10.6108049 15.4866064,10.567806 15.428946,10.5248071 C15.6740026,9.99448732 15.2703799,9.23484013 14.9244177,8.69018743 C14.6505309,8.24586549 14.2757384,7.74421169 13.8288705,7.24255788 C14.3910592,6.38257993 15.3568705,4.676957 14.8379271,3.67364939 C14.679361,3.37265711 14.3189837,3 13.5117384,3 L13.4973233,3 C12.6756629,3 11.7675119,3.65931643 10.9458515,4.51929438 C10.0232854,3.84564498 9.01422875,3.31532525 8.40879477,3.65931643 C8.35113439,3.68798236 8.27905891,3.71664829 8.23581363,3.77398015 C8.22139853,3.78831312 8.19256835,3.80264609 8.17815325,3.83131202 C8.16373816,3.84564498 8.14932306,3.85997795 8.13490797,3.88864388 L8.12049287,3.91730981 L4.12751158,9.04851158 C4.11309649,9.04851158 4.11309649,9.04851158 4.09868139,9.06284454 L3.20494551,10.2238148 L3.16170023,10.2668137 C3.11845494,10.3098126 3.08962475,10.3671444 3.07520966,10.4101433 L3.07520966,10.4244763 C2.62834171,11.3417861 4.28607763,13.1334068 5.06449275,13.92172 C5.75641731,14.6097023 7.28441737,16 8.23581363,16 C8.43762496,16 8.596191,15.9426681 8.74034195,15.8136714 L14.2613233,11.5567806 C14.2901535,11.5424476 14.3045686,11.5137817 14.3333988,11.4851158 C14.362229,11.5137817 14.3766441,11.5567806 14.3910592,11.5854465 C14.5640403,11.9294377 14.679361,12.2877619 14.6937761,12.6747519 C14.7370214,13.061742 14.7081912,13.463065 14.6505309,13.8500551 L14.6505309,13.8643881 C14.6361158,13.9790518 14.6361158,14.0793826 14.6505309,14.1940463 C14.7514365,14.8390298 15.3568705,15.2833517 15.9911347,15.1830209 C16.639814,15.0826902 17.0866819,14.4807056 16.9857762,13.8357222 C16.8992857,13.2767365 16.7839649,12.7034179 16.5533234,12.1587652' id='Fill-1'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 311 */
+/* 314 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55785,7 +56417,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _selection = __webpack_require__(3);
 
-var _snapping = __webpack_require__(312);
+var _snapping = __webpack_require__(315);
 
 var _guides = __webpack_require__(29);
 
@@ -55801,7 +56433,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _math = __webpack_require__(19);
 
-var _lineMode = __webpack_require__(313);
+var _lineMode = __webpack_require__(316);
 
 var _lineMode2 = _interopRequireDefault(_lineMode);
 
@@ -56111,7 +56743,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(LineMode);
 
 /***/ }),
-/* 312 */
+/* 315 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56186,7 +56818,7 @@ exports.endPointHit = endPointHit;
 exports.touching = touching;
 
 /***/ }),
-/* 313 */
+/* 316 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56212,7 +56844,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _line = __webpack_require__(314);
+var _line = __webpack_require__(317);
 
 var _line2 = _interopRequireDefault(_line);
 
@@ -56235,13 +56867,13 @@ LineModeComponent.propTypes = {
 exports.default = LineModeComponent;
 
 /***/ }),
-/* 314 */
+/* 317 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eline%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='square'%3E %3Cg id='line' stroke='%23575E75' stroke-width='2'%3E %3Cpath d='M5,15 L15,5' id='Line'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 315 */
+/* 318 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56267,13 +56899,13 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _box = __webpack_require__(93);
+var _box = __webpack_require__(94);
 
 var _box2 = _interopRequireDefault(_box);
 
-var _eyeDropper = __webpack_require__(104);
+var _eyeDropper = __webpack_require__(105);
 
-var _loupe = __webpack_require__(316);
+var _loupe = __webpack_require__(319);
 
 var _loupe2 = _interopRequireDefault(_loupe);
 
@@ -56396,11 +57028,11 @@ LoupeComponent.propTypes = {
 exports.default = LoupeComponent;
 
 /***/ }),
-/* 316 */
+/* 319 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(317);
+var content = __webpack_require__(320);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -56421,7 +57053,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 317 */
+/* 320 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -56438,7 +57070,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 318 */
+/* 321 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56460,25 +57092,25 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(6);
 
-var _fixedTools = __webpack_require__(319);
+var _fixedTools = __webpack_require__(322);
 
 var _fixedTools2 = _interopRequireDefault(_fixedTools);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(48);
+var _format = __webpack_require__(49);
 
 var _selectedItems = __webpack_require__(7);
 
 var _eyeDropper = __webpack_require__(45);
 
-var _textEditTarget = __webpack_require__(53);
+var _textEditTarget = __webpack_require__(54);
 
 var _layout = __webpack_require__(70);
 
 var _selection = __webpack_require__(3);
 
-var _order = __webpack_require__(105);
+var _order = __webpack_require__(106);
 
 var _group = __webpack_require__(28);
 
@@ -56627,7 +57259,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(FixedTools);
 
 /***/ }),
-/* 319 */
+/* 322 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -56651,15 +57283,15 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactResponsive = __webpack_require__(320);
+var _reactResponsive = __webpack_require__(323);
 
 var _reactResponsive2 = _interopRequireDefault(_reactResponsive);
 
 var _group = __webpack_require__(28);
 
-var _order = __webpack_require__(105);
+var _order = __webpack_require__(106);
 
-var _bufferedInputHoc = __webpack_require__(321);
+var _bufferedInputHoc = __webpack_require__(324);
 
 var _bufferedInputHoc2 = _interopRequireDefault(_bufferedInputHoc);
 
@@ -56667,11 +57299,11 @@ var _button = __webpack_require__(44);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _buttonGroup = __webpack_require__(95);
+var _buttonGroup = __webpack_require__(96);
 
 var _buttonGroup2 = _interopRequireDefault(_buttonGroup);
 
-var _dropdown = __webpack_require__(106);
+var _dropdown = __webpack_require__(107);
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
@@ -56689,7 +57321,7 @@ var _inputGroup = __webpack_require__(32);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(52);
+var _label = __webpack_require__(53);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -56697,45 +57329,45 @@ var _labeledIconButton = __webpack_require__(68);
 
 var _labeledIconButton2 = _interopRequireDefault(_labeledIconButton);
 
-var _layoutConstants = __webpack_require__(327);
+var _layoutConstants = __webpack_require__(330);
 
 var _layoutConstants2 = _interopRequireDefault(_layoutConstants);
 
-var _hideLabel = __webpack_require__(107);
+var _hideLabel = __webpack_require__(108);
 
-var _fixedTools = __webpack_require__(328);
+var _fixedTools = __webpack_require__(331);
 
 var _fixedTools2 = _interopRequireDefault(_fixedTools);
 
-var _group2 = __webpack_require__(330);
+var _group2 = __webpack_require__(333);
 
 var _group3 = _interopRequireDefault(_group2);
 
-var _redo = __webpack_require__(331);
+var _redo = __webpack_require__(334);
 
 var _redo2 = _interopRequireDefault(_redo);
 
-var _sendBack = __webpack_require__(332);
+var _sendBack = __webpack_require__(335);
 
 var _sendBack2 = _interopRequireDefault(_sendBack);
 
-var _sendBackward = __webpack_require__(333);
+var _sendBackward = __webpack_require__(336);
 
 var _sendBackward2 = _interopRequireDefault(_sendBackward);
 
-var _sendForward = __webpack_require__(334);
+var _sendForward = __webpack_require__(337);
 
 var _sendForward2 = _interopRequireDefault(_sendForward);
 
-var _sendFront = __webpack_require__(335);
+var _sendFront = __webpack_require__(338);
 
 var _sendFront2 = _interopRequireDefault(_sendFront);
 
-var _undo = __webpack_require__(336);
+var _undo = __webpack_require__(339);
 
 var _undo2 = _interopRequireDefault(_undo);
 
-var _ungroup = __webpack_require__(337);
+var _ungroup = __webpack_require__(340);
 
 var _ungroup2 = _interopRequireDefault(_ungroup);
 
@@ -57009,7 +57641,7 @@ var mapStateToProps = function mapStateToProps(state) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps)((0, _reactIntl.injectIntl)(FixedToolsComponent));
 
 /***/ }),
-/* 320 */
+/* 323 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(root, factory) {
@@ -57764,7 +58396,7 @@ object-assign
 //# sourceMappingURL=react-responsive.js.map
 
 /***/ }),
-/* 321 */
+/* 324 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -57870,59 +58502,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 
 /***/ }),
-/* 322 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-var content = __webpack_require__(323);
-
-if(typeof content === 'string') content = [[module.i, content, '']];
-
-var transform;
-var insertInto;
-
-
-
-var options = {"hmr":true}
-
-options.transform = transform
-options.insertInto = undefined;
-
-var update = __webpack_require__(13)(content, options);
-
-if(content.locals) module.exports = content.locals;
-
-if(false) {}
-
-/***/ }),
-/* 323 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(12)(false);
-// imports
-
-
-// module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.dropdown_dropdown_2cQyf {\n    border: 1px solid #E9EEF2;\n    border-radius: 5px;\n    overflow: visible;\n    min-width: 3.5rem;\n    color: #4C97FF;\n    padding: .5rem;\n}\n\n.dropdown_mod-open_1QOjG {\n    background-color: #E9EEF2;\n}\n\n.dropdown_dropdown-icon_13LnP {\n    width: .5rem;\n    height: .5rem;\n    vertical-align: middle;\n    padding-bottom: .2rem;\n}\n\n[dir=\"ltr\"] .dropdown_dropdown-icon_13LnP {\n    margin-left: .5rem;\n}\n\n[dir=\"rtl\"] .dropdown_dropdown-icon_13LnP {\n    margin-right: .5rem;\n}\n\n.dropdown_mod-caret-up_1v809 {\n    -webkit-transform: rotate(180deg);\n        -ms-transform: rotate(180deg);\n            transform: rotate(180deg);\n    padding-bottom: 0;\n    padding-top: .2rem;\n}\n", ""]);
-
-// exports
-exports.locals = {
-	"dropdown": "dropdown_dropdown_2cQyf",
-	"mod-open": "dropdown_mod-open_1QOjG",
-	"modOpen": "dropdown_mod-open_1QOjG",
-	"dropdown-icon": "dropdown_dropdown-icon_13LnP",
-	"dropdownIcon": "dropdown_dropdown-icon_13LnP",
-	"mod-caret-up": "dropdown_mod-caret-up_1v809",
-	"modCaretUp": "dropdown_mod-caret-up_1v809"
-};
-
-/***/ }),
-/* 324 */
-/***/ (function(module, exports) {
-
-module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='8px' height='5px' viewBox='0 0 8 5' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Edropdown-caret%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='dropdown-caret' fill='%234C97FF'%3E %3Cpath d='M4,5 C3.72520708,5 3.45163006,4.89695045 3.24127973,4.68965311 L0.314613572,1.80666227 C-0.104871191,1.39326583 -0.104871191,0.724642023 0.314613572,0.310047331 C0.732882438,-0.10334911 7.26711756,-0.10334911 7.68538643,0.310047331 C8.10487119,0.723443772 8.10487119,1.39326583 7.68538643,1.80666227 L4.75993617,4.68965311 C4.54958583,4.89695045 4.27600882,5 4,5'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
-
-/***/ }),
 /* 325 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -57956,31 +58535,24 @@ exports = module.exports = __webpack_require__(12)(false);
 
 
 // module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* NOTE:\nEdited to add input-range-small\n*/\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.input_input-form_l9eYg {\n    height: 2rem;\n    padding: 0 0.75rem;\n\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    font-size: 0.75rem;\n    font-weight: bold;\n    color: #575e75;\n\n    border-width: 1px;\n    border-style: solid;\n    border-color: #E9EEF2;\n    border-radius: 2rem;\n\n    outline: none;\n    cursor: text;\n    -webkit-transition: 0.25s ease-out;\n    -o-transition: 0.25s ease-out;\n    transition: 0.25s ease-out; /* @todo: standardize with var */\n    -webkit-box-shadow: none;\n            box-shadow: none;\n\n    /*\n        For truncating overflowing text gracefully\n        Min-width is for a bug: https://css-tricks.com/flexbox-truncated-text\n        @todo: move this out into a mixin or a helper component\n    */\n    overflow: hidden;\n    -o-text-overflow: ellipsis;\n       text-overflow: ellipsis;\n    white-space: nowrap;\n    min-width: 0;\n}\n\n.input_input-form_l9eYg:focus {\n    border-color: #4C97FF;\n    -webkit-box-shadow: 0 0 0 .25rem hsla(215, 100%, 65%, 0.20);\n            box-shadow: 0 0 0 .25rem hsla(215, 100%, 65%, 0.20);\n}\n\n.input_input-small_2qj1C {\n    width: 3rem; \n    text-align: center;\n}\n\n.input_input-small-range_2GQzZ {\n    width: 3.75rem;\n    text-align: center;\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.dropdown_dropdown_2cQyf {\n    border: 1px solid #E9EEF2;\n    border-radius: 5px;\n    overflow: visible;\n    min-width: 3.5rem;\n    color: #4C97FF;\n    padding: .5rem;\n}\n\n.dropdown_mod-open_1QOjG {\n    background-color: #E9EEF2;\n}\n\n.dropdown_dropdown-icon_13LnP {\n    width: .5rem;\n    height: .5rem;\n    vertical-align: middle;\n    padding-bottom: .2rem;\n}\n\n[dir=\"ltr\"] .dropdown_dropdown-icon_13LnP {\n    margin-left: .5rem;\n}\n\n[dir=\"rtl\"] .dropdown_dropdown-icon_13LnP {\n    margin-right: .5rem;\n}\n\n.dropdown_mod-caret-up_1v809 {\n    -webkit-transform: rotate(180deg);\n        -ms-transform: rotate(180deg);\n            transform: rotate(180deg);\n    padding-bottom: 0;\n    padding-top: .2rem;\n}\n", ""]);
 
 // exports
 exports.locals = {
-	"input-form": "input_input-form_l9eYg",
-	"inputForm": "input_input-form_l9eYg",
-	"input-small": "input_input-small_2qj1C",
-	"inputSmall": "input_input-small_2qj1C",
-	"input-small-range": "input_input-small-range_2GQzZ",
-	"inputSmallRange": "input_input-small-range_2GQzZ"
+	"dropdown": "dropdown_dropdown_2cQyf",
+	"mod-open": "dropdown_mod-open_1QOjG",
+	"modOpen": "dropdown_mod-open_1QOjG",
+	"dropdown-icon": "dropdown_dropdown-icon_13LnP",
+	"dropdownIcon": "dropdown_dropdown-icon_13LnP",
+	"mod-caret-up": "dropdown_mod-caret-up_1v809",
+	"modCaretUp": "dropdown_mod-caret-up_1v809"
 };
 
 /***/ }),
 /* 327 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    fullSizeEditorMinWidth: 1274
-};
+module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='8px' height='5px' viewBox='0 0 8 5' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Edropdown-caret%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='dropdown-caret' fill='%234C97FF'%3E %3Cpath d='M4,5 C3.72520708,5 3.45163006,4.89695045 3.24127973,4.68965311 L0.314613572,1.80666227 C-0.104871191,1.39326583 -0.104871191,0.724642023 0.314613572,0.310047331 C0.732882438,-0.10334911 7.26711756,-0.10334911 7.68538643,0.310047331 C8.10487119,0.723443772 8.10487119,1.39326583 7.68538643,1.80666227 L4.75993617,4.68965311 C4.54958583,4.89695045 4.27600882,5 4,5'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
 /* 328 */
@@ -58009,6 +58581,66 @@ if(false) {}
 
 /***/ }),
 /* 329 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(12)(false);
+// imports
+
+
+// module
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* NOTE:\nEdited to add input-range-small\n*/\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.input_input-form_l9eYg {\n    height: 2rem;\n    padding: 0 0.75rem;\n\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    font-size: 0.75rem;\n    font-weight: bold;\n    color: #575e75;\n\n    border-width: 1px;\n    border-style: solid;\n    border-color: #E9EEF2;\n    border-radius: 2rem;\n\n    outline: none;\n    cursor: text;\n    -webkit-transition: 0.25s ease-out;\n    -o-transition: 0.25s ease-out;\n    transition: 0.25s ease-out; /* @todo: standardize with var */\n    -webkit-box-shadow: none;\n            box-shadow: none;\n\n    /*\n        For truncating overflowing text gracefully\n        Min-width is for a bug: https://css-tricks.com/flexbox-truncated-text\n        @todo: move this out into a mixin or a helper component\n    */\n    overflow: hidden;\n    -o-text-overflow: ellipsis;\n       text-overflow: ellipsis;\n    white-space: nowrap;\n    min-width: 0;\n}\n\n.input_input-form_l9eYg:focus {\n    border-color: #4C97FF;\n    -webkit-box-shadow: 0 0 0 .25rem hsla(215, 100%, 65%, 0.20);\n            box-shadow: 0 0 0 .25rem hsla(215, 100%, 65%, 0.20);\n}\n\n.input_input-small_2qj1C {\n    width: 3rem; \n    text-align: center;\n}\n\n.input_input-small-range_2GQzZ {\n    width: 3.75rem;\n    text-align: center;\n}\n", ""]);
+
+// exports
+exports.locals = {
+	"input-form": "input_input-form_l9eYg",
+	"inputForm": "input_input-form_l9eYg",
+	"input-small": "input_input-small_2qj1C",
+	"inputSmall": "input_input-small_2qj1C",
+	"input-small-range": "input_input-small-range_2GQzZ",
+	"inputSmallRange": "input_input-small-range_2GQzZ"
+};
+
+/***/ }),
+/* 330 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    fullSizeEditorMinWidth: 1274
+};
+
+/***/ }),
+/* 331 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(332);
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(13)(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+/* 332 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -58048,55 +58680,55 @@ exports.locals = {
 };
 
 /***/ }),
-/* 330 */
+/* 333 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Egroup%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='group' stroke-width='0.75'%3E %3Cg id='group-icon' transform='translate(2.000000, 2.000000)'%3E %3Crect id='Rectangle-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='13' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-3' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='13' width='3' height='3'%3E%3C/rect%3E %3Cpath d='M1.5,3 L1.5,13' id='Line' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M14.5,3 L14.5,13' id='Line-Copy' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M13,1.5 L3,1.5' id='Line-Copy-2' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M13,14.5 L3,14.5' id='Line-Copy-3' stroke='%234C97FF' stroke-linecap='square'%3E%3C/path%3E %3Cg id='Group' transform='translate(8.000000, 8.000000) rotate(180.000000) translate(-8.000000, -8.000000) translate(4.000000, 4.000000)' stroke='%23575E75'%3E %3Crect id='Rectangle-3-Copy' fill='%23FFFFFF' transform='translate(5.500000, 5.500000) rotate(180.000000) translate(-5.500000, -5.500000) ' x='3' y='3' width='5' height='5' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-3' fill='%23575E75' transform='translate(2.500000, 2.500000) rotate(180.000000) translate(-2.500000, -2.500000) ' x='0' y='0' width='5' height='5' rx='0.5'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 331 */
+/* 334 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eredo%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='redo' fill='%234C97FF'%3E %3Cpath d='M17.5581635,12.7700651 L13.8403972,16.4941315 C13.5610922,16.7671364 13.1830854,16.9211391 12.7903784,16.9211391 C12.3990715,16.9211391 12.0210647,16.7671364 11.7403597,16.4941315 L8.02399342,12.7700651 C7.5969858,12.3430574 7.47098355,11.7060461 7.70198767,11.1530362 C7.93299179,10.6000263 8.46500128,10.24302 9.06701202,10.24302 L10.4040359,10.24302 C10.3690352,9.92101423 10.2780336,9.55700774 10.1240309,9.17200087 C10.07573,9.05999887 10.0260291,8.94799688 9.97002813,8.83599488 C9.89302676,8.70999263 9.90072689,8.67499201 9.79502501,8.52098926 C9.62702201,8.26898476 9.47301926,8.07998139 9.29031601,7.86297752 C8.9200094,7.4639704 8.47200141,7.12096429 7.99599292,6.86895979 C7.5129843,6.6169553 7.00897531,6.46295255 6.56096732,6.37895105 C6.11995945,6.30194968 5.71395221,6.29494955 5.47594796,6.29494955 C5.35694584,6.28794943 5.2029431,6.31594993 5.12594172,6.32295005 C5.04194022,6.32995018 4.99293935,6.3369503 4.99293935,6.3369503 C4.49593048,6.38595117 4.04792249,6.02194468 3.99892162,5.52493582 C3.95692087,5.10492832 4.20192524,4.72692158 4.57293186,4.58691908 C4.57293186,4.58691908 4.62193273,4.56591871 4.6989341,4.53791821 C4.78993573,4.50991771 4.87393723,4.46091684 5.06994072,4.40491584 C5.46194772,4.28591371 5.95895658,4.15991147 6.60996819,4.09691034 C7.25397968,4.04090934 8.03099354,4.05490959 8.85070816,4.22291259 C9.66902276,4.39791571 10.5300381,4.72692158 11.3280524,5.20293007 C11.7060591,5.44793444 12.1120663,5.73493956 12.427072,6.01494456 C12.5670745,6.11994643 12.8050787,6.35795068 12.9450812,6.5049533 C13.1060841,6.67295629 13.2530867,6.84095929 13.4007893,7.01596241 C13.9670994,7.7159749 14.3871069,8.47198839 14.6601118,9.15800062 C14.8211147,9.55000762 14.9331167,9.92101423 15.0171182,10.24302 L16.5151449,10.24302 C17.1171556,10.24302 17.6491651,10.6000263 17.8801692,11.1530362 C18.1111734,11.7060461 17.9851711,12.3430574 17.5581635,12.7700651' id='Fill-1' transform='translate(10.994247, 10.494247) rotate(-45.000000) translate(-10.994247, -10.494247) '%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 332 */
+/* 335 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-back%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-back'%3E %3Cg transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,10 L15,10' id='Stroke-6-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,12 L14,12' id='Stroke-6-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M1,10 L4,10' id='Stroke-10-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M2,12 L4,12' id='Stroke-10-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 333 */
+/* 336 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-backward%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-backward'%3E %3Cg id='send-forward' transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 334 */
+/* 337 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-forward%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-forward'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 335 */
+/* 338 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-front%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-front'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,10 L15,10' id='Stroke-6-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M12,12 L14,12' id='Stroke-6-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M1,10 L4,10' id='Stroke-10-Copy' stroke='%23575E75' opacity='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M2,12 L4,12' id='Stroke-10-Copy-2' stroke='%23575E75' opacity='0.5' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 336 */
+/* 339 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eundo%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='undo' fill='%234C97FF'%3E %3Cpath d='M15.5581635,12.7700651 L11.8403972,16.4941315 C11.5610922,16.7671364 11.1830854,16.9211391 10.7903784,16.9211391 C10.3990715,16.9211391 10.0210647,16.7671364 9.74035971,16.4941315 L6.02399342,12.7700651 C5.5969858,12.3430574 5.47098355,11.7060461 5.70198767,11.1530362 C5.93299179,10.6000263 6.46500128,10.24302 7.06701202,10.24302 L8.40403587,10.24302 C8.36903525,9.92101423 8.27803362,9.55700774 8.12403088,9.17200087 C8.07573002,9.05999887 8.02602913,8.94799688 7.97002813,8.83599488 C7.89302676,8.70999263 7.90072689,8.67499201 7.79502501,8.52098926 C7.62702201,8.26898476 7.47301926,8.07998139 7.29031601,7.86297752 C6.9200094,7.4639704 6.47200141,7.12096429 5.99599292,6.86895979 C5.5129843,6.6169553 5.00897531,6.46295255 4.56096732,6.37895105 C4.11995945,6.30194968 3.71395221,6.29494955 3.47594796,6.29494955 C3.35694584,6.28794943 3.2029431,6.31594993 3.12594172,6.32295005 C3.04194022,6.32995018 2.99293935,6.3369503 2.99293935,6.3369503 C2.49593048,6.38595117 2.04792249,6.02194468 1.99892162,5.52493582 C1.95692087,5.10492832 2.20192524,4.72692158 2.57293186,4.58691908 C2.57293186,4.58691908 2.62193273,4.56591871 2.6989341,4.53791821 C2.78993573,4.50991771 2.87393723,4.46091684 3.06994072,4.40491584 C3.46194772,4.28591371 3.95895658,4.15991147 4.60996819,4.09691034 C5.25397968,4.04090934 6.03099354,4.05490959 6.85070816,4.22291259 C7.66902276,4.39791571 8.53003812,4.72692158 9.32805235,5.20293007 C9.7060591,5.44793444 10.1120663,5.73493956 10.427072,6.01494456 C10.5670745,6.11994643 10.8050787,6.35795068 10.9450812,6.5049533 C11.1060841,6.67295629 11.2530867,6.84095929 11.4007893,7.01596241 C11.9670994,7.7159749 12.3871069,8.47198839 12.6601118,9.15800062 C12.8211147,9.55000762 12.9331167,9.92101423 13.0171182,10.24302 L14.5151449,10.24302 C15.1171556,10.24302 15.6491651,10.6000263 15.8801692,11.1530362 C16.1111734,11.7060461 15.9851711,12.3430574 15.5581635,12.7700651' id='Fill-1' transform='translate(8.994247, 10.494247) scale(-1, 1) rotate(-45.000000) translate(-8.994247, -10.494247) '%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 337 */
+/* 340 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eungroup%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='ungroup' stroke-width='0.75'%3E %3Cg id='ungroup-icon' transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 2.000000)'%3E %3Crect id='Rectangle-3-Copy' stroke='%23575E75' fill='%23FFFFFF' x='6.5' y='6.5' width='8' height='8' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-3' stroke='%23575E75' fill='%23575E75' x='1.5' y='1.5' width='8' height='8' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-2' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='8' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='8' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-3' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='8' y='8' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-4' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='5' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-5' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='13' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-6' stroke='%234C97FF' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='5' y='13' width='3' height='3'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 338 */
+/* 341 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58126,11 +58758,11 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _copyPasteHoc = __webpack_require__(108);
+var _copyPasteHoc = __webpack_require__(109);
 
 var _copyPasteHoc2 = _interopRequireDefault(_copyPasteHoc);
 
-var _modeTools = __webpack_require__(339);
+var _modeTools = __webpack_require__(342);
 
 var _modeTools2 = _interopRequireDefault(_modeTools);
 
@@ -58559,7 +59191,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _copyPasteHoc2.default)((0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ModeTools));
 
 /***/ }),
-/* 339 */
+/* 342 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -58583,25 +59215,25 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _brushMode = __webpack_require__(109);
+var _brushMode = __webpack_require__(110);
 
 var _eraserMode = __webpack_require__(61);
 
-var _bitBrushSize = __webpack_require__(110);
+var _bitBrushSize = __webpack_require__(111);
 
-var _bitEraserSize = __webpack_require__(111);
+var _bitEraserSize = __webpack_require__(112);
 
-var _fillBitmapShapes = __webpack_require__(112);
+var _fillBitmapShapes = __webpack_require__(113);
 
-var _fontDropdown = __webpack_require__(340);
+var _fontDropdown = __webpack_require__(343);
 
 var _fontDropdown2 = _interopRequireDefault(_fontDropdown);
 
-var _liveInputHoc = __webpack_require__(114);
+var _liveInputHoc = __webpack_require__(115);
 
 var _liveInputHoc2 = _interopRequireDefault(_liveInputHoc);
 
-var _label = __webpack_require__(52);
+var _label = __webpack_require__(53);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -58627,73 +59259,73 @@ var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _hideLabel = __webpack_require__(107);
+var _hideLabel = __webpack_require__(108);
 
-var _modeTools = __webpack_require__(343);
+var _modeTools = __webpack_require__(346);
 
 var _modeTools2 = _interopRequireDefault(_modeTools);
 
-var _copy = __webpack_require__(345);
+var _copy = __webpack_require__(348);
 
 var _copy2 = _interopRequireDefault(_copy);
 
-var _paste = __webpack_require__(346);
+var _paste = __webpack_require__(349);
 
 var _paste2 = _interopRequireDefault(_paste);
 
-var _delete = __webpack_require__(347);
+var _delete = __webpack_require__(350);
 
 var _delete2 = _interopRequireDefault(_delete);
 
-var _brush = __webpack_require__(85);
+var _brush = __webpack_require__(86);
 
 var _brush2 = _interopRequireDefault(_brush);
 
-var _eraser = __webpack_require__(92);
+var _eraser = __webpack_require__(93);
 
 var _eraser2 = _interopRequireDefault(_eraser);
 
-var _line = __webpack_require__(87);
+var _line = __webpack_require__(88);
 
 var _line2 = _interopRequireDefault(_line);
 
-var _brush3 = __webpack_require__(97);
+var _brush3 = __webpack_require__(98);
 
 var _brush4 = _interopRequireDefault(_brush3);
 
-var _curvedPoint = __webpack_require__(348);
+var _curvedPoint = __webpack_require__(351);
 
 var _curvedPoint2 = _interopRequireDefault(_curvedPoint);
 
-var _eraser3 = __webpack_require__(98);
+var _eraser3 = __webpack_require__(99);
 
 var _eraser4 = _interopRequireDefault(_eraser3);
 
-var _flipHorizontal = __webpack_require__(349);
+var _flipHorizontal = __webpack_require__(352);
 
 var _flipHorizontal2 = _interopRequireDefault(_flipHorizontal);
 
-var _flipVertical = __webpack_require__(350);
+var _flipVertical = __webpack_require__(353);
 
 var _flipVertical2 = _interopRequireDefault(_flipVertical);
 
-var _straightPoint = __webpack_require__(351);
+var _straightPoint = __webpack_require__(354);
 
 var _straightPoint2 = _interopRequireDefault(_straightPoint);
 
-var _oval = __webpack_require__(90);
+var _oval = __webpack_require__(91);
 
 var _oval2 = _interopRequireDefault(_oval);
 
-var _rectangle = __webpack_require__(91);
+var _rectangle = __webpack_require__(92);
 
 var _rectangle2 = _interopRequireDefault(_rectangle);
 
-var _ovalOutlined = __webpack_require__(352);
+var _ovalOutlined = __webpack_require__(355);
 
 var _ovalOutlined2 = _interopRequireDefault(_ovalOutlined);
 
-var _rectangleOutlined = __webpack_require__(353);
+var _rectangleOutlined = __webpack_require__(356);
 
 var _rectangleOutlined2 = _interopRequireDefault(_rectangleOutlined);
 
@@ -59038,7 +59670,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)((0, _reactIntl.injectIntl)(ModeToolsComponent));
 
 /***/ }),
-/* 340 */
+/* 343 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59068,11 +59700,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _fontDropdown = __webpack_require__(341);
+var _fontDropdown = __webpack_require__(344);
 
 var _fontDropdown2 = _interopRequireDefault(_fontDropdown);
 
-var _fonts = __webpack_require__(55);
+var _fonts = __webpack_require__(56);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -59080,7 +59712,7 @@ var _font = __webpack_require__(71);
 
 var _selection = __webpack_require__(3);
 
-var _fontDropdown3 = __webpack_require__(113);
+var _fontDropdown3 = __webpack_require__(114);
 
 var _fontDropdown4 = _interopRequireDefault(_fontDropdown3);
 
@@ -59313,7 +59945,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(FontDropdown);
 
 /***/ }),
-/* 341 */
+/* 344 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59339,7 +59971,7 @@ var _button = __webpack_require__(44);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _dropdown = __webpack_require__(106);
+var _dropdown = __webpack_require__(107);
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
@@ -59347,11 +59979,11 @@ var _inputGroup = __webpack_require__(32);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _fonts = __webpack_require__(55);
+var _fonts = __webpack_require__(56);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
-var _fontDropdown = __webpack_require__(113);
+var _fontDropdown = __webpack_require__(114);
 
 var _fontDropdown2 = _interopRequireDefault(_fontDropdown);
 
@@ -59518,7 +60150,7 @@ ModeToolsComponent.propTypes = {
 exports.default = ModeToolsComponent;
 
 /***/ }),
-/* 342 */
+/* 345 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -59553,11 +60185,11 @@ exports.locals = {
 };
 
 /***/ }),
-/* 343 */
+/* 346 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(344);
+var content = __webpack_require__(347);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -59578,7 +60210,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 344 */
+/* 347 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -59601,61 +60233,61 @@ exports.locals = {
 };
 
 /***/ }),
-/* 345 */
+/* 348 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ecopy v2%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='copy-v2'%3E %3Cg id='copy' transform='translate(3.000000, 2.000000)'%3E %3Cpolyline id='Path-3' stroke-opacity='0.5' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round' stroke-dasharray='1,2' points='0.503173828 3 0.503173828 15.5 13 15.5'%3E%3C/polyline%3E %3Cpath d='M2,1.00684547 C2,0.450780073 2.45303631,0 2.99703014,0 L10,0 L10,2.34995317 C10,3.26124887 10.7336617,4 11.6500468,4 L14,4 L14,13.0046024 C14,13.5543453 13.544239,14 12.9975267,14 L3.00247329,14 C2.44882258,14 2,13.5500512 2,12.9931545 L2,1.00684547 Z' id='Rectangle-4' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M11,0 L14,3 L11.9989566,3 C11.4472481,3 11,2.55733967 11,2.00104344 L11,0 Z' id='Rectangle-5' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M9.8115942,9.1884058 L8.6884058,9.1884058 L8.6884058,10.3115942 C8.6884058,10.6859903 8.38647343,11 8,11 C7.61352657,11 7.3115942,10.6859903 7.3115942,10.3115942 L7.3115942,9.1884058 L6.1884058,9.1884058 C5.81400966,9.1884058 5.5,8.88647343 5.5,8.5 C5.5,8.11352657 5.81400966,7.8115942 6.1884058,7.8115942 L7.3115942,7.8115942 L7.3115942,6.6884058 C7.3115942,6.31280193 7.61352657,6 8,6 C8.38647343,6 8.6884058,6.31280193 8.6884058,6.6884058 L8.6884058,7.8115942 L9.8115942,7.8115942 C10.1859903,7.8115942 10.5,8.11352657 10.5,8.5 C10.5,8.88647343 10.1859903,9.1884058 9.8115942,9.1884058 Z' id='Fill-1' stroke='%23FFFFFF' stroke-width='0.25' fill='%23FFFFFF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 346 */
+/* 349 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Epaste v2%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='paste-v2'%3E %3Cg id='paste' transform='translate(3.000000, 2.000000)'%3E %3Cpolyline id='Path-3' stroke-opacity='0.5' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round' stroke-dasharray='1,2' transform='translate(6.748413, 6.750000) scale(1, -1) translate(-6.748413, -6.750000) ' points='0.5 0.5 0.5 13 12.9968262 13'%3E%3C/polyline%3E %3Cpath d='M2,3.00684547 C2,2.45078007 2.45303631,2 2.99703014,2 L10,2 L10,4.34995317 C10,5.26124887 10.7336617,6 11.6500468,6 L14,6 L14,15.0046024 C14,15.5543453 13.544239,16 12.9975267,16 L3.00247329,16 C2.44882258,16 2,15.5500512 2,14.9931545 L2,3.00684547 Z' id='Rectangle-4' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M11,2 L14,5 L11.9989566,5 C11.4472481,5 11,4.55733967 11,4.00104344 L11,2 Z' id='Rectangle-5' fill='%234C97FF'%3E%3C/path%3E %3Cpath d='M8.34791833,12.8771885 C8.26180668,12.9633001 8.14699113,13.0063559 8.03217559,13.0063559 C7.9030081,13.0063559 7.78819256,12.9633001 7.70208091,12.8771885 L5.86503222,11.0401398 C5.73586474,10.8966203 5.69280891,10.7100451 5.76456862,10.5378218 C5.83632834,10.3655985 5.99419971,10.2651349 6.18077497,10.2651349 L6.92707599,10.2651349 L7.28587456,7.66743321 C7.31457845,7.46650601 7.41504205,7.27993075 7.57291342,7.16511521 C7.73078479,7.03594773 7.94606393,6.97853995 8.13263919,7.00724384 C8.47708582,7.06321642 8.74977273,7.33733852 8.79282856,7.66743321 L9.16597907,10.2651349 L9.86922427,10.2651349 C10.0557995,10.2651349 10.2136709,10.3799504 10.2854306,10.5521737 C10.3571903,10.7100451 10.3141345,10.9109723 10.184967,11.0401398 L8.34791833,12.8771885 Z' id='Fill-1' fill='%23FFFFFF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 347 */
+/* 350 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Edelete%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='delete' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='Delete-Icon' transform='translate(2.000000, 1.500000)' fill='%234C97FF' fill-rule='nonzero'%3E %3Cpath d='M2,3.25 L14,3.25 C14.4437164,3.25 14.7904293,3.63311343 14.7462779,4.07462779 L13.6363275,15.1741315 C13.5468672,16.0687347 12.7940775,16.75 11.8950124,16.75 L4.10498756,16.75 C3.20592253,16.75 2.45313279,16.0687347 2.36367248,15.1741315 L1.25372211,4.07462779 C1.20957067,3.63311343 1.55628356,3.25 2,3.25 Z M8.75,12 L8.75,7 C8.75,6.58578644 8.41421356,6.25 8,6.25 C7.58578644,6.25 7.25,6.58578644 7.25,7 L7.25,12 C7.25,12.4142136 7.58578644,12.75 8,12.75 C8.41421356,12.75 8.75,12.4142136 8.75,12 Z M11.25,12 L11.25,7 C11.25,6.58578644 10.9142136,6.25 10.5,6.25 C10.0857864,6.25 9.75,6.58578644 9.75,7 L9.75,12 C9.75,12.4142136 10.0857864,12.75 10.5,12.75 C10.9142136,12.75 11.25,12.4142136 11.25,12 Z M6.25,12 L6.25,7 C6.25,6.58578644 5.91421356,6.25 5.5,6.25 C5.08578644,6.25 4.75,6.58578644 4.75,7 L4.75,12 C4.75,12.4142136 5.08578644,12.75 5.5,12.75 C5.91421356,12.75 6.25,12.4142136 6.25,12 Z M1.5,4 L14.5,4 L1.5,4 Z M1.5,3 L14.5,3 C15.0522847,3 15.5,3.44771525 15.5,4 C15.5,4.55228475 15.0522847,5 14.5,5 L1.5,5 C0.94771525,5 0.5,4.55228475 0.5,4 C0.5,3.44771525 0.94771525,3 1.5,3 Z M9.25,3.25 L9.25,2 C9.25,1.86192881 9.13807119,1.75 9,1.75 L7,1.75 C6.86192881,1.75 6.75,1.86192881 6.75,2 L6.75,3.25 L9.25,3.25 Z M7,0.25 L9,0.25 C9.96649831,0.25 10.75,1.03350169 10.75,2 L10.75,4.75 L5.25,4.75 L5.25,2 C5.25,1.03350169 6.03350169,0.25 7,0.25 Z' id='Combined-Shape'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 348 */
+/* 351 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ecurved-point%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='curved-point'%3E %3Cpath d='M2,15 C2,10.5818452 5.58151214,7 10.000744,7 C14.4184879,7 18,10.5818452 18,15' id='Stroke-3' stroke='%234C97FF' stroke-width='0.75' fill-opacity='0.25' fill='%234C97FF' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M3,7 L17,7' id='Stroke-7' stroke='%234C97FF' stroke-width='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Ccircle id='Oval-4' fill-opacity='0.25' fill='%234C97FF' cx='10' cy='7' r='3'%3E%3C/circle%3E %3Ccircle id='Oval-4' fill='%234C97FF' cx='10' cy='7' r='2'%3E%3C/circle%3E %3Ccircle id='Oval-5' fill='%234C97FF' cx='3' cy='7' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-5-Copy' fill='%234C97FF' cx='17' cy='7' r='1'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 349 */
+/* 352 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eflip-horizontal%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='flip-horizontal'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='0.75' r='1'%3E%3C/circle%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='13.25' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy' fill='%23575E75' opacity='0.5' cx='8' cy='3.875' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-2' fill='%23575E75' opacity='0.5' cx='8' cy='7' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-3' fill='%23575E75' opacity='0.5' cx='8' cy='10.125' r='1'%3E%3C/circle%3E %3Cpath d='M16,3.08425423 L16,10.9157458 C16,11.4342626 15.2574491,11.6956996 14.8235798,11.3282353 L10.2019293,7.41103711 C9.93269025,7.18445835 9.93269025,6.81408922 10.2019293,6.58751046 L14.8235798,2.67176469 C15.2574491,2.30430042 16,2.56573745 16,3.08425423' id='Fill-11' fill='%234C97FF' opacity='0.5'%3E%3C/path%3E %3Cpath d='M0,10.9157458 L0,3.08425423 C0,2.56573745 0.742550911,2.30430042 1.17470525,2.67176469 L5.79807074,6.58896289 C6.06730975,6.81554165 6.06730975,7.18591078 5.79807074,7.41248954 L1.17470525,11.3282353 C0.742550911,11.6956996 0,11.4342626 0,10.9157458' id='Fill-14' fill='%234C97FF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 350 */
+/* 353 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eflip-vertical%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='flip-vertical'%3E %3Cg id='flip-horizontal' transform='translate(10.000000, 10.000000) rotate(90.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='0.75' r='1'%3E%3C/circle%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='13.25' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy' fill='%23575E75' opacity='0.5' cx='8' cy='3.875' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-2' fill='%23575E75' opacity='0.5' cx='8' cy='7' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-3' fill='%23575E75' opacity='0.5' cx='8' cy='10.125' r='1'%3E%3C/circle%3E %3Cpath d='M16,3.08425423 L16,10.9157458 C16,11.4342626 15.2574491,11.6956996 14.8235798,11.3282353 L10.2019293,7.41103711 C9.93269025,7.18445835 9.93269025,6.81408922 10.2019293,6.58751046 L14.8235798,2.67176469 C15.2574491,2.30430042 16,2.56573745 16,3.08425423' id='Fill-11' fill='%234C97FF' opacity='0.5'%3E%3C/path%3E %3Cpath d='M0,10.9157458 L0,3.08425423 C0,2.56573745 0.742550911,2.30430042 1.17470525,2.67176469 L5.79807074,6.58896289 C6.06730975,6.81554165 6.06730975,7.18591078 5.79807074,7.41248954 L1.17470525,11.3282353 C0.742550911,11.6956996 0,11.4342626 0,10.9157458' id='Fill-14' fill='%234C97FF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 351 */
+/* 354 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Estraight-point%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='straight-point' fill='%234C97FF'%3E %3Cpolyline id='Path-2' stroke='%234C97FF' stroke-width='0.75' fill-opacity='0.25' stroke-linecap='round' stroke-linejoin='round' points='2 15 10 7 18 15'%3E%3C/polyline%3E %3Ccircle id='Oval-4' fill-opacity='0.25' cx='10' cy='7' r='3'%3E%3C/circle%3E %3Ccircle id='Oval-4' cx='10' cy='7' r='2'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 352 */
+/* 355 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eoval-outlined%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='oval-outlined' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='Group' transform='translate(4.000000, 4.000000)' fill='%23575E75'%3E %3Cpolygon id='Fill-1' points='0 9.33333333 1.33333333 9.33333333 1.33333333 2.66666667 0 2.66666667'%3E%3C/polygon%3E %3Cpolygon id='Fill-2' points='1.33333333 2.66666667 2.66666667 2.66666667 2.66666667 1.33333333 1.33333333 1.33333333'%3E%3C/polygon%3E %3Cpolygon id='Fill-3' points='1.33333333 10.6666667 2.66666667 10.6666667 2.66666667 9.33333333 1.33333333 9.33333333'%3E%3C/polygon%3E %3Cpolygon id='Fill-4' points='2.66666667 1.33333333 9.33333333 1.33333333 9.33333333 0 2.66666667 0'%3E%3C/polygon%3E %3Cpolygon id='Fill-5' points='9.33333333 2.66666667 10.6666667 2.66666667 10.6666667 1.33333333 9.33333333 1.33333333'%3E%3C/polygon%3E %3Cpolygon id='Fill-6' points='10.6666667 9.33333333 12 9.33333333 12 2.66666667 10.6666667 2.66666667'%3E%3C/polygon%3E %3Cpolygon id='Fill-7' points='9.33333333 10.6666667 10.6666667 10.6666667 10.6666667 9.33333333 9.33333333 9.33333333'%3E%3C/polygon%3E %3Cpolygon id='Fill-8' points='2.66666667 12 9.33333333 12 9.33333333 10.6666667 2.66666667 10.6666667'%3E%3C/polygon%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 353 */
+/* 356 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Erectange-outlined%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='rectange-outlined' stroke='none' stroke-width='1.33333333' fill='none' fill-rule='evenodd'%3E %3Crect id='rectangle-icon' stroke='%23575E75' x='4.5' y='4.5' width='11' height='11'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 354 */
+/* 357 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -59705,11 +60337,11 @@ var _cursor = __webpack_require__(26);
 
 var _selection = __webpack_require__(3);
 
-var _ovalTool = __webpack_require__(355);
+var _ovalTool = __webpack_require__(358);
 
 var _ovalTool2 = _interopRequireDefault(_ovalTool);
 
-var _ovalMode = __webpack_require__(356);
+var _ovalMode = __webpack_require__(359);
 
 var _ovalMode2 = _interopRequireDefault(_ovalMode);
 
@@ -59869,7 +60501,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(OvalMode);
 
 /***/ }),
-/* 355 */
+/* 358 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60079,7 +60711,7 @@ var OvalTool = function (_paper$Tool) {
 exports.default = OvalTool;
 
 /***/ }),
-/* 356 */
+/* 359 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60105,7 +60737,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _oval = __webpack_require__(357);
+var _oval = __webpack_require__(360);
 
 var _oval2 = _interopRequireDefault(_oval);
 
@@ -60128,13 +60760,13 @@ OvalModeComponent.propTypes = {
 exports.default = OvalModeComponent;
 
 /***/ }),
-/* 357 */
+/* 360 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eoval%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='oval' stroke-width='1.5' stroke='%23575E75'%3E %3Ccircle id='oval-icon' cx='10' cy='10' r='5'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 358 */
+/* 361 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60184,11 +60816,11 @@ var _cursor = __webpack_require__(26);
 
 var _selection = __webpack_require__(3);
 
-var _rectTool = __webpack_require__(359);
+var _rectTool = __webpack_require__(362);
 
 var _rectTool2 = _interopRequireDefault(_rectTool);
 
-var _rectMode = __webpack_require__(360);
+var _rectMode = __webpack_require__(363);
 
 var _rectMode2 = _interopRequireDefault(_rectMode);
 
@@ -60348,7 +60980,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(RectMode);
 
 /***/ }),
-/* 359 */
+/* 362 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60555,7 +61187,7 @@ var RectTool = function (_paper$Tool) {
 exports.default = RectTool;
 
 /***/ }),
-/* 360 */
+/* 363 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60581,7 +61213,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _rectangle = __webpack_require__(361);
+var _rectangle = __webpack_require__(364);
 
 var _rectangle2 = _interopRequireDefault(_rectangle);
 
@@ -60604,13 +61236,13 @@ RectModeComponent.propTypes = {
 exports.default = RectModeComponent;
 
 /***/ }),
-/* 361 */
+/* 364 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Erectangle%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E %3Cg id='rectangle' stroke='%23575E75' stroke-width='1.5'%3E %3Crect id='rectangle-icon' x='5' y='5' width='10' height='10'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 362 */
+/* 365 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60648,11 +61280,11 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _reshapeTool = __webpack_require__(363);
+var _reshapeTool = __webpack_require__(366);
 
 var _reshapeTool2 = _interopRequireDefault(_reshapeTool);
 
-var _reshapeMode = __webpack_require__(366);
+var _reshapeMode = __webpack_require__(369);
 
 var _reshapeMode2 = _interopRequireDefault(_reshapeMode);
 
@@ -60780,7 +61412,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ReshapeMode);
 
 /***/ }),
-/* 363 */
+/* 366 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -60816,15 +61448,15 @@ var _math = __webpack_require__(19);
 
 var _selection = __webpack_require__(3);
 
-var _moveTool = __webpack_require__(89);
+var _moveTool = __webpack_require__(90);
 
 var _moveTool2 = _interopRequireDefault(_moveTool);
 
-var _pointTool = __webpack_require__(364);
+var _pointTool = __webpack_require__(367);
 
 var _pointTool2 = _interopRequireDefault(_pointTool);
 
-var _handleTool = __webpack_require__(365);
+var _handleTool = __webpack_require__(368);
 
 var _handleTool2 = _interopRequireDefault(_handleTool);
 
@@ -61285,7 +61917,7 @@ var ReshapeTool = function (_paper$Tool) {
 exports.default = ReshapeTool;
 
 /***/ }),
-/* 364 */
+/* 367 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61573,7 +62205,7 @@ var PointTool = function () {
 exports.default = PointTool;
 
 /***/ }),
-/* 365 */
+/* 368 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61772,7 +62404,7 @@ var HandleTool = function () {
 exports.default = HandleTool;
 
 /***/ }),
-/* 366 */
+/* 369 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61798,7 +62430,7 @@ var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _reshape = __webpack_require__(367);
+var _reshape = __webpack_require__(370);
 
 var _reshape2 = _interopRequireDefault(_reshape);
 
@@ -61821,13 +62453,13 @@ ReshapeModeComponent.propTypes = {
 exports.default = ReshapeModeComponent;
 
 /***/ }),
-/* 367 */
+/* 370 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ereshape%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='reshape'%3E %3Cg id='reshape-icon' transform='translate(3.000000, 2.000000)'%3E %3Cpath d='M6.3718,4e-05 C6.3718,1.20298846 6.03840639,2.32811001 5.45898306,3.28804076 C5.31876362,3.52034235 4.30079812,3.15107034 3.82818604,3.61859131 C3.35557395,4.08611228 3.47873759,5.34529147 3.26181884,5.47482181 C2.30759304,6.04462589 1.19191205,6.37204 -0.0002,6.37204' id='Stroke-1' stroke='%23575E75' stroke-width='0.75'%3E%3C/path%3E %3Cpath d='M4,6.94999094 C2.85887984,6.71835578 2,5.70947896 2,4.5 C2,3.11928813 3.11928813,2 4.5,2 C5.88071187,2 7,3.11928813 7,4.5 C7,4.56854233 6.99724162,4.63644042 6.99182982,4.70358929 L6.68137747,4.42017327 C5.65792772,3.48493325 4,4.20484091 4,5.595932 L4,6.94999094 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3Cpath d='M4,7.96455557 C2.30385293,7.72194074 1,6.26323595 1,4.5 C1,2.56700338 2.56700338,1 4.5,1 C6.43299662,1 8,2.56700338 8,4.5 C8,4.84508345 7.95005914,5.1785026 7.85701065,5.4934242 L6.68137747,4.42017327 C5.65792772,3.48493325 4,4.20484091 4,5.595932 L4,7.96455557 Z' id='Oval-2' fill-opacity='0.15' fill='%23575E75'%3E%3C/path%3E %3Cpath d='M7.87915329,13.1684522 L8.98467414,15.6316703 C9.20235954,16.1186581 9.76980913,16.3337238 10.2516521,16.1137141 C10.7334951,15.8924683 10.9462887,15.3189598 10.7286032,14.833208 L9.63583183,12.3973461 L12.3974628,12.3973461 C12.945512,12.3973461 13.207518,11.7313818 12.8048941,11.3644462 L6.00716065,5.15870674 C5.6225647,4.80725864 5,5.07769498 5,5.595932 L5,14.8026807 C5,15.3507015 5.68145595,15.608033 6.04802397,15.1994001 L7.87915329,13.1684522 Z' id='select-icon' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 368 */
+/* 371 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -61871,11 +62503,11 @@ var _cursor = __webpack_require__(26);
 
 var _selection = __webpack_require__(3);
 
-var _selectTool = __webpack_require__(369);
+var _selectTool = __webpack_require__(372);
 
 var _selectTool2 = _interopRequireDefault(_selectTool);
 
-var _selectMode = __webpack_require__(370);
+var _selectMode = __webpack_require__(373);
 
 var _selectMode2 = _interopRequireDefault(_selectMode);
 
@@ -62010,7 +62642,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SelectMode);
 
 /***/ }),
-/* 369 */
+/* 372 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62026,7 +62658,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _hover = __webpack_require__(103);
+var _hover = __webpack_require__(104);
 
 var _selection = __webpack_require__(3);
 
@@ -62255,7 +62887,7 @@ var SelectTool = function (_paper$Tool) {
 exports.default = SelectTool;
 
 /***/ }),
-/* 370 */
+/* 373 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62281,7 +62913,7 @@ var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _select = __webpack_require__(371);
+var _select = __webpack_require__(374);
 
 var _select2 = _interopRequireDefault(_select);
 
@@ -62304,13 +62936,13 @@ SelectModeComponent.propTypes = {
 exports.default = SelectModeComponent;
 
 /***/ }),
-/* 371 */
+/* 374 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eselect%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='select' fill='%23575E75'%3E %3Cpath d='M9.08480709,12.7519131 L10.2692937,15.3910753 C10.5025281,15.912848 11.1105098,16.1432755 11.6267701,15.9075508 C12.1430304,15.6705018 12.3710236,15.0560284 12.1377892,14.53558 L10.9669627,11.925728 L13.925853,11.925728 C14.5130486,11.925728 14.7937693,11.2121948 14.3623865,10.8190495 L7.0791007,4.17004294 C6.6670336,3.7934914 6,4.08324462 6,4.63849857 L6,14.5028722 C6,15.0900373 6.73013138,15.3657496 7.12288282,14.9279287 L9.08480709,12.7519131 Z' id='select-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 372 */
+/* 375 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62352,7 +62984,7 @@ var _format = __webpack_require__(14);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _strokeColorIndicator = __webpack_require__(373);
+var _strokeColorIndicator = __webpack_require__(376);
 
 var _strokeColorIndicator2 = _interopRequireDefault(_strokeColorIndicator);
 
@@ -62471,7 +63103,7 @@ StrokeColorIndicator.propTypes = {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(StrokeColorIndicator);
 
 /***/ }),
-/* 373 */
+/* 376 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62495,11 +63127,11 @@ var _reactPopover2 = _interopRequireDefault(_reactPopover);
 
 var _reactIntl = __webpack_require__(24);
 
-var _colorButton = __webpack_require__(99);
+var _colorButton = __webpack_require__(100);
 
 var _colorButton2 = _interopRequireDefault(_colorButton);
 
-var _colorPicker = __webpack_require__(102);
+var _colorPicker = __webpack_require__(103);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
@@ -62507,7 +63139,7 @@ var _inputGroup = __webpack_require__(32);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(52);
+var _label = __webpack_require__(53);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -62576,7 +63208,7 @@ StrokeColorIndicatorComponent.propTypes = {
 exports.default = (0, _reactIntl.injectIntl)(StrokeColorIndicatorComponent);
 
 /***/ }),
-/* 374 */
+/* 377 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62610,7 +63242,7 @@ var _strokeColor = __webpack_require__(33);
 
 var _strokeWidth = __webpack_require__(34);
 
-var _strokeWidthIndicator = __webpack_require__(375);
+var _strokeWidthIndicator = __webpack_require__(378);
 
 var _strokeWidthIndicator2 = _interopRequireDefault(_strokeWidthIndicator);
 
@@ -62709,7 +63341,7 @@ StrokeWidthIndicator.propTypes = {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(StrokeWidthIndicator);
 
 /***/ }),
-/* 375 */
+/* 378 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62735,7 +63367,7 @@ var _inputGroup = __webpack_require__(32);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _liveInputHoc = __webpack_require__(114);
+var _liveInputHoc = __webpack_require__(115);
 
 var _liveInputHoc2 = _interopRequireDefault(_liveInputHoc);
 
@@ -62770,7 +63402,7 @@ StrokeWidthIndicatorComponent.propTypes = {
 exports.default = StrokeWidthIndicatorComponent;
 
 /***/ }),
-/* 376 */
+/* 379 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -62800,7 +63432,7 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _fonts = __webpack_require__(55);
+var _fonts = __webpack_require__(56);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -62818,7 +63450,7 @@ var _strokeColor = __webpack_require__(33);
 
 var _modes3 = __webpack_require__(10);
 
-var _textEditTarget = __webpack_require__(53);
+var _textEditTarget = __webpack_require__(54);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -62828,15 +63460,15 @@ var _cursor = __webpack_require__(26);
 
 var _selection = __webpack_require__(3);
 
-var _textTool = __webpack_require__(377);
+var _textTool = __webpack_require__(380);
 
 var _textTool2 = _interopRequireDefault(_textTool);
 
-var _textMode = __webpack_require__(378);
+var _textMode = __webpack_require__(381);
 
 var _textMode2 = _interopRequireDefault(_textMode);
 
-var _bitTextMode = __webpack_require__(380);
+var _bitTextMode = __webpack_require__(383);
 
 var _bitTextMode2 = _interopRequireDefault(_bitTextMode);
 
@@ -63053,7 +63685,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch, ownProps) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(TextMode);
 
 /***/ }),
-/* 377 */
+/* 380 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63591,7 +64223,7 @@ var TextTool = function (_paper$Tool) {
 exports.default = TextTool;
 
 /***/ }),
-/* 378 */
+/* 381 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63617,7 +64249,7 @@ var _toolSelectBase = __webpack_require__(15);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _text = __webpack_require__(379);
+var _text = __webpack_require__(382);
 
 var _text2 = _interopRequireDefault(_text);
 
@@ -63640,13 +64272,13 @@ TextModeComponent.propTypes = {
 exports.default = TextModeComponent;
 
 /***/ }),
-/* 379 */
+/* 382 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Etext%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='text' fill='%23575E75'%3E %3Cpath d='M16,4.35294118 L16,6.85176471 C16,7.04941176 15.8447059,7.20470588 15.6470588,7.20470588 L14.8988235,7.20470588 C14.7576471,7.20470588 14.6164706,7.12 14.5741176,6.99294118 L14.2070588,6.11764706 L11.0588235,6.11764706 L11.0588235,14.2917647 L11.92,14.6164706 C12.0611765,14.6729412 12.16,14.8 12.16,14.9552941 L12.16,15.6470588 C12.16,15.8447059 11.9905882,16 11.8070588,16 L8.20705882,16 C8.02352941,16 7.85411765,15.8447059 7.85411765,15.6470588 L7.85411765,14.9552941 C7.85411765,14.8 7.95294118,14.6729412 8.08,14.6164706 L8.94117647,14.2917647 L8.94117647,6.11764706 L5.80705882,6.11764706 L5.44,6.99294118 C5.38352941,7.12 5.25647059,7.20470588 5.11529412,7.20470588 L4.35294118,7.20470588 C4.16941176,7.20470588 4,7.04941176 4,6.85176471 L4,4.35294118 C4,4.15529412 4.16941176,4 4.35294118,4 L15.6470588,4 C15.8447059,4 16,4.15529412 16,4.35294118' id='text-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 380 */
+/* 383 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63672,7 +64304,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _text = __webpack_require__(381);
+var _text = __webpack_require__(384);
 
 var _text2 = _interopRequireDefault(_text);
 
@@ -63695,17 +64327,17 @@ BitTextComponent.propTypes = {
 exports.default = BitTextComponent;
 
 /***/ }),
-/* 381 */
+/* 384 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Etext%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='text' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpolygon id='Page-1' fill='%23575E75' points='4 4 4 8 6 8 6 6 9 6 9 14 7 14 7 16 13 16 13 14 11 14 11 6 14 6 14 8 16 8 16 4'%3E%3C/polygon%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 382 */
+/* 385 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(383);
+var content = __webpack_require__(386);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -63726,7 +64358,7 @@ if(content.locals) module.exports = content.locals;
 if(false) {}
 
 /***/ }),
-/* 383 */
+/* 386 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(12)(false);
@@ -63782,31 +64414,31 @@ exports.locals = {
 };
 
 /***/ }),
-/* 384 */
+/* 387 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ebitmap%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='bitmap' fill='%23FFFFFF'%3E %3Cpath d='M4,3 L16,3 L16,4 L4,4 L4,3 Z M2,5 L3,5 L3,13 L2,13 L2,5 Z M17,5 L18,5 L18,13 L17,13 L17,5 Z M2,13 L18,13 L18,15 L2,15 L2,13 Z M4,12 L16,12 L16,13 L4,13 L4,12 Z M5,11 L8,11 L8,12 L5,12 L5,11 Z M6,10 L7,10 L7,11 L6,11 L6,10 Z M9,11 L16,11 L16,12 L9,12 L9,11 Z M10,10 L15,10 L15,11 L10,11 L10,10 Z M11,9 L14,9 L14,10 L11,10 L11,9 Z M12,8 L13,8 L13,9 L12,9 L12,8 Z M16,12 L17,12 L17,13 L16,13 L16,12 Z M3,15 L17,15 L17,16 L3,16 L3,15 Z M3,4 L4,4 L4,5 L3,5 L3,4 Z M16,4 L17,4 L17,5 L16,5 L16,4 Z M4,16 L16,16 L16,17 L4,17 L4,16 Z' id='Combined-Shape'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 385 */
+/* 388 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:none;stroke:%23575e75;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-in%3C/title%3E %3Cg class='cls-3'%3E %3Ccircle class='cls-4' cx='18' cy='18' r='7'/%3E %3Cline class='cls-4' x1='23' y1='23' x2='26' y2='26'/%3E %3Cline class='cls-4' x1='16' y1='18' x2='20' y2='18'/%3E %3Cline class='cls-4' x1='18' y1='16' x2='18' y2='20'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 386 */
+/* 389 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:none;stroke:%23575e75;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-out%3C/title%3E %3Cg class='cls-3'%3E %3Ccircle class='cls-4' cx='18' cy='18' r='7'/%3E %3Cline class='cls-4' x1='23' y1='23' x2='26' y2='26'/%3E %3Cline class='cls-4' x1='16' y1='18' x2='20' y2='18'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 387 */
+/* 390 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:%23575e75;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-reset%3C/title%3E %3Cg class='cls-3'%3E %3Crect class='cls-4' x='13' y='14' width='10' height='2' rx='1' ry='1'/%3E %3Crect class='cls-4' x='13' y='20' width='10' height='2' rx='1' ry='1'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 388 */
+/* 391 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -63832,13 +64464,13 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(54);
+var _lodash3 = __webpack_require__(55);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
 var _reactRedux = __webpack_require__(6);
 
-var _copyPasteHoc = __webpack_require__(108);
+var _copyPasteHoc = __webpack_require__(109);
 
 var _copyPasteHoc2 = _interopRequireDefault(_copyPasteHoc);
 
@@ -63991,7 +64623,7 @@ var KeyboardShortcutsHOC = function KeyboardShortcutsHOC(WrappedComponent) {
 exports.default = KeyboardShortcutsHOC;
 
 /***/ }),
-/* 389 */
+/* 392 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64096,7 +64728,7 @@ var SelectionHOC = function SelectionHOC(WrappedComponent) {
 exports.default = SelectionHOC;
 
 /***/ }),
-/* 390 */
+/* 393 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64122,7 +64754,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(54);
+var _lodash3 = __webpack_require__(55);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -64132,7 +64764,7 @@ var _selection = __webpack_require__(3);
 
 var _selectedItems = __webpack_require__(7);
 
-var _undo = __webpack_require__(57);
+var _undo = __webpack_require__(58);
 
 var _undo2 = __webpack_require__(41);
 
@@ -64240,7 +64872,7 @@ var UndoHOC = function UndoHOC(WrappedComponent) {
 exports.default = UndoHOC;
 
 /***/ }),
-/* 391 */
+/* 394 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64274,7 +64906,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(54);
+var _lodash3 = __webpack_require__(55);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -64290,7 +64922,7 @@ var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(21);
 
-var _undo2 = __webpack_require__(57);
+var _undo2 = __webpack_require__(58);
 
 var _math = __webpack_require__(19);
 
@@ -64456,7 +65088,7 @@ var UpdateImageHOC = function UpdateImageHOC(WrappedComponent) {
 exports.default = UpdateImageHOC;
 
 /***/ }),
-/* 392 */
+/* 395 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64472,15 +65104,15 @@ var _modes = __webpack_require__(10);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _bitBrushSize = __webpack_require__(110);
+var _bitBrushSize = __webpack_require__(111);
 
 var _bitBrushSize2 = _interopRequireDefault(_bitBrushSize);
 
-var _bitEraserSize = __webpack_require__(111);
+var _bitEraserSize = __webpack_require__(112);
 
 var _bitEraserSize2 = _interopRequireDefault(_bitEraserSize);
 
-var _brushMode = __webpack_require__(109);
+var _brushMode = __webpack_require__(110);
 
 var _brushMode2 = _interopRequireDefault(_brushMode);
 
@@ -64488,7 +65120,7 @@ var _eraserMode = __webpack_require__(61);
 
 var _eraserMode2 = _interopRequireDefault(_eraserMode);
 
-var _color = __webpack_require__(393);
+var _color = __webpack_require__(396);
 
 var _color2 = _interopRequireDefault(_color);
 
@@ -64500,11 +65132,11 @@ var _cursor = __webpack_require__(26);
 
 var _cursor2 = _interopRequireDefault(_cursor);
 
-var _fillBitmapShapes = __webpack_require__(112);
+var _fillBitmapShapes = __webpack_require__(113);
 
 var _fillBitmapShapes2 = _interopRequireDefault(_fillBitmapShapes);
 
-var _fillMode = __webpack_require__(394);
+var _fillMode = __webpack_require__(397);
 
 var _fillMode2 = _interopRequireDefault(_fillMode);
 
@@ -64512,7 +65144,7 @@ var _font = __webpack_require__(71);
 
 var _font2 = _interopRequireDefault(_font);
 
-var _format = __webpack_require__(48);
+var _format = __webpack_require__(49);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -64532,11 +65164,11 @@ var _selectedItems = __webpack_require__(7);
 
 var _selectedItems2 = _interopRequireDefault(_selectedItems);
 
-var _textEditTarget = __webpack_require__(53);
+var _textEditTarget = __webpack_require__(54);
 
 var _textEditTarget2 = _interopRequireDefault(_textEditTarget);
 
-var _viewBounds = __webpack_require__(49);
+var _viewBounds = __webpack_require__(50);
 
 var _viewBounds2 = _interopRequireDefault(_viewBounds);
 
@@ -64544,7 +65176,7 @@ var _undo = __webpack_require__(41);
 
 var _undo2 = _interopRequireDefault(_undo);
 
-var _zoomLevels = __webpack_require__(83);
+var _zoomLevels = __webpack_require__(84);
 
 var _zoomLevels2 = _interopRequireDefault(_zoomLevels);
 
@@ -64574,7 +65206,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 393 */
+/* 396 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64594,7 +65226,7 @@ var _fillColor = __webpack_require__(20);
 
 var _fillColor2 = _interopRequireDefault(_fillColor);
 
-var _fillColor3 = __webpack_require__(50);
+var _fillColor3 = __webpack_require__(51);
 
 var _fillColor4 = _interopRequireDefault(_fillColor3);
 
@@ -64622,7 +65254,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 394 */
+/* 397 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64650,7 +65282,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 395 */
+/* 398 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64662,7 +65294,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(35);
 
-var _intl = __webpack_require__(115);
+var _intl = __webpack_require__(116);
 
 var _intl2 = _interopRequireDefault(_intl);
 
@@ -64676,7 +65308,7 @@ exports.default = (0, _redux.combineReducers)({
 });
 
 /***/ }),
-/* 396 */
+/* 399 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64700,9 +65332,9 @@ Object.defineProperty(exports, "Provider", {
 });
 exports.initialState = exports.updateIntl = exports.UPDATE = void 0;
 
-var _IntlProvider2 = _interopRequireDefault(__webpack_require__(116));
+var _IntlProvider2 = _interopRequireDefault(__webpack_require__(117));
 
-var _Provider2 = _interopRequireDefault(__webpack_require__(397));
+var _Provider2 = _interopRequireDefault(__webpack_require__(400));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64746,7 +65378,7 @@ function intlReducer() {
 }
 
 /***/ }),
-/* 397 */
+/* 400 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -64763,7 +65395,7 @@ var _react = _interopRequireDefault(__webpack_require__(0));
 
 var _propTypes = _interopRequireDefault(__webpack_require__(1));
 
-var _IntlProvider = _interopRequireDefault(__webpack_require__(116));
+var _IntlProvider = _interopRequireDefault(__webpack_require__(117));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64780,7 +65412,7 @@ var _default = Provider;
 exports.default = _default;
 
 /***/ }),
-/* 398 */
+/* 401 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -67041,186 +67673,186 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /***/ }),
-/* 399 */
+/* 402 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/en.js
-var en = __webpack_require__(122);
+var en = __webpack_require__(123);
 var en_default = /*#__PURE__*/__webpack_require__.n(en);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/am.js
-var am = __webpack_require__(123);
+var am = __webpack_require__(124);
 var am_default = /*#__PURE__*/__webpack_require__.n(am);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/ar.js
-var ar = __webpack_require__(124);
+var ar = __webpack_require__(125);
 var ar_default = /*#__PURE__*/__webpack_require__.n(ar);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/az.js
-var az = __webpack_require__(125);
+var az = __webpack_require__(126);
 var az_default = /*#__PURE__*/__webpack_require__.n(az);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/ca.js
-var ca = __webpack_require__(126);
+var ca = __webpack_require__(127);
 var ca_default = /*#__PURE__*/__webpack_require__.n(ca);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/cs.js
-var cs = __webpack_require__(127);
+var cs = __webpack_require__(128);
 var cs_default = /*#__PURE__*/__webpack_require__.n(cs);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/cy.js
-var cy = __webpack_require__(128);
+var cy = __webpack_require__(129);
 var cy_default = /*#__PURE__*/__webpack_require__.n(cy);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/da.js
-var da = __webpack_require__(129);
+var da = __webpack_require__(130);
 var da_default = /*#__PURE__*/__webpack_require__.n(da);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/de.js
-var de = __webpack_require__(130);
+var de = __webpack_require__(131);
 var de_default = /*#__PURE__*/__webpack_require__.n(de);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/el.js
-var el = __webpack_require__(131);
+var el = __webpack_require__(132);
 var el_default = /*#__PURE__*/__webpack_require__.n(el);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/es.js
-var es = __webpack_require__(132);
+var es = __webpack_require__(133);
 var es_default = /*#__PURE__*/__webpack_require__.n(es);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/et.js
-var et = __webpack_require__(133);
+var et = __webpack_require__(134);
 var et_default = /*#__PURE__*/__webpack_require__.n(et);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/eu.js
-var eu = __webpack_require__(134);
+var eu = __webpack_require__(135);
 var eu_default = /*#__PURE__*/__webpack_require__.n(eu);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/fi.js
-var fi = __webpack_require__(135);
+var fi = __webpack_require__(136);
 var fi_default = /*#__PURE__*/__webpack_require__.n(fi);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/fr.js
-var fr = __webpack_require__(136);
+var fr = __webpack_require__(137);
 var fr_default = /*#__PURE__*/__webpack_require__.n(fr);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/ga.js
-var ga = __webpack_require__(137);
+var ga = __webpack_require__(138);
 var ga_default = /*#__PURE__*/__webpack_require__.n(ga);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/gd.js
-var gd = __webpack_require__(138);
+var gd = __webpack_require__(139);
 var gd_default = /*#__PURE__*/__webpack_require__.n(gd);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/gl.js
-var gl = __webpack_require__(139);
+var gl = __webpack_require__(140);
 var gl_default = /*#__PURE__*/__webpack_require__.n(gl);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/he.js
-var he = __webpack_require__(140);
+var he = __webpack_require__(141);
 var he_default = /*#__PURE__*/__webpack_require__.n(he);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/hu.js
-var hu = __webpack_require__(141);
+var hu = __webpack_require__(142);
 var hu_default = /*#__PURE__*/__webpack_require__.n(hu);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/hr.js
-var hr = __webpack_require__(142);
+var hr = __webpack_require__(143);
 var hr_default = /*#__PURE__*/__webpack_require__.n(hr);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/id.js
-var id = __webpack_require__(143);
+var id = __webpack_require__(144);
 var id_default = /*#__PURE__*/__webpack_require__.n(id);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/is.js
-var is = __webpack_require__(144);
+var is = __webpack_require__(145);
 var is_default = /*#__PURE__*/__webpack_require__.n(is);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/it.js
-var it = __webpack_require__(145);
+var it = __webpack_require__(146);
 var it_default = /*#__PURE__*/__webpack_require__.n(it);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/ja.js
-var ja = __webpack_require__(146);
+var ja = __webpack_require__(147);
 var ja_default = /*#__PURE__*/__webpack_require__.n(ja);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/ko.js
-var ko = __webpack_require__(147);
+var ko = __webpack_require__(148);
 var ko_default = /*#__PURE__*/__webpack_require__.n(ko);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/lt.js
-var lt = __webpack_require__(148);
+var lt = __webpack_require__(149);
 var lt_default = /*#__PURE__*/__webpack_require__.n(lt);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/lv.js
-var lv = __webpack_require__(149);
+var lv = __webpack_require__(150);
 var lv_default = /*#__PURE__*/__webpack_require__.n(lv);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/nl.js
-var nl = __webpack_require__(150);
+var nl = __webpack_require__(151);
 var nl_default = /*#__PURE__*/__webpack_require__.n(nl);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/nb.js
-var nb = __webpack_require__(151);
+var nb = __webpack_require__(152);
 var nb_default = /*#__PURE__*/__webpack_require__.n(nb);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/nn.js
-var nn = __webpack_require__(152);
+var nn = __webpack_require__(153);
 var nn_default = /*#__PURE__*/__webpack_require__.n(nn);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/pl.js
-var pl = __webpack_require__(153);
+var pl = __webpack_require__(154);
 var pl_default = /*#__PURE__*/__webpack_require__.n(pl);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/pt.js
-var pt = __webpack_require__(154);
+var pt = __webpack_require__(155);
 var pt_default = /*#__PURE__*/__webpack_require__.n(pt);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/ro.js
-var ro = __webpack_require__(155);
+var ro = __webpack_require__(156);
 var ro_default = /*#__PURE__*/__webpack_require__.n(ro);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/ru.js
-var ru = __webpack_require__(156);
+var ru = __webpack_require__(157);
 var ru_default = /*#__PURE__*/__webpack_require__.n(ru);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/sl.js
-var sl = __webpack_require__(157);
+var sl = __webpack_require__(158);
 var sl_default = /*#__PURE__*/__webpack_require__.n(sl);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/sk.js
-var sk = __webpack_require__(158);
+var sk = __webpack_require__(159);
 var sk_default = /*#__PURE__*/__webpack_require__.n(sk);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/sr.js
-var sr = __webpack_require__(159);
+var sr = __webpack_require__(160);
 var sr_default = /*#__PURE__*/__webpack_require__.n(sr);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/sv.js
-var sv = __webpack_require__(160);
+var sv = __webpack_require__(161);
 var sv_default = /*#__PURE__*/__webpack_require__.n(sv);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/th.js
-var th = __webpack_require__(161);
+var th = __webpack_require__(162);
 var th_default = /*#__PURE__*/__webpack_require__.n(th);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/tr.js
-var tr = __webpack_require__(162);
+var tr = __webpack_require__(163);
 var tr_default = /*#__PURE__*/__webpack_require__.n(tr);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/uk.js
-var uk = __webpack_require__(163);
+var uk = __webpack_require__(164);
 var uk_default = /*#__PURE__*/__webpack_require__.n(uk);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/vi.js
-var vi = __webpack_require__(164);
+var vi = __webpack_require__(165);
 var vi_default = /*#__PURE__*/__webpack_require__.n(vi);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/zh.js
-var zh = __webpack_require__(165);
+var zh = __webpack_require__(166);
 var zh_default = /*#__PURE__*/__webpack_require__.n(zh);
 
 // CONCATENATED MODULE: ./node_modules/scratch-l10n/src/supported-locales.js
