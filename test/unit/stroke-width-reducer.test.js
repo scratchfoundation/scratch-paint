@@ -13,7 +13,7 @@ test('initialState', () => {
 
 test('changestrokeWidth', () => {
     let defaultState;
-    const newstrokeWidth = 234;
+    const newstrokeWidth = 23;
 
     expect(strokeWidthReducer(defaultState /* state */, changeStrokeWidth(newstrokeWidth) /* action */))
         .toEqual(newstrokeWidth);
