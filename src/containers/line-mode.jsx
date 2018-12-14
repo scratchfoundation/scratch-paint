@@ -113,6 +113,7 @@ class LineMode extends React.Component {
         // If not near other path, start a new path
         if (!this.path) {
             this.path = new paper.Path();
+            this.path.strokeCap = 'round';
             stylePath(this.path, this.props.colorState.strokeColor, this.props.colorState.strokeWidth);
 
             this.path.add(event.point);
