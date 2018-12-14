@@ -45,11 +45,11 @@ Edited to add input-range-small
 }
 
 .input-small {
-    width: 3rem; 
+    width: 3rem;
     text-align: center;
 }
 
 .input-small-range {
-    width: 3.75rem;
+    width: 4rem;
     text-align: center;
 }
