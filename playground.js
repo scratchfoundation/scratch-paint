@@ -26271,7 +26271,7 @@ var _stylePath = __webpack_require__(9);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var CHANGE_STROKE_WIDTH = 'scratch-paint/stroke-width/CHANGE_STROKE_WIDTH';
-var MAX_STROKE_WIDTH = 800;
+var MAX_STROKE_WIDTH = 100;
 var initialState = 4;
 
 var reducer = function reducer(state, action) {
@@ -56588,6 +56588,7 @@ var LineMode = function (_React$Component) {
             // If not near other path, start a new path
             if (!this.path) {
                 this.path = new _paper2.default.Path();
+                this.path.strokeCap = 'round';
                 (0, _stylePath.stylePath)(this.path, this.props.colorState.strokeColor, this.props.colorState.strokeWidth);
 
                 this.path.add(event.point);
@@ -58617,7 +58618,7 @@ exports = module.exports = __webpack_require__(12)(false);
 
 
 // module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* NOTE:\nEdited to add input-range-small\n*/\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.input_input-form_l9eYg {\n    height: 2rem;\n    padding: 0 0.75rem;\n\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    font-size: 0.75rem;\n    font-weight: bold;\n    color: #575e75;\n\n    border-width: 1px;\n    border-style: solid;\n    border-color: #E9EEF2;\n    border-radius: 2rem;\n\n    outline: none;\n    cursor: text;\n    -webkit-transition: 0.25s ease-out;\n    -o-transition: 0.25s ease-out;\n    transition: 0.25s ease-out; /* @todo: standardize with var */\n    -webkit-box-shadow: none;\n            box-shadow: none;\n\n    /*\n        For truncating overflowing text gracefully\n        Min-width is for a bug: https://css-tricks.com/flexbox-truncated-text\n        @todo: move this out into a mixin or a helper component\n    */\n    overflow: hidden;\n    -o-text-overflow: ellipsis;\n       text-overflow: ellipsis;\n    white-space: nowrap;\n    min-width: 0;\n}\n\n.input_input-form_l9eYg:focus {\n    border-color: #4C97FF;\n    -webkit-box-shadow: 0 0 0 .25rem hsla(215, 100%, 65%, 0.20);\n            box-shadow: 0 0 0 .25rem hsla(215, 100%, 65%, 0.20);\n}\n\n.input_input-small_2qj1C {\n    width: 3rem; \n    text-align: center;\n}\n\n.input_input-small-range_2GQzZ {\n    width: 3.75rem;\n    text-align: center;\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* NOTE:\nEdited to add input-range-small\n*/\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.input_input-form_l9eYg {\n    height: 2rem;\n    padding: 0 0.75rem;\n\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    font-size: 0.75rem;\n    font-weight: bold;\n    color: #575e75;\n\n    border-width: 1px;\n    border-style: solid;\n    border-color: #E9EEF2;\n    border-radius: 2rem;\n\n    outline: none;\n    cursor: text;\n    -webkit-transition: 0.25s ease-out;\n    -o-transition: 0.25s ease-out;\n    transition: 0.25s ease-out; /* @todo: standardize with var */\n    -webkit-box-shadow: none;\n            box-shadow: none;\n\n    /*\n        For truncating overflowing text gracefully\n        Min-width is for a bug: https://css-tricks.com/flexbox-truncated-text\n        @todo: move this out into a mixin or a helper component\n    */\n    overflow: hidden;\n    -o-text-overflow: ellipsis;\n       text-overflow: ellipsis;\n    white-space: nowrap;\n    min-width: 0;\n}\n\n.input_input-form_l9eYg:focus {\n    border-color: #4C97FF;\n    -webkit-box-shadow: 0 0 0 .25rem hsla(215, 100%, 65%, 0.20);\n            box-shadow: 0 0 0 .25rem hsla(215, 100%, 65%, 0.20);\n}\n\n.input_input-small_2qj1C {\n    width: 3rem;\n    text-align: center;\n}\n\n.input_input-small-range_2GQzZ {\n    width: 4rem;\n    text-align: center;\n}\n", ""]);
 
 // exports
 exports.locals = {
