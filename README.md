@@ -37,10 +37,13 @@ You can try out your own copy of the paint editor by running the development ser
 
 In the cloned `scratch-paint` directory, run:
 ```bash
+npm run build
 npm start
 ```
 
 Then go to [http://localhost:8078/playground/](http://localhost:8078/playground/). 8078 is BLOB upside-down. The True Name of this repo is scratch-blobs.
+
+*(Note that the `npm run build` step above seems like it's only necessary for some user and environments, and not others; check for yourself if the server that `npm start` starts is hot-reloading correctly.)*
 
 ### Running locally (as part of Scratch)
 So you've tried out your edits in the playground and they look good. You should now test with the rest of Scratch, to make sure that everything hooks up right, and so that you can use your custom paint editor to make costumes and sprites!
@@ -58,9 +61,12 @@ Now in another terminal, go back to the `scratch-gui` folder and run
 ```bash
 npm install
 npm link scratch-paint
+npm run build
 npm start
 ```
 Then go to [http://localhost:8601](http://localhost:8601). 601 is supposed to look like GUI (it's okay, I don't really see it either.) The Costumes tab should be running your local copy of scratch-paint!
+
+*(Note that the `npm run build` step above seems like it's only necessary for some user and environments, and not others; check for yourself if the server that `npm start` starts is hot-reloading correctly.)*
 
 ### How to include in your own Node.js App
 If you want to use scratch-paint in your own Node environment/application, add it with:
