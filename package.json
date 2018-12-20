@@ -24,7 +24,7 @@
     "url": "git+ssh://git@github.com/LLK/scratch-paint.git"
   },
   "dependencies": {
-    "@scratch/paper": "0.11.20181113220307",
+    "@scratch/paper": "0.11.20181220183503",
     "classnames": "2.2.5",
     "keymirror": "0.1.1",
     "lodash.bindall": "4.4.0",
@@ -32,7 +32,7 @@
     "minilog": "3.1.0",
     "parse-color": "1.0.0",
     "prop-types": "^15.5.10",
-    "scratch-svg-renderer": "0.2.0-prerelease.20181218153528"
+    "scratch-svg-renderer": "0.2.0-prerelease.20181220183040"
   },
   "peerDependencies": {
     "react": "^16",
