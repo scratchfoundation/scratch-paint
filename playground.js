@@ -129,7 +129,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Tue Nov 13 16:56:31 2018 -0500
+ * Date: Thu Dec 20 13:26:52 2018 -0500
  *
  ***
  *
@@ -14448,12 +14448,13 @@ new function() {
 		var node = SvgElement.create('text', getTransform(item._matrix, false),
 				formatter);
 		node.setAttribute('font-size', item.fontSize);
+		node.setAttribute('xml:space', 'preserve');
 		for (var i = 0; i < item._lines.length; i++) {
 			var tspanNode = SvgElement.create('tspan', {
 				x: '0',
 				dy: i === 0 ? '0' : item.getLeading() + 'px'
 			}, formatter);
-			tspanNode.textContent = item._lines[i];
+			tspanNode.textContent = item._lines[i] ? item._lines[i] : ' ';
 			node.appendChild(tspanNode);
 		}
 		return node;
@@ -43979,6 +43980,7 @@ class SvgRenderer {
             // Set text-before-edge alignment:
             // Scratch renders all text like this.
             textElement.setAttribute('alignment-baseline', 'text-before-edge');
+            textElement.setAttribute('xml:space', 'preserve');
             // If there's no font size provided, provide one.
             if (!textElement.getAttribute('font-size')) {
                 textElement.setAttribute('font-size', '18');
@@ -44036,8 +44038,9 @@ class SvgRenderer {
                 for (const line of lines) {
                     const tspanNode = SvgElement.create('tspan');
                     tspanNode.setAttribute('x', '0');
+                    tspanNode.setAttribute('style', 'white-space: pre');
                     tspanNode.setAttribute('dy', `${spacing}em`);
-                    tspanNode.textContent = line;
+                    tspanNode.textContent = line ? line : ' ';
                     textElement.appendChild(tspanNode);
                 }
             }
