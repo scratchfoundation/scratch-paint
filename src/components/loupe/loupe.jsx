@@ -66,6 +66,11 @@ class LoupeComponent extends React.Component {
     }
     setCanvas (element) {
         this.canvas = element;
+        // Make sure to draw a frame when this component is first mounted
+        // Check for null ref because refs are called with null when unmounted
+        if (this.canvas) {
+            this.draw();
+        }
     }
     render () {
         const {
