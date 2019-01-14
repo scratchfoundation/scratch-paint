@@ -33148,6 +33148,7 @@ var EyeDropperTool = function (_paper$Tool) {
         };
 
         _this.onMouseDown = _this.handleMouseDown;
+        _this.onMouseUp = _this.handleMouseUp;
         _this.onMouseMove = _this.handleMouseMove;
 
         _this.canvas = canvas;
@@ -33177,7 +33178,15 @@ var EyeDropperTool = function (_paper$Tool) {
         }
     }, {
         key: 'handleMouseDown',
-        value: function handleMouseDown() {
+        value: function handleMouseDown(event) {
+            // Nothing special on mousedown, just send to move handler which will show the loupe,
+            // and the mouse up handler submits the color. This allows touch to drag
+            // with the loupe visible to find the correct color
+            this.handleMouseMove(event);
+        }
+    }, {
+        key: 'handleMouseUp',
+        value: function handleMouseUp() {
             if (!this.hideLoupe) {
                 var colorInfo = this.getColorInfo(this.pickX, this.pickY, this.hideLoupe);
                 if (!colorInfo) return;
@@ -35536,7 +35545,7 @@ var PaintEditor = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaintEditor.__proto__ || Object.getPrototypeOf(PaintEditor)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['switchMode', 'onMouseDown', 'setCanvas', 'setTextArea', 'startEyeDroppingLoop', 'stopEyeDroppingLoop', 'handleSetSelectedItems', 'handleZoomIn', 'handleZoomOut', 'handleZoomReset']);
+        (0, _lodash2.default)(_this, ['switchMode', 'onMouseDown', 'onMouseUp', 'setCanvas', 'setTextArea', 'startEyeDroppingLoop', 'stopEyeDroppingLoop', 'handleSetSelectedItems', 'handleZoomIn', 'handleZoomOut', 'handleZoomReset']);
         _this.state = {
             canvas: null,
             colorInfo: null
@@ -35554,6 +35563,8 @@ var PaintEditor = function (_React$Component) {
             // canvas, and should therefore stop the eye dropper
             document.addEventListener('mousedown', this.onMouseDown);
             document.addEventListener('touchstart', this.onMouseDown);
+            document.addEventListener('mouseup', this.onMouseUp);
+            document.addEventListener('touchend', this.onMouseUp);
         }
     }, {
         key: 'componentWillReceiveProps',
@@ -35575,7 +35586,7 @@ var PaintEditor = function (_React$Component) {
             } else if (!this.props.isEyeDropping && prevProps.isEyeDropping) {
                 this.stopEyeDroppingLoop();
             } else if (this.props.isEyeDropping && this.props.viewBounds !== prevProps.viewBounds) {
-                this.props.previousTool.activate();
+                if (this.props.previousTool) this.props.previousTool.activate();
                 this.props.onDeactivateEyeDropper();
                 this.stopEyeDroppingLoop();
             }
@@ -35593,6 +35604,8 @@ var PaintEditor = function (_React$Component) {
             this.stopEyeDroppingLoop();
             document.removeEventListener('mousedown', this.onMouseDown);
             document.removeEventListener('touchstart', this.onMouseDown);
+            document.removeEventListener('mouseup', this.onMouseUp);
+            document.removeEventListener('touchend', this.onMouseUp);
         }
     }, {
         key: 'switchMode',
@@ -35709,7 +35722,10 @@ var PaintEditor = function (_React$Component) {
                 // Exit text edit mode if you click anywhere outside of canvas
                 this.props.removeTextEditTarget();
             }
-
+        }
+    }, {
+        key: 'onMouseUp',
+        value: function onMouseUp() {
             if (this.props.isEyeDropping) {
                 var colorString = this.eyeDropper.colorString;
                 var callback = this.props.changeColorToEyeDropper;
@@ -35720,7 +35736,7 @@ var PaintEditor = function (_React$Component) {
                     // so apply the new color
                     callback(colorString);
                 }
-                this.props.previousTool.activate();
+                if (this.props.previousTool) this.props.previousTool.activate();
                 this.props.onDeactivateEyeDropper();
                 this.stopEyeDroppingLoop();
             }
@@ -57021,6 +57037,11 @@ var LoupeComponent = function (_React$Component) {
         key: 'setCanvas',
         value: function setCanvas(element) {
             this.canvas = element;
+            // Make sure to draw a frame when this component is first mounted
+            // Check for null ref because refs are called with null when unmounted
+            if (this.canvas) {
+                this.draw();
+            }
         }
     }, {
         key: 'render',
