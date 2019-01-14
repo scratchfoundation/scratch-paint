@@ -117,7 +117,7 @@ class PaintEditor extends React.Component {
         } else if (!this.props.isEyeDropping && prevProps.isEyeDropping) {
             this.stopEyeDroppingLoop();
         } else if (this.props.isEyeDropping && this.props.viewBounds !== prevProps.viewBounds) {
-            this.props.previousTool.activate();
+            if (this.props.previousTool) this.props.previousTool.activate();
             this.props.onDeactivateEyeDropper();
             this.stopEyeDroppingLoop();
         }
@@ -245,7 +245,7 @@ class PaintEditor extends React.Component {
                 // so apply the new color
                 callback(colorString);
             }
-            this.props.previousTool.activate();
+            if (this.props.previousTool) this.props.previousTool.activate();
             this.props.onDeactivateEyeDropper();
             this.stopEyeDroppingLoop();
         }
