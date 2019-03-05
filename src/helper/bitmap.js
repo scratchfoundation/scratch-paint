@@ -329,10 +329,10 @@ const getHitBounds = function (raster) {
     let left = 0;
     let right = imageData.width;
 
-    while (bottom - 1 > top && rowBlank_(imageData, width, bottom - 1)) --bottom;
     while (top < bottom && rowBlank_(imageData, width, top)) ++top;
-    while (right - 1 > left && columnBlank_(imageData, width, right - 1, top, bottom)) --right;
+    while (bottom - 1 > top && rowBlank_(imageData, width, bottom - 1)) --bottom;
     while (left < right && columnBlank_(imageData, width, left, top, bottom)) ++left;
+    while (right - 1 > left && columnBlank_(imageData, width, right - 1, top, bottom)) --right;
 
     return new paper.Rectangle(left, top, right - left, bottom - top);
 };
