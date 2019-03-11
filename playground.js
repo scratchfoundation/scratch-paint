@@ -107,7 +107,7 @@ if (true) {
  * LICENSE file in the root directory of this source tree.
  */
 
-if (false) { var throwOnDirectAccess, isValidElement, REACT_ELEMENT_TYPE; } else {
+if (false) { var throwOnDirectAccess, ReactIs; } else {
   // By explicitly using `prop-types` you are opting into new production behavior.
   // http://fb.me/prop-types-in-prod
   module.exports = __webpack_require__(181)();
@@ -39683,6 +39683,8 @@ function addLooseExports(parse, Parser$$1, plugins$$1) {
 var ReactPropTypesSecret = __webpack_require__(182);
 
 function emptyFunction() {}
+function emptyFunctionWithReset() {}
+emptyFunctionWithReset.resetWarningCache = emptyFunction;
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -39716,16 +39718,19 @@ module.exports = function() {
     any: shim,
     arrayOf: getShim,
     element: shim,
+    elementType: shim,
     instanceOf: getShim,
     node: shim,
     objectOf: getShim,
     oneOf: getShim,
     oneOfType: getShim,
     shape: getShim,
-    exact: getShim
+    exact: getShim,
+
+    checkPropTypes: emptyFunctionWithReset,
+    resetWarningCache: emptyFunction
   };
 
-  ReactPropTypes.checkPropTypes = emptyFunction;
   ReactPropTypes.PropTypes = ReactPropTypes;
 
   return ReactPropTypes;
@@ -56340,10 +56345,12 @@ var FillTool = function (_paper$Tool) {
         value: function _setFillItemColor(color1, color2, gradientType, pointerLocation) {
             var item = this._getFillItem();
             if (!item) return;
-            if (color1 instanceof _paper2.default.Color || gradientType === _gradientTypes2.default.SOLID) {
-                item.fillColor = color1;
-            } else {
+            // Only create a gradient if specifically requested, else use color1 directly
+            // This ensures we do not set a gradient by accident (see scratch-paint#830).
+            if (gradientType && gradientType !== _gradientTypes2.default.SOLID) {
                 item.fillColor = (0, _stylePath.createGradientObject)(color1, color2, gradientType, item.bounds, pointerLocation);
+            } else {
+                item.fillColor = color1;
             }
         }
     }, {
