@@ -178,10 +178,12 @@ class FillTool extends paper.Tool {
     _setFillItemColor (color1, color2, gradientType, pointerLocation) {
         const item = this._getFillItem();
         if (!item) return;
-        if (color1 instanceof paper.Color || gradientType === GradientTypes.SOLID) {
-            item.fillColor = color1;
-        } else {
+        // Only create a gradient if specifically requested, else use color1 directly
+        // This ensures we do not set a gradient by accident (see scratch-paint#830).
+        if (gradientType && gradientType !== GradientTypes.SOLID) {
             item.fillColor = createGradientObject(color1, color2, gradientType, item.bounds, pointerLocation);
+        } else {
+            item.fillColor = color1;
         }
     }
     _getFillItem () {
