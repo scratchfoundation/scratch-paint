@@ -113,7 +113,7 @@ class ScrollableCanvas extends React.Component {
             pan(dx, dy);
             this.props.updateViewBounds(paper.view.matrix);
             if (paper.tool) {
-                paper.tool.view._handleMouseEvent('mousemove', event, fixedPoint)
+                paper.tool.view._handleMouseEvent('mousemove', event, fixedPoint);
             }
         }
         event.preventDefault();
