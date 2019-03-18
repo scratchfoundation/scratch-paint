@@ -45563,12 +45563,12 @@ var ScrollableCanvas = function (_React$Component) {
             var multiplier = event.deltaMode === 0x1 ? 15 : 1;
             var deltaX = event.deltaX * multiplier;
             var deltaY = event.deltaY * multiplier;
+            var canvasRect = this.props.canvas.getBoundingClientRect();
+            var offsetX = event.clientX - canvasRect.left;
+            var offsetY = event.clientY - canvasRect.top;
+            var fixedPoint = _paper2.default.view.viewToProject(new _paper2.default.Point(offsetX, offsetY));
             if (event.metaKey || event.ctrlKey) {
                 // Zoom keeping mouse location fixed
-                var canvasRect = this.props.canvas.getBoundingClientRect();
-                var offsetX = event.clientX - canvasRect.left;
-                var offsetY = event.clientY - canvasRect.top;
-                var fixedPoint = _paper2.default.view.viewToProject(new _paper2.default.Point(offsetX, offsetY));
                 (0, _view.zoomOnFixedPoint)(-deltaY / 1000, fixedPoint);
                 this.props.updateViewBounds(_paper2.default.view.matrix);
                 this.props.redrawSelectionBox(); // Selection handles need to be resized after zoom
@@ -45584,6 +45584,9 @@ var ScrollableCanvas = function (_React$Component) {
                 var dy = deltaY / _paper2.default.view.zoom;
                 (0, _view.pan)(_dx, dy);
                 this.props.updateViewBounds(_paper2.default.view.matrix);
+                if (_paper2.default.tool) {
+                    _paper2.default.tool.view._handleMouseEvent('mousemove', event, fixedPoint);
+                }
             }
             event.preventDefault();
         }
