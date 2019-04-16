@@ -65079,8 +65079,17 @@ var UpdateImageHOC = function UpdateImageHOC(WrappedComponent) {
                     }
                 }
                 var rect = (0, _bitmap.getHitBounds)(plasteredRaster);
+                var imageData = plasteredRaster.getImageData(rect);
+
+                // If the bitmap has a zero width or height, save this information
+                // since zero isn't a valid value for on imageData objects' widths and heights.
+                if (rect.width === 0 || rect.height === 0) {
+                    imageData.sourceWidth = rect.width;
+                    imageData.sourceHeight = rect.height;
+                }
+
                 this.props.onUpdateImage(false /* isVector */
-                , plasteredRaster.getImageData(rect), _view.ART_BOARD_WIDTH / 2 - rect.x, _view.ART_BOARD_HEIGHT / 2 - rect.y);
+                , imageData, _view.ART_BOARD_WIDTH / 2 - rect.x, _view.ART_BOARD_HEIGHT / 2 - rect.y);
 
                 if (!skipSnapshot) {
                     (0, _undo2.performSnapshot)(this.props.undoSnapshot, _format2.default.BITMAP);
