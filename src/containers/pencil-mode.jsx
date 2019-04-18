@@ -51,8 +51,9 @@ class PencilMode extends React.Component {
         clearSelection(this.props.clearSelectedItems);
 
         this.tool = new PencilTool(
-            this.props.clearSelectedItems,
-            this.props.onUpdateImage
+            this.props.onUpdateImage,
+            this.props.clearSelectedItems
+            
         );
         this.tool.setColorState(this.props.colorState);
         this.tool.setSmoothing(this.props.pencilModeState.pencilSmoothing);
