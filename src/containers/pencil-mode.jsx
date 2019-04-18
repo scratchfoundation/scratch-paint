@@ -3,9 +3,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
-import {MIXED} from '../helper/style-path';
 
-import {changeStrokeColor, DEFAULT_COLOR} from '../reducers/stroke-color';
+import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {clearGradient} from '../reducers/selection-gradient-type';
@@ -31,20 +30,23 @@ class PencilMode extends React.Component {
         if (this.tool && nextProps.colorState !== this.props.colorState) {
             this.tool.setColorState(nextProps.colorState);
         }
+        if (this.tool && nextProps.pencilModeState.pencilSmoothing !== this.props.pencilModeState.pencilSmoothing) {
+            this.tool.setSmoothing(nextProps.pencilModeState.pencilSmoothing);
+        }
 
         if (nextProps.isPencilModeActive && !this.props.isPencilModeActive) {
             this.activateTool();
         } else if (!nextProps.isPencilModeActive && this.props.isPencilModeActive) {
             this.deactivateTool();
-        } else if (nextProps.isPencilModeActive && this.props.isPencilModeActive) {
-            // TODO
         }
     }
     shouldComponentUpdate (nextProps) {
         return nextProps.isPencilModeActive !== this.props.isPencilModeActive;
     }
     componentWillUnmount () {
-        // TODO
+        if (this.tool) {
+            this.deactivateTool();
+        }
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
@@ -55,14 +57,12 @@ class PencilMode extends React.Component {
             this.props.onUpdateImage
         );
         this.tool.setColorState(this.props.colorState);
+        this.tool.setSmoothing(this.props.pencilModeState.pencilSmoothing);
         this.tool.activate();
     }
     deactivateTool () {
-        this.tool.deactivateTool();
         this.tool.remove();
         this.tool = null;
-
-        console.log("DEACTIVATED");
     }
     render () {
         return (
@@ -84,10 +84,9 @@ PencilMode.propTypes = {
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
     isPencilModeActive: PropTypes.bool.isRequired,
-    onChangeStrokeColor: PropTypes.func.isRequired,
     onUpdateImage: PropTypes.func.isRequired,
     pencilModeState: PropTypes.shape({
-        brushSize: PropTypes.number.isRequired
+        pencilSmoothing: PropTypes.number.isRequired
     })
 };
 

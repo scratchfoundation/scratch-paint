@@ -5,6 +5,7 @@ import React from 'react';
 
 import {changeBrushSize} from '../../reducers/brush-mode';
 import {changeBrushSize as changeEraserSize} from '../../reducers/eraser-mode';
+import {changePencilSmoothing} from '../../reducers/pencil-mode';
 import {changeBitBrushSize} from '../../reducers/bit-brush-size';
 import {changeBitEraserSize} from '../../reducers/bit-eraser-size';
 import {setShapesFilled} from '../../reducers/fill-bitmap-shapes';
@@ -54,6 +55,11 @@ const ModeToolsComponent = props => {
             defaultMessage: 'Eraser size',
             description: 'Label for the eraser size input',
             id: 'paint.modeTools.eraserSize'
+        },
+        pencilSmoothing: {
+            defaultMessage: 'Smoothing',
+            description: 'Label for the pencil smoothing input',
+            id: 'paint.modeTools.pencilSmoothing'
         },
         copy: {
             defaultMessage: 'Copy',
@@ -138,6 +144,26 @@ const ModeToolsComponent = props => {
                     value={currentBrushValue}
                     onSubmit={changeFunction}
                 />
+            </div>
+        );
+    }
+    case Modes.PENCIL:
+    {
+        return (
+            <div className={classNames(props.className, styles.modeTools)}>
+                <InputGroup>
+                    <Label text={props.intl.formatMessage(messages.pencilSmoothing)}>
+                        <LiveInput
+                            range
+                            small
+                            max="100"
+                            min="0"
+                            type="number"
+                            value={props.pencilSmoothing}
+                            onSubmit={props.onPencilSliderChange}
+                        />
+                    </Label>
+                </InputGroup>
             </div>
         );
     }
@@ -330,8 +356,10 @@ ModeToolsComponent.propTypes = {
     onFlipVertical: PropTypes.func.isRequired,
     onOutlineShapes: PropTypes.func.isRequired,
     onPasteFromClipboard: PropTypes.func.isRequired,
+    onPencilSliderChange: PropTypes.func.isRequired,
     onPointPoints: PropTypes.func.isRequired,
-    onUpdateImage: PropTypes.func.isRequired
+    onUpdateImage: PropTypes.func.isRequired,
+    pencilSmoothing: PropTypes.number
 };
 
 const mapStateToProps = state => ({
@@ -341,6 +369,7 @@ const mapStateToProps = state => ({
     bitBrushSize: state.scratchPaint.bitBrushSize,
     bitEraserSize: state.scratchPaint.bitEraserSize,
     brushValue: state.scratchPaint.brushMode.brushSize,
+    pencilSmoothing: state.scratchPaint.pencilMode.pencilSmoothing,
     clipboardItems: state.scratchPaint.clipboard.items,
     eraserValue: state.scratchPaint.eraserMode.brushSize
 });
@@ -353,6 +382,9 @@ const mapDispatchToProps = dispatch => ({
     },
     onBitEraserSliderChange: eraserSize => {
         dispatch(changeBitEraserSize(eraserSize));
+    },
+    onPencilSliderChange: pencilSmoothing => {
+        dispatch(changePencilSmoothing(pencilSmoothing));
     },
     onEraserSliderChange: eraserSize => {
         dispatch(changeEraserSize(eraserSize));

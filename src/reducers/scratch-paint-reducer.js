@@ -3,6 +3,7 @@ import modeReducer from './modes';
 import bitBrushSizeReducer from './bit-brush-size';
 import bitEraserSizeReducer from './bit-eraser-size';
 import brushModeReducer from './brush-mode';
+import pencilModeReducer from './pencil-mode';
 import eraserModeReducer from './eraser-mode';
 import colorReducer from './color';
 import clipboardReducer from './clipboard';
@@ -36,6 +37,7 @@ export default combineReducers({
     hoveredItemId: hoverReducer,
     layout: layoutReducer,
     modals: modalsReducer,
+    pencilMode: pencilModeReducer,
     selectedItems: selectedItemReducer,
     textEditTarget: textEditTargetReducer,
     undo: undoReducer,

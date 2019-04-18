@@ -114,7 +114,8 @@ class FillColorIndicator extends React.Component {
 
 const mapStateToProps = state => ({
     colorIndex: state.scratchPaint.fillMode.colorIndex,
-    disabled: state.scratchPaint.mode === Modes.LINE,
+    disabled: state.scratchPaint.mode === Modes.LINE ||
+        state.scratchPaint.mode === Modes.PENCIL,
     fillColor: state.scratchPaint.color.fillColor,
     fillColor2: state.scratchPaint.color.fillColor2,
     fillColorModalVisible: state.scratchPaint.modals.fillColor,

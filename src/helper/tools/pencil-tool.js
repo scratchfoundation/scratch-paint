@@ -1,5 +1,5 @@
 import paper from '@scratch/paper';
-import {styleShape} from '../style-path';
+import {stylePath} from '../style-path';
 
 /**
  * Tool for drawing pencil strokes.
@@ -26,6 +26,7 @@ class PencilTool extends paper.Tool {
 
         this.path = null;
         this.colorState = null;
+        this.smoothing = null;
         this.active = false;
     }
     /**
@@ -38,13 +39,21 @@ class PencilTool extends paper.Tool {
     setColorState (colorState) {
         this.colorState = colorState;
     }
+    setSmoothing (smoothing) {
+        this.smoothing = smoothing;
+    }
     handleMouseDown (event) {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
 
-        this.path = new paper.Path();
+        this.path = new paper.Path({
+            strokeCap: 'round',
+            strokeJoin: 'round'
+        });
 
-        styleShape(this.path, this.colorState);
+        console.log(this.colorState);
+
+        stylePath(this.path, this.colorState.strokeColor, this.colorState.strokeWidth);
     }
     handleMouseDrag (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
@@ -58,15 +67,20 @@ class PencilTool extends paper.Tool {
         this.active = false;
 
         if (this.path) {
-            if (this.path.length < PencilTool.TOLERANCE / paper.view.zoom) {
+            const scaledTolerance = PencilTool.TOLERANCE / paper.view.zoom;
+            if (this.path.length < scaledTolerance) {
                 // Tiny stroke drawn unintentionally?
                 this.path.remove();
                 this.path = null;
             } else {
+                // Clone path, close (possibly), simplify
                 const strokePath = this.path.clone(true);
 
-                strokePath.smooth();
-                strokePath.simplify(10);
+                // Close the path if the first and last points are sufficiently close
+                strokePath.closed = strokePath.firstSegment.point.getDistance(strokePath.lastSegment.point) <
+                                    scaledTolerance;
+
+                strokePath.simplify(this.smoothing);
 
                 this.path.remove();
                 this.path = null;
@@ -75,9 +89,6 @@ class PencilTool extends paper.Tool {
             }
         }
 
-    }
-    deactivateTool () {
-        
     }
 }
 
