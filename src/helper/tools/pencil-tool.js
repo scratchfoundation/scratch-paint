@@ -51,8 +51,6 @@ class PencilTool extends paper.Tool {
             strokeJoin: 'round'
         });
 
-        console.log(this.colorState);
-
         stylePath(this.path, this.colorState.strokeColor, this.colorState.strokeWidth);
     }
     handleMouseDrag (event) {

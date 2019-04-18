@@ -7,7 +7,6 @@ import Modes from '../lib/modes';
 import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
-import {clearGradient} from '../reducers/selection-gradient-type';
 import {clearSelection} from '../helper/selection';
 
 import PencilTool from '../helper/tools/pencil-tool';
@@ -50,7 +49,6 @@ class PencilMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        this.props.clearGradient();
 
         this.tool = new PencilTool(
             this.props.clearSelectedItems,
@@ -75,7 +73,6 @@ class PencilMode extends React.Component {
 }
 
 PencilMode.propTypes = {
-    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: PropTypes.string,
@@ -98,9 +95,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
-    },
-    clearGradient: () => {
-        dispatch(clearGradient());
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.PENCIL));
