@@ -27,6 +27,7 @@ import Loupe from '../loupe/loupe.jsx';
 import FixedToolsContainer from '../../containers/fixed-tools.jsx';
 import ModeToolsContainer from '../../containers/mode-tools.jsx';
 import OvalMode from '../../containers/oval-mode.jsx';
+import PencilMode from '../../containers/pencil-mode.jsx';
 import RectMode from '../../containers/rect-mode.jsx';
 import ReshapeMode from '../../containers/reshape-mode.jsx';
 import SelectMode from '../../containers/select-mode.jsx';
@@ -141,6 +142,9 @@ const PaintEditorComponent = props => (
                         onUpdateImage={props.onUpdateImage}
                     />
                     <BrushMode
+                        onUpdateImage={props.onUpdateImage}
+                    />
+                    <PencilMode
                         onUpdateImage={props.onUpdateImage}
                     />
                     <EraserMode

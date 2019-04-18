@@ -10,6 +10,7 @@ const Modes = keyMirror({
     BIT_ERASER: null,
     BIT_SELECT: null,
     BRUSH: null,
+    PENCIL: null,
     ERASER: null,
     LINE: null,
     FILL: null,
