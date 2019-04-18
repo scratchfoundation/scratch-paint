@@ -46,6 +46,7 @@ class PencilTool extends paper.Tool {
         if (event.event.button > 0) return; // only first mouse button
         this.active = true;
 
+        // Start a new path and style it
         this.path = new paper.Path({
             strokeCap: 'round',
             strokeJoin: 'round'
@@ -56,9 +57,7 @@ class PencilTool extends paper.Tool {
     handleMouseDrag (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
 
-        const point = new paper.Point(event.point.x, event.point.y);
-        
-        this.path.add(point);
+        this.path.add(event.point);
     }
     handleMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
