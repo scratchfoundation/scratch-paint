@@ -19332,7 +19332,7 @@ var hoist_non_react_statics_cjs = __webpack_require__(118);
 var hoist_non_react_statics_cjs_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics_cjs);
 
 // EXTERNAL MODULE: ./node_modules/react-redux/node_modules/invariant/browser.js
-var browser = __webpack_require__(57);
+var browser = __webpack_require__(56);
 var browser_default = /*#__PURE__*/__webpack_require__.n(browser);
 
 // EXTERNAL MODULE: ./node_modules/react-redux/node_modules/react-is/index.js
@@ -27822,83 +27822,6 @@ module.exports = g;
 
 /***/ }),
 /* 48 */
-/***/ (function(module, exports) {
-
-/* Adapted from
- * Paper.js - The Swiss Army Knife of Vector Graphics Scripting.
- * http://paperjs.org/
- *
- * Copyright (c) 2011 - 2016, Juerg Lehni & Jonathan Puckey
- * http://scratchdisk.com/ & http://jonathanpuckey.com/
- *
- * Distributed under the MIT license. See LICENSE file for details.
- *
- * All rights reserved.
- */
-
-/**
- * @name SvgElement
- * @namespace
- * @private
- */
-class SvgElement {
-    // SVG related namespaces
-    static get svg () {
-        return 'http://www.w3.org/2000/svg';
-    }
-    static get xmlns () {
-        return 'http://www.w3.org/2000/xmlns';
-    }
-    static get xlink () {
-        return 'http://www.w3.org/1999/xlink';
-    }
-
-    // Mapping of attribute names to required namespaces:
-    static attributeNamespace () {
-        return {
-            'href': SvgElement.xlink,
-            'xlink': SvgElement.xmlns,
-            // Only the xmlns attribute needs the trailing slash. See #984
-            'xmlns': `${SvgElement.xmlns}/`,
-            // IE needs the xmlns namespace when setting 'xmlns:xlink'. See #984
-            'xmlns:xlink': `${SvgElement.xmlns}/`
-        };
-    }
-
-    static create (tag, attributes, formatter) {
-        return SvgElement.set(document.createElementNS(SvgElement.svg, tag), attributes, formatter);
-    }
-
-    static get (node, name) {
-        const namespace = SvgElement.attributeNamespace[name];
-        const value = namespace ?
-            node.getAttributeNS(namespace, name) :
-            node.getAttribute(name);
-        return value === 'null' ? null : value;
-    }
-
-    static set (node, attributes, formatter) {
-        for (const name in attributes) {
-            let value = attributes[name];
-            const namespace = SvgElement.attributeNamespace[name];
-            if (typeof value === 'number' && formatter) {
-                value = formatter.number(value);
-            }
-            if (namespace) {
-                node.setAttributeNS(namespace, name, value);
-            } else {
-                node.setAttribute(name, value);
-            }
-        }
-        return node;
-    }
-}
-
-module.exports = SvgElement;
-
-
-/***/ }),
-/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27955,7 +27878,7 @@ exports.default = reducer;
 exports.changeFormat = changeFormat;
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28010,7 +27933,7 @@ exports.default = reducer;
 exports.updateViewBounds = updateViewBounds;
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28084,7 +28007,7 @@ exports.default = reducer;
 exports.changeFillColor2 = changeFillColor2;
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28110,7 +28033,7 @@ exports.window = WINDOW;
 exports.document = DOCUMENT;
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28162,7 +28085,7 @@ Label.defaultProps = {
 exports.default = Label;
 
 /***/ }),
-/* 54 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28217,7 +28140,7 @@ exports.default = reducer;
 exports.setTextEditTarget = setTextEditTarget;
 
 /***/ }),
-/* 55 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -29712,7 +29635,7 @@ module.exports = omit;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(47)))
 
 /***/ }),
-/* 56 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29736,7 +29659,7 @@ var Fonts = {
 exports.default = Fonts;
 
 /***/ }),
-/* 57 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29788,7 +29711,7 @@ module.exports = invariant;
 
 
 /***/ }),
-/* 58 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29949,6 +29872,83 @@ exports.performUndo = performUndo;
 exports.performRedo = performRedo;
 exports.shouldShowUndo = shouldShowUndo;
 exports.shouldShowRedo = shouldShowRedo;
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports) {
+
+/* Adapted from
+ * Paper.js - The Swiss Army Knife of Vector Graphics Scripting.
+ * http://paperjs.org/
+ *
+ * Copyright (c) 2011 - 2016, Juerg Lehni & Jonathan Puckey
+ * http://scratchdisk.com/ & http://jonathanpuckey.com/
+ *
+ * Distributed under the MIT license. See LICENSE file for details.
+ *
+ * All rights reserved.
+ */
+
+/**
+ * @name SvgElement
+ * @namespace
+ * @private
+ */
+class SvgElement {
+    // SVG related namespaces
+    static get svg () {
+        return 'http://www.w3.org/2000/svg';
+    }
+    static get xmlns () {
+        return 'http://www.w3.org/2000/xmlns';
+    }
+    static get xlink () {
+        return 'http://www.w3.org/1999/xlink';
+    }
+
+    // Mapping of attribute names to required namespaces:
+    static attributeNamespace () {
+        return {
+            'href': SvgElement.xlink,
+            'xlink': SvgElement.xmlns,
+            // Only the xmlns attribute needs the trailing slash. See #984
+            'xmlns': `${SvgElement.xmlns}/`,
+            // IE needs the xmlns namespace when setting 'xmlns:xlink'. See #984
+            'xmlns:xlink': `${SvgElement.xmlns}/`
+        };
+    }
+
+    static create (tag, attributes, formatter) {
+        return SvgElement.set(document.createElementNS(SvgElement.svg, tag), attributes, formatter);
+    }
+
+    static get (node, name) {
+        const namespace = SvgElement.attributeNamespace[name];
+        const value = namespace ?
+            node.getAttributeNS(namespace, name) :
+            node.getAttribute(name);
+        return value === 'null' ? null : value;
+    }
+
+    static set (node, attributes, formatter) {
+        for (const name in attributes) {
+            let value = attributes[name];
+            const namespace = SvgElement.attributeNamespace[name];
+            if (typeof value === 'number' && formatter) {
+                value = formatter.number(value);
+            }
+            if (namespace) {
+                node.setAttributeNS(namespace, name, value);
+            } else {
+                node.setAttribute(name, value);
+            }
+        }
+        return node;
+    }
+}
+
+module.exports = SvgElement;
+
 
 /***/ }),
 /* 59 */
@@ -30409,7 +30409,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clientOnly = exports.noop = exports.equalRecords = exports.find = undefined;
 
-var _platform = __webpack_require__(52);
+var _platform = __webpack_require__(51);
 
 var find = function find(f, xs) {
   return xs.reduce(function (b, x) {
@@ -30655,7 +30655,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeFont = exports.default = undefined;
 
-var _fonts = __webpack_require__(56);
+var _fonts = __webpack_require__(55);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -31059,7 +31059,6 @@ exports.hop = hop;
 /* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const SvgElement = __webpack_require__(48);
 /**
  * @fileOverview Import bitmap data into Scratch 3.0, resizing image as necessary.
  */
@@ -31076,30 +31075,30 @@ const {FONTS} = __webpack_require__(215);
  *   // External stylesheet linked to by SVG: no effect.
  *   // Using a <link> or <style>@import</style> to link to font-family
  *   // injected into the document: no effect.
- * @param {SVGElement} svgTag The SVG dom object
- * @return {void}
+ * @param {string} svgString The string representation of the svg to modify
+ * @return {string} The svg with any needed fonts inlined
  */
-const inlineSvgFonts = function (svgTag) {
+const inlineSvgFonts = function (svgString) {
     // Collect fonts that need injection.
     const fontsNeeded = new Set();
-    const collectFonts = function collectFonts (domElement) {
-        if (domElement.getAttribute && domElement.getAttribute('font-family')) {
-            fontsNeeded.add(domElement.getAttribute('font-family'));
-        }
-        for (let i = 0; i < domElement.childNodes.length; i++) {
-            collectFonts(domElement.childNodes[i]);
-        }
-    };
-    collectFonts(svgTag);
-    const newDefs = SvgElement.create('defs');
-    const newStyle = SvgElement.create('style');
-    for (const font of fontsNeeded) {
-        if (FONTS.hasOwnProperty(font)) {
-            newStyle.textContent += FONTS[font];
-        }
+    const fontRegex = /font-family="([^"]*)"/g;
+    let matches = fontRegex.exec(svgString);
+    while (matches) {
+        fontsNeeded.add(matches[1]);
+        matches = fontRegex.exec(svgString);
     }
-    newDefs.appendChild(newStyle);
-    svgTag.insertBefore(newDefs, svgTag.childNodes[0]);
+    if (fontsNeeded.size > 0) {
+        let str = '<defs><style>';
+        for (const font of fontsNeeded) {
+            if (FONTS.hasOwnProperty(font)) {
+                str += `${FONTS[font]}`;
+            }
+        }
+        str += '</style></defs>';
+        svgString = svgString.replace(/<svg[^>]*>/, `$&${str}`);
+        return svgString;
+    }
+    return svgString;
 };
 
 module.exports = inlineSvgFonts;
@@ -33542,7 +33541,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(55);
+var _lodash3 = __webpack_require__(54);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -35447,15 +35446,15 @@ var _updateImageHoc2 = _interopRequireDefault(_updateImageHoc);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(49);
+var _format = __webpack_require__(48);
 
 var _selectedItems = __webpack_require__(7);
 
 var _eyeDropper = __webpack_require__(45);
 
-var _textEditTarget = __webpack_require__(54);
+var _textEditTarget = __webpack_require__(53);
 
-var _viewBounds = __webpack_require__(50);
+var _viewBounds = __webpack_require__(49);
 
 var _layout = __webpack_require__(70);
 
@@ -43370,7 +43369,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _undo = __webpack_require__(58);
+var _undo = __webpack_require__(57);
 
 var _undo2 = __webpack_require__(41);
 
@@ -43388,9 +43387,9 @@ var _hover = __webpack_require__(42);
 
 var _clipboard = __webpack_require__(59);
 
-var _format3 = __webpack_require__(49);
+var _format3 = __webpack_require__(48);
 
-var _viewBounds = __webpack_require__(50);
+var _viewBounds = __webpack_require__(49);
 
 var _zoomLevels = __webpack_require__(84);
 
@@ -43839,7 +43838,7 @@ exports.getItemsCompoundPath = getItemsCompoundPath;
 const SVGRenderer = __webpack_require__(214);
 const BitmapAdapter = __webpack_require__(227);
 const inlineSvgFonts = __webpack_require__(82);
-const SvgElement = __webpack_require__(48);
+const SvgElement = __webpack_require__(58);
 const convertFonts = __webpack_require__(83);
 // /**
 //  * Export for NPM & Node.js
@@ -43859,7 +43858,7 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 const inlineSvgFonts = __webpack_require__(82);
-const SvgElement = __webpack_require__(48);
+const SvgElement = __webpack_require__(58);
 const convertFonts = __webpack_require__(83);
 const fixupSvgString = __webpack_require__(223);
 const transformStrokeWidths = __webpack_require__(224);
@@ -43952,6 +43951,7 @@ class SvgRenderer {
             this._transformGradients();
         }
         transformStrokeWidths(this._svgTag, window);
+        this._transformImages(this._svgTag);
         if (fromVersion2) {
             // Transform all text elements.
             this._transformText();
@@ -44069,25 +44069,53 @@ class SvgRenderer {
     }
 
     /**
-     * Fix SVGs to comply with SVG spec. Scratch 2 defaults to x2 = 0 when x2 is missing, but
-     * SVG defaults to x2 = 1 when missing.
+     * @param {string} tagName svg tag to search for
+     * @return {Array} a list of elements with the given tagname in _svgTag
      */
-    _transformGradients () {
-        // Collect all gradient elements into a list.
-        const linearGradientElements = [];
+    _collectElements (tagName) {
+        const elts = [];
         const collectElements = domElement => {
-            if (domElement.localName === 'linearGradient') {
-                linearGradientElements.push(domElement);
+            if (domElement.localName === tagName) {
+                elts.push(domElement);
             }
             for (let i = 0; i < domElement.childNodes.length; i++) {
                 collectElements(domElement.childNodes[i]);
             }
         };
         collectElements(this._svgTag);
+        return elts;
+    }
+
+    /**
+     * Fix SVGs to comply with SVG spec. Scratch 2 defaults to x2 = 0 when x2 is missing, but
+     * SVG defaults to x2 = 1 when missing.
+     */
+    _transformGradients () {
+        const linearGradientElements = this._collectElements('linearGradient');
+
         // For each gradient element, supply x2 if necessary.
         for (const gradientElement of linearGradientElements) {
             if (!gradientElement.getAttribute('x2')) {
                 gradientElement.setAttribute('x2', '0');
+            }
+        }
+    }
+
+    /**
+     * Fix SVGs to match appearance in Scratch 2, which used nearest neighbor scaling for bitmaps
+     * within SVGs.
+     */
+    _transformImages () {
+        const imageElements = this._collectElements('image');
+
+        // For each image element, set image rendering to pixelated"
+        const pixelatedImages = 'image-rendering: optimizespeed; image-rendering: pixelated;';
+        for (const elt of imageElements) {
+            if (elt.getAttribute('style')) {
+                elt.setAttribute('style',
+                    `${pixelatedImages} ${elt.getAttribute('style')}`);
+            } else {
+                elt.setAttribute('style', pixelatedImages);
             }
         }
     }
@@ -44138,36 +44166,37 @@ class SvgRenderer {
      * a natural and performant way.
      */
     _transformMeasurements () {
-        // Save `svgText` for later re-parsing.
-        const svgText = this.toString();
-
         // Append the SVG dom to the document.
         // This allows us to use `getBBox` on the page,
         // which returns the full bounding-box of all drawn SVG
         // elements, similar to how Scratch 2.0 did measurement.
         const svgSpot = document.createElement('span');
+        // Clone the svg tag. This tag becomes unusable/undrawable in browsers
+        // once it's appended to the page, perhaps for security reasons?
+        const tempTag = this._svgTag.cloneNode(/* deep */ true);
         let bbox;
         try {
+            svgSpot.appendChild(tempTag);
             document.body.appendChild(svgSpot);
-            svgSpot.appendChild(this._svgTag);
             // Take the bounding box.
-            bbox = this._svgTag.getBBox();
+            bbox = tempTag.getBBox();
         } finally {
             // Always destroy the element, even if, for example, getBBox throws.
             document.body.removeChild(svgSpot);
+            svgSpot.removeChild(tempTag);
         }
-
-        // Re-parse the SVG from `svgText`. The above DOM becomes
-        // unusable/undrawable in browsers once it's appended to the page,
-        // perhaps for security reasons?
-        const parser = new DOMParser();
-        this._svgDom = parser.parseFromString(svgText, 'text/xml');
-        this._svgTag = this._svgDom.documentElement;
 
         // Enlarge the bbox from the largest found stroke width
         // This may have false-positives, but at least the bbox will always
         // contain the full graphic including strokes.
-        const halfStrokeWidth = this._findLargestStrokeWidth(this._svgTag) / 2;
+        // If the width or height is zero however, don't enlarge since
+        // they won't have a stroke width that needs to be enlarged.
+        let halfStrokeWidth;
+        if (bbox.width === 0 || bbox.height === 0) {
+            halfStrokeWidth = 0;
+        } else {
+            halfStrokeWidth = this._findLargestStrokeWidth(this._svgTag) / 2;
+        }
         const width = bbox.width + (halfStrokeWidth * 2);
         const height = bbox.height + (halfStrokeWidth * 2);
         const x = bbox.x - halfStrokeWidth;
@@ -44187,13 +44216,11 @@ class SvgRenderer {
      * @returns {string} String representing current SVG data.
      */
     toString (shouldInjectFonts) {
-        let svgDom = this._svgDom;
-        if (shouldInjectFonts) {
-            svgDom = this._svgDom.cloneNode(true /* deep */);
-            inlineSvgFonts(svgDom.documentElement);
-        }
         const serializer = new XMLSerializer();
-        const string = serializer.serializeToString(svgDom);
+        let string = serializer.serializeToString(this._svgDom);
+        if (shouldInjectFonts) {
+            string = inlineSvgFonts(string);
+        }
         return string;
     }
 
@@ -44374,6 +44401,9 @@ module.exports = function (svgString) {
     // Note: [\s\S] matches everything including newlines, which .* does not
     svgString = svgString.replace(/<metadata>[\s\S]*<\/metadata>/, '');
 
+    // Strip script tags and javascript executing
+    svgString = svgString.replace(/<script[\s\S]*>[\s\S]*<\/script>/, '');
+
     return svgString;
 };
 
@@ -44383,7 +44413,7 @@ module.exports = function (svgString) {
 /***/ (function(module, exports, __webpack_require__) {
 
 const Matrix = __webpack_require__(225);
-const SvgElement = __webpack_require__(48);
+const SvgElement = __webpack_require__(58);
 const log = __webpack_require__(226);
 
 /**
@@ -45447,7 +45477,7 @@ var _scrollableCanvas2 = _interopRequireDefault(_scrollableCanvas);
 
 var _view = __webpack_require__(22);
 
-var _viewBounds = __webpack_require__(50);
+var _viewBounds = __webpack_require__(49);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -48827,7 +48857,7 @@ var _bitFillMode2 = _interopRequireDefault(_bitFillMode);
 
 var _fillColor = __webpack_require__(20);
 
-var _fillColor2 = __webpack_require__(51);
+var _fillColor2 = __webpack_require__(50);
 
 var _modes3 = __webpack_require__(10);
 
@@ -52411,7 +52441,7 @@ var _colorIndex = __webpack_require__(62);
 
 var _fillColor = __webpack_require__(20);
 
-var _fillColor2 = __webpack_require__(51);
+var _fillColor2 = __webpack_require__(50);
 
 var _fillModeGradientType = __webpack_require__(38);
 
@@ -52643,7 +52673,7 @@ var _inputGroup = __webpack_require__(32);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(52);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -52762,7 +52792,7 @@ var _onResize = __webpack_require__(289);
 
 var _onResize2 = _interopRequireDefault(_onResize);
 
-var _platform = __webpack_require__(52);
+var _platform = __webpack_require__(51);
 
 var _platform2 = _interopRequireDefault(_platform);
 
@@ -54569,7 +54599,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.equalCoords = exports.doesFitWithin = exports.centerOfBoundsFromBounds = exports.centerOfBounds = exports.centerOfSize = exports.axes = exports.pickZone = exports.place = exports.calcRelPos = exports.validTypeValues = exports.types = exports.El = undefined;
 
-var _platform = __webpack_require__(52);
+var _platform = __webpack_require__(51);
 
 var _utils = __webpack_require__(67);
 
@@ -54843,7 +54873,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.removeEventListener = exports.addEventListener = exports.off = exports.on = undefined;
 
-var _platform = __webpack_require__(52);
+var _platform = __webpack_require__(51);
 
 var _utils = __webpack_require__(67);
 
@@ -55930,7 +55960,7 @@ var _stylePath = __webpack_require__(9);
 
 var _fillColor = __webpack_require__(20);
 
-var _fillColor2 = __webpack_require__(51);
+var _fillColor2 = __webpack_require__(50);
 
 var _modes3 = __webpack_require__(10);
 
@@ -57164,13 +57194,13 @@ var _fixedTools2 = _interopRequireDefault(_fixedTools);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(49);
+var _format = __webpack_require__(48);
 
 var _selectedItems = __webpack_require__(7);
 
 var _eyeDropper = __webpack_require__(45);
 
-var _textEditTarget = __webpack_require__(54);
+var _textEditTarget = __webpack_require__(53);
 
 var _layout = __webpack_require__(70);
 
@@ -57387,7 +57417,7 @@ var _inputGroup = __webpack_require__(32);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(52);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -59299,7 +59329,7 @@ var _liveInputHoc = __webpack_require__(115);
 
 var _liveInputHoc2 = _interopRequireDefault(_liveInputHoc);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(52);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -59770,7 +59800,7 @@ var _fontDropdown = __webpack_require__(345);
 
 var _fontDropdown2 = _interopRequireDefault(_fontDropdown);
 
-var _fonts = __webpack_require__(56);
+var _fonts = __webpack_require__(55);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -60045,7 +60075,7 @@ var _inputGroup = __webpack_require__(32);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _fonts = __webpack_require__(56);
+var _fonts = __webpack_require__(55);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -63205,7 +63235,7 @@ var _inputGroup = __webpack_require__(32);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
-var _label = __webpack_require__(53);
+var _label = __webpack_require__(52);
 
 var _label2 = _interopRequireDefault(_label);
 
@@ -63498,7 +63528,7 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _fonts = __webpack_require__(56);
+var _fonts = __webpack_require__(55);
 
 var _fonts2 = _interopRequireDefault(_fonts);
 
@@ -63516,7 +63546,7 @@ var _strokeColor = __webpack_require__(33);
 
 var _modes3 = __webpack_require__(10);
 
-var _textEditTarget = __webpack_require__(54);
+var _textEditTarget = __webpack_require__(53);
 
 var _selectedItems = __webpack_require__(7);
 
@@ -64530,7 +64560,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(55);
+var _lodash3 = __webpack_require__(54);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -64820,7 +64850,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(55);
+var _lodash3 = __webpack_require__(54);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -64830,7 +64860,7 @@ var _selection = __webpack_require__(3);
 
 var _selectedItems = __webpack_require__(7);
 
-var _undo = __webpack_require__(58);
+var _undo = __webpack_require__(57);
 
 var _undo2 = __webpack_require__(41);
 
@@ -64972,7 +65002,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _lodash3 = __webpack_require__(55);
+var _lodash3 = __webpack_require__(54);
 
 var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -64988,7 +65018,7 @@ var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(21);
 
-var _undo2 = __webpack_require__(58);
+var _undo2 = __webpack_require__(57);
 
 var _math = __webpack_require__(19);
 
@@ -65219,7 +65249,7 @@ var _font = __webpack_require__(71);
 
 var _font2 = _interopRequireDefault(_font);
 
-var _format = __webpack_require__(49);
+var _format = __webpack_require__(48);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -65239,11 +65269,11 @@ var _selectedItems = __webpack_require__(7);
 
 var _selectedItems2 = _interopRequireDefault(_selectedItems);
 
-var _textEditTarget = __webpack_require__(54);
+var _textEditTarget = __webpack_require__(53);
 
 var _textEditTarget2 = _interopRequireDefault(_textEditTarget);
 
-var _viewBounds = __webpack_require__(50);
+var _viewBounds = __webpack_require__(49);
 
 var _viewBounds2 = _interopRequireDefault(_viewBounds);
 
@@ -65301,7 +65331,7 @@ var _fillColor = __webpack_require__(20);
 
 var _fillColor2 = _interopRequireDefault(_fillColor);
 
-var _fillColor3 = __webpack_require__(51);
+var _fillColor3 = __webpack_require__(50);
 
 var _fillColor4 = _interopRequireDefault(_fillColor3);
 
