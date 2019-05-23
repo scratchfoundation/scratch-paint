@@ -22576,8 +22576,9 @@ var convertToBitmap = function convertToBitmap(clearSelectedItems, onUpdateImage
     // Get rid of anti-aliasing
     // @todo get crisp text https://github.com/LLK/scratch-paint/issues/508
     svg.setAttribute('shape-rendering', 'crispEdges');
-    (0, _scratchSvgRenderer.inlineSvgFonts)(svg);
+
     var svgString = new XMLSerializer().serializeToString(svg);
+    svgString = (0, _scratchSvgRenderer.inlineSvgFonts)(svgString);
 
     // Put anti-aliased SVG into image, and dump image back into canvas
     var img = new Image();
