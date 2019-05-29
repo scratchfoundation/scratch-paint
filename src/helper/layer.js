@@ -50,6 +50,10 @@ const getRaster = function () {
     return _getLayer('isRasterLayer').children[0];
 };
 
+const getDragCrosshairLayer = function () {
+    return _getLayer('isDragCrosshairLayer');
+};
+
 const getBackgroundGuideLayer = function () {
     return _getLayer('isBackgroundGuideLayer');
 };
@@ -200,10 +204,6 @@ const _makeDragCrosshairLayer = function () {
     dragCrosshairLayer.data.isDragCrosshairLayer = true;
     dragCrosshairLayer.opacity = 0;
     return dragCrosshairLayer;
-};
-
-const getDragCrosshairLayer = function () {
-    return _getLayer('isDragCrosshairLayer');
 };
 
 const _makeBackgroundGuideLayer = function () {
