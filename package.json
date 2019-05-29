@@ -90,7 +90,7 @@
     "redux-throttle": "0.1.1",
     "regenerator-runtime": "^0.12.0",
     "rimraf": "^2.6.1",
-    "scratch-l10n": "3.1.20181129221712",
+    "scratch-l10n": "3.3.20190529144051",
     "style-loader": "^0.23.1",
     "svg-url-loader": "^2.3.2",
     "tap": "^11.1.0",
