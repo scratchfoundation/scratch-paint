@@ -43,6 +43,7 @@ class ColorPicker extends React.Component {
             'handleChangeGradientTypeRadial',
             'handleChangeGradientTypeSolid',
             'handleChangeGradientTypeVertical',
+            'handleHexChange',
             'handleHueChange',
             'handleSaturationChange',
             'handleBrightnessChange',
@@ -76,6 +77,14 @@ class ColorPicker extends React.Component {
         const isMixed = color === MIXED;
         return isTransparent || isMixed ?
             [50, 100, 100] : colorStringToHsv(color);
+    }
+    handleHexChange (hex) {
+        if (parseColor(hex).hsv) {
+            const [hue, saturation, brightness] = colorStringToHsv(hex);
+            this.setState({hue, saturation, brightness}, () => {
+                this.handleColorChange();
+            });
+        }
     }
     handleHueChange (hue) {
         this.setState({hue: hue}, () => {
@@ -140,6 +149,7 @@ class ColorPicker extends React.Component {
                 onChangeGradientTypeRadial={this.handleChangeGradientTypeRadial}
                 onChangeGradientTypeSolid={this.handleChangeGradientTypeSolid}
                 onChangeGradientTypeVertical={this.handleChangeGradientTypeVertical}
+                onHexChange={this.handleHexChange}
                 onHueChange={this.handleHueChange}
                 onSaturationChange={this.handleSaturationChange}
                 onSelectColor={this.props.onSelectColor}

@@ -1,3 +1,4 @@
+import bindAll from 'lodash.bindall';
 import React from 'react';
 import PropTypes from 'prop-types';
 import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
@@ -35,6 +36,13 @@ const messages = defineMessages({
     }
 });
 class ColorPickerComponent extends React.Component {
+    constructor () {
+        super();
+        bindAll(this, [
+            'handleHexChange',
+            'handleHexFocus'
+        ]);
+    }
     _makeBackground (channel) {
         const stops = [];
         // Generate the color slider background CSS gradients by adding
@@ -55,6 +63,12 @@ class ColorPickerComponent extends React.Component {
             }
         }
         return `linear-gradient(to left, ${stops.join(',')})`;
+    }
+    handleHexChange (evt) {
+        this.props.onHexChange(evt.target.value);
+    }
+    handleHexFocus (evt) {
+        evt.target.select();
     }
     render () {
         return (
@@ -268,7 +282,12 @@ class ColorPickerComponent extends React.Component {
                         }
                     </div>
                     <div className={classNames(styles.swatches, styles.hexSwatch)}>
-                        <input className={classNames(inputStyles.inputForm, styles.hexInput)} />
+                        <input
+                            className={classNames(inputStyles.inputForm, styles.hexInput)}
+                            value={hsvToHex(this.props.hue, this.props.saturation, this.props.brightness)}
+                            onChange={this.handleHexChange}
+                            onFocus={this.handleHexFocus}
+                        />
                     </div>
                     <div className={styles.swatches}>
                         <div
@@ -308,6 +327,7 @@ ColorPickerComponent.propTypes = {
     onChangeGradientTypeRadial: PropTypes.func.isRequired,
     onChangeGradientTypeSolid: PropTypes.func.isRequired,
     onChangeGradientTypeVertical: PropTypes.func.isRequired,
+    onHexChange: PropTypes.func.isRequired,
     onHueChange: PropTypes.func.isRequired,
     onSaturationChange: PropTypes.func.isRequired,
     onSelectColor: PropTypes.func.isRequired,
