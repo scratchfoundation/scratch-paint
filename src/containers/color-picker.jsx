@@ -26,6 +26,8 @@ const colorStringToHsv = hexString => {
     return hsv;
 };
 
+const colorStringToHex = hexString => parseColor(hexString).hex;
+
 const hsvToHex = (h, s, v) =>
     // Scale hue back up to [0, 360] from [0, 100]
     parseColor(`hsv(${3.6 * h}, ${s}, ${v})`).hex
@@ -52,9 +54,10 @@ class ColorPicker extends React.Component {
         ]);
 
         const color = props.colorIndex === 0 ? props.color : props.color2;
+        const hex = this.getHex(color);
         const hsv = this.getHsv(color);
         this.state = {
-            hex: color.toLowerCase(),
+            hex: hex,
             hue: hsv[0],
             saturation: hsv[1],
             brightness: hsv[2]
@@ -78,6 +81,12 @@ class ColorPicker extends React.Component {
         const isMixed = color === MIXED;
         return isTransparent || isMixed ?
             [50, 100, 100] : colorStringToHsv(color);
+    }
+    getHex (color) {
+        const isTransparent = color === null;
+        const isMixed = color === MIXED;
+        return isTransparent || isMixed ?
+            hsvToHex(50, 100, 100) : colorStringToHex(color);
     }
     handleHexChange (hex) {
         if (hex[0] !== '#') {
