@@ -8,6 +8,7 @@ import parseColor from 'parse-color';
 import Slider from '../forms/slider.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import styles from './color-picker.css';
+import inputStyles from '../forms/input.css';
 import GradientTypes from '../../lib/gradient-types';
 import {MIXED} from '../../helper/style-path';
 
@@ -265,6 +266,9 @@ class ColorPickerComponent extends React.Component {
                                 />
                             </div>)
                         }
+                    </div>
+                    <div className={classNames(styles.swatches, styles.hexSwatch)}>
+                        <input className={classNames(inputStyles.inputForm, styles.hexInput)} />
                     </div>
                     <div className={styles.swatches}>
                         <div

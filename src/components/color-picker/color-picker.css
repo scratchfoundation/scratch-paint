@@ -25,6 +25,10 @@
     justify-content: space-between;
 }
 
+.hex-input {
+    width: 7ch;
+}
+
 .row-header {
     font-family: "Helvetica Neue", Helvetica, sans-serif;
     font-size: 0.65rem;
@@ -59,13 +63,14 @@
 }
 
 .swatch {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 2rem;
+    height: 2rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: content-box;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .large-swatch-icon {
