@@ -284,7 +284,7 @@ class ColorPickerComponent extends React.Component {
                     <div className={classNames(styles.swatches, styles.hexSwatch)}>
                         <input
                             className={classNames(inputStyles.inputForm, styles.hexInput)}
-                            value={hsvToHex(this.props.hue, this.props.saturation, this.props.brightness)}
+                            value={this.props.hex}
                             onChange={this.handleHexChange}
                             onFocus={this.handleHexFocus}
                         />
@@ -317,6 +317,7 @@ ColorPickerComponent.propTypes = {
     color2: PropTypes.string,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
+    hex: PropTypes.string.isRequired,
     hue: PropTypes.number.isRequired,
     intl: intlShape.isRequired,
     isEyeDropping: PropTypes.bool.isRequired,

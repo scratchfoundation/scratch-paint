@@ -54,6 +54,7 @@ class ColorPicker extends React.Component {
         const color = props.colorIndex === 0 ? props.color : props.color2;
         const hsv = this.getHsv(color);
         this.state = {
+            hex: color.toLowerCase(),
             hue: hsv[0],
             saturation: hsv[1],
             brightness: hsv[2]
@@ -79,25 +80,38 @@ class ColorPicker extends React.Component {
             [50, 100, 100] : colorStringToHsv(color);
     }
     handleHexChange (hex) {
+        if (hex[0] !== '#') {
+            hex = `#${hex}`;
+        }
+        hex = hex.slice(0, 7).toLowerCase();
         if (parseColor(hex).hsv) {
             const [hue, saturation, brightness] = colorStringToHsv(hex);
-            this.setState({hue, saturation, brightness}, () => {
+            this.setState({hue, saturation, brightness, hex}, () => {
                 this.handleColorChange();
             });
         }
     }
     handleHueChange (hue) {
-        this.setState({hue: hue}, () => {
+        this.setState({
+            hue: hue,
+            hex: hsvToHex(hue, this.state.saturation, this.state.brightness)
+        }, () => {
             this.handleColorChange();
         });
     }
     handleSaturationChange (saturation) {
-        this.setState({saturation: saturation}, () => {
+        this.setState({
+            saturation: saturation,
+            hex: hsvToHex(this.state.hue, saturation, this.state.brightness)
+        }, () => {
             this.handleColorChange();
         });
     }
     handleBrightnessChange (brightness) {
-        this.setState({brightness: brightness}, () => {
+        this.setState({
+            brightness: brightness,
+            hex: hsvToHex(this.state.hue, this.state.saturation, brightness)
+        }, () => {
             this.handleColorChange();
         });
     }
@@ -137,6 +151,7 @@ class ColorPicker extends React.Component {
                 color2={this.props.color2}
                 colorIndex={this.props.colorIndex}
                 gradientType={this.props.gradientType}
+                hex={this.state.hex}
                 hue={this.state.hue}
                 isEyeDropping={this.props.isEyeDropping}
                 mode={this.props.mode}
