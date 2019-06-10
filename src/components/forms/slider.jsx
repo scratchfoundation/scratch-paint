@@ -6,9 +6,6 @@ import {getEventXY} from '../../lib/touch-utils';
 
 import styles from './slider.css';
 
-const CONTAINER_WIDTH = 150;
-const HANDLE_WIDTH = 26;
-
 class SliderComponent extends React.Component {
     constructor (props) {
         super(props);
@@ -56,12 +53,7 @@ class SliderComponent extends React.Component {
     }
 
     render () {
-        const halfHandleWidth = HANDLE_WIDTH / 2;
-        const pixelMin = halfHandleWidth;
-        const pixelMax = CONTAINER_WIDTH - halfHandleWidth;
-        const handleOffset = pixelMin +
-            ((pixelMax - pixelMin) * (this.props.value / 100)) -
-            halfHandleWidth;
+        const handleOffset = this.props.value;
         return (
             <div
                 className={classNames({
@@ -74,14 +66,16 @@ class SliderComponent extends React.Component {
                 }}
                 onClick={this.handleClickBackground}
             >
-                <div
-                    className={styles.handle}
-                    style={{
-                        left: `${handleOffset}px`
-                    }}
-                    onMouseDown={this.handleMouseDown}
-                    onTouchStart={this.handleMouseDown}
-                />
+                <div className={classNames(styles.handleRange)}>
+                    <div
+                        className={styles.handle}
+                        style={{
+                            left: `${handleOffset}%`
+                        }}
+                        onMouseDown={this.handleMouseDown}
+                        onTouchStart={this.handleMouseDown}
+                    />
+                </div>
             </div>
         );
     }

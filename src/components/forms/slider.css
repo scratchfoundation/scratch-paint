@@ -1,7 +1,9 @@
 .container {
     margin: 8px;
     height: 22px;
-    width: 150px;
+    min-width: 150px;
+    flex-grow: 1;
+    box-sizing: border-box;
     position: relative;
     outline: none;
     border-radius: 11px;
@@ -12,10 +14,17 @@
     margin-bottom: 4px;
 }
 
+.handle-range {
+    margin-left: 13px;
+    margin-right: 13px;
+    position: relative;
+}
+
 .handle {
     left: 100px;
     width: 26px;
     height: 26px;
+    margin-left: -13px;
     margin-top: -2px;
     position: absolute;
     background-color: white;
