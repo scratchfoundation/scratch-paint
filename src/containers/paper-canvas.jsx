@@ -153,6 +153,7 @@ class PaperCanvas extends React.Component {
         } else if (this.shouldZoomToFit === true) {
             zoomToFit(isBitmapMode);
         }
+        this.props.updateViewBounds(paper.view.matrix);
         this.shouldZoomToFit = false;
     }
     importSvg (svg, rotationCenterX, rotationCenterY) {
