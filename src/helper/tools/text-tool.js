@@ -368,6 +368,7 @@ class TextTool extends paper.Tool {
         if (this.textBox && this.textBox.content.trim() === '') {
             this.textBox.remove();
             this.textBox = null;
+            this.onUpdateImage();
         }
 
         // Remove guide
