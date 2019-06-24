@@ -44932,8 +44932,10 @@ var PaperCanvas = function (_React$Component) {
         value: function maybeZoomToFit(isBitmapMode) {
             if (this.shouldZoomToFit instanceof _paper2.default.Matrix) {
                 _paper2.default.view.matrix = this.shouldZoomToFit;
+                this.props.updateViewBounds(_paper2.default.view.matrix);
             } else if (this.shouldZoomToFit === true) {
                 (0, _view.zoomToFit)(isBitmapMode);
+                this.props.updateViewBounds(_paper2.default.view.matrix);
             }
             this.shouldZoomToFit = false;
         }
