@@ -24,14 +24,14 @@ class SliderComponent extends React.Component {
     handleMouseDown () {
         document.addEventListener('mousemove', this.handleMouseMove);
         document.addEventListener('mouseup', this.handleMouseUp);
-        document.addEventListener('touchmove', this.handleMouseMove);
+        document.addEventListener('touchmove', this.handleMouseMove, {passive: false});
         document.addEventListener('touchend', this.handleMouseUp);
     }
 
     handleMouseUp () {
         document.removeEventListener('mousemove', this.handleMouseMove);
         document.removeEventListener('mouseup', this.handleMouseUp);
-        document.removeEventListener('touchmove', this.handleMouseMove);
+        document.removeEventListener('touchmove', this.handleMouseMove, {passive: false});
         document.removeEventListener('touchend', this.handleMouseUp);
     }
 
