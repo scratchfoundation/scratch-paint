@@ -30,6 +30,7 @@ import sendForwardIcon from './icons/send-forward.svg';
 import sendFrontIcon from './icons/send-front.svg';
 import undoIcon from './icons/undo.svg';
 import ungroupIcon from './icons/ungroup.svg';
+import centerIcon from './icons/center.svg';
 
 const BufferedInput = BufferedInputHOC(Input);
 const messages = defineMessages({
@@ -82,6 +83,11 @@ const messages = defineMessages({
         defaultMessage: 'More',
         description: 'Label for dropdown to access more action buttons',
         id: 'paint.paintEditor.more'
+    },
+    center: {
+        defaultMessage: 'Center',
+        description: 'Set the rotating point of the sprite to i\'s center',
+        id: 'paint.paintEditor.center'
     }
 });
 
@@ -158,6 +164,16 @@ const FixedToolsComponent = props => {
                         />
                     </Button>
                 </ButtonGroup>
+            </InputGroup>
+
+            {/* Center */}
+            <InputGroup className={styles.modDashedBorder}>
+                <LabeledIconButton
+                        hideLabel={hideLabel(props.intl.locale)}
+                        imgSrc={centerIcon}
+                        title={props.intl.formatMessage(messages.center)}
+                        onClick={props.onCenter}
+                    />
             </InputGroup>
 
             {/* Group/Ungroup */}
@@ -310,7 +326,8 @@ FixedToolsComponent.propTypes = {
     onUndo: PropTypes.func.isRequired,
     onUngroup: PropTypes.func.isRequired,
     onUpdateName: PropTypes.func.isRequired,
-    rtl: PropTypes.bool.isRequired
+    rtl: PropTypes.bool.isRequired,
+    onCenter: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({

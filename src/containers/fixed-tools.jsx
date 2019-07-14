@@ -14,6 +14,7 @@ import {setLayout} from '../reducers/layout';
 import {getSelectedLeafItems} from '../helper/selection';
 import {bringToFront, sendBackward, sendToBack, bringForward} from '../helper/order';
 import {groupSelection, ungroupSelection} from '../helper/group';
+import {center} from '../helper/center';
 
 import Formats from '../lib/format';
 import {isBitmap} from '../lib/format';
@@ -29,7 +30,8 @@ class FixedTools extends React.Component {
             'handleSendToFront',
             'handleSetSelectedItems',
             'handleGroup',
-            'handleUngroup'
+            'handleUngroup',
+            'handleCenter'
         ]);
     }
     handleGroup () {
@@ -53,6 +55,9 @@ class FixedTools extends React.Component {
     handleSetSelectedItems () {
         this.props.setSelectedItems(this.props.format);
     }
+    handleCenter () {
+        center(this.props.onUpdateImage,isBitmap(this.props.format), this.props.clearSelectedItems);
+    }
     render () {
         return (
             <FixedToolsComponent
@@ -69,6 +74,7 @@ class FixedTools extends React.Component {
                 onUngroup={this.handleUngroup}
                 onUpdateImage={this.props.onUpdateImage}
                 onUpdateName={this.props.onUpdateName}
+                onCenter={this.handleCenter}
             />
         );
     }
