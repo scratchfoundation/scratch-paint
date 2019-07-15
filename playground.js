@@ -46919,7 +46919,7 @@ var ScrollableCanvas = function (_React$Component) {
             this.initialMouseX = (0, _touchUtils.getEventXY)(event).x;
             this.initialScreenX = _paper2.default.view.matrix.tx;
             window.addEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
-            window.addEventListener('touchmove', this.handleHorizontalScrollbarMouseMove);
+            window.addEventListener('touchmove', this.handleHorizontalScrollbarMouseMove, { passive: false });
             window.addEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
             window.addEventListener('touchend', this.handleHorizontalScrollbarMouseUp);
             event.preventDefault();
@@ -46937,7 +46937,7 @@ var ScrollableCanvas = function (_React$Component) {
         key: 'handleHorizontalScrollbarMouseUp',
         value: function handleHorizontalScrollbarMouseUp() {
             window.removeEventListener('mousemove', this.handleHorizontalScrollbarMouseMove);
-            window.removeEventListener('touchmove', this.handleHorizontalScrollbarMouseMove);
+            window.removeEventListener('touchmove', this.handleHorizontalScrollbarMouseMove, { passive: false });
             window.removeEventListener('mouseup', this.handleHorizontalScrollbarMouseUp);
             window.removeEventListener('touchend', this.handleHorizontalScrollbarMouseUp);
             this.initialMouseX = null;
@@ -46950,7 +46950,7 @@ var ScrollableCanvas = function (_React$Component) {
             this.initialMouseY = (0, _touchUtils.getEventXY)(event).y;
             this.initialScreenY = _paper2.default.view.matrix.ty;
             window.addEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
-            window.addEventListener('touchmove', this.handleVerticalScrollbarMouseMove);
+            window.addEventListener('touchmove', this.handleVerticalScrollbarMouseMove, { passive: false });
             window.addEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
             window.addEventListener('touchend', this.handleVerticalScrollbarMouseUp);
             event.preventDefault();
@@ -46968,7 +46968,7 @@ var ScrollableCanvas = function (_React$Component) {
         key: 'handleVerticalScrollbarMouseUp',
         value: function handleVerticalScrollbarMouseUp(event) {
             window.removeEventListener('mousemove', this.handleVerticalScrollbarMouseMove);
-            window.removeEventListener('touchmove', this.handleVerticalScrollbarMouseMove);
+            window.removeEventListener('touchmove', this.handleVerticalScrollbarMouseMove, { passive: false });
             window.removeEventListener('mouseup', this.handleVerticalScrollbarMouseUp);
             window.removeEventListener('touchend', this.handleVerticalScrollbarMouseUp);
             this.initialMouseY = null;
@@ -56943,7 +56943,7 @@ var SliderComponent = function (_React$Component) {
         value: function handleMouseDown() {
             document.addEventListener('mousemove', this.handleMouseMove);
             document.addEventListener('mouseup', this.handleMouseUp);
-            document.addEventListener('touchmove', this.handleMouseMove);
+            document.addEventListener('touchmove', this.handleMouseMove, { passive: false });
             document.addEventListener('touchend', this.handleMouseUp);
         }
     }, {
@@ -56951,7 +56951,7 @@ var SliderComponent = function (_React$Component) {
         value: function handleMouseUp() {
             document.removeEventListener('mousemove', this.handleMouseMove);
             document.removeEventListener('mouseup', this.handleMouseUp);
-            document.removeEventListener('touchmove', this.handleMouseMove);
+            document.removeEventListener('touchmove', this.handleMouseMove, { passive: false });
             document.removeEventListener('touchend', this.handleMouseUp);
         }
     }, {
