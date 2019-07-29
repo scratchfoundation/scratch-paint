@@ -129,7 +129,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Thu Dec 20 13:26:52 2018 -0500
+ * Date: Mon Jul 29 11:21:04 2019 -0400
  *
  ***
  *
@@ -14850,6 +14850,7 @@ new function() {
 				var spacing = 1.2;
 				for (var i = 0; i < node.childNodes.length; i++) {
 					var child = node.childNodes[i];
+					if (!child.getAttribute) continue;
 					lines.push(child.textContent);
 					var dyString = child.getAttribute('dy');
 					if (dyString) {
