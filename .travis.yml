@@ -13,7 +13,7 @@ cache:
   directories:
   - node_modules
 install:
-- npm install canvas@1.6.7
+- npm install canvas@1.6.11
 - npm --production=false install
 - npm --production=false update
 before_deploy:
