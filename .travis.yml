@@ -1,13 +1,20 @@
 language: node_js
-sudo: required
-dist: trusty
 node_js:
 - 8
+addons:
+  apt:
+    packages:
+    - g++-4.9
+    - git
+    - libcairo2-dev
+    - libpango1.0-dev
+    - libssl-dev
+    - libjpeg62-dev
+    - libgif-dev
 cache:
   directories:
   - node_modules
 install:
-- sudo apt-get update && sudo apt-get install -y libcairo2-dev libpango1.0-dev libssl-dev libjpeg62-dev libgif-dev pkg-config
 - npm install canvas@1.6.7
 - npm --production=false install
 - npm --production=false update
