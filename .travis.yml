@@ -2,7 +2,7 @@ language: node_js
 sudo: required
 dist: trusty
 node_js:
-- 8
+- 6
 cache:
   directories:
   - node_modules
@@ -17,7 +17,6 @@ before_deploy:
 - git config --global user.name $(git log --pretty=format:"%an" -n1)
 deploy:
 - provider: script
-  node_js: 8
   on:
     all_branches: true
     condition: $TRAVIS_BRANCH != develop && $TRAVIS_EVENT_TYPE != cron
