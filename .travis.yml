@@ -14,7 +14,7 @@ env:
   global:
   - NODE_ENV=production
   matrix:
-  - NPM_SCRIPT="unit -- --jobs=1"
+  - NPM_SCRIPT="unit"
 cache:
   directories:
   - node_modules
