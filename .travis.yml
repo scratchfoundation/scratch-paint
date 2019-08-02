@@ -1,15 +1,6 @@
 language: node_js
 node_js:
 - 8
-- 10
-addons:
-  apt:
-    packages:
-    - libcairo2-dev
-    - libpango1.0-dev
-    - libssl-dev
-    - libjpeg62-dev
-    - libgif-dev
 env:
   global:
   - NODE_ENV=production
@@ -18,10 +9,18 @@ env:
 cache:
   directories:
   - node_modules
+addons:
+  apt:
+    packages:
+    - libcairo2-dev
+    - libpango1.0-dev
+    - libssl-dev
+    - libjpeg62-dev
+    - libgif-dev
 install:
-- npm install canvas@1.6.11
 - npm --production=false install
 - npm --production=false update
+- npm install --no-save canvas@1.6.11
 script: npm run $NPM_SCRIPT
 jobs:
     include:
