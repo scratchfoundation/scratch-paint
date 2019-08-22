@@ -45309,7 +45309,7 @@ class SvgRenderer {
                 ty = -4 * fontSize / 22;
             }
 
-            if (textElement.transform.baseVal.length === 0) {
+            if (textElement.transform.baseVal.numberOfItems === 0) {
                 const transform = this._svgTag.createSVGTransform();
                 textElement.transform.baseVal.appendItem(transform);
             }
@@ -45671,6 +45671,19 @@ module.exports = function (svgString) {
             /(<image[^>]+?xlink:href=["'])data:img\/png/g,
             // use the captured <image ..... xlink:href=" then append the right data uri mime type
             ($0, $1) => `${$1}data:image/png`
+        );
+    }
+
+    // Some SVGs from Inkscape attempt to bind a prefix to a reserved namespace name.
+    // This will cause SVG parsing to fail, so replace these with a dummy namespace name.
+    // This namespace name is only valid for "xml", and if we bind "xmlns:xml" to the dummy namespace,
+    // parsing will fail yet again, so exclude "xmlns:xml" declarations.
+    if (svgString.match(/xmlns:(?!xml=)[^ ]+="http:\/\/www.w3.org\/XML\/1998\/namespace"/) !== null) {
+        svgString = svgString.replace(
+            // capture the entire attribute
+            /(xmlns:(?!xml=)[^ ]+)="http:\/\/www.w3.org\/XML\/1998\/namespace"/g,
+            // use the captured attribute name; replace only the URL
+            ($0, $1) => `${$1}="http://dummy.namespace"`
         );
     }
 
