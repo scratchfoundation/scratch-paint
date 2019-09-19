@@ -234,16 +234,6 @@ const FixedToolsComponent = props => {
                             onClick={props.onSendToBack}
                         />
                     </InputGroup>
-
-                    {/* To be rotation point */}
-                    {/* <InputGroup>
-                        <LabeledIconButton
-                            imgAlt="Rotation Point"
-                            imgSrc={rotationPointIcon}
-                            title="Rotation Point"
-                            onClick={function () {}}
-                        />
-                    </InputGroup> */}
                 </MediaQuery> : null
             }
             {isVector(props.format) ?
@@ -285,19 +275,6 @@ const FixedToolsComponent = props => {
                                         />
                                         <span>{props.intl.formatMessage(messages.back)}</span>
                                     </Button>
-
-                                    {/* To be rotation point */}
-                                    {/* <Button
-                                        className={classNames(styles.modMenuItem, styles.modTopDivider)}
-                                        onClick={function () {}}
-                                    >
-                                        <img
-                                            className={styles.menuItemIcon}
-                                            draggable={false}
-                                            src={rotationPointIcon}
-                                        />
-                                        <span>{'Rotation Point'}</span>
-                                    </Button> */}
                                 </InputGroup>
                             }
                             tipSize={.01}

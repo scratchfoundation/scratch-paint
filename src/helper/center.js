@@ -2,7 +2,7 @@ import paper from '@scratch/paper';
 import { clearSelection } from './selection';
 import { getHitBounds } from './bitmap';
 import { ART_BOARD_WIDTH, ART_BOARD_HEIGHT } from './view';
-import {createCanvas, clearRaster, getRaster, hideGuideLayers, showGuideLayers} from './layer';
+import { createCanvas, getRaster } from './layer';
 
 const center = function (onUpdateImage, isBitmap, clearSelectedItems) {
     clearSelection(clearSelectedItems);
@@ -35,7 +35,7 @@ function _centerBitmap() {
     getRaster().canvas = tmpCanvas;
 }
 
-function _getTranslateVector(bounds){
+function _getTranslateVector(bounds) {
     const centerSprite = new paper.Point((bounds.x * 2 + bounds.width) / 2, (bounds.y * 2 + bounds.height) / 2);
     const centerBoard = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     return centerBoard.subtract(centerSprite);
