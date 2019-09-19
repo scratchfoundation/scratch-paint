@@ -24,6 +24,7 @@ import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
 import Modes from '../lib/modes';
+import {BitmapModes} from '../lib/modes';
 import Formats from '../lib/format';
 import {isBitmap, isVector} from '../lib/format';
 import bindAll from 'lodash.bindall';
@@ -105,9 +106,9 @@ class PaintEditor extends React.Component {
         document.addEventListener('touchend', this.onMouseUp);
     }
     componentWillReceiveProps (newProps) {
-        if (isVector(this.props.format) && isBitmap(newProps.format)) {
+        if (!isBitmap(this.props.format) && isBitmap(newProps.format)) {
             this.switchMode(Formats.BITMAP);
-        } else if (isVector(newProps.format) && isBitmap(this.props.format)) {
+        } else if (!isVector(this.props.format) && isVector(newProps.format)) {
             this.switchMode(Formats.VECTOR);
         }
         if (newProps.rtl !== this.props.rtl) {
@@ -140,7 +141,7 @@ class PaintEditor extends React.Component {
         document.removeEventListener('touchend', this.onMouseUp);
     }
     switchMode (newFormat) {
-        if (isVector(newFormat)) {
+        if (isVector(newFormat) && (this.props.mode in BitmapModes)) {
             switch (this.props.mode) {
             case Modes.BIT_BRUSH:
                 this.props.changeMode(Modes.BRUSH);
@@ -170,7 +171,8 @@ class PaintEditor extends React.Component {
                 log.error(`Mode not handled: ${this.props.mode}`);
                 this.props.changeMode(Modes.BRUSH);
             }
-        } else if (isBitmap(newFormat)) {
+        } else if (isBitmap(newFormat) &&
+                (this.props.mode in Modes && !(this.props.mode in BitmapModes))) {
             switch (this.props.mode) {
             case Modes.BRUSH:
                 this.props.changeMode(Modes.BIT_BRUSH);
@@ -202,6 +204,9 @@ class PaintEditor extends React.Component {
                 log.error(`Mode not handled: ${this.props.mode}`);
                 this.props.changeMode(Modes.BIT_BRUSH);
             }
+        } else if (!(this.props.mode in Modes)) {
+            log.error(`Mode not handled: ${this.props.mode}`);
+            this.props.changeMode(Modes.BIT_BRUSH);
         }
     }
     handleZoomIn () {
