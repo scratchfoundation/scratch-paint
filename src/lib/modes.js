@@ -24,7 +24,7 @@ const bitmapModesObj = {
 };
 const VectorModes = keyMirror(vectorModesObj);
 const BitmapModes = keyMirror(bitmapModesObj);
-const Modes = keyMirror({...vectorModesObj, ...bitmapModesObj})
+const Modes = keyMirror({...vectorModesObj, ...bitmapModesObj});
 
 export {
     Modes as default,
