@@ -56,7 +56,7 @@ class FixedTools extends React.Component {
         this.props.setSelectedItems(this.props.format);
     }
     handleCenter () {
-        center(this.props.onUpdateImage,isBitmap(this.props.format), this.props.clearSelectedItems);
+        center(this.props.onUpdateImage, isBitmap(this.props.format), this.props.clearSelectedItems);
     }
     render () {
         return (

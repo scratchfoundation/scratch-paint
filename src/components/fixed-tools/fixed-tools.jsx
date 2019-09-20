@@ -167,13 +167,13 @@ const FixedToolsComponent = props => {
             </InputGroup>
 
             {/* Center */}
-            <InputGroup className={isVector(props.format) ? styles.modDashedBorder : ""}>
+            <InputGroup className={isVector(props.format) ? styles.modDashedBorder : ''}>
                 <LabeledIconButton
-                        hideLabel={hideLabel(props.intl.locale)}
-                        imgSrc={centerIcon}
-                        title={props.intl.formatMessage(messages.center)}
-                        onClick={props.onCenter}
-                    />
+                    hideLabel={hideLabel(props.intl.locale)}
+                    imgSrc={centerIcon}
+                    title={props.intl.formatMessage(messages.center)}
+                    onClick={props.onCenter}
+                />
             </InputGroup>
 
             {/* Group/Ungroup */}
