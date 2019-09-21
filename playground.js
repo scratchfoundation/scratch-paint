@@ -53709,9 +53709,14 @@ var FillColorIndicator = function (_React$Component) {
     }, {
         key: 'handleCloseFillColor',
         value: function handleCloseFillColor() {
-            if (!this.props.isEyeDropping) {
-                this.props.onCloseFillColor();
-            }
+            // If the eyedropper is currently being used, don't
+            // close the fill color menu.
+            if (this.props.isEyeDropping) return;
+
+            // Otherwise, close the fill color menu and
+            // also reset the color index to indicate
+            // that `color1` is selected.
+            this.props.onCloseFillColor();
             this.props.onChangeColorIndex(0);
         }
     }, {
