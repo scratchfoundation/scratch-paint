@@ -17605,7 +17605,9 @@ exports.selectRootItem = selectRootItem;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.BitmapModes = exports.default = undefined;
+exports.BitmapModes = exports.VectorModes = exports.default = undefined;
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _keymirror = __webpack_require__(40);
 
@@ -17613,15 +17615,7 @@ var _keymirror2 = _interopRequireDefault(_keymirror);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Modes = (0, _keymirror2.default)({
-    BIT_BRUSH: null,
-    BIT_LINE: null,
-    BIT_OVAL: null,
-    BIT_RECT: null,
-    BIT_TEXT: null,
-    BIT_FILL: null,
-    BIT_ERASER: null,
-    BIT_SELECT: null,
+var vectorModesObj = {
     BRUSH: null,
     ERASER: null,
     LINE: null,
@@ -17632,9 +17626,8 @@ var Modes = (0, _keymirror2.default)({
     RECT: null,
     ROUNDED_RECT: null,
     TEXT: null
-});
-
-var BitmapModes = (0, _keymirror2.default)({
+};
+var bitmapModesObj = {
     BIT_BRUSH: null,
     BIT_LINE: null,
     BIT_OVAL: null,
@@ -17643,9 +17636,13 @@ var BitmapModes = (0, _keymirror2.default)({
     BIT_FILL: null,
     BIT_ERASER: null,
     BIT_SELECT: null
-});
+};
+var VectorModes = (0, _keymirror2.default)(vectorModesObj);
+var BitmapModes = (0, _keymirror2.default)(bitmapModesObj);
+var Modes = (0, _keymirror2.default)(_extends({}, vectorModesObj, bitmapModesObj));
 
 exports.default = Modes;
+exports.VectorModes = VectorModes;
 exports.BitmapModes = BitmapModes;
 
 /***/ }),
@@ -35460,7 +35457,7 @@ var PaintEditor = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (PaintEditor.__proto__ || Object.getPrototypeOf(PaintEditor)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['switchMode', 'onMouseDown', 'onMouseUp', 'setCanvas', 'setTextArea', 'startEyeDroppingLoop', 'stopEyeDroppingLoop', 'handleSetSelectedItems', 'handleZoomIn', 'handleZoomOut', 'handleZoomReset']);
+        (0, _lodash2.default)(_this, ['switchModeForFormat', 'onMouseDown', 'onMouseUp', 'setCanvas', 'setTextArea', 'startEyeDroppingLoop', 'stopEyeDroppingLoop', 'handleSetSelectedItems', 'handleZoomIn', 'handleZoomOut', 'handleZoomReset']);
         _this.state = {
             canvas: null,
             colorInfo: null
@@ -35484,10 +35481,10 @@ var PaintEditor = function (_React$Component) {
     }, {
         key: 'componentWillReceiveProps',
         value: function componentWillReceiveProps(newProps) {
-            if ((0, _format2.isVector)(this.props.format) && (0, _format2.isBitmap)(newProps.format)) {
-                this.switchMode(_format3.default.BITMAP);
-            } else if ((0, _format2.isVector)(newProps.format) && (0, _format2.isBitmap)(this.props.format)) {
-                this.switchMode(_format3.default.VECTOR);
+            if (!(0, _format2.isBitmap)(this.props.format) && (0, _format2.isBitmap)(newProps.format)) {
+                this.switchModeForFormat(_format3.default.BITMAP);
+            } else if (!(0, _format2.isVector)(this.props.format) && (0, _format2.isVector)(newProps.format)) {
+                this.switchModeForFormat(_format3.default.VECTOR);
             }
             if (newProps.rtl !== this.props.rtl) {
                 this.props.setLayout(newProps.rtl ? 'rtl' : 'ltr');
@@ -35523,8 +35520,12 @@ var PaintEditor = function (_React$Component) {
             document.removeEventListener('touchend', this.onMouseUp);
         }
     }, {
-        key: 'switchMode',
-        value: function switchMode(newFormat) {
+        key: 'switchModeForFormat',
+        value: function switchModeForFormat(newFormat) {
+            if ((0, _format2.isVector)(newFormat) && this.props.mode in _modes2.VectorModes || (0, _format2.isBitmap)(newFormat) && this.props.mode in _modes2.BitmapModes) {
+                // Format didn't change; no mode change needed
+                return;
+            }
             if ((0, _format2.isVector)(newFormat)) {
                 switch (this.props.mode) {
                     case _modes3.default.BIT_BRUSH:
