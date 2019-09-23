@@ -2,6 +2,8 @@
 @import "../../css/units.css";
 
 .editor-container {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     padding: calc(3 * $grid-unit);
@@ -20,8 +22,8 @@
 
 .top-align-row {
     display: flex;
-    padding-top: calc(5 * $grid-unit);
     flex-direction: row;
+    padding-top: calc(5 * $grid-unit);
 }
 
 .row + .row {
@@ -114,9 +116,22 @@ $border-radius: 0.25rem;
     margin-left: calc(2 * $grid-unit);
 }
 
+.top-align-row {
+    height: 100%;
+}
+
+.controls-container {
+    width: 100%;
+    height: 100%;
+    margin-left: calc(2 * $grid-unit);
+    margin-right: calc(2 * $grid-unit);
+}
+
 .canvas-container {
-    width: 480px;
-    height: 360px;
+    width: 100%;
+    height: calc(100% - 40px - $grid-unit);
+    min-height: 360px;
+    min-width: 400px;
     box-sizing: content-box;
     border: 1px solid #e8edf1;
     border-radius: .25rem;
@@ -126,20 +141,12 @@ $border-radius: 0.25rem;
 
 .mode-selector {
     display: flex;
-    max-width: 6rem;
+    max-width: 7rem;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
     align-content: flex-start;
     justify-content: space-between;
-}
-
-[dir="ltr"] .mode-selector {
-    margin-right: calc(2 * $grid-unit);
-}
-
-[dir="rtl"] .mode-selector {
-    margin-left: calc(2 * $grid-unit);
 }
 
 .zoom-controls {
@@ -188,9 +195,13 @@ $border-radius: 0.25rem;
     }
 
     .mode-selector {
-        margin-right: $grid-unit;
         flex-direction: column;
         justify-content: flex-start;
+    }
+
+    .controls-container {
+        margin-right: $grid-unit;
+        margin-left: $grid-unit;
     }
 }
 
