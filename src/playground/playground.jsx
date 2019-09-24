@@ -6,8 +6,10 @@ import {Provider} from 'react-redux';
 import {createStore} from 'redux';
 import reducer from './reducers/combine-reducers';
 import {intlInitialState, IntlProvider} from './reducers/intl.js';
+import styles from './playground.css';
 
 const appTarget = document.createElement('div');
+appTarget.setAttribute('class', styles.playgroundContainer);
 document.body.appendChild(appTarget);
 const store = createStore(
     reducer,
