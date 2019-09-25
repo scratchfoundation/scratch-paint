@@ -244,7 +244,7 @@ const _makeBackgroundGuideLayer = function () {
     const guideLayer = new paper.Layer();
     guideLayer.locked = true;
 
-    const vBackground = _makeBackgroundPaper(120, 90, '#E5E5E5');
+    const vBackground = _makeBackgroundPaper(120, 90, '#F9F9F9');
     vBackground.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
     vBackground.scaling = new paper.Point(8, 8);
     vBackground.guide = true;
