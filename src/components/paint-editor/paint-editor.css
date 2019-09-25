@@ -130,8 +130,8 @@ $border-radius: 0.25rem;
 .canvas-container {
     width: 100%;
     height: calc(100% - 40px - $grid-unit);
-    min-height: 360px;
-    min-width: 400px;
+    min-height: 362px; /* Leave room for the border */
+    min-width: 402px;
     box-sizing: content-box;
     border: 1px solid #e8edf1;
     border-radius: .25rem;
@@ -141,7 +141,7 @@ $border-radius: 0.25rem;
 
 .mode-selector {
     display: flex;
-    max-width: 7.1rem;
+    max-width: 7.8rem;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;

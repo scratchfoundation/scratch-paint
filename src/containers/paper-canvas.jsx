@@ -199,6 +199,8 @@ class PaperCanvas extends React.Component {
                 // positioned incorrectly
                 paperCanvas.queuedImport =
                     window.setTimeout(() => {
+                        paper.view.setViewSize(paper.DomElement.getSize(paper.view.element));
+                        paperCanvas.props.updateViewBounds(paper.view.matrix);
                         paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
                     }, 0);
             }
