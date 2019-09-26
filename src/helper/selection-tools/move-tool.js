@@ -3,7 +3,7 @@ import Modes from '../../lib/modes';
 import {isGroup} from '../group';
 import {isCompoundPathItem, getRootItem} from '../item';
 import {checkPointsClose, snapDeltaToAngle} from '../math';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER} from '../view';
+import {getActionBounds, CENTER} from '../view';
 import {clearSelection, cloneSelection, getSelectedLeafItems, getSelectedRootItems, setItemSelection}
     from '../selection';
 import {getDragCrosshairLayer} from '../layer';
@@ -121,19 +121,20 @@ class MoveTool {
         this.setSelectedItems();
     }
     onMouseDrag (event) {
+        const size = paper.DomElement.getSize(paper.view.element);
         const point = event.point;
-        point.x = Math.max(0, Math.min(point.x, ART_BOARD_WIDTH));
-        point.y = Math.max(0, Math.min(point.y, ART_BOARD_HEIGHT));
+        const bounds = getActionBounds();
         
+        point.x = Math.max(bounds.left, Math.min(point.x, bounds.right));
+        point.y = Math.max(bounds.top, Math.min(point.y, bounds.bottom));
         const dragVector = point.subtract(event.downPoint);
         let snapVector;
 
         // Snapping to align center. Not in reshape mode, because reshape doesn't show center crosshair
-        const center = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
         if (!event.modifiers.shift && this.mode !== Modes.RESHAPE) {
             if (checkPointsClose(
                 this.selectionCenter.add(dragVector),
-                center,
+                CENTER,
                 SNAPPING_THRESHOLD / paper.view.zoom /* threshold */)) {
                 
                 snapVector = center.subtract(this.selectionCenter);

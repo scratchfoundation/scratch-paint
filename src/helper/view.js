@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
-import {getSelectedRootItems} from './selection';
 import {CROSSHAIR_SIZE, getBackgroundGuideLayer, getDragCrosshairLayer, getRaster} from './layer';
+import {getAllRootItems, getSelectedRootItems} from './selection';
 import {getHitBounds} from './bitmap';
 
 // Vectors are imported and exported at SVG_ART_BOARD size.
@@ -12,22 +12,25 @@ const ART_BOARD_WIDTH = 480 * 2;
 const ART_BOARD_HEIGHT = 360 * 2;
 const CENTER = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
 const PADDING_PERCENT = 25; // Padding as a percent of the max of width/height of the sprite
+const BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
 // zoomed in for tiny costumes.
 
+let workspaceBounds = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+
 const clampViewBounds = () => {
     const {left, right, top, bottom} = paper.project.view.bounds;
-    if (left < 0) {
-        paper.project.view.scrollBy(new paper.Point(-left, 0));
+    if (left < workspaceBounds.left) {
+        paper.project.view.scrollBy(new paper.Point(workspaceBounds.left - left, 0));
     }
-    if (top < 0) {
-        paper.project.view.scrollBy(new paper.Point(0, -top));
+    if (top < workspaceBounds.top) {
+        paper.project.view.scrollBy(new paper.Point(0, workspaceBounds.top - top));
     }
-    if (bottom > ART_BOARD_HEIGHT) {
-        paper.project.view.scrollBy(new paper.Point(0, ART_BOARD_HEIGHT - bottom));
+    if (bottom > workspaceBounds.bottom) {
+        paper.project.view.scrollBy(new paper.Point(0, workspaceBounds.bottom - bottom));
     }
-    if (right > ART_BOARD_WIDTH) {
-        paper.project.view.scrollBy(new paper.Point(ART_BOARD_WIDTH - right, 0));
+    if (right > workspaceBounds.right) {
+        paper.project.view.scrollBy(new paper.Point(workspaceBounds.right - right, 0));
     }
 };
 
@@ -89,6 +92,28 @@ const pan = (dx, dy) => {
     clampViewBounds();
 };
 
+const setWorkspaceBounds = updateViewBounds => {
+    // The workspace bounds define the areas that the scroll bars can access.
+    // They include at minimum the artboard, and extend to a bit beyond the
+    // farthest item off tne edge in any given direction (so items can't be
+    // "lost" off the edge)
+    const items = getAllRootItems();
+    // Include the artboard and what's visible in the viewport
+    const bounds = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+    bounds.unite(paper.view.bounds);
+
+    for (const item of items) {
+        bounds.unite(item.bounds.expand(BUFFER));
+    }
+    workspaceBounds = bounds;
+    updateViewBounds(paper.view.matrix);
+};
+
+/* Mouse actions are clamped to action bounds */
+const getActionBounds = () => {
+    return paper.view.bounds.unite(getRaster().bounds);
+};
+
 const zoomToFit = isBitmap => {
     resetZoom();
     let bounds;
@@ -119,8 +144,10 @@ export {
     SVG_ART_BOARD_WIDTH,
     SVG_ART_BOARD_HEIGHT,
     clampViewBounds,
+    getActionBounds,
     pan,
     resetZoom,
+    setWorkspaceBounds,
     zoomOnSelection,
     zoomOnFixedPoint,
     zoomToFit
