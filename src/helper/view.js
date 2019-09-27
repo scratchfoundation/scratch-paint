@@ -58,6 +58,15 @@ const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
         .subtract(preZoomCenter);
     view.zoom = newZoom;
     view.translate(postZoomOffset.multiply(-1));
+
+    // Cut out empty space when "jump" zooming
+    const items = getAllRootItems();
+    let bounds = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+    for (const item of items) {
+        bounds = bounds.unite(item.bounds.expand(BUFFER));
+    }
+    _workspaceBounds = bounds;
+
     clampViewBounds();
     _resizeCrosshair();
 };
