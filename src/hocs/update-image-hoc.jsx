@@ -8,13 +8,15 @@ import {connect} from 'react-redux';
 
 import {undoSnapshot} from '../reducers/undo';
 import {setSelectedItems} from '../reducers/selected-items';
+import {updateViewBounds} from '../reducers/view-bounds';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
 import {commitRectToBitmap, commitOvalToBitmap, commitSelectionToBitmap, getHitBounds} from '../helper/bitmap';
 import {performSnapshot} from '../helper/undo';
 import {scaleWithStrokes} from '../helper/math';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
+
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT, setWorkspaceBounds} from '../helper/view';
 
 import Modes from '../lib/modes';
 import {BitmapModes} from '../lib/modes';
@@ -47,6 +49,8 @@ const UpdateImageHOC = function (WrappedComponent) {
             } else if (isVector(actualFormat)) {
                 this.handleUpdateVector(skipSnapshot);
             }
+            setWorkspaceBounds();
+            this.props.updateViewBounds(paper.view.matrix);
         }
         handleUpdateBitmap (skipSnapshot) {
             if (!getRaster().loaded) {
@@ -153,7 +157,8 @@ const UpdateImageHOC = function (WrappedComponent) {
         format: PropTypes.oneOf(Object.keys(Formats)),
         mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
         onUpdateImage: PropTypes.func.isRequired,
-        undoSnapshot: PropTypes.func.isRequired
+        undoSnapshot: PropTypes.func.isRequired,
+        updateViewBounds: PropTypes.func.isRequired
     };
 
     const mapStateToProps = state => ({
@@ -167,6 +172,9 @@ const UpdateImageHOC = function (WrappedComponent) {
         },
         undoSnapshot: snapshot => {
             dispatch(undoSnapshot(snapshot));
+        },
+        updateViewBounds: matrix => {
+            dispatch(updateViewBounds(matrix));
         }
     });
 

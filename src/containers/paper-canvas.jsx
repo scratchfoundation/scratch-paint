@@ -11,7 +11,7 @@ import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, getRaster, setupLayers} from '../helper/layer';
 import {clearSelectedItems} from '../reducers/selected-items';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, resetZoom, zoomToFit} from '../helper/view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, resetZoom, setWorkspaceBounds, zoomToFit} from '../helper/view';
 import {ensureClockwise, scaleWithStrokes} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
@@ -30,13 +30,14 @@ class PaperCanvas extends React.Component {
             'importSvg',
             'initializeSvg',
             'maybeZoomToFit',
-            'switchCostume'
+            'switchCostume',
+            'onViewResize'
         ]);
     }
     componentDidMount () {
         paper.setup(this.canvas);
+        paper.view.on('resize', this.onViewResize);
         resetZoom();
-        this.props.updateViewBounds(paper.view.matrix);
         if (this.props.zoomLevelId) {
             this.props.setZoomLevelId(this.props.zoomLevelId);
             if (this.props.zoomLevels[this.props.zoomLevelId]) {
@@ -46,6 +47,8 @@ class PaperCanvas extends React.Component {
                 // Zoom to fit true means find a comfortable zoom level for viewing the costume
                 this.shouldZoomToFit = true;
             }
+        } else {
+            this.props.updateViewBounds(paper.view.matrix);
         }
 
         const context = this.canvas.getContext('2d');
@@ -150,12 +153,12 @@ class PaperCanvas extends React.Component {
     maybeZoomToFit (isBitmapMode) {
         if (this.shouldZoomToFit instanceof paper.Matrix) {
             paper.view.matrix = this.shouldZoomToFit;
-            this.props.updateViewBounds(paper.view.matrix);
         } else if (this.shouldZoomToFit === true) {
             zoomToFit(isBitmapMode);
-            this.props.updateViewBounds(paper.view.matrix);
         }
         this.shouldZoomToFit = false;
+        setWorkspaceBounds();
+        this.props.updateViewBounds(paper.view.matrix);
     }
     importSvg (svg, rotationCenterX, rotationCenterY) {
         const paperCanvas = this;
@@ -256,6 +259,10 @@ class PaperCanvas extends React.Component {
         }
         performSnapshot(this.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
         this.maybeZoomToFit();
+    }
+    onViewResize () {
+        setWorkspaceBounds();
+        this.props.updateViewBounds(paper.view.matrix);
     }
     setCanvas (canvas) {
         this.canvas = canvas;

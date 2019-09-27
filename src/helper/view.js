@@ -16,22 +16,23 @@ const BUFFER = 50; // Number of pixels of allowance around objects at the edges 
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
 // zoomed in for tiny costumes.
 
-let workspaceBounds = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+let _workspaceBounds = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
 
 const clampViewBounds = () => {
     const {left, right, top, bottom} = paper.project.view.bounds;
-    if (left < workspaceBounds.left) {
-        paper.project.view.scrollBy(new paper.Point(workspaceBounds.left - left, 0));
+    if (left < _workspaceBounds.left) {
+        paper.project.view.scrollBy(new paper.Point(_workspaceBounds.left - left, 0));
     }
-    if (top < workspaceBounds.top) {
-        paper.project.view.scrollBy(new paper.Point(0, workspaceBounds.top - top));
+    if (top < _workspaceBounds.top) {
+        paper.project.view.scrollBy(new paper.Point(0, _workspaceBounds.top - top));
     }
-    if (bottom > workspaceBounds.bottom) {
-        paper.project.view.scrollBy(new paper.Point(0, workspaceBounds.bottom - bottom));
+    if (bottom > _workspaceBounds.bottom) {
+        paper.project.view.scrollBy(new paper.Point(0, _workspaceBounds.bottom - bottom));
     }
-    if (right > workspaceBounds.right) {
-        paper.project.view.scrollBy(new paper.Point(workspaceBounds.right - right, 0));
+    if (right > _workspaceBounds.right) {
+        paper.project.view.scrollBy(new paper.Point(_workspaceBounds.right - right, 0));
     }
+    setWorkspaceBounds();
 };
 
 const _resizeCrosshair = () => {
@@ -92,21 +93,24 @@ const pan = (dx, dy) => {
     clampViewBounds();
 };
 
-const setWorkspaceBounds = updateViewBounds => {
+const getWorkspaceBounds = () => {
+    return _workspaceBounds;
+}
+
+const setWorkspaceBounds = () => {
     // The workspace bounds define the areas that the scroll bars can access.
     // They include at minimum the artboard, and extend to a bit beyond the
     // farthest item off tne edge in any given direction (so items can't be
     // "lost" off the edge)
     const items = getAllRootItems();
     // Include the artboard and what's visible in the viewport
-    const bounds = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
-    bounds.unite(paper.view.bounds);
+    let bounds = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+    bounds = bounds.unite(paper.view.bounds);
 
     for (const item of items) {
-        bounds.unite(item.bounds.expand(BUFFER));
+        bounds = bounds.unite(item.bounds.expand(BUFFER));
     }
-    workspaceBounds = bounds;
-    updateViewBounds(paper.view.matrix);
+    _workspaceBounds = bounds;
 };
 
 /* Mouse actions are clamped to action bounds */
@@ -148,6 +152,7 @@ export {
     pan,
     resetZoom,
     setWorkspaceBounds,
+    getWorkspaceBounds,
     zoomOnSelection,
     zoomOnFixedPoint,
     zoomToFit
