@@ -14,9 +14,10 @@ const CENTER = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
 const PADDING_PERCENT = 25; // Padding as a percent of the max of width/height of the sprite
 const BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
-// zoomed in for tiny costumes.
+                        // zoomed in for tiny costumes.
+const ART_BOARD_BOUNDS = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
 
-let _workspaceBounds = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+let _workspaceBounds = ART_BOARD_BOUNDS;
 
 const clampViewBounds = () => {
     const {left, right, top, bottom} = paper.project.view.bounds;
@@ -61,9 +62,23 @@ const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
 
     // Cut out empty space when "jump" zooming
     const items = getAllRootItems();
-    let bounds = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+    let bounds = ART_BOARD_BOUNDS.expand(BUFFER);
     for (const item of items) {
         bounds = bounds.unite(item.bounds.expand(BUFFER));
+    }
+
+    // Center in view if viewport is larger than workspace
+    let hDiff = 0;
+    let vDiff = 0;
+    if (bounds.width < paper.view.bounds.width) {
+        hDiff = paper.view.bounds.width - bounds.width;
+        bounds.left -= hDiff / 2;
+        bounds.width += hDiff;
+    }
+    if (bounds.height < paper.view.bounds.height) {
+        vDiff = paper.view.bounds.height - bounds.height;
+        bounds.top -= vDiff / 2;
+        bounds.height += vDiff;
     }
     _workspaceBounds = bounds;
 
@@ -113,7 +128,7 @@ const setWorkspaceBounds = () => {
     // "lost" off the edge)
     const items = getAllRootItems();
     // Include the artboard and what's visible in the viewport
-    let bounds = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+    let bounds = ART_BOARD_BOUNDS.expand(BUFFER);
     bounds = bounds.unite(paper.view.bounds);
 
     for (const item of items) {
@@ -124,7 +139,7 @@ const setWorkspaceBounds = () => {
 
 /* Mouse actions are clamped to action bounds */
 const getActionBounds = () => {
-    return paper.view.bounds.unite(getRaster().bounds);
+    return paper.view.bounds.unite(ART_BOARD_BOUNDS);
 };
 
 const zoomToFit = isBitmap => {
