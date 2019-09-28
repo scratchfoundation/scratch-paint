@@ -40,16 +40,20 @@ class NudgeTool {
             }
         }
         const bounds = getActionBounds();
+        const bottom = bounds.bottom - rect.top - 1;
+        const top = bounds.top - rect.bottom + 1;
+        const left = bounds.left - rect.right + 1;
+        const right = bounds.right - rect.left - 1;
 
         let translation;
         if (event.key === 'up') {
-            translation = new paper.Point(0, Math.max(-nudgeAmount, bounds.top - rect.bottom + 1));
+            translation = new paper.Point(0, Math.min(bottom, Math.max(-nudgeAmount, top)));
         } else if (event.key === 'down') {
-            translation = new paper.Point(0, Math.min(nudgeAmount, bounds.bottom - rect.top - 1));
+            translation = new paper.Point(0, Math.max(top, Math.min(nudgeAmount, bottom)));
         } else if (event.key === 'left') {
-            translation = new paper.Point(Math.max(-nudgeAmount, bounds.left - rect.right + 1), 0);
+            translation = new paper.Point(Math.min(right, Math.max(-nudgeAmount, left)), 0);
         } else if (event.key === 'right') {
-            translation = new paper.Point(Math.min(nudgeAmount, bounds.right - rect.left - 1), 0);
+            translation = new paper.Point(Math.max(left, Math.min(nudgeAmount, right)), 0);
         }
 
         if (translation) {

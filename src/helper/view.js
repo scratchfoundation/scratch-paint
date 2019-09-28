@@ -15,7 +15,13 @@ const PADDING_PERCENT = 25; // Padding as a percent of the max of width/height o
 const BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
                         // zoomed in for tiny costumes.
+const MAX_DIMENSION = 2048;
 const ART_BOARD_BOUNDS = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+const MAX_WORKSPACE_BOUNDS = new paper.Rectangle(
+    ART_BOARD_WIDTH / 2 - MAX_DIMENSION / 2,
+    ART_BOARD_HEIGHT / 2 - MAX_DIMENSION / 2,
+    MAX_DIMENSION,
+    MAX_DIMENSION);
 
 let _workspaceBounds = ART_BOARD_BOUNDS;
 
@@ -60,28 +66,7 @@ const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
     view.zoom = newZoom;
     view.translate(postZoomOffset.multiply(-1));
 
-    // Cut out empty space when "jump" zooming
-    const items = getAllRootItems();
-    let bounds = ART_BOARD_BOUNDS.expand(BUFFER);
-    for (const item of items) {
-        bounds = bounds.unite(item.bounds.expand(BUFFER));
-    }
-
-    // Center in view if viewport is larger than workspace
-    let hDiff = 0;
-    let vDiff = 0;
-    if (bounds.width < paper.view.bounds.width) {
-        hDiff = paper.view.bounds.width - bounds.width;
-        bounds.left -= hDiff / 2;
-        bounds.width += hDiff;
-    }
-    if (bounds.height < paper.view.bounds.height) {
-        vDiff = paper.view.bounds.height - bounds.height;
-        bounds.top -= vDiff / 2;
-        bounds.height += vDiff;
-    }
-    _workspaceBounds = bounds;
-
+    setWorkspaceBounds(true /* clipEmpty */);
     clampViewBounds();
     _resizeCrosshair();
 };
@@ -121,25 +106,53 @@ const getWorkspaceBounds = () => {
     return _workspaceBounds;
 }
 
-const setWorkspaceBounds = () => {
-    // The workspace bounds define the areas that the scroll bars can access.
-    // They include at minimum the artboard, and extend to a bit beyond the
-    // farthest item off tne edge in any given direction (so items can't be
-    // "lost" off the edge)
+/**
+* The workspace bounds define the areas that the scroll bars can access.
+* They include at minimum the artboard, and extend to a bit beyond the
+* farthest item off tne edge in any given direction (so items can't be
+* "lost" off the edge)
+*
+* @param clipEmpty {boolean} clip empty space from bounds, even if it
+* means discontinuously jumping the viewport. This should probably be
+* false unless the viewport is going to move discontinuously anyway
+* (such as in a zoom button click)
+*/
+const setWorkspaceBounds = clipEmpty => {
     const items = getAllRootItems();
-    // Include the artboard and what's visible in the viewport
     let bounds = ART_BOARD_BOUNDS.expand(BUFFER);
-    bounds = bounds.unite(paper.view.bounds);
-
+    if (!clipEmpty) {
+        bounds = bounds.unite(paper.view.bounds);
+    }
     for (const item of items) {
+        // Include the artboard and what's visible in the viewport
         bounds = bounds.unite(item.bounds.expand(BUFFER));
     }
-    _workspaceBounds = bounds;
+    bounds = bounds.intersect(MAX_WORKSPACE_BOUNDS);
+    let top = bounds.top;
+    let left = bounds.left;
+    let bottom = bounds.bottom;
+    let right = bounds.right;
+
+    // Center in view if viewport is larger than workspace
+    let hDiff = 0;
+    let vDiff = 0;
+    if (bounds.width < paper.view.bounds.width) {
+        hDiff = (paper.view.bounds.width - bounds.width) / 2;
+        left -= hDiff;
+        right += hDiff;
+    }
+    if (bounds.height < paper.view.bounds.height) {
+        vDiff = (paper.view.bounds.height - bounds.height) / 2;
+        top -= vDiff;
+        bottom += vDiff;
+    }
+
+    _workspaceBounds = new paper.Rectangle(left, top, right - left, bottom - top);
 };
 
 /* Mouse actions are clamped to action bounds */
 const getActionBounds = () => {
-    return paper.view.bounds.unite(ART_BOARD_BOUNDS);
+    return paper.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
 };
 
 const zoomToFit = isBitmap => {
@@ -171,6 +184,7 @@ export {
     CENTER,
     SVG_ART_BOARD_WIDTH,
     SVG_ART_BOARD_HEIGHT,
+    MAX_WORKSPACE_BOUNDS,
     clampViewBounds,
     getActionBounds,
     pan,
