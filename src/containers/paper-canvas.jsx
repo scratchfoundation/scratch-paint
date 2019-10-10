@@ -263,6 +263,10 @@ class PaperCanvas extends React.Component {
     onViewResize () {
         setWorkspaceBounds(true /* clipEmpty */);
         clampViewBounds();
+        window.setTimeout(() => {
+            // Fix incorrect paper canvas scale on browser zoom reset
+            paper.view.setViewSize(paper.DomElement.getSize(paper.view.element));
+        });
         this.props.updateViewBounds(paper.view.matrix);
     }
     setCanvas (canvas) {
