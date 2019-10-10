@@ -223,8 +223,11 @@ class PaperCanvas extends React.Component {
                     break;
                 }
             }
-            item.clipped = false;
-            mask.remove();
+            // item.clipped = false;
+            // mask.remove();
+            mask.bounds.height = 1024;
+            mask.bounds.width = 1024;
+            mask.bounds.setCenter(new paper.Point());
         }
 
         // Reduce single item nested in groups
