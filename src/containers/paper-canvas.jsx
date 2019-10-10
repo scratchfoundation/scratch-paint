@@ -11,7 +11,7 @@ import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, getRaster, setupLayers} from '../helper/layer';
 import {clearSelectedItems} from '../reducers/selected-items';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, resetZoom, setWorkspaceBounds, zoomToFit} from '../helper/view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, clampViewBounds, resetZoom, setWorkspaceBounds, zoomToFit} from '../helper/view';
 import {ensureClockwise, scaleWithStrokes} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
@@ -261,7 +261,8 @@ class PaperCanvas extends React.Component {
         this.maybeZoomToFit();
     }
     onViewResize () {
-        setWorkspaceBounds();
+        setWorkspaceBounds(true /* clipEmpty */);
+        clampViewBounds();
         this.props.updateViewBounds(paper.view.matrix);
     }
     setCanvas (canvas) {
