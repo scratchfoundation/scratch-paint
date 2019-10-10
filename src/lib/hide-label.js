@@ -21,6 +21,7 @@ const localeTooBig = [
     'sl',
     'fi',
     'sv',
+    'sw',
     'vi',
     'tr',
     'uk'
