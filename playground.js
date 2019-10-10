@@ -33396,7 +33396,7 @@ exports.default = Dropdown;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var localeTooBig = ['ab', 'ca', 'cy', 'de', 'et', 'el', 'ga', 'gd', 'gl', 'mi', 'nl', 'ja', 'ja-Hira', 'nb', 'nn', 'rap', 'th', 'sr', 'sk', 'sl', 'fi', 'sv', 'vi', 'tr', 'uk'];
+var localeTooBig = ['ab', 'ca', 'cy', 'de', 'et', 'el', 'ga', 'gd', 'gl', 'mi', 'nl', 'ja', 'ja-Hira', 'nb', 'nn', 'rap', 'th', 'sr', 'sk', 'sl', 'fi', 'sv', 'sw', 'vi', 'tr', 'uk'];
 
 var hideLabel = function hideLabel(locale) {
     return localeTooBig.includes(locale);
