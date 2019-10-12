@@ -58,7 +58,14 @@ const _resizeCrosshair = () => {
 const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
     const view = paper.view;
     const preZoomCenter = view.center;
-    const newZoom = Math.max(0.5, view.zoom + deltaZoom);
+    let newZoom;
+    if (view.zoom <= 0.5 && deltaZoom < 0) {
+        newZoom = 0.333;
+    } else if (view.zoom <= 0.333 && deltaZoom > 0) {
+        newZoom = 0.5;
+    } else {
+        newZoom = Math.max(0.5, view.zoom + deltaZoom)
+    }
     const scaling = view.zoom / newZoom;
     const preZoomOffset = fixedPoint.subtract(preZoomCenter);
     const postZoomOffset = fixedPoint.subtract(preZoomOffset.multiply(scaling))
