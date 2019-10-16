@@ -11,7 +11,8 @@ import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, getRaster, setupLayers} from '../helper/layer';
 import {clearSelectedItems} from '../reducers/selected-items';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, clampViewBounds, resetZoom, setWorkspaceBounds, zoomToFit} from '../helper/view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, MAX_DIMENSION} from '../helper/view';
+import {clampViewBounds, resetZoom, setWorkspaceBounds, zoomToFit} from '../helper/view';
 import {ensureClockwise, scaleWithStrokes} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
 import {clearPasteOffset} from '../reducers/clipboard';
@@ -238,6 +239,7 @@ class PaperCanvas extends React.Component {
         ensureClockwise(item);
         scaleWithStrokes(item, 2, new paper.Point()); // Import at 2x
 
+        // Apply rotation center
         if (typeof rotationCenterX !== 'undefined' && typeof rotationCenterY !== 'undefined') {
             let rotationPoint = new paper.Point(rotationCenterX, rotationCenterY);
             if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {

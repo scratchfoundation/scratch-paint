@@ -1,6 +1,5 @@
 import paper from '@scratch/paper';
 import {getSelectedRootItems} from '../selection';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
 import {getActionBounds} from '../view';
 
 const NUDGE_MORE_MULTIPLIER = 15;

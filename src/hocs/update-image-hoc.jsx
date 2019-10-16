@@ -16,7 +16,8 @@ import {commitRectToBitmap, commitOvalToBitmap, commitSelectionToBitmap, getHitB
 import {performSnapshot} from '../helper/undo';
 import {scaleWithStrokes} from '../helper/math';
 
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT, setWorkspaceBounds} from '../helper/view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
+import {MAX_SVG_WORKSPACE_BOUNDS, setWorkspaceBounds} from '../helper/view';
 
 import Modes from '../lib/modes';
 import {BitmapModes} from '../lib/modes';
@@ -49,6 +50,7 @@ const UpdateImageHOC = function (WrappedComponent) {
             } else if (isVector(actualFormat)) {
                 this.handleUpdateVector(skipSnapshot);
             }
+            // Any time an image update is made, recalculate the bounds of the artwork
             setWorkspaceBounds();
             this.props.updateViewBounds(paper.view.matrix);
         }

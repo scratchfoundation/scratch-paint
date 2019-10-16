@@ -118,7 +118,7 @@ const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
     } else if (view.zoom <= 0.333 && deltaZoom > 0) {
         newZoom = 0.5;
     } else {
-        newZoom = Math.max(0.5, view.zoom + deltaZoom)
+        newZoom = Math.max(0.5, view.zoom + deltaZoom);
     }
     const scaling = view.zoom / newZoom;
     const preZoomOffset = fixedPoint.subtract(preZoomCenter);
@@ -163,58 +163,9 @@ const pan = (dx, dy) => {
     clampViewBounds();
 };
 
-const getWorkspaceBounds = () => {
-    return _workspaceBounds;
-}
-
-/**
-* The workspace bounds define the areas that the scroll bars can access.
-* They include at minimum the artboard, and extend to a bit beyond the
-* farthest item off tne edge in any given direction (so items can't be
-* "lost" off the edge)
-*
-* @param clipEmpty {boolean} clip empty space from bounds, even if it
-* means discontinuously jumping the viewport. This should probably be
-* false unless the viewport is going to move discontinuously anyway
-* (such as in a zoom button click)
-*/
-const setWorkspaceBounds = clipEmpty => {
-    const items = getAllRootItems();
-    let bounds = ART_BOARD_BOUNDS.expand(BUFFER);
-    if (!clipEmpty) {
-        bounds = bounds.unite(paper.view.bounds);
-    }
-    for (const item of items) {
-        // Include the artboard and what's visible in the viewport
-        bounds = bounds.unite(item.bounds.expand(BUFFER));
-    }
-    bounds = bounds.intersect(MAX_WORKSPACE_BOUNDS);
-    let top = bounds.top;
-    let left = bounds.left;
-    let bottom = bounds.bottom;
-    let right = bounds.right;
-
-    // Center in view if viewport is larger than workspace
-    let hDiff = 0;
-    let vDiff = 0;
-    if (bounds.width < paper.view.bounds.width) {
-        hDiff = (paper.view.bounds.width - bounds.width) / 2;
-        left -= hDiff;
-        right += hDiff;
-    }
-    if (bounds.height < paper.view.bounds.height) {
-        vDiff = (paper.view.bounds.height - bounds.height) / 2;
-        top -= vDiff;
-        bottom += vDiff;
-    }
-
-    _workspaceBounds = new paper.Rectangle(left, top, right - left, bottom - top);
-};
-
 /* Mouse actions are clamped to action bounds */
-const getActionBounds = () => {
-    return paper.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
-};
+const getActionBounds = () =>
+    paper.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
 
 const zoomToFit = isBitmap => {
     resetZoom();
