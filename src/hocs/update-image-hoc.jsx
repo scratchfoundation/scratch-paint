@@ -114,25 +114,46 @@ const UpdateImageHOC = function (WrappedComponent) {
             }
         }
         handleUpdateVector (skipSnapshot) {
+            // Remove viewbox (this would make it export at 2048 x 2048)
+            let workspaceMask;
+            if (paper.project.activeLayer.clipped) {
+                for (const child of paper.project.activeLayer.children) {
+                    if (child.isClipMask()) {
+                        workspaceMask = child;
+                        break;
+                    }
+                }
+                paper.project.activeLayer.clipped = false;
+                workspaceMask.remove();
+            }
             const guideLayers = hideGuideLayers(true /* includeRaster */);
 
             // Export at 0.5x
             scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
-            const bounds = paper.project.activeLayer.drawnBounds;
-            // @todo (https://github.com/LLK/scratch-paint/issues/445) generate view box
+            const contentMask = new paper.Shape.Rectangle(
+                paper.project.activeLayer.drawnBounds.intersect(MAX_SVG_WORKSPACE_BOUNDS)
+            );
+            paper.project.activeLayer.addChild(contentMask);
+            contentMask.clipMask = true;
+
             this.props.onUpdateImage(
                 true /* isVector */,
                 paper.project.exportSVG({
                     asString: true,
                     bounds: 'content',
-                    matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
+                    matrix: new paper.Matrix().translate(-contentMask.bounds.x, -contentMask.bounds.y)
                 }),
-                (SVG_ART_BOARD_WIDTH / 2) - bounds.x,
-                (SVG_ART_BOARD_HEIGHT / 2) - bounds.y);
+                (SVG_ART_BOARD_WIDTH / 2) - contentMask.bounds.x,
+                (SVG_ART_BOARD_HEIGHT / 2) - contentMask.bounds.y);
             scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
             paper.project.activeLayer.applyMatrix = true;
 
             showGuideLayers(guideLayers);
+
+            // Add back viewbox
+            paper.project.activeLayer.addChild(workspaceMask);
+            workspaceMask.clipMask = true;
+            contentMask.remove();
 
             if (!skipSnapshot) {
                 performSnapshot(this.props.undoSnapshot, Formats.VECTOR);

@@ -214,20 +214,20 @@ class PaperCanvas extends React.Component {
         const itemWidth = item.bounds.width;
         const itemHeight = item.bounds.height;
 
-        // Remove viewbox
+        // Get reference to viewbox
+        let mask;
         if (item.clipped) {
-            let mask;
             for (const child of item.children) {
                 if (child.isClipMask()) {
                     mask = child;
                     break;
                 }
             }
-            // item.clipped = false;
-            // mask.remove();
-            mask.bounds.height = 1024;
-            mask.bounds.width = 1024;
-            mask.bounds.setCenter(new paper.Point());
+            mask.guide = true;
+            mask.locked = true;
+        } else {
+            item.addChild(new paper.Shape.Rectangle(item.bounds));
+            item.lastChild.clipMask = true;
         }
 
         // Reduce single item nested in groups
@@ -250,6 +250,12 @@ class PaperCanvas extends React.Component {
             item.translate(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2)
                 .subtract(itemWidth, itemHeight));
         }
+        // Set the artwork to get clipped at the max costume size
+        mask.matrix = new paper.Matrix(); // Identity
+        mask.size.height = MAX_DIMENSION;
+        mask.size.width = MAX_DIMENSION;
+        mask.setPosition(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2));
+
         paper.project.activeLayer.insertChild(0, item);
         if (isGroup(item)) {
             // Fixes an issue where we may export empty groups
