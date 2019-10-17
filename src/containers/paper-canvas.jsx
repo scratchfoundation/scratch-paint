@@ -224,12 +224,19 @@ class PaperCanvas extends React.Component {
                     break;
                 }
             }
-            mask.guide = true;
-            mask.locked = true;
+            mask.clipMask = false;
         } else {
-            item.addChild(new paper.Shape.Rectangle(item.bounds));
-            item.lastChild.clipMask = true;
+            mask = new paper.Shape.Rectangle(item.bounds);
         }
+        mask.guide = true;
+        mask.locked = true;
+        mask.matrix = new paper.Matrix(); // Identity
+        // Set the artwork to get clipped at the max costume size
+        mask.size.height = MAX_DIMENSION;
+        mask.size.width = MAX_DIMENSION;
+        mask.setPosition(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2));
+        paper.project.activeLayer.addChild(mask);
+        mask.clipMask = true;
 
         // Reduce single item nested in groups
         if (item instanceof paper.Group && item.children.length === 1) {
@@ -252,11 +259,6 @@ class PaperCanvas extends React.Component {
             item.translate(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2)
                 .subtract(itemWidth, itemHeight));
         }
-        // Set the artwork to get clipped at the max costume size
-        mask.matrix = new paper.Matrix(); // Identity
-        mask.size.height = MAX_DIMENSION;
-        mask.size.width = MAX_DIMENSION;
-        mask.setPosition(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2));
 
         paper.project.activeLayer.insertChild(0, item);
         if (isGroup(item)) {
@@ -268,6 +270,7 @@ class PaperCanvas extends React.Component {
             }
             ungroupItems([item]);
         }
+
         performSnapshot(this.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
         this.maybeZoomToFit();
     }

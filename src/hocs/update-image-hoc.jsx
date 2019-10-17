@@ -132,21 +132,17 @@ const UpdateImageHOC = function (WrappedComponent) {
 
             // Export at 0.5x
             scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
-            const contentMask = new paper.Shape.Rectangle(
-                paper.project.activeLayer.drawnBounds.intersect(MAX_SVG_WORKSPACE_BOUNDS)
-            );
-            paper.project.activeLayer.addChild(contentMask);
-            contentMask.clipMask = true;
-
+            
+            const bounds = paper.project.activeLayer.drawnBounds;
             this.props.onUpdateImage(
                 true /* isVector */,
                 paper.project.exportSVG({
                     asString: true,
                     bounds: 'content',
-                    matrix: new paper.Matrix().translate(-contentMask.bounds.x, -contentMask.bounds.y)
+                    matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
                 }),
-                (SVG_ART_BOARD_WIDTH / 2) - contentMask.bounds.x,
-                (SVG_ART_BOARD_HEIGHT / 2) - contentMask.bounds.y);
+                (SVG_ART_BOARD_WIDTH / 2) - bounds.x,
+                (SVG_ART_BOARD_HEIGHT / 2) - bounds.y);
             scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
             paper.project.activeLayer.applyMatrix = true;
 
@@ -157,7 +153,6 @@ const UpdateImageHOC = function (WrappedComponent) {
                 paper.project.activeLayer.addChild(workspaceMask);
                 workspaceMask.clipMask = true;
             }
-            contentMask.remove();
 
             if (!skipSnapshot) {
                 performSnapshot(this.props.undoSnapshot, Formats.VECTOR);
