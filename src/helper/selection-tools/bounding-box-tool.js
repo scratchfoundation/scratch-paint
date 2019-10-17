@@ -4,7 +4,6 @@ import keyMirror from 'keymirror';
 import {getSelectedRootItems} from '../selection';
 import {getGuideColor, removeBoundsPath, removeBoundsHandles} from '../guides';
 import {getGuideLayer, setGuideItem} from '../layer';
-
 import Cursors from '../../lib/cursors';
 import ScaleTool from './scale-tool';
 import RotateTool from './rotate-tool';
@@ -24,6 +23,7 @@ const BoundingBoxModes = keyMirror({
     ROTATE: null,
     MOVE: null
 });
+let anchorIcon;
 
 /**
  * Tool that handles transforming the selection and drawing a bounding box with handles.
@@ -54,6 +54,16 @@ class BoundingBoxTool {
         this._modeMap[BoundingBoxModes.MOVE] =
             new MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool);
         this._currentCursor = null;
+
+        paper.project.importSVG(selectionAnchorIcon, {
+            onLoad: function (item) {
+                anchorIcon = item;
+                item.visible = false;
+                item.parent = getGuideLayer();
+                item.locked = true;
+                item.guide = true;
+            }
+        });
     }
 
     /**
@@ -223,10 +233,10 @@ class BoundingBoxTool {
             hRoundRect.remove();
 
             this.boundsPath.addChild(anchorIcon);
-            this.boundsPath.selectionAnchor = anchorIcon;
+            this.boundsPath.selectionAnchor = anchorIcon;\
             this._modeMap[BoundingBoxModes.MOVE].setBoundsPath(this.boundsPath);
         }
-        this.boundsPath.guide = true;
+        setGuideItem(this.boundsPath);
         this.boundsPath.data.isSelectionBound = true;
         this.boundsPath.data.isHelperItem = true;
         this.boundsPath.fillColor = null;
@@ -235,6 +245,11 @@ class BoundingBoxTool {
         this.boundsPath.strokeColor = getGuideColor();
         this.boundsPath.selectionAnchor.scale(SELECTION_ANCHOR_SIZE / paper.view.zoom / this.boundsPath.selectionAnchor.bounds.width);
         this.boundsPath.selectionAnchor.position = rect.center;
+
+        if (anchorIcon) {
+            anchorIcon.visible = true;
+            anchorIcon.position = rect.center;
+        }
 
         // Make a template to copy
         const boundsScaleCircleShadow =
@@ -315,6 +330,9 @@ class BoundingBoxTool {
         this.boundsRect = null;
         this.boundsScaleHandles.length = 0;
         this.boundsRotHandles.length = 0;
+        if (anchorIcon) {
+            anchorIcon.visible = false;
+        }
     }
     removeBoundsHandles () {
         removeBoundsHandles();

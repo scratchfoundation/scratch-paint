@@ -229,7 +229,6 @@ const _makeCrosshair = function (opacity, parent) {
     crosshair.applyMatrix = false;
     parent.dragCrosshair = crosshair;
     crosshair.scale(CROSSHAIR_SIZE / crosshair.bounds.width / paper.view.zoom);
-
 };
 
 const _makeDragCrosshairLayer = function () {
