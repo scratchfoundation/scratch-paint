@@ -95,7 +95,7 @@ const hideGuideLayers = function (includeRaster) {
     const backgroundGuideLayer = getBackgroundGuideLayer();
     const dragCrosshairLayer = getDragCrosshairLayer();
     const guideLayer = getGuideLayer();
-    if (dragCrosshairLayer) dragCrosshairLayer.remove();
+    dragCrosshairLayer.remove();
     guideLayer.remove();
     backgroundGuideLayer.remove();
     let rasterLayer;
