@@ -153,8 +153,10 @@ const UpdateImageHOC = function (WrappedComponent) {
             showGuideLayers(guideLayers);
 
             // Add back viewbox
-            paper.project.activeLayer.addChild(workspaceMask);
-            workspaceMask.clipMask = true;
+            if (workspaceMask) {
+                paper.project.activeLayer.addChild(workspaceMask);
+                workspaceMask.clipMask = true;
+            }
             contentMask.remove();
 
             if (!skipSnapshot) {
