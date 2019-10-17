@@ -17,7 +17,7 @@ import {performSnapshot} from '../helper/undo';
 import {scaleWithStrokes} from '../helper/math';
 
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
-import {MAX_SVG_WORKSPACE_BOUNDS, setWorkspaceBounds} from '../helper/view';
+import {setWorkspaceBounds} from '../helper/view';
 
 import Modes from '../lib/modes';
 import {BitmapModes} from '../lib/modes';
@@ -132,7 +132,7 @@ const UpdateImageHOC = function (WrappedComponent) {
 
             // Export at 0.5x
             scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
-            
+
             const bounds = paper.project.activeLayer.drawnBounds;
             this.props.onUpdateImage(
                 true /* isVector */,

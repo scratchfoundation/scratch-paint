@@ -8,28 +8,22 @@ import {getHitBounds} from './bitmap';
 // canvases of ART_BOARD size.
 // (This is for backwards compatibility, to handle both assets
 // designed for 480 x 360, and bitmap resolution 2 bitmaps)
-const ART_BOARD_WIDTH = 480 * 2;
-const ART_BOARD_HEIGHT = 360 * 2;
+const SVG_ART_BOARD_WIDTH = 480;
+const SVG_ART_BOARD_HEIGHT = 360;
+const ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH * 2;
+const ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT * 2;
 const CENTER = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
-const SVG_ART_BOARD_WIDTH = ART_BOARD_WIDTH / 2;
-const SVG_ART_BOARD_HEIGHT = ART_BOARD_HEIGHT / 2;
 const PADDING_PERCENT = 25; // Padding as a percent of the max of width/height of the sprite
 const BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
                         // zoomed in for tiny costumes.
 const MAX_DIMENSION = 2048;
-const MAX_SVG_DIMENSION = MAX_DIMENSION / 2;
 const ART_BOARD_BOUNDS = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
 const MAX_WORKSPACE_BOUNDS = new paper.Rectangle(
     (ART_BOARD_WIDTH / 2) - (MAX_DIMENSION / 2),
     (ART_BOARD_HEIGHT / 2) - (MAX_DIMENSION / 2),
     MAX_DIMENSION,
     MAX_DIMENSION);
-const MAX_SVG_WORKSPACE_BOUNDS = new paper.Rectangle(
-    (SVG_ART_BOARD_WIDTH / 2) - (MAX_SVG_DIMENSION / 2),
-    (SVG_ART_BOARD_HEIGHT / 2) - (MAX_SVG_DIMENSION / 2),
-    MAX_SVG_DIMENSION,
-    MAX_SVG_DIMENSION);
 
 let _workspaceBounds = ART_BOARD_BOUNDS;
 
@@ -198,7 +192,6 @@ export {
     SVG_ART_BOARD_HEIGHT,
     MAX_DIMENSION,
     MAX_WORKSPACE_BOUNDS,
-    MAX_SVG_WORKSPACE_BOUNDS,
     clampViewBounds,
     getActionBounds,
     pan,
