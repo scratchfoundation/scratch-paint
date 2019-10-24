@@ -248,6 +248,7 @@ class BoundingBoxTool {
 
         if (anchorIcon) {
             anchorIcon.visible = true;
+            anchorIcon.scale(20 / paper.view.zoom / anchorIcon.bounds.width);
             anchorIcon.position = rect.center;
         }
 
