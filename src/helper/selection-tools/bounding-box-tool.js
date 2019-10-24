@@ -4,6 +4,8 @@ import keyMirror from 'keymirror';
 import {getSelectedRootItems} from '../selection';
 import {getGuideColor, removeBoundsPath, removeBoundsHandles} from '../guides';
 import {getGuideLayer, setGuideItem} from '../layer';
+import selectionAnchorIcon from '../icons/selection-anchor-expanded.svg';
+
 import Cursors from '../../lib/cursors';
 import ScaleTool from './scale-tool';
 import RotateTool from './rotate-tool';
@@ -248,7 +250,7 @@ class BoundingBoxTool {
 
         if (anchorIcon) {
             anchorIcon.visible = true;
-            anchorIcon.scale(20 / paper.view.zoom / anchorIcon.bounds.width);
+            anchorIcon.scale(SELECTION_ANCHOR_SIZE / paper.view.zoom / anchorIcon.bounds.width);
             anchorIcon.position = rect.center;
         }
 
