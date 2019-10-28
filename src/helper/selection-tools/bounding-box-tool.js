@@ -234,7 +234,7 @@ class BoundingBoxTool {
             hRoundRect.remove();
 
             this.boundsPath.addChild(anchorIcon);
-            this.boundsPath.selectionAnchor = anchorIcon;\
+            this.boundsPath.selectionAnchor = anchorIcon;
             this._modeMap[BoundingBoxModes.MOVE].setBoundsPath(this.boundsPath);
         }
         setGuideItem(this.boundsPath);
