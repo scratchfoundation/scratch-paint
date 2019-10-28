@@ -5,8 +5,6 @@ import {isGroupItem} from './item';
 
 const CROSSHAIR_SIZE = 16;
 
-const CROSSHAIR_SIZE = 28;
-
 const _getLayer = function (layerString) {
     for (const layer of paper.project.layers) {
         if (layer.data && layer.data[layerString]) {

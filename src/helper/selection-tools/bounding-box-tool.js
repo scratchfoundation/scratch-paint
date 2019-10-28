@@ -62,8 +62,7 @@ class BoundingBoxTool {
                 anchorIcon = item;
                 item.visible = false;
                 item.parent = getGuideLayer();
-                item.locked = true;
-                item.guide = true;
+                setGuideItem(item);
             }
         });
     }
