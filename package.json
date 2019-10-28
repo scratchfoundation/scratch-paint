@@ -5,7 +5,7 @@
   "main": "./dist/scratch-paint.js",
   "browser": "./src/index.js",
   "scripts": {
-    "build": "npm run clean && webpack --progress --colors --bail",
+    "build": "npm run clean && NODE_OPTIONS=--max_old_space_size=8000 webpack --progress --colors --bail",
     "clean": "rimraf ./dist && mkdirp dist && rimraf ./playground && mkdirp playground",
     "deploy": "touch playground/.nojekyll && gh-pages -t -d playground -m \"Build for $(git log --pretty=format:%H -n1)\"",
     "i18n:push": "tx-push-src scratch-editor paint-editor ./translations/en.json",
