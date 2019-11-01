@@ -42,7 +42,7 @@ const getWorkspaceBounds = () => _workspaceBounds;
 */
 const setWorkspaceBounds = clipEmpty => {
     const items = getAllRootItems();
-    let bounds = ART_BOARD_BOUNDS.expand(BUFFER);
+    let bounds = ART_BOARD_BOUNDS;
     if (!clipEmpty) {
         bounds = bounds.unite(paper.view.bounds);
     }
@@ -50,7 +50,7 @@ const setWorkspaceBounds = clipEmpty => {
         // Include the artboard and what's visible in the viewport
         bounds = bounds.unite(item.bounds.expand(BUFFER));
     }
-    bounds = bounds.intersect(MAX_WORKSPACE_BOUNDS);
+    bounds = bounds.intersect(MAX_WORKSPACE_BOUNDS.expand(BUFFER));
     let top = bounds.top;
     let left = bounds.left;
     let bottom = bounds.bottom;
