@@ -41,7 +41,7 @@ const clearRaster = function () {
     raster.parent = layer;
     raster.guide = true;
     raster.locked = true;
-    raster.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
+    raster.position = CENTER;
 };
 
 const getRaster = function () {
@@ -245,12 +245,12 @@ const _makeBackgroundGuideLayer = function () {
     
     const vWorkspaceBounds = new paper.Shape.Rectangle(MAX_WORKSPACE_BOUNDS);
     vWorkspaceBounds.fillColor = '#ECF1F9';
-    vWorkspaceBounds.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
+    vWorkspaceBounds.position = CENTER;
     vWorkspaceBounds.guide = true;
     vWorkspaceBounds.locked = true;
 
     const vBackground = _makeBackgroundPaper(120, 90, '#F9F9F9');
-    vBackground.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
+    vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(8, 8);
     vBackground.guide = true;
     vBackground.locked = true;

@@ -11,7 +11,7 @@ import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, getRaster, setupLayers} from '../helper/layer';
 import {clearSelectedItems} from '../reducers/selected-items';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, MAX_DIMENSION} from '../helper/view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_DIMENSION} from '../helper/view';
 import {clampViewBounds, resetZoom, setWorkspaceBounds, zoomToFit} from '../helper/view';
 import {ensureClockwise, scaleWithStrokes} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
@@ -234,7 +234,7 @@ class PaperCanvas extends React.Component {
         // Set the artwork to get clipped at the max costume size
         mask.size.height = MAX_DIMENSION;
         mask.size.width = MAX_DIMENSION;
-        mask.setPosition(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2));
+        mask.setPosition(CENTER);
         paper.project.activeLayer.addChild(mask);
         mask.clipMask = true;
 
@@ -252,12 +252,10 @@ class PaperCanvas extends React.Component {
             if (viewBox && viewBox.length >= 2 && !isNaN(viewBox[0]) && !isNaN(viewBox[1])) {
                 rotationPoint = rotationPoint.subtract(viewBox[0], viewBox[1]);
             }
-            item.translate(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2)
-                .subtract(rotationPoint.multiply(2)));
+            item.translate(CENTER.subtract(rotationPoint.multiply(2)));
         } else {
             // Center
-            item.translate(new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2)
-                .subtract(itemWidth, itemHeight));
+            item.translate(CENTER.subtract(itemWidth, itemHeight));
         }
 
         paper.project.activeLayer.insertChild(0, item);

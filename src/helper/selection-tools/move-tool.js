@@ -153,6 +153,9 @@ class MoveTool {
                 item.position = item.data.origPos.add(snapDeltaToAngle(dragVector, Math.PI / 4));
             } else {
                 item.position = item.data.origPos.add(dragVector);
+                if (checkPointsClose(item.position, CENTER, 2 / paper.view.zoom /* threshold */)) {
+                    item.position = CENTER;
+                }
             }
         }
         
