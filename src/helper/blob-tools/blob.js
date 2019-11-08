@@ -5,6 +5,7 @@ import SegmentBrushHelper from './segment-brush-helper';
 import {MIXED, styleCursorPreview} from '../../helper/style-path';
 import {clearSelection, getItems} from '../../helper/selection';
 import {getGuideLayer} from '../../helper/layer';
+import {isCompoundPathChild} from '../compound-path';
 
 /**
  * Shared code for the brush and eraser mode. Adds functions on the paper tool object
@@ -263,8 +264,12 @@ class Blobbiness {
                 class: paper.PathItem
             });
         }
-        
+
         for (let i = items.length - 1; i >= 0; i--) {
+            // If a path is part of a compound path, that parent path will later be processed.
+            // Skip processing the child path so as not to double-process it.
+            if (isCompoundPathChild(items[i])) continue;
+
             // TODO handle compound paths
             if (items[i] instanceof paper.Path && (!items[i].fillColor || items[i].fillColor._alpha === 0)) {
                 // Gather path segments
