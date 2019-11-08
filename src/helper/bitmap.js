@@ -748,9 +748,13 @@ const commitOvalToBitmap = function (oval, bitmap) {
     const radiusY = Math.abs(oval.size.height / 2);
     const context = bitmap.getContext('2d');
     const filled = oval.strokeWidth === 0;
-    context.fillStyle = filled ?
-        oval.fillColor && oval.fillColor.toCSS() : oval.strokeColor && oval.strokeColor.toCSS();
 
+    const canvasColor = filled ? oval.fillColor : oval.strokeColor;
+    // If the color is null (e.g. fully transparent/"no fill"), don't bother drawing anything,
+    // and especially don't try calling `toCSS` on it
+    if (!canvasColor) return;
+
+    context.fillStyle = canvasColor.toCSS();
     const drew = drawEllipse({
         position: oval.position,
         radiusX,
@@ -771,8 +775,13 @@ const commitRectToBitmap = function (rect, bitmap) {
     const tmpCanvas = createCanvas();
     const context = tmpCanvas.getContext('2d');
     const filled = rect.strokeWidth === 0;
-    context.fillStyle = filled ?
-        rect.fillColor && rect.fillColor.toCSS() : rect.strokeColor && rect.strokeColor.toCSS();
+
+    const canvasColor = filled ? rect.fillColor : rect.strokeColor;
+    // If the color is null (e.g. fully transparent/"no fill"), don't bother drawing anything,
+    // and especially don't try calling `toCSS` on it
+    if (!canvasColor) return;
+
+    context.fillStyle = canvasColor.toCSS();
     if (filled) {
         fillRect(rect, context);
     } else {
