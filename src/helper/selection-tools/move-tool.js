@@ -122,10 +122,11 @@ class MoveTool {
     }
     onMouseDrag (event) {
         const point = event.point;
-        const bounds = getActionBounds();
+        const actionBounds = getActionBounds();
+
+        point.x = Math.max(actionBounds.left, Math.min(point.x, actionBounds.right));
+        point.y = Math.max(actionBounds.top, Math.min(point.y, actionBounds.bottom));
         
-        point.x = Math.max(bounds.left, Math.min(point.x, bounds.right));
-        point.y = Math.max(bounds.top, Math.min(point.y, bounds.bottom));
         const dragVector = point.subtract(event.downPoint);
         let snapVector;
 
@@ -136,7 +137,7 @@ class MoveTool {
                 CENTER,
                 SNAPPING_THRESHOLD / paper.view.zoom /* threshold */)) {
                 
-                snapVector = center.subtract(this.selectionCenter);
+                snapVector = CENTER.subtract(this.selectionCenter);
             }
         }
 
@@ -153,9 +154,6 @@ class MoveTool {
                 item.position = item.data.origPos.add(snapDeltaToAngle(dragVector, Math.PI / 4));
             } else {
                 item.position = item.data.origPos.add(dragVector);
-                if (checkPointsClose(item.position, CENTER, 2 / paper.view.zoom /* threshold */)) {
-                    item.position = CENTER;
-                }
             }
         }
         
