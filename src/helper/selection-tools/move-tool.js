@@ -136,7 +136,7 @@ class MoveTool {
                 this.selectionCenter.add(dragVector),
                 CENTER,
                 SNAPPING_THRESHOLD / paper.view.zoom /* threshold */)) {
-                
+
                 snapVector = CENTER.subtract(this.selectionCenter);
             }
         }
