@@ -1,6 +1,10 @@
 import paper from '@scratch/paper';
 import log from '../log/log';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from './view';
+import {isGroupItem} from './item';
+import costumeAnchorIcon from './icons/costume-anchor.svg';
+
+const CROSSHAIR_SIZE = 28;
 
 const _getLayer = function (layerString) {
     for (const layer of paper.project.layers) {
@@ -73,6 +77,16 @@ const getGuideLayer = function () {
     return layer;
 };
 
+const setGuideItem = function (item) {
+    item.locked = true;
+    item.guide = true;
+    if (isGroupItem(item)) {
+        for (let i = 0; i < item.children.length; i++) {
+            setGuideItem(item.children[i])
+        }
+    }
+}
+
 /**
  * Removes the guide layers, e.g. for purposes of exporting the image. Must call showGuideLayers to re-add them.
  * @param {boolean} includeRaster true if the raster layer should also be hidden
@@ -82,6 +96,7 @@ const hideGuideLayers = function (includeRaster) {
     const backgroundGuideLayer = getBackgroundGuideLayer();
     const dragCrosshairLayer = getDragCrosshairLayer();
     const guideLayer = getGuideLayer();
+    dragCrosshairLayer.remove();
     guideLayer.remove();
     backgroundGuideLayer.remove();
     let rasterLayer;
@@ -175,34 +190,25 @@ const _makeBackgroundPaper = function (width, height, color) {
 };
 
 // Helper function for drawing a crosshair
-const _makeCrosshair = function () {
-    const vLine = new paper.Path.Line(new paper.Point(0, -7), new paper.Point(0, 7));
-    vLine.strokeWidth = 2;
-    vLine.strokeColor = '#ccc';
-    vLine.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
-    vLine.guide = true;
-    vLine.locked = true;
-
-    const hLine = new paper.Path.Line(new paper.Point(-7, 0), new paper.Point(7, 0));
-    hLine.strokeWidth = 2;
-    hLine.strokeColor = '#ccc';
-    hLine.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
-    hLine.guide = true;
-    hLine.locked = true;
-
-    const circle = new paper.Shape.Circle(new paper.Point(0, 0), 5);
-    circle.strokeWidth = 2;
-    circle.strokeColor = '#ccc';
-    circle.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
-    circle.guide = true;
-    circle.locked = true;
+const _makeCrosshair = function (opacity, parent) {
+    paper.project.importSVG(costumeAnchorIcon, {
+        applyMatrix: false,
+        onLoad: function (item) {
+            item.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
+            item.opacity = opacity;
+            item.parent = parent;
+            parent.dragCrosshair = item;
+            item.scale(CROSSHAIR_SIZE / item.bounds.width / paper.view.zoom);
+            setGuideItem(item);
+        }
+    });
 };
 
 const _makeDragCrosshairLayer = function () {
     const dragCrosshairLayer = new paper.Layer();
-    _makeCrosshair();
+    _makeCrosshair(1, dragCrosshairLayer);
     dragCrosshairLayer.data.isDragCrosshairLayer = true;
-    dragCrosshairLayer.opacity = 0;
+    dragCrosshairLayer.visible = false;
     return dragCrosshairLayer;
 };
 
@@ -216,7 +222,7 @@ const _makeBackgroundGuideLayer = function () {
     vBackground.guide = true;
     vBackground.locked = true;
 
-    _makeCrosshair();
+    _makeCrosshair(0.25, guideLayer);
 
     guideLayer.data.isBackgroundGuideLayer = true;
     return guideLayer;
@@ -235,6 +241,7 @@ const setupLayers = function () {
 };
 
 export {
+    CROSSHAIR_SIZE,
     createCanvas,
     hideGuideLayers,
     showGuideLayers,
@@ -243,5 +250,6 @@ export {
     getBackgroundGuideLayer,
     clearRaster,
     getRaster,
+    setGuideItem,
     setupLayers
 };
