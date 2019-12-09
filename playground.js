@@ -22427,7 +22427,15 @@ var getHitBounds = function getHitBounds(raster) {
         ++left;
     }while (right - 1 > left && columnBlank_(imageData, width, right - 1, top, bottom)) {
         --right;
-    }return new _paper2.default.Rectangle(left, top, right - left, bottom - top);
+    } // Center an empty bitmap
+    if (top === bottom) {
+        top = bottom = imageData.height / 2;
+    }
+    if (left === right) {
+        left = right = imageData.width / 2;
+    }
+
+    return new _paper2.default.Rectangle(left, top, right - left, bottom - top);
 };
 
 var trim_ = function trim_(raster) {
