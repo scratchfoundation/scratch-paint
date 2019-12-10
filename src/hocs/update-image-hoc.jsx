@@ -89,14 +89,15 @@ const UpdateImageHOC = function (WrappedComponent) {
                 }
             }
             const rect = getHitBounds(plasteredRaster);
-            const imageData = plasteredRaster.getImageData(rect);
 
-            // If the bitmap has a zero width or height, save this information
-            // since zero isn't a valid value for on imageData objects' widths and heights.
+            // Use 1x1 instead of 0x0 for getting imageData since paper.js automagically
+            // returns the full artboard in the case of getImageData(0x0).
+            // Bitmaps need a non-zero width/height in order to be saved as PNG.
             if (rect.width === 0 || rect.height === 0) {
-                imageData.sourceWidth = rect.width;
-                imageData.sourceHeight = rect.height;
+                rect.width = rect.height = 1;
             }
+
+            const imageData = plasteredRaster.getImageData(rect);
 
             this.props.onUpdateImage(
                 false /* isVector */,
