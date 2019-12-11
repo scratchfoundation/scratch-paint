@@ -3,7 +3,7 @@ import Modes from '../../lib/modes';
 import {isGroup} from '../group';
 import {isCompoundPathItem, getRootItem} from '../item';
 import {checkPointsClose, snapDeltaToAngle} from '../math';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER} from '../view';
 import {clearSelection, cloneSelection, getSelectedLeafItems, getSelectedRootItems, setItemSelection}
     from '../selection';
 import {getDragCrosshairLayer} from '../layer';
@@ -31,6 +31,7 @@ class MoveTool {
         this.onUpdateImage = onUpdateImage;
         this.switchToTextTool = switchToTextTool;
         this.boundsPath = null;
+        this.firstDrag = false;
     }
 
     /**
@@ -91,7 +92,7 @@ class MoveTool {
             this.selectedItems.push(this.boundsPath);
         }
 
-        
+        this.firstDrag = true;
     }
     setBoundsPath (boundsPath) {
         this.boundsPath = boundsPath;
@@ -154,14 +155,18 @@ class MoveTool {
                 item.position = item.data.origPos.add(dragVector);
             }
         }
-
-
-        // Show the center crosshair above the selected item while dragging. This makes it easier to center sprites.
-        // Yes, we're calling it once per drag event, but it's better than having the crosshair pop up
-        // for a split second every time you click a sprite.
-        getDragCrosshairLayer().visible = true;
+        
+        if (this.firstDrag) {
+            // Show the center crosshair above the selected item while dragging.
+            getDragCrosshairLayer().visible = true;
+            this.firstDrag = false;
+        }
+        const opacity = Math.max(0, 1 - ((CENTER.getDistance(this.selectionCenter.add(dragVector)) / CENTER.x) * (4 * paper.view.zoom)));
+        console.log(opacity);
+        getDragCrosshairLayer().opacity = opacity;
     }
     onMouseUp () {
+        this.firstDrag = false;
         let moved = false;
         // resetting the items origin point for the next usage
         for (const item of this.selectedItems) {
