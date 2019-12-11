@@ -185,6 +185,7 @@ const zoomToFit = isBitmap => {
 };
 
 export {
+    ART_BOARD_BOUNDS,
     ART_BOARD_HEIGHT,
     ART_BOARD_WIDTH,
     CENTER,

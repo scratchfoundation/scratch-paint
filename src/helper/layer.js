@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import log from '../log/log';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS} from './view';
+import {ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS} from './view';
 import {isGroupItem} from './item';
 
 const CROSSHAIR_SIZE = 16;
@@ -94,8 +94,10 @@ const setGuideItem = function (item) {
 const hideGuideLayers = function (includeRaster) {
     const backgroundGuideLayer = getBackgroundGuideLayer();
     const dragCrosshairLayer = getDragCrosshairLayer();
+    const outlineLayer = _getLayer('isOutlineLayer');
     const guideLayer = getGuideLayer();
     dragCrosshairLayer.remove();
+    outlineLayer.remove();
     guideLayer.remove();
     backgroundGuideLayer.remove();
     let rasterLayer;
@@ -105,6 +107,7 @@ const hideGuideLayers = function (includeRaster) {
     }
     return {
         dragCrosshairLayer: dragCrosshairLayer,
+        outlineLayer: outlineLayer,
         guideLayer: guideLayer,
         backgroundGuideLayer: backgroundGuideLayer,
         rasterLayer: rasterLayer
@@ -119,6 +122,7 @@ const hideGuideLayers = function (includeRaster) {
 const showGuideLayers = function (guideLayers) {
     const backgroundGuideLayer = guideLayers.backgroundGuideLayer;
     const dragCrosshairLayer = guideLayers.dragCrosshairLayer;
+    const outlineLayer = guideLayers.outlineLayer;
     const guideLayer = guideLayers.guideLayer;
     const rasterLayer = guideLayers.rasterLayer;
     if (rasterLayer && !rasterLayer.index) {
@@ -132,6 +136,10 @@ const showGuideLayers = function (guideLayers) {
     if (!dragCrosshairLayer.index) {
         paper.project.addLayer(dragCrosshairLayer);
         dragCrosshairLayer.bringToFront();
+    }
+    if (!outlineLayer.index) {
+        paper.project.addLayer(outlineLayer);
+        outlineLayer.bringToFront();
     }
     if (!guideLayer.index) {
         paper.project.addLayer(guideLayer);
@@ -239,6 +247,21 @@ const _makeDragCrosshairLayer = function () {
     return dragCrosshairLayer;
 };
 
+const _makeOutlineLayer = function () {
+    const outlineLayer = new paper.Layer();
+    const whiteRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(1));
+    whiteRect.strokeWidth = 2;
+    whiteRect.strokeColor = "#FFF";
+    setGuideItem(whiteRect);
+    const blueRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(5));
+    blueRect.strokeWidth = 2;
+    blueRect.strokeColor = "#4280D7";
+    blueRect.opacity = 0.5;
+    setGuideItem(blueRect);
+    outlineLayer.data.isOutlineLayer = true;
+    return outlineLayer;
+};
+
 const _makeBackgroundGuideLayer = function () {
     const guideLayer = new paper.Layer();
     guideLayer.locked = true;
@@ -266,9 +289,11 @@ const setupLayers = function () {
     _makeRasterLayer();
     const paintLayer = _makePaintingLayer();
     const dragCrosshairLayer = _makeDragCrosshairLayer();
+    const outlineLayer = _makeOutlineLayer();
     const guideLayer = _makeGuideLayer();
     backgroundGuideLayer.sendToBack();
     dragCrosshairLayer.bringToFront();
+    outlineLayer.bringToFront();
     guideLayer.bringToFront();
     paintLayer.activate();
 };
