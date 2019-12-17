@@ -33860,6 +33860,7 @@ exports.setShapesFilled = setShapesFilled;
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(341);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -45683,12 +45684,12 @@ module.exports = function (svgString) {
     }
 
     // The <metadata> element is not needed for rendering and sometimes contains
-    // unparseable garbage from Illustrator :(
+    // unparseable garbage from Illustrator :( Empty out the contents.
     // Note: [\s\S] matches everything including newlines, which .* does not
-    svgString = svgString.replace(/<metadata>[\s\S]*<\/metadata>/, '');
+    svgString = svgString.replace(/<metadata>[\s\S]*<\/metadata>/, '<metadata></metadata>');
 
-    // Strip script tags and javascript executing
-    svgString = svgString.replace(/<script[\s\S]*>[\s\S]*<\/script>/, '');
+    // Empty script tags and javascript executing
+    svgString = svgString.replace(/<script[\s\S]*>[\s\S]*<\/script>/, '<script></script>');
 
     return svgString;
 };
@@ -46598,6 +46599,7 @@ function fromByteArray (uint8) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(226);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -46970,6 +46972,7 @@ exports.default = ScrollableCanvasComponent;
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(230);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -48041,6 +48044,7 @@ exports.default = BitBrushModeComponent;
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(236);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -48078,6 +48082,7 @@ exports.locals = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(238);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -52687,6 +52692,7 @@ module.exports = [
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(263);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -56203,6 +56209,7 @@ exports.default = Tip;
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(287);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -56804,6 +56811,7 @@ exports.default = SliderComponent;
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(291);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -56840,6 +56848,7 @@ exports.locals = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(293);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -56879,6 +56888,7 @@ exports.locals = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(295);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -56976,6 +56986,7 @@ module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E 
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(303);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -57012,6 +57023,7 @@ exports.locals = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(305);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -58257,6 +58269,7 @@ exports.default = LoupeComponent;
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(316);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -59724,6 +59737,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(322);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -59770,6 +59784,7 @@ module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' stan
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(325);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -59823,6 +59838,7 @@ exports.default = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(328);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -61382,6 +61398,7 @@ exports.locals = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(343);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
@@ -65523,6 +65540,7 @@ module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E 
 /***/ (function(module, exports, __webpack_require__) {
 
 var content = __webpack_require__(382);
+content = content.__esModule ? content.default : content;
 
 if (typeof content === 'string') {
   content = [[module.i, content, '']];
