@@ -256,7 +256,7 @@ const _makeOutlineLayer = function () {
     const blueRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(5));
     blueRect.strokeWidth = 2;
     blueRect.strokeColor = "#4280D7";
-    blueRect.opacity = 0.5;
+    blueRect.opacity = 0.25;
     setGuideItem(blueRect);
     outlineLayer.data.isOutlineLayer = true;
     return outlineLayer;
