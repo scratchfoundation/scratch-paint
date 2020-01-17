@@ -32,7 +32,8 @@ class PaperCanvas extends React.Component {
             'initializeSvg',
             'maybeZoomToFit',
             'switchCostume',
-            'onViewResize'
+            'onViewResize',
+            'recalibrateSize'
         ]);
     }
     componentDidMount () {
@@ -120,6 +121,7 @@ class PaperCanvas extends React.Component {
         if (!image) {
             this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
             performSnapshot(this.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
+            this.recalibrateSize();
             return;
         }
 
@@ -142,6 +144,7 @@ class PaperCanvas extends React.Component {
                     (ART_BOARD_HEIGHT / 2) - rotationCenterY);
                 this.maybeZoomToFit(true /* isBitmap */);
                 performSnapshot(this.props.undoSnapshot, Formats.BITMAP_SKIP_CONVERT);
+                this.recalibrateSize();
             };
             imgElement.src = image;
         } else if (format === 'svg') {
@@ -151,6 +154,7 @@ class PaperCanvas extends React.Component {
             log.error(`Didn't recognize format: ${format}. Use 'jpg', 'png' or 'svg'.`);
             this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
             performSnapshot(this.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
+            this.recalibrateSize();
         }
     }
     maybeZoomToFit (isBitmapMode) {
@@ -277,11 +281,16 @@ class PaperCanvas extends React.Component {
     onViewResize () {
         setWorkspaceBounds(true /* clipEmpty */);
         clampViewBounds();
+        // Fix incorrect paper canvas scale on browser zoom reset
+        this.recalibrateSize();
+        this.props.updateViewBounds(paper.view.matrix);
+    }
+    recalibrateSize () {
+        // Sets the size that Paper thinks the canvas is to the size the canvas element actually is.
+        // When these are out of sync, the mouse events in the paint editor don't line up correctly.
         window.setTimeout(() => {
-            // Fix incorrect paper canvas scale on browser zoom reset
             paper.view.setViewSize(paper.DomElement.getSize(paper.view.element));
         });
-        this.props.updateViewBounds(paper.view.matrix);
     }
     setCanvas (canvas) {
         this.canvas = canvas;
