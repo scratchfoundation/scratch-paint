@@ -4,7 +4,7 @@ import BroadBrushHelper from './broad-brush-helper';
 import SegmentBrushHelper from './segment-brush-helper';
 import {MIXED, styleCursorPreview} from '../../helper/style-path';
 import {clearSelection, getItems} from '../../helper/selection';
-import {getGuideLayer} from '../../helper/layer';
+import {getGuideLayer, setGuideItem} from '../../helper/layer';
 
 /**
  * Shared code for the brush and eraser mode. Adds functions on the paper tool object
@@ -181,6 +181,7 @@ class Blobbiness {
             });
             this.cursorPreview.parent = getGuideLayer();
             this.cursorPreview.data.isHelperItem = true;
+            setGuideItem(this.cursorPreview);
         }
         this.cursorPreview.position = this.cursorPreviewLastPoint;
         this.cursorPreview.radius = this.options.brushSize / 2;
