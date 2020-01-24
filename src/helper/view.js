@@ -41,14 +41,16 @@ const getWorkspaceBounds = () => _workspaceBounds;
 */
 const setWorkspaceBounds = clipEmpty => {
     const items = getAllRootItems();
+    // Include the artboard and what's visible in the viewport
     let bounds = ART_BOARD_BOUNDS;
     if (!clipEmpty) {
         bounds = bounds.unite(paper.view.bounds);
     }
+    // Include everything the user has drawn and a buffer around it
     for (const item of items) {
-        // Include the artboard and what's visible in the viewport
         bounds = bounds.unite(item.bounds.expand(BUFFER));
     }
+    // Limit to max workspace bounds
     bounds = bounds.intersect(MAX_WORKSPACE_BOUNDS.expand(BUFFER));
     let top = bounds.top;
     let left = bounds.left;
@@ -165,14 +167,24 @@ const zoomToFit = isBitmap => {
     resetZoom();
     let bounds;
     if (isBitmap) {
-        bounds = getHitBounds(getRaster());
+        bounds = getHitBounds(getRaster()).expand(BUFFER);
     } else {
-        bounds = paper.project.activeLayer.bounds;
+        const items = getAllRootItems();
+        for (const item of items) {
+            if (!bounds) {
+                bounds = item.bounds;
+            } else {
+                bounds = bounds.unite(item.bounds);
+            }
+        }
     }
     if (bounds && bounds.width && bounds.height) {
-        // Ratio of (sprite length plus padding on all sides) to art board length.
-        let ratio = Math.max(bounds.width * (1 + (2 * PADDING_PERCENT / 100)) / ART_BOARD_WIDTH,
-            bounds.height * (1 + (2 * PADDING_PERCENT / 100)) / ART_BOARD_HEIGHT);
+        const canvas = paper.view.element;
+        // Ratio of (sprite length plus padding on all sides) to viewport length.
+        let ratio = paper.view.zoom *
+            Math.max(
+                bounds.width * (1 + (2 * PADDING_PERCENT / 100)) / canvas.clientWidth,
+                bounds.height * (1 + (2 * PADDING_PERCENT / 100)) / canvas.clientHeight);
         // Clamp ratio
         ratio = Math.max(Math.min(1, ratio), MIN_RATIO);
         if (ratio < 1) {
@@ -181,6 +193,8 @@ const zoomToFit = isBitmap => {
             resizeCrosshair();
             clampViewBounds();
         }
+    } else {
+        console.warn("No bounds!");
     }
 };
 
