@@ -21203,22 +21203,53 @@ var getTarget = function getTarget() {
   };
 }();
 
-var stylesInDom = {};
+var stylesInDom = [];
 
-function modulesToDom(moduleId, list, options) {
-  for (var i = 0; i < list.length; i++) {
-    var part = {
-      css: list[i][1],
-      media: list[i][2],
-      sourceMap: list[i][3]
-    };
+function getIndexByIdentifier(identifier) {
+  var result = -1;
 
-    if (stylesInDom[moduleId][i]) {
-      stylesInDom[moduleId][i](part);
-    } else {
-      stylesInDom[moduleId].push(addStyle(part, options));
+  for (var i = 0; i < stylesInDom.length; i++) {
+    if (stylesInDom[i].identifier === identifier) {
+      result = i;
+      break;
     }
   }
+
+  return result;
+}
+
+function modulesToDom(list, options) {
+  var idCountMap = {};
+  var identifiers = [];
+
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i];
+    var id = options.base ? item[0] + options.base : item[0];
+    var count = idCountMap[id] || 0;
+    var identifier = "".concat(id, " ").concat(count);
+    idCountMap[id] = count + 1;
+    var index = getIndexByIdentifier(identifier);
+    var obj = {
+      css: item[1],
+      media: item[2],
+      sourceMap: item[3]
+    };
+
+    if (index !== -1) {
+      stylesInDom[index].references++;
+      stylesInDom[index].updater(obj);
+    } else {
+      stylesInDom.push({
+        identifier: identifier,
+        updater: addStyle(obj, options),
+        references: 1
+      });
+    }
+
+    identifiers.push(identifier);
+  }
+
+  return identifiers;
 }
 
 function insertStyleElement(options) {
@@ -21272,7 +21303,7 @@ var replaceText = function replaceText() {
 }();
 
 function applyToSingletonTag(style, index, remove, obj) {
-  var css = remove ? '' : obj.css; // For old IE
+  var css = remove ? '' : obj.media ? "@media ".concat(obj.media, " {").concat(obj.css, "}") : obj.css; // For old IE
 
   /* istanbul ignore if  */
 
@@ -21359,7 +21390,7 @@ function addStyle(obj, options) {
   };
 }
 
-module.exports = function (moduleId, list, options) {
+module.exports = function (list, options) {
   options = options || {}; // Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
   // tags it will allow on a page
 
@@ -21367,14 +21398,8 @@ module.exports = function (moduleId, list, options) {
     options.singleton = isOldIE();
   }
 
-  moduleId = options.base ? moduleId + options.base : moduleId;
   list = list || [];
-
-  if (!stylesInDom[moduleId]) {
-    stylesInDom[moduleId] = [];
-  }
-
-  modulesToDom(moduleId, list, options);
+  var lastIdentifiers = modulesToDom(list, options);
   return function update(newList) {
     newList = newList || [];
 
@@ -21382,21 +21407,27 @@ module.exports = function (moduleId, list, options) {
       return;
     }
 
-    if (!stylesInDom[moduleId]) {
-      stylesInDom[moduleId] = [];
+    for (var i = 0; i < lastIdentifiers.length; i++) {
+      var identifier = lastIdentifiers[i];
+      var index = getIndexByIdentifier(identifier);
+      stylesInDom[index].references--;
     }
 
-    modulesToDom(moduleId, newList, options);
+    var newLastIdentifiers = modulesToDom(newList, options);
 
-    for (var j = newList.length; j < stylesInDom[moduleId].length; j++) {
-      stylesInDom[moduleId][j]();
+    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
+      var _identifier = lastIdentifiers[_i];
+
+      var _index = getIndexByIdentifier(_identifier);
+
+      if (stylesInDom[_index].references === 0) {
+        stylesInDom[_index].updater();
+
+        stylesInDom.splice(_index, 1);
+      }
     }
 
-    stylesInDom[moduleId].length = newList.length;
-
-    if (stylesInDom[moduleId].length === 0) {
-      delete stylesInDom[moduleId];
-    }
+    lastIdentifiers = newLastIdentifiers;
   };
 };
 
@@ -33829,7 +33860,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -46607,7 +46638,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -46983,7 +47014,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -48058,7 +48089,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -48099,7 +48130,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -48113,7 +48144,7 @@ module.exports = exported;
 
 exports = module.exports = __webpack_require__(13)(false);
 // Module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.tool-select-base_mod-tool-select_1RQKn {\n    display: inline-block;\n    margin: .25rem;\n    border: none;\n    border-radius: .25rem;\n    outline: none;\n    background: none;\n    padding: .25rem;\n    font-size: 0.85rem;\n    -webkit-transition: 0.2s;\n    -o-transition: 0.2s;\n    transition: 0.2s;\n}\n\n.tool-select-base_mod-tool-select_1RQKn.tool-select-base_is-selected_3Le38 {\n    background-color: #4C97FF;\n}\n\n.tool-select-base_mod-tool-select_1RQKn:focus {\n    outline: none;\n}\n\nimg.tool-select-base_tool-select-icon_2TT3t {\n    width: 2rem;\n    height: 2rem;\n    -webkit-box-flex: 1;\n    -webkit-flex-grow: 1;\n        -ms-flex-positive: 1;\n            flex-grow: 1;\n    vertical-align: middle;\n}\n\n.tool-select-base_mod-tool-select_1RQKn.tool-select-base_is-selected_3Le38 .tool-select-base_tool-select-icon_2TT3t {\n    /* Make the tool icons white while selected by making them black and inverting */\n    -webkit-filter: brightness(0) invert(1);\n            filter: brightness(0) invert(1);\n}\n\n@media only screen and (max-width: 1249px) {\n    .tool-select-base_mod-tool-select_1RQKn {\n        margin: 0;\n    }\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.tool-select-base_mod-tool-select_1RQKn {\n    display: inline-block;\n    margin: .25rem;\n    border: none;\n    border-radius: .25rem;\n    outline: none;\n    background: none;\n    padding: .25rem;\n    font-size: 0.85rem;\n    -webkit-transition: 0.2s;\n    -o-transition: 0.2s;\n    transition: 0.2s;\n}\n\n.tool-select-base_mod-tool-select_1RQKn.tool-select-base_is-selected_3Le38 {\n    background-color: #4C97FF;\n}\n\n.tool-select-base_mod-tool-select_1RQKn:focus {\n    outline: none;\n}\n\nimg.tool-select-base_tool-select-icon_2TT3t {\n    width: 2rem;\n    height: 2rem;\n    -webkit-box-flex: 1;\n    -webkit-flex-grow: 1;\n        -ms-flex-positive: 1;\n            flex-grow: 1;\n    vertical-align: middle;\n}\n\n.tool-select-base_mod-tool-select_1RQKn.tool-select-base_is-selected_3Le38 .tool-select-base_tool-select-icon_2TT3t {\n    /* Make the tool icons white while selected by making them black and inverting */\n    -webkit-filter: brightness(0) invert(1);\n            filter: brightness(0) invert(1);\n}\n\n@media only screen and (max-width: 1256px) {\n    .tool-select-base_mod-tool-select_1RQKn {\n        margin: 0;\n    }\n}\n", ""]);
 // Exports
 exports.locals = {
 	"mod-tool-select": "tool-select-base_mod-tool-select_1RQKn",
@@ -52712,7 +52743,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -52726,7 +52757,7 @@ module.exports = exported;
 
 exports = module.exports = __webpack_require__(13)(false);
 // Module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.button-group_button-group_3_c2R {\n    padding: 0 .25rem;\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.button-group_button-group_3_c2R {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    padding: 0 .25rem;\n}\n", ""]);
 // Exports
 exports.locals = {
 	"button-group": "button-group_button-group_3_c2R",
@@ -56232,7 +56263,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -56837,7 +56868,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -56877,7 +56908,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -56920,7 +56951,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -57021,7 +57052,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -57035,7 +57066,7 @@ module.exports = exported;
 
 exports = module.exports = __webpack_require__(13)(false);
 // Module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n[dir=\"ltr\"] .input-group_input-group_3FzNB + .input-group_input-group_3FzNB {\n    margin-left: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .input-group_input-group_3FzNB + .input-group_input-group_3FzNB {\n    margin-right: calc(2 * .25rem);\n}\n\n.input-group_disabled_3fp6_ {\n    opacity: 0.3;\n    /* Prevent any user actions */\n    pointer-events: none;\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n[dir=\"ltr\"] .input-group_input-group_3FzNB + .input-group_input-group_3FzNB {\n    margin-left: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .input-group_input-group_3FzNB + .input-group_input-group_3FzNB {\n    margin-right: calc(2 * .25rem);\n}\n\n.input-group_input-group_3FzNB {\n    display:-webkit-box;\n    display:-webkit-flex;\n    display:-ms-flexbox;\n    display:flex;\n}\n\n.input-group_disabled_3fp6_ {\n    opacity: 0.3;\n    /* Prevent any user actions */\n    pointer-events: none;\n}\n", ""]);
 // Exports
 exports.locals = {
 	"input-group": "input-group_input-group_3FzNB",
@@ -57061,7 +57092,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -57075,7 +57106,7 @@ module.exports = exported;
 
 exports = module.exports = __webpack_require__(13)(false);
 // Module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.label_input-group_2vTky {\n    display: -webkit-inline-box;\n    display: -webkit-inline-flex;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.label_input-label_3KjCa, .label_input-label-secondary_3QDNV {\n    font-size: 0.625rem;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    cursor: default;\n}\n\n[dir=\"ltr\"] .label_input-label_3KjCa, [dir=\"ltr\"] .label_input-label-secondary_3QDNV{\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .label_input-label_3KjCa, [dir=\"ltr\"] .label_input-label-secondary_3QDNV{\n    margin-left: calc(2 * .25rem);\n}\n\n.label_input-label_3KjCa {\n    font-weight: bold;\n}\n\n@media only screen and (max-width: 1249px) {\n    .label_input-group_2vTky {\n        display: -webkit-box;\n        display: -webkit-flex;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-orient: vertical;\n        -webkit-box-direction: normal;\n        -webkit-flex-direction: column;\n            -ms-flex-direction: column;\n                flex-direction: column;\n        -webkit-box-align: start;\n        -webkit-align-items: flex-start;\n            -ms-flex-align: start;\n                align-items: flex-start;\n        margin-top: -1rem; /* To align with the non-labeled inputs */\n    }\n\n    .label_input-label_3KjCa {\n        font-weight: normal;\n        margin-bottom: 0.25rem;\n    }\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.label_input-group_2vTky {\n    display: -webkit-inline-box;\n    display: -webkit-inline-flex;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.label_input-label_3KjCa, .label_input-label-secondary_3QDNV {\n    font-size: 0.625rem;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    cursor: default;\n}\n\n[dir=\"ltr\"] .label_input-label_3KjCa, [dir=\"ltr\"] .label_input-label-secondary_3QDNV{\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .label_input-label_3KjCa, [dir=\"ltr\"] .label_input-label-secondary_3QDNV{\n    margin-left: calc(2 * .25rem);\n}\n\n.label_input-label_3KjCa {\n    font-weight: bold;\n}\n\n@media only screen and (max-width: 1256px) {\n    .label_input-group_2vTky {\n        display: -webkit-box;\n        display: -webkit-flex;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-orient: vertical;\n        -webkit-box-direction: normal;\n        -webkit-flex-direction: column;\n            -ms-flex-direction: column;\n                flex-direction: column;\n        -webkit-box-align: start;\n        -webkit-align-items: flex-start;\n            -ms-flex-align: start;\n                align-items: flex-start;\n        margin-top: -1rem; /* To align with the non-labeled inputs */\n    }\n\n    .label_input-label_3KjCa {\n        font-weight: normal;\n        margin-bottom: 0.25rem;\n    }\n}\n", ""]);
 // Exports
 exports.locals = {
 	"input-group": "label_input-group_2vTky",
@@ -58310,7 +58341,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -59781,7 +59812,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -59795,7 +59826,7 @@ module.exports = exported;
 
 exports = module.exports = __webpack_require__(13)(false);
 // Module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.dropdown_dropdown_2cQyf {\n    border: 1px solid #E9EEF2;\n    border-radius: 5px;\n    overflow: visible;\n    min-width: 3.5rem;\n    color: #4C97FF;\n    padding: .5rem;\n}\n\n.dropdown_mod-open_1QOjG {\n    background-color: #E9EEF2;\n}\n\n.dropdown_dropdown-icon_13LnP {\n    width: .5rem;\n    height: .5rem;\n    vertical-align: middle;\n    padding-bottom: .2rem;\n}\n\n[dir=\"ltr\"] .dropdown_dropdown-icon_13LnP {\n    margin-left: .5rem;\n}\n\n[dir=\"rtl\"] .dropdown_dropdown-icon_13LnP {\n    margin-right: .5rem;\n}\n\n.dropdown_mod-caret-up_1v809 {\n    -webkit-transform: rotate(180deg);\n        -ms-transform: rotate(180deg);\n            transform: rotate(180deg);\n    padding-bottom: 0;\n    padding-top: .2rem;\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.dropdown_dropdown_2cQyf {\n    border: 1px solid #E9EEF2;\n    border-radius: 5px;\n    overflow: visible;\n    min-width: 3.5rem;\n    color: #4C97FF;\n    padding: .5rem;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.dropdown_mod-open_1QOjG {\n    background-color: #E9EEF2;\n}\n\n.dropdown_dropdown-icon_13LnP {\n    width: .5rem;\n    height: .5rem;\n    vertical-align: middle;\n    padding-bottom: .2rem;\n}\n\n[dir=\"ltr\"] .dropdown_dropdown-icon_13LnP {\n    margin-left: .5rem;\n}\n\n[dir=\"rtl\"] .dropdown_dropdown-icon_13LnP {\n    margin-right: .5rem;\n}\n\n.dropdown_mod-caret-up_1v809 {\n    -webkit-transform: rotate(180deg);\n        -ms-transform: rotate(180deg);\n            transform: rotate(180deg);\n    padding-bottom: 0;\n    padding-top: .2rem;\n}\n", ""]);
 // Exports
 exports.locals = {
 	"dropdown": "dropdown_dropdown_2cQyf",
@@ -59831,7 +59862,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -59888,7 +59919,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -61451,7 +61482,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -65596,7 +65627,7 @@ var options = {};
 options.insert = "head";
 options.singleton = false;
 
-var update = api(module.i, content, options);
+var update = api(content, options);
 
 var exported = content.locals ? content.locals : {};
 
@@ -65610,7 +65641,7 @@ module.exports = exported;
 
 exports = module.exports = __webpack_require__(13)(false);
 // Module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.paint-editor_editor-container_3ajxi {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    padding: calc(3 * .25rem);\n}\n\n.paint-editor_row_1psvV {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.paint-editor_editor-container-top_23HHq {\n    border-bottom: 1px dashed #D9D9D9;\n    padding-bottom: calc(2 * .25rem);\n}\n\n.paint-editor_top-align-row_2Ky-F {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    padding-top: calc(5 * .25rem);\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n}\n\n.paint-editor_row_1psvV + .paint-editor_row_1psvV {\n    margin-top: calc(2 * .25rem);\n}\n\n[dir=\"ltr\"] .paint-editor_mod-dashed-border_1xeKo {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mod-dashed-border_1xeKo {\n    border-left: 1px dashed #D9D9D9;\n    padding-left: calc(2 * .25rem);\n}\n\n.paint-editor_mod-labeled-icon-height_3hBCl {\n    height: 2.85rem; /* for the second row so the dashed borders are equal in size */\n}\n\n.paint-editor_button-group-button_1gq5A {\n    display: inline-block;\n    border: 1px solid #D9D9D9;\n    border-radius: 0;\n    padding: .35rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A {\n    border-left: none;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A {\n    border-right: none;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A:first-of-type {\n    border-left: 1px solid #D9D9D9;\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A:first-of-type {\n    border-right: 1px solid #D9D9D9;\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A.paint-editor_mod-start-border_jVIRO {\n    border-left: 1px solid #D9D9D9;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A.paint-editor_mod-start-border_jVIRO {\n    border-right: 1px solid #D9D9D9;\n}\n\n[dir=\"ltr\"].paint-editor_button-group-button_1gq5A.paint-editor_mod-no-end-border_XiRoc {\n    border-right: none;\n}\n\n[dir=\"rtl\"].paint-editor_button-group-button_1gq5A.paint-editor_mod-no-end-border_XiRoc {\n    border-left: none;\n}\n\n.paint-editor_button-group-button-icon_3BPxO {\n    width: 1.25rem;\n    height: 1.25rem;\n    vertical-align: middle;\n}\n\n.paint-editor_mod-mode-tools_1IXSj {\n    margin-left: calc(2 * .25rem);\n}\n\n[dir=\"ltr\"] .paint-editor_mod-margin-after_1OgHf {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mod-margin-after_1OgHf {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_canvas-container_2rN98 {\n    width: 480px;\n    height: 360px;\n    -webkit-box-sizing: content-box;\n            box-sizing: content-box;\n    border: 1px solid #e8edf1;\n    border-radius: .25rem;\n    position: relative;\n    overflow: visible;\n}\n\n.paint-editor_mode-selector_1edhd {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    max-width: 6rem;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-flex-wrap: wrap;\n        -ms-flex-wrap: wrap;\n            flex-wrap: wrap;\n    -webkit-box-align: start;\n    -webkit-align-items: flex-start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-align-content: flex-start;\n        -ms-flex-line-pack: start;\n            align-content: flex-start;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n[dir=\"ltr\"] .paint-editor_mode-selector_1edhd {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mode-selector_1edhd {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_zoom-controls_3Qe-- {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: reverse;\n    -webkit-flex-direction: row-reverse;\n        -ms-flex-direction: row-reverse;\n            flex-direction: row-reverse;\n}\n\n.paint-editor_color-picker-wrapper_1IC0W {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    pointer-events: none;\n}\n\n.paint-editor_canvas-controls_e2K-q {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin-top: .25rem;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n.paint-editor_bitmap-button_GsX3L {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    border-radius: 5px;\n    background-color: #4C97FF;\n    padding: calc(2 * .25rem);\n    line-height: 1.5rem;\n    font-size: calc(3 * .25rem);\n    font-weight: bold;\n    color: white;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n\n[dir=\"ltr\"] .paint-editor_bitmap-button-icon_wPoPh {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_bitmap-button-icon_wPoPh {\n    margin-left: calc(2 * .25rem);\n}\n\n@media only screen and (max-width: 1249px) {\n    .paint-editor_editor-container_3ajxi {\n        padding: calc(3 * .25rem) .25rem;\n    }\n\n    .paint-editor_mode-selector_1edhd {\n        margin-right: .25rem;\n        -webkit-box-orient: vertical;\n        -webkit-box-direction: normal;\n        -webkit-flex-direction: column;\n            -ms-flex-direction: column;\n                flex-direction: column;\n        -webkit-box-pack: start;\n        -webkit-justify-content: flex-start;\n            -ms-flex-pack: start;\n                justify-content: flex-start;\n    }\n}\n\n.paint-editor_text-area_3VRLj {\n    background: transparent;\n    border: none;\n    display: none;\n    margin: 0px;\n    opacity: .8;\n    outline: none;\n    overflow: hidden;\n    padding: 0px;\n    position: absolute;\n    resize: none;\n    -webkit-text-fill-color: transparent;\n    text-fill-color: transparent;\n}\n\n.paint-editor_button-text_2sm18 {\n    width: 100%; /* Fixes button text wrapping in Edge */\n}\n", ""]);
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.paint-editor_editor-container_3ajxi {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    padding: calc(3 * .25rem);\n}\n\n.paint-editor_row_1psvV {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.paint-editor_editor-container-top_23HHq {\n    border-bottom: 1px dashed #D9D9D9;\n    padding-bottom: calc(2 * .25rem);\n}\n\n.paint-editor_top-align-row_2Ky-F {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    padding-top: calc(5 * .25rem);\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n}\n\n.paint-editor_row_1psvV + .paint-editor_row_1psvV {\n    margin-top: calc(2 * .25rem);\n}\n\n[dir=\"ltr\"] .paint-editor_mod-dashed-border_1xeKo {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mod-dashed-border_1xeKo {\n    border-left: 1px dashed #D9D9D9;\n    padding-left: calc(2 * .25rem);\n}\n\n.paint-editor_mod-labeled-icon-height_3hBCl {\n    height: 2.85rem; /* for the second row so the dashed borders are equal in size */\n}\n\n.paint-editor_button-group-button_1gq5A {\n    display: inline-block;\n    border: 1px solid #D9D9D9;\n    border-radius: 0;\n    padding: .35rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A {\n    border-left: none;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A {\n    border-right: none;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A:first-of-type {\n    border-left: 1px solid #D9D9D9;\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A:first-of-type {\n    border-right: 1px solid #D9D9D9;\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A.paint-editor_mod-start-border_jVIRO {\n    border-left: 1px solid #D9D9D9;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A.paint-editor_mod-start-border_jVIRO {\n    border-right: 1px solid #D9D9D9;\n}\n\n[dir=\"ltr\"].paint-editor_button-group-button_1gq5A.paint-editor_mod-no-end-border_XiRoc {\n    border-right: none;\n}\n\n[dir=\"rtl\"].paint-editor_button-group-button_1gq5A.paint-editor_mod-no-end-border_XiRoc {\n    border-left: none;\n}\n\n.paint-editor_button-group-button-icon_3BPxO {\n    width: 1.25rem;\n    height: 1.25rem;\n    vertical-align: middle;\n}\n\n.paint-editor_mod-mode-tools_1IXSj {\n    margin-left: calc(2 * .25rem);\n}\n\n[dir=\"ltr\"] .paint-editor_mod-margin-after_1OgHf {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mod-margin-after_1OgHf {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_canvas-container_2rN98 {\n    width: 480px;\n    height: 360px;\n    -webkit-box-sizing: content-box;\n            box-sizing: content-box;\n    border: 1px solid #e8edf1;\n    border-radius: .25rem;\n    position: relative;\n    overflow: visible;\n}\n\n.paint-editor_mode-selector_1edhd {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    max-width: 6rem;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-flex-wrap: wrap;\n        -ms-flex-wrap: wrap;\n            flex-wrap: wrap;\n    -webkit-box-align: start;\n    -webkit-align-items: flex-start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-align-content: flex-start;\n        -ms-flex-line-pack: start;\n            align-content: flex-start;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n[dir=\"ltr\"] .paint-editor_mode-selector_1edhd {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mode-selector_1edhd {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_zoom-controls_3Qe-- {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: reverse;\n    -webkit-flex-direction: row-reverse;\n        -ms-flex-direction: row-reverse;\n            flex-direction: row-reverse;\n}\n\n.paint-editor_color-picker-wrapper_1IC0W {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    pointer-events: none;\n}\n\n.paint-editor_canvas-controls_e2K-q {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin-top: .25rem;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n.paint-editor_bitmap-button_GsX3L {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    border-radius: 5px;\n    background-color: #4C97FF;\n    padding: calc(2 * .25rem);\n    line-height: 1.5rem;\n    font-size: calc(3 * .25rem);\n    font-weight: bold;\n    color: white;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n\n[dir=\"ltr\"] .paint-editor_bitmap-button-icon_wPoPh {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_bitmap-button-icon_wPoPh {\n    margin-left: calc(2 * .25rem);\n}\n\n@media only screen and (max-width: 1256px) {\n    .paint-editor_editor-container_3ajxi {\n        padding: calc(3 * .25rem) .25rem;\n    }\n\n    .paint-editor_mode-selector_1edhd {\n        margin-right: .25rem;\n        -webkit-box-orient: vertical;\n        -webkit-box-direction: normal;\n        -webkit-flex-direction: column;\n            -ms-flex-direction: column;\n                flex-direction: column;\n        -webkit-box-pack: start;\n        -webkit-justify-content: flex-start;\n            -ms-flex-pack: start;\n                justify-content: flex-start;\n    }\n}\n\n.paint-editor_text-area_3VRLj {\n    background: transparent;\n    border: none;\n    display: none;\n    margin: 0px;\n    opacity: .8;\n    outline: none;\n    overflow: hidden;\n    padding: 0px;\n    position: absolute;\n    resize: none;\n    -webkit-text-fill-color: transparent;\n    text-fill-color: transparent;\n}\n\n.paint-editor_button-text_2sm18 {\n    width: 100%; /* Fixes button text wrapping in Edge */\n}\n", ""]);
 // Exports
 exports.locals = {
 	"editor-container": "paint-editor_editor-container_3ajxi",
