@@ -21452,7 +21452,7 @@ module.exports = function (useSourceMap) {
       var content = cssWithMappingToString(item, useSourceMap);
 
       if (item[2]) {
-        return "@media ".concat(item[2], "{").concat(content, "}");
+        return "@media ".concat(item[2], " {").concat(content, "}");
       }
 
       return content;
@@ -21467,32 +21467,18 @@ module.exports = function (useSourceMap) {
       modules = [[null, modules, '']];
     }
 
-    var alreadyImportedModules = {};
+    for (var i = 0; i < modules.length; i++) {
+      var item = [].concat(modules[i]);
 
-    for (var i = 0; i < this.length; i++) {
-      // eslint-disable-next-line prefer-destructuring
-      var id = this[i][0];
-
-      if (id != null) {
-        alreadyImportedModules[id] = true;
-      }
-    }
-
-    for (var _i = 0; _i < modules.length; _i++) {
-      var item = modules[_i]; // skip already imported module
-      // this implementation is not 100% perfect for weird media query combinations
-      // when a module is imported multiple times with different media queries.
-      // I hope this will never occur (Hey this way we have smaller bundles)
-
-      if (item[0] == null || !alreadyImportedModules[item[0]]) {
-        if (mediaQuery && !item[2]) {
+      if (mediaQuery) {
+        if (!item[2]) {
           item[2] = mediaQuery;
-        } else if (mediaQuery) {
-          item[2] = "(".concat(item[2], ") and (").concat(mediaQuery, ")");
+        } else {
+          item[2] = "".concat(mediaQuery, " and ").concat(item[2]);
         }
-
-        list.push(item);
       }
+
+      list.push(item);
     }
   };
 
@@ -46650,7 +46636,9 @@ module.exports = exported;
 /* 226 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, ".paper-canvas_paper-canvas_2biXB {\n    width: 480px;\n    height: 360px;\n    margin: auto;\n    position: absolute;\n    background-color: #fff;\n}\n", ""]);
 // Exports
@@ -46658,6 +46646,8 @@ exports.locals = {
 	"paper-canvas": "paper-canvas_paper-canvas_2biXB",
 	"paperCanvas": "paper-canvas_paper-canvas_2biXB"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 227 */
@@ -47026,7 +47016,9 @@ module.exports = exported;
 /* 230 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, ".scrollable-canvas_vertical-scrollbar_gyXyM, .scrollable-canvas_horizontal-scrollbar_OBOUt {\n    position: absolute;\n    background: rgba(190, 190, 190, 0.8);\n    border-radius: calc(8px / 2);\n    cursor: pointer;\n}\n.scrollable-canvas_vertical-scrollbar-wrapper_1cMNm {\n    position: absolute;\n    width: 8px;\n    right: 0;\n    top: 1px;\n    height: calc(100% - 8px - 1px);\n}\n.scrollable-canvas_horizontal-scrollbar-wrapper_2BUMa {\n    position: absolute;\n    height: 8px;\n    left: 1px;\n    bottom: 0;\n    width: calc(100% - 8px - 1px);\n}\n.scrollable-canvas_vertical-scrollbar_gyXyM {\n    width: 8px;\n}\n.scrollable-canvas_horizontal-scrollbar_OBOUt {\n    height: 8px;\n}\n", ""]);
 // Exports
@@ -47040,6 +47032,8 @@ exports.locals = {
 	"horizontal-scrollbar-wrapper": "scrollable-canvas_horizontal-scrollbar-wrapper_2BUMa",
 	"horizontalScrollbarWrapper": "scrollable-canvas_horizontal-scrollbar-wrapper_2BUMa"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 231 */
@@ -48101,7 +48095,9 @@ module.exports = exported;
 /* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.button_button_lmpwR {\n    background: none;\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n\n.button_button_lmpwR:active {\n    background-color: hsla(215, 100%, 65%, 0.20); \n}\n\n.button_highlighted_2c0Ir.button_button_lmpwR {\n    background-color: hsla(215, 100%, 65%, 0.20); \n}\n\n.button_mod-disabled_CFsZ2 {\n    cursor: auto;\n    opacity: .5;\n}\n\n.button_mod-disabled_CFsZ2:active {\n    background: none;\n}\n", ""]);
 // Exports
@@ -48111,6 +48107,8 @@ exports.locals = {
 	"mod-disabled": "button_mod-disabled_CFsZ2",
 	"modDisabled": "button_mod-disabled_CFsZ2"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 237 */
@@ -48142,7 +48140,9 @@ module.exports = exported;
 /* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.tool-select-base_mod-tool-select_1RQKn {\n    display: inline-block;\n    margin: .25rem;\n    border: none;\n    border-radius: .25rem;\n    outline: none;\n    background: none;\n    padding: .25rem;\n    font-size: 0.85rem;\n    -webkit-transition: 0.2s;\n    -o-transition: 0.2s;\n    transition: 0.2s;\n}\n\n.tool-select-base_mod-tool-select_1RQKn.tool-select-base_is-selected_3Le38 {\n    background-color: #4C97FF;\n}\n\n.tool-select-base_mod-tool-select_1RQKn:focus {\n    outline: none;\n}\n\nimg.tool-select-base_tool-select-icon_2TT3t {\n    width: 2rem;\n    height: 2rem;\n    -webkit-box-flex: 1;\n    -webkit-flex-grow: 1;\n        -ms-flex-positive: 1;\n            flex-grow: 1;\n    vertical-align: middle;\n}\n\n.tool-select-base_mod-tool-select_1RQKn.tool-select-base_is-selected_3Le38 .tool-select-base_tool-select-icon_2TT3t {\n    /* Make the tool icons white while selected by making them black and inverting */\n    -webkit-filter: brightness(0) invert(1);\n            filter: brightness(0) invert(1);\n}\n\n@media only screen and (max-width: 1256px) {\n    .tool-select-base_mod-tool-select_1RQKn {\n        margin: 0;\n    }\n}\n", ""]);
 // Exports
@@ -48154,6 +48154,8 @@ exports.locals = {
 	"tool-select-icon": "tool-select-base_tool-select-icon_2TT3t",
 	"toolSelectIcon": "tool-select-base_tool-select-icon_2TT3t"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 239 */
@@ -52755,7 +52757,9 @@ module.exports = exported;
 /* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.button-group_button-group_3_c2R {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    padding: 0 .25rem;\n}\n", ""]);
 // Exports
@@ -52763,6 +52767,8 @@ exports.locals = {
 	"button-group": "button-group_button-group_3_c2R",
 	"buttonGroup": "button-group_button-group_3_c2R"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 264 */
@@ -56275,7 +56281,9 @@ module.exports = exported;
 /* 287 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, ".color-button_color-button_2-mXT {\n    height: 2rem;\n    width: 3rem;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n}\n\n.color-button_color-button-swatch_6Xhs3 {\n    position: relative;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    cursor: pointer;\n    -webkit-flex-basis: 2rem;\n        -ms-flex-preferred-size: 2rem;\n            flex-basis: 2rem;\n    -webkit-flex-shrink: 0;\n        -ms-flex-negative: 0;\n            flex-shrink: 0;\n    height: 100%;\n    border: 1px solid rgba(0, 0, 0, 0.25);\n}\n\n[dir=\"ltr\"] .color-button_color-button-swatch_6Xhs3 {\n    border-top-left-radius: 4px;\n    border-bottom-left-radius: 4px;\n}\n\n[dir=\"rtl\"] .color-button_color-button-swatch_6Xhs3 {\n    border-top-right-radius: 4px;\n    border-bottom-right-radius: 4px;\n}\n\n.color-button_color-button-arrow_1b654 {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    cursor: pointer;\n    -webkit-flex-basis: 1rem;\n        -ms-flex-preferred-size: 1rem;\n            flex-basis: 1rem;\n    -webkit-flex-shrink: 0;\n        -ms-flex-negative: 0;\n            flex-shrink: 0;\n    height: 100%;\n\n    border: 1px solid rgba(0, 0, 0, 0.25);\n\n    -webkit-box-align: center;\n\n    -webkit-align-items: center;\n\n        -ms-flex-align: center;\n\n            align-items: center;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    color: #575e75;\n    font-size: 0.75rem;\n}\n\n[dir=\"ltr\"] .color-button_color-button-arrow_1b654 {\n    border-top-right-radius: 4px;\n    border-bottom-right-radius: 4px;\n    border-left: none;\n}\n\n[dir=\"rtl\"] .color-button_color-button-arrow_1b654 {\n    border-top-left-radius: 4px;\n    border-bottom-left-radius: 4px;\n    border-right: none;\n}\n\n.color-button_swatch-icon_2gc40 {\n    width: 1.75rem;\n    margin: auto;\n    /* Make sure it appears above the outline box */\n    z-index: 2;\n}\n\n.color-button_outline-swatch_2ifeG:after {\n    content: \"\";\n    position: absolute;\n    top: calc(0.5rem);\n    left: calc(0.5rem);\n    width: 0.75rem;\n    height: 0.75rem;\n    background: white;\n    border: 1px solid rgba(0, 0, 0, 0.25);\n    /* Make sure it appears below the transparent icon */\n    z-index: 1;\n}\n", ""]);
 // Exports
@@ -56291,6 +56299,8 @@ exports.locals = {
 	"outline-swatch": "color-button_outline-swatch_2ifeG",
 	"outlineSwatch": "color-button_outline-swatch_2ifeG"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 288 */
@@ -56880,7 +56890,9 @@ module.exports = exported;
 /* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, ".slider_container_2U0n6 {\n    margin: 8px;\n    height: 22px;\n    width: 150px;\n    position: relative;\n    outline: none;\n    border-radius: 11px;\n    margin-bottom: 20px;\n}\n\n.slider_last_3coMi {\n    margin-bottom: 4px;\n}\n\n.slider_handle_2M_mA {\n    left: 100px;\n    width: 26px;\n    height: 26px;\n    margin-top: -2px;\n    position: absolute;\n    background-color: white;\n    border-radius: 100%;\n    -webkit-box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);\n            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.15);\n    -ms-touch-action: none;\n        touch-action: none;\n}\n", ""]);
 // Exports
@@ -56889,6 +56901,8 @@ exports.locals = {
 	"last": "slider_last_3coMi",
 	"handle": "slider_handle_2M_mA"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 292 */
@@ -56920,7 +56934,9 @@ module.exports = exported;
 /* 293 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.labeled-icon-button_mod-edit-field_Z3eav {\n    background: none;\n    border: none;\n    display: inline-block;\n    padding: .25rem .325rem;\n    outline: none;\n    border-radius: 0.25rem;\n    min-width: 3rem;\n    font-size: 0.85rem;\n    text-align: center;\n}\n\n.labeled-icon-button_edit-field-icon_1BGdr {\n    width: 1.5rem;\n    height: 1.5rem;\n    -webkit-box-flex: 1;\n    -webkit-flex-grow: 1;\n        -ms-flex-positive: 1;\n            flex-grow: 1;\n    vertical-align: middle;\n}\n\n.labeled-icon-button_edit-field-title_32vCQ {\n    display: block;\n    margin-top: .125rem;\n    font-size: .625rem;\n}\n", ""]);
 // Exports
@@ -56932,6 +56948,8 @@ exports.locals = {
 	"edit-field-title": "labeled-icon-button_edit-field-title_32vCQ",
 	"editFieldTitle": "labeled-icon-button_edit-field-title_32vCQ"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 294 */
@@ -56963,7 +56981,9 @@ module.exports = exported;
 /* 295 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n/* Popover styles */\n\n.Popover-body {\n    background: white;\n    border: 1px solid #ddd;\n    padding: 4px;\n    border-radius: 4px;\n    padding: 4px;\n    -webkit-box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, .3);\n            box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, .3);\n}\n\n.Popover-tipShape {\n    fill: white;\n    stroke: #ddd;\n}\n\n.color-picker_clickable_1qAhZ {\n    cursor: pointer;\n}\n\n.color-picker_swatch-row_3ygSb {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n.color-picker_row-header_23YDh {\n    font-family: \"Helvetica Neue\", Helvetica, sans-serif;\n    font-size: 0.65rem;\n    color: #575E75;\n    margin: 8px;\n}\n\n[dir=\"ltr\"] .color-picker_label-readout_efqFT {\n    margin-left: 10px;\n}\n\n[dir=\"rtl\"] .color-picker_label-readout_efqFT {\n    margin-right: 10px;\n}\n\n.color-picker_label-name_3kaOv {\n    font-weight: bold;\n}\n\n.color-picker_divider_3Hq7P {\n    border-top: 1px solid #ddd;\n    margin: 8px;\n}\n\n.color-picker_swap-button_knDOR {\n    margin-left: 8px;\n    margin-right: 8px;\n}\n\n.color-picker_swatches_3P15b {\n    margin: 8px;\n}\n\n.color-picker_swatch_3zRbd {\n    width: 1.5rem;\n    height: 1.5rem;\n    border: 1px solid #ddd;\n    border-radius: 4px;\n    -webkit-box-sizing: content-box;\n            box-sizing: content-box;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.color-picker_large-swatch-icon_2EdzJ {\n    width: 1.75rem;\n    margin: auto;\n}\n\n.color-picker_large-swatch_2tprq {\n    width: 2rem;\n    height: 2rem;\n}\n\n.color-picker_active-swatch_2U6UP {\n    border: 1px solid #4C97FF;\n    -webkit-box-shadow: 0px 0px 0px 3px hsla(215, 100%, 65%, 0.2);\n            box-shadow: 0px 0px 0px 3px hsla(215, 100%, 65%, 0.2);\n}\n\n.color-picker_swatch-icon_1GWhH {\n    width: 1.5rem;\n    height: 1.5rem;\n}\n\n.color-picker_inactive-gradient_3LMcb {\n    -webkit-filter: saturate(0%);\n            filter: saturate(0%);\n}\n\n.color-picker_gradient-picker-row_2ZOSs {\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n    margin: 8px;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n\n[dir=\"ltr\"] .color-picker_gradient-picker-row_2ZOSs > img + img {\n    margin-left: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .color-picker_gradient-picker-row_2ZOSs > img + img {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .color-picker_gradient-swatches-row_1laEb {\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: reverse;\n    -webkit-flex-direction: row-reverse;\n        -ms-flex-direction: row-reverse;\n            flex-direction: row-reverse;\n}\n", ""]);
 // Exports
@@ -56997,6 +57017,8 @@ exports.locals = {
 	"gradient-swatches-row": "color-picker_gradient-swatches-row_1laEb",
 	"gradientSwatchesRow": "color-picker_gradient-swatches-row_1laEb"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 296 */
@@ -57064,7 +57086,9 @@ module.exports = exported;
 /* 303 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n[dir=\"ltr\"] .input-group_input-group_3FzNB + .input-group_input-group_3FzNB {\n    margin-left: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .input-group_input-group_3FzNB + .input-group_input-group_3FzNB {\n    margin-right: calc(2 * .25rem);\n}\n\n.input-group_input-group_3FzNB {\n    display:-webkit-box;\n    display:-webkit-flex;\n    display:-ms-flexbox;\n    display:flex;\n}\n\n.input-group_disabled_3fp6_ {\n    opacity: 0.3;\n    /* Prevent any user actions */\n    pointer-events: none;\n}\n", ""]);
 // Exports
@@ -57073,6 +57097,8 @@ exports.locals = {
 	"inputGroup": "input-group_input-group_3FzNB",
 	"disabled": "input-group_disabled_3fp6_"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 304 */
@@ -57104,7 +57130,9 @@ module.exports = exported;
 /* 305 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.label_input-group_2vTky {\n    display: -webkit-inline-box;\n    display: -webkit-inline-flex;\n    display: -ms-inline-flexbox;\n    display: inline-flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.label_input-label_3KjCa, .label_input-label-secondary_3QDNV {\n    font-size: 0.625rem;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n    cursor: default;\n}\n\n[dir=\"ltr\"] .label_input-label_3KjCa, [dir=\"ltr\"] .label_input-label-secondary_3QDNV{\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .label_input-label_3KjCa, [dir=\"ltr\"] .label_input-label-secondary_3QDNV{\n    margin-left: calc(2 * .25rem);\n}\n\n.label_input-label_3KjCa {\n    font-weight: bold;\n}\n\n@media only screen and (max-width: 1256px) {\n    .label_input-group_2vTky {\n        display: -webkit-box;\n        display: -webkit-flex;\n        display: -ms-flexbox;\n        display: flex;\n        -webkit-box-orient: vertical;\n        -webkit-box-direction: normal;\n        -webkit-flex-direction: column;\n            -ms-flex-direction: column;\n                flex-direction: column;\n        -webkit-box-align: start;\n        -webkit-align-items: flex-start;\n            -ms-flex-align: start;\n                align-items: flex-start;\n        margin-top: -1rem; /* To align with the non-labeled inputs */\n    }\n\n    .label_input-label_3KjCa {\n        font-weight: normal;\n        margin-bottom: 0.25rem;\n    }\n}\n", ""]);
 // Exports
@@ -57116,6 +57144,8 @@ exports.locals = {
 	"input-label-secondary": "label_input-label-secondary_3QDNV",
 	"inputLabelSecondary": "label_input-label-secondary_3QDNV"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 306 */
@@ -58353,7 +58383,9 @@ module.exports = exported;
 /* 316 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, ".loupe_eye-dropper_39EHg {\n    position: absolute;\n    border-radius: 100%;\n    border: 1px solid #222;\n}\n", ""]);
 // Exports
@@ -58361,6 +58393,8 @@ exports.locals = {
 	"eye-dropper": "loupe_eye-dropper_39EHg",
 	"eyeDropper": "loupe_eye-dropper_39EHg"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 317 */
@@ -59824,7 +59858,9 @@ module.exports = exported;
 /* 322 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.dropdown_dropdown_2cQyf {\n    border: 1px solid #E9EEF2;\n    border-radius: 5px;\n    overflow: visible;\n    min-width: 3.5rem;\n    color: #4C97FF;\n    padding: .5rem;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.dropdown_mod-open_1QOjG {\n    background-color: #E9EEF2;\n}\n\n.dropdown_dropdown-icon_13LnP {\n    width: .5rem;\n    height: .5rem;\n    vertical-align: middle;\n    padding-bottom: .2rem;\n}\n\n[dir=\"ltr\"] .dropdown_dropdown-icon_13LnP {\n    margin-left: .5rem;\n}\n\n[dir=\"rtl\"] .dropdown_dropdown-icon_13LnP {\n    margin-right: .5rem;\n}\n\n.dropdown_mod-caret-up_1v809 {\n    -webkit-transform: rotate(180deg);\n        -ms-transform: rotate(180deg);\n            transform: rotate(180deg);\n    padding-bottom: 0;\n    padding-top: .2rem;\n}\n", ""]);
 // Exports
@@ -59837,6 +59873,8 @@ exports.locals = {
 	"mod-caret-up": "dropdown_mod-caret-up_1v809",
 	"modCaretUp": "dropdown_mod-caret-up_1v809"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 323 */
@@ -59874,7 +59912,9 @@ module.exports = exported;
 /* 325 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* NOTE:\nEdited to add input-range-small\n*/\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.input_input-form_l9eYg {\n    height: 2rem;\n    padding: 0 0.75rem;\n\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    font-size: 0.75rem;\n    font-weight: bold;\n    color: #575e75;\n\n    border-width: 1px;\n    border-style: solid;\n    border-color: #E9EEF2;\n    border-radius: 2rem;\n\n    outline: none;\n    cursor: text;\n    -webkit-transition: 0.25s ease-out;\n    -o-transition: 0.25s ease-out;\n    transition: 0.25s ease-out; /* @todo: standardize with var */\n    -webkit-box-shadow: none;\n            box-shadow: none;\n\n    /*\n        For truncating overflowing text gracefully\n        Min-width is for a bug: https://css-tricks.com/flexbox-truncated-text\n        @todo: move this out into a mixin or a helper component\n    */\n    overflow: hidden;\n    -o-text-overflow: ellipsis;\n       text-overflow: ellipsis;\n    white-space: nowrap;\n    min-width: 0;\n}\n\n.input_input-form_l9eYg:focus {\n    border-color: #4C97FF;\n    -webkit-box-shadow: 0 0 0 .25rem hsla(215, 100%, 65%, 0.20);\n            box-shadow: 0 0 0 .25rem hsla(215, 100%, 65%, 0.20);\n}\n\n.input_input-small_2qj1C {\n    width: 3rem;\n    text-align: center;\n}\n\n.input_input-small-range_2GQzZ {\n    width: 4rem;\n    text-align: center;\n}\n", ""]);
 // Exports
@@ -59886,6 +59926,8 @@ exports.locals = {
 	"input-small-range": "input_input-small-range_2GQzZ",
 	"inputSmallRange": "input_input-small-range_2GQzZ"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 326 */
@@ -59931,7 +59973,9 @@ module.exports = exported;
 /* 328 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.fixed-tools_row_2PVw6 {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.fixed-tools_costume-input_3ax5t {\n    width: 8rem;\n}\n\n[dir=\"ltr\"] .fixed-tools_mod-dashed-border_1AyX1 {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .fixed-tools_mod-dashed-border_1AyX1 {\n    border-left: 1px dashed #D9D9D9;\n    padding-left: calc(2 * .25rem);\n}\n\n.fixed-tools_mod-unselect_1Xf-j {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n\n.fixed-tools_button-group-button_2DTEM {\n    display: inline-block;\n    border: 1px solid #D9D9D9;\n    border-radius: 0;\n    padding: .35rem;\n}\n\n[dir=\"ltr\"] .fixed-tools_button-group-button_2DTEM {\n    border-left: none;\n}\n\n[dir=\"rtl\"] .fixed-tools_button-group-button_2DTEM {\n    border-right: none;\n}\n\n[dir=\"ltr\"] .fixed-tools_button-group-button_2DTEM:last-of-type {\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .fixed-tools_button-group-button_2DTEM:first-of-type {\n    border-left: 1px solid #D9D9D9;\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .fixed-tools_button-group-button_2DTEM:last-of-type {\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .fixed-tools_button-group-button_2DTEM:first-of-type {\n    border-right: 1px solid #D9D9D9;\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .fixed-tools_button-group-button_2DTEM.fixed-tools_mod-start-border_1OTDn {\n    border-left: 1px solid #D9D9D9;\n}\n\n[dir=\"rtl\"] .fixed-tools_button-group-button_2DTEM.fixed-tools_mod-start-border_1OTDn {\n    border-right: 1px solid #D9D9D9;\n}\n\n[dir=\"ltr\"] .fixed-tools_button-group-button_2DTEM.fixed-tools_mod-no-end-border_20uuv {\n    border-right: none;\n}\n\n[dir=\"rtl\"] .fixed-tools_button-group-button_2DTEM.fixed-tools_mod-no-end-border_20uuv {\n    border-left: none;\n}\n\n.fixed-tools_button-group-button-icon_3shFH {\n    width: 1.25rem;\n    height: 1.25rem;\n    vertical-align: middle;\n}\n\n[dir=\"rtl\"] .fixed-tools_button-group-button-icon_3shFH {\n    -webkit-transform: scaleX(-1);\n        -ms-transform: scaleX(-1);\n            transform: scaleX(-1);\n}\n\n.fixed-tools_mod-context-menu_JvI5y {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n\n.fixed-tools_mod-top-divider_oxfsG {\n    border-top: 1px solid #D9D9D9;\n}\n\n.fixed-tools_mod-menu-item_1eQQZ {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0 -.25rem;\n    min-width: 6.25rem;\n    padding: calc(3 * .25rem);\n    white-space: nowrap;\n    cursor: pointer;\n    -webkit-transition: 0.1s ease;\n    -o-transition: 0.1s ease;\n    transition: 0.1s ease;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n    font-family: \"Helvetica Neue\", Helvetica, sans-serif;\n}\n\n.fixed-tools_mod-disabled_UJyp0 {\n    cursor: auto;\n}\n\n.fixed-tools_mod-menu-item_1eQQZ:hover {\n    background: hsla(215, 100%, 65%, 0.20);\n}\n\n.fixed-tools_mod-disabled_UJyp0:hover {\n    background-color: transparent;\n}\n\n.fixed-tools_menu-item-icon_2DtJ1 {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .fixed-tools_menu-item-icon_2DtJ1 {\n    margin-right: 0;\n    margin-left: calc(2 * .25rem);\n}\n", ""]);
 // Exports
@@ -59962,6 +60006,8 @@ exports.locals = {
 	"menu-item-icon": "fixed-tools_menu-item-icon_2DtJ1",
 	"menuItemIcon": "fixed-tools_menu-item-icon_2DtJ1"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 329 */
@@ -61437,7 +61483,9 @@ exports.default = ModeToolsComponent;
 /* 341 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.font-dropdown_mod-menu-item_hwOca {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin: 0 -.25rem;\n    min-width: 6.25rem;\n    padding: calc(2 * .25rem);\n    padding-left: calc(3 * .25rem);\n    padding-right: calc(3 * .25rem);\n    white-space: nowrap;\n    width: 8.5rem;\n    cursor: pointer;\n    -webkit-transition: 0.1s ease;\n    -o-transition: 0.1s ease;\n    transition: 0.1s ease;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.font-dropdown_mod-menu-item_hwOca:hover {\n    background: #4C97FF;\n    color: white;\n}\n\n.font-dropdown_mod-context-menu_3llFm {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n}\n\n.font-dropdown_mod-unselect_130OF {\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n\n.font-dropdown_displayed-font-name_3cU-U {\n    font-size: .8rem;\n}\n\n.font-dropdown_font-dropdown_3vjc6 {\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n    color: #575e75;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    font-size: 1rem;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n    width: 8.5rem;\n    height: 2rem;\n}\n\n.font-dropdown_serif_tMSQM {\n    font-family: 'Serif';\n}\n\n.font-dropdown_sans-serif_24kX9 {\n    font-family: 'Sans Serif';\n}\n\n.font-dropdown_serif_tMSQM {\n    font-family: 'Serif';\n}\n\n.font-dropdown_handwriting_Y7s5d {\n    font-family: 'Handwriting';\n}\n\n.font-dropdown_marker_3AmLD {\n    font-family: 'Marker';\n}\n\n.font-dropdown_curly_1UQYh {\n    font-family: 'Curly';\n}\n\n.font-dropdown_pixel_3aRC6 {\n    font-family: 'Pixel';\n}\n\n.font-dropdown_chinese_zV1Hj {\n    font-family: \"Microsoft YaHei\", \"微软雅黑\", STXihei, \"华文细黑\";\n}\n\n.font-dropdown_japanese_2SlYs {\n    font-family: \"ヒラギノ角ゴ Pro W3\", \"Hiragino Kaku Gothic Pro\", Osaka, \"メイリオ\", Meiryo, \"ＭＳ Ｐゴシック\", \"MS PGothic\";\n}\n\n.font-dropdown_korean_1Fx37 {\n    font-family: \"Malgun Gothic\";\n}\n", ""]);
 // Exports
@@ -61463,6 +61511,8 @@ exports.locals = {
 	"japanese": "font-dropdown_japanese_2SlYs",
 	"korean": "font-dropdown_korean_1Fx37"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 342 */
@@ -61494,7 +61544,9 @@ module.exports = exported;
 /* 343 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.mode-tools_mode-tools_UREem {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    min-height: 3rem;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.mode-tools_mode-tools-icon_3yoZ2 {\n    margin-right: calc(2 * .25rem);\n    width: 2rem;\n    height: 2rem;\n}\n\n[dir=\"ltr\"] .mode-tools_mod-dashed-border_3Bmy_ {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(3 * .25rem);\n}\n\n[dir=\"rtl\"] .mode-tools_mod-dashed-border_3Bmy_ {\n    border-left: 1px dashed #D9D9D9;\n    padding-left: calc(3 * .25rem);\n}\n\n.mode-tools_mod-labeled-icon-height_kRA3W {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    height: 2.85rem; /* for the second row so the dashed borders are equal in size */\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n", ""]);
 // Exports
@@ -61508,6 +61560,8 @@ exports.locals = {
 	"mod-labeled-icon-height": "mode-tools_mod-labeled-icon-height_kRA3W",
 	"modLabeledIconHeight": "mode-tools_mod-labeled-icon-height_kRA3W"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 344 */
@@ -65639,7 +65693,9 @@ module.exports = exported;
 /* 382 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(13)(false);
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
+exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.paint-editor_editor-container_3ajxi {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: vertical;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: column;\n        -ms-flex-direction: column;\n            flex-direction: column;\n    padding: calc(3 * .25rem);\n}\n\n.paint-editor_row_1psvV {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-box-align: center;\n    -webkit-align-items: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n\n.paint-editor_editor-container-top_23HHq {\n    border-bottom: 1px dashed #D9D9D9;\n    padding-bottom: calc(2 * .25rem);\n}\n\n.paint-editor_top-align-row_2Ky-F {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    padding-top: calc(5 * .25rem);\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n}\n\n.paint-editor_row_1psvV + .paint-editor_row_1psvV {\n    margin-top: calc(2 * .25rem);\n}\n\n[dir=\"ltr\"] .paint-editor_mod-dashed-border_1xeKo {\n    border-right: 1px dashed #D9D9D9;\n    padding-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mod-dashed-border_1xeKo {\n    border-left: 1px dashed #D9D9D9;\n    padding-left: calc(2 * .25rem);\n}\n\n.paint-editor_mod-labeled-icon-height_3hBCl {\n    height: 2.85rem; /* for the second row so the dashed borders are equal in size */\n}\n\n.paint-editor_button-group-button_1gq5A {\n    display: inline-block;\n    border: 1px solid #D9D9D9;\n    border-radius: 0;\n    padding: .35rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A {\n    border-left: none;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A {\n    border-right: none;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A:first-of-type {\n    border-left: 1px solid #D9D9D9;\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A:last-of-type {\n    border-top-left-radius: 0.25rem;\n    border-bottom-left-radius: 0.25rem;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A:first-of-type {\n    border-right: 1px solid #D9D9D9;\n    border-top-right-radius: 0.25rem;\n    border-bottom-right-radius: 0.25rem;\n}\n\n[dir=\"ltr\"] .paint-editor_button-group-button_1gq5A.paint-editor_mod-start-border_jVIRO {\n    border-left: 1px solid #D9D9D9;\n}\n\n[dir=\"rtl\"] .paint-editor_button-group-button_1gq5A.paint-editor_mod-start-border_jVIRO {\n    border-right: 1px solid #D9D9D9;\n}\n\n[dir=\"ltr\"].paint-editor_button-group-button_1gq5A.paint-editor_mod-no-end-border_XiRoc {\n    border-right: none;\n}\n\n[dir=\"rtl\"].paint-editor_button-group-button_1gq5A.paint-editor_mod-no-end-border_XiRoc {\n    border-left: none;\n}\n\n.paint-editor_button-group-button-icon_3BPxO {\n    width: 1.25rem;\n    height: 1.25rem;\n    vertical-align: middle;\n}\n\n.paint-editor_mod-mode-tools_1IXSj {\n    margin-left: calc(2 * .25rem);\n}\n\n[dir=\"ltr\"] .paint-editor_mod-margin-after_1OgHf {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mod-margin-after_1OgHf {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_canvas-container_2rN98 {\n    width: 480px;\n    height: 360px;\n    -webkit-box-sizing: content-box;\n            box-sizing: content-box;\n    border: 1px solid #e8edf1;\n    border-radius: .25rem;\n    position: relative;\n    overflow: visible;\n}\n\n.paint-editor_mode-selector_1edhd {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    max-width: 6rem;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n        -ms-flex-direction: row;\n            flex-direction: row;\n    -webkit-flex-wrap: wrap;\n        -ms-flex-wrap: wrap;\n            flex-wrap: wrap;\n    -webkit-box-align: start;\n    -webkit-align-items: flex-start;\n        -ms-flex-align: start;\n            align-items: flex-start;\n    -webkit-align-content: flex-start;\n        -ms-flex-line-pack: start;\n            align-content: flex-start;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n[dir=\"ltr\"] .paint-editor_mode-selector_1edhd {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_mode-selector_1edhd {\n    margin-left: calc(2 * .25rem);\n}\n\n.paint-editor_zoom-controls_3Qe-- {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: reverse;\n    -webkit-flex-direction: row-reverse;\n        -ms-flex-direction: row-reverse;\n            flex-direction: row-reverse;\n}\n\n.paint-editor_color-picker-wrapper_1IC0W {\n    position: absolute;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    pointer-events: none;\n}\n\n.paint-editor_canvas-controls_e2K-q {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    margin-top: .25rem;\n    -webkit-box-pack: justify;\n    -webkit-justify-content: space-between;\n        -ms-flex-pack: justify;\n            justify-content: space-between;\n}\n\n.paint-editor_bitmap-button_GsX3L {\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: -ms-flexbox;\n    display: flex;\n    border-radius: 5px;\n    background-color: #4C97FF;\n    padding: calc(2 * .25rem);\n    line-height: 1.5rem;\n    font-size: calc(3 * .25rem);\n    font-weight: bold;\n    color: white;\n    -webkit-box-pack: center;\n    -webkit-justify-content: center;\n        -ms-flex-pack: center;\n            justify-content: center;\n}\n\n[dir=\"ltr\"] .paint-editor_bitmap-button-icon_wPoPh {\n    margin-right: calc(2 * .25rem);\n}\n\n[dir=\"rtl\"] .paint-editor_bitmap-button-icon_wPoPh {\n    margin-left: calc(2 * .25rem);\n}\n\n@media only screen and (max-width: 1256px) {\n    .paint-editor_editor-container_3ajxi {\n        padding: calc(3 * .25rem) .25rem;\n    }\n\n    .paint-editor_mode-selector_1edhd {\n        margin-right: .25rem;\n        -webkit-box-orient: vertical;\n        -webkit-box-direction: normal;\n        -webkit-flex-direction: column;\n            -ms-flex-direction: column;\n                flex-direction: column;\n        -webkit-box-pack: start;\n        -webkit-justify-content: flex-start;\n            -ms-flex-pack: start;\n                justify-content: flex-start;\n    }\n}\n\n.paint-editor_text-area_3VRLj {\n    background: transparent;\n    border: none;\n    display: none;\n    margin: 0px;\n    opacity: .8;\n    outline: none;\n    overflow: hidden;\n    padding: 0px;\n    position: absolute;\n    resize: none;\n    -webkit-text-fill-color: transparent;\n    text-fill-color: transparent;\n}\n\n.paint-editor_button-text_2sm18 {\n    width: 100%; /* Fixes button text wrapping in Edge */\n}\n", ""]);
 // Exports
@@ -65686,6 +65742,8 @@ exports.locals = {
 	"button-text": "paint-editor_button-text_2sm18",
 	"buttonText": "paint-editor_button-text_2sm18"
 };
+module.exports = exports;
+
 
 /***/ }),
 /* 383 */
