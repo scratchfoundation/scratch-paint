@@ -78,10 +78,13 @@ class ScaleTool {
         const delta = point.subtract(this.lastPoint);
         this.lastPoint = point;
 
+        const modOrigSize = this.origSize;
+
         if (event.modifiers.alt) {
             this.centered = true;
             this.itemGroup.position = this.origCenter;
             this.pivot = this.origCenter;
+            this.modOrigSize = this.origSize * 0.5;
         } else {
             if (this.centered) {
                 // Reset position if we were just in alt
@@ -97,17 +100,14 @@ class ScaleTool {
         }
 
         this.corner = this.corner.add(delta);
-        let size = this.corner.subtract(this.pivot);
-        if (event.modifiers.alt) {
-            size = size.multiply(2);
-        }
+        const size = this.corner.subtract(this.pivot);
         let sx = 1.0;
         let sy = 1.0;
-        if (Math.abs(this.origSize.x) > 0.0000001) {
-            sx = size.x / this.origSize.x;
+        if (Math.abs(modOrigSize.x) > 0.0000001) {
+            sx = size.x / modOrigSize.x;
         }
-        if (Math.abs(this.origSize.y) > 0.0000001) {
-            sy = size.y / this.origSize.y;
+        if (Math.abs(modOrigSize.y) > 0.0000001) {
+            sy = size.y / modOrigSize.y;
         }
 
         if (this.isCorner && !event.modifiers.shift) {
