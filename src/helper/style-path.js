@@ -13,15 +13,26 @@ const MIXED = 'scratch-paint/style-path/mixed';
 // Check if two colors, possibly null, are (approximately) equal.
 const _colorsEqual = (color1, color2) => {
     if (color1 === color2) return true;
-    // Handle nulls. We know they can't both be null, because we'd have already returned true if they were.
     if (!color1 || !color2) return false;
 
-    // If either one of the colors doesn't have a `toCSS` method, it isn't a paper.js Color object,
-    // and we've already handled the case where neither is a Color object and they're both equal.
-    if (!(color1.toCSS && color2.toCSS)) return false;
+    if (!(color1 instanceof paper.Color && color2 instanceof paper.Color)) {
+        log.warn('_colorsEqual passed non-Colors');
+        return false;
+    }
 
-    // Convert to CSS in case e.g. one color is RGB and the other is HSB
-    return color1.toCSS() === color2.toCSS();
+    const hsb1 = color1.type === 'hsb' ? color1 : color1.convert('hsb');
+    const hsb2 = color2.type === 'hsb' ? color2 : color2.convert('hsb');
+
+    // Colors that are similar enough, as determined by this threshold, will be considered equal.
+    // Copied from paper.js' Numerical.js. This is a good number. I like this number.
+    const EPSILON = 1e-12;
+
+    return (
+        Math.abs(hsb1.hue - hsb2.hue) < EPSILON &&
+        Math.abs(hsb1.saturation - hsb2.saturation) < EPSILON &&
+        Math.abs(hsb1.brightness - hsb2.brightness) < EPSILON &&
+        Math.abs(hsb1.alpha - hsb2.alpha) < EPSILON
+    );
 };
 
 // Selected items and currently active text edit items respond to color changes.
