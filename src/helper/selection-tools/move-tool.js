@@ -124,10 +124,9 @@ class MoveTool {
         const dragVector = point.subtract(event.downPoint);
         let snapVector;
 
-        // Snapping to align center. Only in select mode, because only select shows a center
-        // crosshair to line up.
+        // Snapping to align center. Not in reshape mode, because reshape doesn't show center crosshair
         const center = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
-        if (!event.modifiers.shift && this.mode === Modes.SELECT) {
+        if (!event.modifiers.shift && this.mode !== Modes.RESHAPE) {
             if (checkPointsClose(
                 this.selectionCenter.add(dragVector),
                 center,
