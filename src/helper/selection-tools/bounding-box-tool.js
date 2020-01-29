@@ -57,14 +57,16 @@ class BoundingBoxTool {
             new MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool);
         this._currentCursor = null;
 
-        paper.project.importSVG(selectionAnchorIcon, {
-            onLoad: function (item) {
-                anchorIcon = item;
-                item.visible = false;
-                item.parent = getGuideLayer();
-                setGuideItem(item);
-            }
-        });
+        if (!anchorIcon) {
+            paper.project.importSVG(selectionAnchorIcon, {
+                onLoad: function (item) {
+                    anchorIcon = item;
+                    item.visible = false;
+                    item.parent = getGuideLayer();
+                    setGuideItem(item);
+                }
+            });
+        }
     }
 
     /**
