@@ -70,6 +70,9 @@ class PaperCanvas extends React.Component {
                 newProps.rotationCenterX, newProps.rotationCenterY,
                 this.props.zoomLevelId, newProps.zoomLevelId);
         }
+        if (this.props.format !== newProps.format) {
+            this.recalibrateSize();
+        }
     }
     componentWillUnmount () {
         this.clearQueuedImport();
