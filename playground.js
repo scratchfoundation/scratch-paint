@@ -33246,7 +33246,7 @@ var EyeDropperTool = function (_paper$Tool) {
                 x: x,
                 y: y,
                 color: colors.data,
-                data: bufferContext.getImageData(artX * ZOOM_SCALE - LOUPE_RADIUS * ZOOM_SCALE, artY * ZOOM_SCALE - LOUPE_RADIUS * ZOOM_SCALE, LOUPE_RADIUS * 2 * ZOOM_SCALE, LOUPE_RADIUS * 2 * ZOOM_SCALE).data,
+                data: bufferContext.getImageData(ZOOM_SCALE * (artX - LOUPE_RADIUS), ZOOM_SCALE * (artY - LOUPE_RADIUS), LOUPE_RADIUS * 2 * ZOOM_SCALE, LOUPE_RADIUS * 2 * ZOOM_SCALE).data,
                 hideLoupe: hideLoupe
             };
         }
@@ -58450,7 +58450,16 @@ var LoupeComponent = function (_React$Component) {
             tmpCanvas.height = loupeDiameter;
             var tmpCtx = tmpCanvas.getContext('2d');
             var imageData = tmpCtx.createImageData(loupeDiameter, loupeDiameter);
-            imageData.data.set(this.props.colorInfo.data);
+
+            // Since the color info comes from elsewhere there is no guarantee
+            // about the size. Make sure it matches to prevent data.set from throwing.
+            // See issue #966 for example of how that can happen.
+            if (this.props.colorInfo.data.length === imageData.data.length) {
+                imageData.data.set(this.props.colorInfo.data);
+            } else {
+                console.warn('Image data size mismatch drawing loupe'); // eslint-disable-line no-console
+            }
+
             tmpCtx.putImageData(imageData, 0, 0);
 
             // Scale the loupe canvas and draw the zoomed image
