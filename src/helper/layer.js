@@ -1,10 +1,9 @@
 import paper from '@scratch/paper';
 import log from '../log/log';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from './view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER} from './view';
 import {isGroupItem} from './item';
-import costumeAnchorIcon from './icons/costume-anchor.svg';
 
-const CROSSHAIR_SIZE = 28;
+const CROSSHAIR_SIZE = 16;
 
 const _getLayer = function (layerString) {
     for (const layer of paper.project.layers) {
@@ -191,17 +190,46 @@ const _makeBackgroundPaper = function (width, height, color) {
 
 // Helper function for drawing a crosshair
 const _makeCrosshair = function (opacity, parent) {
-    paper.project.importSVG(costumeAnchorIcon, {
-        applyMatrix: false,
-        onLoad: function (item) {
-            item.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
-            item.opacity = opacity;
-            item.parent = parent;
-            parent.dragCrosshair = item;
-            item.scale(CROSSHAIR_SIZE / item.bounds.width / paper.view.zoom);
-            setGuideItem(item);
-        }
-    });
+    const crosshair = new paper.Group();
+
+    const vLine2 = new paper.Path.Line(new paper.Point(0, -7), new paper.Point(0, 7));
+    vLine2.strokeWidth = 4;
+    vLine2.strokeColor = 'white';
+    vLine2.strokeCap = 'round';
+    crosshair.addChild(vLine2);
+    const hLine2 = new paper.Path.Line(new paper.Point(-7, 0), new paper.Point(7, 0));
+    hLine2.strokeWidth = 4;
+    hLine2.strokeColor = 'white';
+    hLine2.strokeCap = 'round';
+    crosshair.addChild(hLine2);
+    const circle2 = new paper.Shape.Circle(new paper.Point(0, 0), 5);
+    circle2.strokeWidth = 4;
+    circle2.strokeColor = 'white';
+    crosshair.addChild(circle2);
+
+    const vLine = new paper.Path.Line(new paper.Point(0, -7), new paper.Point(0, 7));
+    vLine.strokeWidth = 2;
+    vLine.strokeColor = '#ccc';
+    vLine.strokeCap = 'round';
+    crosshair.addChild(vLine);
+    const hLine = new paper.Path.Line(new paper.Point(-7, 0), new paper.Point(7, 0));
+    hLine.strokeWidth = 2;
+    hLine.strokeColor = '#ccc';
+    hLine.strokeCap = 'round';
+    crosshair.addChild(hLine);
+    const circle = new paper.Shape.Circle(new paper.Point(0, 0), 5);
+    circle.strokeWidth = 2;
+    circle.strokeColor = '#ccc';
+    crosshair.addChild(circle);
+
+    setGuideItem(crosshair);
+    crosshair.position = CENTER;
+    crosshair.opacity = opacity;
+    crosshair.parent = parent;
+    crosshair.applyMatrix = false;
+    parent.dragCrosshair = crosshair;
+    crosshair.scale(CROSSHAIR_SIZE / crosshair.bounds.width / paper.view.zoom);
+
 };
 
 const _makeDragCrosshairLayer = function () {
