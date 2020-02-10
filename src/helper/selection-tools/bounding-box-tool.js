@@ -226,14 +226,15 @@ class BoundingBoxTool {
             this.boundsPath.selectionAnchor = anchorIcon;
             this._modeMap[BoundingBoxModes.MOVE].setBoundsPath(this.boundsPath);
         }
-        this.boundsPath.guide = true;
+        setGuideItem(this.boundsPath);
         this.boundsPath.data.isSelectionBound = true;
         this.boundsPath.data.isHelperItem = true;
         this.boundsPath.fillColor = null;
         this.boundsPath.parent = getGuideLayer();
         this.boundsPath.strokeWidth = 1 / paper.view.zoom;
         this.boundsPath.strokeColor = getGuideColor();
-        this.boundsPath.selectionAnchor.scale(SELECTION_ANCHOR_SIZE / paper.view.zoom / this.boundsPath.selectionAnchor.bounds.width);
+        this.boundsPath.selectionAnchor.scale(
+            SELECTION_ANCHOR_SIZE / paper.view.zoom / this.boundsPath.selectionAnchor.bounds.width);
         this.boundsPath.selectionAnchor.position = rect.center;
 
         // Make a template to copy

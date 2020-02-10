@@ -129,14 +129,13 @@ class MoveTool {
         let snapVector;
 
         // Snapping to align center. Not in reshape mode, because reshape doesn't show center crosshair
-        const center = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
         if (!event.modifiers.shift && this.mode !== Modes.RESHAPE) {
             if (checkPointsClose(
                 this.selectionCenter.add(dragVector),
-                center,
+                CENTER,
                 SNAPPING_THRESHOLD / paper.view.zoom /* threshold */)) {
                 
-                snapVector = center.subtract(this.selectionCenter);
+                snapVector = CENTER.subtract(this.selectionCenter);
             }
         }
 
@@ -161,8 +160,8 @@ class MoveTool {
             getDragCrosshairLayer().visible = true;
             this.firstDrag = false;
         }
-        const opacity = Math.max(0, 1 - ((CENTER.getDistance(this.selectionCenter.add(dragVector)) / CENTER.x) * (4 * paper.view.zoom)));
-        console.log(opacity);
+        const opacity = Math.max(0,
+            1 - ((CENTER.getDistance(this.selectionCenter.add(dragVector)) / CENTER.x) * (4 * paper.view.zoom)));
         getDragCrosshairLayer().opacity = opacity;
     }
     onMouseUp () {
