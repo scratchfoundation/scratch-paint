@@ -246,7 +246,8 @@ class BoundingBoxTool {
         this.boundsPath.parent = getGuideLayer();
         this.boundsPath.strokeWidth = 1 / paper.view.zoom;
         this.boundsPath.strokeColor = getGuideColor();
-        this.boundsPath.selectionAnchor.scale(SELECTION_ANCHOR_SIZE / paper.view.zoom / this.boundsPath.selectionAnchor.bounds.width);
+        this.boundsPath.selectionAnchor.scale(
+            SELECTION_ANCHOR_SIZE / paper.view.zoom / this.boundsPath.selectionAnchor.bounds.width);
         this.boundsPath.selectionAnchor.position = rect.center;
 
         if (anchorIcon) {

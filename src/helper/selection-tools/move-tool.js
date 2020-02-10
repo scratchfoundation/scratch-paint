@@ -162,7 +162,9 @@ class MoveTool {
             getDragCrosshairLayer().visible = true;
             this.firstDrag = false;
         }
-        const opacity = Math.max(0, 1 - ((CENTER.getDistance(this.selectionCenter.add(dragVector)) / CENTER.x) * (4 * paper.view.zoom)));
+
+        const opacity = Math.max(0,
+            1 - ((CENTER.getDistance(this.selectionCenter.add(dragVector)) / CENTER.x) * (4 * paper.view.zoom)));
         getDragCrosshairLayer().opacity = opacity;
     }
     onMouseUp () {
