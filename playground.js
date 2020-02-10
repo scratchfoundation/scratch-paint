@@ -16995,7 +16995,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _group = __webpack_require__(29);
 
-var _item = __webpack_require__(37);
+var _item = __webpack_require__(30);
 
 var _compoundPath = __webpack_require__(208);
 
@@ -17010,7 +17010,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var getItems = function getItems(options) {
     var newMatcher = function newMatcher(item) {
-        return !(item instanceof _paper2.default.Layer) && !item.locked && !(item.data && item.data.isHelperItem) && (!options.match || options.match(item));
+        return !(item instanceof _paper2.default.Layer) && item.layer.data && item.layer.data.isPaintingLayer && !item.locked && !item.isClipMask() && !(item.data && item.data.isHelperItem) && (!options.match || options.match(item));
     };
     var newOptions = _extends({}, options, { match: newMatcher });
     return _paper2.default.project.getItems(newOptions);
@@ -19720,7 +19720,7 @@ function shallowEqual(objA, objB) {
   return true;
 }
 // EXTERNAL MODULE: ./node_modules/redux/es/index.js + 15 modules
-var es = __webpack_require__(36);
+var es = __webpack_require__(37);
 
 // CONCATENATED MODULE: ./node_modules/react-redux/es/utils/isPlainObject.js
 /**
@@ -20208,7 +20208,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _selection = __webpack_require__(3);
 
-var _item = __webpack_require__(37);
+var _item = __webpack_require__(30);
 
 var _group = __webpack_require__(29);
 
@@ -20906,7 +20906,7 @@ exports.changeMode = changeMode;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.setupLayers = exports.getRaster = exports.clearRaster = exports.getBackgroundGuideLayer = exports.getGuideLayer = exports.showGuideLayers = exports.hideGuideLayers = exports.createCanvas = undefined;
+exports.setupLayers = exports.setGuideItem = exports.getRaster = exports.clearRaster = exports.getBackgroundGuideLayer = exports.getGuideLayer = exports.getDragCrosshairLayer = exports.showGuideLayers = exports.hideGuideLayers = exports.createCanvas = exports.CROSSHAIR_SIZE = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -20918,7 +20918,11 @@ var _log2 = _interopRequireDefault(_log);
 
 var _view = __webpack_require__(22);
 
+var _item = __webpack_require__(30);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CROSSHAIR_SIZE = 16;
 
 var _getLayer = function _getLayer(layerString) {
     var _iteratorNormalCompletion = true;
@@ -20989,6 +20993,10 @@ var getRaster = function getRaster() {
     return _getLayer('isRasterLayer').children[0];
 };
 
+var getDragCrosshairLayer = function getDragCrosshairLayer() {
+    return _getLayer('isDragCrosshairLayer');
+};
+
 var getBackgroundGuideLayer = function getBackgroundGuideLayer() {
     return _getLayer('isBackgroundGuideLayer');
 };
@@ -21008,6 +21016,16 @@ var getGuideLayer = function getGuideLayer() {
     return layer;
 };
 
+var setGuideItem = function setGuideItem(item) {
+    item.locked = true;
+    item.guide = true;
+    if ((0, _item.isGroupItem)(item)) {
+        for (var i = 0; i < item.children.length; i++) {
+            setGuideItem(item.children[i]);
+        }
+    }
+};
+
 /**
  * Removes the guide layers, e.g. for purposes of exporting the image. Must call showGuideLayers to re-add them.
  * @param {boolean} includeRaster true if the raster layer should also be hidden
@@ -21015,7 +21033,9 @@ var getGuideLayer = function getGuideLayer() {
  */
 var hideGuideLayers = function hideGuideLayers(includeRaster) {
     var backgroundGuideLayer = getBackgroundGuideLayer();
+    var dragCrosshairLayer = getDragCrosshairLayer();
     var guideLayer = getGuideLayer();
+    dragCrosshairLayer.remove();
     guideLayer.remove();
     backgroundGuideLayer.remove();
     var rasterLayer = void 0;
@@ -21024,6 +21044,7 @@ var hideGuideLayers = function hideGuideLayers(includeRaster) {
         rasterLayer.remove();
     }
     return {
+        dragCrosshairLayer: dragCrosshairLayer,
         guideLayer: guideLayer,
         backgroundGuideLayer: backgroundGuideLayer,
         rasterLayer: rasterLayer
@@ -21037,6 +21058,7 @@ var hideGuideLayers = function hideGuideLayers(includeRaster) {
  */
 var showGuideLayers = function showGuideLayers(guideLayers) {
     var backgroundGuideLayer = guideLayers.backgroundGuideLayer;
+    var dragCrosshairLayer = guideLayers.dragCrosshairLayer;
     var guideLayer = guideLayers.guideLayer;
     var rasterLayer = guideLayers.rasterLayer;
     if (rasterLayer && !rasterLayer.index) {
@@ -21046,6 +21068,10 @@ var showGuideLayers = function showGuideLayers(guideLayers) {
     if (!backgroundGuideLayer.index) {
         _paper2.default.project.addLayer(backgroundGuideLayer);
         backgroundGuideLayer.sendToBack();
+    }
+    if (!dragCrosshairLayer.index) {
+        _paper2.default.project.addLayer(dragCrosshairLayer);
+        dragCrosshairLayer.bringToFront();
     }
     if (!guideLayer.index) {
         _paper2.default.project.addLayer(guideLayer);
@@ -21102,6 +21128,57 @@ var _makeBackgroundPaper = function _makeBackgroundPaper(width, height, color) {
     return vGroup;
 };
 
+// Helper function for drawing a crosshair
+var _makeCrosshair = function _makeCrosshair(opacity, parent) {
+    var crosshair = new _paper2.default.Group();
+
+    var vLine2 = new _paper2.default.Path.Line(new _paper2.default.Point(0, -7), new _paper2.default.Point(0, 7));
+    vLine2.strokeWidth = 6;
+    vLine2.strokeColor = 'white';
+    vLine2.strokeCap = 'round';
+    crosshair.addChild(vLine2);
+    var hLine2 = new _paper2.default.Path.Line(new _paper2.default.Point(-7, 0), new _paper2.default.Point(7, 0));
+    hLine2.strokeWidth = 6;
+    hLine2.strokeColor = 'white';
+    hLine2.strokeCap = 'round';
+    crosshair.addChild(hLine2);
+    var circle2 = new _paper2.default.Shape.Circle(new _paper2.default.Point(0, 0), 5.5);
+    circle2.strokeWidth = 6;
+    circle2.strokeColor = 'white';
+    crosshair.addChild(circle2);
+
+    var vLine = new _paper2.default.Path.Line(new _paper2.default.Point(0, -7), new _paper2.default.Point(0, 7));
+    vLine.strokeWidth = 2;
+    vLine.strokeColor = 'black';
+    vLine.strokeCap = 'round';
+    crosshair.addChild(vLine);
+    var hLine = new _paper2.default.Path.Line(new _paper2.default.Point(-7, 0), new _paper2.default.Point(7, 0));
+    hLine.strokeWidth = 2;
+    hLine.strokeColor = 'black';
+    hLine.strokeCap = 'round';
+    crosshair.addChild(hLine);
+    var circle = new _paper2.default.Shape.Circle(new _paper2.default.Point(0, 0), 5.5);
+    circle.strokeWidth = 2;
+    circle.strokeColor = 'black';
+    crosshair.addChild(circle);
+
+    setGuideItem(crosshair);
+    crosshair.position = _view.CENTER;
+    crosshair.opacity = opacity;
+    crosshair.parent = parent;
+    crosshair.applyMatrix = false;
+    parent.dragCrosshair = crosshair;
+    crosshair.scale(CROSSHAIR_SIZE / crosshair.bounds.width / _paper2.default.view.zoom);
+};
+
+var _makeDragCrosshairLayer = function _makeDragCrosshairLayer() {
+    var dragCrosshairLayer = new _paper2.default.Layer();
+    _makeCrosshair(0.65, dragCrosshairLayer);
+    dragCrosshairLayer.data.isDragCrosshairLayer = true;
+    dragCrosshairLayer.visible = false;
+    return dragCrosshairLayer;
+};
+
 var _makeBackgroundGuideLayer = function _makeBackgroundGuideLayer() {
     var guideLayer = new _paper2.default.Layer();
     guideLayer.locked = true;
@@ -21112,26 +21189,7 @@ var _makeBackgroundGuideLayer = function _makeBackgroundGuideLayer() {
     vBackground.guide = true;
     vBackground.locked = true;
 
-    var vLine = new _paper2.default.Path.Line(new _paper2.default.Point(0, -7), new _paper2.default.Point(0, 7));
-    vLine.strokeWidth = 2;
-    vLine.strokeColor = '#ccc';
-    vLine.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
-    vLine.guide = true;
-    vLine.locked = true;
-
-    var hLine = new _paper2.default.Path.Line(new _paper2.default.Point(-7, 0), new _paper2.default.Point(7, 0));
-    hLine.strokeWidth = 2;
-    hLine.strokeColor = '#ccc';
-    hLine.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
-    hLine.guide = true;
-    hLine.locked = true;
-
-    var circle = new _paper2.default.Shape.Circle(new _paper2.default.Point(0, 0), 5);
-    circle.strokeWidth = 2;
-    circle.strokeColor = '#ccc';
-    circle.position = new _paper2.default.Point(_view.ART_BOARD_WIDTH / 2, _view.ART_BOARD_HEIGHT / 2);
-    circle.guide = true;
-    circle.locked = true;
+    _makeCrosshair(0.16, guideLayer);
 
     guideLayer.data.isBackgroundGuideLayer = true;
     return guideLayer;
@@ -21141,19 +21199,24 @@ var setupLayers = function setupLayers() {
     var backgroundGuideLayer = _makeBackgroundGuideLayer();
     _makeRasterLayer();
     var paintLayer = _makePaintingLayer();
+    var dragCrosshairLayer = _makeDragCrosshairLayer();
     var guideLayer = _makeGuideLayer();
     backgroundGuideLayer.sendToBack();
+    dragCrosshairLayer.bringToFront();
     guideLayer.bringToFront();
     paintLayer.activate();
 };
 
+exports.CROSSHAIR_SIZE = CROSSHAIR_SIZE;
 exports.createCanvas = createCanvas;
 exports.hideGuideLayers = hideGuideLayers;
 exports.showGuideLayers = showGuideLayers;
+exports.getDragCrosshairLayer = getDragCrosshairLayer;
 exports.getGuideLayer = getGuideLayer;
 exports.getBackgroundGuideLayer = getBackgroundGuideLayer;
 exports.clearRaster = clearRaster;
 exports.getRaster = getRaster;
+exports.setGuideItem = setGuideItem;
 exports.setupLayers = setupLayers;
 
 /***/ }),
@@ -22066,7 +22129,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _layer = __webpack_require__(11);
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(31);
 
 var _selection = __webpack_require__(3);
 
@@ -22876,7 +22939,7 @@ exports.selectAllBitmap = selectAllBitmap;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.zoomToFit = exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resetZoom = exports.pan = exports.clampViewBounds = exports.SVG_ART_BOARD_HEIGHT = exports.SVG_ART_BOARD_WIDTH = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = undefined;
+exports.zoomToFit = exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resetZoom = exports.pan = exports.clampViewBounds = exports.SVG_ART_BOARD_HEIGHT = exports.SVG_ART_BOARD_WIDTH = exports.CENTER = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -22897,6 +22960,7 @@ var SVG_ART_BOARD_WIDTH = 480;
 var SVG_ART_BOARD_HEIGHT = 360;
 var ART_BOARD_WIDTH = 480 * 2;
 var ART_BOARD_HEIGHT = 360 * 2;
+var CENTER = new _paper2.default.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
 var PADDING_PERCENT = 25; // Padding as a percent of the max of width/height of the sprite
 var MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
 // zoomed in for tiny costumes.
@@ -22922,6 +22986,15 @@ var clampViewBounds = function clampViewBounds() {
     }
 };
 
+var _resizeCrosshair = function _resizeCrosshair() {
+    if ((0, _layer.getDragCrosshairLayer)() && (0, _layer.getDragCrosshairLayer)().dragCrosshair) {
+        (0, _layer.getDragCrosshairLayer)().dragCrosshair.scale(_layer.CROSSHAIR_SIZE / (0, _layer.getDragCrosshairLayer)().dragCrosshair.bounds.width / _paper2.default.view.zoom);
+    }
+    if ((0, _layer.getBackgroundGuideLayer)() && (0, _layer.getBackgroundGuideLayer)().dragCrosshair) {
+        (0, _layer.getBackgroundGuideLayer)().dragCrosshair.scale(_layer.CROSSHAIR_SIZE / (0, _layer.getBackgroundGuideLayer)().dragCrosshair.bounds.width / _paper2.default.view.zoom);
+    }
+};
+
 // Zoom keeping a project-space point fixed.
 // This article was helpful http://matthiasberth.com/tech/stable-zoom-and-pan-in-paperjs
 var zoomOnFixedPoint = function zoomOnFixedPoint(deltaZoom, fixedPoint) {
@@ -22934,6 +23007,7 @@ var zoomOnFixedPoint = function zoomOnFixedPoint(deltaZoom, fixedPoint) {
     view.zoom = newZoom;
     view.translate(postZoomOffset.multiply(-1));
     clampViewBounds();
+    _resizeCrosshair();
 };
 
 // Zoom keeping the selection center (if any) fixed.
@@ -22980,6 +23054,7 @@ var zoomOnSelection = function zoomOnSelection(deltaZoom) {
 
 var resetZoom = function resetZoom() {
     _paper2.default.project.view.zoom = .5;
+    _resizeCrosshair();
     clampViewBounds();
 };
 
@@ -23004,6 +23079,7 @@ var zoomToFit = function zoomToFit(isBitmap) {
         if (ratio < 1) {
             _paper2.default.view.center = bounds.center;
             _paper2.default.view.zoom = _paper2.default.view.zoom / ratio;
+            _resizeCrosshair();
             clampViewBounds();
         }
     }
@@ -23011,6 +23087,7 @@ var zoomToFit = function zoomToFit(isBitmap) {
 
 exports.ART_BOARD_HEIGHT = ART_BOARD_HEIGHT;
 exports.ART_BOARD_WIDTH = ART_BOARD_WIDTH;
+exports.CENTER = CENTER;
 exports.SVG_ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH;
 exports.SVG_ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT;
 exports.clampViewBounds = clampViewBounds;
@@ -25146,7 +25223,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _item = __webpack_require__(37);
+var _item = __webpack_require__(30);
 
 var _selection = __webpack_require__(3);
 
@@ -25312,6 +25389,89 @@ exports.shouldShowUngroup = shouldShowUngroup;
 
 /***/ }),
 /* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getRootItem = exports.setPositionInView = exports.getPositionInView = exports.setPivot = exports.isPGTextItem = exports.isPointTextItem = exports.isGroupItem = exports.isCompoundPathItem = exports.isPathItem = exports.isBoundsItem = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var getRootItem = function getRootItem(item) {
+    if (item.parent.className === 'Layer') {
+        return item;
+    }
+    return getRootItem(item.parent);
+};
+
+var isBoundsItem = function isBoundsItem(item) {
+    if (item.className === 'PointText' || item.className === 'Shape' || item.className === 'PlacedSymbol' || item.className === 'Raster') {
+        return true;
+    }
+    return false;
+};
+
+var isPathItem = function isPathItem(item) {
+    return item.className === 'Path';
+};
+
+var isCompoundPathItem = function isCompoundPathItem(item) {
+    return item.className === 'CompoundPath';
+};
+
+var isGroupItem = function isGroupItem(item) {
+    return item && item.className && item.className === 'Group';
+};
+
+var isPointTextItem = function isPointTextItem(item) {
+    return item.className === 'PointText';
+};
+
+var isPGTextItem = function isPGTextItem(item) {
+    return getRootItem(item).data.isPGTextItem;
+};
+
+var setPivot = function setPivot(item, point) {
+    if (isBoundsItem(item)) {
+        item.pivot = item.globalToLocal(point);
+    } else {
+        item.pivot = point;
+    }
+};
+
+var getPositionInView = function getPositionInView(item) {
+    var itemPos = new _paper2.default.Point();
+    itemPos.x = item.position.x - _paper2.default.view.bounds.x;
+    itemPos.y = item.position.y - _paper2.default.view.bounds.y;
+    return itemPos;
+};
+
+var setPositionInView = function setPositionInView(item, pos) {
+    item.position.x = _paper2.default.view.bounds.x + pos.x;
+    item.position.y = _paper2.default.view.bounds.y + pos.y;
+};
+
+exports.isBoundsItem = isBoundsItem;
+exports.isPathItem = isPathItem;
+exports.isCompoundPathItem = isCompoundPathItem;
+exports.isGroupItem = isGroupItem;
+exports.isPointTextItem = isPointTextItem;
+exports.isPGTextItem = isPGTextItem;
+exports.setPivot = setPivot;
+exports.getPositionInView = getPositionInView;
+exports.setPositionInView = setPositionInView;
+exports.getRootItem = getRootItem;
+
+/***/ }),
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25543,7 +25703,7 @@ exports.getGuideColor = getGuideColor;
 exports.setDefaultGuideStyle = setDefaultGuideStyle;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25565,7 +25725,7 @@ var _keymirror2 = _interopRequireDefault(_keymirror);
 
 var _selection = __webpack_require__(3);
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(31);
 
 var _layer = __webpack_require__(11);
 
@@ -25589,6 +25749,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var SELECTION_ANCHOR_SIZE = 12;
 /** SVG for the rotation icon on the bounding box */
 var ARROW_PATH = 'M19.28,1.09C19.28.28,19,0,18.2,0c-1.67,0-3.34,0-5,0-.34,0-.88.24-1,.47a1.4,1.4,' + '0,0,0,.36,1.08,15.27,15.27,0,0,0,1.46,1.36A6.4,6.4,0,0,1,6.52,4,5.85,5.85,0,0,1,5.24,3,15.27,15.27,' + '0,0,0,6.7,1.61,1.4,1.4,0,0,0,7.06.54C7,.3,6.44.07,6.1.06c-1.67,0-3.34,0-5,0C.28,0,0,.31,0,1.12c0,1.67,' + '0,3.34,0,5a1.23,1.23,0,0,0,.49,1,1.22,1.22,0,0,0,1-.31A14.38,14.38,0,0,0,2.84,5.26l.73.62a9.45,9.45,' + '0,0,0,7.34,2,9.45,9.45,0,0,0,4.82-2.05l.73-.62a14.38,14.38,0,0,0,1.29,1.51,1.22,1.22,' + '0,0,0,1,.31,1.23,1.23,0,0,0,.49-1C19.31,4.43,19.29,2.76,19.28,1.09Z';
 /** Modes of the bounding box tool, which can do many things depending on how it's used. */
@@ -25826,20 +25987,36 @@ var BoundingBoxTool = function () {
             }
 
             if (!this.boundsPath) {
-                this.boundsPath = new _paper2.default.Path.Rectangle(rect);
-                this.boundsPath.curves[0].divideAtTime(0.5);
-                this.boundsPath.curves[2].divideAtTime(0.5);
-                this.boundsPath.curves[4].divideAtTime(0.5);
-                this.boundsPath.curves[6].divideAtTime(0.5);
+                this.boundsPath = new _paper2.default.Group();
+                this.boundsRect = _paper2.default.Path.Rectangle(rect);
+                this.boundsRect.curves[0].divideAtTime(0.5);
+                this.boundsRect.curves[2].divideAtTime(0.5);
+                this.boundsRect.curves[4].divideAtTime(0.5);
+                this.boundsRect.curves[6].divideAtTime(0.5);
+                this.boundsPath.addChild(this.boundsRect);
+
+                var anchorIcon = new _paper2.default.Group();
+                var vRect = new _paper2.default.Rectangle(new _paper2.default.Point(-1, -6), new _paper2.default.Size(2, 12));
+                var vRoundRect = new _paper2.default.Path.Rectangle(vRect, new _paper2.default.Size(1, 1));
+                var hRect = new _paper2.default.Rectangle(new _paper2.default.Point(-6, -1), new _paper2.default.Size(12, 2));
+                var hRoundRect = new _paper2.default.Path.Rectangle(hRect, new _paper2.default.Size(1, 1));
+                anchorIcon = vRoundRect.unite(hRoundRect);
+                vRoundRect.remove();
+                hRoundRect.remove();
+
+                this.boundsPath.addChild(anchorIcon);
+                this.boundsPath.selectionAnchor = anchorIcon;
                 this._modeMap[BoundingBoxModes.MOVE].setBoundsPath(this.boundsPath);
             }
-            this.boundsPath.guide = true;
+            (0, _layer.setGuideItem)(this.boundsPath);
             this.boundsPath.data.isSelectionBound = true;
             this.boundsPath.data.isHelperItem = true;
             this.boundsPath.fillColor = null;
             this.boundsPath.parent = (0, _layer.getGuideLayer)();
             this.boundsPath.strokeWidth = 1 / _paper2.default.view.zoom;
             this.boundsPath.strokeColor = (0, _guides.getGuideColor)();
+            this.boundsPath.selectionAnchor.scale(SELECTION_ANCHOR_SIZE / _paper2.default.view.zoom / this.boundsPath.selectionAnchor.bounds.width);
+            this.boundsPath.selectionAnchor.position = rect.center;
 
             // Make a template to copy
             var boundsScaleCircleShadow = new _paper2.default.Path.Circle({
@@ -25867,8 +26044,8 @@ var BoundingBoxTool = function () {
             var boundsScaleHandle = new _paper2.default.Group([boundsScaleCircleShadow, boundsScaleCircle]);
             boundsScaleHandle.parent = (0, _layer.getGuideLayer)();
 
-            for (var index = 0; index < this.boundsPath.segments.length; index++) {
-                var segment = this.boundsPath.segments[index];
+            for (var index = 0; index < this.boundsRect.segments.length; index++) {
+                var segment = this.boundsRect.segments[index];
 
                 if (index === 7) {
                     var offset = new _paper2.default.Point(0, 20);
@@ -25937,6 +26114,7 @@ var BoundingBoxTool = function () {
         value: function removeBoundsPath() {
             (0, _guides.removeBoundsPath)();
             this.boundsPath = null;
+            this.boundsRect = null;
             this.boundsScaleHandles.length = 0;
             this.boundsRotHandles.length = 0;
         }
@@ -25969,7 +26147,7 @@ var BoundingBoxTool = function () {
 exports.default = BoundingBoxTool;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26116,7 +26294,7 @@ var NudgeTool = function () {
 exports.default = NudgeTool;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26167,7 +26345,7 @@ InputGroup.propTypes = {
 exports.default = InputGroup;
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26184,7 +26362,7 @@ var _log2 = _interopRequireDefault(_log);
 
 var _selectedItems = __webpack_require__(7);
 
-var _strokeWidth = __webpack_require__(35);
+var _strokeWidth = __webpack_require__(36);
 
 var _stylePath = __webpack_require__(9);
 
@@ -26236,7 +26414,7 @@ exports.default = reducer;
 exports.changeStrokeColor = changeStrokeColor;
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26299,7 +26477,7 @@ exports.CHANGE_STROKE_WIDTH = CHANGE_STROKE_WIDTH;
 exports.MAX_STROKE_WIDTH = MAX_STROKE_WIDTH;
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -27095,89 +27273,6 @@ function isCrushed() {}
 if (false) {}
 
 
-
-/***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.getRootItem = exports.setPositionInView = exports.getPositionInView = exports.setPivot = exports.isPGTextItem = exports.isPointTextItem = exports.isGroupItem = exports.isCompoundPathItem = exports.isPathItem = exports.isBoundsItem = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var getRootItem = function getRootItem(item) {
-    if (item.parent.className === 'Layer') {
-        return item;
-    }
-    return getRootItem(item.parent);
-};
-
-var isBoundsItem = function isBoundsItem(item) {
-    if (item.className === 'PointText' || item.className === 'Shape' || item.className === 'PlacedSymbol' || item.className === 'Raster') {
-        return true;
-    }
-    return false;
-};
-
-var isPathItem = function isPathItem(item) {
-    return item.className === 'Path';
-};
-
-var isCompoundPathItem = function isCompoundPathItem(item) {
-    return item.className === 'CompoundPath';
-};
-
-var isGroupItem = function isGroupItem(item) {
-    return item && item.className && item.className === 'Group';
-};
-
-var isPointTextItem = function isPointTextItem(item) {
-    return item.className === 'PointText';
-};
-
-var isPGTextItem = function isPGTextItem(item) {
-    return getRootItem(item).data.isPGTextItem;
-};
-
-var setPivot = function setPivot(item, point) {
-    if (isBoundsItem(item)) {
-        item.pivot = item.globalToLocal(point);
-    } else {
-        item.pivot = point;
-    }
-};
-
-var getPositionInView = function getPositionInView(item) {
-    var itemPos = new _paper2.default.Point();
-    itemPos.x = item.position.x - _paper2.default.view.bounds.x;
-    itemPos.y = item.position.y - _paper2.default.view.bounds.y;
-    return itemPos;
-};
-
-var setPositionInView = function setPositionInView(item, pos) {
-    item.position.x = _paper2.default.view.bounds.x + pos.x;
-    item.position.y = _paper2.default.view.bounds.y + pos.y;
-};
-
-exports.isBoundsItem = isBoundsItem;
-exports.isPathItem = isPathItem;
-exports.isCompoundPathItem = isCompoundPathItem;
-exports.isGroupItem = isGroupItem;
-exports.isPointTextItem = isPointTextItem;
-exports.isPGTextItem = isPGTextItem;
-exports.setPivot = setPivot;
-exports.getPositionInView = getPositionInView;
-exports.setPositionInView = setPositionInView;
-exports.getRootItem = getRootItem;
 
 /***/ }),
 /* 38 */
@@ -29631,7 +29726,7 @@ var performSnapshot = function performSnapshot(dispatchPerformSnapshot, format) 
 var _restore = function _restore(entry, setSelectedItems, onUpdateImage, isBitmapMode) {
     for (var i = _paper2.default.project.layers.length - 1; i >= 0; i--) {
         var layer = _paper2.default.project.layers[i];
-        if (!layer.data.isBackgroundGuideLayer) {
+        if (!layer.data.isBackgroundGuideLayer && !layer.data.isDragCrosshairLayer) {
             layer.removeChildren();
             layer.remove();
         }
@@ -29914,7 +30009,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(31);
 
 var _selection = __webpack_require__(3);
 
@@ -31348,7 +31443,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _group = __webpack_require__(29);
 
-var _item = __webpack_require__(37);
+var _item = __webpack_require__(30);
 
 var _math = __webpack_require__(19);
 
@@ -31356,13 +31451,19 @@ var _view = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
+var _layer = __webpack_require__(11);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/** Snap to align selection center to rotation center within this distance */
+var SNAPPING_THRESHOLD = 4;
+
 /**
  * Tool to handle dragging an item to reposition it in a selection mode.
  */
+
 var MoveTool = function () {
     /**
      * @param {Modes} mode Paint editor mode
@@ -31378,9 +31479,11 @@ var MoveTool = function () {
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
+        this.selectionCenter = null;
         this.onUpdateImage = onUpdateImage;
         this.switchToTextTool = switchToTextTool;
         this.boundsPath = null;
+        this.firstDrag = false;
     }
 
     /**
@@ -31425,10 +31528,49 @@ var MoveTool = function () {
                 this._select(item, true, hitProperties.subselect);
             }
             if (hitProperties.clone) (0, _selection.cloneSelection)(hitProperties.subselect, this.onUpdateImage);
+
             this.selectedItems = this.mode === _modes2.default.RESHAPE ? (0, _selection.getSelectedLeafItems)() : (0, _selection.getSelectedRootItems)();
+            if (this.selectedItems.length === 0) {
+                return;
+            }
+
+            var selectionBounds = void 0;
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this.selectedItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var selectedItem = _step.value;
+
+                    if (selectionBounds) {
+                        selectionBounds = selectionBounds.unite(selectedItem.bounds);
+                    } else {
+                        selectionBounds = selectedItem.bounds;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            this.selectionCenter = selectionBounds.center;
+
             if (this.boundsPath) {
                 this.selectedItems.push(this.boundsPath);
             }
+
+            this.firstDrag = true;
         }
     }, {
         key: 'setBoundsPath',
@@ -31467,48 +31609,18 @@ var MoveTool = function () {
             var point = event.point;
             point.x = Math.max(0, Math.min(point.x, _view.ART_BOARD_WIDTH));
             point.y = Math.max(0, Math.min(point.y, _view.ART_BOARD_HEIGHT));
+
             var dragVector = point.subtract(event.downPoint);
+            var snapVector = void 0;
 
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            // Snapping to align center. Not in reshape mode, because reshape doesn't show center crosshair
+            if (!event.modifiers.shift && this.mode !== _modes2.default.RESHAPE) {
+                if ((0, _math.checkPointsClose)(this.selectionCenter.add(dragVector), _view.CENTER, SNAPPING_THRESHOLD / _paper2.default.view.zoom /* threshold */)) {
 
-            try {
-                for (var _iterator = this.selectedItems[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var item = _step.value;
-
-                    // add the position of the item before the drag started
-                    // for later use in the snap calculation
-                    if (!item.data.origPos) {
-                        item.data.origPos = item.position;
-                    }
-
-                    if (event.modifiers.shift) {
-                        item.position = item.data.origPos.add((0, _math.snapDeltaToAngle)(dragVector, Math.PI / 4));
-                    } else {
-                        item.position = item.data.origPos.add(dragVector);
-                    }
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
+                    snapVector = _view.CENTER.subtract(this.selectionCenter);
                 }
             }
-        }
-    }, {
-        key: 'onMouseUp',
-        value: function onMouseUp() {
-            var moved = false;
-            // resetting the items origin point for the next usage
+
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;
             var _iteratorError2 = undefined;
@@ -31517,10 +31629,19 @@ var MoveTool = function () {
                 for (var _iterator2 = this.selectedItems[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                     var item = _step2.value;
 
-                    if (item.data && item.data.origPos && !item.position.equals(item.data.origPos)) {
-                        moved = true;
+                    // add the position of the item before the drag started
+                    // for later use in the snap calculation
+                    if (!item.data.origPos) {
+                        item.data.origPos = item.position;
                     }
-                    item.data.origPos = null;
+
+                    if (snapVector) {
+                        item.position = item.data.origPos.add(snapVector);
+                    } else if (event.modifiers.shift) {
+                        item.position = item.data.origPos.add((0, _math.snapDeltaToAngle)(dragVector, Math.PI / 4));
+                    } else {
+                        item.position = item.data.origPos.add(dragVector);
+                    }
                 }
             } catch (err) {
                 _didIteratorError2 = true;
@@ -31537,11 +31658,57 @@ var MoveTool = function () {
                 }
             }
 
+            if (this.firstDrag) {
+                // Show the center crosshair above the selected item while dragging.
+                (0, _layer.getDragCrosshairLayer)().visible = true;
+                this.firstDrag = false;
+            }
+            var opacity = Math.max(0, 1 - _view.CENTER.getDistance(this.selectionCenter.add(dragVector)) / _view.CENTER.x * (4 * _paper2.default.view.zoom));
+            (0, _layer.getDragCrosshairLayer)().opacity = opacity;
+        }
+    }, {
+        key: 'onMouseUp',
+        value: function onMouseUp() {
+            this.firstDrag = false;
+            var moved = false;
+            // resetting the items origin point for the next usage
+            var _iteratorNormalCompletion3 = true;
+            var _didIteratorError3 = false;
+            var _iteratorError3 = undefined;
+
+            try {
+                for (var _iterator3 = this.selectedItems[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                    var item = _step3.value;
+
+                    if (item.data && item.data.origPos && !item.position.equals(item.data.origPos)) {
+                        moved = true;
+                    }
+                    item.data.origPos = null;
+                }
+            } catch (err) {
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                        _iterator3.return();
+                    }
+                } finally {
+                    if (_didIteratorError3) {
+                        throw _iteratorError3;
+                    }
+                }
+            }
+
             this.selectedItems = null;
+            this.selectionCenter = null;
 
             if (moved) {
                 this.onUpdateImage();
             }
+
+            // Hide the crosshair we showed earlier.
+            (0, _layer.getDragCrosshairLayer)().visible = false;
         }
     }]);
 
@@ -32888,9 +33055,9 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _item = __webpack_require__(37);
+var _item = __webpack_require__(30);
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(31);
 
 var _group = __webpack_require__(29);
 
@@ -34620,7 +34787,7 @@ var _2 = _interopRequireDefault(_);
 
 var _reactRedux = __webpack_require__(6);
 
-var _redux = __webpack_require__(36);
+var _redux = __webpack_require__(37);
 
 var _combineReducers = __webpack_require__(394);
 
@@ -41765,7 +41932,7 @@ var _fillMode = __webpack_require__(306);
 
 var _fillMode2 = _interopRequireDefault(_fillMode);
 
-var _inputGroup = __webpack_require__(33);
+var _inputGroup = __webpack_require__(34);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
@@ -44746,7 +44913,7 @@ var PaperCanvas = function (_React$Component) {
 
                     if (layer.data.isRasterLayer) {
                         (0, _layer.clearRaster)();
-                    } else if (!layer.data.isBackgroundGuideLayer) {
+                    } else if (!layer.data.isBackgroundGuideLayer && !layer.data.isDragCrosshairLayer) {
                         layer.removeChildren();
                     }
                 }
@@ -48820,11 +48987,11 @@ var _selection = __webpack_require__(3);
 
 var _math = __webpack_require__(19);
 
-var _boundingBoxTool = __webpack_require__(31);
+var _boundingBoxTool = __webpack_require__(32);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
 
-var _nudgeTool = __webpack_require__(32);
+var _nudgeTool = __webpack_require__(33);
 
 var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
@@ -49143,6 +49310,7 @@ var ScaleTool = function () {
             this.pivot = boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
             this.origPivot = boundsPath.bounds[this._getOpposingRectCornerNameByIndex(index)].clone();
             this.corner = boundsPath.bounds[this._getRectCornerNameByIndex(index)].clone();
+            this.selectionAnchor = boundsPath.selectionAnchor;
             this.origSize = this.corner.subtract(this.pivot);
             this.origCenter = boundsPath.bounds.center;
             this.isCorner = this._isCorner(index);
@@ -49215,6 +49383,9 @@ var ScaleTool = function () {
                     // Reset position if we were just in alt
                     this.centered = false;
                     this.itemGroup.scale(1 / this.lastSx, 1 / this.lastSy, this.pivot);
+                    if (this.selectionAnchor) {
+                        this.selectionAnchor.scale(this.lastSx, this.lastSy);
+                    }
                     this.lastSx = 1;
                     this.lastSy = 1;
                 }
@@ -49243,6 +49414,9 @@ var ScaleTool = function () {
                 sy *= signy;
             }
             this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
+            if (this.selectionAnchor) {
+                this.selectionAnchor.scale(this.lastSx / sx, this.lastSy / sy);
+            }
             this.lastSx = sx;
             this.lastSy = sy;
         }
@@ -49754,11 +49928,11 @@ var _selection = __webpack_require__(3);
 
 var _math = __webpack_require__(19);
 
-var _boundingBoxTool = __webpack_require__(31);
+var _boundingBoxTool = __webpack_require__(32);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
 
-var _nudgeTool = __webpack_require__(32);
+var _nudgeTool = __webpack_require__(33);
 
 var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
@@ -50877,11 +51051,11 @@ var _layer = __webpack_require__(11);
 
 var _bitmap = __webpack_require__(21);
 
-var _boundingBoxTool = __webpack_require__(31);
+var _boundingBoxTool = __webpack_require__(32);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
 
-var _nudgeTool = __webpack_require__(32);
+var _nudgeTool = __webpack_require__(33);
 
 var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
@@ -53912,7 +54086,7 @@ var _colorPicker = __webpack_require__(101);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
-var _inputGroup = __webpack_require__(33);
+var _inputGroup = __webpack_require__(34);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
@@ -57758,13 +57932,13 @@ var _selection = __webpack_require__(3);
 
 var _snapping = __webpack_require__(311);
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(31);
 
 var _stylePath = __webpack_require__(9);
 
-var _strokeColor = __webpack_require__(34);
+var _strokeColor = __webpack_require__(35);
 
-var _strokeWidth = __webpack_require__(35);
+var _strokeWidth = __webpack_require__(36);
 
 var _modes3 = __webpack_require__(10);
 
@@ -58672,7 +58846,7 @@ var _input = __webpack_require__(67);
 
 var _input2 = _interopRequireDefault(_input);
 
-var _inputGroup = __webpack_require__(33);
+var _inputGroup = __webpack_require__(34);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
@@ -60601,7 +60775,7 @@ var _input = __webpack_require__(67);
 
 var _input2 = _interopRequireDefault(_input);
 
-var _inputGroup = __webpack_require__(33);
+var _inputGroup = __webpack_require__(34);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
@@ -60687,7 +60861,7 @@ var _rectangleOutlined = __webpack_require__(352);
 
 var _rectangleOutlined2 = _interopRequireDefault(_rectangleOutlined);
 
-var _strokeWidth = __webpack_require__(35);
+var _strokeWidth = __webpack_require__(36);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -61333,7 +61507,7 @@ var _dropdown = __webpack_require__(105);
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
-var _inputGroup = __webpack_require__(33);
+var _inputGroup = __webpack_require__(34);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
@@ -61684,7 +61858,7 @@ var _stylePath = __webpack_require__(9);
 
 var _fillColor = __webpack_require__(20);
 
-var _strokeColor = __webpack_require__(34);
+var _strokeColor = __webpack_require__(35);
 
 var _modes3 = __webpack_require__(10);
 
@@ -61886,11 +62060,11 @@ var _selection = __webpack_require__(3);
 
 var _math = __webpack_require__(19);
 
-var _boundingBoxTool = __webpack_require__(31);
+var _boundingBoxTool = __webpack_require__(32);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
 
-var _nudgeTool = __webpack_require__(32);
+var _nudgeTool = __webpack_require__(33);
 
 var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
@@ -62163,7 +62337,7 @@ var _stylePath = __webpack_require__(9);
 
 var _fillColor = __webpack_require__(20);
 
-var _strokeColor = __webpack_require__(34);
+var _strokeColor = __webpack_require__(35);
 
 var _modes3 = __webpack_require__(10);
 
@@ -62365,11 +62539,11 @@ var _selection = __webpack_require__(3);
 
 var _math = __webpack_require__(19);
 
-var _boundingBoxTool = __webpack_require__(31);
+var _boundingBoxTool = __webpack_require__(32);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
 
-var _nudgeTool = __webpack_require__(32);
+var _nudgeTool = __webpack_require__(33);
 
 var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
@@ -62799,9 +62973,9 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _item = __webpack_require__(37);
+var _item = __webpack_require__(30);
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(31);
 
 var _math = __webpack_require__(19);
 
@@ -64021,11 +64195,11 @@ var _hover = __webpack_require__(102);
 
 var _selection = __webpack_require__(3);
 
-var _boundingBoxTool = __webpack_require__(31);
+var _boundingBoxTool = __webpack_require__(32);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
 
-var _nudgeTool = __webpack_require__(32);
+var _nudgeTool = __webpack_require__(33);
 
 var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
@@ -64329,9 +64503,9 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _strokeColor = __webpack_require__(34);
+var _strokeColor = __webpack_require__(35);
 
-var _strokeWidth = __webpack_require__(35);
+var _strokeWidth = __webpack_require__(36);
 
 var _modals = __webpack_require__(61);
 
@@ -64494,7 +64668,7 @@ var _colorPicker = __webpack_require__(101);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
-var _inputGroup = __webpack_require__(33);
+var _inputGroup = __webpack_require__(34);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
@@ -64597,9 +64771,9 @@ var _parseColor = __webpack_require__(43);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
-var _strokeColor = __webpack_require__(34);
+var _strokeColor = __webpack_require__(35);
 
-var _strokeWidth = __webpack_require__(35);
+var _strokeWidth = __webpack_require__(36);
 
 var _strokeWidthIndicator = __webpack_require__(374);
 
@@ -64722,7 +64896,7 @@ var _input = __webpack_require__(67);
 
 var _input2 = _interopRequireDefault(_input);
 
-var _inputGroup = __webpack_require__(33);
+var _inputGroup = __webpack_require__(34);
 
 var _inputGroup2 = _interopRequireDefault(_inputGroup);
 
@@ -64730,7 +64904,7 @@ var _liveInputHoc = __webpack_require__(113);
 
 var _liveInputHoc2 = _interopRequireDefault(_liveInputHoc);
 
-var _strokeWidth = __webpack_require__(35);
+var _strokeWidth = __webpack_require__(36);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64805,7 +64979,7 @@ var _font = __webpack_require__(69);
 
 var _fillColor = __webpack_require__(20);
 
-var _strokeColor = __webpack_require__(34);
+var _strokeColor = __webpack_require__(35);
 
 var _modes3 = __webpack_require__(10);
 
@@ -65066,15 +65240,15 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _selection = __webpack_require__(3);
 
-var _boundingBoxTool = __webpack_require__(31);
+var _boundingBoxTool = __webpack_require__(32);
 
 var _boundingBoxTool2 = _interopRequireDefault(_boundingBoxTool);
 
-var _nudgeTool = __webpack_require__(32);
+var _nudgeTool = __webpack_require__(33);
 
 var _nudgeTool2 = _interopRequireDefault(_nudgeTool);
 
-var _guides = __webpack_require__(30);
+var _guides = __webpack_require__(31);
 
 var _layer = __webpack_require__(11);
 
@@ -66468,7 +66642,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(36);
+var _redux = __webpack_require__(37);
 
 var _modes = __webpack_require__(10);
 
@@ -66586,7 +66760,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(36);
+var _redux = __webpack_require__(37);
 
 var _eyeDropper = __webpack_require__(45);
 
@@ -66604,11 +66778,11 @@ var _selectionGradientType = __webpack_require__(23);
 
 var _selectionGradientType2 = _interopRequireDefault(_selectionGradientType);
 
-var _strokeColor = __webpack_require__(34);
+var _strokeColor = __webpack_require__(35);
 
 var _strokeColor2 = _interopRequireDefault(_strokeColor);
 
-var _strokeWidth = __webpack_require__(35);
+var _strokeWidth = __webpack_require__(36);
 
 var _strokeWidth2 = _interopRequireDefault(_strokeWidth);
 
@@ -66634,7 +66808,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(36);
+var _redux = __webpack_require__(37);
 
 var _fillModeGradientType = __webpack_require__(38);
 
@@ -66662,7 +66836,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(36);
+var _redux = __webpack_require__(37);
 
 var _intl = __webpack_require__(114);
 
