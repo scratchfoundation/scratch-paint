@@ -172,27 +172,29 @@ class MoveTool {
             this.firstDrag = false;
         }
 
+        // The rotation center crosshair should be opaque over the entire selection bounding box, and fade out to
+        // totally transparent outside the selection bounding box.
         let opacityMultiplier = 1;
         const newCenter = this.selectionCenter.add(dragVector);
         if ((CENTER.y < bounds.top && CENTER.x < bounds.left) ||
             (CENTER.y > bounds.bottom && CENTER.x < bounds.left) ||
             (CENTER.y < bounds.top && CENTER.x > bounds.right) ||
             (CENTER.y > bounds.bottom && CENTER.x > bounds.right)) {
-            // 4 corners
+            // rotation center is to one of the 4 corners of the selection bounding box
             const distX = Math.max(CENTER.x - bounds.right, bounds.left - CENTER.x);
             const distY = Math.max(CENTER.y - bounds.bottom, bounds.top - CENTER.y);
             const dist = Math.sqrt((distX * distX) + (distY * distY));
             opacityMultiplier =
                 Math.max(0, (1 - (dist / (FADE_DISTANCE / paper.view.zoom))));
         } else if (CENTER.y < bounds.top || CENTER.y > bounds.bottom) {
-            // above or below
+            // rotation center is above or below the selection bounding box
             opacityMultiplier = Math.max(0,
                 (1 - ((Math.abs(CENTER.y - newCenter.y) - (bounds.height / 2)) / (FADE_DISTANCE / paper.view.zoom))));
         } else if (CENTER.x < bounds.left || CENTER.x > bounds.right) {
-            // left or right
+            // rotation center is left or right of the selection bounding box
             opacityMultiplier = Math.max(0,
                 (1 - ((Math.abs(CENTER.x - newCenter.x) - (bounds.width / 2)) / (FADE_DISTANCE / paper.view.zoom))));
-        } // else within selection bounds, always show drag crosshair at full opacity
+        } // else the rotation center is within selection bounds, always show drag crosshair at full opacity
         getDragCrosshairLayer().opacity = CROSSHAIR_FULL_OPACITY * opacityMultiplier;
 
     }
