@@ -4,6 +4,7 @@ import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER} from './view';
 import {isGroupItem} from './item';
 
 const CROSSHAIR_SIZE = 16;
+const CROSSHAIR_FULL_OPACITY = 0.75;
 
 const _getLayer = function (layerString) {
     for (const layer of paper.project.layers) {
@@ -234,7 +235,7 @@ const _makeCrosshair = function (opacity, parent) {
 
 const _makeDragCrosshairLayer = function () {
     const dragCrosshairLayer = new paper.Layer();
-    _makeCrosshair(0.65, dragCrosshairLayer);
+    _makeCrosshair(CROSSHAIR_FULL_OPACITY, dragCrosshairLayer);
     dragCrosshairLayer.data.isDragCrosshairLayer = true;
     dragCrosshairLayer.visible = false;
     return dragCrosshairLayer;
@@ -270,6 +271,7 @@ const setupLayers = function () {
 
 export {
     CROSSHAIR_SIZE,
+    CROSSHAIR_FULL_OPACITY,
     createCanvas,
     hideGuideLayers,
     showGuideLayers,
