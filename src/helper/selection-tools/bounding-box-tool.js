@@ -4,7 +4,6 @@ import keyMirror from 'keymirror';
 import {getSelectedRootItems} from '../selection';
 import {getGuideColor, removeBoundsPath, removeBoundsHandles} from '../guides';
 import {getGuideLayer, setGuideItem} from '../layer';
-import selectionAnchorIcon from '../icons/selection-anchor-expanded.svg';
 
 import Cursors from '../../lib/cursors';
 import ScaleTool from './scale-tool';
@@ -80,17 +79,6 @@ class BoundingBoxTool {
      * @return {boolean} True if there was a hit, false otherwise
      */
     onMouseDown (event, clone, multiselect, doubleClicked, hitOptions) {
-        if (!anchorIcon) {
-            paper.project.importSVG(selectionAnchorIcon, {
-                onLoad: function (item) {
-                    anchorIcon = item;
-                    item.visible = false;
-                    item.parent = getGuideLayer();
-                    setGuideItem(item);
-                }
-            });
-        }
-
         if (event.event.button > 0) return; // only first mouse button
         const {hitResult, mode} = this._determineMode(event, multiselect, hitOptions);
         if (!hitResult) {
