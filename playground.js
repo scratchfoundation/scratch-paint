@@ -20906,7 +20906,7 @@ exports.changeMode = changeMode;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.setupLayers = exports.setGuideItem = exports.getRaster = exports.clearRaster = exports.getBackgroundGuideLayer = exports.getGuideLayer = exports.getDragCrosshairLayer = exports.showGuideLayers = exports.hideGuideLayers = exports.createCanvas = exports.CROSSHAIR_SIZE = undefined;
+exports.setupLayers = exports.setGuideItem = exports.getRaster = exports.clearRaster = exports.getBackgroundGuideLayer = exports.getGuideLayer = exports.getDragCrosshairLayer = exports.showGuideLayers = exports.hideGuideLayers = exports.createCanvas = exports.CROSSHAIR_FULL_OPACITY = exports.CROSSHAIR_SIZE = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -20923,6 +20923,7 @@ var _item = __webpack_require__(30);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var CROSSHAIR_SIZE = 16;
+var CROSSHAIR_FULL_OPACITY = 0.75;
 
 var _getLayer = function _getLayer(layerString) {
     var _iteratorNormalCompletion = true;
@@ -21173,7 +21174,7 @@ var _makeCrosshair = function _makeCrosshair(opacity, parent) {
 
 var _makeDragCrosshairLayer = function _makeDragCrosshairLayer() {
     var dragCrosshairLayer = new _paper2.default.Layer();
-    _makeCrosshair(0.65, dragCrosshairLayer);
+    _makeCrosshair(CROSSHAIR_FULL_OPACITY, dragCrosshairLayer);
     dragCrosshairLayer.data.isDragCrosshairLayer = true;
     dragCrosshairLayer.visible = false;
     return dragCrosshairLayer;
@@ -21208,6 +21209,7 @@ var setupLayers = function setupLayers() {
 };
 
 exports.CROSSHAIR_SIZE = CROSSHAIR_SIZE;
+exports.CROSSHAIR_FULL_OPACITY = CROSSHAIR_FULL_OPACITY;
 exports.createCanvas = createCanvas;
 exports.hideGuideLayers = hideGuideLayers;
 exports.showGuideLayers = showGuideLayers;
@@ -25995,14 +25997,19 @@ var BoundingBoxTool = function () {
                 this.boundsRect.curves[6].divideAtTime(0.5);
                 this.boundsPath.addChild(this.boundsRect);
 
-                var anchorIcon = new _paper2.default.Group();
-                var vRect = new _paper2.default.Rectangle(new _paper2.default.Point(-1, -6), new _paper2.default.Size(2, 12));
-                var vRoundRect = new _paper2.default.Path.Rectangle(vRect, new _paper2.default.Size(1, 1));
-                var hRect = new _paper2.default.Rectangle(new _paper2.default.Point(-6, -1), new _paper2.default.Size(12, 2));
-                var hRoundRect = new _paper2.default.Path.Rectangle(hRect, new _paper2.default.Size(1, 1));
-                anchorIcon = vRoundRect.unite(hRoundRect);
-                vRoundRect.remove();
-                hRoundRect.remove();
+                var vRect = new _paper2.default.Path.Rectangle({
+                    point: [-1, -6],
+                    size: [2, 12],
+                    radius: 1,
+                    insert: false
+                });
+                var hRect = new _paper2.default.Path.Rectangle({
+                    point: [-6, -1],
+                    size: [12, 2],
+                    radius: 1,
+                    insert: false
+                });
+                var anchorIcon = vRect.unite(hRect);
 
                 this.boundsPath.addChild(anchorIcon);
                 this.boundsPath.selectionAnchor = anchorIcon;
@@ -31459,6 +31466,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /** Snap to align selection center to rotation center within this distance */
 var SNAPPING_THRESHOLD = 4;
+var FADE_DISTANCE = 10;
 
 /**
  * Tool to handle dragging an item to reposition it in a selection mode.
@@ -31620,7 +31628,11 @@ var MoveTool = function () {
                     snapVector = _view.CENTER.subtract(this.selectionCenter);
                 }
             }
+            if (this.selectedItems.length === 0) {
+                return;
+            }
 
+            var bounds = void 0;
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;
             var _iteratorError2 = undefined;
@@ -31641,6 +31653,12 @@ var MoveTool = function () {
                         item.position = item.data.origPos.add((0, _math.snapDeltaToAngle)(dragVector, Math.PI / 4));
                     } else {
                         item.position = item.data.origPos.add(dragVector);
+                    }
+
+                    if (bounds) {
+                        bounds = bounds.unite(item.bounds);
+                    } else {
+                        bounds = item.bounds;
                     }
                 }
             } catch (err) {
@@ -31663,8 +31681,25 @@ var MoveTool = function () {
                 (0, _layer.getDragCrosshairLayer)().visible = true;
                 this.firstDrag = false;
             }
-            var opacity = Math.max(0, 1 - _view.CENTER.getDistance(this.selectionCenter.add(dragVector)) / _view.CENTER.x * (4 * _paper2.default.view.zoom));
-            (0, _layer.getDragCrosshairLayer)().opacity = opacity;
+
+            // The rotation center crosshair should be opaque over the entire selection bounding box, and fade out to
+            // totally transparent outside the selection bounding box.
+            var opacityMultiplier = 1;
+            var newCenter = this.selectionCenter.add(dragVector);
+            if (_view.CENTER.y < bounds.top && _view.CENTER.x < bounds.left || _view.CENTER.y > bounds.bottom && _view.CENTER.x < bounds.left || _view.CENTER.y < bounds.top && _view.CENTER.x > bounds.right || _view.CENTER.y > bounds.bottom && _view.CENTER.x > bounds.right) {
+                // rotation center is to one of the 4 corners of the selection bounding box
+                var distX = Math.max(_view.CENTER.x - bounds.right, bounds.left - _view.CENTER.x);
+                var distY = Math.max(_view.CENTER.y - bounds.bottom, bounds.top - _view.CENTER.y);
+                var dist = Math.sqrt(distX * distX + distY * distY);
+                opacityMultiplier = Math.max(0, 1 - dist / (FADE_DISTANCE / _paper2.default.view.zoom));
+            } else if (_view.CENTER.y < bounds.top || _view.CENTER.y > bounds.bottom) {
+                // rotation center is above or below the selection bounding box
+                opacityMultiplier = Math.max(0, 1 - (Math.abs(_view.CENTER.y - newCenter.y) - bounds.height / 2) / (FADE_DISTANCE / _paper2.default.view.zoom));
+            } else if (_view.CENTER.x < bounds.left || _view.CENTER.x > bounds.right) {
+                // rotation center is left or right of the selection bounding box
+                opacityMultiplier = Math.max(0, 1 - (Math.abs(_view.CENTER.x - newCenter.x) - bounds.width / 2) / (FADE_DISTANCE / _paper2.default.view.zoom));
+            } // else the rotation center is within selection bounds, always show drag crosshair at full opacity
+            (0, _layer.getDragCrosshairLayer)().opacity = _layer.CROSSHAIR_FULL_OPACITY * opacityMultiplier;
         }
     }, {
         key: 'onMouseUp',
