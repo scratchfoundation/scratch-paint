@@ -212,15 +212,20 @@ class BoundingBoxTool {
             this.boundsRect.curves[4].divideAtTime(0.5);
             this.boundsRect.curves[6].divideAtTime(0.5);
             this.boundsPath.addChild(this.boundsRect);
-            
-            let anchorIcon = new paper.Group();
-            const vRect = new paper.Rectangle(new paper.Point(-1, -6), new paper.Size(2, 12));
-            const vRoundRect = new paper.Path.Rectangle(vRect, new paper.Size(1, 1));
-            const hRect = new paper.Rectangle(new paper.Point(-6, -1), new paper.Size(12, 2));
-            const hRoundRect = new paper.Path.Rectangle(hRect, new paper.Size(1, 1));
-            anchorIcon = vRoundRect.unite(hRoundRect);
-            vRoundRect.remove();
-            hRoundRect.remove();
+
+            const vRect = new paper.Path.Rectangle({
+                point: [-1, -6],
+                size: [2, 12],
+                radius: 1,
+                insert: false
+            });
+            const hRect = new paper.Path.Rectangle({
+                point: [-6, -1],
+                size: [12, 2],
+                radius: 1,
+                insert: false
+            });
+            const anchorIcon = vRect.unite(hRect);
 
             this.boundsPath.addChild(anchorIcon);
             this.boundsPath.selectionAnchor = anchorIcon;
