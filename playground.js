@@ -22941,7 +22941,7 @@ exports.selectAllBitmap = selectAllBitmap;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.zoomToFit = exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resetZoom = exports.pan = exports.clampViewBounds = exports.SVG_ART_BOARD_HEIGHT = exports.SVG_ART_BOARD_WIDTH = exports.CENTER = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = undefined;
+exports.zoomToFit = exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resizeCrosshair = exports.resetZoom = exports.pan = exports.clampViewBounds = exports.SVG_ART_BOARD_HEIGHT = exports.SVG_ART_BOARD_WIDTH = exports.CENTER = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -22988,7 +22988,7 @@ var clampViewBounds = function clampViewBounds() {
     }
 };
 
-var _resizeCrosshair = function _resizeCrosshair() {
+var resizeCrosshair = function resizeCrosshair() {
     if ((0, _layer.getDragCrosshairLayer)() && (0, _layer.getDragCrosshairLayer)().dragCrosshair) {
         (0, _layer.getDragCrosshairLayer)().dragCrosshair.scale(_layer.CROSSHAIR_SIZE / (0, _layer.getDragCrosshairLayer)().dragCrosshair.bounds.width / _paper2.default.view.zoom);
     }
@@ -23009,7 +23009,7 @@ var zoomOnFixedPoint = function zoomOnFixedPoint(deltaZoom, fixedPoint) {
     view.zoom = newZoom;
     view.translate(postZoomOffset.multiply(-1));
     clampViewBounds();
-    _resizeCrosshair();
+    resizeCrosshair();
 };
 
 // Zoom keeping the selection center (if any) fixed.
@@ -23056,7 +23056,7 @@ var zoomOnSelection = function zoomOnSelection(deltaZoom) {
 
 var resetZoom = function resetZoom() {
     _paper2.default.project.view.zoom = .5;
-    _resizeCrosshair();
+    resizeCrosshair();
     clampViewBounds();
 };
 
@@ -23081,7 +23081,7 @@ var zoomToFit = function zoomToFit(isBitmap) {
         if (ratio < 1) {
             _paper2.default.view.center = bounds.center;
             _paper2.default.view.zoom = _paper2.default.view.zoom / ratio;
-            _resizeCrosshair();
+            resizeCrosshair();
             clampViewBounds();
         }
     }
@@ -23095,6 +23095,7 @@ exports.SVG_ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT;
 exports.clampViewBounds = clampViewBounds;
 exports.pan = pan;
 exports.resetZoom = resetZoom;
+exports.resizeCrosshair = resizeCrosshair;
 exports.zoomOnSelection = zoomOnSelection;
 exports.zoomOnFixedPoint = zoomOnFixedPoint;
 exports.zoomToFit = zoomToFit;
@@ -45017,6 +45018,7 @@ var PaperCanvas = function (_React$Component) {
             if (this.shouldZoomToFit instanceof _paper2.default.Matrix) {
                 _paper2.default.view.matrix = this.shouldZoomToFit;
                 this.props.updateViewBounds(_paper2.default.view.matrix);
+                (0, _view.resizeCrosshair)();
             } else if (this.shouldZoomToFit === true) {
                 (0, _view.zoomToFit)(isBitmapMode);
                 this.props.updateViewBounds(_paper2.default.view.matrix);
