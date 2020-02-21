@@ -4,10 +4,12 @@ const UNDO = 'scratch-paint/undo/UNDO';
 const REDO = 'scratch-paint/undo/REDO';
 const SNAPSHOT = 'scratch-paint/undo/SNAPSHOT';
 const CLEAR = 'scratch-paint/undo/CLEAR';
+const SWITCH_COSTUME = 'scratch-paint/undo/SWITCH_COSTUME';
 const MAX_STACK_SIZE = 100;
 const initialState = {
     stack: [],
-    pointer: -1
+    pointer: -1,
+    imageId: ''
 };
 
 const reducer = function (state, action) {
@@ -18,19 +20,25 @@ const reducer = function (state, action) {
             log.warn(`Can't undo, undo stack is empty`);
             return state;
         }
-        return {
-            stack: state.stack,
-            pointer: state.pointer - 1
-        };
+        return Object.assign(
+            {},
+            state,
+            {
+                stack: state.stack,
+                pointer: state.pointer - 1
+            });
     case REDO:
         if (state.pointer <= -1 || state.pointer === state.stack.length - 1) {
             log.warn(`Can't redo, redo stack is empty`);
             return state;
         }
-        return {
-            stack: state.stack,
-            pointer: state.pointer + 1
-        };
+        return Object.assign(
+            {},
+            state,
+            {
+                stack: state.stack,
+                pointer: state.pointer + 1
+            });
     case SNAPSHOT:
         if (!action.snapshot) {
             log.warn(`Couldn't create undo snapshot, no data provided`);
@@ -38,19 +46,30 @@ const reducer = function (state, action) {
         }
         // Overflowed or about to overflow
         if (state.pointer >= MAX_STACK_SIZE - 1) {
-            return {
-                // Make a stack of size MAX_STACK_SIZE, cutting off the oldest snapshots.
-                stack: state.stack.slice(state.pointer - MAX_STACK_SIZE + 2, state.pointer + 1).concat(action.snapshot),
-                pointer: MAX_STACK_SIZE - 1
-            };
+            return Object.assign(
+                {},
+                state,
+                {
+                    // Make a stack of size MAX_STACK_SIZE, cutting off the oldest snapshots.
+                    stack: state.stack.slice(
+                        state.pointer - MAX_STACK_SIZE + 2,
+                        state.pointer + 1
+                    ).concat(action.snapshot),
+                    pointer: MAX_STACK_SIZE - 1
+                });
         }
-        return {
-            // Performing an action clears the redo stack
-            stack: state.stack.slice(0, state.pointer + 1).concat(action.snapshot),
-            pointer: state.pointer + 1
-        };
+        return Object.assign(
+            {},
+            state,
+            {
+                // Performing an action clears the redo stack
+                stack: state.stack.slice(0, state.pointer + 1).concat(action.snapshot),
+                pointer: state.pointer + 1
+            });
     case CLEAR:
         return initialState;
+    case SWITCH_COSTUME:
+        return Object.assign({}, state, {imageId: action.imageId});
     default:
         return state;
     }
@@ -88,6 +107,12 @@ const clearUndoState = function () {
         type: CLEAR
     };
 };
+const switchCostume = function (imageId) {
+    return {
+        type: SWITCH_COSTUME,
+        imageId
+    };
+};
 
 export {
     reducer as default,
@@ -95,6 +120,7 @@ export {
     redo,
     undoSnapshot,
     clearUndoState,
+    switchCostume,
     MAX_STACK_SIZE,
     UNDO,
     REDO
