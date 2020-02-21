@@ -7,7 +7,7 @@ import Formats from '../lib/format';
 import log from '../log/log';
 
 import {performSnapshot} from '../helper/undo';
-import {undoSnapshot, clearUndoState, switchCostume} from '../reducers/undo';
+import {undoSnapshot, clearUndoState, changeImageId} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, getRaster, setupLayers} from '../helper/layer';
 import {clearSelectedItems} from '../reducers/selected-items';
@@ -112,7 +112,7 @@ class PaperCanvas extends React.Component {
         this.props.clearSelectedItems();
         this.props.clearHoveredItem();
         this.props.clearPasteOffset();
-        this.props.switchCostume(newImageId);
+        this.props.changeImageId(newImageId);
         this.importImage(format, image, rotationCenterX, rotationCenterY);
     }
     importImage (format, image, rotationCenterX, rotationCenterY) {
@@ -302,7 +302,7 @@ PaperCanvas.propTypes = {
     rotationCenterY: PropTypes.number,
     saveZoomLevel: PropTypes.func.isRequired,
     setZoomLevelId: PropTypes.func.isRequired,
-    switchCostume: PropTypes.func.isRequired,
+    changeImageId: PropTypes.func.isRequired,
     undoSnapshot: PropTypes.func.isRequired,
     updateViewBounds: PropTypes.func.isRequired,
     zoomLevelId: PropTypes.string,
@@ -342,8 +342,8 @@ const mapDispatchToProps = dispatch => ({
     setZoomLevelId: zoomLevelId => {
         dispatch(setZoomLevelId(zoomLevelId));
     },
-    switchCostume: imageId => {
-        dispatch(switchCostume(imageId));
+    changeImageId: imageId => {
+        dispatch(changeImageId(imageId));
     },
     updateViewBounds: matrix => {
         dispatch(updateViewBounds(matrix));

@@ -4,7 +4,7 @@ const UNDO = 'scratch-paint/undo/UNDO';
 const REDO = 'scratch-paint/undo/REDO';
 const SNAPSHOT = 'scratch-paint/undo/SNAPSHOT';
 const CLEAR = 'scratch-paint/undo/CLEAR';
-const SWITCH_COSTUME = 'scratch-paint/undo/SWITCH_COSTUME';
+const CHANGE_IMAGE_ID = 'scratch-paint/undo/CHANGE_IMAGE_ID';
 const MAX_STACK_SIZE = 100;
 const initialState = {
     stack: [],
@@ -68,7 +68,7 @@ const reducer = function (state, action) {
             });
     case CLEAR:
         return initialState;
-    case SWITCH_COSTUME:
+    case CHANGE_IMAGE_ID:
         return Object.assign({}, state, {imageId: action.imageId});
     default:
         return state;
@@ -107,9 +107,9 @@ const clearUndoState = function () {
         type: CLEAR
     };
 };
-const switchCostume = function (imageId) {
+const changeImageId = function (imageId) {
     return {
-        type: SWITCH_COSTUME,
+        type: CHANGE_IMAGE_ID,
         imageId
     };
 };
@@ -120,7 +120,7 @@ export {
     redo,
     undoSnapshot,
     clearUndoState,
-    switchCostume,
+    changeImageId,
     MAX_STACK_SIZE,
     UNDO,
     REDO
