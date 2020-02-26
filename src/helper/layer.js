@@ -4,7 +4,7 @@ import {ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPA
 import {isGroupItem} from './item';
 
 const CROSSHAIR_SIZE = 16;
-const CROSSHAIR_FULL_OPACITY = 0.65;
+const CROSSHAIR_FULL_OPACITY = 0.75;
 
 const _getLayer = function (layerString) {
     for (const layer of paper.project.layers) {

@@ -163,6 +163,8 @@ class PaperCanvas extends React.Component {
     maybeZoomToFit (isBitmapMode) {
         if (this.shouldZoomToFit instanceof paper.Matrix) {
             paper.view.matrix = this.shouldZoomToFit;
+            this.props.updateViewBounds(paper.view.matrix);
+            resizeCrosshair();
         } else if (this.shouldZoomToFit === true) {
             zoomToFit(isBitmapMode);
         }
