@@ -116,7 +116,7 @@ const UpdateImageHOC = function (WrappedComponent) {
             }
         }
         handleUpdateVector (skipSnapshot) {
-            // Remove viewbox (this would make it export at 2048 x 2048)
+            // Remove viewbox (this would make it export at MAX_WORKSPACE_BOUNDS)
             let workspaceMask;
             if (paper.project.activeLayer.clipped) {
                 for (const child of paper.project.activeLayer.children) {

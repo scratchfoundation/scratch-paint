@@ -11,7 +11,7 @@ import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
 import {clearRaster, getRaster, setupLayers} from '../helper/layer';
 import {clearSelectedItems} from '../reducers/selected-items';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_DIMENSION} from '../helper/view';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS} from '../helper/view';
 import {clampViewBounds, resetZoom, setWorkspaceBounds, zoomToFit} from '../helper/view';
 import {ensureClockwise, scaleWithStrokes} from '../helper/math';
 import {clearHoveredItem} from '../reducers/hover';
@@ -243,8 +243,8 @@ class PaperCanvas extends React.Component {
         mask.locked = true;
         mask.matrix = new paper.Matrix(); // Identity
         // Set the artwork to get clipped at the max costume size
-        mask.size.height = MAX_DIMENSION;
-        mask.size.width = MAX_DIMENSION;
+        mask.size.height = MAX_WORKSPACE_BOUNDS.height;
+        mask.size.width = MAX_WORKSPACE_BOUNDS.width;
         mask.setPosition(CENTER);
         paper.project.activeLayer.addChild(mask);
         mask.clipMask = true;

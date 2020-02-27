@@ -17,13 +17,12 @@ const PADDING_PERCENT = 25; // Padding as a percent of the max of width/height o
 const BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
                         // zoomed in for tiny costumes.
-const MAX_DIMENSION = 2048;
 const ART_BOARD_BOUNDS = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
 const MAX_WORKSPACE_BOUNDS = new paper.Rectangle(
-    (ART_BOARD_WIDTH / 2) - (MAX_DIMENSION / 2),
-    (ART_BOARD_HEIGHT / 2) - (MAX_DIMENSION / 2),
-    MAX_DIMENSION,
-    MAX_DIMENSION);
+    -ART_BOARD_WIDTH / 4,
+    -ART_BOARD_HEIGHT / 4,
+    ART_BOARD_WIDTH * 1.5,
+    ART_BOARD_HEIGHT * 1.5);
 
 let _workspaceBounds = ART_BOARD_BOUNDS;
 
@@ -192,7 +191,6 @@ export {
     CENTER,
     SVG_ART_BOARD_WIDTH,
     SVG_ART_BOARD_HEIGHT,
-    MAX_DIMENSION,
     MAX_WORKSPACE_BOUNDS,
     clampViewBounds,
     getActionBounds,
