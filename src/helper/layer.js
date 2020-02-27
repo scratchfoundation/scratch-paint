@@ -165,7 +165,7 @@ const _makeRasterLayer = function () {
     return rasterLayer;
 };
 
-const _makeBackgroundPaper = function (width, height, color) {
+const _makeBackgroundPaper = function (width, height, color, opacity) {
     // creates a checkerboard path of width * height squares in color on white
     let x = 0;
     let y = 0;
@@ -188,11 +188,14 @@ const _makeBackgroundPaper = function (width, height, color) {
     vRect.fillColor = '#fff';
     vRect.guide = true;
     vRect.locked = true;
+    vRect.position = CENTER;
     const vPath = new paper.Path(pathPoints);
     vPath.fillRule = 'evenodd';
     vPath.fillColor = color;
+    vPath.opacity = opacity;
     vPath.guide = true;
     vPath.locked = true;
+    vPath.position = CENTER;
     const vGroup = new paper.Group([vRect, vPath]);
     return vGroup;
 };
@@ -273,7 +276,7 @@ const _makeBackgroundGuideLayer = function () {
     vWorkspaceBounds.guide = true;
     vWorkspaceBounds.locked = true;
 
-    const vBackground = _makeBackgroundPaper(120, 90, '#F9F9F9');
+    const vBackground = _makeBackgroundPaper(180, 135, "#0062ff", 0.03);
     vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(8, 8);
     vBackground.guide = true;
