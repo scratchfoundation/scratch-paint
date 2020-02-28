@@ -196,7 +196,14 @@ const _makeBackgroundPaper = function (width, height, color, opacity) {
     vPath.guide = true;
     vPath.locked = true;
     vPath.position = CENTER;
-    const vGroup = new paper.Group([vRect, vPath]);
+    const mask = new paper.Shape.Rectangle(MAX_WORKSPACE_BOUNDS);
+    mask.position = CENTER;
+    mask.guide = true;
+    mask.locked = true;
+    mask.scale(1/8);
+    const vGroup = new paper.Group([vRect, vPath, mask]);
+    mask.clipMask = true;
+
     return vGroup;
 };
 
@@ -276,7 +283,7 @@ const _makeBackgroundGuideLayer = function () {
     vWorkspaceBounds.guide = true;
     vWorkspaceBounds.locked = true;
 
-    const vBackground = _makeBackgroundPaper(180, 135, "#0062ff", 0.03);
+    const vBackground = _makeBackgroundPaper(180, 136, "#0062ff", 0.03);
     vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(8, 8);
     vBackground.guide = true;
