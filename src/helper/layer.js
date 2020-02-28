@@ -283,7 +283,7 @@ const _makeBackgroundGuideLayer = function () {
     vWorkspaceBounds.guide = true;
     vWorkspaceBounds.locked = true;
 
-    const vBackground = _makeBackgroundPaper(180, 136, "#0062ff", 0.03);
+    const vBackground = _makeBackgroundPaper(180, 136, "#0062ff", 0.05);
     vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(8, 8);
     vBackground.guide = true;
