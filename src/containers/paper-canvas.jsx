@@ -76,7 +76,10 @@ class PaperCanvas extends React.Component {
     }
     componentWillUnmount () {
         this.clearQueuedImport();
-        this.props.saveZoomLevel();
+        // shouldZoomToFit means the zoom level hasn't been initialized yet
+        if (!this.shouldZoomToFit) {
+            this.props.saveZoomLevel();
+        }
         paper.remove();
     }
     clearQueuedImport () {
