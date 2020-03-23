@@ -67,7 +67,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-react": "^7.2.1",
     "gh-pages": "github:rschamp/gh-pages#publish-branch-to-subfolder",
-    "html-webpack-plugin": "3.2.0",
+    "html-webpack-plugin": "4.0.0",
     "jest": "^22.2.2",
     "lodash.defaultsdeep": "4.6.1",
     "mkdirp": "^1.0.3",
