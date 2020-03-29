@@ -4,6 +4,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import paper from '@scratch/paper';
 import Formats from '../lib/format';
+import uid from '../lib/uid';
 import log from '../log/log';
 
 import {performSnapshot} from '../helper/undo';
@@ -169,6 +170,13 @@ class PaperCanvas extends React.Component {
         if (svgAttrs && svgAttrs[0].indexOf('xmlns=') === -1) {
             svg = svg.replace(
                 '<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+        }
+        // 3. paper.js fails when an element's id is just number. if that happens, set it to random id.
+        if (svg.match(/<[\w]+[^>]* id=['"][\d]+['"]/) !== null) {
+            svg = svg.replace(
+                /(<[\w]+[^>]* id=['"])[\d]+(['"])/g,
+                (_, $0, $1) => `${$0}${uid()}${$1}`
+            );
         }
 
         // Get the origin which the viewBox is defined relative to. During import, Paper will translate
