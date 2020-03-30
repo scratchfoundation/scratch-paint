@@ -56,6 +56,9 @@ class ColorPickerComponent extends React.Component {
         return `linear-gradient(to left, ${stops.join(',')})`;
     }
     render () {
+        const swatchClickFactory = (color) => {
+            return () => this.props.onSwatch(color);
+        }
         return (
             <div
                 className={styles.colorPickerContainer}
@@ -178,6 +181,22 @@ class ColorPickerComponent extends React.Component {
                         )}
                     </div>
                 ) : null}
+                {this.props.colors ?
+                <div className={classNames(styles.swatches, styles.colorSwatches)}>
+                    {this.props.colors.map((color) => (
+                        <div
+                            className={classNames({
+                                [styles.swatch]: true,
+                                [styles.activeSwatch]: this.props.colorsMatch(this.props.color, color)
+                            })}
+                            style={{
+                                backgroundColor: parseColor(color).hex
+                            }}
+                            onClick={swatchClickFactory(color)}
+                        />
+                    ))}
+                </div> :
+                null}
                 <div className={styles.row}>
                     <div className={styles.rowHeader}>
                         <span className={styles.labelName}>
@@ -292,6 +311,8 @@ ColorPickerComponent.propTypes = {
     brightness: PropTypes.number.isRequired,
     color: PropTypes.string,
     color2: PropTypes.string,
+    colors: PropTypes.arrayOf(PropTypes.string).isRequired,
+    colorsMatch: PropTypes.func.isRequired,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     hue: PropTypes.number.isRequired,
@@ -309,6 +330,7 @@ ColorPickerComponent.propTypes = {
     onSelectColor: PropTypes.func.isRequired,
     onSelectColor2: PropTypes.func.isRequired,
     onSwap: PropTypes.func,
+    onSwatch: PropTypes.func.isRequired,
     onTransparent: PropTypes.func.isRequired,
     rtl: PropTypes.bool.isRequired,
     saturation: PropTypes.number.isRequired,

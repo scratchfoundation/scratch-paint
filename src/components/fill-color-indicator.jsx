@@ -28,6 +28,7 @@ const FillColorIndicatorComponent = props => (
                 <ColorPicker
                     color={props.fillColor}
                     color2={props.fillColor2}
+                    colors={props.colors}
                     gradientType={props.gradientType}
                     shouldShowGradientTools={props.shouldShowGradientTools}
                     onChangeColor={props.onChangeFillColor}
@@ -53,6 +54,7 @@ const FillColorIndicatorComponent = props => (
 
 FillColorIndicatorComponent.propTypes = {
     className: PropTypes.string,
+    colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     disabled: PropTypes.bool.isRequired,
     fillColor: PropTypes.string,
     fillColor2: PropTypes.string,

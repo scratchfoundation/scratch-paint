@@ -38,6 +38,7 @@ class ColorPicker extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
+            'colorsMatch',
             'getHsv',
             'handleChangeGradientTypeHorizontal',
             'handleChangeGradientTypeRadial',
@@ -46,6 +47,7 @@ class ColorPicker extends React.Component {
             'handleHueChange',
             'handleSaturationChange',
             'handleBrightnessChange',
+            'handleSwatch',
             'handleTransparent',
             'handleActivateEyeDropper'
         ]);
@@ -70,6 +72,12 @@ class ColorPicker extends React.Component {
                 brightness: hsv[2]
             });
         }
+    }
+    colorsMatch (hsv, colorString) {
+        const [hue, saturation, brightness] = colorStringToHsv(colorString);
+        return hsv.hue === hue &&
+            hsv.saturation === saturation &&
+            hsv.brightness === brightness;
     }
     getHsv (color) {
         const isTransparent = color === null;
@@ -99,6 +107,12 @@ class ColorPicker extends React.Component {
             this.state.brightness
         ));
     }
+    handleSwatch (color) {
+        const hsv = colorStringToHsv(color);
+        this.setState({hue: hsv[0], saturation: hsv[1], brightness: hsv[2]}, () => {
+            this.handleColorChange();
+        });
+    }
     handleTransparent () {
         this.props.onChangeColor(null);
     }
@@ -126,6 +140,8 @@ class ColorPicker extends React.Component {
                 brightness={this.state.brightness}
                 color={this.props.color}
                 color2={this.props.color2}
+                colors={this.props.colors}
+                colorsMatch={this.colorsMatch}
                 colorIndex={this.props.colorIndex}
                 gradientType={this.props.gradientType}
                 hue={this.state.hue}
@@ -145,6 +161,7 @@ class ColorPicker extends React.Component {
                 onSelectColor={this.props.onSelectColor}
                 onSelectColor2={this.props.onSelectColor2}
                 onSwap={this.props.onSwap}
+                onSwatch={this.handleSwatch}
                 onTransparent={this.handleTransparent}
             />
         );
@@ -154,6 +171,7 @@ class ColorPicker extends React.Component {
 ColorPicker.propTypes = {
     color: PropTypes.string,
     color2: PropTypes.string,
+    colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,

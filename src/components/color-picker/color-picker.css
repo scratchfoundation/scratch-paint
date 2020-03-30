@@ -4,6 +4,7 @@
 :global(.Popover-body) {
     background: white;
     border: 1px solid #ddd;
+    width: 236px;
     padding: 4px;
     border-radius: 4px;
     padding: 4px;
@@ -56,6 +57,13 @@
 
 .swatches {
     margin: 8px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.color-swatches {
+    margin-top: 16px;
+    margin-bottom:16px;
 }
 
 .swatch {
@@ -66,6 +74,7 @@
     box-sizing: content-box;
     display: flex;
     align-items: center;
+    margin: 2px;
 }
 
 .large-swatch-icon {

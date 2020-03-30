@@ -44,6 +44,32 @@ class FillColorIndicator extends React.Component {
             this._hasChanged = false;
         }
     }
+    getAllColors () {
+        const COLORS = {
+            RED:'#e24f27',
+            ORANGE:'#fb8c3c',
+            YELLOW:'#fdd73a',
+            GREEN:'#53de65',
+            TEAL:'#1ebcbc',
+            BLUE:'#2fadfc',
+            PURPLE:'#9966ff',
+            BLACK:'#000000',
+            WHITE:'#ffffff',
+            UMBER:'#4c392c',
+            CHOCOLATE:'#745137',
+            BROWN:'#b4875f',
+            TAN:'#ecc296',
+            PEACH:'#f6dcc4'
+        };
+        const colors = [];
+        for (let item in COLORS) {
+            if (isNaN(Number(item))) {
+                const color = parseColor(COLORS[item]).rgb;
+                colors.push(`rgb(${color[0]},${color[1]},${color[2]})`);
+            }
+        }
+        return colors;
+    }
     handleChangeFillColor (newColor) {
         // Apply color and update redux, but do not update svg until picker closes.
         const isDifferent = applyFillColorToSelection(
@@ -108,6 +134,7 @@ class FillColorIndicator extends React.Component {
         return (
             <FillColorIndicatorComponent
                 {...this.props}
+                colors={this.getAllColors()}
                 onChangeFillColor={this.handleChangeFillColor}
                 onChangeGradientType={this.handleChangeGradientType}
                 onCloseFillColor={this.handleCloseFillColor}
