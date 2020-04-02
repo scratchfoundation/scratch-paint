@@ -61,6 +61,7 @@ class ColorPicker extends React.Component {
         };
     }
     componentWillReceiveProps (newProps) {
+        // TODO colorsmatch does not support gradients
         const color = newProps.colorIndex === 0 ? this.props.color : this.props.color2;
         const newColor = newProps.colorIndex === 0 ? newProps.color : newProps.color2;
         const colorSetByEyedropper = this.props.isEyeDropping && color !== newColor;
