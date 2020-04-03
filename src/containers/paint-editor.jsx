@@ -20,6 +20,7 @@ import {setLayout} from '../reducers/layout';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
+import {convertBackgroundGuideLayer} from '../helper/layer';
 import {resetZoom, zoomOnSelection} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
@@ -108,8 +109,10 @@ class PaintEditor extends React.Component {
     componentWillReceiveProps (newProps) {
         if (!isBitmap(this.props.format) && isBitmap(newProps.format)) {
             this.switchModeForFormat(Formats.BITMAP);
+            convertBackgroundGuideLayer(Formats.BITMAP);
         } else if (!isVector(this.props.format) && isVector(newProps.format)) {
             this.switchModeForFormat(Formats.VECTOR);
+            convertBackgroundGuideLayer(Formats.VECTOR);
         }
         if (newProps.rtl !== this.props.rtl) {
             this.props.setLayout(newProps.rtl ? 'rtl' : 'ltr');
