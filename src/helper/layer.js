@@ -64,14 +64,20 @@ const getBackgroundGuideLayer = function () {
     return _getLayer('isBackgroundGuideLayer');
 };
 
-const convertBackgroundGuideLayer = function (format) {
+const _convertLayer = function (layer, format) {
     if (isVector(format)) {
-        getBackgroundGuideLayer().vectorBackground.visible = true;
-        getBackgroundGuideLayer().bitmapBackground.visible = false;
+        layer.vectorBackground.visible = true;
+        layer.bitmapBackground.visible = false;
     } else if (isBitmap(format)) {
-        getBackgroundGuideLayer().bitmapBackground.visible = true;
-        getBackgroundGuideLayer().vectorBackground.visible = false;
+        layer.bitmapBackground.visible = true;
+        layer.vectorBackground.visible = false;
+    } else {
+        console.warn("NO FORMAT");
     }
+}
+
+const convertBackgroundGuideLayer = function (format) {
+    _convertLayer(getBackgroundGuideLayer(), format);
 }
 
 const _makeGuideLayer = function () {
@@ -310,7 +316,7 @@ const _makeBackgroundGuideLayer = function (format) {
     bitmapBackground.locked = true;
     guideLayer.bitmapBackground = bitmapBackground;
 
-    convertBackgroundGuideLayer(format);
+    _convertLayer(guideLayer, format);
     
     _makeCrosshair(0.16, guideLayer);
 
@@ -318,8 +324,8 @@ const _makeBackgroundGuideLayer = function (format) {
     return guideLayer;
 };
 
-const setupLayers = function () {
-    const backgroundGuideLayer = _makeBackgroundGuideLayer();
+const setupLayers = function (format) {
+    const backgroundGuideLayer = _makeBackgroundGuideLayer(format);
     _makeRasterLayer();
     const paintLayer = _makePaintingLayer();
     const dragCrosshairLayer = _makeDragCrosshairLayer();
