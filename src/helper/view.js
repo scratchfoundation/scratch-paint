@@ -159,9 +159,17 @@ const pan = (dx, dy) => {
     clampViewBounds();
 };
 
-/* Mouse actions are clamped to action bounds */
-const getActionBounds = () =>
-    paper.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
+/**
+ * Mouse actions are clamped to action bounds
+ * @param {boolean} isBitmap True if the editor is in bitmap mode, false if it is in vector mode
+ */
+const getActionBounds = (isBitmap) => {
+    if (isBitmap) {
+        return ART_BOARD_BOUNDS;
+    } else {
+        return paper.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
+    }
+}
 
 const zoomToFit = isBitmap => {
     resetZoom();

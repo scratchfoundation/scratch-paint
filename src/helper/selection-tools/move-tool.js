@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
+import {BitmapModes} from '../../lib/modes';
 import {isGroup} from '../group';
 import {isCompoundPathItem, getRootItem} from '../item';
 import {checkPointsClose, snapDeltaToAngle} from '../math';
@@ -123,7 +124,7 @@ class MoveTool {
     }
     onMouseDrag (event) {
         const point = event.point;
-        const actionBounds = getActionBounds();
+        const actionBounds = getActionBounds(this.mode in BitmapModes);
 
         point.x = Math.max(actionBounds.left, Math.min(point.x, actionBounds.right));
         point.y = Math.max(actionBounds.top, Math.min(point.y, actionBounds.bottom));

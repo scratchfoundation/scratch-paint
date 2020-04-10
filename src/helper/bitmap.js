@@ -407,7 +407,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
             } else {
                 // Resize mask for bitmap bounds
                 item.size.height = ART_BOARD_HEIGHT;
-                item.size.width = ART_BOARD_HEIGHT
+                item.size.width = ART_BOARD_WIDTH;
                 item.setPosition(CENTER);
             }
         }

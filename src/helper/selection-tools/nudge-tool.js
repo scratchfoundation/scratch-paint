@@ -1,6 +1,7 @@
 import paper from '@scratch/paper';
 import {getSelectedRootItems} from '../selection';
 import {getActionBounds} from '../view';
+import {BitmapModes} from '../../lib/modes';
 
 const NUDGE_MORE_MULTIPLIER = 15;
 
@@ -10,10 +11,12 @@ const NUDGE_MORE_MULTIPLIER = 15;
  */
 class NudgeTool {
     /**
+     * @param {Mode} mode Paint editor mode
      * @param {function} boundingBoxTool to control the bounding box
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (boundingBoxTool, onUpdateImage) {
+    constructor (mode, boundingBoxTool, onUpdateImage) {
+        this.isBitmap = mode in BitmapModes;
         this.boundingBoxTool = boundingBoxTool;
         this.onUpdateImage = onUpdateImage;
     }
@@ -38,7 +41,7 @@ class NudgeTool {
                 rect = item.bounds;
             }
         }
-        const bounds = getActionBounds();
+        const bounds = getActionBounds(isBitmap(this.format));
         const bottom = bounds.bottom - rect.top - 1;
         const top = bounds.top - rect.bottom + 1;
         const left = bounds.left - rect.right + 1;
