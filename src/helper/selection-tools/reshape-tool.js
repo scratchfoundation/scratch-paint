@@ -74,7 +74,9 @@ class ReshapeTool extends paper.Tool {
         this.onKeyUp = this.handleKeyUp;
         this.onKeyDown = this.handleKeyDown;
 
-        paper.settings.handleSize = 8;
+        // A handle's size is given in diameter, and each handle has a 2.5-pixel stroke that isn't part of its size.
+        // Size the handles such that clicking on either the stroke or the handle itself will be registered as a drag
+        paper.settings.handleSize = (ReshapeTool.TOLERANCE * 2) - 2.5;
     }
     /**
      * Returns the hit options for segments to use when conducting hit tests. Segments are only visible
