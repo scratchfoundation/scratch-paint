@@ -33,7 +33,7 @@ const ReshapeModes = keyMirror({
 class ReshapeTool extends paper.Tool {
     /** Distance within which mouse is considered to be hitting an item */
     static get TOLERANCE () {
-        return 4;
+        return 5.25;
     }
     /** Clicks registered within this amount of time are registered as double clicks */
     static get DOUBLE_CLICK_MILLIS () {
