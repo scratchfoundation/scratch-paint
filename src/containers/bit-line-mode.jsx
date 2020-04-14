@@ -94,7 +94,7 @@ BitLineMode.propTypes = {
 
 const mapStateToProps = state => ({
     bitBrushSize: state.scratchPaint.bitBrushSize,
-    color: state.scratchPaint.color.fillColor,
+    color: state.scratchPaint.color.fillColor.primary,
     isBitLineModeActive: state.scratchPaint.mode === Modes.BIT_LINE
 });
 const mapDispatchToProps = dispatch => ({

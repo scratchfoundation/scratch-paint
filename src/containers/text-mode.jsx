@@ -82,7 +82,8 @@ class TextMode extends React.Component {
         // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
         // If exactly one of fill or stroke color is set, set the other one to transparent.
         // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
-        const {fillColor, strokeColor, strokeWidth} = nextProps.colorState;
+        const {strokeColor, strokeWidth} = nextProps.colorState;
+        const fillColor = this.props.colorState.fillColor.primary;
         const fillColorPresent = fillColor !== MIXED && fillColor !== null;
         const strokeColorPresent = nextProps.isBitmap ? false :
             strokeColor !== MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
@@ -143,7 +144,10 @@ TextMode.propTypes = {
     clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
-        fillColor: PropTypes.string,
+        fillColor: PropTypes.shape({
+            primary: PropTypes.string,
+            secondary: PropTypes.string
+        }),
         strokeColor: PropTypes.string,
         strokeWidth: PropTypes.number
     }).isRequired,

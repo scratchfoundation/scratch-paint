@@ -502,8 +502,9 @@ const styleCursorPreview = function (path, options) {
     }
 };
 
+// TODO: style using gradient?
 const styleShape = function (path, options) {
-    path.fillColor = options.fillColor;
+    path.fillColor = options.fillColor.primary;
     path.strokeColor = options.strokeColor;
     path.strokeWidth = options.strokeWidth;
 };

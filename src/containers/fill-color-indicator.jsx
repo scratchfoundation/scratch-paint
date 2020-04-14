@@ -5,8 +5,7 @@ import bindAll from 'lodash.bindall';
 import parseColor from 'parse-color';
 
 import {changeColorIndex} from '../reducers/color-index';
-import {changeFillColor} from '../reducers/fill-color';
-import {changeFillColor2} from '../reducers/fill-color-2';
+import {changeFillColor, changeFillColor2} from '../reducers/fill-color';
 import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {openFillColor, closeFillColor} from '../reducers/modals';
 import {getSelectedLeafItems} from '../helper/selection';
@@ -121,8 +120,8 @@ class FillColorIndicator extends React.Component {
 const mapStateToProps = state => ({
     colorIndex: state.scratchPaint.fillMode.colorIndex,
     disabled: state.scratchPaint.mode === Modes.LINE,
-    fillColor: state.scratchPaint.color.fillColor,
-    fillColor2: state.scratchPaint.color.fillColor2,
+    fillColor: state.scratchPaint.color.fillColor.primary,
+    fillColor2: state.scratchPaint.color.fillColor.secondary,
     fillColorModalVisible: state.scratchPaint.modals.fillColor,
     format: state.scratchPaint.format,
     gradientType: state.scratchPaint.color.gradientType,

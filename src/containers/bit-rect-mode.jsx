@@ -111,7 +111,7 @@ BitRectMode.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    color: state.scratchPaint.color.fillColor,
+    color: state.scratchPaint.color.fillColor.primary,
     filled: state.scratchPaint.fillBitmapShapes,
     isRectModeActive: state.scratchPaint.mode === Modes.BIT_RECT,
     selectedItems: state.scratchPaint.selectedItems,

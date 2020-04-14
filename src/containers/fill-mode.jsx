@@ -7,8 +7,7 @@ import GradientTypes from '../lib/gradient-types';
 import FillTool from '../helper/tools/fill-tool';
 import {getRotatedColor, MIXED} from '../helper/style-path';
 
-import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
-import {changeFillColor2} from '../reducers/fill-color-2';
+import {changeFillColor, changeFillColor2, DEFAULT_COLOR} from '../reducers/fill-color';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {clearSelection} from '../helper/selection';
@@ -127,8 +126,8 @@ FillMode.propTypes = {
 
 const mapStateToProps = state => ({
     fillModeGradientType: state.scratchPaint.fillMode.gradientType, // Last user-selected gradient type
-    fillColor: state.scratchPaint.color.fillColor,
-    fillColor2: state.scratchPaint.color.fillColor2,
+    fillColor: state.scratchPaint.color.fillColor.primary,
+    fillColor2: state.scratchPaint.color.fillColor.secondary,
     hoveredItemId: state.scratchPaint.hoveredItemId,
     isFillModeActive: state.scratchPaint.mode === Modes.FILL,
     selectModeGradientType: state.scratchPaint.color.gradientType

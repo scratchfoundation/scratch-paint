@@ -111,7 +111,7 @@ BitOvalMode.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    color: state.scratchPaint.color.fillColor,
+    color: state.scratchPaint.color.fillColor.primary,
     filled: state.scratchPaint.fillBitmapShapes,
     isOvalModeActive: state.scratchPaint.mode === Modes.BIT_OVAL,
     selectedItems: state.scratchPaint.selectedItems,

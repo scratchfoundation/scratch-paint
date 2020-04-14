@@ -94,7 +94,7 @@ BitBrushMode.propTypes = {
 
 const mapStateToProps = state => ({
     bitBrushSize: state.scratchPaint.bitBrushSize,
-    color: state.scratchPaint.color.fillColor,
+    color: state.scratchPaint.color.fillColor.primary,
     isBitBrushModeActive: state.scratchPaint.mode === Modes.BIT_BRUSH
 });
 const mapDispatchToProps = dispatch => ({

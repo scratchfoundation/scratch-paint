@@ -7,8 +7,7 @@ import GradientTypes from '../lib/gradient-types';
 
 import FillModeComponent from '../components/bit-fill-mode/bit-fill-mode.jsx';
 
-import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
-import {changeFillColor2} from '../reducers/fill-color-2';
+import {changeFillColor, changeFillColor2, DEFAULT_COLOR} from '../reducers/fill-color';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {changeGradientType} from '../reducers/fill-mode-gradient-type';
@@ -115,8 +114,8 @@ BitFillMode.propTypes = {
 
 const mapStateToProps = state => ({
     fillModeGradientType: state.scratchPaint.fillMode.gradientType, // Last user-selected gradient type
-    color: state.scratchPaint.color.fillColor,
-    color2: state.scratchPaint.color.fillColor2,
+    color: state.scratchPaint.color.fillColor.primary,
+    color2: state.scratchPaint.color.fillColor.secondary,
     isFillModeActive: state.scratchPaint.mode === Modes.BIT_FILL,
     selectModeGradientType: state.scratchPaint.color.gradientType
 });
