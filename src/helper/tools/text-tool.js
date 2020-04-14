@@ -50,14 +50,15 @@ class TextTool extends paper.Tool {
         this.onUpdateImage = onUpdateImage;
         this.setTextEditTarget = setTextEditTarget;
         this.changeFont = changeFont;
+        const paintMode = isBitmap ? Modes.BIT_TEXT : Modes.TEXT;
         this.boundingBoxTool = new BoundingBoxTool(
-            Modes.TEXT,
+            paintMode,
             setSelectedItems,
             clearSelectedItems,
             setCursor,
             onUpdateImage
         );
-        this.nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
+        this.nudgeTool = new NudgeTool(paintMode, this.boundingBoxTool, onUpdateImage);
         this.isBitmap = isBitmap;
 
         // We have to set these functions instead of just declaring them because

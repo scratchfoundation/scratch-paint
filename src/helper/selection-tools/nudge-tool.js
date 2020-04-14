@@ -16,9 +16,9 @@ class NudgeTool {
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
     constructor (mode, boundingBoxTool, onUpdateImage) {
-        this.isBitmap = mode in BitmapModes;
         this.boundingBoxTool = boundingBoxTool;
         this.onUpdateImage = onUpdateImage;
+        this.boundingBoxTool.isBitmap = mode in BitmapModes;
     }
     onKeyDown (event) {
         if (event.event.target instanceof HTMLInputElement) {
@@ -41,7 +41,7 @@ class NudgeTool {
                 rect = item.bounds;
             }
         }
-        const bounds = getActionBounds(isBitmap(this.format));
+        const bounds = getActionBounds(this.boundingBoxTool.isBitmap);
         const bottom = bounds.bottom - rect.top - 1;
         const top = bounds.top - rect.bottom + 1;
         const left = bounds.left - rect.right + 1;

@@ -71,8 +71,6 @@ const _convertLayer = function (layer, format) {
     } else if (isBitmap(format)) {
         layer.bitmapBackground.visible = true;
         layer.vectorBackground.visible = false;
-    } else {
-        console.warn("NO FORMAT");
     }
 }
 
