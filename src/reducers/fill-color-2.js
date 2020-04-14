@@ -24,13 +24,12 @@ const reducer = function (state, action) {
             return state;
         }
         const colors = getColorsFromSelection(action.selectedItems);
-        if (colors.gradientType === GradientTypes.SOLID) {
-            // Gradient type may be solid when multiple gradient types are selected.
-            // In this case, changing the first color should not change the second color.
-            if (colors.fillColor2 === MIXED) return MIXED;
-            return state;
+        // Gradient type may be solid when multiple gradient types are selected.
+        // In this case, changing the first color should not change the second color.
+        if (colors.gradientType !== GradientTypes.SOLID || colors.fillColor2 === MIXED) {
+            return colors.fillColor2;
         }
-        return colors.fillColor2;
+        return state;
     }
     case CLEAR_GRADIENT:
         return null;
