@@ -10,7 +10,7 @@ import Formats from '../lib/format';
 import {isBitmap} from '../lib/format';
 
 import StrokeColorIndicatorComponent from '../components/stroke-color-indicator.jsx';
-import {applyStrokeColorToSelection, applyStrokeWidthToSelection} from '../helper/style-path';
+import {applyColorToSelection, applyStrokeWidthToSelection} from '../helper/style-path';
 
 class StrokeColorIndicator extends React.Component {
     constructor (props) {
@@ -40,8 +40,13 @@ class StrokeColorIndicator extends React.Component {
             this.props.onChangeStrokeWidth(0);
         }
         // Apply color and update redux, but do not update svg until picker closes.
-        this._hasChanged =
-            applyStrokeColorToSelection(newColor, isBitmap(this.props.format), this.props.textEditTarget) ||
+        this._hasChanged = applyColorToSelection(
+            newColor,
+            0, // colorIndex,
+            true, // isSolidGradient
+            isBitmap(this.props.format),
+            true, // applyToStroke
+            this.props.textEditTarget) ||
             this._hasChanged;
         this.props.onChangeStrokeColor(newColor);
     }

@@ -16,7 +16,7 @@ import {isBitmap} from '../lib/format';
 import GradientTypes from '../lib/gradient-types';
 
 import FillColorIndicatorComponent from '../components/fill-color-indicator.jsx';
-import {applyFillColorToSelection,
+import {applyColorToSelection,
     applyGradientTypeToSelection,
     getRotatedColor,
     swapColorsInSelection,
@@ -45,11 +45,12 @@ class FillColorIndicator extends React.Component {
     }
     handleChangeFillColor (newColor) {
         // Apply color and update redux, but do not update svg until picker closes.
-        const isDifferent = applyFillColorToSelection(
+        const isDifferent = applyColorToSelection(
             newColor,
             this.props.colorIndex,
             this.props.gradientType === GradientTypes.SOLID,
             isBitmap(this.props.format),
+            false, // applyToStroke
             this.props.textEditTarget);
         this._hasChanged = this._hasChanged || isDifferent;
         this.props.onChangeFillColor(newColor, this.props.colorIndex);
@@ -59,6 +60,7 @@ class FillColorIndicator extends React.Component {
         const isDifferent = applyGradientTypeToSelection(
             gradientType,
             isBitmap(this.props.format),
+            false, // applyToStroke
             this.props.textEditTarget);
         this._hasChanged = this._hasChanged || isDifferent;
         const hasSelectedItems = getSelectedLeafItems().length > 0;
@@ -92,6 +94,7 @@ class FillColorIndicator extends React.Component {
         if (getSelectedLeafItems().length) {
             const isDifferent = swapColorsInSelection(
                 isBitmap(this.props.format),
+                false, // applyToStroke
                 this.props.textEditTarget);
             this.props.setSelectedItems();
             this._hasChanged = this._hasChanged || isDifferent;

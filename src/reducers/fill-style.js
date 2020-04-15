@@ -14,7 +14,7 @@ const reducer = makeColorStyleReducer({
     defaultColor: DEFAULT_COLOR,
     selectionPrimaryColorKey: 'fillColor',
     selectionSecondaryColorKey: 'fillColor2',
-    selectionGradientTypeKey: 'gradientType'
+    selectionGradientTypeKey: 'fillGradientType'
 });
 
 // Action creators ==================================

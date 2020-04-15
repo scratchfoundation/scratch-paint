@@ -7,7 +7,7 @@ import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeStrokeWidth} from '../reducers/stroke-width';
 import StrokeWidthIndicatorComponent from '../components/stroke-width-indicator.jsx';
 import {getSelectedLeafItems} from '../helper/selection';
-import {applyStrokeColorToSelection, applyStrokeWidthToSelection, getColorsFromSelection, MIXED}
+import {applyColorToSelection, applyStrokeWidthToSelection, getColorsFromSelection, MIXED}
     from '../helper/style-path';
 import Modes from '../lib/modes';
 import Formats from '../lib/format';
@@ -25,7 +25,13 @@ class StrokeWidthIndicator extends React.Component {
         if ((!this.props.strokeWidth || this.props.strokeWidth === 0) && newWidth > 0) {
             let currentColor = getColorsFromSelection(getSelectedLeafItems(), isBitmap(this.props.format)).strokeColor;
             if (currentColor === null) {
-                changed = applyStrokeColorToSelection('#000', isBitmap(this.props.format), this.props.textEditTarget) ||
+                changed = applyColorToSelection(
+                    '#000',
+                    0, // colorIndex,
+                    true, // isSolidGradient
+                    isBitmap(this.props.format),
+                    true, // applyToStroke
+                    this.props.textEditTarget) ||
                     changed;
                 currentColor = '#000';
             } else if (currentColor !== MIXED) {

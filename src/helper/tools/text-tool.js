@@ -241,7 +241,8 @@ class TextTool extends paper.Tool {
                 content: '',
                 font: this.font,
                 fontSize: 40,
-                // TODO: style using gradient?
+                // TODO: style using gradient
+                // https://github.com/LLK/scratch-paint/issues/1164
                 fillColor: this.colorState.fillColor.primary,
                 // Default leading for both the HTML text area and paper.PointText
                 // is 120%, but for some reason they are slightly off from each other.
