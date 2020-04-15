@@ -516,10 +516,6 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
         };
     }
 
-    // Treat stroke gradients as MIXED
-    // TODO: remove this once stroke gradients are supported
-    if (selectionStrokeGradientType !== GradientTypes.SOLID) selectionStrokeColorString = MIXED;
-
     return {
         fillColor: selectionFillColorString ? selectionFillColorString : null,
         fillColor2: selectionFillColor2String ? selectionFillColor2String : null,
@@ -566,7 +562,7 @@ const styleCursorPreview = function (path, options) {
 // TODO: style using gradient?
 const styleShape = function (path, options) {
     path.fillColor = options.fillColor.primary;
-    path.strokeColor = options.strokeColor;
+    path.strokeColor = options.strokeColor.primary;
     path.strokeWidth = options.strokeWidth;
 };
 

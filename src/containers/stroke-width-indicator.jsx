@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
 import parseColor from 'parse-color';
-import {changeStrokeColor} from '../reducers/stroke-color';
+import {changeStrokeColor} from '../reducers/stroke-style';
 import {changeStrokeWidth} from '../reducers/stroke-width';
 import StrokeWidthIndicatorComponent from '../components/stroke-width-indicator.jsx';
 import {getSelectedLeafItems} from '../helper/selection';

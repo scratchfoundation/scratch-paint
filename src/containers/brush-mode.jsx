@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
+import ColorStyleProptype from '../lib/color-style-proptype';
 import Blobbiness from '../helper/blob-tools/blob';
 import {MIXED} from '../helper/style-path';
 
@@ -38,7 +39,7 @@ class BrushMode extends React.Component {
             this.blob.setOptions({
                 isEraser: false,
                 fillColor: fillColor.primary,
-                strokeColor,
+                strokeColor: strokeColor.primary,
                 strokeWidth,
                 ...nextProps.brushModeState
             });
@@ -88,11 +89,8 @@ BrushMode.propTypes = {
     clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
-        fillColor: PropTypes.shape({
-            primary: PropTypes.string,
-            secondary: PropTypes.string
-        }),
-        strokeColor: PropTypes.string,
+        fillColor: ColorStyleProptype,
+        strokeColor: ColorStyleProptype,
         strokeWidth: PropTypes.number
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,

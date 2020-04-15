@@ -35,7 +35,7 @@ const changeFillColor2 = function (fillColor) {
 const changeFillGradientType = function (gradientType) {
     return {
         type: CHANGE_FILL_GRADIENT_TYPE,
-        gradientType: gradientType
+        gradientType
     };
 };
 
