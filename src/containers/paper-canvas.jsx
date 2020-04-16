@@ -136,7 +136,7 @@ class PaperCanvas extends React.Component {
             // import bitmap
             this.props.changeFormat(Formats.BITMAP_SKIP_CONVERT);
 
-            let mask = new paper.Shape.Rectangle(getRaster().getBounds());
+            const mask = new paper.Shape.Rectangle(getRaster().getBounds());
             mask.guide = true;
             mask.locked = true;
             mask.setPosition(CENTER);
@@ -338,6 +338,7 @@ PaperCanvas.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     clearUndo: PropTypes.func.isRequired,
     cursor: PropTypes.string,
+    format: PropTypes.oneOf(Object.keys(Formats)),
     image: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.instanceOf(HTMLImageElement)

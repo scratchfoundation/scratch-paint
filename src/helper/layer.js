@@ -3,7 +3,6 @@ import log from '../log/log';
 import {ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS} from './view';
 import {isGroupItem} from './item';
 import {isBitmap, isVector} from '../lib/format';
-import Formats from '../lib/format';
 
 const CROSSHAIR_SIZE = 16;
 const CROSSHAIR_FULL_OPACITY = 0.75;
@@ -72,11 +71,11 @@ const _convertLayer = function (layer, format) {
         layer.bitmapBackground.visible = true;
         layer.vectorBackground.visible = false;
     }
-}
+};
 
 const convertBackgroundGuideLayer = function (format) {
     _convertLayer(getBackgroundGuideLayer(), format);
-}
+};
 
 const _makeGuideLayer = function () {
     const guideLayer = new paper.Layer();
@@ -216,7 +215,7 @@ const _makeBackgroundPaper = function (width, height, color, opacity) {
     mask.position = CENTER;
     mask.guide = true;
     mask.locked = true;
-    mask.scale(1/8);
+    mask.scale(1 / 8);
     const vGroup = new paper.Group([vRect, vPath, mask]);
     mask.clipMask = true;
 
@@ -278,11 +277,11 @@ const _makeOutlineLayer = function () {
     const outlineLayer = new paper.Layer();
     const whiteRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(1));
     whiteRect.strokeWidth = 2;
-    whiteRect.strokeColor = "#FFF";
+    whiteRect.strokeColor = 'white';
     setGuideItem(whiteRect);
     const blueRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(5));
     blueRect.strokeWidth = 2;
-    blueRect.strokeColor = "#4280D7";
+    blueRect.strokeColor = '#4280D7';
     blueRect.opacity = 0.25;
     setGuideItem(blueRect);
     outlineLayer.data.isOutlineLayer = true;
@@ -297,7 +296,7 @@ const _makeBackgroundGuideLayer = function (format) {
     vWorkspaceBounds.fillColor = '#ECF1F9';
     vWorkspaceBounds.position = CENTER;
 
-    const vBackground = _makeBackgroundPaper(180, 136, "#0062ff", 0.05);
+    const vBackground = _makeBackgroundPaper(180, 136, '#0062ff', 0.05);
     vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(8, 8);
 
@@ -307,7 +306,7 @@ const _makeBackgroundGuideLayer = function (format) {
     setGuideItem(vectorBackground);
     guideLayer.vectorBackground = vectorBackground;
 
-    const bitmapBackground = _makeBackgroundPaper(120, 90, "#0062ff", 0.05);
+    const bitmapBackground = _makeBackgroundPaper(120, 90, '#0062ff', 0.05);
     bitmapBackground.position = CENTER;
     bitmapBackground.scaling = new paper.Point(8, 8);
     bitmapBackground.guide = true;

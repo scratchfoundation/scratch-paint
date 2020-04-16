@@ -2,6 +2,7 @@ import paper from '@scratch/paper';
 import {CROSSHAIR_SIZE, getBackgroundGuideLayer, getDragCrosshairLayer, getRaster} from './layer';
 import {getAllRootItems, getSelectedRootItems} from './selection';
 import {getHitBounds} from './bitmap';
+import log from '../log/log';
 
 // Vectors are imported and exported at SVG_ART_BOARD size.
 // Once they are imported however, both SVGs and bitmaps are on
@@ -16,7 +17,7 @@ const CENTER = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
 const PADDING_PERCENT = 25; // Padding as a percent of the max of width/height of the sprite
 const BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
-                        // zoomed in for tiny costumes.
+//                         zoomed in for tiny costumes.
 const ART_BOARD_BOUNDS = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
 const MAX_WORKSPACE_BOUNDS = new paper.Rectangle(
     -ART_BOARD_WIDTH / 4,
@@ -162,14 +163,14 @@ const pan = (dx, dy) => {
 /**
  * Mouse actions are clamped to action bounds
  * @param {boolean} isBitmap True if the editor is in bitmap mode, false if it is in vector mode
+ * @returns {paper.Rectangle} the bounds within which mouse events should work in the paint editor
  */
-const getActionBounds = (isBitmap) => {
+const getActionBounds = isBitmap => {
     if (isBitmap) {
         return ART_BOARD_BOUNDS;
-    } else {
-        return paper.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
     }
-}
+    return paper.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
+};
 
 const zoomToFit = isBitmap => {
     resetZoom();
@@ -179,10 +180,10 @@ const zoomToFit = isBitmap => {
     } else {
         const items = getAllRootItems();
         for (const item of items) {
-            if (!bounds) {
-                bounds = item.bounds;
-            } else {
+            if (bounds) {
                 bounds = bounds.unite(item.bounds);
+            } else {
+                bounds = item.bounds;
             }
         }
     }
@@ -202,7 +203,7 @@ const zoomToFit = isBitmap => {
             clampViewBounds();
         }
     } else {
-        console.warn("No bounds!");
+        log.warn('No bounds!');
     }
 };
 

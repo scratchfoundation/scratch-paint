@@ -401,7 +401,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
                 new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
         }
         for (let i = paper.project.activeLayer.children.length - 1; i >= 0; i--) {
-            let item = paper.project.activeLayer.children[i];
+            const item = paper.project.activeLayer.children[i];
             if (item.clipMask === false) {
                 item.remove();
             } else {
@@ -431,7 +431,7 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
 
 const convertToVector = function (clearSelectedItems, onUpdateImage) {
     clearSelection(clearSelectedItems);
-    for (let item of paper.project.activeLayer.children) {
+    for (const item of paper.project.activeLayer.children) {
         if (item.clipMask === true) {
             // Resize mask for vector bounds
             item.size.height = MAX_WORKSPACE_BOUNDS.height;
