@@ -25,6 +25,7 @@
     flex-direction: row;
     height: 100%;
     padding-top: calc(5 * $grid-unit);
+    min-width: 524px;
 }
 
 .row + .row {
