@@ -19167,7 +19167,14 @@ module.exports = bindAll;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "Provider", function() { return /* reexport */ components_Provider; });
+__webpack_require__.d(__webpack_exports__, "createProvider", function() { return /* reexport */ createProvider; });
+__webpack_require__.d(__webpack_exports__, "connectAdvanced", function() { return /* reexport */ connectAdvanced; });
+__webpack_require__.d(__webpack_exports__, "connect", function() { return /* reexport */ connect_connect; });
 
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
 function _inheritsLoose(subClass, superClass) {
@@ -20081,10 +20088,6 @@ function createConnect(_temp) {
 }
 /* harmony default export */ var connect_connect = (createConnect());
 // CONCATENATED MODULE: ./node_modules/react-redux/es/index.js
-/* concated harmony reexport Provider */__webpack_require__.d(__webpack_exports__, "Provider", function() { return components_Provider; });
-/* concated harmony reexport createProvider */__webpack_require__.d(__webpack_exports__, "createProvider", function() { return createProvider; });
-/* concated harmony reexport connectAdvanced */__webpack_require__.d(__webpack_exports__, "connectAdvanced", function() { return connectAdvanced; });
-/* concated harmony reexport connect */__webpack_require__.d(__webpack_exports__, "connect", function() { return connect_connect; });
 
 
 
@@ -23170,7 +23173,22 @@ exports.clearGradient = clearGradient;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "addLocaleData", function() { return /* binding */ addLocaleData; });
+__webpack_require__.d(__webpack_exports__, "intlShape", function() { return /* binding */ intlShape; });
+__webpack_require__.d(__webpack_exports__, "injectIntl", function() { return /* binding */ injectIntl; });
+__webpack_require__.d(__webpack_exports__, "defineMessages", function() { return /* binding */ defineMessages; });
+__webpack_require__.d(__webpack_exports__, "IntlProvider", function() { return /* binding */ index_es_IntlProvider; });
+__webpack_require__.d(__webpack_exports__, "FormattedDate", function() { return /* binding */ index_es_FormattedDate; });
+__webpack_require__.d(__webpack_exports__, "FormattedTime", function() { return /* binding */ index_es_FormattedTime; });
+__webpack_require__.d(__webpack_exports__, "FormattedRelative", function() { return /* binding */ index_es_FormattedRelative; });
+__webpack_require__.d(__webpack_exports__, "FormattedNumber", function() { return /* binding */ index_es_FormattedNumber; });
+__webpack_require__.d(__webpack_exports__, "FormattedPlural", function() { return /* binding */ index_es_FormattedPlural; });
+__webpack_require__.d(__webpack_exports__, "FormattedMessage", function() { return /* binding */ index_es_FormattedMessage; });
+__webpack_require__.d(__webpack_exports__, "FormattedHTMLMessage", function() { return /* binding */ index_es_FormattedHTMLMessage; });
 
 // EXTERNAL MODULE: ../locale-data/index.js (ignored)
 var locale_data_ignored_ = __webpack_require__(119);
@@ -23243,18 +23261,6 @@ var memoizeFormatConstructor = function (FormatConstructor, cache) {
 /* harmony default export */ var lib = (memoizeFormatConstructor);
 //# sourceMappingURL=index.js.map
 // CONCATENATED MODULE: ./node_modules/react-intl/lib/index.es.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addLocaleData", function() { return addLocaleData; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "intlShape", function() { return intlShape; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "injectIntl", function() { return injectIntl; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defineMessages", function() { return defineMessages; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "IntlProvider", function() { return index_es_IntlProvider; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedDate", function() { return index_es_FormattedDate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedTime", function() { return index_es_FormattedTime; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedRelative", function() { return index_es_FormattedRelative; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedNumber", function() { return index_es_FormattedNumber; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedPlural", function() { return index_es_FormattedPlural; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedMessage", function() { return index_es_FormattedMessage; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormattedHTMLMessage", function() { return index_es_FormattedHTMLMessage; });
 /*
  * Copyright 2018, Yahoo Inc.
  * Copyrights licensed under the New BSD License.
@@ -26489,7 +26495,15 @@ exports.MAX_STROKE_WIDTH = MAX_STROKE_WIDTH;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "createStore", function() { return /* reexport */ createStore_createStore; });
+__webpack_require__.d(__webpack_exports__, "combineReducers", function() { return /* reexport */ combineReducers; });
+__webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return /* reexport */ bindActionCreators; });
+__webpack_require__.d(__webpack_exports__, "applyMiddleware", function() { return /* reexport */ applyMiddleware; });
+__webpack_require__.d(__webpack_exports__, "compose", function() { return /* reexport */ compose; });
 
 // EXTERNAL MODULE: ./node_modules/lodash-es/_freeGlobal.js
 var _freeGlobal = __webpack_require__(118);
@@ -27260,11 +27274,6 @@ function applyMiddleware() {
   };
 }
 // CONCATENATED MODULE: ./node_modules/redux/es/index.js
-/* concated harmony reexport createStore */__webpack_require__.d(__webpack_exports__, "createStore", function() { return createStore_createStore; });
-/* concated harmony reexport combineReducers */__webpack_require__.d(__webpack_exports__, "combineReducers", function() { return combineReducers; });
-/* concated harmony reexport bindActionCreators */__webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return bindActionCreators; });
-/* concated harmony reexport applyMiddleware */__webpack_require__.d(__webpack_exports__, "applyMiddleware", function() { return applyMiddleware; });
-/* concated harmony reexport compose */__webpack_require__.d(__webpack_exports__, "compose", function() { return compose; });
 
 
 
@@ -69258,7 +69267,14 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "default", function() { return /* reexport */ locales; });
+__webpack_require__.d(__webpack_exports__, "localeMap", function() { return /* reexport */ localeMap; });
+__webpack_require__.d(__webpack_exports__, "isRtl", function() { return /* reexport */ isRtl; });
+__webpack_require__.d(__webpack_exports__, "localeData", function() { return /* binding */ localeData; });
 
 // EXTERNAL MODULE: ./node_modules/react-intl/locale-data/en.js
 var en = __webpack_require__(121);
@@ -69616,10 +69632,6 @@ const wwwLocales = {
 
 
 // CONCATENATED MODULE: ./node_modules/scratch-l10n/src/index.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "localeData", function() { return localeData; });
-/* concated harmony reexport default */__webpack_require__.d(__webpack_exports__, "default", function() { return locales; });
-/* concated harmony reexport localeMap */__webpack_require__.d(__webpack_exports__, "localeMap", function() { return localeMap; });
-/* concated harmony reexport isRtl */__webpack_require__.d(__webpack_exports__, "isRtl", function() { return isRtl; });
 
 
 
