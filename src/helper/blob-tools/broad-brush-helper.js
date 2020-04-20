@@ -196,10 +196,15 @@ class BroadBrushHelper {
             return this.finalPath;
         }
 
+        let delta = this.lastVec;
+
         // If the mouse up is at the same point as the mouse drag event then we need
         // the second to last point to get the right direction vector for the end cap
         if (!event.point.equals(this.lastPoint)) {
-            const step = event.delta.normalize(options.brushSize / 2);
+            // The given event.delta is the difference between the mouse down coords and the mouse up coords,
+            // but we want the difference between the last mouse drag coords and the mouse up coords.
+            delta = event.point.subtract(this.lastPoint);
+            const step = delta.normalize(options.brushSize / 2);
             step.angle += 90;
 
             const top = event.point.add(step);
@@ -210,7 +215,7 @@ class BroadBrushHelper {
 
         // Simplify before adding end cap so cap doesn't get warped
         this.simplify(1);
-        const handleVec = event.delta.normalize(options.brushSize / 2);
+        const handleVec = delta.normalize(options.brushSize / 2);
         this.finalPath.add(new paper.Segment(
             event.point.add(handleVec),
             handleVec.rotate(90),
