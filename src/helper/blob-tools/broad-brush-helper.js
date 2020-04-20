@@ -34,6 +34,7 @@ class BroadBrushHelper {
     onBroadMouseDown (event, tool, options) {
         this.steps = 0;
         this.smoothed = 0;
+        this.lastVec = null;
         tool.minDistance = Math.min(5, Math.max(2 / paper.view.zoom, options.brushSize / 2));
         tool.maxDistance = options.brushSize;
         if (event.event.button > 0) return; // only first mouse button
