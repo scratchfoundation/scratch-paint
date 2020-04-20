@@ -38,7 +38,7 @@ class BroadBrushHelper {
         tool.minDistance = Math.min(5, Math.max(2 / paper.view.zoom, options.brushSize / 2));
         tool.maxDistance = options.brushSize;
         if (event.event.button > 0) return; // only first mouse button
-        
+
         this.finalPath = new paper.Path.Circle({
             center: event.point,
             radius: options.brushSize / 2
@@ -46,7 +46,7 @@ class BroadBrushHelper {
         styleBlob(this.finalPath, options);
         this.lastPoint = event.point;
     }
-    
+
     onBroadMouseDrag (event, tool, options) {
         this.steps++;
         const step = (event.delta).normalize(options.brushSize / 2);
@@ -97,12 +97,8 @@ class BroadBrushHelper {
             this.finalPath.insert(0, new paper.Segment(this.lastPoint.subtract(step)));
             this.finalPath.add(new paper.Segment(this.lastPoint.add(step)));
         }
-        const top = event.middlePoint.add(step);
-        const bottom = event.middlePoint.subtract(step);
 
-        this.finalPath.add(top);
         this.finalPath.add(event.point.add(step));
-        this.finalPath.insert(0, bottom);
         this.finalPath.insert(0, event.point.subtract(step));
 
         if (this.finalPath.segments.length > this.smoothed + (this.smoothingThreshold * 2)) {
@@ -220,7 +216,7 @@ class BroadBrushHelper {
             this.finalPath.remove();
             this.finalPath = newPath;
         }
-        
+
         // Try to merge end caps
         for (const cap of this.endCaps) {
             const temp = this.union(this.finalPath, cap);
