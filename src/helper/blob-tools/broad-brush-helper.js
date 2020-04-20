@@ -79,7 +79,6 @@ class BroadBrushHelper {
                 this.endCaps.push(this.union(circ, this.union(rect, rect2)));
             }
         }
-        this.lastVec = event.delta;
         step.angle += 90;
 
         // Move the first point out away from the drag so that the end of the path is rounded
@@ -98,12 +97,27 @@ class BroadBrushHelper {
             this.finalPath.add(new paper.Segment(this.lastPoint.add(step)));
         }
 
+        // Update angle of the last brush step's points to match the average angle of the last mouse vector and this
+        // mouse vector (aka the vertex normal).
+        if (this.lastVec) {
+            const lastNormal = this.lastVec.normalize(options.brushSize / 2).rotate(90);
+            const averageNormal = new paper.Point(
+                lastNormal.x + step.x,
+                lastNormal.y + step.y
+            ).normalize(options.brushSize / 2);
+
+            this.finalPath.segments[0].point = this.lastPoint.subtract(averageNormal);
+            this.finalPath.segments[this.finalPath.segments.length - 1].point = this.lastPoint.add(averageNormal);
+        }
+
         this.finalPath.add(event.point.add(step));
         this.finalPath.insert(0, event.point.subtract(step));
 
         if (this.finalPath.segments.length > this.smoothed + (this.smoothingThreshold * 2)) {
             this.simplify(1);
         }
+
+        this.lastVec = event.delta;
         this.lastPoint = event.point;
     }
 
