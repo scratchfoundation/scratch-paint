@@ -1,6 +1,7 @@
 import paper from '@scratch/paper';
 import {getSelectedRootItems} from '../selection';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
+import {BitmapModes} from '../../lib/modes';
 
 const NUDGE_MORE_MULTIPLIER = 15;
 
@@ -10,12 +11,14 @@ const NUDGE_MORE_MULTIPLIER = 15;
  */
 class NudgeTool {
     /**
+     * @param {Mode} mode Paint editor mode
      * @param {function} boundingBoxTool to control the bounding box
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (boundingBoxTool, onUpdateImage) {
+    constructor (mode, boundingBoxTool, onUpdateImage) {
         this.boundingBoxTool = boundingBoxTool;
         this.onUpdateImage = onUpdateImage;
+        this.boundingBoxTool.isBitmap = mode in BitmapModes;
     }
     onKeyDown (event) {
         if (event.event.target instanceof HTMLInputElement) {

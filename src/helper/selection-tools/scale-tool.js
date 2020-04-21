@@ -1,6 +1,7 @@
 import paper from '@scratch/paper';
 import {getItems} from '../selection';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
+import {BitmapModes} from '../../lib/modes';
 
 /**
  * Tool to handle scaling items by pulling on the handles around the edges of the bounding
@@ -8,9 +9,11 @@ import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
  */
 class ScaleTool {
     /**
+     * @param {Mode} mode Paint editor mode
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (onUpdateImage) {
+    constructor (mode, onUpdateImage) {
+        this.isBitmap = mode in BitmapModes;
         this.active = false;
         this.boundsPath = null;
         this.pivot = null;
