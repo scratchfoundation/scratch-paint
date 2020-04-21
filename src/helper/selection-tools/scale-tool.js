@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import {getItems} from '../selection';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
+import {getActionBounds} from '../view';
 import {BitmapModes} from '../../lib/modes';
 
 /**
@@ -74,8 +74,9 @@ class ScaleTool {
     onMouseDrag (event) {
         if (!this.active) return;
         const point = event.point;
-        point.x = Math.max(0, Math.min(point.x, ART_BOARD_WIDTH));
-        point.y = Math.max(0, Math.min(point.y, ART_BOARD_HEIGHT));
+        const bounds = getActionBounds(this.isBitmap);
+        point.x = Math.max(bounds.left, Math.min(point.x, bounds.right));
+        point.y = Math.max(bounds.top, Math.min(point.y, bounds.bottom));
 
         if (!this.lastPoint) this.lastPoint = event.lastPoint;
         const delta = point.subtract(this.lastPoint);
