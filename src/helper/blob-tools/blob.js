@@ -42,7 +42,7 @@ class Blobbiness {
         this.brushSize = null;
         this.fillColor = null;
     }
-    
+
     /**
      * Set configuration options for a blob
      * @param {!object} options Configuration
@@ -93,7 +93,7 @@ class Blobbiness {
             blob.cursorPreview.bringToFront();
             blob.cursorPreview.position = event.point;
         };
-        
+
         this.tool.onMouseDown = function (event) {
             blob.resizeCursorIfNeeded(event.point);
             if (event.event.button > 0) return; // only first mouse button
@@ -126,7 +126,7 @@ class Blobbiness {
 
         this.tool.onMouseUp = function (event) {
             if (event.event.button > 0 || !this.active) return; // only first mouse button
-            
+
             let lastPath;
             if (blob.brush === Blobbiness.BROAD) {
                 lastPath = blob.broadBrushHelper.onBroadMouseUp(event, blob.tool, blob.options);
@@ -249,7 +249,11 @@ class Blobbiness {
         // If there are selected items, try to erase from amongst those.
         let items = getItems({
             match: function (item) {
-                return item.selected && blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);
+                return item.selected && blob.isMergeable(lastPath, item) &&
+                    blob.touches(lastPath, item) &&
+                    // Boolean operations will produce incorrect results if directly applied to compound path children,
+                    // so exclude those. Their parents are also selected so boolean operations will apply to them.
+                    !isCompoundPathChild(item);
             },
             class: paper.PathItem
         });
@@ -259,17 +263,15 @@ class Blobbiness {
             clearSelection(this.clearSelectedItems);
             items = getItems({
                 match: function (item) {
-                    return blob.isMergeable(lastPath, item) && blob.touches(lastPath, item);
+                    return blob.isMergeable(lastPath, item) &&
+                        blob.touches(lastPath, item) &&
+                        !isCompoundPathChild(item);
                 },
                 class: paper.PathItem
             });
         }
 
         for (let i = items.length - 1; i >= 0; i--) {
-            // If a path is part of a compound path, that parent path will later be processed.
-            // Skip processing the child path so as not to double-process it.
-            if (isCompoundPathChild(items[i])) continue;
-
             // TODO handle compound paths
             if (items[i] instanceof paper.Path && (!items[i].fillColor || items[i].fillColor._alpha === 0)) {
                 // Gather path segments
