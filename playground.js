@@ -32508,7 +32508,6 @@ var Blobbiness = function () {
             }
 
             for (var i = items.length - 1; i >= 0; i--) {
-                // TODO handle compound paths
                 if (items[i] instanceof _paper2.default.Path && (!items[i].fillColor || items[i].fillColor._alpha === 0)) {
                     // Gather path segments
                     var _subpaths = [];
@@ -32541,7 +32540,6 @@ var Blobbiness = function () {
 
                 // Gather path segments
                 var subpaths = [];
-                // TODO: Handle compound path
                 if (items[i] instanceof _paper2.default.Path && !items[i].closed) {
                     var _firstSeg = items[i].clone();
                     var _intersections = _firstSeg.getIntersections(lastPath);
