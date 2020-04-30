@@ -46,20 +46,20 @@ class FillColorIndicator extends React.Component {
     }
     getAllColors () {
         const COLORS = {
-            RED:'#e24f27',
-            ORANGE:'#fb8c3c',
-            YELLOW:'#fdd73a',
-            GREEN:'#53de65',
-            TEAL:'#1ebcbc',
-            BLUE:'#2fadfc',
+            RED:'#ff0000',
+            ORANGE:'#fd8c2f',
+            YELLOW:'#fed91e',
+            GREEN:'#4be05e',
+            LIGHT_BLUE:'#80dbff',
+            BLUE:'#3364ff',
             PURPLE:'#9966ff',
             BLACK:'#000000',
             WHITE:'#ffffff',
-            UMBER:'#4c392c',
-            CHOCOLATE:'#745137',
-            BROWN:'#b4875f',
-            TAN:'#ecc296',
-            PEACH:'#f6dcc4'
+            UMBER:'#4c392b',
+            CHOCOLATE:'#755135',
+            BROWN:'#b5875c',
+            TAN:'#edc393',
+            PEACH:'#f7dcc3'
         };
         const colors = [];
         for (let item in COLORS) {
