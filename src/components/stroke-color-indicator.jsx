@@ -27,6 +27,7 @@ const StrokeColorIndicatorComponent = props => (
                 <ColorPicker
                     color={props.strokeColor}
                     color2={null}
+                    colors={props.colors}
                     gradientType={GradientTypes.SOLID}
                     shouldShowGradientTools={false}
                     // @todo handle stroke gradient
@@ -53,6 +54,7 @@ const StrokeColorIndicatorComponent = props => (
 
 StrokeColorIndicatorComponent.propTypes = {
     className: PropTypes.string,
+    colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     disabled: PropTypes.bool.isRequired,
     intl: intlShape,
     onChangeStrokeColor: PropTypes.func.isRequired,

@@ -14,6 +14,7 @@ import {setSelectedItems} from '../reducers/selected-items';
 import Modes from '../lib/modes';
 import Formats from '../lib/format';
 import {isBitmap} from '../lib/format';
+import getAllColors from '../lib/colors';
 import GradientTypes from '../lib/gradient-types';
 
 import FillColorIndicatorComponent from '../components/fill-color-indicator.jsx';
@@ -43,32 +44,6 @@ class FillColorIndicator extends React.Component {
             if (this._hasChanged) onUpdateImage();
             this._hasChanged = false;
         }
-    }
-    getAllColors () {
-        const COLORS = {
-            RED:'#ff0000',
-            ORANGE:'#fd8c2f',
-            YELLOW:'#fed91e',
-            GREEN:'#4be05e',
-            LIGHT_BLUE:'#80dbff',
-            BLUE:'#3364ff',
-            PURPLE:'#9966ff',
-            BLACK:'#000000',
-            WHITE:'#ffffff',
-            UMBER:'#4c392b',
-            CHOCOLATE:'#755135',
-            BROWN:'#b5875c',
-            TAN:'#edc393',
-            PEACH:'#f7dcc3'
-        };
-        const colors = [];
-        for (let item in COLORS) {
-            if (isNaN(Number(item))) {
-                const color = parseColor(COLORS[item]).rgb;
-                colors.push(`rgb(${color[0]},${color[1]},${color[2]})`);
-            }
-        }
-        return colors;
     }
     handleChangeFillColor (newColor) {
         // Apply color and update redux, but do not update svg until picker closes.
@@ -134,7 +109,7 @@ class FillColorIndicator extends React.Component {
         return (
             <FillColorIndicatorComponent
                 {...this.props}
-                colors={this.getAllColors()}
+                colors={getAllColors()}
                 onChangeFillColor={this.handleChangeFillColor}
                 onChangeGradientType={this.handleChangeGradientType}
                 onCloseFillColor={this.handleCloseFillColor}
