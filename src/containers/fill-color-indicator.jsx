@@ -14,7 +14,7 @@ import {setSelectedItems} from '../reducers/selected-items';
 import Modes from '../lib/modes';
 import Formats from '../lib/format';
 import {isBitmap} from '../lib/format';
-import getAllColors from '../lib/colors';
+import {getAllColors} from '../lib/colors';
 import GradientTypes from '../lib/gradient-types';
 
 import FillColorIndicatorComponent from '../components/fill-color-indicator.jsx';

@@ -18,14 +18,14 @@ const COLORS = {
 };
 
 const getAllColors = function () {
-    const colors = [];
+    const rgbColors = [];
     for (let item in COLORS) {
         if (isNaN(Number(item))) {
             const color = parseColor(COLORS[item]).rgb;
-            colors.push(`rgb(${color[0]},${color[1]},${color[2]})`);
+            rgbColors.push(`rgb(${color[0]},${color[1]},${color[2]})`);
         }
     }
-    return colors;
+    return rgbColors;
 }
 
-export default getAllColors;
+export {getAllColors};

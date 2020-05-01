@@ -74,11 +74,15 @@ class ColorPicker extends React.Component {
             });
         }
     }
-    colorsMatch (hsv, colorString) {
-        const [hue, saturation, brightness] = colorStringToHsv(colorString);
-        return hsv.hue === hue &&
-            hsv.saturation === saturation &&
-            hsv.brightness === brightness;
+    colorsMatch (colorString1, colorString2) {
+        // transparent
+        if (!colorString1) return colorString1  === colorString2;
+
+        const [hue1, saturation1, brightness1] = colorStringToHsv(colorString1);
+        const [hue2, saturation2, brightness2] = colorStringToHsv(colorString2);
+        return Math.abs(hue1 - hue2) < .5 &&
+            Math.abs(saturation1 - saturation2) < .5 &&
+            Math.abs(brightness1 - brightness2) < .5;
     }
     getHsv (color) {
         const isTransparent = color === null;

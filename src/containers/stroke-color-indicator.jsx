@@ -6,7 +6,7 @@ import {changeStrokeColor} from '../reducers/stroke-color';
 import {changeStrokeWidth} from '../reducers/stroke-width';
 import {openStrokeColor, closeStrokeColor} from '../reducers/modals';
 import Modes from '../lib/modes';
-import getAllColors from '../lib/colors';
+import {getAllColors} from '../lib/colors';
 import Formats from '../lib/format';
 import {isBitmap} from '../lib/format';
 
