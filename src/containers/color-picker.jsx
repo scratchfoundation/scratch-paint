@@ -16,6 +16,7 @@ import Modes from '../lib/modes';
 
 const colorStringToHsv = hexString => {
     const hsv = parseColor(hexString).hsv;
+    if (!hsv) return hsv; // transparent
     // Hue comes out in [0, 360], limit to [0, 100]
     hsv[0] = hsv[0] / 3.6;
     // Black is parsed as {0, 0, 0}, but turn saturation up to 100
@@ -75,8 +76,8 @@ class ColorPicker extends React.Component {
         }
     }
     colorsMatch (colorString1, colorString2) {
-        // transparent
-        if (!colorString1) return colorString1  === colorString2;
+        // transparent or mixed
+        if (!colorString1 || colorString1 === MIXED) return colorString1  === colorString2;
 
         const [hue1, saturation1, brightness1] = colorStringToHsv(colorString1);
         const [hue2, saturation2, brightness2] = colorStringToHsv(colorString2);
