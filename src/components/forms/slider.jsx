@@ -6,7 +6,7 @@ import {getEventXY} from '../../lib/touch-utils';
 
 import styles from './slider.css';
 
-const CONTAINER_WIDTH = 212;
+const CONTAINER_WIDTH = 198;
 const HANDLE_WIDTH = 26;
 
 class SliderComponent extends React.Component {
