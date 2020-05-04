@@ -200,7 +200,7 @@ const _makeBackgroundPaper = function (width, height, color, opacity) {
     mask.position = CENTER;
     mask.guide = true;
     mask.locked = true;
-    mask.scale(1/8);
+    mask.scale(1 / 8);
     const vGroup = new paper.Group([vRect, vPath, mask]);
     mask.clipMask = true;
 
@@ -262,11 +262,11 @@ const _makeOutlineLayer = function () {
     const outlineLayer = new paper.Layer();
     const whiteRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(1));
     whiteRect.strokeWidth = 2;
-    whiteRect.strokeColor = "#FFF";
+    whiteRect.strokeColor = 'white';
     setGuideItem(whiteRect);
     const blueRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(5));
     blueRect.strokeWidth = 2;
-    blueRect.strokeColor = "#4280D7";
+    blueRect.strokeColor = '#4280D7';
     blueRect.opacity = 0.25;
     setGuideItem(blueRect);
     outlineLayer.data.isOutlineLayer = true;
@@ -283,7 +283,7 @@ const _makeBackgroundGuideLayer = function () {
     vWorkspaceBounds.guide = true;
     vWorkspaceBounds.locked = true;
 
-    const vBackground = _makeBackgroundPaper(180, 136, "#0062ff", 0.05);
+    const vBackground = _makeBackgroundPaper(180, 136, '#0062ff', 0.05);
     vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(8, 8);
     vBackground.guide = true;

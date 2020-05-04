@@ -326,6 +326,7 @@ PaperCanvas.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     clearUndo: PropTypes.func.isRequired,
     cursor: PropTypes.string,
+    format: PropTypes.oneOf(Object.keys(Formats)),
     image: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.instanceOf(HTMLImageElement)

@@ -77,7 +77,7 @@ class ColorPicker extends React.Component {
     }
     colorsMatch (colorString1, colorString2) {
         // transparent or mixed
-        if (!colorString1 || colorString1 === MIXED) return colorString1  === colorString2;
+        if (!colorString1 || colorString1 === MIXED) return colorString1 === colorString2;
 
         const [hue1, saturation1, brightness1] = colorStringToHsv(colorString1);
         const [hue2, saturation2, brightness2] = colorStringToHsv(colorString2);

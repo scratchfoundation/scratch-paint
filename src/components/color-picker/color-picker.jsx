@@ -20,6 +20,7 @@ import fillSolidIcon from './icons/fill-solid-enabled.svg';
 import fillVertGradientIcon from './icons/fill-vert-gradient-enabled.svg';
 import swapIcon from './icons/swap.svg';
 import Modes from '../../lib/modes';
+import {getColorName, getColorRGB} from '../../lib/colors';
 
 const hsvToHex = (h, s, v) =>
     // Scale hue back up to [0, 360] from [0, 100]
@@ -56,9 +57,8 @@ class ColorPickerComponent extends React.Component {
         return `linear-gradient(to left, ${stops.join(',')})`;
     }
     render () {
-        const swatchClickFactory = (color) => {
-            return () => this.props.onSwatch(color);
-        }
+        const swatchClickFactory = color =>
+            () => this.props.onSwatch(color);
         return (
             <div
                 className={styles.colorPickerContainer}
@@ -182,21 +182,25 @@ class ColorPickerComponent extends React.Component {
                     </div>
                 ) : null}
                 {this.props.colors ?
-                <div className={classNames(styles.swatches, styles.colorSwatches)}>
-                    {this.props.colors.map((color) => (
-                        <div
-                            className={classNames({
-                                [styles.swatch]: true,
-                                [styles.activeSwatch]: this.props.colorsMatch(this.props.color, color)
-                            })}
-                            style={{
-                                backgroundColor: parseColor(color).hex
-                            }}
-                            onClick={swatchClickFactory(color)}
-                        />
-                    ))}
-                </div> :
-                null}
+                    <div className={classNames(styles.swatches, styles.colorSwatches)}>
+                        {this.props.colors.map(color => (
+                            <div
+                                key={color}
+                                role="img"
+                                alt={getColorName(color)}
+                                title={getColorName(color)}
+                                className={classNames({
+                                    [styles.swatch]: true,
+                                    [styles.activeSwatch]: this.props.colorsMatch(this.props.color, getColorRGB(color))
+                                })}
+                                style={{
+                                    backgroundColor: parseColor(getColorRGB(color)).hex
+                                }}
+                                onClick={swatchClickFactory(getColorRGB(color))}
+                            />
+                        ))}
+                    </div> :
+                    null}
                 <div className={styles.row}>
                     <div className={styles.rowHeader}>
                         <span className={styles.labelName}>
