@@ -129,7 +129,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Mon Jul 29 11:21:04 2019 -0400
+ * Date: Wed May 6 16:45:21 2020 -0400
  *
  ***
  *
@@ -14483,6 +14483,9 @@ new function() {
 			var get = entry.get,
 				type = entry.type,
 				value = item[get]();
+
+			if (value === undefined) return;
+
 			if (entry.exportFilter
 					? entry.exportFilter(item, value)
 					: !parent || !Base.equals(parent[get](), value) ||
@@ -15017,6 +15020,10 @@ new function() {
 				if (matrix)
 					group.transform(matrix);
 			}
+		},
+
+		'fill-rule': function(item, value) {
+			if (value === 'evenodd' || value === 'nonzero') item.fillRule = value;
 		}
 	});
 
