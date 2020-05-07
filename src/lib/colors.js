@@ -18,21 +18,21 @@ const COLORS = {
 };
 
 const getAllColors = function () {
-    var keys = [];
-    for (var key in COLORS) {
-        if(COLORS.hasOwnProperty(key)) keys.push(key);
+    const keys = [];
+    for (const key in COLORS) {
+        if (COLORS.hasOwnProperty(key)) keys.push(key);
     }
     return keys;
 };
 
 const getColorName = function (key) {
     return key.toLowerCase().replace('_', ' ');
-}
+};
 
 const getColorRGB = function (key) {
     const rgb = parseColor(COLORS[key]).rgb;
-    return`rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-}
+    return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+};
 
 export {
     getAllColors,

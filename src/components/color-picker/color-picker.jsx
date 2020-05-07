@@ -183,22 +183,24 @@ class ColorPickerComponent extends React.Component {
                 ) : null}
                 {this.props.colors ?
                     <div className={classNames(styles.swatches, styles.colorSwatches)}>
-                        {this.props.colors.map(color => (
-                            <div
+                        {this.props.colors.map(color => {
+                            const activeColor = this.props.colorIndex ? this.props.color2 : this.props.color;
+                            return (<div
                                 key={color}
                                 role="img"
                                 alt={getColorName(color)}
                                 title={getColorName(color)}
                                 className={classNames({
                                     [styles.swatch]: true,
-                                    [styles.activeSwatch]: this.props.colorsMatch(this.props.color, getColorRGB(color))
+                                    [styles.activeSwatch]: this.props.colorsMatch(activeColor, getColorRGB(color))
                                 })}
                                 style={{
                                     backgroundColor: parseColor(getColorRGB(color)).hex
                                 }}
                                 onClick={swatchClickFactory(getColorRGB(color))}
                             />
-                        ))}
+                            );
+                        })}
                     </div> :
                     null}
                 <div className={styles.row}>
