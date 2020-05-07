@@ -2,6 +2,7 @@ import paper from '@scratch/paper';
 import {createCanvas, clearRaster, getRaster, hideGuideLayers, showGuideLayers} from './layer';
 import {getGuideColor} from './guides';
 import {clearSelection} from './selection';
+import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS} from './view';
 import {inlineSvgFonts} from 'scratch-svg-renderer';
 import Formats from '../lib/format';
 
@@ -399,7 +400,17 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
                 img,
                 new paper.Point(Math.floor(bounds.topLeft.x), Math.floor(bounds.topLeft.y)));
         }
-        paper.project.activeLayer.removeChildren();
+        for (let i = paper.project.activeLayer.children.length - 1; i >= 0; i--) {
+            const item = paper.project.activeLayer.children[i];
+            if (item.clipMask === false) {
+                item.remove();
+            } else {
+                // Resize mask for bitmap bounds
+                item.size.height = ART_BOARD_HEIGHT;
+                item.size.width = ART_BOARD_WIDTH;
+                item.setPosition(CENTER);
+            }
+        }
         onUpdateImage(false /* skipSnapshot */, Formats.BITMAP /* formatOverride */);
     };
     img.onerror = () => {
@@ -420,7 +431,16 @@ const convertToBitmap = function (clearSelectedItems, onUpdateImage) {
 
 const convertToVector = function (clearSelectedItems, onUpdateImage) {
     clearSelection(clearSelectedItems);
+    for (const item of paper.project.activeLayer.children) {
+        if (item.clipMask === true) {
+            // Resize mask for vector bounds
+            item.size.height = MAX_WORKSPACE_BOUNDS.height;
+            item.size.width = MAX_WORKSPACE_BOUNDS.width;
+            item.setPosition(CENTER);
+        }
+    }
     getTrimmedRaster(true /* shouldInsert */);
+
     clearRaster();
     onUpdateImage(false /* skipSnapshot */, Formats.VECTOR /* formatOverride */);
 };

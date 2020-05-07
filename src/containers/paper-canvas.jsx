@@ -9,7 +9,7 @@ import log from '../log/log';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
-import {clearRaster, getRaster, setupLayers} from '../helper/layer';
+import {clearRaster, convertBackgroundGuideLayer, getRaster, setupLayers} from '../helper/layer';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS} from '../helper/view';
 import {clampViewBounds, resetZoom, setWorkspaceBounds, zoomToFit, resizeCrosshair} from '../helper/view';
@@ -60,7 +60,7 @@ class PaperCanvas extends React.Component {
         // Don't show handles by default
         paper.settings.handleSize = 0;
         // Make layers.
-        setupLayers();
+        setupLayers(this.props.format);
         this.importImage(
             this.props.imageFormat, this.props.image, this.props.rotationCenterX, this.props.rotationCenterY);
     }
@@ -72,6 +72,7 @@ class PaperCanvas extends React.Component {
         }
         if (this.props.format !== newProps.format) {
             this.recalibrateSize();
+            convertBackgroundGuideLayer(newProps.format);
         }
     }
     componentWillUnmount () {
@@ -134,6 +135,13 @@ class PaperCanvas extends React.Component {
         if (format === 'jpg' || format === 'png') {
             // import bitmap
             this.props.changeFormat(Formats.BITMAP_SKIP_CONVERT);
+
+            const mask = new paper.Shape.Rectangle(getRaster().getBounds());
+            mask.guide = true;
+            mask.locked = true;
+            mask.setPosition(CENTER);
+            mask.clipMask = true;
+
             const imgElement = new Image();
             this.queuedImageToLoad = imgElement;
             imgElement.onload = () => {
@@ -148,6 +156,7 @@ class PaperCanvas extends React.Component {
                     imgElement,
                     (ART_BOARD_WIDTH / 2) - rotationCenterX,
                     (ART_BOARD_HEIGHT / 2) - rotationCenterY);
+
                 this.maybeZoomToFit(true /* isBitmap */);
                 performSnapshot(this.props.undoSnapshot, Formats.BITMAP_SKIP_CONVERT);
                 this.recalibrateSize();
@@ -217,6 +226,8 @@ class PaperCanvas extends React.Component {
                 // positioned incorrectly
                 paperCanvas.queuedImport =
                     window.setTimeout(() => {
+                        // Detached
+                        if (!paper.view) return;
                         paper.view.setViewSize(paper.DomElement.getSize(paper.view.element));
                         paperCanvas.props.updateViewBounds(paper.view.matrix);
                         paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
@@ -297,6 +308,7 @@ class PaperCanvas extends React.Component {
         // Sets the size that Paper thinks the canvas is to the size the canvas element actually is.
         // When these are out of sync, the mouse events in the paint editor don't line up correctly.
         window.setTimeout(() => {
+            if (!paper.view) return;
             paper.view.setViewSize(paper.DomElement.getSize(paper.view.element));
         });
     }

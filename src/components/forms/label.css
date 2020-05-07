@@ -4,12 +4,7 @@ See https://github.com/LLK/scratch-paint/issues/13 */
 
 @import "../../css/units.css";
 @import "../../css/colors.css";
-
-.input-group {
-    display: inline-flex;
-    flex-direction: row;
-    align-items: center;
-}
+@import "../input-group/input-group.css";
 
 .input-label, .input-label-secondary {
     font-size: 0.625rem;

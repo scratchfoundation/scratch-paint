@@ -2,6 +2,7 @@ import paper from '@scratch/paper';
 import log from '../log/log';
 import {ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS} from './view';
 import {isGroupItem} from './item';
+import {isBitmap, isVector} from '../lib/format';
 
 const CROSSHAIR_SIZE = 16;
 const CROSSHAIR_FULL_OPACITY = 0.75;
@@ -60,6 +61,20 @@ const getDragCrosshairLayer = function () {
 
 const getBackgroundGuideLayer = function () {
     return _getLayer('isBackgroundGuideLayer');
+};
+
+const _convertLayer = function (layer, format) {
+    if (isVector(format)) {
+        layer.vectorBackground.visible = true;
+        layer.bitmapBackground.visible = false;
+    } else if (isBitmap(format)) {
+        layer.bitmapBackground.visible = true;
+        layer.vectorBackground.visible = false;
+    }
+};
+
+const convertBackgroundGuideLayer = function (format) {
+    _convertLayer(getBackgroundGuideLayer(), format);
 };
 
 const _makeGuideLayer = function () {
@@ -273,30 +288,41 @@ const _makeOutlineLayer = function () {
     return outlineLayer;
 };
 
-const _makeBackgroundGuideLayer = function () {
+const _makeBackgroundGuideLayer = function (format) {
     const guideLayer = new paper.Layer();
     guideLayer.locked = true;
     
     const vWorkspaceBounds = new paper.Shape.Rectangle(MAX_WORKSPACE_BOUNDS);
     vWorkspaceBounds.fillColor = '#ECF1F9';
     vWorkspaceBounds.position = CENTER;
-    vWorkspaceBounds.guide = true;
-    vWorkspaceBounds.locked = true;
 
     const vBackground = _makeBackgroundPaper(180, 136, '#0062ff', 0.05);
     vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(8, 8);
-    vBackground.guide = true;
-    vBackground.locked = true;
 
+    const vectorBackground = new paper.Group();
+    vectorBackground.addChild(vWorkspaceBounds);
+    vectorBackground.addChild(vBackground);
+    setGuideItem(vectorBackground);
+    guideLayer.vectorBackground = vectorBackground;
+
+    const bitmapBackground = _makeBackgroundPaper(120, 90, '#0062ff', 0.05);
+    bitmapBackground.position = CENTER;
+    bitmapBackground.scaling = new paper.Point(8, 8);
+    bitmapBackground.guide = true;
+    bitmapBackground.locked = true;
+    guideLayer.bitmapBackground = bitmapBackground;
+
+    _convertLayer(guideLayer, format);
+    
     _makeCrosshair(0.16, guideLayer);
 
     guideLayer.data.isBackgroundGuideLayer = true;
     return guideLayer;
 };
 
-const setupLayers = function () {
-    const backgroundGuideLayer = _makeBackgroundGuideLayer();
+const setupLayers = function (format) {
+    const backgroundGuideLayer = _makeBackgroundGuideLayer(format);
     _makeRasterLayer();
     const paintLayer = _makePaintingLayer();
     const dragCrosshairLayer = _makeDragCrosshairLayer();
@@ -318,6 +344,7 @@ export {
     getDragCrosshairLayer,
     getGuideLayer,
     getBackgroundGuideLayer,
+    convertBackgroundGuideLayer,
     clearRaster,
     getRaster,
     setGuideItem,

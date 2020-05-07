@@ -1,6 +1,7 @@
 import paper from '@scratch/paper';
 import {getItems} from '../selection';
 import {getActionBounds} from '../view';
+import {BitmapModes} from '../../lib/modes';
 
 /**
  * Tool to handle scaling items by pulling on the handles around the edges of the bounding
@@ -8,9 +9,11 @@ import {getActionBounds} from '../view';
  */
 class ScaleTool {
     /**
+     * @param {Mode} mode Paint editor mode
      * @param {!function} onUpdateImage A callback to call when the image visibly changes
      */
-    constructor (onUpdateImage) {
+    constructor (mode, onUpdateImage) {
+        this.isBitmap = mode in BitmapModes;
         this.active = false;
         this.boundsPath = null;
         this.pivot = null;
@@ -71,7 +74,7 @@ class ScaleTool {
     onMouseDrag (event) {
         if (!this.active) return;
         const point = event.point;
-        const bounds = getActionBounds();
+        const bounds = getActionBounds(this.isBitmap);
         point.x = Math.max(bounds.left, Math.min(point.x, bounds.right));
         point.y = Math.max(bounds.top, Math.min(point.y, bounds.bottom));
 
