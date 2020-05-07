@@ -65,13 +65,8 @@ const getBackgroundGuideLayer = function () {
 };
 
 const _convertLayer = function (layer, format) {
-    if (isVector(format)) {
-        layer.vectorBackground.visible = true;
-        layer.bitmapBackground.visible = false;
-    } else if (isBitmap(format)) {
-        layer.bitmapBackground.visible = true;
-        layer.vectorBackground.visible = false;
-    }
+    layer.bitmapBackground.visible = isBitmap(format);
+    layer.vectorBackground.visible = isVector(format);
 };
 
 const convertBackgroundGuideLayer = function (format) {

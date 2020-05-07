@@ -1,6 +1,6 @@
 .paper-canvas {
-	top: 1px; /* leave room for the border*/
-	left: 1px;
+    top: 1px; /* leave room for the border */
+    left: 1px;
     width: calc(100% - 2px);
     height: calc(100% - 2px);
     margin: auto;
