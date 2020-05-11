@@ -216,7 +216,6 @@ const _makeBackgroundPaper = function (width, height, color, opacity) {
     mask.scale(1 / CHECKERBOARD_SIZE);
     const vGroup = new paper.Group([vRect, vPath, mask]);
     mask.clipMask = true;
-
     return vGroup;
 };
 
@@ -297,8 +296,8 @@ const _makeBackgroundGuideLayer = function (format) {
     // Add 1 to the height because it's an odd number otherwise, and we want it to be even
     // so the corner of the checkerboard to line up with the center crosshair
     const vBackground = _makeBackgroundPaper(
-        (MAX_WORKSPACE_BOUNDS.height / CHECKERBOARD_SIZE) + 1,
         MAX_WORKSPACE_BOUNDS.width / CHECKERBOARD_SIZE,
+        (MAX_WORKSPACE_BOUNDS.height / CHECKERBOARD_SIZE) + 1,
         '#0062ff', 0.05);
     vBackground.position = CENTER;
     vBackground.scaling = new paper.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);
