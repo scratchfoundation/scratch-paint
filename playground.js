@@ -54008,8 +54008,9 @@ var FillColorIndicator = function (_React$Component) {
         key: 'handleSwap',
         value: function handleSwap() {
             if ((0, _selection.getSelectedLeafItems)().length) {
-                (0, _stylePath.swapColorsInSelection)((0, _format.isBitmap)(this.props.format), this.props.textEditTarget);
+                var isDifferent = (0, _stylePath.swapColorsInSelection)((0, _format.isBitmap)(this.props.format), this.props.textEditTarget);
                 this.props.setSelectedItems();
+                this._hasChanged = this._hasChanged || isDifferent;
             } else {
                 var color1 = this.props.fillColor;
                 var color2 = this.props.fillColor2;
