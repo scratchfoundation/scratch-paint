@@ -1,8 +1,10 @@
 import paper from '@scratch/paper';
 import log from '../log/log';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER} from './view';
+import {ART_BOARD_BOUNDS, ART_BOARD_WIDTH, ART_BOARD_HEIGHT, CENTER, MAX_WORKSPACE_BOUNDS} from './view';
 import {isGroupItem} from './item';
+import {isBitmap, isVector} from '../lib/format';
 
+const CHECKERBOARD_SIZE = 8;
 const CROSSHAIR_SIZE = 16;
 const CROSSHAIR_FULL_OPACITY = 0.75;
 
@@ -42,7 +44,7 @@ const clearRaster = function () {
     raster.parent = layer;
     raster.guide = true;
     raster.locked = true;
-    raster.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
+    raster.position = CENTER;
 };
 
 const getRaster = function () {
@@ -60,6 +62,15 @@ const getDragCrosshairLayer = function () {
 
 const getBackgroundGuideLayer = function () {
     return _getLayer('isBackgroundGuideLayer');
+};
+
+const _convertLayer = function (layer, format) {
+    layer.bitmapBackground.visible = isBitmap(format);
+    layer.vectorBackground.visible = isVector(format);
+};
+
+const convertBackgroundGuideLayer = function (format) {
+    _convertLayer(getBackgroundGuideLayer(), format);
 };
 
 const _makeGuideLayer = function () {
@@ -95,8 +106,10 @@ const setGuideItem = function (item) {
 const hideGuideLayers = function (includeRaster) {
     const backgroundGuideLayer = getBackgroundGuideLayer();
     const dragCrosshairLayer = getDragCrosshairLayer();
+    const outlineLayer = _getLayer('isOutlineLayer');
     const guideLayer = getGuideLayer();
     dragCrosshairLayer.remove();
+    outlineLayer.remove();
     guideLayer.remove();
     backgroundGuideLayer.remove();
     let rasterLayer;
@@ -106,6 +119,7 @@ const hideGuideLayers = function (includeRaster) {
     }
     return {
         dragCrosshairLayer: dragCrosshairLayer,
+        outlineLayer: outlineLayer,
         guideLayer: guideLayer,
         backgroundGuideLayer: backgroundGuideLayer,
         rasterLayer: rasterLayer
@@ -120,6 +134,7 @@ const hideGuideLayers = function (includeRaster) {
 const showGuideLayers = function (guideLayers) {
     const backgroundGuideLayer = guideLayers.backgroundGuideLayer;
     const dragCrosshairLayer = guideLayers.dragCrosshairLayer;
+    const outlineLayer = guideLayers.outlineLayer;
     const guideLayer = guideLayers.guideLayer;
     const rasterLayer = guideLayers.rasterLayer;
     if (rasterLayer && !rasterLayer.index) {
@@ -133,6 +148,10 @@ const showGuideLayers = function (guideLayers) {
     if (!dragCrosshairLayer.index) {
         paper.project.addLayer(dragCrosshairLayer);
         dragCrosshairLayer.bringToFront();
+    }
+    if (!outlineLayer.index) {
+        paper.project.addLayer(outlineLayer);
+        outlineLayer.bringToFront();
     }
     if (!guideLayer.index) {
         paper.project.addLayer(guideLayer);
@@ -157,7 +176,7 @@ const _makeRasterLayer = function () {
     return rasterLayer;
 };
 
-const _makeBackgroundPaper = function (width, height, color) {
+const _makeBackgroundPaper = function (width, height, color, opacity) {
     // creates a checkerboard path of width * height squares in color on white
     let x = 0;
     let y = 0;
@@ -176,16 +195,27 @@ const _makeBackgroundPaper = function (width, height, color) {
         pathPoints.push(new paper.Point(x, y));
         y--;
     }
-    const vRect = new paper.Shape.Rectangle(new paper.Point(0, 0), new paper.Point(120, 90));
+    const vRect = new paper.Shape.Rectangle(
+        new paper.Point(0, 0),
+        new paper.Point(ART_BOARD_WIDTH / CHECKERBOARD_SIZE, ART_BOARD_HEIGHT / CHECKERBOARD_SIZE));
     vRect.fillColor = '#fff';
     vRect.guide = true;
     vRect.locked = true;
+    vRect.position = CENTER;
     const vPath = new paper.Path(pathPoints);
     vPath.fillRule = 'evenodd';
     vPath.fillColor = color;
+    vPath.opacity = opacity;
     vPath.guide = true;
     vPath.locked = true;
-    const vGroup = new paper.Group([vRect, vPath]);
+    vPath.position = CENTER;
+    const mask = new paper.Shape.Rectangle(MAX_WORKSPACE_BOUNDS);
+    mask.position = CENTER;
+    mask.guide = true;
+    mask.locked = true;
+    mask.scale(1 / CHECKERBOARD_SIZE);
+    const vGroup = new paper.Group([vRect, vPath, mask]);
+    mask.clipMask = true;
     return vGroup;
 };
 
@@ -230,7 +260,6 @@ const _makeCrosshair = function (opacity, parent) {
     crosshair.applyMatrix = false;
     parent.dragCrosshair = crosshair;
     crosshair.scale(CROSSHAIR_SIZE / crosshair.bounds.width / paper.view.zoom);
-
 };
 
 const _makeDragCrosshairLayer = function () {
@@ -241,30 +270,72 @@ const _makeDragCrosshairLayer = function () {
     return dragCrosshairLayer;
 };
 
-const _makeBackgroundGuideLayer = function () {
+const _makeOutlineLayer = function () {
+    const outlineLayer = new paper.Layer();
+    const whiteRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(1));
+    whiteRect.strokeWidth = 2;
+    whiteRect.strokeColor = 'white';
+    setGuideItem(whiteRect);
+    const blueRect = new paper.Shape.Rectangle(ART_BOARD_BOUNDS.expand(5));
+    blueRect.strokeWidth = 2;
+    blueRect.strokeColor = '#4280D7';
+    blueRect.opacity = 0.25;
+    setGuideItem(blueRect);
+    outlineLayer.data.isOutlineLayer = true;
+    return outlineLayer;
+};
+
+const _makeBackgroundGuideLayer = function (format) {
     const guideLayer = new paper.Layer();
     guideLayer.locked = true;
+    
+    const vWorkspaceBounds = new paper.Shape.Rectangle(MAX_WORKSPACE_BOUNDS);
+    vWorkspaceBounds.fillColor = '#ECF1F9';
+    vWorkspaceBounds.position = CENTER;
 
-    const vBackground = _makeBackgroundPaper(120, 90, '#E5E5E5');
-    vBackground.position = new paper.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
-    vBackground.scaling = new paper.Point(8, 8);
-    vBackground.guide = true;
-    vBackground.locked = true;
+    // Add 1 to the height because it's an odd number otherwise, and we want it to be even
+    // so the corner of the checkerboard to line up with the center crosshair
+    const vBackground = _makeBackgroundPaper(
+        MAX_WORKSPACE_BOUNDS.width / CHECKERBOARD_SIZE,
+        (MAX_WORKSPACE_BOUNDS.height / CHECKERBOARD_SIZE) + 1,
+        '#0062ff', 0.05);
+    vBackground.position = CENTER;
+    vBackground.scaling = new paper.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);
 
+    const vectorBackground = new paper.Group();
+    vectorBackground.addChild(vWorkspaceBounds);
+    vectorBackground.addChild(vBackground);
+    setGuideItem(vectorBackground);
+    guideLayer.vectorBackground = vectorBackground;
+
+    const bitmapBackground = _makeBackgroundPaper(
+        ART_BOARD_WIDTH / CHECKERBOARD_SIZE,
+        ART_BOARD_HEIGHT / CHECKERBOARD_SIZE,
+        '#0062ff', 0.05);
+    bitmapBackground.position = CENTER;
+    bitmapBackground.scaling = new paper.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);
+    bitmapBackground.guide = true;
+    bitmapBackground.locked = true;
+    guideLayer.bitmapBackground = bitmapBackground;
+
+    _convertLayer(guideLayer, format);
+    
     _makeCrosshair(0.16, guideLayer);
 
     guideLayer.data.isBackgroundGuideLayer = true;
     return guideLayer;
 };
 
-const setupLayers = function () {
-    const backgroundGuideLayer = _makeBackgroundGuideLayer();
+const setupLayers = function (format) {
+    const backgroundGuideLayer = _makeBackgroundGuideLayer(format);
     _makeRasterLayer();
     const paintLayer = _makePaintingLayer();
     const dragCrosshairLayer = _makeDragCrosshairLayer();
+    const outlineLayer = _makeOutlineLayer();
     const guideLayer = _makeGuideLayer();
     backgroundGuideLayer.sendToBack();
     dragCrosshairLayer.bringToFront();
+    outlineLayer.bringToFront();
     guideLayer.bringToFront();
     paintLayer.activate();
 };
@@ -278,6 +349,7 @@ export {
     getDragCrosshairLayer,
     getGuideLayer,
     getBackgroundGuideLayer,
+    convertBackgroundGuideLayer,
     clearRaster,
     getRaster,
     setGuideItem,

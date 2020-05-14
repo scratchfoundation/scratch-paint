@@ -49,7 +49,7 @@ class BoundingBoxTool {
         this.boundsScaleHandles = [];
         this.boundsRotHandles = [];
         this._modeMap = {};
-        this._modeMap[BoundingBoxModes.SCALE] = new ScaleTool(onUpdateImage);
+        this._modeMap[BoundingBoxModes.SCALE] = new ScaleTool(mode, onUpdateImage);
         this._modeMap[BoundingBoxModes.ROTATE] = new RotateTool(onUpdateImage);
         this._modeMap[BoundingBoxModes.MOVE] =
             new MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool);

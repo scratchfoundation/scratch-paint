@@ -44,7 +44,7 @@ class SelectionBoxTool {
     }
     onMouseUpBitmap (event) {
         if (event.event.button > 0) return; // only first mouse button
-        if (this.selectionRect) {
+        if (this.selectionRect && this.selectionRect.bounds.intersects(getRaster().bounds)) {
             const rect = new paper.Rectangle({
                 from: new paper.Point(
                     Math.max(0, Math.round(this.selectionRect.bounds.topLeft.x)),
@@ -53,10 +53,6 @@ class SelectionBoxTool {
                     Math.min(ART_BOARD_WIDTH, Math.round(this.selectionRect.bounds.bottomRight.x)),
                     Math.min(ART_BOARD_HEIGHT, Math.round(this.selectionRect.bounds.bottomRight.y)))
             });
-
-            // Remove dotted rectangle
-            this.selectionRect.remove();
-            this.selectionRect = null;
 
             if (rect.area) {
                 // Pull selected raster to active layer
@@ -74,6 +70,11 @@ class SelectionBoxTool {
                 context.clearRect(rect.x, rect.y, rect.width, rect.height);
                 this.setSelectedItems();
             }
+        }
+        if (this.selectionRect) {
+            // Remove dotted rectangle
+            this.selectionRect.remove();
+            this.selectionRect = null;
         }
     }
 }

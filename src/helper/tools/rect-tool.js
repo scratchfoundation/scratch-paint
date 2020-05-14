@@ -31,7 +31,7 @@ class RectTool extends paper.Tool {
             setCursor,
             onUpdateImage
         );
-        const nudgeTool = new NudgeTool(this.boundingBoxTool, onUpdateImage);
+        const nudgeTool = new NudgeTool(Modes.RECT, this.boundingBoxTool, onUpdateImage);
 
         // We have to set these functions instead of just declaring them because
         // paper.js tools hook up the listeners in the setter functions.

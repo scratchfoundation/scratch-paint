@@ -8,13 +8,16 @@ import {connect} from 'react-redux';
 
 import {undoSnapshot} from '../reducers/undo';
 import {setSelectedItems} from '../reducers/selected-items';
+import {updateViewBounds} from '../reducers/view-bounds';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {getRaster, hideGuideLayers, showGuideLayers} from '../helper/layer';
 import {commitRectToBitmap, commitOvalToBitmap, commitSelectionToBitmap, getHitBounds} from '../helper/bitmap';
 import {performSnapshot} from '../helper/undo';
 import {scaleWithStrokes} from '../helper/math';
+
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT, SVG_ART_BOARD_WIDTH, SVG_ART_BOARD_HEIGHT} from '../helper/view';
+import {setWorkspaceBounds} from '../helper/view';
 
 import Modes from '../lib/modes';
 import {BitmapModes} from '../lib/modes';
@@ -47,6 +50,9 @@ const UpdateImageHOC = function (WrappedComponent) {
             } else if (isVector(actualFormat)) {
                 this.handleUpdateVector(skipSnapshot);
             }
+            // Any time an image update is made, recalculate the bounds of the artwork
+            setWorkspaceBounds();
+            this.props.updateViewBounds(paper.view.matrix);
         }
         handleUpdateBitmap (skipSnapshot) {
             if (!getRaster().loaded) {
@@ -110,12 +116,24 @@ const UpdateImageHOC = function (WrappedComponent) {
             }
         }
         handleUpdateVector (skipSnapshot) {
+            // Remove viewbox (this would make it export at MAX_WORKSPACE_BOUNDS)
+            let workspaceMask;
+            if (paper.project.activeLayer.clipped) {
+                for (const child of paper.project.activeLayer.children) {
+                    if (child.isClipMask()) {
+                        workspaceMask = child;
+                        break;
+                    }
+                }
+                paper.project.activeLayer.clipped = false;
+                workspaceMask.remove();
+            }
             const guideLayers = hideGuideLayers(true /* includeRaster */);
 
             // Export at 0.5x
             scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
+
             const bounds = paper.project.activeLayer.drawnBounds;
-            // @todo (https://github.com/LLK/scratch-paint/issues/445) generate view box
             this.props.onUpdateImage(
                 true /* isVector */,
                 paper.project.exportSVG({
@@ -129,6 +147,12 @@ const UpdateImageHOC = function (WrappedComponent) {
             paper.project.activeLayer.applyMatrix = true;
 
             showGuideLayers(guideLayers);
+
+            // Add back viewbox
+            if (workspaceMask) {
+                paper.project.activeLayer.addChild(workspaceMask);
+                workspaceMask.clipMask = true;
+            }
 
             if (!skipSnapshot) {
                 performSnapshot(this.props.undoSnapshot, Formats.VECTOR);
@@ -153,7 +177,8 @@ const UpdateImageHOC = function (WrappedComponent) {
         format: PropTypes.oneOf(Object.keys(Formats)),
         mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
         onUpdateImage: PropTypes.func.isRequired,
-        undoSnapshot: PropTypes.func.isRequired
+        undoSnapshot: PropTypes.func.isRequired,
+        updateViewBounds: PropTypes.func.isRequired
     };
 
     const mapStateToProps = state => ({
@@ -167,6 +192,9 @@ const UpdateImageHOC = function (WrappedComponent) {
         },
         undoSnapshot: snapshot => {
             dispatch(undoSnapshot(snapshot));
+        },
+        updateViewBounds: matrix => {
+            dispatch(updateViewBounds(matrix));
         }
     });
 
