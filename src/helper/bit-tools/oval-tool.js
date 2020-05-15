@@ -76,7 +76,8 @@ class OvalTool extends paper.Tool {
                 this.thickness = this.oval.strokeWidth;
             }
             this.filled = this.oval.strokeWidth === 0;
-            this.color = this.filled ? this.oval.fillColor.toCSS() : this.oval.strokeColor.toCSS();
+            const color = this.filled ? this.oval.fillColor : this.oval.strokeColor;
+            this.color = color ? color.toCSS() : null;
         } else if (this.oval && this.oval.isInserted() && !this.oval.selected) {
             // Oval got deselected
             this.commitOval();
