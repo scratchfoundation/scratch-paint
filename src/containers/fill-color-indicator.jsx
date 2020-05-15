@@ -91,10 +91,11 @@ class FillColorIndicator extends React.Component {
     }
     handleSwap () {
         if (getSelectedLeafItems().length) {
-            swapColorsInSelection(
+            const isDifferent = swapColorsInSelection(
                 isBitmap(this.props.format),
                 this.props.textEditTarget);
             this.props.setSelectedItems();
+            this._hasChanged = this._hasChanged || isDifferent;
         } else {
             let color1 = this.props.fillColor;
             let color2 = this.props.fillColor2;
@@ -130,6 +131,7 @@ const mapStateToProps = state => ({
     shouldShowGradientTools: state.scratchPaint.mode === Modes.SELECT ||
         state.scratchPaint.mode === Modes.RESHAPE ||
         state.scratchPaint.mode === Modes.FILL ||
+        state.scratchPaint.mode === Modes.BIT_SELECT ||
         state.scratchPaint.mode === Modes.BIT_FILL,
     textEditTarget: state.scratchPaint.textEditTarget
 });

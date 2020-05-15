@@ -14,7 +14,6 @@ class RectTool extends ShapeTool {
      */
     constructor (setSelectedItems, clearSelectedItems, setCursor, onUpdateImage) {
         super(setSelectedItems, clearSelectedItems, setCursor, onUpdateImage, Modes.RECT);
-
         this.shapeConstructor = paper.Shape.Rectangle;
     }
 }

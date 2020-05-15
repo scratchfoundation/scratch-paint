@@ -13,7 +13,10 @@ import {sortItemsByZIndex} from './math';
  */
 const getItems = function (options) {
     const newMatcher = function (item) {
-        return !(item instanceof paper.Layer) && !item.locked &&
+        return !(item instanceof paper.Layer) &&
+            item.layer.data && item.layer.data.isPaintingLayer &&
+            !item.locked &&
+            !item.isClipMask() &&
             !(item.data && item.data.isHelperItem) &&
             (!options.match || options.match(item));
     };

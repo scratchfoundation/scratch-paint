@@ -1,11 +1,17 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
+import {BitmapModes} from '../../lib/modes';
 import {isGroup} from '../group';
 import {isCompoundPathItem, getRootItem} from '../item';
-import {snapDeltaToAngle} from '../math';
-import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
+import {checkPointsClose, snapDeltaToAngle} from '../math';
+import {getActionBounds, CENTER} from '../view';
 import {clearSelection, cloneSelection, getSelectedLeafItems, getSelectedRootItems, setItemSelection}
     from '../selection';
+import {getDragCrosshairLayer, CROSSHAIR_FULL_OPACITY} from '../layer';
+
+/** Snap to align selection center to rotation center within this distance */
+const SNAPPING_THRESHOLD = 4;
+const FADE_DISTANCE = 10;
 
 /**
  * Tool to handle dragging an item to reposition it in a selection mode.
@@ -23,9 +29,11 @@ class MoveTool {
         this.setSelectedItems = setSelectedItems;
         this.clearSelectedItems = clearSelectedItems;
         this.selectedItems = null;
+        this.selectionCenter = null;
         this.onUpdateImage = onUpdateImage;
         this.switchToTextTool = switchToTextTool;
         this.boundsPath = null;
+        this.firstDrag = false;
     }
 
     /**
@@ -66,10 +74,27 @@ class MoveTool {
             this._select(item, true, hitProperties.subselect);
         }
         if (hitProperties.clone) cloneSelection(hitProperties.subselect, this.onUpdateImage);
+
         this.selectedItems = this.mode === Modes.RESHAPE ? getSelectedLeafItems() : getSelectedRootItems();
+        if (this.selectedItems.length === 0) {
+            return;
+        }
+
+        let selectionBounds;
+        for (const selectedItem of this.selectedItems) {
+            if (selectionBounds) {
+                selectionBounds = selectionBounds.unite(selectedItem.bounds);
+            } else {
+                selectionBounds = selectedItem.bounds;
+            }
+        }
+        this.selectionCenter = selectionBounds.center;
+
         if (this.boundsPath) {
             this.selectedItems.push(this.boundsPath);
         }
+
+        this.firstDrag = true;
     }
     setBoundsPath (boundsPath) {
         this.boundsPath = boundsPath;
@@ -99,10 +124,29 @@ class MoveTool {
     }
     onMouseDrag (event) {
         const point = event.point;
-        point.x = Math.max(0, Math.min(point.x, ART_BOARD_WIDTH));
-        point.y = Math.max(0, Math.min(point.y, ART_BOARD_HEIGHT));
-        const dragVector = point.subtract(event.downPoint);
+        const actionBounds = getActionBounds(this.mode in BitmapModes);
 
+        point.x = Math.max(actionBounds.left, Math.min(point.x, actionBounds.right));
+        point.y = Math.max(actionBounds.top, Math.min(point.y, actionBounds.bottom));
+        
+        const dragVector = point.subtract(event.downPoint);
+        let snapVector;
+
+        // Snapping to align center. Not in reshape mode, because reshape doesn't show center crosshair
+        if (!event.modifiers.shift && this.mode !== Modes.RESHAPE) {
+            if (checkPointsClose(
+                this.selectionCenter.add(dragVector),
+                CENTER,
+                SNAPPING_THRESHOLD / paper.view.zoom /* threshold */)) {
+
+                snapVector = CENTER.subtract(this.selectionCenter);
+            }
+        }
+        if (this.selectedItems.length === 0) {
+            return;
+        }
+
+        let bounds;
         for (const item of this.selectedItems) {
             // add the position of the item before the drag started
             // for later use in the snap calculation
@@ -110,14 +154,55 @@ class MoveTool {
                 item.data.origPos = item.position;
             }
 
-            if (event.modifiers.shift) {
+            if (snapVector) {
+                item.position = item.data.origPos.add(snapVector);
+            } else if (event.modifiers.shift) {
                 item.position = item.data.origPos.add(snapDeltaToAngle(dragVector, Math.PI / 4));
             } else {
                 item.position = item.data.origPos.add(dragVector);
             }
+
+            if (bounds) {
+                bounds = bounds.unite(item.bounds);
+            } else {
+                bounds = item.bounds;
+            }
         }
+        
+        if (this.firstDrag) {
+            // Show the center crosshair above the selected item while dragging.
+            getDragCrosshairLayer().visible = true;
+            this.firstDrag = false;
+        }
+
+        // The rotation center crosshair should be opaque over the entire selection bounding box, and fade out to
+        // totally transparent outside the selection bounding box.
+        let opacityMultiplier = 1;
+        const newCenter = this.selectionCenter.add(dragVector);
+        if ((CENTER.y < bounds.top && CENTER.x < bounds.left) ||
+            (CENTER.y > bounds.bottom && CENTER.x < bounds.left) ||
+            (CENTER.y < bounds.top && CENTER.x > bounds.right) ||
+            (CENTER.y > bounds.bottom && CENTER.x > bounds.right)) {
+
+            // rotation center is to one of the 4 corners of the selection bounding box
+            const distX = Math.max(CENTER.x - bounds.right, bounds.left - CENTER.x);
+            const distY = Math.max(CENTER.y - bounds.bottom, bounds.top - CENTER.y);
+            const dist = Math.sqrt((distX * distX) + (distY * distY));
+            opacityMultiplier =
+                Math.max(0, (1 - (dist / (FADE_DISTANCE / paper.view.zoom))));
+        } else if (CENTER.y < bounds.top || CENTER.y > bounds.bottom) {
+            // rotation center is above or below the selection bounding box
+            opacityMultiplier = Math.max(0,
+                (1 - ((Math.abs(CENTER.y - newCenter.y) - (bounds.height / 2)) / (FADE_DISTANCE / paper.view.zoom))));
+        } else if (CENTER.x < bounds.left || CENTER.x > bounds.right) {
+            // rotation center is left or right of the selection bounding box
+            opacityMultiplier = Math.max(0,
+                (1 - ((Math.abs(CENTER.x - newCenter.x) - (bounds.width / 2)) / (FADE_DISTANCE / paper.view.zoom))));
+        } // else the rotation center is within selection bounds, always show drag crosshair at full opacity
+        getDragCrosshairLayer().opacity = CROSSHAIR_FULL_OPACITY * opacityMultiplier;
     }
     onMouseUp () {
+        this.firstDrag = false;
         let moved = false;
         // resetting the items origin point for the next usage
         for (const item of this.selectedItems) {
@@ -127,10 +212,14 @@ class MoveTool {
             item.data.origPos = null;
         }
         this.selectedItems = null;
+        this.selectionCenter = null;
 
         if (moved) {
             this.onUpdateImage();
         }
+
+        // Hide the crosshair we showed earlier.
+        getDragCrosshairLayer().visible = false;
     }
 }
 

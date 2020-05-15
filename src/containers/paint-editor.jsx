@@ -20,7 +20,7 @@ import {setLayout} from '../reducers/layout';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
-import {resetZoom, zoomOnSelection} from '../helper/view';
+import {resetZoom, zoomOnSelection, OUTERMOST_ZOOM_LEVEL} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
 import Modes from '../lib/modes';
@@ -211,7 +211,13 @@ class PaintEditor extends React.Component {
         }
     }
     handleZoomIn () {
-        zoomOnSelection(PaintEditor.ZOOM_INCREMENT);
+        // Make the "next step" after the outermost zoom level be the default
+        // zoom level (0.5)
+        let zoomIncrement = PaintEditor.ZOOM_INCREMENT;
+        if (paper.view.zoom === OUTERMOST_ZOOM_LEVEL) {
+            zoomIncrement = 0.5 - OUTERMOST_ZOOM_LEVEL;
+        }
+        zoomOnSelection(zoomIncrement);
         this.props.updateViewBounds(paper.view.matrix);
         this.handleSetSelectedItems();
     }

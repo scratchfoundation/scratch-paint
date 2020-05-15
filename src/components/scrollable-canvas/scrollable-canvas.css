@@ -1,5 +1,5 @@
 $scrollbar-size: 8px;
-$scrollbar-padding: 1px;
+$scrollbar-padding: 4px;
 
 .vertical-scrollbar, .horizontal-scrollbar {
     position: absolute;
@@ -10,17 +10,17 @@ $scrollbar-padding: 1px;
 .vertical-scrollbar-wrapper {
     position: absolute;
     width: $scrollbar-size;
-    right: 0;
+    right: $scrollbar-padding;
     top: $scrollbar-padding;
-    height: calc(100% - $scrollbar-size - $scrollbar-padding);
+    height: calc(100% - $scrollbar-size - 2 * $scrollbar-padding);
 }
 
 .horizontal-scrollbar-wrapper {
     position: absolute;
     height: $scrollbar-size;
     left: $scrollbar-padding;
-    bottom: 0;
-    width: calc(100% - $scrollbar-size - $scrollbar-padding);
+    bottom: $scrollbar-padding;
+    width: calc(100% - $scrollbar-size - 2 * $scrollbar-padding);
 }
 
 .vertical-scrollbar {
