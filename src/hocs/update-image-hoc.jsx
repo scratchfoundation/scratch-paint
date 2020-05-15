@@ -134,6 +134,14 @@ const UpdateImageHOC = function (WrappedComponent) {
             scaleWithStrokes(paper.project.activeLayer, .5, new paper.Point());
 
             const bounds = paper.project.activeLayer.drawnBounds;
+
+            // `bounds.x` and `bounds.y` are relative to the top left corner,
+            // but if there is no content in the active layer, they default to 0,
+            // making the "Scratch space" rotation center ((SVG_ART_BOARD_WIDTH / 2), (SVG_ART_BOARD_HEIGHT / 2)),
+            // aka the upper left corner. Special-case this to be (0, 0), which is the center of the art board.
+            const centerX = bounds.width === 0 ? 0 : (SVG_ART_BOARD_WIDTH / 2) - bounds.x;
+            const centerY = bounds.height === 0 ? 0 : (SVG_ART_BOARD_HEIGHT / 2) - bounds.y;
+
             this.props.onUpdateImage(
                 true /* isVector */,
                 paper.project.exportSVG({
@@ -141,8 +149,8 @@ const UpdateImageHOC = function (WrappedComponent) {
                     bounds: 'content',
                     matrix: new paper.Matrix().translate(-bounds.x, -bounds.y)
                 }),
-                (SVG_ART_BOARD_WIDTH / 2) - bounds.x,
-                (SVG_ART_BOARD_HEIGHT / 2) - bounds.y);
+                centerX,
+                centerY);
             scaleWithStrokes(paper.project.activeLayer, 2, new paper.Point());
             paper.project.activeLayer.applyMatrix = true;
 
