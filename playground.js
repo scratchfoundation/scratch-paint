@@ -23293,8 +23293,13 @@ var commitOvalToBitmap = function commitOvalToBitmap(oval, bitmap) {
     var radiusY = Math.abs(oval.size.height / 2);
     var context = bitmap.getContext('2d');
     var filled = oval.strokeWidth === 0;
-    context.fillStyle = filled ? oval.fillColor && oval.fillColor.toCSS() : oval.strokeColor && oval.strokeColor.toCSS();
 
+    var canvasColor = filled ? oval.fillColor : oval.strokeColor;
+    // If the color is null (e.g. fully transparent/"no fill"), don't bother drawing anything,
+    // and especially don't try calling `toCSS` on it
+    if (!canvasColor) return;
+
+    context.fillStyle = canvasColor.toCSS();
     var drew = drawEllipse({
         position: oval.position,
         radiusX: radiusX,
@@ -23315,7 +23320,13 @@ var commitRectToBitmap = function commitRectToBitmap(rect, bitmap) {
     var tmpCanvas = (0, _layer.createCanvas)();
     var context = tmpCanvas.getContext('2d');
     var filled = rect.strokeWidth === 0;
-    context.fillStyle = filled ? rect.fillColor && rect.fillColor.toCSS() : rect.strokeColor && rect.strokeColor.toCSS();
+
+    var canvasColor = filled ? rect.fillColor : rect.strokeColor;
+    // If the color is null (e.g. fully transparent/"no fill"), don't bother drawing anything,
+    // and especially don't try calling `toCSS` on it
+    if (!canvasColor) return;
+
+    context.fillStyle = canvasColor.toCSS();
     if (filled) {
         fillRect(rect, context);
     } else {
@@ -49463,7 +49474,8 @@ var OvalTool = function (_paper$Tool) {
                     this.thickness = this.oval.strokeWidth;
                 }
                 this.filled = this.oval.strokeWidth === 0;
-                this.color = this.filled ? this.oval.fillColor.toCSS() : this.oval.strokeColor.toCSS();
+                var color = this.filled ? this.oval.fillColor : this.oval.strokeColor;
+                this.color = color ? color.toCSS() : null;
             } else if (this.oval && this.oval.isInserted() && !this.oval.selected) {
                 // Oval got deselected
                 this.commitOval();
@@ -50409,7 +50421,8 @@ var RectTool = function (_paper$Tool) {
                     this.thickness = this.rect.strokeWidth;
                 }
                 this.filled = this.rect.strokeWidth === 0;
-                this.color = this.filled ? this.rect.fillColor.toCSS() : this.rect.strokeColor.toCSS();
+                var color = this.filled ? this.rect.fillColor : this.rect.strokeColor;
+                this.color = color ? color.toCSS() : null;
             } else if (this.rect && this.rect.isInserted() && !this.rect.selected) {
                 // Rectangle got deselected
                 this.commitRect();
