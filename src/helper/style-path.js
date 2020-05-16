@@ -6,6 +6,7 @@ import {getItems} from './selection';
 import GradientTypes from '../lib/gradient-types';
 import parseColor from 'parse-color';
 import {DEFAULT_COLOR} from '../reducers/fill-color';
+import {isCompoundPathChild} from '../helper/compound-path';
 
 const MIXED = 'scratch-paint/style-path/mixed';
 
@@ -159,10 +160,11 @@ const applyFillColorToSelection = function (colorString, colorIndex, isSolidGrad
 const swapColorsInSelection = function (bitmapMode, textEditTargetId) {
     const items = _getColorStateListeners(textEditTargetId);
     let changed = false;
-    for (let item of items) {
-        if (item.parent instanceof paper.CompoundPath) {
-            item = item.parent;
-        }
+    for (const item of items) {
+        // If an item is a child path, do not swap colors.
+        // At some point, we'll iterate over its parent path, and we don't want to swap colors twice--
+        // that would leave us right where we started.
+        if (isCompoundPathChild(item)) continue;
 
         if (bitmapMode) {
             // @todo
