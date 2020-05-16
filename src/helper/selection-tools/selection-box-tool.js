@@ -74,8 +74,7 @@ class SelectionBoxTool {
                 context.clearRect(rect.x, rect.y, rect.width, rect.height);
                 this.setSelectedItems();
             }
-        }
-        if (this.selectionRect) {
+
             // Remove dotted rectangle
             this.selectionRect.remove();
             this.selectionRect = null;
