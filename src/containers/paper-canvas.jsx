@@ -224,19 +224,10 @@ class PaperCanvas extends React.Component {
 
                 // Without the callback, rasters' load function has not been called yet, and they are
                 // positioned incorrectly
-                paperCanvas.queuedImport =
-                    window.setTimeout(() => {
-                        // Detached
-                        if (!paper.view) return;
-                        // Prevent blurriness caused if the "CSS size" of the element is a float--
-                        // setting canvas dimensions to floats floors them, but we need to round instead
-                        const elemSize = paper.DomElement.getSize(paper.view.element);
-                        elemSize.width = Math.round(elemSize.width);
-                        elemSize.height = Math.round(elemSize.height);
-                        paper.view.setViewSize(elemSize);
-                        paperCanvas.props.updateViewBounds(paper.view.matrix);
-                        paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
-                    }, 0);
+                paperCanvas.queuedImport = paperCanvas.recalibrateSize(() => {
+                    paperCanvas.props.updateViewBounds(paper.view.matrix);
+                    paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
+                });
             }
         });
     }
@@ -309,13 +300,20 @@ class PaperCanvas extends React.Component {
         this.recalibrateSize();
         this.props.updateViewBounds(paper.view.matrix);
     }
-    recalibrateSize () {
+    recalibrateSize (callback) {
         // Sets the size that Paper thinks the canvas is to the size the canvas element actually is.
         // When these are out of sync, the mouse events in the paint editor don't line up correctly.
-        window.setTimeout(() => {
+        return window.setTimeout(() => {
             if (!paper.view) return;
-            paper.view.setViewSize(paper.DomElement.getSize(paper.view.element));
-        });
+            // Prevent blurriness caused if the "CSS size" of the element is a float--
+            // setting canvas dimensions to floats floors them, but we need to round instead
+            const elemSize = paper.DomElement.getSize(paper.view.element);
+            elemSize.width = Math.round(elemSize.width);
+            elemSize.height = Math.round(elemSize.height);
+            paper.view.setViewSize(elemSize);
+
+            if (callback) callback();
+        }, 0);
     }
     setCanvas (canvas) {
         this.canvas = canvas;
