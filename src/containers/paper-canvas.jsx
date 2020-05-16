@@ -228,7 +228,12 @@ class PaperCanvas extends React.Component {
                     window.setTimeout(() => {
                         // Detached
                         if (!paper.view) return;
-                        paper.view.setViewSize(paper.DomElement.getSize(paper.view.element));
+                        // Prevent blurriness caused if the "CSS size" of the element is a float--
+                        // setting canvas dimensions to floats floors them, but we need to round instead
+                        const elemSize = paper.DomElement.getSize(paper.view.element);
+                        elemSize.width = Math.round(elemSize.width);
+                        elemSize.height = Math.round(elemSize.height);
+                        paper.view.setViewSize(elemSize);
                         paperCanvas.props.updateViewBounds(paper.view.matrix);
                         paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
                     }, 0);

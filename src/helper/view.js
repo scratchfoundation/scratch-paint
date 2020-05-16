@@ -18,6 +18,7 @@ const PADDING_PERCENT = 25; // Padding as a percent of the max of width/height o
 const BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
 const MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
 //                         zoomed in for tiny costumes.
+const OUTERMOST_ZOOM_LEVEL = 0.333;
 const ART_BOARD_BOUNDS = new paper.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
 const MAX_WORKSPACE_BOUNDS = new paper.Rectangle(
     -ART_BOARD_WIDTH / 4,
@@ -108,14 +109,7 @@ const resizeCrosshair = () => {
 const zoomOnFixedPoint = (deltaZoom, fixedPoint) => {
     const view = paper.view;
     const preZoomCenter = view.center;
-    let newZoom;
-    if (view.zoom <= 0.5 && deltaZoom < 0) {
-        newZoom = 0.333;
-    } else if (view.zoom <= 0.333 && deltaZoom > 0) {
-        newZoom = 0.5;
-    } else {
-        newZoom = Math.max(0.5, view.zoom + deltaZoom);
-    }
+    const newZoom = Math.max(OUTERMOST_ZOOM_LEVEL, view.zoom + deltaZoom);
     const scaling = view.zoom / newZoom;
     const preZoomOffset = fixedPoint.subtract(preZoomCenter);
     const postZoomOffset = fixedPoint.subtract(preZoomOffset.multiply(scaling))
@@ -212,6 +206,7 @@ export {
     ART_BOARD_HEIGHT,
     ART_BOARD_WIDTH,
     CENTER,
+    OUTERMOST_ZOOM_LEVEL,
     SVG_ART_BOARD_WIDTH,
     SVG_ART_BOARD_HEIGHT,
     MAX_WORKSPACE_BOUNDS,
