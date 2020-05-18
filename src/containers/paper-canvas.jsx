@@ -304,6 +304,9 @@ class PaperCanvas extends React.Component {
         // Sets the size that Paper thinks the canvas is to the size the canvas element actually is.
         // When these are out of sync, the mouse events in the paint editor don't line up correctly.
         return window.setTimeout(() => {
+            // If the component unmounts, the canvas will be removed from the page, detaching paper.view.
+            // This could also be called before paper.view exists.
+            // In either case, return early if so without running the callback.
             if (!paper.view) return;
             // Prevent blurriness caused if the "CSS size" of the element is a float--
             // setting canvas dimensions to floats floors them, but we need to round instead
