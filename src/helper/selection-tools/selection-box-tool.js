@@ -3,6 +3,7 @@ import {rectSelect} from '../guides';
 import {clearSelection, processRectangularSelection} from '../selection';
 import {getRaster} from '../layer';
 import {ART_BOARD_WIDTH, ART_BOARD_HEIGHT} from '../view';
+import {getHitBounds} from '../../helper/bitmap';
 
 /** Tool to handle drag selection. A dotted line box appears and everything enclosed is selected. */
 class SelectionBoxTool {
@@ -44,8 +45,8 @@ class SelectionBoxTool {
     }
     onMouseUpBitmap (event) {
         if (event.event.button > 0) return; // only first mouse button
-        if (this.selectionRect && this.selectionRect.bounds.intersects(getRaster().bounds)) {
-            const rect = new paper.Rectangle({
+        if (this.selectionRect) {
+            let rect = new paper.Rectangle({
                 from: new paper.Point(
                     Math.max(0, Math.round(this.selectionRect.bounds.topLeft.x)),
                     Math.max(0, Math.round(this.selectionRect.bounds.topLeft.y))),
@@ -53,6 +54,9 @@ class SelectionBoxTool {
                     Math.min(ART_BOARD_WIDTH, Math.round(this.selectionRect.bounds.bottomRight.x)),
                     Math.min(ART_BOARD_HEIGHT, Math.round(this.selectionRect.bounds.bottomRight.y)))
             });
+
+            // Trim/tighten selection bounds inwards to only the opaque region, excluding transparent pixels
+            rect = getHitBounds(getRaster(), rect);
 
             if (rect.area) {
                 // Pull selected raster to active layer
@@ -70,8 +74,7 @@ class SelectionBoxTool {
                 context.clearRect(rect.x, rect.y, rect.width, rect.height);
                 this.setSelectedItems();
             }
-        }
-        if (this.selectionRect) {
+
             // Remove dotted rectangle
             this.selectionRect.remove();
             this.selectionRect = null;
