@@ -20230,7 +20230,7 @@ var _parseColor = __webpack_require__(44);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _compoundPath = __webpack_require__(56);
 
@@ -20929,7 +20929,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _item = __webpack_require__(30);
 
@@ -22142,372 +22142,6 @@ exports.sortItemsByZIndex = sortItemsByZIndex;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.DEFAULT_COLOR = exports.changeFillColor = exports.default = undefined;
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _selectedItems = __webpack_require__(7);
-
-var _stylePath = __webpack_require__(9);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_FILL_COLOR = 'scratch-paint/fill-color/CHANGE_FILL_COLOR';
-var DEFAULT_COLOR = '#9966FF';
-var initialState = DEFAULT_COLOR;
-// Matches hex colors
-var regExp = /^#([0-9a-f]{3}){1,2}$/i;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_FILL_COLOR:
-            if (!regExp.test(action.fillColor) && action.fillColor !== null && action.fillColor !== _stylePath.MIXED) {
-                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
-                return state;
-            }
-            return action.fillColor;
-        case _selectedItems.CHANGE_SELECTED_ITEMS:
-            // Don't change state if no selection
-            if (!action.selectedItems || !action.selectedItems.length) {
-                return state;
-            }
-            return (0, _stylePath.getColorsFromSelection)(action.selectedItems, action.bitmapMode).fillColor;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var changeFillColor = function changeFillColor(fillColor) {
-    return {
-        type: CHANGE_FILL_COLOR,
-        fillColor: fillColor
-    };
-};
-
-exports.default = reducer;
-exports.changeFillColor = changeFillColor;
-exports.DEFAULT_COLOR = DEFAULT_COLOR;
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.zoomToFit = exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resizeCrosshair = exports.getWorkspaceBounds = exports.setWorkspaceBounds = exports.resetZoom = exports.pan = exports.getActionBounds = exports.clampViewBounds = exports.MAX_WORKSPACE_BOUNDS = exports.SVG_ART_BOARD_HEIGHT = exports.SVG_ART_BOARD_WIDTH = exports.OUTERMOST_ZOOM_LEVEL = exports.CENTER = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = exports.ART_BOARD_BOUNDS = undefined;
-
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
-var _layer = __webpack_require__(11);
-
-var _selection = __webpack_require__(3);
-
-var _bitmap = __webpack_require__(22);
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// Vectors are imported and exported at SVG_ART_BOARD size.
-// Once they are imported however, both SVGs and bitmaps are on
-// canvases of ART_BOARD size.
-// (This is for backwards compatibility, to handle both assets
-// designed for 480 x 360, and bitmap resolution 2 bitmaps)
-var SVG_ART_BOARD_WIDTH = 480;
-var SVG_ART_BOARD_HEIGHT = 360;
-var ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH * 2;
-var ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT * 2;
-var CENTER = new _paper2.default.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
-var PADDING_PERCENT = 25; // Padding as a percent of the max of width/height of the sprite
-var BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
-var MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
-//                         zoomed in for tiny costumes.
-var OUTERMOST_ZOOM_LEVEL = 0.333;
-var ART_BOARD_BOUNDS = new _paper2.default.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
-var MAX_WORKSPACE_BOUNDS = new _paper2.default.Rectangle(-ART_BOARD_WIDTH / 4, -ART_BOARD_HEIGHT / 4, ART_BOARD_WIDTH * 1.5, ART_BOARD_HEIGHT * 1.5);
-
-var _workspaceBounds = ART_BOARD_BOUNDS;
-
-var getWorkspaceBounds = function getWorkspaceBounds() {
-    return _workspaceBounds;
-};
-
-/**
-* The workspace bounds define the areas that the scroll bars can access.
-* They include at minimum the artboard, and extend to a bit beyond the
-* farthest item off tne edge in any given direction (so items can't be
-* "lost" off the edge)
-*
-* @param {boolean} clipEmpty Clip empty space from bounds, even if it
-* means discontinuously jumping the viewport. This should probably be
-* false unless the viewport is going to move discontinuously anyway
-* (such as in a zoom button click)
-*/
-var setWorkspaceBounds = function setWorkspaceBounds(clipEmpty) {
-    var items = (0, _selection.getAllRootItems)();
-    // Include the artboard and what's visible in the viewport
-    var bounds = ART_BOARD_BOUNDS;
-    if (!clipEmpty) {
-        bounds = bounds.unite(_paper2.default.view.bounds);
-    }
-    // Include everything the user has drawn and a buffer around it
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
-
-    try {
-        for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var item = _step.value;
-
-            bounds = bounds.unite(item.bounds.expand(BUFFER));
-        }
-        // Limit to max workspace bounds
-    } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-    } finally {
-        try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
-            }
-        } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
-            }
-        }
-    }
-
-    bounds = bounds.intersect(MAX_WORKSPACE_BOUNDS.expand(BUFFER));
-    var top = bounds.top;
-    var left = bounds.left;
-    var bottom = bounds.bottom;
-    var right = bounds.right;
-
-    // Center in view if viewport is larger than workspace
-    var hDiff = 0;
-    var vDiff = 0;
-    if (bounds.width < _paper2.default.view.bounds.width) {
-        hDiff = (_paper2.default.view.bounds.width - bounds.width) / 2;
-        left -= hDiff;
-        right += hDiff;
-    }
-    if (bounds.height < _paper2.default.view.bounds.height) {
-        vDiff = (_paper2.default.view.bounds.height - bounds.height) / 2;
-        top -= vDiff;
-        bottom += vDiff;
-    }
-
-    _workspaceBounds = new _paper2.default.Rectangle(left, top, right - left, bottom - top);
-};
-
-var clampViewBounds = function clampViewBounds() {
-    var _paper$project$view$b = _paper2.default.project.view.bounds,
-        left = _paper$project$view$b.left,
-        right = _paper$project$view$b.right,
-        top = _paper$project$view$b.top,
-        bottom = _paper$project$view$b.bottom;
-
-    if (left < _workspaceBounds.left) {
-        _paper2.default.project.view.scrollBy(new _paper2.default.Point(_workspaceBounds.left - left, 0));
-    }
-    if (top < _workspaceBounds.top) {
-        _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, _workspaceBounds.top - top));
-    }
-    if (bottom > _workspaceBounds.bottom) {
-        _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, _workspaceBounds.bottom - bottom));
-    }
-    if (right > _workspaceBounds.right) {
-        _paper2.default.project.view.scrollBy(new _paper2.default.Point(_workspaceBounds.right - right, 0));
-    }
-    setWorkspaceBounds();
-};
-
-var resizeCrosshair = function resizeCrosshair() {
-    if ((0, _layer.getDragCrosshairLayer)() && (0, _layer.getDragCrosshairLayer)().dragCrosshair) {
-        (0, _layer.getDragCrosshairLayer)().dragCrosshair.scale(_layer.CROSSHAIR_SIZE / (0, _layer.getDragCrosshairLayer)().dragCrosshair.bounds.width / _paper2.default.view.zoom);
-    }
-    if ((0, _layer.getBackgroundGuideLayer)() && (0, _layer.getBackgroundGuideLayer)().dragCrosshair) {
-        (0, _layer.getBackgroundGuideLayer)().dragCrosshair.scale(_layer.CROSSHAIR_SIZE / (0, _layer.getBackgroundGuideLayer)().dragCrosshair.bounds.width / _paper2.default.view.zoom);
-    }
-};
-
-// Zoom keeping a project-space point fixed.
-// This article was helpful http://matthiasberth.com/tech/stable-zoom-and-pan-in-paperjs
-var zoomOnFixedPoint = function zoomOnFixedPoint(deltaZoom, fixedPoint) {
-    var view = _paper2.default.view;
-    var preZoomCenter = view.center;
-    var newZoom = Math.max(OUTERMOST_ZOOM_LEVEL, view.zoom + deltaZoom);
-    var scaling = view.zoom / newZoom;
-    var preZoomOffset = fixedPoint.subtract(preZoomCenter);
-    var postZoomOffset = fixedPoint.subtract(preZoomOffset.multiply(scaling)).subtract(preZoomCenter);
-    view.zoom = newZoom;
-    view.translate(postZoomOffset.multiply(-1));
-
-    setWorkspaceBounds(true /* clipEmpty */);
-    clampViewBounds();
-    resizeCrosshair();
-};
-
-// Zoom keeping the selection center (if any) fixed.
-var zoomOnSelection = function zoomOnSelection(deltaZoom) {
-    var fixedPoint = void 0;
-    var items = (0, _selection.getSelectedRootItems)();
-    if (items.length > 0) {
-        var rect = null;
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
-
-        try {
-            for (var _iterator2 = items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                var item = _step2.value;
-
-                if (rect) {
-                    rect = rect.unite(item.bounds);
-                } else {
-                    rect = item.bounds;
-                }
-            }
-        } catch (err) {
-            _didIteratorError2 = true;
-            _iteratorError2 = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                    _iterator2.return();
-                }
-            } finally {
-                if (_didIteratorError2) {
-                    throw _iteratorError2;
-                }
-            }
-        }
-
-        fixedPoint = rect.center;
-    } else {
-        fixedPoint = _paper2.default.project.view.center;
-    }
-    zoomOnFixedPoint(deltaZoom, fixedPoint);
-};
-
-var resetZoom = function resetZoom() {
-    _paper2.default.project.view.zoom = .5;
-    setWorkspaceBounds(true /* clipEmpty */);
-    resizeCrosshair();
-    clampViewBounds();
-};
-
-var pan = function pan(dx, dy) {
-    _paper2.default.project.view.scrollBy(new _paper2.default.Point(dx, dy));
-    clampViewBounds();
-};
-
-/**
- * Mouse actions are clamped to action bounds
- * @param {boolean} isBitmap True if the editor is in bitmap mode, false if it is in vector mode
- * @returns {paper.Rectangle} the bounds within which mouse events should work in the paint editor
- */
-var getActionBounds = function getActionBounds(isBitmap) {
-    if (isBitmap) {
-        return ART_BOARD_BOUNDS;
-    }
-    return _paper2.default.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
-};
-
-var zoomToFit = function zoomToFit(isBitmap) {
-    resetZoom();
-    var bounds = void 0;
-    if (isBitmap) {
-        bounds = (0, _bitmap.getHitBounds)((0, _layer.getRaster)()).expand(BUFFER);
-    } else {
-        var items = (0, _selection.getAllRootItems)();
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
-
-        try {
-            for (var _iterator3 = items[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                var item = _step3.value;
-
-                if (bounds) {
-                    bounds = bounds.unite(item.bounds);
-                } else {
-                    bounds = item.bounds;
-                }
-            }
-        } catch (err) {
-            _didIteratorError3 = true;
-            _iteratorError3 = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                    _iterator3.return();
-                }
-            } finally {
-                if (_didIteratorError3) {
-                    throw _iteratorError3;
-                }
-            }
-        }
-    }
-    if (bounds && bounds.width && bounds.height) {
-        var canvas = _paper2.default.view.element;
-        // Ratio of (sprite length plus padding on all sides) to viewport length.
-        var ratio = _paper2.default.view.zoom * Math.max(bounds.width * (1 + 2 * PADDING_PERCENT / 100) / canvas.clientWidth, bounds.height * (1 + 2 * PADDING_PERCENT / 100) / canvas.clientHeight);
-        // Clamp ratio
-        ratio = Math.max(Math.min(1, ratio), MIN_RATIO);
-        if (ratio < 1) {
-            _paper2.default.view.center = bounds.center;
-            _paper2.default.view.zoom = _paper2.default.view.zoom / ratio;
-            resizeCrosshair();
-            clampViewBounds();
-        }
-    } else {
-        _log2.default.warn('No bounds!');
-    }
-};
-
-exports.ART_BOARD_BOUNDS = ART_BOARD_BOUNDS;
-exports.ART_BOARD_HEIGHT = ART_BOARD_HEIGHT;
-exports.ART_BOARD_WIDTH = ART_BOARD_WIDTH;
-exports.CENTER = CENTER;
-exports.OUTERMOST_ZOOM_LEVEL = OUTERMOST_ZOOM_LEVEL;
-exports.SVG_ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH;
-exports.SVG_ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT;
-exports.MAX_WORKSPACE_BOUNDS = MAX_WORKSPACE_BOUNDS;
-exports.clampViewBounds = clampViewBounds;
-exports.getActionBounds = getActionBounds;
-exports.pan = pan;
-exports.resetZoom = resetZoom;
-exports.setWorkspaceBounds = setWorkspaceBounds;
-exports.getWorkspaceBounds = getWorkspaceBounds;
-exports.resizeCrosshair = resizeCrosshair;
-exports.zoomOnSelection = zoomOnSelection;
-exports.zoomOnFixedPoint = zoomOnFixedPoint;
-exports.zoomToFit = zoomToFit;
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 exports.selectAllBitmap = exports.scaleBitmap = exports.flipBitmapVertical = exports.flipBitmapHorizontal = exports.forEachLinePoint = exports.drawEllipse = exports.getTrimmedRaster = exports.getHitBounds = exports.getBrushMark = exports.floodFillAll = exports.floodFill = exports.outlineRect = exports.fillRect = exports.convertToVector = exports.convertToBitmap = exports.commitRectToBitmap = exports.commitOvalToBitmap = exports.commitSelectionToBitmap = undefined;
 
 var _paper = __webpack_require__(2);
@@ -22520,7 +22154,7 @@ var _guides = __webpack_require__(31);
 
 var _selection = __webpack_require__(3);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _scratchSvgRenderer = __webpack_require__(209);
 
@@ -22834,11 +22468,18 @@ var columnBlank_ = function columnBlank_(imageData, width, x, top, bottom) {
     return true;
 };
 
-// Adapted from Tim Down's https://gist.github.com/timdown/021d9c8f2aabc7092df564996f5afbbf
-// Get bounds, trimming transparent pixels from edges.
-var getHitBounds = function getHitBounds(raster) {
-    var width = raster.width;
-    var imageData = raster.getImageData(raster.bounds);
+/**
+ * Get bounds around the contents of a raster, trimming transparent pixels from edges.
+ * Adapted from Tim Down's https://gist.github.com/timdown/021d9c8f2aabc7092df564996f5afbbf
+ * @param {paper.Raster} raster The raster to get the bounds around
+ * @param {paper.Rectangle} [rect] Optionally, an alternative bounding rectangle to limit the check to.
+ * @returns {paper.Rectangle} The bounds around the opaque area of the passed raster
+ * (or opaque within the passed rectangle)
+ */
+var getHitBounds = function getHitBounds(raster, rect) {
+    var bounds = rect || raster.bounds;
+    var width = bounds.width;
+    var imageData = raster.getImageData(bounds);
     var top = 0;
     var bottom = imageData.height;
     var left = 0;
@@ -22860,7 +22501,7 @@ var getHitBounds = function getHitBounds(raster) {
         left = right = imageData.width / 2;
     }
 
-    return new _paper2.default.Rectangle(left, top, right - left, bottom - top);
+    return new _paper2.default.Rectangle(left + bounds.left, top + bounds.top, right - left, bottom - top);
 };
 
 var trim_ = function trim_(raster) {
@@ -23369,6 +23010,372 @@ exports.flipBitmapHorizontal = flipBitmapHorizontal;
 exports.flipBitmapVertical = flipBitmapVertical;
 exports.scaleBitmap = scaleBitmap;
 exports.selectAllBitmap = selectAllBitmap;
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.DEFAULT_COLOR = exports.changeFillColor = exports.default = undefined;
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _selectedItems = __webpack_require__(7);
+
+var _stylePath = __webpack_require__(9);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_FILL_COLOR = 'scratch-paint/fill-color/CHANGE_FILL_COLOR';
+var DEFAULT_COLOR = '#9966FF';
+var initialState = DEFAULT_COLOR;
+// Matches hex colors
+var regExp = /^#([0-9a-f]{3}){1,2}$/i;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_FILL_COLOR:
+            if (!regExp.test(action.fillColor) && action.fillColor !== null && action.fillColor !== _stylePath.MIXED) {
+                _log2.default.warn('Invalid hex color code: ' + action.fillColor);
+                return state;
+            }
+            return action.fillColor;
+        case _selectedItems.CHANGE_SELECTED_ITEMS:
+            // Don't change state if no selection
+            if (!action.selectedItems || !action.selectedItems.length) {
+                return state;
+            }
+            return (0, _stylePath.getColorsFromSelection)(action.selectedItems, action.bitmapMode).fillColor;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeFillColor = function changeFillColor(fillColor) {
+    return {
+        type: CHANGE_FILL_COLOR,
+        fillColor: fillColor
+    };
+};
+
+exports.default = reducer;
+exports.changeFillColor = changeFillColor;
+exports.DEFAULT_COLOR = DEFAULT_COLOR;
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.zoomToFit = exports.zoomOnFixedPoint = exports.zoomOnSelection = exports.resizeCrosshair = exports.getWorkspaceBounds = exports.setWorkspaceBounds = exports.resetZoom = exports.pan = exports.getActionBounds = exports.clampViewBounds = exports.MAX_WORKSPACE_BOUNDS = exports.SVG_ART_BOARD_HEIGHT = exports.SVG_ART_BOARD_WIDTH = exports.OUTERMOST_ZOOM_LEVEL = exports.CENTER = exports.ART_BOARD_WIDTH = exports.ART_BOARD_HEIGHT = exports.ART_BOARD_BOUNDS = undefined;
+
+var _paper = __webpack_require__(2);
+
+var _paper2 = _interopRequireDefault(_paper);
+
+var _layer = __webpack_require__(11);
+
+var _selection = __webpack_require__(3);
+
+var _bitmap = __webpack_require__(20);
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Vectors are imported and exported at SVG_ART_BOARD size.
+// Once they are imported however, both SVGs and bitmaps are on
+// canvases of ART_BOARD size.
+// (This is for backwards compatibility, to handle both assets
+// designed for 480 x 360, and bitmap resolution 2 bitmaps)
+var SVG_ART_BOARD_WIDTH = 480;
+var SVG_ART_BOARD_HEIGHT = 360;
+var ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH * 2;
+var ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT * 2;
+var CENTER = new _paper2.default.Point(ART_BOARD_WIDTH / 2, ART_BOARD_HEIGHT / 2);
+var PADDING_PERCENT = 25; // Padding as a percent of the max of width/height of the sprite
+var BUFFER = 50; // Number of pixels of allowance around objects at the edges of the workspace
+var MIN_RATIO = .125; // Zoom in to at least 1/8 of the screen. This way you don't end up incredibly
+//                         zoomed in for tiny costumes.
+var OUTERMOST_ZOOM_LEVEL = 0.333;
+var ART_BOARD_BOUNDS = new _paper2.default.Rectangle(0, 0, ART_BOARD_WIDTH, ART_BOARD_HEIGHT);
+var MAX_WORKSPACE_BOUNDS = new _paper2.default.Rectangle(-ART_BOARD_WIDTH / 4, -ART_BOARD_HEIGHT / 4, ART_BOARD_WIDTH * 1.5, ART_BOARD_HEIGHT * 1.5);
+
+var _workspaceBounds = ART_BOARD_BOUNDS;
+
+var getWorkspaceBounds = function getWorkspaceBounds() {
+    return _workspaceBounds;
+};
+
+/**
+* The workspace bounds define the areas that the scroll bars can access.
+* They include at minimum the artboard, and extend to a bit beyond the
+* farthest item off tne edge in any given direction (so items can't be
+* "lost" off the edge)
+*
+* @param {boolean} clipEmpty Clip empty space from bounds, even if it
+* means discontinuously jumping the viewport. This should probably be
+* false unless the viewport is going to move discontinuously anyway
+* (such as in a zoom button click)
+*/
+var setWorkspaceBounds = function setWorkspaceBounds(clipEmpty) {
+    var items = (0, _selection.getAllRootItems)();
+    // Include the artboard and what's visible in the viewport
+    var bounds = ART_BOARD_BOUNDS;
+    if (!clipEmpty) {
+        bounds = bounds.unite(_paper2.default.view.bounds);
+    }
+    // Include everything the user has drawn and a buffer around it
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+        for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var item = _step.value;
+
+            bounds = bounds.unite(item.bounds.expand(BUFFER));
+        }
+        // Limit to max workspace bounds
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    bounds = bounds.intersect(MAX_WORKSPACE_BOUNDS.expand(BUFFER));
+    var top = bounds.top;
+    var left = bounds.left;
+    var bottom = bounds.bottom;
+    var right = bounds.right;
+
+    // Center in view if viewport is larger than workspace
+    var hDiff = 0;
+    var vDiff = 0;
+    if (bounds.width < _paper2.default.view.bounds.width) {
+        hDiff = (_paper2.default.view.bounds.width - bounds.width) / 2;
+        left -= hDiff;
+        right += hDiff;
+    }
+    if (bounds.height < _paper2.default.view.bounds.height) {
+        vDiff = (_paper2.default.view.bounds.height - bounds.height) / 2;
+        top -= vDiff;
+        bottom += vDiff;
+    }
+
+    _workspaceBounds = new _paper2.default.Rectangle(left, top, right - left, bottom - top);
+};
+
+var clampViewBounds = function clampViewBounds() {
+    var _paper$project$view$b = _paper2.default.project.view.bounds,
+        left = _paper$project$view$b.left,
+        right = _paper$project$view$b.right,
+        top = _paper$project$view$b.top,
+        bottom = _paper$project$view$b.bottom;
+
+    if (left < _workspaceBounds.left) {
+        _paper2.default.project.view.scrollBy(new _paper2.default.Point(_workspaceBounds.left - left, 0));
+    }
+    if (top < _workspaceBounds.top) {
+        _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, _workspaceBounds.top - top));
+    }
+    if (bottom > _workspaceBounds.bottom) {
+        _paper2.default.project.view.scrollBy(new _paper2.default.Point(0, _workspaceBounds.bottom - bottom));
+    }
+    if (right > _workspaceBounds.right) {
+        _paper2.default.project.view.scrollBy(new _paper2.default.Point(_workspaceBounds.right - right, 0));
+    }
+    setWorkspaceBounds();
+};
+
+var resizeCrosshair = function resizeCrosshair() {
+    if ((0, _layer.getDragCrosshairLayer)() && (0, _layer.getDragCrosshairLayer)().dragCrosshair) {
+        (0, _layer.getDragCrosshairLayer)().dragCrosshair.scale(_layer.CROSSHAIR_SIZE / (0, _layer.getDragCrosshairLayer)().dragCrosshair.bounds.width / _paper2.default.view.zoom);
+    }
+    if ((0, _layer.getBackgroundGuideLayer)() && (0, _layer.getBackgroundGuideLayer)().dragCrosshair) {
+        (0, _layer.getBackgroundGuideLayer)().dragCrosshair.scale(_layer.CROSSHAIR_SIZE / (0, _layer.getBackgroundGuideLayer)().dragCrosshair.bounds.width / _paper2.default.view.zoom);
+    }
+};
+
+// Zoom keeping a project-space point fixed.
+// This article was helpful http://matthiasberth.com/tech/stable-zoom-and-pan-in-paperjs
+var zoomOnFixedPoint = function zoomOnFixedPoint(deltaZoom, fixedPoint) {
+    var view = _paper2.default.view;
+    var preZoomCenter = view.center;
+    var newZoom = Math.max(OUTERMOST_ZOOM_LEVEL, view.zoom + deltaZoom);
+    var scaling = view.zoom / newZoom;
+    var preZoomOffset = fixedPoint.subtract(preZoomCenter);
+    var postZoomOffset = fixedPoint.subtract(preZoomOffset.multiply(scaling)).subtract(preZoomCenter);
+    view.zoom = newZoom;
+    view.translate(postZoomOffset.multiply(-1));
+
+    setWorkspaceBounds(true /* clipEmpty */);
+    clampViewBounds();
+    resizeCrosshair();
+};
+
+// Zoom keeping the selection center (if any) fixed.
+var zoomOnSelection = function zoomOnSelection(deltaZoom) {
+    var fixedPoint = void 0;
+    var items = (0, _selection.getSelectedRootItems)();
+    if (items.length > 0) {
+        var rect = null;
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+            for (var _iterator2 = items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var item = _step2.value;
+
+                if (rect) {
+                    rect = rect.unite(item.bounds);
+                } else {
+                    rect = item.bounds;
+                }
+            }
+        } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                    _iterator2.return();
+                }
+            } finally {
+                if (_didIteratorError2) {
+                    throw _iteratorError2;
+                }
+            }
+        }
+
+        fixedPoint = rect.center;
+    } else {
+        fixedPoint = _paper2.default.project.view.center;
+    }
+    zoomOnFixedPoint(deltaZoom, fixedPoint);
+};
+
+var resetZoom = function resetZoom() {
+    _paper2.default.project.view.zoom = .5;
+    setWorkspaceBounds(true /* clipEmpty */);
+    resizeCrosshair();
+    clampViewBounds();
+};
+
+var pan = function pan(dx, dy) {
+    _paper2.default.project.view.scrollBy(new _paper2.default.Point(dx, dy));
+    clampViewBounds();
+};
+
+/**
+ * Mouse actions are clamped to action bounds
+ * @param {boolean} isBitmap True if the editor is in bitmap mode, false if it is in vector mode
+ * @returns {paper.Rectangle} the bounds within which mouse events should work in the paint editor
+ */
+var getActionBounds = function getActionBounds(isBitmap) {
+    if (isBitmap) {
+        return ART_BOARD_BOUNDS;
+    }
+    return _paper2.default.view.bounds.unite(ART_BOARD_BOUNDS).intersect(MAX_WORKSPACE_BOUNDS);
+};
+
+var zoomToFit = function zoomToFit(isBitmap) {
+    resetZoom();
+    var bounds = void 0;
+    if (isBitmap) {
+        bounds = (0, _bitmap.getHitBounds)((0, _layer.getRaster)()).expand(BUFFER);
+    } else {
+        var items = (0, _selection.getAllRootItems)();
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
+
+        try {
+            for (var _iterator3 = items[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                var item = _step3.value;
+
+                if (bounds) {
+                    bounds = bounds.unite(item.bounds);
+                } else {
+                    bounds = item.bounds;
+                }
+            }
+        } catch (err) {
+            _didIteratorError3 = true;
+            _iteratorError3 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                    _iterator3.return();
+                }
+            } finally {
+                if (_didIteratorError3) {
+                    throw _iteratorError3;
+                }
+            }
+        }
+    }
+    if (bounds && bounds.width && bounds.height) {
+        var canvas = _paper2.default.view.element;
+        // Ratio of (sprite length plus padding on all sides) to viewport length.
+        var ratio = _paper2.default.view.zoom * Math.max(bounds.width * (1 + 2 * PADDING_PERCENT / 100) / canvas.clientWidth, bounds.height * (1 + 2 * PADDING_PERCENT / 100) / canvas.clientHeight);
+        // Clamp ratio
+        ratio = Math.max(Math.min(1, ratio), MIN_RATIO);
+        if (ratio < 1) {
+            _paper2.default.view.center = bounds.center;
+            _paper2.default.view.zoom = _paper2.default.view.zoom / ratio;
+            resizeCrosshair();
+            clampViewBounds();
+        }
+    } else {
+        _log2.default.warn('No bounds!');
+    }
+};
+
+exports.ART_BOARD_BOUNDS = ART_BOARD_BOUNDS;
+exports.ART_BOARD_HEIGHT = ART_BOARD_HEIGHT;
+exports.ART_BOARD_WIDTH = ART_BOARD_WIDTH;
+exports.CENTER = CENTER;
+exports.OUTERMOST_ZOOM_LEVEL = OUTERMOST_ZOOM_LEVEL;
+exports.SVG_ART_BOARD_WIDTH = SVG_ART_BOARD_WIDTH;
+exports.SVG_ART_BOARD_HEIGHT = SVG_ART_BOARD_HEIGHT;
+exports.MAX_WORKSPACE_BOUNDS = MAX_WORKSPACE_BOUNDS;
+exports.clampViewBounds = clampViewBounds;
+exports.getActionBounds = getActionBounds;
+exports.pan = pan;
+exports.resetZoom = resetZoom;
+exports.setWorkspaceBounds = setWorkspaceBounds;
+exports.getWorkspaceBounds = getWorkspaceBounds;
+exports.resizeCrosshair = resizeCrosshair;
+exports.zoomOnSelection = zoomOnSelection;
+exports.zoomOnFixedPoint = zoomOnFixedPoint;
+exports.zoomToFit = zoomToFit;
 
 /***/ }),
 /* 23 */
@@ -26446,7 +26453,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _selection = __webpack_require__(3);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _modes = __webpack_require__(4);
 
@@ -30343,7 +30350,9 @@ var _selection = __webpack_require__(3);
 
 var _layer = __webpack_require__(11);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
+
+var _bitmap = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30401,11 +30410,14 @@ var SelectionBoxTool = function () {
         key: 'onMouseUpBitmap',
         value: function onMouseUpBitmap(event) {
             if (event.event.button > 0) return; // only first mouse button
-            if (this.selectionRect && this.selectionRect.bounds.intersects((0, _layer.getRaster)().bounds)) {
+            if (this.selectionRect) {
                 var rect = new _paper2.default.Rectangle({
                     from: new _paper2.default.Point(Math.max(0, Math.round(this.selectionRect.bounds.topLeft.x)), Math.max(0, Math.round(this.selectionRect.bounds.topLeft.y))),
                     to: new _paper2.default.Point(Math.min(_view.ART_BOARD_WIDTH, Math.round(this.selectionRect.bounds.bottomRight.x)), Math.min(_view.ART_BOARD_HEIGHT, Math.round(this.selectionRect.bounds.bottomRight.y)))
                 });
+
+                // Trim/tighten selection bounds inwards to only the opaque region, excluding transparent pixels
+                rect = (0, _bitmap.getHitBounds)((0, _layer.getRaster)(), rect);
 
                 if (rect.area) {
                     // Pull selected raster to active layer
@@ -30423,8 +30435,7 @@ var SelectionBoxTool = function () {
                     context.clearRect(rect.x, rect.y, rect.width, rect.height);
                     this.setSelectedItems();
                 }
-            }
-            if (this.selectionRect) {
+
                 // Remove dotted rectangle
                 this.selectionRect.remove();
                 this.selectionRect = null;
@@ -31564,7 +31575,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31776,7 +31787,7 @@ var _item = __webpack_require__(30);
 
 var _math = __webpack_require__(19);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -33955,7 +33966,7 @@ var _reactRedux = __webpack_require__(6);
 
 var _selection = __webpack_require__(3);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
 var _format = __webpack_require__(14);
 
@@ -35892,9 +35903,9 @@ var _layout = __webpack_require__(69);
 
 var _selection = __webpack_require__(3);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _eyeDropper2 = __webpack_require__(104);
 
@@ -45170,7 +45181,7 @@ var _layer = __webpack_require__(11);
 
 var _selectedItems = __webpack_require__(7);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _math = __webpack_require__(19);
 
@@ -47268,7 +47279,7 @@ var _scrollableCanvas = __webpack_require__(228);
 
 var _scrollableCanvas2 = _interopRequireDefault(_scrollableCanvas);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _viewBounds = __webpack_require__(43);
 
@@ -47655,7 +47666,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _modes3 = __webpack_require__(10);
 
@@ -48773,7 +48784,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _modes3 = __webpack_require__(10);
 
@@ -48988,9 +48999,9 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49185,7 +49196,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _modes3 = __webpack_require__(10);
 
@@ -49376,7 +49387,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
 var _layer = __webpack_require__(11);
 
@@ -49660,7 +49671,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _selection = __webpack_require__(3);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _modes = __webpack_require__(4);
 
@@ -50132,7 +50143,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _modes3 = __webpack_require__(10);
 
@@ -50323,7 +50334,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
 var _layer = __webpack_require__(11);
 
@@ -50670,7 +50681,7 @@ var _bitFillMode = __webpack_require__(251);
 
 var _bitFillMode2 = _interopRequireDefault(_bitFillMode);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _fillColor2 = __webpack_require__(49);
 
@@ -50915,7 +50926,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
 var _stylePath = __webpack_require__(9);
 
@@ -51453,7 +51464,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
 var _boundingBoxTool = __webpack_require__(32);
 
@@ -53404,7 +53415,7 @@ var _blob2 = _interopRequireDefault(_blob);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _modes3 = __webpack_require__(10);
 
@@ -54253,7 +54264,7 @@ var _parseColor2 = _interopRequireDefault(_parseColor);
 
 var _colorIndex = __webpack_require__(61);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _fillColor2 = __webpack_require__(49);
 
@@ -57773,7 +57784,7 @@ var _fillTool2 = _interopRequireDefault(_fillTool);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _fillColor2 = __webpack_require__(49);
 
@@ -60690,7 +60701,7 @@ var _math = __webpack_require__(19);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
 var _format = __webpack_require__(14);
 
@@ -62238,7 +62249,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _strokeColor = __webpack_require__(35);
 
@@ -62717,7 +62728,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _strokeColor = __webpack_require__(35);
 
@@ -63850,7 +63861,7 @@ var _paper2 = _interopRequireDefault(_paper);
 
 var _math = __webpack_require__(19);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
 
@@ -65360,7 +65371,7 @@ var _stylePath = __webpack_require__(9);
 
 var _font = __webpack_require__(70);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _strokeColor = __webpack_require__(35);
 
@@ -66392,7 +66403,7 @@ var _copyPasteHoc = __webpack_require__(108);
 
 var _copyPasteHoc2 = _interopRequireDefault(_copyPasteHoc);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
 var _selection = __webpack_require__(3);
 
@@ -66840,13 +66851,13 @@ var _selection = __webpack_require__(3);
 
 var _layer = __webpack_require__(11);
 
-var _bitmap = __webpack_require__(22);
+var _bitmap = __webpack_require__(20);
 
 var _undo2 = __webpack_require__(55);
 
 var _math = __webpack_require__(19);
 
-var _view = __webpack_require__(21);
+var _view = __webpack_require__(22);
 
 var _modes = __webpack_require__(4);
 
@@ -67207,7 +67218,7 @@ var _eyeDropper = __webpack_require__(46);
 
 var _eyeDropper2 = _interopRequireDefault(_eyeDropper);
 
-var _fillColor = __webpack_require__(20);
+var _fillColor = __webpack_require__(21);
 
 var _fillColor2 = _interopRequireDefault(_fillColor);
 
