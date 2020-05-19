@@ -45423,18 +45423,10 @@ var PaperCanvas = function (_React$Component) {
 
                     // Without the callback, rasters' load function has not been called yet, and they are
                     // positioned incorrectly
-                    paperCanvas.queuedImport = window.setTimeout(function () {
-                        // Detached
-                        if (!_paper2.default.view) return;
-                        // Prevent blurriness caused if the "CSS size" of the element is a float--
-                        // setting canvas dimensions to floats floors them, but we need to round instead
-                        var elemSize = _paper2.default.DomElement.getSize(_paper2.default.view.element);
-                        elemSize.width = Math.round(elemSize.width);
-                        elemSize.height = Math.round(elemSize.height);
-                        _paper2.default.view.setViewSize(elemSize);
+                    paperCanvas.queuedImport = paperCanvas.recalibrateSize(function () {
                         paperCanvas.props.updateViewBounds(_paper2.default.view.matrix);
                         paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
-                    }, 0);
+                    });
                 }
             });
         }
@@ -45557,13 +45549,23 @@ var PaperCanvas = function (_React$Component) {
         }
     }, {
         key: 'recalibrateSize',
-        value: function recalibrateSize() {
+        value: function recalibrateSize(callback) {
             // Sets the size that Paper thinks the canvas is to the size the canvas element actually is.
             // When these are out of sync, the mouse events in the paint editor don't line up correctly.
-            window.setTimeout(function () {
+            return window.setTimeout(function () {
+                // If the component unmounts, the canvas will be removed from the page, detaching paper.view.
+                // This could also be called before paper.view exists.
+                // In either case, return early if so without running the callback.
                 if (!_paper2.default.view) return;
-                _paper2.default.view.setViewSize(_paper2.default.DomElement.getSize(_paper2.default.view.element));
-            });
+                // Prevent blurriness caused if the "CSS size" of the element is a float--
+                // setting canvas dimensions to floats floors them, but we need to round instead
+                var elemSize = _paper2.default.DomElement.getSize(_paper2.default.view.element);
+                elemSize.width = Math.round(elemSize.width);
+                elemSize.height = Math.round(elemSize.height);
+                _paper2.default.view.setViewSize(elemSize);
+
+                if (callback) callback();
+            }, 0);
         }
     }, {
         key: 'setCanvas',
