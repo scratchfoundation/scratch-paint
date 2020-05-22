@@ -201,6 +201,45 @@ class ColorPickerComponent extends React.Component {
                             />
                             );
                         })}
+                        <div className={styles.swatches}>
+                            {this.props.mode === Modes.BIT_LINE ||
+                                this.props.mode === Modes.BIT_RECT ||
+                                this.props.mode === Modes.BIT_OVAL ||
+                                this.props.mode === Modes.BIT_TEXT ? null :
+                                (<div
+                                    className={classNames({
+                                        [styles.clickable]: true,
+                                        [styles.swatch]: true,
+                                        [styles.activeSwatch]:
+                                            (this.props.colorIndex === 0 && this.props.color === null) ||
+                                            (this.props.colorIndex === 1 && this.props.color2 === null)
+                                    })}
+                                    onClick={this.props.onTransparent}
+                                >
+                                    <img
+                                        className={styles.swatchIcon}
+                                        draggable={false}
+                                        src={noFillIcon}
+                                    />
+                                </div>)
+                            }
+                        </div>
+                        <div className={styles.swatches}>
+                            <div
+                                className={classNames({
+                                    [styles.clickable]: true,
+                                    [styles.swatch]: true,
+                                    [styles.activeSwatch]: this.props.isEyeDropping
+                                })}
+                                onClick={this.props.onActivateEyeDropper}
+                            >
+                                <img
+                                    className={styles.swatchIcon}
+                                    draggable={false}
+                                    src={eyeDropperIcon}
+                                />
+                            </div>
+                        </div>
                     </div> :
                     null}
                 <div className={styles.row}>
@@ -265,47 +304,6 @@ class ColorPickerComponent extends React.Component {
                             value={this.props.brightness}
                             onChange={this.props.onBrightnessChange}
                         />
-                    </div>
-                </div>
-                <div className={styles.swatchRow}>
-                    <div className={styles.swatches}>
-                        {this.props.mode === Modes.BIT_LINE ||
-                            this.props.mode === Modes.BIT_RECT ||
-                            this.props.mode === Modes.BIT_OVAL ||
-                            this.props.mode === Modes.BIT_TEXT ? null :
-                            (<div
-                                className={classNames({
-                                    [styles.clickable]: true,
-                                    [styles.swatch]: true,
-                                    [styles.activeSwatch]:
-                                        (this.props.colorIndex === 0 && this.props.color === null) ||
-                                        (this.props.colorIndex === 1 && this.props.color2 === null)
-                                })}
-                                onClick={this.props.onTransparent}
-                            >
-                                <img
-                                    className={styles.swatchIcon}
-                                    draggable={false}
-                                    src={noFillIcon}
-                                />
-                            </div>)
-                        }
-                    </div>
-                    <div className={styles.swatches}>
-                        <div
-                            className={classNames({
-                                [styles.clickable]: true,
-                                [styles.swatch]: true,
-                                [styles.activeSwatch]: this.props.isEyeDropping
-                            })}
-                            onClick={this.props.onActivateEyeDropper}
-                        >
-                            <img
-                                className={styles.swatchIcon}
-                                draggable={false}
-                                src={eyeDropperIcon}
-                            />
-                        </div>
                     </div>
                 </div>
             </div>
