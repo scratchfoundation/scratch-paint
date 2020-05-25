@@ -35,6 +35,8 @@ const mapStateToProps = state => ({
     shouldShowGradientTools: state.scratchPaint.mode === Modes.SELECT ||
         state.scratchPaint.mode === Modes.RESHAPE ||
         state.scratchPaint.mode === Modes.FILL ||
+        state.scratchPaint.mode === Modes.RECT ||
+        state.scratchPaint.mode === Modes.OVAL ||
         state.scratchPaint.mode === Modes.BIT_SELECT ||
         state.scratchPaint.mode === Modes.BIT_FILL,
     textEditTarget: state.scratchPaint.textEditTarget

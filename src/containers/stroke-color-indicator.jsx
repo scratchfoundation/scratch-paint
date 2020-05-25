@@ -36,7 +36,9 @@ const mapStateToProps = state => ({
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     mode: state.scratchPaint.mode,
     shouldShowGradientTools: state.scratchPaint.mode === Modes.SELECT ||
-        state.scratchPaint.mode === Modes.RESHAPE,
+        state.scratchPaint.mode === Modes.RESHAPE ||
+        state.scratchPaint.mode === Modes.RECT ||
+        state.scratchPaint.mode === Modes.OVAL,
     textEditTarget: state.scratchPaint.textEditTarget
 });
 

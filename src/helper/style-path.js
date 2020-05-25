@@ -559,10 +559,16 @@ const styleCursorPreview = function (path, options) {
     }
 };
 
-// TODO: style using gradient?
 const styleShape = function (path, options) {
-    path.fillColor = options.fillColor.primary;
-    path.strokeColor = options.strokeColor.primary;
+    for (const colorKey of ['fillColor', 'strokeColor']) {
+        if (options[colorKey].gradientType === GradientTypes.SOLID) {
+            path[colorKey] = options[colorKey].primary;
+        } else {
+            const {primary, secondary, gradientType} = options[colorKey];
+            path[colorKey] = createGradientObject(primary, secondary, gradientType, path.bounds);
+        }
+    }
+
     path.strokeWidth = options.strokeWidth;
 };
 
