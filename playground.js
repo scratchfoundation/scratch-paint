@@ -21949,7 +21949,7 @@ var _makeBackgroundGuideLayer = function _makeBackgroundGuideLayer(format) {
 
     // Add 1 to the height because it's an odd number otherwise, and we want it to be even
     // so the corner of the checkerboard to line up with the center crosshair
-    var vBackground = _makeBackgroundPaper(_view.MAX_WORKSPACE_BOUNDS.width / CHECKERBOARD_SIZE, _view.MAX_WORKSPACE_BOUNDS.height / CHECKERBOARD_SIZE + 1, '#0062ff', 0.05);
+    var vBackground = _makeBackgroundPaper(_view.MAX_WORKSPACE_BOUNDS.width / CHECKERBOARD_SIZE, _view.MAX_WORKSPACE_BOUNDS.height / CHECKERBOARD_SIZE + 1, '#D9E3F2', 0.55);
     vBackground.position = _view.CENTER;
     vBackground.scaling = new _paper2.default.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);
 
@@ -21959,7 +21959,7 @@ var _makeBackgroundGuideLayer = function _makeBackgroundGuideLayer(format) {
     setGuideItem(vectorBackground);
     guideLayer.vectorBackground = vectorBackground;
 
-    var bitmapBackground = _makeBackgroundPaper(_view.ART_BOARD_WIDTH / CHECKERBOARD_SIZE, _view.ART_BOARD_HEIGHT / CHECKERBOARD_SIZE, '#0062ff', 0.05);
+    var bitmapBackground = _makeBackgroundPaper(_view.ART_BOARD_WIDTH / CHECKERBOARD_SIZE, _view.ART_BOARD_HEIGHT / CHECKERBOARD_SIZE, '#D9E3F2', 0.55);
     bitmapBackground.position = _view.CENTER;
     bitmapBackground.scaling = new _paper2.default.Point(CHECKERBOARD_SIZE, CHECKERBOARD_SIZE);
     bitmapBackground.guide = true;
