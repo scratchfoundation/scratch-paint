@@ -35908,6 +35908,7 @@ var Playground = function (_React$Component) {
             image: svgString, // svg string or data URI
             rtl: rtl
         };
+        _this.reusableCanvas = document.createElement('canvas');
         return _this;
     }
 
@@ -35927,11 +35928,12 @@ var Playground = function (_React$Component) {
                 // is Bitmap
                 // image parameter has type ImageData
                 // paint editor takes dataURI as input
-                var canvas = document.createElement('canvas');
-                var context = canvas.getContext('2d');
+                this.reusableCanvas.width = image.width;
+                this.reusableCanvas.height = image.height;
+                var context = this.reusableCanvas.getContext('2d');
                 context.putImageData(image, 0, 0);
                 this.setState({
-                    image: canvas.toDataURL('image/png'),
+                    image: this.reusableCanvas.toDataURL('image/png'),
                     rotationCenterX: rotationCenterX,
                     rotationCenterY: rotationCenterY
                 });
@@ -46063,6 +46065,13 @@ var PaperCanvas = function (_React$Component) {
                 imgElement.onload = function () {
                     if (!_this2.queuedImageToLoad) return;
                     _this2.queuedImageToLoad = null;
+
+                    if (typeof rotationCenterX === 'undefined') {
+                        rotationCenterX = imgElement.width / 2;
+                    }
+                    if (typeof rotationCenterY === 'undefined') {
+                        rotationCenterY = imgElement.height / 2;
+                    }
 
                     (0, _layer.getRaster)().drawImage(imgElement, _view.ART_BOARD_WIDTH / 2 - rotationCenterX, _view.ART_BOARD_HEIGHT / 2 - rotationCenterY);
                     (0, _layer.getRaster)().drawImage(imgElement, _view.ART_BOARD_WIDTH / 2 - rotationCenterX, _view.ART_BOARD_HEIGHT / 2 - rotationCenterY);
