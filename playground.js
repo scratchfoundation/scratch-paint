@@ -35896,16 +35896,18 @@ var Playground = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (Playground.__proto__ || Object.getPrototypeOf(Playground)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['handleUpdateName', 'handleUpdateImage']);
+        (0, _lodash2.default)(_this, ['downloadImage', 'handleUpdateName', 'handleUpdateImage', 'onUploadImage']);
         // Append ?dir=rtl to URL to get RTL layout
         var match = location.search.match(/dir=([^&]+)/);
         var rtl = match && match[1] == 'rtl';
+        _this.id = 0;
         _this.state = {
             name: 'meow',
             rotationCenterX: 20,
             rotationCenterY: 400,
             imageFormat: 'svg', // 'svg', 'png', or 'jpg'
             image: svgString, // svg string or data URI
+            imageId: _this.id, // If this changes, the paint editor will reload
             rtl: rtl
         };
         _this.reusableCanvas = document.createElement('canvas');
@@ -35920,7 +35922,12 @@ var Playground = function (_React$Component) {
     }, {
         key: 'handleUpdateImage',
         value: function handleUpdateImage(isVector, image, rotationCenterX, rotationCenterY) {
-            console.log(image);
+            this.setState({
+                imageFormat: isVector ? 'svg' : 'png'
+            });
+            if (!isVector) {
+                console.log('Image width: ' + image.width + '    Image height: ' + image.height);
+            }
             console.log('rotationCenterX: ' + rotationCenterX + '    rotationCenterY: ' + rotationCenterY);
             if (isVector) {
                 this.setState({ image: image, rotationCenterX: rotationCenterX, rotationCenterY: rotationCenterY });
@@ -35940,13 +35947,120 @@ var Playground = function (_React$Component) {
             }
         }
     }, {
+        key: 'downloadImage',
+        value: function downloadImage() {
+            var downloadLink = document.createElement('a');
+            document.body.appendChild(downloadLink);
+
+            var format = this.state.imageFormat;
+            var data = this.state.image;
+            if (format === 'png' || format === 'jpg') {
+                data = this.b64toByteArray(data);
+            } else {
+                data = [data];
+            }
+            var blob = new Blob(data, { type: format });
+            var filename = this.state.name + '.' + format;
+            if ('download' in HTMLAnchorElement.prototype) {
+                var url = window.URL.createObjectURL(blob);
+                downloadLink.href = url;
+                downloadLink.download = filename;
+                downloadLink.type = blob.type;
+                downloadLink.click();
+                window.URL.revokeObjectURL(url);
+            } else {
+                // iOS Safari, open a new page and set href to data-uri
+                var popup = window.open('', '_blank');
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    popup.location.href = reader.result;
+                    popup = null;
+                };
+                reader.readAsDataURL(blob);
+            }
+            document.body.removeChild(downloadLink);
+        }
+    }, {
+        key: 'b64toByteArray',
+        value: function b64toByteArray(b64Data) {
+            var sliceSize = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 512;
+
+            // Remove header
+            b64Data = b64Data.substring(b64Data.indexOf('base64,') + 7);
+
+            var byteCharacters = atob(b64Data);
+            var byteArrays = [];
+
+            for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+                var byteNumbers = new Array(slice.length);
+                for (var i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+
+                var byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+
+            return byteArrays;
+        }
+    }, {
+        key: 'uploadImage',
+        value: function uploadImage() {
+            document.getElementById(_playground2.default.fileInput).click();
+        }
+    }, {
+        key: 'onUploadImage',
+        value: function onUploadImage(event) {
+            var file = event.target.files[0];
+            var type = file.type === 'image/svg+xml' ? 'svg' : file.type === 'image/png' ? 'png' : file.type === 'image/jpg' ? 'jpg' : file.type === 'image/jpeg' ? 'jpg' : null;
+
+            var reader = new FileReader();
+            if (type === 'svg') {
+                reader.readAsText(file, 'UTF-8');
+            } else if (type === 'png' || type === 'jpg') {
+                reader.readAsDataURL(file);
+            } else {
+                alert("Couldn't read file type: " + file.type);
+            }
+
+            var that = this;
+            reader.onload = function (readerEvent) {
+                var content = readerEvent.target.result; // this is the content!
+
+                that.setState({
+                    image: content,
+                    name: file.name.split('.').slice(0, -1).join('.'),
+                    imageId: ++that.id,
+                    imageFormat: type,
+                    rotationCenterX: undefined,
+                    rotationCenterY: undefined
+                });
+            };
+        }
+    }, {
         key: 'render',
         value: function render() {
-            return _react2.default.createElement(_2.default, _extends({}, this.state, {
-                imageId: 'meow',
-                onUpdateName: this.handleUpdateName,
-                onUpdateImage: this.handleUpdateImage
-            }));
+            return _react2.default.createElement(
+                'div',
+                { className: _playground2.default.wrapper },
+                _react2.default.createElement(_2.default, _extends({}, this.state, {
+                    onUpdateName: this.handleUpdateName,
+                    onUpdateImage: this.handleUpdateImage
+                })),
+                _react2.default.createElement(
+                    'button',
+                    { className: _playground2.default.playgroundButton, onClick: this.uploadImage },
+                    'Upload'
+                ),
+                _react2.default.createElement('input', { id: _playground2.default.fileInput, type: 'file', name: 'name', onChange: this.onUploadImage }),
+                _react2.default.createElement(
+                    'button',
+                    { className: _playground2.default.playgroundButton, onClick: this.downloadImage },
+                    'Download'
+                )
+            );
         }
     }]);
 
@@ -70411,10 +70525,13 @@ module.exports = content.locals || {};
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\nbody {\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    margin: 0px;\n}\n\nbody, html {\n\theight: 100%\n}\n\n.playground_playgroundContainer_3CQoG{\n\theight: 90%;\n\twidth: 90%;\n\tmargin: auto;\n}", ""]);
+exports.push([module.i, "\nbody {\n    font-family: \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n    margin: 0px;\n}\n\nbody, html, .playground_wrapper_27Lh0 {\n\theight: 100%\n}\n\n.playground_playgroundContainer_3CQoG{\n\theight: 90%;\n\twidth: 90%;\n\tmargin: auto;\n}\n\n#playground_fileInput_fFns4 {\n\tdisplay: none;\n}\n\n.playground_playgroundButton_hZeTH {\n\tmargin: 4px;\n}\n", ""]);
 // Exports
 exports.locals = {
-	"playgroundContainer": "playground_playgroundContainer_3CQoG"
+	"wrapper": "playground_wrapper_27Lh0",
+	"playgroundContainer": "playground_playgroundContainer_3CQoG",
+	"fileInput": "playground_fileInput_fFns4",
+	"playgroundButton": "playground_playgroundButton_hZeTH"
 };
 module.exports = exports;
 
