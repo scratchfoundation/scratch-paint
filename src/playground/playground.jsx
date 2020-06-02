@@ -43,6 +43,7 @@ class Playground extends React.Component {
             image: svgString, // svg string or data URI
             rtl: rtl
         };
+        this.reusableCanvas = document.createElement('canvas');
     }
     handleUpdateName (name) {
         this.setState({name});
@@ -55,11 +56,12 @@ class Playground extends React.Component {
         } else { // is Bitmap
             // image parameter has type ImageData
             // paint editor takes dataURI as input
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
+            this.reusableCanvas.width = image.width;
+            this.reusableCanvas.height = image.height;
+            const context = this.reusableCanvas.getContext('2d');
             context.putImageData(image, 0, 0);
             this.setState({
-                image: canvas.toDataURL('image/png'),
+                image: this.reusableCanvas.toDataURL('image/png'),
                 rotationCenterX: rotationCenterX,
                 rotationCenterY: rotationCenterY
             });
