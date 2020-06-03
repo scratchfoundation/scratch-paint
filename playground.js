@@ -32753,10 +32753,10 @@ var MoveTool = function () {
                 for (var _iterator3 = this.selectedItems[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                     var item = _step3.value;
 
-                    if (item.data && item.data.origPos && !item.position.equals(item.data.origPos)) {
-                        moved = true;
+                    if (item.data.origPos) {
+                        if (!item.position.equals(item.data.origPos)) moved = true;
+                        delete item.data.origPos;
                     }
-                    item.data.origPos = null;
                 }
             } catch (err) {
                 _didIteratorError3 = true;
