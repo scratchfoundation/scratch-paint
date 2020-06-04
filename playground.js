@@ -48399,17 +48399,23 @@ var ScrollableCanvasComponent = function ScrollableCanvasComponent(props) {
                 className: _scrollableCanvas2.default.horizontalScrollbarWrapper,
                 style: { pointerEvents: 'none' }
             },
-            _react2.default.createElement('div', {
-                className: _scrollableCanvas2.default.horizontalScrollbar,
-                style: {
-                    width: props.horizontalScrollLengthPercent + '%',
-                    left: props.horizontalScrollStartPercent + '%',
-                    pointerEvents: 'auto',
-                    display: '' + (props.hideScrollbars || Math.abs(props.horizontalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block')
+            _react2.default.createElement(
+                'div',
+                {
+                    className: _scrollableCanvas2.default.horizontalScrollbarHitbox,
+                    style: {
+                        width: props.horizontalScrollLengthPercent + '%',
+                        left: props.horizontalScrollStartPercent + '%',
+                        pointerEvents: 'auto',
+                        display: '' + (props.hideScrollbars || Math.abs(props.horizontalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block')
+                    },
+                    onMouseDown: props.onHorizontalScrollbarMouseDown,
+                    onTouchStart: props.onHorizontalScrollbarMouseDown
                 },
-                onMouseDown: props.onHorizontalScrollbarMouseDown,
-                onTouchStart: props.onHorizontalScrollbarMouseDown
-            })
+                _react2.default.createElement('div', {
+                    className: _scrollableCanvas2.default.horizontalScrollbar
+                })
+            )
         ),
         _react2.default.createElement(
             'div',
@@ -48417,17 +48423,23 @@ var ScrollableCanvasComponent = function ScrollableCanvasComponent(props) {
                 className: _scrollableCanvas2.default.verticalScrollbarWrapper,
                 style: { pointerEvents: 'none' }
             },
-            _react2.default.createElement('div', {
-                className: _scrollableCanvas2.default.verticalScrollbar,
-                style: {
-                    height: props.verticalScrollLengthPercent + '%',
-                    top: props.verticalScrollStartPercent + '%',
-                    pointerEvents: 'auto',
-                    display: '' + (props.hideScrollbars || Math.abs(props.verticalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block')
+            _react2.default.createElement(
+                'div',
+                {
+                    className: _scrollableCanvas2.default.verticalScrollbarHitbox,
+                    style: {
+                        height: props.verticalScrollLengthPercent + '%',
+                        top: props.verticalScrollStartPercent + '%',
+                        pointerEvents: 'auto',
+                        display: '' + (props.hideScrollbars || Math.abs(props.verticalScrollLengthPercent - 100) < 1e-8 ? 'none' : 'block')
+                    },
+                    onMouseDown: props.onVerticalScrollbarMouseDown,
+                    onTouchStart: props.onVerticalScrollbarMouseDown
                 },
-                onMouseDown: props.onVerticalScrollbarMouseDown,
-                onTouchStart: props.onVerticalScrollbarMouseDown
-            })
+                _react2.default.createElement('div', {
+                    className: _scrollableCanvas2.default.verticalScrollbar
+                })
+            )
         )
     );
 };
@@ -48478,7 +48490,7 @@ module.exports = content.locals || {};
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(13);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, ".scrollable-canvas_vertical-scrollbar_gyXyM, .scrollable-canvas_horizontal-scrollbar_OBOUt {\n    position: absolute;\n    background: rgba(190, 190, 190, 0.8);\n    border-radius: calc(8px / 2);\n    cursor: pointer;\n}\n.scrollable-canvas_vertical-scrollbar-wrapper_1cMNm {\n    position: absolute;\n    width: 8px;\n    right: 4px;\n    top: 4px;\n    height: calc(100% - 8px - 2 * 4px);\n}\n.scrollable-canvas_horizontal-scrollbar-wrapper_2BUMa {\n    position: absolute;\n    height: 8px;\n    left: 4px;\n    bottom: 4px;\n    width: calc(100% - 8px - 2 * 4px);\n}\n.scrollable-canvas_vertical-scrollbar_gyXyM {\n    width: 8px;\n}\n.scrollable-canvas_horizontal-scrollbar_OBOUt {\n    height: 8px;\n}\n", ""]);
+exports.push([module.i, ".scrollable-canvas_vertical-scrollbar_gyXyM, .scrollable-canvas_horizontal-scrollbar_OBOUt {\n    background: rgba(190, 190, 190, 0.8);\n    border-radius: calc(8px / 2);\n    width: 100%;\n    height: 100%;\n}\n.scrollable-canvas_vertical-scrollbar-wrapper_1cMNm {\n    position: absolute;\n    width: calc(8px + 4px);\n    right: 0;\n    top: 4px;\n    height: calc(100% - 8px - 2 * 4px);\n}\n.scrollable-canvas_horizontal-scrollbar-wrapper_2BUMa {\n    position: absolute;\n    height: calc(8px + 4px);\n    left: 4px;\n    bottom: 0;\n    width: calc(100% - 8px - 2 * 4px);\n}\n.scrollable-canvas_vertical-scrollbar-hitbox_2QprH, .scrollable-canvas_horizontal-scrollbar-hitbox_EBg8r {\n    position: absolute;\n    cursor: pointer;\n    -webkit-box-sizing: border-box;\n            box-sizing: border-box;\n}\n.scrollable-canvas_vertical-scrollbar-hitbox_2QprH {\n    width: calc(8px + 4px);\n    padding-right: 4px;\n}\n.scrollable-canvas_horizontal-scrollbar-hitbox_EBg8r {\n    height: calc(8px + 4px);\n    padding-bottom: 4px;\n}\n", ""]);
 // Exports
 exports.locals = {
 	"vertical-scrollbar": "scrollable-canvas_vertical-scrollbar_gyXyM",
@@ -48488,7 +48500,11 @@ exports.locals = {
 	"vertical-scrollbar-wrapper": "scrollable-canvas_vertical-scrollbar-wrapper_1cMNm",
 	"verticalScrollbarWrapper": "scrollable-canvas_vertical-scrollbar-wrapper_1cMNm",
 	"horizontal-scrollbar-wrapper": "scrollable-canvas_horizontal-scrollbar-wrapper_2BUMa",
-	"horizontalScrollbarWrapper": "scrollable-canvas_horizontal-scrollbar-wrapper_2BUMa"
+	"horizontalScrollbarWrapper": "scrollable-canvas_horizontal-scrollbar-wrapper_2BUMa",
+	"vertical-scrollbar-hitbox": "scrollable-canvas_vertical-scrollbar-hitbox_2QprH",
+	"verticalScrollbarHitbox": "scrollable-canvas_vertical-scrollbar-hitbox_2QprH",
+	"horizontal-scrollbar-hitbox": "scrollable-canvas_horizontal-scrollbar-hitbox_EBg8r",
+	"horizontalScrollbarHitbox": "scrollable-canvas_horizontal-scrollbar-hitbox_EBg8r"
 };
 module.exports = exports;
 
