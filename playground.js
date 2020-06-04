@@ -64715,17 +64715,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _paper = __webpack_require__(2);
-
-var _paper2 = _interopRequireDefault(_paper);
-
 var _math = __webpack_require__(19);
 
 var _view = __webpack_require__(22);
 
 var _selection = __webpack_require__(3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -64803,48 +64797,16 @@ var PointTool = function () {
     }, {
         key: 'addPoint',
         value: function addPoint(hitProperties) {
-            // Length of curve from previous point to new point
-            var beforeCurveLength = hitProperties.hitResult.location.curveOffset;
-            var afterCurveLength = hitProperties.hitResult.location.curve.length - hitProperties.hitResult.location.curveOffset;
+            var newSegment = hitProperties.hitResult.item.divideAt(hitProperties.hitResult.location);
 
-            // Handle length based on curve length until next point
-            var handleIn = hitProperties.hitResult.location.tangent.multiply(-beforeCurveLength * _math.HANDLE_RATIO);
-            var handleOut = hitProperties.hitResult.location.tangent.multiply(afterCurveLength * _math.HANDLE_RATIO);
-            // Don't let one handle overwhelm the other (results in path doubling back on itself weirdly)
-            if (handleIn.length > 3 * handleOut.length) {
-                handleIn = handleIn.multiply(3 * handleOut.length / handleIn.length);
-            }
-            if (handleOut.length > 3 * handleIn.length) {
-                handleOut = handleOut.multiply(3 * handleIn.length / handleOut.length);
-            }
+            // If we're adding a point in the middle of a straight line, it won't be smooth by default, so smooth it
+            if (!newSegment.hasHandles()) newSegment.smooth();
 
-            var beforeSegment = hitProperties.hitResult.item.segments[hitProperties.hitResult.location.index];
-            var afterSegment = hitProperties.hitResult.item.segments[hitProperties.hitResult.location.index + 1];
-
-            // Add segment
-            var newSegment = new _paper2.default.Segment(hitProperties.hitResult.location.point, handleIn, handleOut);
-            hitProperties.hitResult.item.insert(hitProperties.hitResult.location.index + 1, newSegment);
             hitProperties.hitResult.segment = newSegment;
             if (!hitProperties.multiselect) {
                 (0, _selection.clearSelection)(this.clearSelectedItems);
             }
             newSegment.selected = true;
-
-            // Adjust handles of curve before and curve after to account for new curve length
-            if (beforeSegment && beforeSegment.handleOut) {
-                if (afterSegment) {
-                    beforeSegment.handleOut = beforeSegment.handleOut.multiply(beforeCurveLength * _math.HANDLE_RATIO / beforeSegment.handleOut.length);
-                } else {
-                    beforeSegment.handleOut = null;
-                }
-            }
-            if (afterSegment && afterSegment.handleIn) {
-                if (beforeSegment) {
-                    afterSegment.handleIn = afterSegment.handleIn.multiply(afterCurveLength * _math.HANDLE_RATIO / afterSegment.handleIn.length);
-                } else {
-                    afterSegment.handleIn = null;
-                }
-            }
         }
     }, {
         key: 'removePoint',
