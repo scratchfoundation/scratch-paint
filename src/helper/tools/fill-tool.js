@@ -31,6 +31,8 @@ class FillTool extends paper.Tool {
 
         // The path that's being hovered over.
         this.fillItem = null;
+        // The style property that we're applying the color to (either fill or stroke).
+        this.fillProperty = null;
         // If we're hovering over a hole in a compound path, we can't just recolor it. This is the
         // added item that's the same shape as the hole that's drawn over the hole when we fill a hole.
         this.addedFillItem = null;
@@ -43,14 +45,17 @@ class FillTool extends paper.Tool {
                 item.lastSegment.point.getDistance(item.firstSegment.point) < 8;
         };
         return {
-            segments: true,
+            segments: false,
             stroke: true,
-            curves: true,
+            curves: false,
             fill: true,
             guide: false,
             match: function (hitResult) {
+                // Allow fills to be hit only if the item has a fill already or the path is closed/nearly closed
+                const hitFill = hitResult.item.hasFill() || hitResult.item.closed || isAlmostClosedPath(hitResult.item);
                 if (hitResult.item instanceof paper.Path &&
-                    (hitResult.item.hasFill() || hitResult.item.closed || isAlmostClosedPath(hitResult.item))) {
+                    // Disallow hits that don't qualify for the fill criteria, but only if they're fills
+                    (hitFill || hitResult.type !== 'fill')) {
                     return true;
                 }
                 if (hitResult.item instanceof paper.PointText) {
@@ -58,6 +63,12 @@ class FillTool extends paper.Tool {
                 }
             },
             hitUnfilledPaths: true,
+            // If the color is transparent/none, then we need to be able to hit "invisible" outlines so that we don't
+            // prevent ourselves from hitting an outline when we make it transparent via the fill preview, causing it to
+            // flicker back and forth between transparent/its previous color as we hit it, then stop hitting it, etc.
+            // If the color *is* visible, then don't hit "invisible" outlines, since this would add visible outlines to
+            // non-outlined shapes when you hovered over where their outlines would be.
+            hitUnstrokedPaths: this.gradientType === GradientTypes.SOLID && this.fillColor === null,
             tolerance: FillTool.TOLERANCE / paper.view.zoom
         };
     }
@@ -89,8 +100,13 @@ class FillTool extends paper.Tool {
             this.setHoveredItem(hoveredItem ? hoveredItem.id : null);
         }
         const hitItem = hoveredItem ? hoveredItem.data.origItem : null;
+        const hitType = hoveredItem ? hoveredItem.data.hitResult.type : null;
+
+        // The hit "target" changes if we switch items or switch between fill/outline on the same item
+        const hitTargetChanged = hitItem !== this.fillItem || hitType !== this.fillProperty;
+
         // Still hitting the same thing
-        if ((!hitItem && !this.fillItem) || this.fillItem === hitItem) {
+        if (!hitTargetChanged) {
             // Only radial gradient needs to be updated
             if (this.gradientType === GradientTypes.RADIAL) {
                 this._setFillItemColor(this.fillColor, this.fillColor2, this.gradientType, event.point);
@@ -106,14 +122,18 @@ class FillTool extends paper.Tool {
             }
             this.fillItemOrigColor = null;
             this.fillItem = null;
+            this.fillProperty = null;
         }
         if (hitItem) {
             this.fillItem = hitItem;
-            this.fillItemOrigColor = hitItem.fillColor;
-            if (hitItem.parent instanceof paper.CompoundPath && hitItem.area < 0) { // hole
+            this.fillProperty = hitType;
+            const colorProp = hitType === 'fill' ? 'fillColor' : 'strokeColor';
+            this.fillItemOrigColor = hitItem[colorProp];
+            if (hitItem.parent instanceof paper.CompoundPath && hitItem.area < 0 && hitType === 'fill') { // hole
                 if (!this.fillColor) {
                     // Hole filled with transparent is no-op
                     this.fillItem = null;
+                    this.fillProperty = null;
                     this.fillItemOrigColor = null;
                     return;
                 }
@@ -127,7 +147,7 @@ class FillTool extends paper.Tool {
                 expandBy(this.addedFillItem, .1);
                 this.addedFillItem.insertAbove(hitItem.parent);
             } else if (this.fillItem.parent instanceof paper.CompoundPath) {
-                this.fillItemOrigColor = hitItem.parent.fillColor;
+                this.fillItemOrigColor = hitItem.parent[colorProp];
             }
             this._setFillItemColor(this.fillColor, this.fillColor2, this.gradientType, event.point);
         }
@@ -163,6 +183,7 @@ class FillTool extends paper.Tool {
 
             this.clearHoveredItem();
             this.fillItem = null;
+            this.fillProperty = null;
             this.addedFillItem = null;
             this.fillItemOrigColor = null;
             this.onUpdateImage();
@@ -178,12 +199,13 @@ class FillTool extends paper.Tool {
     _setFillItemColor (color1, color2, gradientType, pointerLocation) {
         const item = this._getFillItem();
         if (!item) return;
+        const colorProp = this.fillProperty === 'fill' ? 'fillColor' : 'strokeColor';
         // Only create a gradient if specifically requested, else use color1 directly
         // This ensures we do not set a gradient by accident (see scratch-paint#830).
         if (gradientType && gradientType !== GradientTypes.SOLID) {
-            item.fillColor = createGradientObject(color1, color2, gradientType, item.bounds, pointerLocation);
+            item[colorProp] = createGradientObject(color1, color2, gradientType, item.bounds, pointerLocation);
         } else {
-            item.fillColor = color1;
+            item[colorProp] = color1;
         }
     }
     _getFillItem () {
@@ -199,6 +221,7 @@ class FillTool extends paper.Tool {
             this._setFillItemColor(this.fillItemOrigColor);
             this.fillItemOrigColor = null;
             this.fillItem = null;
+            this.fillProperty = null;
         }
         this.clearHoveredItem();
         this.setHoveredItem = null;
