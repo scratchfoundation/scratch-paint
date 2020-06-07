@@ -125,11 +125,11 @@ const FixedToolsComponent = props => {
                                 }
                             )
                         }
-                        disabled={undoDisabled}
-                        onClick={props.onUndo}
+                        disabled={props.rtl ? redoDisabled : undoDisabled}
+                        onClick={props.rtl ? props.onRedo : props.onUndo}
                     >
                         <img
-                            alt={props.intl.formatMessage(messages.undo)}
+                            alt={props.intl.formatMessage(props.rtl ? messages.redo : messages.undo)}
                             className={classNames(
                                 styles.buttonGroupButtonIcon,
                                 styles.undoIcon
@@ -147,11 +147,11 @@ const FixedToolsComponent = props => {
                                 }
                             )
                         }
-                        disabled={redoDisabled}
-                        onClick={props.onRedo}
+                        disabled={props.rtl ? undoDisabled : redoDisabled}
+                        onClick={props.rtl ? props.onUndo : props.onRedo}
                     >
                         <img
-                            alt={props.intl.formatMessage(messages.redo)}
+                            alt={props.intl.formatMessage(props.rtl ? messages.undo : messages.redo)}
                             className={styles.buttonGroupButtonIcon}
                             draggable={false}
                             src={redoIcon}
