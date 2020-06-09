@@ -64301,7 +64301,25 @@ var ReshapeTool = function (_paper$Tool) {
 
         /** Distance within which mouse is considered to be hitting an item */
         get: function get() {
-            return 4;
+            return ReshapeTool.HANDLE_RADIUS + ReshapeTool.HANDLE_PADDING;
+        }
+        /**
+         * Units of padding around the visible handle area that will still register clicks as "touching the handle"
+         */
+
+    }, {
+        key: 'HANDLE_PADDING',
+        get: function get() {
+            return 1;
+        }
+        /**
+         * Handles' radius, including the stroke
+         */
+
+    }, {
+        key: 'HANDLE_RADIUS',
+        get: function get() {
+            return 5.25;
         }
         /** Clicks registered within this amount of time are registered as double clicks */
 
@@ -64348,7 +64366,10 @@ var ReshapeTool = function (_paper$Tool) {
         _this.onKeyUp = _this.handleKeyUp;
         _this.onKeyDown = _this.handleKeyDown;
 
-        _paper2.default.settings.handleSize = 8;
+        // A handle's size is given in diameter, and each handle has a 2.5-pixel stroke that isn't part of its size:
+        // https://github.com/LLK/paper.js/blob/a187e4c81cc63f3d48c5097b9a9fbddde9f057da/src/item/Item.js#L4480
+        // Size the handles such that clicking on either the stroke or the handle itself will be registered as a drag
+        _paper2.default.settings.handleSize = ReshapeTool.HANDLE_RADIUS * 2 - 2.5;
         return _this;
     }
     /**
