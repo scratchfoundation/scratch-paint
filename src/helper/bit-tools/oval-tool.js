@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
+import {styleShape} from '../style-path';
 import {commitOvalToBitmap} from '../bitmap';
 import {getRaster} from '../layer';
 import {clearSelection} from '../selection';
@@ -83,29 +84,22 @@ class OvalTool extends paper.Tool {
             this.commitOval();
         }
     }
+    styleOval () {
+        styleShape(this.oval, {
+            fillColor: this.filled ? this.color : null,
+            strokeColor: this.filled ? null : this.color,
+            strokeWidth: this.filled ? 0 : this.thickness
+        });
+    }
     setColor (color) {
         this.color = color;
-        if (this.oval) {
-            if (this.filled) {
-                this.oval.fillColor = this.color;
-            } else {
-                this.oval.strokeColor = this.color;
-            }
-        }
+        if (this.oval) this.styleOval();
     }
     setFilled (filled) {
         if (this.filled === filled) return;
         this.filled = filled;
         if (this.oval && this.oval.isInserted()) {
-            if (this.filled) {
-                this.oval.fillColor = this.color;
-                this.oval.strokeWidth = 0;
-                this.oval.strokeColor = null;
-            } else {
-                this.oval.fillColor = null;
-                this.oval.strokeWidth = this.thickness;
-                this.oval.strokeColor = this.color;
-            }
+            this.styleOval();
             this.onUpdateImage();
         }
     }
@@ -131,23 +125,12 @@ class OvalTool extends paper.Tool {
             this.isBoundingBoxMode = false;
             clearSelection(this.clearSelectedItems);
             this.commitOval();
-            if (this.filled) {
-                this.oval = new paper.Shape.Ellipse({
-                    fillColor: this.color,
-                    point: event.downPoint,
-                    strokeWidth: 0,
-                    strokeScaling: false,
-                    size: 0
-                });
-            } else {
-                this.oval = new paper.Shape.Ellipse({
-                    strokeColor: this.color,
-                    strokeWidth: this.thickness,
-                    point: event.downPoint,
-                    strokeScaling: false,
-                    size: 0
-                });
-            }
+            this.oval = new paper.Shape.Ellipse({
+                point: event.downPoint,
+                size: 0,
+                strokeScaling: false
+            });
+            this.styleOval();
             this.oval.data = {zoomLevel: paper.view.zoom};
         }
     }
@@ -175,6 +158,7 @@ class OvalTool extends paper.Tool {
         } else {
             this.oval.position = downPoint.subtract(this.oval.size.multiply(0.5));
         }
+        this.styleOval();
     }
     handleMouseMove (event) {
         this.boundingBoxTool.onMouseMove(event, this.getHitOptions());
@@ -197,6 +181,7 @@ class OvalTool extends paper.Tool {
                 // Hit testing does not work correctly unless the width and height are positive
                 this.oval.size = new paper.Point(Math.abs(this.oval.size.width), Math.abs(this.oval.size.height));
                 this.oval.selected = true;
+                this.styleOval();
                 this.setSelectedItems();
             }
         }

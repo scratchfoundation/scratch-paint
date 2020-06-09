@@ -28,6 +28,7 @@ const mapStateToProps = state => ({
     color: state.scratchPaint.color.fillColor.primary,
     color2: state.scratchPaint.color.fillColor.secondary,
     colorModalVisible: state.scratchPaint.modals.fillColor,
+    fillBitmapShapes: state.scratchPaint.fillBitmapShapes,
     format: state.scratchPaint.format,
     gradientType: state.scratchPaint.color.fillColor.gradientType,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
@@ -38,6 +39,8 @@ const mapStateToProps = state => ({
         state.scratchPaint.mode === Modes.RECT ||
         state.scratchPaint.mode === Modes.OVAL ||
         state.scratchPaint.mode === Modes.BIT_SELECT ||
+        state.scratchPaint.mode === Modes.BIT_RECT ||
+        state.scratchPaint.mode === Modes.BIT_OVAL ||
         state.scratchPaint.mode === Modes.BIT_FILL,
     textEditTarget: state.scratchPaint.textEditTarget
 });

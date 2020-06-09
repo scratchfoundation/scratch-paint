@@ -275,8 +275,24 @@ const drawEllipse = function (options, context) {
     if (!matrix.isInvertible()) return false;
     const inverse = matrix.clone().invert();
 
+    const isGradient = context.fillStyle instanceof CanvasGradient;
+
+    // If drawing a gradient, we need to draw the shape onto a temporary canvas, then draw the gradient atop that canvas
+    // only where the shape appears. drawShearedEllipse draws some pixels twice, which would be a problem if the
+    // gradient fades to transparent as those pixels would end up looking more opaque. Instead, mask in the gradient.
+    // https://github.com/LLK/scratch-paint/issues/1152
+    // Outlines are drawn as a series of brush mark images and as such can't be drawn as gradients in the first place.
+    let origContext;
+    let tmpCanvas;
+    const {width: canvasWidth, height: canvasHeight} = context.canvas;
+    if (isGradient) {
+        tmpCanvas = createCanvas(canvasWidth, canvasHeight);
+        origContext = context;
+        context = tmpCanvas.getContext('2d');
+    }
+
     if (!isFilled) {
-        const brushMark = getBrushMark(thickness, context.fillStyle);
+        const brushMark = getBrushMark(thickness, isGradient ? 'black' : context.fillStyle);
         const roundedUpRadius = Math.ceil(thickness / 2);
         drawFn = (x, y) => {
             context.drawImage(brushMark, ~~x - roundedUpRadius, ~~y - roundedUpRadius);
@@ -295,7 +311,7 @@ const drawEllipse = function (options, context) {
     const radiusA = Math.sqrt(-4 * C / ((B * B) - (4 * A * C)));
     const slope = B / 2 / C;
 
-    return drawShearedEllipse_({
+    const wasDrawn = drawShearedEllipse_({
         centerX: positionX,
         centerY: positionY,
         radiusX: radiusA,
@@ -304,6 +320,17 @@ const drawEllipse = function (options, context) {
         isFilled: isFilled,
         drawFn: drawFn
     }, context);
+
+    // Mask in the gradient only where the shape was drawn, and draw it. Then draw the gradientified shape onto the
+    // original canvas normally.
+    if (isGradient && wasDrawn) {
+        context.globalCompositeOperation = 'source-in';
+        context.fillStyle = origContext.fillStyle;
+        context.fillRect(0, 0, canvasWidth, canvasHeight);
+        origContext.drawImage(tmpCanvas, 0, 0);
+    }
+
+    return wasDrawn;
 };
 
 const rowBlank_ = function (imageData, width, y) {
@@ -658,6 +685,20 @@ const outlineRect = function (rect, thickness, context) {
         context.drawImage(brushMark, ~~x - roundedUpRadius, ~~y - roundedUpRadius);
     };
 
+    const isGradient = context.fillStyle instanceof CanvasGradient;
+
+    // If drawing a gradient, we need to draw the shape onto a temporary canvas, then draw the gradient atop that canvas
+    // only where the shape appears. Outlines are drawn as a series of brush mark images and as such can't be drawn as
+    // gradients.
+    let origContext;
+    let tmpCanvas;
+    const {width: canvasWidth, height: canvasHeight} = context.canvas;
+    if (isGradient) {
+        tmpCanvas = createCanvas(canvasWidth, canvasHeight);
+        origContext = context;
+        context = tmpCanvas.getContext('2d');
+    }
+
     const startPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, -rect.size.height / 2));
     const widthPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, -rect.size.height / 2));
     const heightPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, rect.size.height / 2));
@@ -667,6 +708,16 @@ const outlineRect = function (rect, thickness, context) {
     forEachLinePoint(startPoint, heightPoint, drawFn);
     forEachLinePoint(endPoint, widthPoint, drawFn);
     forEachLinePoint(endPoint, heightPoint, drawFn);
+
+    // Mask in the gradient only where the shape was drawn, and draw it. Then draw the gradientified shape onto the
+    // original canvas normally.
+    if (isGradient) {
+        context.globalCompositeOperation = 'source-in';
+        context.fillStyle = origContext.fillStyle;
+        context.fillRect(0, 0, canvasWidth, canvasHeight);
+        origContext.drawImage(tmpCanvas, 0, 0);
+    }
+
 };
 
 const flipBitmapHorizontal = function (canvas) {
@@ -774,6 +825,62 @@ const commitSelectionToBitmap = function (selection, bitmap) {
 };
 
 /**
+ * Converts a Paper.js color style (an item's fillColor or strokeColor) into a canvas-applicable color style.
+ * Note that a "color style" as applied to an item is different from a plain paper.Color or paper.Gradient.
+ * For instance, a gradient "color style" has origin and destination points whereas an unattached paper.Gradient
+ * does not.
+ * @param {paper.Color} color The color to convert to a canvas color/gradient
+ * @param {CanvasRenderingContext2D} context The rendering context on which the style will be used
+ * @returns {string|CanvasGradient} The canvas fill/stroke style.
+ */
+const _paperColorToCanvasStyle = function (color, context) {
+    if (!color) return null;
+    if (color.type === 'gradient') {
+        let canvasGradient;
+        const {origin, destination} = color;
+        if (color.gradient.radial) {
+            // Adapted from:
+            // https://github.com/paperjs/paper.js/blob/b081fd72c72cd61331313c3961edb48f3dfaffbd/src/style/Color.js#L926-L935
+            let {highlight} = color;
+            const start = highlight || origin;
+            const radius = destination.getDistance(origin);
+            if (highlight) {
+                const vector = highlight.subtract(origin);
+                if (vector.getLength() > radius) {
+                    // Paper ¯\_(ツ)_/¯
+                    highlight = origin.add(vector.normalize(radius - 0.1));
+                }
+            }
+            canvasGradient = context.createRadialGradient(
+                start.x, start.y,
+                0,
+                origin.x, origin.y,
+                radius
+            );
+        } else {
+            canvasGradient = context.createLinearGradient(
+                origin.x, origin.y,
+                destination.x, destination.y
+            );
+        }
+
+        const {stops} = color.gradient;
+        // Adapted from:
+        // https://github.com/paperjs/paper.js/blob/b081fd72c72cd61331313c3961edb48f3dfaffbd/src/style/Color.js#L940-L950
+        for (let i = 0, len = stops.length; i < len; i++) {
+            const stop = stops[i];
+            const offset = stop.offset;
+            canvasGradient.addColorStop(
+                offset || i / (len - 1),
+                stop.color.toCSS()
+            );
+        }
+        return canvasGradient;
+    }
+    return color.toCSS();
+};
+
+/**
  * @param {paper.Shape.Ellipse} oval Vector oval to convert
  * @param {paper.Raster} bitmap raster to draw selection
  * @return {bool} true if the oval was drawn
@@ -784,12 +891,12 @@ const commitOvalToBitmap = function (oval, bitmap) {
     const context = bitmap.getContext('2d');
     const filled = oval.strokeWidth === 0;
 
-    const canvasColor = filled ? oval.fillColor : oval.strokeColor;
-    // If the color is null (e.g. fully transparent/"no fill"), don't bother drawing anything,
-    // and especially don't try calling `toCSS` on it
+    const canvasColor = _paperColorToCanvasStyle(filled ? oval.fillColor : oval.strokeColor, context);
+    // If the color is null (e.g. fully transparent/"no fill"), don't bother drawing anything
     if (!canvasColor) return;
 
-    context.fillStyle = canvasColor.toCSS();
+    context.fillStyle = canvasColor;
+
     const drew = drawEllipse({
         position: oval.position,
         radiusX,
@@ -811,12 +918,12 @@ const commitRectToBitmap = function (rect, bitmap) {
     const context = tmpCanvas.getContext('2d');
     const filled = rect.strokeWidth === 0;
 
-    const canvasColor = filled ? rect.fillColor : rect.strokeColor;
-    // If the color is null (e.g. fully transparent/"no fill"), don't bother drawing anything,
-    // and especially don't try calling `toCSS` on it
+    const canvasColor = _paperColorToCanvasStyle(filled ? rect.fillColor : rect.strokeColor, context);
+    // If the color is null (e.g. fully transparent/"no fill"), don't bother drawing anything
     if (!canvasColor) return;
 
-    context.fillStyle = canvasColor.toCSS();
+    context.fillStyle = canvasColor;
+
     if (filled) {
         fillRect(rect, context);
     } else {

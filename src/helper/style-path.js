@@ -120,20 +120,6 @@ const applyColorToSelection = function (
             item = item.parent;
         }
 
-        // In bitmap mode, fill color applies to the stroke if there is a stroke
-        if (
-            bitmapMode &&
-            !applyToStroke &&
-            item.strokeColor !== null &&
-            item.strokeWidth
-        ) {
-            if (!_colorMatch(item.strokeColor, colorString)) {
-                changed = true;
-                item.strokeColor = colorString;
-            }
-            continue;
-        }
-
         const itemColorProp = applyToStroke ? 'strokeColor' : 'fillColor';
         const itemColor = item[itemColorProp];
 
@@ -179,8 +165,6 @@ const applyColorToSelection = function (
  * @return {boolean} Whether the color application actually changed visibly.
  */
 const swapColorsInSelection = function (bitmapMode, applyToStroke, textEditTargetId) {
-    if (bitmapMode) return; // @todo
-
     const items = _getColorStateListeners(textEditTargetId);
     let changed = false;
     for (const item of items) {
@@ -255,10 +239,7 @@ const applyGradientTypeToSelection = function (gradientType, bitmapMode, applyTo
             itemColor2 = itemColor.gradient.stops[1].color.toCSS();
         }
 
-        if (bitmapMode) {
-            // @todo Add when we apply gradients to selections in bitmap mode
-            continue;
-        } else if (gradientType === GradientTypes.SOLID) {
+        if (gradientType === GradientTypes.SOLID) {
             if (itemColor && itemColor.gradient) {
                 changed = true;
                 item[itemColorProp] = itemColor1;

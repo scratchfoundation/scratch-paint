@@ -52,30 +52,34 @@ const makeColorIndicator = (label, isStroke) => {
                 }
             }
 
+            const formatIsBitmap = isBitmap(this.props.format);
             // Apply color and update redux, but do not update svg until picker closes.
             const isDifferent = applyColorToSelection(
                 newColor,
                 this.props.colorIndex,
                 this.props.gradientType === GradientTypes.SOLID,
-                isBitmap(this.props.format),
-                isStroke,
+                formatIsBitmap,
+                // In bitmap mode, only the fill color selector is used, but it applies to stroke if fillBitmapShapes
+                // is set to true via the "Fill"/"Outline" selector button
+                isStroke || (formatIsBitmap && !this.props.fillBitmapShapes),
                 this.props.textEditTarget);
             this._hasChanged = this._hasChanged || isDifferent;
             this.props.onChangeColor(newColor, this.props.colorIndex);
         }
         handleChangeGradientType (gradientType) {
+            const formatIsBitmap = isBitmap(this.props.format);
             // Apply color and update redux, but do not update svg until picker closes.
             const isDifferent = applyGradientTypeToSelection(
                 gradientType,
-                isBitmap(this.props.format),
-                isStroke,
+                formatIsBitmap,
+                isStroke || (formatIsBitmap && !this.props.fillBitmapShapes),
                 this.props.textEditTarget);
             this._hasChanged = this._hasChanged || isDifferent;
             const hasSelectedItems = getSelectedLeafItems().length > 0;
             if (hasSelectedItems) {
                 if (isDifferent) {
                     // Recalculates the swatch colors
-                    this.props.setSelectedItems();
+                    this.props.setSelectedItems(this.props.format);
                 }
             }
             if (this.props.gradientType === GradientTypes.SOLID && gradientType !== GradientTypes.SOLID) {
@@ -100,11 +104,12 @@ const makeColorIndicator = (label, isStroke) => {
         }
         handleSwap () {
             if (getSelectedLeafItems().length) {
+                const formatIsBitmap = isBitmap(this.props.format);
                 const isDifferent = swapColorsInSelection(
-                    isBitmap(this.props.format),
-                    isStroke,
+                    formatIsBitmap,
+                    isStroke || (formatIsBitmap && !this.props.fillBitmapShapes),
                     this.props.textEditTarget);
-                this.props.setSelectedItems();
+                this.props.setSelectedItems(this.props.format);
                 this._hasChanged = this._hasChanged || isDifferent;
             } else {
                 let color1 = this.props.color;
@@ -136,6 +141,7 @@ const makeColorIndicator = (label, isStroke) => {
         color: PropTypes.string,
         color2: PropTypes.string,
         colorModalVisible: PropTypes.bool.isRequired,
+        fillBitmapShapes: PropTypes.bool.isRequired,
         format: PropTypes.oneOf(Object.keys(Formats)),
         gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
         intl: intlShape,

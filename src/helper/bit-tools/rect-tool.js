@@ -1,5 +1,6 @@
 import paper from '@scratch/paper';
 import Modes from '../../lib/modes';
+import {styleShape} from '../../helper/style-path';
 import {commitRectToBitmap} from '../bitmap';
 import {getRaster} from '../layer';
 import {clearSelection} from '../selection';
@@ -81,29 +82,22 @@ class RectTool extends paper.Tool {
             this.commitRect();
         }
     }
+    styleRect () {
+        styleShape(this.rect, {
+            fillColor: this.filled ? this.color : null,
+            strokeColor: this.filled ? null : this.color,
+            strokeWidth: this.filled ? 0 : this.thickness
+        });
+    }
     setColor (color) {
         this.color = color;
-        if (this.rect) {
-            if (this.filled) {
-                this.rect.fillColor = this.color;
-            } else {
-                this.rect.strokeColor = this.color;
-            }
-        }
+        if (this.rect) this.styleRect();
     }
     setFilled (filled) {
         if (this.filled === filled) return;
         this.filled = filled;
         if (this.rect && this.rect.isInserted()) {
-            if (this.filled) {
-                this.rect.fillColor = this.color;
-                this.rect.strokeWidth = 0;
-                this.rect.strokeColor = null;
-            } else {
-                this.rect.fillColor = null;
-                this.rect.strokeWidth = this.thickness;
-                this.rect.strokeColor = this.color;
-            }
+            this.styleRect();
             this.onUpdateImage();
         }
     }
@@ -148,16 +142,10 @@ class RectTool extends paper.Tool {
 
         if (this.rect) this.rect.remove();
         this.rect = new paper.Shape.Rectangle(baseRect);
-        if (this.filled) {
-            this.rect.fillColor = this.color;
-            this.rect.strokeWidth = 0;
-        } else {
-            this.rect.strokeColor = this.color;
-            this.rect.strokeWidth = this.thickness;
-        }
         this.rect.strokeJoin = 'round';
         this.rect.strokeScaling = false;
         this.rect.data = {zoomLevel: paper.view.zoom};
+        this.styleRect();
 
         if (event.modifiers.alt) {
             this.rect.position = event.downPoint;
@@ -188,6 +176,7 @@ class RectTool extends paper.Tool {
                 // Hit testing does not work correctly unless the width and height are positive
                 this.rect.size = new paper.Point(Math.abs(this.rect.size.width), Math.abs(this.rect.size.height));
                 this.rect.selected = true;
+                this.styleRect();
                 this.setSelectedItems();
             }
         }

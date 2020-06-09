@@ -30,6 +30,7 @@ const mapStateToProps = state => ({
         state.scratchPaint.mode === Modes.FILL,
     color: state.scratchPaint.color.strokeColor.primary,
     color2: state.scratchPaint.color.strokeColor.secondary,
+    fillBitmapShapes: state.scratchPaint.fillBitmapShapes,
     colorModalVisible: state.scratchPaint.modals.strokeColor,
     format: state.scratchPaint.format,
     gradientType: state.scratchPaint.color.strokeColor.gradientType,
@@ -38,7 +39,9 @@ const mapStateToProps = state => ({
     shouldShowGradientTools: state.scratchPaint.mode === Modes.SELECT ||
         state.scratchPaint.mode === Modes.RESHAPE ||
         state.scratchPaint.mode === Modes.RECT ||
-        state.scratchPaint.mode === Modes.OVAL,
+        state.scratchPaint.mode === Modes.OVAL ||
+        state.scratchPaint.mode === Modes.BIT_RECT ||
+        state.scratchPaint.mode === Modes.BIT_OVAL,
     textEditTarget: state.scratchPaint.textEditTarget
 });
 
