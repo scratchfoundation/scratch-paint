@@ -121,6 +121,12 @@ class ScaleTool {
             sx *= signx;
             sy *= signy;
         }
+        if (Math.abs(sx) < 0.0001) {
+            sx = this.lastSx;
+        }
+        if (Math.abs(sy) < 0.0001) {
+            sy = this.lastSy;
+        }
         this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
         if (this.selectionAnchor) {
             this.selectionAnchor.scale(this.lastSx / sx, this.lastSy / sy);
