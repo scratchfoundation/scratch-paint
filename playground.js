@@ -50930,10 +50930,6 @@ var RotateTool = function () {
             for (var i = 0; i < this.rotItems.length; i++) {
                 var item = this.rotItems[i];
 
-                if (!item.data.origRot) {
-                    item.data.origRot = item.rotation;
-                }
-
                 item.rotate(rotAngle - this.prevRot, this.rotGroupPivot);
             }
 
