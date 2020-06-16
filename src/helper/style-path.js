@@ -48,7 +48,7 @@ const getColorStringForTransparent = function (colorToMatch) {
 };
 
 // Returns a color shift by 72 of the given color, DEFAULT_COLOR if the given color is null, or null if it is MIXED.
-const getRotatedColor = function (firstColor) {
+const generateSecondaryColor = function (firstColor) {
     if (firstColor === MIXED) return null;
     const color = new paper.Color(firstColor);
     if (!firstColor || color.alpha === 0) return DEFAULT_COLOR;
@@ -262,7 +262,7 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
         let itemColor2;
         if (!hasGradient || !itemColor.gradient.stops[1]) {
             // If item color is solid or a gradient that has no 2nd color, set the 2nd color based on the first color
-            itemColor2 = getRotatedColor(itemColor1);
+            itemColor2 = generateSecondaryColor(itemColor1);
         } else if (itemColor.gradient.stops[1].color.alpha === 0) {
             // Gradient has 2nd color which is transparent
             itemColor2 = null;
@@ -600,7 +600,7 @@ export {
     applyStrokeWidthToSelection,
     createGradientObject,
     getColorsFromSelection,
-    getRotatedColor,
+    generateSecondaryColor,
     MIXED,
     styleBlob,
     styleShape,

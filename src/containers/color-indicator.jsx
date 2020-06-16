@@ -13,7 +13,7 @@ import ColorIndicatorComponent from '../components/color-indicator.jsx';
 import {applyColorToSelection,
     applyGradientTypeToSelection,
     applyStrokeWidthToSelection,
-    getRotatedColor,
+    generateSecondaryColor,
     swapColorsInSelection,
     MIXED} from '../helper/style-path';
 
@@ -97,7 +97,7 @@ const makeColorIndicator = (label, isStroke) => {
             if (this.props.gradientType === GradientTypes.SOLID && gradientType !== GradientTypes.SOLID) {
                 // Generate color 2 and change to the 2nd swatch when switching from solid to gradient
                 if (!hasSelectedItems) {
-                    this.props.onChangeColor(getRotatedColor(this.props.color), 1);
+                    this.props.onChangeColor(generateSecondaryColor(this.props.color), 1);
                 }
                 this.props.onChangeColorIndex(1);
             }

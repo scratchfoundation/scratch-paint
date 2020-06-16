@@ -13,7 +13,7 @@ import {clearSelectedItems} from '../reducers/selected-items';
 import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {clearSelection} from '../helper/selection';
 import FillTool from '../helper/bit-tools/fill-tool';
-import {getRotatedColor, MIXED} from '../helper/style-path';
+import {generateSecondaryColor, MIXED} from '../helper/style-path';
 
 class BitFillMode extends React.Component {
     constructor (props) {
@@ -69,13 +69,13 @@ class BitFillMode extends React.Component {
         let color2 = this.props.color2;
         if (gradientType !== this.props.styleGradientType) {
             if (this.props.styleGradientType === GradientTypes.SOLID) {
-                color2 = getRotatedColor(color);
+                color2 = generateSecondaryColor(color);
                 this.props.onChangeFillColor(color2, 1);
             }
             this.props.changeGradientType(gradientType);
         }
         if (this.props.color2 === MIXED) {
-            color2 = getRotatedColor();
+            color2 = generateSecondaryColor();
             this.props.onChangeFillColor(color2, 1);
         }
         this.tool = new FillTool(this.props.onUpdateImage);
