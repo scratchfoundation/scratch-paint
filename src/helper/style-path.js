@@ -4,7 +4,6 @@ import {isPointTextItem} from './item';
 import {isGroup} from './group';
 import {getItems} from './selection';
 import GradientTypes from '../lib/gradient-types';
-import parseColor from 'parse-color';
 import {DEFAULT_COLOR} from '../reducers/fill-style';
 import {isCompoundPathChild} from '../helper/compound-path';
 import log from '../log/log';
@@ -47,13 +46,33 @@ const getColorStringForTransparent = function (colorToMatch) {
     return color.toCSS();
 };
 
-// Returns a color shift by 72 of the given color, DEFAULT_COLOR if the given color is null, or null if it is MIXED.
+/**
+ * Generate a color that contrasts well with the passed-in color.
+ * @param {string} firstColor The "primary" color
+ * @return {string} CSS string for generated color
+ */
 const generateSecondaryColor = function (firstColor) {
     if (firstColor === MIXED) return null;
     const color = new paper.Color(firstColor);
     if (!firstColor || color.alpha === 0) return DEFAULT_COLOR;
-    return parseColor(
-        `hsl(${(color.hue - 72) % 360}, ${color.saturation * 100}, ${Math.max(color.lightness * 100, 10)})`).hex;
+
+    color.type = 'hsb';
+    const desaturated = color.saturation <= 0.15;
+    // If the color is desaturated or dark enough that a hue shift would be hard to see, do a brightness shift.
+    if (desaturated || color.brightness <= 0.4) {
+        // Choose the shade that contrasts the most with the given color.
+        // Use a brightness of 0.1 instead of 0 because if the brightness is 0, it's black and we lose the hue.
+        color.brightness = (color.brightness < 0.55 ? 1 : 0.1);
+    }
+    // If the color was desaturated, don't do a hue shift, as it would be hard to see anyway.
+    if (!desaturated) {
+        color.hue -= 72;
+    }
+    // The returned color will be one of three things:
+    // 1. If the color was bright and saturated (e.g. colorful), it will be that color, hue-shifted.
+    // 2. If the color was dark and saturated, it will be that color, brightened and hue-shifted.
+    // 3. If the color was not saturated, it will be that color, brightened or darkened as needed to contrast most.
+    return color.toCSS(true /* hex */);
 };
 
 /**
