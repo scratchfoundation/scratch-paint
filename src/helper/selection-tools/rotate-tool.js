@@ -37,10 +37,6 @@ class RotateTool {
 
         for (let i = 0; i < this.rotItems.length; i++) {
             const item = this.rotItems[i];
-            
-            if (!item.data.origRot) {
-                item.data.origRot = item.rotation;
-            }
 
             item.rotate(rotAngle - this.prevRot, this.rotGroupPivot);
         }
@@ -49,7 +45,7 @@ class RotateTool {
     }
     onMouseUp (event) {
         if (event.event.button > 0) return; // only first mouse button
-        
+
         this.rotItems.length = 0;
         this.rotGroupPivot = null;
         this.prevRot = 90;

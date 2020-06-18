@@ -13,7 +13,7 @@ const ScrollableCanvasComponent = props => (
             style={{pointerEvents: 'none'}}
         >
             <div
-                className={styles.horizontalScrollbar}
+                className={styles.horizontalScrollbarHitbox}
                 style={{
                     width: `${props.horizontalScrollLengthPercent}%`,
                     left: `${props.horizontalScrollStartPercent}%`,
@@ -23,14 +23,18 @@ const ScrollableCanvasComponent = props => (
                 }}
                 onMouseDown={props.onHorizontalScrollbarMouseDown}
                 onTouchStart={props.onHorizontalScrollbarMouseDown}
-            />
+            >
+                <div
+                    className={styles.horizontalScrollbar}
+                />
+            </div>
         </div>
         <div
             className={styles.verticalScrollbarWrapper}
             style={{pointerEvents: 'none'}}
         >
             <div
-                className={styles.verticalScrollbar}
+                className={styles.verticalScrollbarHitbox}
                 style={{
                     height: `${props.verticalScrollLengthPercent}%`,
                     top: `${props.verticalScrollStartPercent}%`,
@@ -40,7 +44,11 @@ const ScrollableCanvasComponent = props => (
                 }}
                 onMouseDown={props.onVerticalScrollbarMouseDown}
                 onTouchStart={props.onVerticalScrollbarMouseDown}
-            />
+            >
+                <div
+                    className={styles.verticalScrollbar}
+                />
+            </div>
         </div>
     </div>
 );

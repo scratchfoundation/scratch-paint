@@ -320,11 +320,18 @@ const columnBlank_ = function (imageData, width, x, top, bottom) {
     return true;
 };
 
-// Adapted from Tim Down's https://gist.github.com/timdown/021d9c8f2aabc7092df564996f5afbbf
-// Get bounds, trimming transparent pixels from edges.
-const getHitBounds = function (raster) {
-    const width = raster.width;
-    const imageData = raster.getImageData(raster.bounds);
+/**
+ * Get bounds around the contents of a raster, trimming transparent pixels from edges.
+ * Adapted from Tim Down's https://gist.github.com/timdown/021d9c8f2aabc7092df564996f5afbbf
+ * @param {paper.Raster} raster The raster to get the bounds around
+ * @param {paper.Rectangle} [rect] Optionally, an alternative bounding rectangle to limit the check to.
+ * @returns {paper.Rectangle} The bounds around the opaque area of the passed raster
+ * (or opaque within the passed rectangle)
+ */
+const getHitBounds = function (raster, rect) {
+    const bounds = rect || raster.bounds;
+    const width = bounds.width;
+    const imageData = raster.getImageData(bounds);
     let top = 0;
     let bottom = imageData.height;
     let left = 0;
@@ -343,7 +350,7 @@ const getHitBounds = function (raster) {
         left = right = imageData.width / 2;
     }
 
-    return new paper.Rectangle(left, top, right - left, bottom - top);
+    return new paper.Rectangle(left + bounds.left, top + bounds.top, right - left, bottom - top);
 };
 
 const trim_ = function (raster) {
