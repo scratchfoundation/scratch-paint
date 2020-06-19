@@ -33770,7 +33770,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var colorToBackground = function colorToBackground(color, color2, gradientType) {
-    if (color === _stylePath.MIXED || color2 === _stylePath.MIXED) return 'white';
+    if (color === _stylePath.MIXED || gradientType !== _gradientTypes2.default.SOLID && color2 === _stylePath.MIXED) return 'white';
     if (color === null) color = 'white';
     if (color2 === null) color2 = 'white';
     switch (gradientType) {
