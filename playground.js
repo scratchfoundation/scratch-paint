@@ -50579,10 +50579,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var MIN_SCALE_FACTOR = 0.0001;
+
 /**
  * Tool to handle scaling items by pulling on the handles around the edges of the bounding
  * box when in the bounding box tool.
  */
+
 var ScaleTool = function () {
     /**
      * @param {Mode} mode Paint editor mode
@@ -50720,13 +50723,15 @@ var ScaleTool = function () {
                 sy = size.y / this.origSize.y;
             }
 
+            var signx = sx > 0 ? 1 : -1;
+            var signy = sy > 0 ? 1 : -1;
             if (this.isCorner && !event.modifiers.shift) {
-                var signx = sx > 0 ? 1 : -1;
-                var signy = sy > 0 ? 1 : -1;
                 sx = sy = Math.max(Math.abs(sx), Math.abs(sy));
                 sx *= signx;
                 sy *= signy;
             }
+            sx = signx * Math.max(Math.abs(sx), MIN_SCALE_FACTOR);
+            sy = signy * Math.max(Math.abs(sy), MIN_SCALE_FACTOR);
             this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
             if (this.selectionAnchor) {
                 this.selectionAnchor.scale(this.lastSx / sx, this.lastSy / sy);
