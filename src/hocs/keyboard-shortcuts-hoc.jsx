@@ -9,7 +9,7 @@ import CopyPasteHOC from './copy-paste-hoc.jsx';
 import {selectAllBitmap} from '../helper/bitmap';
 import {clearSelection, deleteSelection, getSelectedLeafItems,
     selectAllItems, selectAllSegments} from '../helper/selection';
-import {groupSelection, ungroupSelection} from '../helper/group';
+import {groupSelection, shouldShowGroup, ungroupSelection, shouldShowUngroup} from '../helper/group';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {changeMode} from '../reducers/modes';
 
@@ -49,10 +49,14 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
                 } else if (event.key === 'z') {
                     this.props.onUndo();
                 } else if (event.shiftKey && event.key.toLowerCase() === 'g') {
-                    ungroupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
+                    if (shouldShowUngroup()) {
+                        ungroupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
+                    }
                     event.preventDefault();
                 } else if (event.key === 'g') {
-                    groupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
+                    if (shouldShowGroup()) {
+                        groupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
+                    }
                     event.preventDefault();
                 } else if (event.key === 'c') {
                     this.props.onCopyToClipboard();
