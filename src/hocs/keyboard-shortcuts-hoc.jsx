@@ -9,6 +9,7 @@ import CopyPasteHOC from './copy-paste-hoc.jsx';
 import {selectAllBitmap} from '../helper/bitmap';
 import {clearSelection, deleteSelection, getSelectedLeafItems,
     selectAllItems, selectAllSegments} from '../helper/selection';
+import {groupSelection, ungroupSelection} from '../helper/group';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {changeMode} from '../reducers/modes';
 
@@ -47,11 +48,23 @@ const KeyboardShortcutsHOC = function (WrappedComponent) {
                     this.props.onRedo();
                 } else if (event.key === 'z') {
                     this.props.onUndo();
+                } else if (event.shiftKey && event.key.toLowerCase() === 'g') {
+                    ungroupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
+                    event.preventDefault();
+                } else if (event.key === 'g') {
+                    groupSelection(clearSelectedItems, setSelectedItems, this.props.onUpdateImage);
+                    event.preventDefault();
                 } else if (event.key === 'c') {
                     this.props.onCopyToClipboard();
                 } else if (event.key === 'v') {
                     this.changeToASelectMode();
                     this.props.onPasteFromClipboard();
+                } else if (event.key === 'x') {
+                    this.props.onCopyToClipboard();
+                    if (deleteSelection(this.props.mode, this.props.onUpdateImage)) {
+                        this.props.setSelectedItems(this.props.format);
+                    }
+                    event.preventDefault();
                 } else if (event.key === 'a') {
                     this.changeToASelectMode();
                     event.preventDefault();
