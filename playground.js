@@ -17702,7 +17702,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(29);
+var _group = __webpack_require__(27);
 
 var _item = __webpack_require__(30);
 
@@ -20922,7 +20922,7 @@ var _selection = __webpack_require__(3);
 
 var _item = __webpack_require__(30);
 
-var _group = __webpack_require__(29);
+var _group = __webpack_require__(27);
 
 var _gradientTypes = __webpack_require__(17);
 
@@ -24171,7 +24171,7 @@ var locale_data_ignored_ = __webpack_require__(120);
 var locale_data_ignored_default = /*#__PURE__*/__webpack_require__.n(locale_data_ignored_);
 
 // EXTERNAL MODULE: ./node_modules/intl-messageformat/index.js
-var intl_messageformat = __webpack_require__(28);
+var intl_messageformat = __webpack_require__(29);
 var intl_messageformat_default = /*#__PURE__*/__webpack_require__.n(intl_messageformat);
 
 // EXTERNAL MODULE: ./node_modules/intl-relativeformat/index.js
@@ -26117,91 +26117,6 @@ module.exports = Transform;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.setCursor = exports.default = undefined;
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _cursors = __webpack_require__(88);
-
-var _cursors2 = _interopRequireDefault(_cursors);
-
-var _eyeDropper = __webpack_require__(46);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_CURSOR = 'scratch-paint/cursor/CHANGE_CURSOR';
-var initialState = _cursors2.default.DEFAULT;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_CURSOR:
-            if (typeof action.cursorString === 'undefined') {
-                _log2.default.warn('Cursor should not be set to undefined. Use \'default\'.');
-                return state;
-            } else if (!Object.values(_cursors2.default).includes(action.cursorString)) {
-                _log2.default.warn('Cursor should be a valid cursor string. Got: ' + action.cursorString);
-            }
-            return action.cursorString;
-        case _eyeDropper.ACTIVATE_EYE_DROPPER:
-            return _cursors2.default.NONE;
-        case _eyeDropper.DEACTIVATE_EYE_DROPPER:
-            return _cursors2.default.DEFAULT;
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-/**
- * Set the mouse cursor state to the given string
- * @param {string} cursorString The CSS cursor string.
- * @return {object} Redux action to change the cursor.
- */
-var setCursor = function setCursor(cursorString) {
-    return {
-        type: CHANGE_CURSOR,
-        cursorString: cursorString
-    };
-};
-
-exports.default = reducer;
-exports.setCursor = setCursor;
-
-/***/ }),
-/* 28 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* jshint node:true */
-
-
-
-var IntlMessageFormat = __webpack_require__(194)['default'];
-
-// Add all locale data to `IntlMessageFormat`. This module will be ignored when
-// bundling for the browser with Browserify/Webpack.
-__webpack_require__(201);
-
-// Re-export `IntlMessageFormat` as the CommonJS default exports with all the
-// locale data registered, and with English set as the default locale. Define
-// the `default` prop for use with other compiled ES6 Modules.
-exports = module.exports = IntlMessageFormat;
-exports['default'] = exports;
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 exports.shouldShowUngroup = exports.shouldShowGroup = exports.isGroupChild = exports.isGroup = exports.getItemsGroup = exports.ungroupItems = exports.groupItems = exports.ungroupSelection = exports.groupSelection = undefined;
 
 var _paper = __webpack_require__(2);
@@ -26371,6 +26286,91 @@ exports.isGroup = isGroup;
 exports.isGroupChild = isGroupChild;
 exports.shouldShowGroup = shouldShowGroup;
 exports.shouldShowUngroup = shouldShowUngroup;
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.setCursor = exports.default = undefined;
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _cursors = __webpack_require__(88);
+
+var _cursors2 = _interopRequireDefault(_cursors);
+
+var _eyeDropper = __webpack_require__(46);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_CURSOR = 'scratch-paint/cursor/CHANGE_CURSOR';
+var initialState = _cursors2.default.DEFAULT;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_CURSOR:
+            if (typeof action.cursorString === 'undefined') {
+                _log2.default.warn('Cursor should not be set to undefined. Use \'default\'.');
+                return state;
+            } else if (!Object.values(_cursors2.default).includes(action.cursorString)) {
+                _log2.default.warn('Cursor should be a valid cursor string. Got: ' + action.cursorString);
+            }
+            return action.cursorString;
+        case _eyeDropper.ACTIVATE_EYE_DROPPER:
+            return _cursors2.default.NONE;
+        case _eyeDropper.DEACTIVATE_EYE_DROPPER:
+            return _cursors2.default.DEFAULT;
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+/**
+ * Set the mouse cursor state to the given string
+ * @param {string} cursorString The CSS cursor string.
+ * @return {object} Redux action to change the cursor.
+ */
+var setCursor = function setCursor(cursorString) {
+    return {
+        type: CHANGE_CURSOR,
+        cursorString: cursorString
+    };
+};
+
+exports.default = reducer;
+exports.setCursor = setCursor;
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* jshint node:true */
+
+
+
+var IntlMessageFormat = __webpack_require__(194)['default'];
+
+// Add all locale data to `IntlMessageFormat`. This module will be ignored when
+// bundling for the browser with Browserify/Webpack.
+__webpack_require__(201);
+
+// Re-export `IntlMessageFormat` as the CommonJS default exports with all the
+// locale data registered, and with English set as the default locale. Define
+// the `default` prop for use with other compiled ES6 Modules.
+exports = module.exports = IntlMessageFormat;
+exports['default'] = exports;
+
 
 /***/ }),
 /* 30 */
@@ -32483,7 +32483,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _group = __webpack_require__(29);
+var _group = __webpack_require__(27);
 
 var _item = __webpack_require__(30);
 
@@ -34136,7 +34136,7 @@ var _item = __webpack_require__(30);
 
 var _guides = __webpack_require__(31);
 
-var _group = __webpack_require__(29);
+var _group = __webpack_require__(27);
 
 var _math = __webpack_require__(19);
 
@@ -45582,7 +45582,7 @@ See the accompanying LICENSE file for terms.
 */
 Object.defineProperty(exports, "__esModule", { value: true });
 /* jslint esnext: true */
-var intl_messageformat_1 = __webpack_require__(28);
+var intl_messageformat_1 = __webpack_require__(29);
 var diff_1 = __webpack_require__(204);
 var es5_1 = __webpack_require__(205);
 exports.default = RelativeFormat;
@@ -46028,7 +46028,7 @@ var _undo = __webpack_require__(56);
 
 var _undo2 = __webpack_require__(41);
 
-var _group = __webpack_require__(29);
+var _group = __webpack_require__(27);
 
 var _layer = __webpack_require__(11);
 
@@ -50104,7 +50104,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selectionGradientType = __webpack_require__(23);
 
-var _cursor = __webpack_require__(27);
+var _cursor = __webpack_require__(28);
 
 var _selection = __webpack_require__(3);
 
@@ -51052,7 +51052,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selectionGradientType = __webpack_require__(23);
 
-var _cursor = __webpack_require__(27);
+var _cursor = __webpack_require__(28);
 
 var _selection = __webpack_require__(3);
 
@@ -52212,7 +52212,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selectionGradientType = __webpack_require__(23);
 
-var _cursor = __webpack_require__(27);
+var _cursor = __webpack_require__(28);
 
 var _selection = __webpack_require__(3);
 
@@ -59943,7 +59943,7 @@ var _selection = __webpack_require__(3);
 
 var _order = __webpack_require__(105);
 
-var _group = __webpack_require__(29);
+var _group = __webpack_require__(27);
 
 var _format2 = __webpack_require__(14);
 
@@ -60118,7 +60118,7 @@ var _reactResponsive = __webpack_require__(319);
 
 var _reactResponsive2 = _interopRequireDefault(_reactResponsive);
 
-var _group = __webpack_require__(29);
+var _group = __webpack_require__(27);
 
 var _order = __webpack_require__(105);
 
@@ -63160,7 +63160,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selectionGradientType = __webpack_require__(23);
 
-var _cursor = __webpack_require__(27);
+var _cursor = __webpack_require__(28);
 
 var _selection = __webpack_require__(3);
 
@@ -63639,7 +63639,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selectionGradientType = __webpack_require__(23);
 
-var _cursor = __webpack_require__(27);
+var _cursor = __webpack_require__(28);
 
 var _selection = __webpack_require__(3);
 
@@ -65310,7 +65310,7 @@ var _hover = __webpack_require__(42);
 
 var _selectedItems = __webpack_require__(7);
 
-var _cursor = __webpack_require__(27);
+var _cursor = __webpack_require__(28);
 
 var _selection = __webpack_require__(3);
 
@@ -66267,7 +66267,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selectionGradientType = __webpack_require__(23);
 
-var _cursor = __webpack_require__(27);
+var _cursor = __webpack_require__(28);
 
 var _selection = __webpack_require__(3);
 
@@ -67291,6 +67291,8 @@ var _bitmap = __webpack_require__(20);
 
 var _selection = __webpack_require__(3);
 
+var _group = __webpack_require__(27);
+
 var _selectedItems = __webpack_require__(7);
 
 var _modes = __webpack_require__(10);
@@ -67347,11 +67349,30 @@ var KeyboardShortcutsHOC = function KeyboardShortcutsHOC(WrappedComponent) {
                         this.props.onRedo();
                     } else if (event.key === 'z') {
                         this.props.onUndo();
+                    } else if (event.shiftKey && event.key.toLowerCase() === 'g') {
+                        if ((0, _group.shouldShowUngroup)()) {
+                            (0, _group.ungroupSelection)(_selectedItems.clearSelectedItems, _selectedItems.setSelectedItems, this.props.onUpdateImage);
+                        }
+                        event.preventDefault();
+                    } else if (event.key === 'g') {
+                        if ((0, _group.shouldShowGroup)()) {
+                            (0, _group.groupSelection)(_selectedItems.clearSelectedItems, _selectedItems.setSelectedItems, this.props.onUpdateImage);
+                        }
+                        event.preventDefault();
                     } else if (event.key === 'c') {
                         this.props.onCopyToClipboard();
                     } else if (event.key === 'v') {
                         this.changeToASelectMode();
                         this.props.onPasteFromClipboard();
+                    } else if (event.key === 'x') {
+                        var selectedItems = (0, _selection.getSelectedRootItems)();
+                        if (selectedItems.length > 0) {
+                            this.props.onCopyToClipboard();
+                            if ((0, _selection.deleteSelection)(this.props.mode, this.props.onUpdateImage)) {
+                                this.props.setSelectedItems(this.props.format);
+                            }
+                        }
+                        event.preventDefault();
                     } else if (event.key === 'a') {
                         this.changeToASelectMode();
                         event.preventDefault();
@@ -68008,7 +68029,7 @@ var _clipboard = __webpack_require__(59);
 
 var _clipboard2 = _interopRequireDefault(_clipboard);
 
-var _cursor = __webpack_require__(27);
+var _cursor = __webpack_require__(28);
 
 var _cursor2 = _interopRequireDefault(_cursor);
 
