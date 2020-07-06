@@ -8,7 +8,7 @@ import {changeStrokeGradientType} from '../reducers/stroke-style';
 import {openStrokeColor, closeStrokeColor} from '../reducers/modals';
 import {getSelectedLeafItems} from '../helper/selection';
 import {setSelectedItems} from '../reducers/selected-items';
-import Modes from '../lib/modes';
+import Modes, {GradientToolsModes} from '../lib/modes';
 import {isBitmap} from '../lib/format';
 
 import makeColorIndicator from './color-indicator.jsx';
@@ -36,12 +36,7 @@ const mapStateToProps = state => ({
     gradientType: state.scratchPaint.color.strokeColor.gradientType,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     mode: state.scratchPaint.mode,
-    shouldShowGradientTools: state.scratchPaint.mode === Modes.SELECT ||
-        state.scratchPaint.mode === Modes.RESHAPE ||
-        state.scratchPaint.mode === Modes.RECT ||
-        state.scratchPaint.mode === Modes.OVAL ||
-        state.scratchPaint.mode === Modes.BIT_RECT ||
-        state.scratchPaint.mode === Modes.BIT_OVAL,
+    shouldShowGradientTools: state.scratchPaint.mode in GradientToolsModes,
     textEditTarget: state.scratchPaint.textEditTarget
 });
 

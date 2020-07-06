@@ -26,8 +26,22 @@ const VectorModes = keyMirror(vectorModesObj);
 const BitmapModes = keyMirror(bitmapModesObj);
 const Modes = keyMirror({...vectorModesObj, ...bitmapModesObj});
 
+const GradientToolsModes = keyMirror({
+    FILL: null,
+    SELECT: null,
+    RESHAPE: null,
+    OVAL: null,
+    RECT: null,
+
+    BIT_OVAL: null,
+    BIT_RECT: null,
+    BIT_SELECT: null,
+    BIT_FILL: null
+});
+
 export {
     Modes as default,
     VectorModes,
-    BitmapModes
+    BitmapModes,
+    GradientToolsModes
 };
