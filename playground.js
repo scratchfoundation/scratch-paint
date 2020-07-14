@@ -129,7 +129,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Fri May 29 12:39:13 2020 -0400
+ * Date: Thu Jul 9 18:07:00 2020 -0400
  *
  ***
  *
@@ -9262,9 +9262,8 @@ var Path = PathItem.extend({
 			strokePadding = tolerancePadding,
 			join, cap, miterLimit,
 			area, loc, res,
-			hitStroke = options.stroke && style.hasStroke(),
-			hitFill = options.hitUnfilledPaths
-				? options.fill : options.fill && style.hasFill(),
+			hitStroke = options.stroke && (style.hasStroke() || options.hitUnstrokedPaths),
+			hitFill = options.fill && (style.hasFill() || options.hitUnfilledPaths),
 			hitCurves = options.curves,
 			strokeRadius = hitStroke
 					? style.getStrokeWidth() / 2
@@ -15617,8 +15616,6 @@ new function() {
 	}, {}), {
 		id: function(item, value) {
 			definitions[value] = item;
-			if (item.setName)
-				item.setName(value);
 		},
 
 		'clip-path': function(item, value) {
