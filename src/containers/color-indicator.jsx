@@ -43,10 +43,24 @@ const makeColorIndicator = (label, isStroke) => {
             // Stroke-selector-specific logic: if we change the stroke color from "none" to something visible, ensure
             // there's a nonzero stroke width. If we change the stroke color to "none", set the stroke width to zero.
             if (isStroke) {
-                if (this.props.color === null && newColor !== null) {
+
+                // Whether the old color style in this color indicator was null (completely transparent).
+                // If it's a solid color, this means that the first color is null.
+                // If it's a gradient, this means both colors are null.
+                const oldStyleWasNull = this.props.gradientType === GradientTypes.SOLID ?
+                    this.props.color === null :
+                    this.props.color === null && this.props.color2 === null;
+
+                const otherColor = this.props.colorIndex === 1 ? this.props.color : this.props.color2;
+                // Whether the new color style in this color indicator is null.
+                const newStyleIsNull = this.props.gradientType === GradientTypes.SOLID ?
+                    newColor === null :
+                    newColor === null && otherColor === null;
+
+                if (oldStyleWasNull && !newStyleIsNull) {
                     this._hasChanged = applyStrokeWidthToSelection(1, this.props.textEditTarget) || this._hasChanged;
                     this.props.onChangeStrokeWidth(1);
-                } else if (this.props.color !== null && newColor === null) {
+                } else if (!oldStyleWasNull && newStyleIsNull) {
                     this._hasChanged = applyStrokeWidthToSelection(0, this.props.textEditTarget) || this._hasChanged;
                     this.props.onChangeStrokeWidth(0);
                 }
