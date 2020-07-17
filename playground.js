@@ -26216,6 +26216,8 @@ var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateImage)
             if (!item.hasChildren()) {
                 emptyGroups.push(item);
             }
+        } else if (setSelectedItems) {
+            item.selected = true;
         }
     }
     if (setSelectedItems) {
