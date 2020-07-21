@@ -34,10 +34,11 @@ class BroadBrushHelper {
     onBroadMouseDown (event, tool, options) {
         this.steps = 0;
         this.smoothed = 0;
+        this.lastVec = null;
         tool.minDistance = Math.min(5, Math.max(2 / paper.view.zoom, options.brushSize / 2));
         tool.maxDistance = options.brushSize;
         if (event.event.button > 0) return; // only first mouse button
-        
+
         this.finalPath = new paper.Path.Circle({
             center: event.point,
             radius: options.brushSize / 2
@@ -45,7 +46,7 @@ class BroadBrushHelper {
         styleBlob(this.finalPath, options);
         this.lastPoint = event.point;
     }
-    
+
     onBroadMouseDrag (event, tool, options) {
         this.steps++;
         const step = (event.delta).normalize(options.brushSize / 2);
@@ -78,7 +79,6 @@ class BroadBrushHelper {
                 this.endCaps.push(this.union(circ, this.union(rect, rect2)));
             }
         }
-        this.lastVec = event.delta;
         step.angle += 90;
 
         // Move the first point out away from the drag so that the end of the path is rounded
@@ -96,17 +96,28 @@ class BroadBrushHelper {
             this.finalPath.insert(0, new paper.Segment(this.lastPoint.subtract(step)));
             this.finalPath.add(new paper.Segment(this.lastPoint.add(step)));
         }
-        const top = event.middlePoint.add(step);
-        const bottom = event.middlePoint.subtract(step);
 
-        this.finalPath.add(top);
+        // Update angle of the last brush step's points to match the average angle of the last mouse vector and this
+        // mouse vector (aka the vertex normal).
+        if (this.lastVec) {
+            const lastNormal = this.lastVec.normalize(options.brushSize / 2).rotate(90);
+            const averageNormal = new paper.Point(
+                lastNormal.x + step.x,
+                lastNormal.y + step.y
+            ).normalize(options.brushSize / 2);
+
+            this.finalPath.segments[0].point = this.lastPoint.subtract(averageNormal);
+            this.finalPath.segments[this.finalPath.segments.length - 1].point = this.lastPoint.add(averageNormal);
+        }
+
         this.finalPath.add(event.point.add(step));
-        this.finalPath.insert(0, bottom);
         this.finalPath.insert(0, event.point.subtract(step));
 
         if (this.finalPath.segments.length > this.smoothed + (this.smoothingThreshold * 2)) {
             this.simplify(1);
         }
+
+        this.lastVec = event.delta;
         this.lastPoint = event.point;
     }
 
@@ -185,10 +196,15 @@ class BroadBrushHelper {
             return this.finalPath;
         }
 
+        let delta = this.lastVec;
+
         // If the mouse up is at the same point as the mouse drag event then we need
         // the second to last point to get the right direction vector for the end cap
         if (!event.point.equals(this.lastPoint)) {
-            const step = event.delta.normalize(options.brushSize / 2);
+            // The given event.delta is the difference between the mouse down coords and the mouse up coords,
+            // but we want the difference between the last mouse drag coords and the mouse up coords.
+            delta = event.point.subtract(this.lastPoint);
+            const step = delta.normalize(options.brushSize / 2);
             step.angle += 90;
 
             const top = event.point.add(step);
@@ -199,7 +215,7 @@ class BroadBrushHelper {
 
         // Simplify before adding end cap so cap doesn't get warped
         this.simplify(1);
-        const handleVec = event.delta.normalize(options.brushSize / 2);
+        const handleVec = delta.normalize(options.brushSize / 2);
         this.finalPath.add(new paper.Segment(
             event.point.add(handleVec),
             handleVec.rotate(90),
@@ -219,7 +235,7 @@ class BroadBrushHelper {
             this.finalPath.remove();
             this.finalPath = newPath;
         }
-        
+
         // Try to merge end caps
         for (const cap of this.endCaps) {
             const temp = this.union(this.finalPath, cap);
