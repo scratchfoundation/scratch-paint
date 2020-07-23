@@ -64,9 +64,10 @@ const getRotatedColor = function (firstColor) {
  * @param {paper.Rectangle} bounds Bounds of the object
  * @param {?paper.Point} [radialCenter] Where the center of a radial gradient should be, if the gradient is radial.
  * Defaults to center of bounds.
+ * @param {number} [minSize] The minimum width/height of the gradient object.
  * @return {paper.Color} Color object with gradient, may be null or color string if the gradient type is solid
  */
-const createGradientObject = function (color1, color2, gradientType, bounds, radialCenter) {
+const createGradientObject = function (color1, color2, gradientType, bounds, radialCenter, minSize) {
     if (gradientType === GradientTypes.SOLID) return color1;
     if (color1 === null) {
         color1 = getColorStringForTransparent(color2);
@@ -74,15 +75,50 @@ const createGradientObject = function (color1, color2, gradientType, bounds, rad
     if (color2 === null) {
         color2 = getColorStringForTransparent(color1);
     }
-    const halfLongestDimension = Math.max(bounds.width, bounds.height) / 2;
-    const start = gradientType === GradientTypes.RADIAL ? (radialCenter || bounds.center) :
-        gradientType === GradientTypes.VERTICAL ? bounds.topCenter :
-            gradientType === GradientTypes.HORIZONTAL ? bounds.leftCenter :
-                null;
-    const end = gradientType === GradientTypes.RADIAL ? start.add(new paper.Point(halfLongestDimension, 0)) :
-        gradientType === GradientTypes.VERTICAL ? bounds.bottomCenter :
-            gradientType === GradientTypes.HORIZONTAL ? bounds.rightCenter :
-                null;
+
+    // Force gradients to have a minimum length. If the gradient start and end points are the same or very close
+    // (e.g. applying a vertical gradient to a perfectly horizontal line or vice versa), the gradient will not appear.
+    if (!minSize) minSize = 1e-2;
+
+    let start;
+    let end;
+    switch (gradientType) {
+    case GradientTypes.HORIZONTAL: {
+        // clone these points so that adding/subtracting doesn't affect actual bounds
+        start = bounds.leftCenter.clone();
+        end = bounds.rightCenter.clone();
+
+        const gradientSize = Math.abs(end.x - start.x);
+        if (gradientSize < minSize) {
+            const sizeDiff = (minSize - gradientSize) / 2;
+            end.x += sizeDiff;
+            start.x -= sizeDiff;
+        }
+        break;
+    }
+    case GradientTypes.VERTICAL: {
+        // clone these points so that adding/subtracting doesn't affect actual bounds
+        start = bounds.topCenter.clone();
+        end = bounds.bottomCenter.clone();
+
+        const gradientSize = Math.abs(end.y - start.y);
+        if (gradientSize < minSize) {
+            const sizeDiff = (minSize - gradientSize) / 2;
+            end.y += sizeDiff;
+            start.y -= sizeDiff;
+        }
+        break;
+    }
+
+    case GradientTypes.RADIAL: {
+        const halfLongestDimension = Math.max(bounds.width, bounds.height) / 2;
+        start = radialCenter || bounds.center;
+        end = start.add(new paper.Point(
+            Math.max(halfLongestDimension, minSize / 2),
+            0));
+        break;
+    }
+    }
     return {
         gradient: {
             stops: [color1, color2],
@@ -544,7 +580,14 @@ const styleShape = function (path, options) {
             path[colorKey] = options[colorKey].primary;
         } else {
             const {primary, secondary, gradientType} = options[colorKey];
-            path[colorKey] = createGradientObject(primary, secondary, gradientType, path.bounds);
+            path[colorKey] = createGradientObject(
+                primary,
+                secondary,
+                gradientType,
+                path.bounds,
+                null, // radialCenter
+                options.strokeWidth // minimum gradient size is stroke width
+            );
         }
     }
 
