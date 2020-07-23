@@ -551,14 +551,6 @@ const styleBlob = function (path, options) {
     }
 };
 
-const stylePath = function (path, strokeColor, strokeWidth) {
-    // Make sure a visible line is drawn
-    path.setStrokeColor(
-        (strokeColor === MIXED || strokeColor === null) ? 'black' : strokeColor);
-    path.setStrokeWidth(
-        strokeWidth === null || strokeWidth === 0 ? 1 : strokeWidth);
-};
-
 const styleCursorPreview = function (path, options) {
     if (options.isEraser) {
         path.fillColor = 'white';
@@ -604,7 +596,6 @@ export {
     MIXED,
     styleBlob,
     styleShape,
-    stylePath,
     styleCursorPreview,
     swapColorsInSelection
 };

@@ -32,6 +32,7 @@ const GradientToolsModes = keyMirror({
     RESHAPE: null,
     OVAL: null,
     RECT: null,
+    LINE: null,
 
     BIT_OVAL: null,
     BIT_RECT: null,
