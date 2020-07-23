@@ -273,56 +273,36 @@ const applyGradientTypeToSelection = function (gradientType, bitmapMode, applyTo
             itemColor2 = getColorStringForTransparent(itemColor1);
         }
 
+        let gradientTypeDiffers = false;
+        // If the item's gradient type differs from the gradient type we want to apply, then we change it
         switch (gradientType) {
         case GradientTypes.RADIAL: {
             const hasRadialGradient = hasGradient && itemColor.gradient.radial;
-            if (!hasRadialGradient) {
-                changed = true;
-                const halfLongestDimension = Math.max(item.bounds.width, item.bounds.height) / 2;
-
-                item[itemColorProp] = {
-                    gradient: {
-                        stops: [itemColor1, itemColor2],
-                        radial: true
-                    },
-                    origin: item.position,
-                    destination: item.position.add(new paper.Point(halfLongestDimension, 0))
-                };
-            }
+            gradientTypeDiffers = !hasRadialGradient;
             break;
         }
         case GradientTypes.HORIZONTAL: {
             const hasHorizontalGradient = hasGradient && !itemColor.gradient.radial &&
                 Math.abs(itemColor.origin.y - itemColor.destination.y) < 1e-8;
-            if (!hasHorizontalGradient) {
-                changed = true;
-
-                item[itemColorProp] = {
-                    gradient: {
-                        stops: [itemColor1, itemColor2]
-                    },
-                    origin: item.bounds.leftCenter,
-                    destination: item.bounds.rightCenter
-                };
-            }
+            gradientTypeDiffers = !hasHorizontalGradient;
             break;
         }
         case GradientTypes.VERTICAL: {
             const hasVerticalGradient = hasGradient && !itemColor.gradient.radial &&
                 Math.abs(itemColor.origin.x - itemColor.destination.x) < 1e-8;
-            if (!hasVerticalGradient) {
-                changed = true;
-
-                item[itemColorProp] = {
-                    gradient: {
-                        stops: [itemColor1, itemColor2]
-                    },
-                    origin: item.bounds.topCenter,
-                    destination: item.bounds.bottomCenter
-                };
-            }
+            gradientTypeDiffers = !hasVerticalGradient;
             break;
         }
+        }
+
+        if (gradientTypeDiffers) {
+            changed = true;
+            item[itemColorProp] = createGradientObject(
+                itemColor1,
+                itemColor2,
+                gradientType,
+                item.bounds
+            );
         }
     }
     return changed;
