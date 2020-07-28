@@ -314,7 +314,9 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
                 itemColor1,
                 itemColor2,
                 gradientType,
-                item.bounds
+                item.bounds,
+                null, // radialCenter
+                item.strokeWidth
             );
         }
     }
