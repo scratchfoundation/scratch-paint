@@ -421,12 +421,18 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                 }
             }
             if (item.strokeColor) {
-
                 if (item.strokeColor.type === 'gradient') {
                     const {primary, secondary, gradientType} = _colorStateFromGradient(item.strokeColor.gradient);
-                    const strokeColorString = primary;
+
+                    let strokeColorString = primary;
                     const strokeColor2String = secondary;
-                    const strokeGradientType = gradientType;
+                    let strokeGradientType = gradientType;
+
+                    // If the item's stroke width is 0, pretend the stroke color is null
+                    if (!item.strokeWidth) {
+                        strokeColorString = null;
+                        strokeGradientType = GradientTypes.SOLID;
+                    }
 
                     // Stroke color is fill color in bitmap
                     if (bitmapMode) {
