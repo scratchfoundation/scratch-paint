@@ -6,10 +6,9 @@ import Modes from '../lib/modes';
 import Blobbiness from '../helper/blob-tools/blob';
 import {MIXED} from '../helper/style-path';
 
-import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
+import {changeFillColor, clearFillGradient, DEFAULT_COLOR} from '../reducers/fill-style';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
-import {clearGradient} from '../reducers/selection-gradient-type';
 import {clearSelection} from '../helper/selection';
 
 import BrushModeComponent from '../components/brush-mode/brush-mode.jsx';
@@ -35,9 +34,12 @@ class BrushMode extends React.Component {
         } else if (!nextProps.isBrushModeActive && this.props.isBrushModeActive) {
             this.deactivateTool();
         } else if (nextProps.isBrushModeActive && this.props.isBrushModeActive) {
+            const {fillColor, strokeColor, strokeWidth} = nextProps.colorState;
             this.blob.setOptions({
                 isEraser: false,
-                ...nextProps.colorState,
+                fillColor: fillColor.primary,
+                strokeColor,
+                strokeWidth,
                 ...nextProps.brushModeState
             });
         }
@@ -56,7 +58,7 @@ class BrushMode extends React.Component {
         clearSelection(this.props.clearSelectedItems);
         this.props.clearGradient();
         // Force the default brush color if fill is MIXED or transparent
-        const {fillColor} = this.props.colorState;
+        const fillColor = this.props.colorState.fillColor.primary;
         if (fillColor === MIXED || fillColor === null) {
             this.props.onChangeFillColor(DEFAULT_COLOR);
         }
@@ -86,7 +88,10 @@ BrushMode.propTypes = {
     clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
-        fillColor: PropTypes.string,
+        fillColor: PropTypes.shape({
+            primary: PropTypes.string,
+            secondary: PropTypes.string
+        }),
         strokeColor: PropTypes.string,
         strokeWidth: PropTypes.number
     }).isRequired,
@@ -106,7 +111,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearSelectedItems());
     },
     clearGradient: () => {
-        dispatch(clearGradient());
+        dispatch(clearFillGradient());
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.BRUSH));

@@ -255,7 +255,10 @@ class LineMode extends React.Component {
 LineMode.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
-        fillColor: PropTypes.string,
+        fillColor: PropTypes.shape({
+            primary: PropTypes.string,
+            secondary: PropTypes.string
+        }),
         strokeColor: PropTypes.string,
         strokeWidth: PropTypes.number
     }).isRequired,
