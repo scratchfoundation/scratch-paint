@@ -129,7 +129,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
  *
  * All rights reserved.
  *
- * Date: Thu Jul 9 18:07:00 2020 -0400
+ * Date: Tue Jul 28 15:52:11 2020 -0400
  *
  ***
  *
@@ -4744,14 +4744,14 @@ new function() {
 	}
 }), {
 
-	_setStyles: function(ctx, param, viewMatrix) {
+	_setStyles: function(ctx, param, viewMatrix, strokeMatrix) {
 		var style = this._style,
 			matrix = this._matrix;
 		if (style.hasFill()) {
-			ctx.fillStyle = style.getFillColor().toCanvasStyle(ctx, matrix);
+			ctx.fillStyle = style.getFillColor().toCanvasStyle(ctx, matrix, strokeMatrix);
 		}
 		if (style.hasStroke()) {
-			ctx.strokeStyle = style.getStrokeColor().toCanvasStyle(ctx, matrix);
+			ctx.strokeStyle = style.getStrokeColor().toCanvasStyle(ctx, matrix, strokeMatrix);
 			ctx.lineWidth = style.getStrokeWidth();
 			var strokeJoin = style.getStrokeJoin(),
 				strokeCap = style.getStrokeCap(),
@@ -5296,7 +5296,7 @@ var Shape = Item.extend({
 			ctx.closePath();
 		}
 		if (!dontPaint && (hasFill || hasStroke)) {
-			this._setStyles(ctx, param, viewMatrix);
+			this._setStyles(ctx, param, viewMatrix, strokeMatrix);
 			if (hasFill) {
 				ctx.fill(style.getFillRule());
 				ctx.shadowColor = 'rgba(0,0,0,0)';
@@ -9578,7 +9578,7 @@ new function() {
 			}
 
 			if (!dontPaint && (hasFill || hasStroke)) {
-				this._setStyles(ctx, param, viewMatrix);
+				this._setStyles(ctx, param, viewMatrix, strokeMatrix);
 				if (hasFill) {
 					ctx.fill(style.getFillRule());
 					ctx.shadowColor = 'rgba(0,0,0,0)';
@@ -10350,7 +10350,7 @@ var CompoundPath = PathItem.extend({
 			children[i].draw(ctx, param, strokeMatrix);
 
 		if (!param.clip) {
-			this._setStyles(ctx, param, viewMatrix);
+			this._setStyles(ctx, param, viewMatrix, strokeMatrix);
 			var style = this._style;
 			if (style.hasFill()) {
 				ctx.fill(style.getFillRule());
@@ -12268,8 +12268,9 @@ var Color = Base.extend(new function() {
 						+ components.join(',') + ')';
 		},
 
-		toCanvasStyle: function(ctx, matrix) {
-			if (this._canvasStyle)
+		toCanvasStyle: function(ctx, matrix, strokeMatrix) {
+			var strokeMayChange = this._type === 'gradient' && strokeMatrix;
+			if (this._canvasStyle && !strokeMayChange)
 				return this._canvasStyle;
 			if (this._type !== 'gradient')
 				return this._canvasStyle = this.toCSS();
@@ -12286,6 +12287,12 @@ var Color = Base.extend(new function() {
 				destination = inverse._transformPoint(destination);
 				if (highlight)
 					highlight = inverse._transformPoint(highlight);
+			}
+			if (strokeMatrix) {
+				origin = strokeMatrix._transformPoint(origin);
+				destination = strokeMatrix._transformPoint(destination);
+				if (highlight)
+					highlight = strokeMatrix._transformPoint(highlight);
 			}
 			if (gradient._radial) {
 				var radius = destination.getDistance(origin);
@@ -12308,7 +12315,8 @@ var Color = Base.extend(new function() {
 						offset == null ? i / (l - 1) : offset,
 						stop._color.toCanvasStyle());
 			}
-			return this._canvasStyle = canvasGradient;
+			if (!strokeMayChange) this._canvasStyle = canvasGradient;
+			return canvasGradient;
 		},
 
 		transform: function(matrix) {
