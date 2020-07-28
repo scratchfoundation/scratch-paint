@@ -203,7 +203,14 @@ class FillTool extends paper.Tool {
         // Only create a gradient if specifically requested, else use color1 directly
         // This ensures we do not set a gradient by accident (see scratch-paint#830).
         if (gradientType && gradientType !== GradientTypes.SOLID) {
-            item[colorProp] = createGradientObject(color1, color2, gradientType, item.bounds, pointerLocation);
+            item[colorProp] = createGradientObject(
+                color1,
+                color2,
+                gradientType,
+                item.bounds,
+                pointerLocation,
+                item.strokeWidth
+            );
         } else {
             item[colorProp] = color1;
         }
