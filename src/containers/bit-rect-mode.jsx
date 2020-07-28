@@ -4,9 +4,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
+import ColorStyleProptype from '../lib/color-style-proptype';
 import {MIXED} from '../helper/style-path';
 
-import {changeFillColor, clearFillGradient, DEFAULT_COLOR} from '../reducers/fill-style';
+import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-style';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {setCursor} from '../reducers/cursor';
@@ -61,9 +62,8 @@ class BitRectMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        this.props.clearGradient();
         // Force the default brush color if fill is MIXED or transparent
-        const fillColorPresent = this.props.color !== MIXED && this.props.color !== null;
+        const fillColorPresent = this.props.color.primary !== MIXED && this.props.color.primary !== null;
         if (!fillColorPresent) {
             this.props.onChangeFillColor(DEFAULT_COLOR);
         }
@@ -94,9 +94,8 @@ class BitRectMode extends React.Component {
 }
 
 BitRectMode.propTypes = {
-    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    color: PropTypes.string,
+    color: ColorStyleProptype,
     filled: PropTypes.bool,
     handleMouseDown: PropTypes.func.isRequired,
     isRectModeActive: PropTypes.bool.isRequired,
@@ -110,7 +109,7 @@ BitRectMode.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    color: state.scratchPaint.color.fillColor.primary,
+    color: state.scratchPaint.color.fillColor,
     filled: state.scratchPaint.fillBitmapShapes,
     isRectModeActive: state.scratchPaint.mode === Modes.BIT_RECT,
     selectedItems: state.scratchPaint.selectedItems,
@@ -120,9 +119,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
-    },
-    clearGradient: () => {
-        dispatch(clearFillGradient());
     },
     setCursor: cursorString => {
         dispatch(setCursor(cursorString));

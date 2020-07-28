@@ -64,9 +64,10 @@ const getRotatedColor = function (firstColor) {
  * @param {paper.Rectangle} bounds Bounds of the object
  * @param {?paper.Point} [radialCenter] Where the center of a radial gradient should be, if the gradient is radial.
  * Defaults to center of bounds.
+ * @param {number} [minSize] The minimum width/height of the gradient object.
  * @return {paper.Color} Color object with gradient, may be null or color string if the gradient type is solid
  */
-const createGradientObject = function (color1, color2, gradientType, bounds, radialCenter) {
+const createGradientObject = function (color1, color2, gradientType, bounds, radialCenter, minSize) {
     if (gradientType === GradientTypes.SOLID) return color1;
     if (color1 === null) {
         color1 = getColorStringForTransparent(color2);
@@ -74,15 +75,50 @@ const createGradientObject = function (color1, color2, gradientType, bounds, rad
     if (color2 === null) {
         color2 = getColorStringForTransparent(color1);
     }
-    const halfLongestDimension = Math.max(bounds.width, bounds.height) / 2;
-    const start = gradientType === GradientTypes.RADIAL ? (radialCenter || bounds.center) :
-        gradientType === GradientTypes.VERTICAL ? bounds.topCenter :
-            gradientType === GradientTypes.HORIZONTAL ? bounds.leftCenter :
-                null;
-    const end = gradientType === GradientTypes.RADIAL ? start.add(new paper.Point(halfLongestDimension, 0)) :
-        gradientType === GradientTypes.VERTICAL ? bounds.bottomCenter :
-            gradientType === GradientTypes.HORIZONTAL ? bounds.rightCenter :
-                null;
+
+    // Force gradients to have a minimum length. If the gradient start and end points are the same or very close
+    // (e.g. applying a vertical gradient to a perfectly horizontal line or vice versa), the gradient will not appear.
+    if (!minSize) minSize = 1e-2;
+
+    let start;
+    let end;
+    switch (gradientType) {
+    case GradientTypes.HORIZONTAL: {
+        // clone these points so that adding/subtracting doesn't affect actual bounds
+        start = bounds.leftCenter.clone();
+        end = bounds.rightCenter.clone();
+
+        const gradientSize = Math.abs(end.x - start.x);
+        if (gradientSize < minSize) {
+            const sizeDiff = (minSize - gradientSize) / 2;
+            end.x += sizeDiff;
+            start.x -= sizeDiff;
+        }
+        break;
+    }
+    case GradientTypes.VERTICAL: {
+        // clone these points so that adding/subtracting doesn't affect actual bounds
+        start = bounds.topCenter.clone();
+        end = bounds.bottomCenter.clone();
+
+        const gradientSize = Math.abs(end.y - start.y);
+        if (gradientSize < minSize) {
+            const sizeDiff = (minSize - gradientSize) / 2;
+            end.y += sizeDiff;
+            start.y -= sizeDiff;
+        }
+        break;
+    }
+
+    case GradientTypes.RADIAL: {
+        const halfLongestDimension = Math.max(bounds.width, bounds.height) / 2;
+        start = radialCenter || bounds.center;
+        end = start.add(new paper.Point(
+            Math.max(halfLongestDimension, minSize / 2),
+            0));
+        break;
+    }
+    }
     return {
         gradient: {
             stops: [color1, color2],
@@ -100,7 +136,6 @@ const createGradientObject = function (color1, color2, gradientType, bounds, rad
  * @param {boolean} isSolidGradient True if is solid gradient. Sometimes the item has a gradient but the color
  *     picker is set to a solid gradient. This happens when a mix of colors and gradient types is selected.
  *     When changing the color in this case, the solid gradient should override the existing gradient on the item.
- * @param {?boolean} bitmapMode True if the color is being set in bitmap mode
  * @param {?boolean} applyToStroke True if changing the selection's stroke, false if changing its fill.
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
  * @return {boolean} Whether the color application actually changed visibly.
@@ -109,7 +144,6 @@ const applyColorToSelection = function (
     colorString,
     colorIndex,
     isSolidGradient,
-    bitmapMode,
     applyToStroke,
     textEditTargetId
 ) {
@@ -118,20 +152,6 @@ const applyColorToSelection = function (
     for (let item of items) {
         if (item.parent instanceof paper.CompoundPath) {
             item = item.parent;
-        }
-
-        // In bitmap mode, fill color applies to the stroke if there is a stroke
-        if (
-            bitmapMode &&
-            !applyToStroke &&
-            item.strokeColor !== null &&
-            item.strokeWidth
-        ) {
-            if (!_colorMatch(item.strokeColor, colorString)) {
-                changed = true;
-                item.strokeColor = colorString;
-            }
-            continue;
         }
 
         const itemColorProp = applyToStroke ? 'strokeColor' : 'fillColor';
@@ -173,14 +193,11 @@ const applyColorToSelection = function (
 
 /**
  * Called to swap gradient colors
- * @param {?boolean} bitmapMode True if the fill color is being set in bitmap mode
  * @param {?boolean} applyToStroke True if changing the selection's stroke, false if changing its fill.
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
  * @return {boolean} Whether the color application actually changed visibly.
  */
-const swapColorsInSelection = function (bitmapMode, applyToStroke, textEditTargetId) {
-    if (bitmapMode) return; // @todo
-
+const swapColorsInSelection = function (applyToStroke, textEditTargetId) {
     const items = _getColorStateListeners(textEditTargetId);
     let changed = false;
     for (const item of items) {
@@ -210,12 +227,11 @@ const swapColorsInSelection = function (bitmapMode, applyToStroke, textEditTarge
 /**
  * Called when setting gradient type
  * @param {GradientType} gradientType gradient type
- * @param {?boolean} bitmapMode True if the fill color is being set in bitmap mode
- * @param {boolean} applyToStroke True if changing the selection's stroke, false if changing its fill.
+ * @param {?boolean} applyToStroke True if changing the selection's stroke, false if changing its fill.
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
  * @return {boolean} Whether the color application actually changed visibly.
  */
-const applyGradientTypeToSelection = function (gradientType, bitmapMode, applyToStroke, textEditTargetId) {
+const applyGradientTypeToSelection = function (gradientType, applyToStroke, textEditTargetId) {
     const items = _getColorStateListeners(textEditTargetId);
     let changed = false;
     for (let item of items) {
@@ -255,10 +271,7 @@ const applyGradientTypeToSelection = function (gradientType, bitmapMode, applyTo
             itemColor2 = itemColor.gradient.stops[1].color.toCSS();
         }
 
-        if (bitmapMode) {
-            // @todo Add when we apply gradients to selections in bitmap mode
-            continue;
-        } else if (gradientType === GradientTypes.SOLID) {
+        if (gradientType === GradientTypes.SOLID) {
             if (itemColor && itemColor.gradient) {
                 changed = true;
                 item[itemColorProp] = itemColor1;
@@ -301,7 +314,9 @@ const applyGradientTypeToSelection = function (gradientType, bitmapMode, applyTo
                 itemColor1,
                 itemColor2,
                 gradientType,
-                item.bounds
+                item.bounds,
+                null, // radialCenter
+                item.strokeWidth
             );
         }
     }
@@ -408,12 +423,18 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                 }
             }
             if (item.strokeColor) {
-
                 if (item.strokeColor.type === 'gradient') {
                     const {primary, secondary, gradientType} = _colorStateFromGradient(item.strokeColor.gradient);
-                    const strokeColorString = primary;
+
+                    let strokeColorString = primary;
                     const strokeColor2String = secondary;
-                    const strokeGradientType = gradientType;
+                    let strokeGradientType = gradientType;
+
+                    // If the item's stroke width is 0, pretend the stroke color is null
+                    if (!item.strokeWidth) {
+                        strokeColorString = null;
+                        strokeGradientType = GradientTypes.SOLID;
+                    }
 
                     // Stroke color is fill color in bitmap
                     if (bitmapMode) {
@@ -516,10 +537,6 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
         };
     }
 
-    // Treat stroke gradients as MIXED
-    // TODO: remove this once stroke gradients are supported
-    if (selectionStrokeGradientType !== GradientTypes.SOLID) selectionStrokeColorString = MIXED;
-
     return {
         fillColor: selectionFillColorString ? selectionFillColorString : null,
         fillColor2: selectionFillColor2String ? selectionFillColor2String : null,
@@ -542,14 +559,6 @@ const styleBlob = function (path, options) {
     }
 };
 
-const stylePath = function (path, strokeColor, strokeWidth) {
-    // Make sure a visible line is drawn
-    path.setStrokeColor(
-        (strokeColor === MIXED || strokeColor === null) ? 'black' : strokeColor);
-    path.setStrokeWidth(
-        strokeWidth === null || strokeWidth === 0 ? 1 : strokeWidth);
-};
-
 const styleCursorPreview = function (path, options) {
     if (options.isEraser) {
         path.fillColor = 'white';
@@ -563,11 +572,26 @@ const styleCursorPreview = function (path, options) {
     }
 };
 
-// TODO: style using gradient?
 const styleShape = function (path, options) {
-    path.fillColor = options.fillColor.primary;
-    path.strokeColor = options.strokeColor;
-    path.strokeWidth = options.strokeWidth;
+    for (const colorKey of ['fillColor', 'strokeColor']) {
+        if (options[colorKey] === null) {
+            path[colorKey] = null;
+        } else if (options[colorKey].gradientType === GradientTypes.SOLID) {
+            path[colorKey] = options[colorKey].primary;
+        } else {
+            const {primary, secondary, gradientType} = options[colorKey];
+            path[colorKey] = createGradientObject(
+                primary,
+                secondary,
+                gradientType,
+                path.bounds,
+                null, // radialCenter
+                options.strokeWidth // minimum gradient size is stroke width
+            );
+        }
+    }
+
+    if (options.hasOwnProperty('strokeWidth')) path.strokeWidth = options.strokeWidth;
 };
 
 export {
@@ -580,7 +604,6 @@ export {
     MIXED,
     styleBlob,
     styleShape,
-    stylePath,
     styleCursorPreview,
     swapColorsInSelection
 };
