@@ -19889,7 +19889,7 @@ bind.placeholder = {};
 
 module.exports = bindAll;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(46)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45)))
 
 /***/ }),
 /* 6 */
@@ -20932,7 +20932,7 @@ exports.default = (0, _minilog2.default)('scratch-paint');
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.swapColorsInSelection = exports.styleCursorPreview = exports.styleShape = exports.styleBlob = exports.MIXED = exports.getRotatedColor = exports.getColorsFromSelection = exports.createGradientObject = exports.applyStrokeWidthToSelection = exports.applyGradientTypeToSelection = exports.applyColorToSelection = undefined;
+exports.swapColorsInSelection = exports.styleCursorPreview = exports.styleShape = exports.styleBlob = exports.MIXED = exports.generateSecondaryColor = exports.getColorsFromSelection = exports.createGradientObject = exports.applyStrokeWidthToSelection = exports.applyGradientTypeToSelection = exports.applyColorToSelection = undefined;
 
 var _paper = __webpack_require__(2);
 
@@ -20947,10 +20947,6 @@ var _group = __webpack_require__(26);
 var _gradientTypes = __webpack_require__(18);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
-
-var _parseColor = __webpack_require__(43);
-
-var _parseColor2 = _interopRequireDefault(_parseColor);
 
 var _fillStyle = __webpack_require__(17);
 
@@ -21001,12 +20997,33 @@ var getColorStringForTransparent = function getColorStringForTransparent(colorTo
     return color.toCSS();
 };
 
-// Returns a color shift by 72 of the given color, DEFAULT_COLOR if the given color is null, or null if it is MIXED.
-var getRotatedColor = function getRotatedColor(firstColor) {
+/**
+ * Generate a color that contrasts well with the passed-in color.
+ * @param {string} firstColor The "primary" color
+ * @return {string} CSS string for generated color
+ */
+var generateSecondaryColor = function generateSecondaryColor(firstColor) {
     if (firstColor === MIXED) return null;
     var color = new _paper2.default.Color(firstColor);
     if (!firstColor || color.alpha === 0) return _fillStyle.DEFAULT_COLOR;
-    return (0, _parseColor2.default)('hsl(' + (color.hue - 72) % 360 + ', ' + color.saturation * 100 + ', ' + Math.max(color.lightness * 100, 10) + ')').hex;
+
+    color.type = 'hsb';
+    var desaturated = color.saturation <= 0.15;
+    // If the color is desaturated or dark enough that a hue shift would be hard to see, do a brightness shift.
+    if (desaturated || color.brightness <= 0.4) {
+        // Choose the shade that contrasts the most with the given color.
+        // Use a brightness of 0.1 instead of 0 because if the brightness is 0, it's black and we lose the hue.
+        color.brightness = color.brightness < 0.55 ? 1 : 0.1;
+    }
+    // If the color was desaturated, don't do a hue shift, as it would be hard to see anyway.
+    if (!desaturated) {
+        color.hue -= 72;
+    }
+    // The returned color will be one of three things:
+    // 1. If the color was bright and saturated (e.g. colorful), it will be that color, hue-shifted.
+    // 2. If the color was dark and saturated, it will be that color, brightened and hue-shifted.
+    // 3. If the color was not saturated, it will be that color, brightened or darkened as needed to contrast most.
+    return color.toCSS(true /* hex */);
 };
 
 /**
@@ -21257,7 +21274,7 @@ var applyGradientTypeToSelection = function applyGradientTypeToSelection(gradien
             var itemColor2 = void 0;
             if (!hasGradient || !itemColor.gradient.stops[1]) {
                 // If item color is solid or a gradient that has no 2nd color, set the 2nd color based on the first color
-                itemColor2 = getRotatedColor(itemColor1);
+                itemColor2 = generateSecondaryColor(itemColor1);
             } else if (itemColor.gradient.stops[1].color.alpha === 0) {
                 // Gradient has 2nd color which is transparent
                 itemColor2 = null;
@@ -21649,7 +21666,7 @@ exports.applyGradientTypeToSelection = applyGradientTypeToSelection;
 exports.applyStrokeWidthToSelection = applyStrokeWidthToSelection;
 exports.createGradientObject = createGradientObject;
 exports.getColorsFromSelection = getColorsFromSelection;
-exports.getRotatedColor = getRotatedColor;
+exports.generateSecondaryColor = generateSecondaryColor;
 exports.MIXED = MIXED;
 exports.styleBlob = styleBlob;
 exports.styleShape = styleShape;
@@ -22517,11 +22534,11 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactIntl = __webpack_require__(23);
 
-var _button = __webpack_require__(44);
+var _button = __webpack_require__(43);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _toolSelectBase = __webpack_require__(236);
+var _toolSelectBase = __webpack_require__(234);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -26455,7 +26472,7 @@ var _cursors = __webpack_require__(87);
 
 var _cursors2 = _interopRequireDefault(_cursors);
 
-var _eyeDropper = __webpack_require__(45);
+var _eyeDropper = __webpack_require__(44);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -26891,11 +26908,11 @@ var _cursors = __webpack_require__(87);
 
 var _cursors2 = _interopRequireDefault(_cursors);
 
-var _scaleTool = __webpack_require__(243);
+var _scaleTool = __webpack_require__(241);
 
 var _scaleTool2 = _interopRequireDefault(_scaleTool);
 
-var _rotateTool = __webpack_require__(244);
+var _rotateTool = __webpack_require__(242);
 
 var _rotateTool2 = _interopRequireDefault(_rotateTool);
 
@@ -28791,7 +28808,332 @@ exports.updateViewBounds = updateViewBounds;
 /* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var convert = __webpack_require__(231);
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _classnames = __webpack_require__(19);
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _propTypes = __webpack_require__(1);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _button = __webpack_require__(232);
+
+var _button2 = _interopRequireDefault(_button);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; } /* DO NOT EDIT
+                                                                                                                                                                                                                             @todo This file is copied from GUI and should be pulled out into a shared library.
+                                                                                                                                                                                                                             See #13 */
+
+/* ACTUALLY, THIS IS EDITED ;)
+THIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD HANDLING FOR DISABLED STATES.*/
+
+var ButtonComponent = function ButtonComponent(_ref) {
+    var _classNames;
+
+    var className = _ref.className,
+        highlighted = _ref.highlighted,
+        onClick = _ref.onClick,
+        children = _ref.children,
+        props = _objectWithoutProperties(_ref, ['className', 'highlighted', 'onClick', 'children']);
+
+    var disabled = props.disabled || false;
+    if (disabled === false) {
+        // if not disabled, add `onClick()` to be applied
+        // in props. If disabled, don't add `onClick()`
+        props.onClick = onClick;
+    }
+    return _react2.default.createElement(
+        'span',
+        _extends({
+            className: (0, _classnames2.default)(_button2.default.button, className, (_classNames = {}, _defineProperty(_classNames, _button2.default.modDisabled, disabled), _defineProperty(_classNames, _button2.default.highlighted, highlighted), _classNames)),
+            role: 'button'
+        }, props),
+        children
+    );
+};
+
+ButtonComponent.propTypes = {
+    children: _propTypes2.default.node,
+    className: _propTypes2.default.string,
+    disabled: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.bool]),
+    highlighted: _propTypes2.default.bool,
+    onClick: _propTypes2.default.func.isRequired
+};
+exports.default = ButtonComponent;
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var ACTIVATE_EYE_DROPPER = 'scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER';
+var DEACTIVATE_EYE_DROPPER = 'scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER';
+
+var initialState = {
+    active: false,
+    callback: function callback() {}, // this will either be `onChangeFillColor` or `onChangeOutlineColor`
+    previousTool: null // the tool that was previously active before eye dropper
+};
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case ACTIVATE_EYE_DROPPER:
+            return Object.assign({}, state, {
+                active: true,
+                callback: action.callback,
+                previousTool: action.previousMode
+            });
+        case DEACTIVATE_EYE_DROPPER:
+            return Object.assign({}, state, {
+                active: false,
+                callback: function callback() {},
+                previousTool: null
+            });
+        default:
+            return state;
+    }
+};
+
+var activateEyeDropper = function activateEyeDropper(currentMode, callback) {
+    return {
+        type: ACTIVATE_EYE_DROPPER,
+        callback: callback,
+        previousMode: currentMode
+    };
+};
+var deactivateEyeDropper = function deactivateEyeDropper() {
+    return {
+        type: DEACTIVATE_EYE_DROPPER
+    };
+};
+
+exports.default = reducer;
+exports.activateEyeDropper = activateEyeDropper;
+exports.deactivateEyeDropper = deactivateEyeDropper;
+exports.ACTIVATE_EYE_DROPPER = ACTIVATE_EYE_DROPPER;
+exports.DEACTIVATE_EYE_DROPPER = DEACTIVATE_EYE_DROPPER;
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.changeFormat = exports.default = undefined;
+
+var _format = __webpack_require__(11);
+
+var _format2 = _interopRequireDefault(_format);
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _undo = __webpack_require__(40);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_FORMAT = 'scratch-paint/formats/CHANGE_FORMAT';
+var initialState = null;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case _undo.UNDO:
+        /* falls through */
+        case _undo.REDO:
+        /* falls through */
+        case CHANGE_FORMAT:
+            if (!action.format) return state;
+            if (action.format in _format2.default) {
+                return action.format;
+            }
+            _log2.default.warn('Format does not exist: ' + action.format);
+        /* falls through */
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeFormat = function changeFormat(format) {
+    return {
+        type: CHANGE_FORMAT,
+        format: format
+    };
+};
+
+exports.default = reducer;
+exports.changeFormat = changeFormat;
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.changeGradientType = exports.default = undefined;
+
+var _gradientTypes = __webpack_require__(18);
+
+var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _fillStyle = __webpack_require__(17);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var initialState = null; // Gradient type shown in the fill tool. This is the last gradient type explicitly chosen by the user,
+// and isn't overwritten by changing the selection.
+
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case _fillStyle.CHANGE_FILL_GRADIENT_TYPE:
+            if (action.gradientType in _gradientTypes2.default) {
+                return action.gradientType;
+            }
+            _log2.default.warn('Gradient type does not exist: ' + action.gradientType);
+        /* falls through */
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+// Use this for user-initiated gradient type selections only.
+// See reducers/fill-style.js for other ways gradient type changes.
+var changeGradientType = function changeGradientType(gradientType) {
+    return {
+        type: _fillStyle.CHANGE_FILL_GRADIENT_TYPE,
+        gradientType: gradientType
+    };
+};
+
+exports.default = reducer;
+exports.changeGradientType = changeGradientType;
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.changeColorIndex = exports.default = undefined;
+
+var _log = __webpack_require__(8);
+
+var _log2 = _interopRequireDefault(_log);
+
+var _fillStyle = __webpack_require__(17);
+
+var _gradientTypes = __webpack_require__(18);
+
+var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CHANGE_COLOR_INDEX = 'scratch-paint/color-index/CHANGE_COLOR_INDEX';
+var initialState = 0;
+
+var reducer = function reducer(state, action) {
+    if (typeof state === 'undefined') state = initialState;
+    switch (action.type) {
+        case CHANGE_COLOR_INDEX:
+            if (action.index !== 1 && action.index !== 0) {
+                _log2.default.warn('Invalid color index: ' + action.index);
+                return state;
+            }
+            return action.index;
+        case _fillStyle.CHANGE_FILL_GRADIENT_TYPE:
+            if (action.gradientType === _gradientTypes2.default.SOLID) return 0;
+        /* falls through */
+        default:
+            return state;
+    }
+};
+
+// Action creators ==================================
+var changeColorIndex = function changeColorIndex(index) {
+    return {
+        type: CHANGE_COLOR_INDEX,
+        index: index
+    };
+};
+
+exports.default = reducer;
+exports.changeColorIndex = changeColorIndex;
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var convert = __webpack_require__(268);
 
 module.exports = function (cstr) {
     var m, conv, parts, alpha;
@@ -28875,331 +29217,6 @@ module.exports = function (cstr) {
     return res;
 };
 
-
-/***/ }),
-/* 44 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _classnames = __webpack_require__(19);
-
-var _classnames2 = _interopRequireDefault(_classnames);
-
-var _propTypes = __webpack_require__(1);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _button = __webpack_require__(234);
-
-var _button2 = _interopRequireDefault(_button);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; } /* DO NOT EDIT
-                                                                                                                                                                                                                             @todo This file is copied from GUI and should be pulled out into a shared library.
-                                                                                                                                                                                                                             See #13 */
-
-/* ACTUALLY, THIS IS EDITED ;)
-THIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD HANDLING FOR DISABLED STATES.*/
-
-var ButtonComponent = function ButtonComponent(_ref) {
-    var _classNames;
-
-    var className = _ref.className,
-        highlighted = _ref.highlighted,
-        onClick = _ref.onClick,
-        children = _ref.children,
-        props = _objectWithoutProperties(_ref, ['className', 'highlighted', 'onClick', 'children']);
-
-    var disabled = props.disabled || false;
-    if (disabled === false) {
-        // if not disabled, add `onClick()` to be applied
-        // in props. If disabled, don't add `onClick()`
-        props.onClick = onClick;
-    }
-    return _react2.default.createElement(
-        'span',
-        _extends({
-            className: (0, _classnames2.default)(_button2.default.button, className, (_classNames = {}, _defineProperty(_classNames, _button2.default.modDisabled, disabled), _defineProperty(_classNames, _button2.default.highlighted, highlighted), _classNames)),
-            role: 'button'
-        }, props),
-        children
-    );
-};
-
-ButtonComponent.propTypes = {
-    children: _propTypes2.default.node,
-    className: _propTypes2.default.string,
-    disabled: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.bool]),
-    highlighted: _propTypes2.default.bool,
-    onClick: _propTypes2.default.func.isRequired
-};
-exports.default = ButtonComponent;
-
-/***/ }),
-/* 45 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var ACTIVATE_EYE_DROPPER = 'scratch-paint/eye-dropper/ACTIVATE_COLOR_PICKER';
-var DEACTIVATE_EYE_DROPPER = 'scratch-paint/eye-dropper/DEACTIVATE_COLOR_PICKER';
-
-var initialState = {
-    active: false,
-    callback: function callback() {}, // this will either be `onChangeFillColor` or `onChangeOutlineColor`
-    previousTool: null // the tool that was previously active before eye dropper
-};
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case ACTIVATE_EYE_DROPPER:
-            return Object.assign({}, state, {
-                active: true,
-                callback: action.callback,
-                previousTool: action.previousMode
-            });
-        case DEACTIVATE_EYE_DROPPER:
-            return Object.assign({}, state, {
-                active: false,
-                callback: function callback() {},
-                previousTool: null
-            });
-        default:
-            return state;
-    }
-};
-
-var activateEyeDropper = function activateEyeDropper(currentMode, callback) {
-    return {
-        type: ACTIVATE_EYE_DROPPER,
-        callback: callback,
-        previousMode: currentMode
-    };
-};
-var deactivateEyeDropper = function deactivateEyeDropper() {
-    return {
-        type: DEACTIVATE_EYE_DROPPER
-    };
-};
-
-exports.default = reducer;
-exports.activateEyeDropper = activateEyeDropper;
-exports.deactivateEyeDropper = deactivateEyeDropper;
-exports.ACTIVATE_EYE_DROPPER = ACTIVATE_EYE_DROPPER;
-exports.DEACTIVATE_EYE_DROPPER = DEACTIVATE_EYE_DROPPER;
-
-/***/ }),
-/* 46 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.changeFormat = exports.default = undefined;
-
-var _format = __webpack_require__(11);
-
-var _format2 = _interopRequireDefault(_format);
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _undo = __webpack_require__(40);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_FORMAT = 'scratch-paint/formats/CHANGE_FORMAT';
-var initialState = null;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case _undo.UNDO:
-        /* falls through */
-        case _undo.REDO:
-        /* falls through */
-        case CHANGE_FORMAT:
-            if (!action.format) return state;
-            if (action.format in _format2.default) {
-                return action.format;
-            }
-            _log2.default.warn('Format does not exist: ' + action.format);
-        /* falls through */
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var changeFormat = function changeFormat(format) {
-    return {
-        type: CHANGE_FORMAT,
-        format: format
-    };
-};
-
-exports.default = reducer;
-exports.changeFormat = changeFormat;
-
-/***/ }),
-/* 48 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.changeGradientType = exports.default = undefined;
-
-var _gradientTypes = __webpack_require__(18);
-
-var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _fillStyle = __webpack_require__(17);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var initialState = null; // Gradient type shown in the fill tool. This is the last gradient type explicitly chosen by the user,
-// and isn't overwritten by changing the selection.
-
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case _fillStyle.CHANGE_FILL_GRADIENT_TYPE:
-            if (action.gradientType in _gradientTypes2.default) {
-                return action.gradientType;
-            }
-            _log2.default.warn('Gradient type does not exist: ' + action.gradientType);
-        /* falls through */
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-// Use this for user-initiated gradient type selections only.
-// See reducers/fill-style.js for other ways gradient type changes.
-var changeGradientType = function changeGradientType(gradientType) {
-    return {
-        type: _fillStyle.CHANGE_FILL_GRADIENT_TYPE,
-        gradientType: gradientType
-    };
-};
-
-exports.default = reducer;
-exports.changeGradientType = changeGradientType;
-
-/***/ }),
-/* 49 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.changeColorIndex = exports.default = undefined;
-
-var _log = __webpack_require__(8);
-
-var _log2 = _interopRequireDefault(_log);
-
-var _fillStyle = __webpack_require__(17);
-
-var _gradientTypes = __webpack_require__(18);
-
-var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CHANGE_COLOR_INDEX = 'scratch-paint/color-index/CHANGE_COLOR_INDEX';
-var initialState = 0;
-
-var reducer = function reducer(state, action) {
-    if (typeof state === 'undefined') state = initialState;
-    switch (action.type) {
-        case CHANGE_COLOR_INDEX:
-            if (action.index !== 1 && action.index !== 0) {
-                _log2.default.warn('Invalid color index: ' + action.index);
-                return state;
-            }
-            return action.index;
-        case _fillStyle.CHANGE_FILL_GRADIENT_TYPE:
-            if (action.gradientType === _gradientTypes2.default.SOLID) return 0;
-        /* falls through */
-        default:
-            return state;
-    }
-};
-
-// Action creators ==================================
-var changeColorIndex = function changeColorIndex(index) {
-    return {
-        type: CHANGE_COLOR_INDEX,
-        index: index
-    };
-};
-
-exports.default = reducer;
-exports.changeColorIndex = changeColorIndex;
 
 /***/ }),
 /* 50 */
@@ -30775,7 +30792,7 @@ function stubArray() {
 
 module.exports = omit;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(46)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45)))
 
 /***/ }),
 /* 53 */
@@ -31544,7 +31561,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _button = __webpack_require__(44);
+var _button = __webpack_require__(43);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -31839,7 +31856,7 @@ if (typeof self !== 'undefined') {
 var result = Object(_ponyfill_js__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(root);
 /* harmony default export */ __webpack_exports__["a"] = (result);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(46), __webpack_require__(191)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45), __webpack_require__(191)(module)))
 
 /***/ }),
 /* 71 */
@@ -33045,7 +33062,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactStyleProptype = __webpack_require__(259);
+var _reactStyleProptype = __webpack_require__(257);
 
 var _reactStyleProptype2 = _interopRequireDefault(_reactStyleProptype);
 
@@ -33376,7 +33393,7 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _buttonGroup = __webpack_require__(261);
+var _buttonGroup = __webpack_require__(259);
 
 var _buttonGroup2 = _interopRequireDefault(_buttonGroup);
 
@@ -33420,11 +33437,11 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _broadBrushHelper = __webpack_require__(264);
+var _broadBrushHelper = __webpack_require__(262);
 
 var _broadBrushHelper2 = _interopRequireDefault(_broadBrushHelper);
 
-var _segmentBrushHelper = __webpack_require__(265);
+var _segmentBrushHelper = __webpack_require__(263);
 
 var _segmentBrushHelper2 = _interopRequireDefault(_segmentBrushHelper);
 
@@ -33963,7 +33980,7 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _parseColor = __webpack_require__(43);
+var _parseColor = __webpack_require__(49);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -34073,7 +34090,7 @@ var makeColorIndicator = function makeColorIndicator(label, isStroke) {
                 if (this.props.gradientType === _gradientTypes2.default.SOLID && gradientType !== _gradientTypes2.default.SOLID) {
                     // Generate color 2 and change to the 2nd swatch when switching from solid to gradient
                     if (!hasSelectedItems) {
-                        this.props.onChangeColor((0, _stylePath.getRotatedColor)(this.props.color), 1);
+                        this.props.onChangeColor((0, _stylePath.generateSecondaryColor)(this.props.color), 1);
                     }
                     this.props.onChangeColorIndex(1);
                 }
@@ -35505,7 +35522,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(46)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(45)))
 
 /***/ }),
 /* 119 */
@@ -36805,11 +36822,11 @@ var _updateImageHoc2 = _interopRequireDefault(_updateImageHoc);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(47);
+var _format = __webpack_require__(46);
 
 var _selectedItems = __webpack_require__(7);
 
-var _eyeDropper = __webpack_require__(45);
+var _eyeDropper = __webpack_require__(44);
 
 var _textEditTarget = __webpack_require__(51);
 
@@ -43180,27 +43197,27 @@ var _bitBrushMode = __webpack_require__(230);
 
 var _bitBrushMode2 = _interopRequireDefault(_bitBrushMode);
 
-var _bitLineMode = __webpack_require__(238);
+var _bitLineMode = __webpack_require__(236);
 
 var _bitLineMode2 = _interopRequireDefault(_bitLineMode);
 
-var _bitOvalMode = __webpack_require__(241);
+var _bitOvalMode = __webpack_require__(239);
 
 var _bitOvalMode2 = _interopRequireDefault(_bitOvalMode);
 
-var _bitRectMode = __webpack_require__(246);
+var _bitRectMode = __webpack_require__(244);
 
 var _bitRectMode2 = _interopRequireDefault(_bitRectMode);
 
-var _bitFillMode = __webpack_require__(249);
+var _bitFillMode = __webpack_require__(247);
 
 var _bitFillMode2 = _interopRequireDefault(_bitFillMode);
 
-var _bitEraserMode = __webpack_require__(253);
+var _bitEraserMode = __webpack_require__(251);
 
 var _bitEraserMode2 = _interopRequireDefault(_bitEraserMode);
 
-var _bitSelectMode = __webpack_require__(255);
+var _bitSelectMode = __webpack_require__(253);
 
 var _bitSelectMode2 = _interopRequireDefault(_bitSelectMode);
 
@@ -43208,7 +43225,7 @@ var _box = __webpack_require__(92);
 
 var _box2 = _interopRequireDefault(_box);
 
-var _button = __webpack_require__(44);
+var _button = __webpack_require__(43);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -43216,15 +43233,15 @@ var _buttonGroup = __webpack_require__(94);
 
 var _buttonGroup2 = _interopRequireDefault(_buttonGroup);
 
-var _brushMode = __webpack_require__(263);
+var _brushMode = __webpack_require__(261);
 
 var _brushMode2 = _interopRequireDefault(_brushMode);
 
-var _eraserMode = __webpack_require__(267);
+var _eraserMode = __webpack_require__(265);
 
 var _eraserMode2 = _interopRequireDefault(_eraserMode);
 
-var _fillColorIndicator = __webpack_require__(269);
+var _fillColorIndicator = __webpack_require__(267);
 
 var _fillColorIndicator2 = _interopRequireDefault(_fillColorIndicator);
 
@@ -46105,7 +46122,7 @@ var _hover = __webpack_require__(41);
 
 var _clipboard = __webpack_require__(58);
 
-var _format3 = __webpack_require__(47);
+var _format3 = __webpack_require__(46);
 
 var _viewBounds = __webpack_require__(42);
 
@@ -48637,7 +48654,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _bitBrushMode = __webpack_require__(233);
+var _bitBrushMode = __webpack_require__(231);
 
 var _bitBrushMode2 = _interopRequireDefault(_bitBrushMode);
 
@@ -48778,807 +48795,6 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 /* 231 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var conversions = __webpack_require__(232);
-
-var convert = function() {
-   return new Converter();
-}
-
-for (var func in conversions) {
-  // export Raw versions
-  convert[func + "Raw"] =  (function(func) {
-    // accept array or plain args
-    return function(arg) {
-      if (typeof arg == "number")
-        arg = Array.prototype.slice.call(arguments);
-      return conversions[func](arg);
-    }
-  })(func);
-
-  var pair = /(\w+)2(\w+)/.exec(func),
-      from = pair[1],
-      to = pair[2];
-
-  // export rgb2hsl and ["rgb"]["hsl"]
-  convert[from] = convert[from] || {};
-
-  convert[from][to] = convert[func] = (function(func) { 
-    return function(arg) {
-      if (typeof arg == "number")
-        arg = Array.prototype.slice.call(arguments);
-      
-      var val = conversions[func](arg);
-      if (typeof val == "string" || val === undefined)
-        return val; // keyword
-
-      for (var i = 0; i < val.length; i++)
-        val[i] = Math.round(val[i]);
-      return val;
-    }
-  })(func);
-}
-
-
-/* Converter does lazy conversion and caching */
-var Converter = function() {
-   this.convs = {};
-};
-
-/* Either get the values for a space or
-  set the values for a space, depending on args */
-Converter.prototype.routeSpace = function(space, args) {
-   var values = args[0];
-   if (values === undefined) {
-      // color.rgb()
-      return this.getValues(space);
-   }
-   // color.rgb(10, 10, 10)
-   if (typeof values == "number") {
-      values = Array.prototype.slice.call(args);        
-   }
-
-   return this.setValues(space, values);
-};
-  
-/* Set the values for a space, invalidating cache */
-Converter.prototype.setValues = function(space, values) {
-   this.space = space;
-   this.convs = {};
-   this.convs[space] = values;
-   return this;
-};
-
-/* Get the values for a space. If there's already
-  a conversion for the space, fetch it, otherwise
-  compute it */
-Converter.prototype.getValues = function(space) {
-   var vals = this.convs[space];
-   if (!vals) {
-      var fspace = this.space,
-          from = this.convs[fspace];
-      vals = convert[fspace][space](from);
-
-      this.convs[space] = vals;
-   }
-  return vals;
-};
-
-["rgb", "hsl", "hsv", "cmyk", "keyword"].forEach(function(space) {
-   Converter.prototype[space] = function(vals) {
-      return this.routeSpace(space, arguments);
-   }
-});
-
-module.exports = convert;
-
-/***/ }),
-/* 232 */
-/***/ (function(module, exports) {
-
-/* MIT license */
-
-module.exports = {
-  rgb2hsl: rgb2hsl,
-  rgb2hsv: rgb2hsv,
-  rgb2hwb: rgb2hwb,
-  rgb2cmyk: rgb2cmyk,
-  rgb2keyword: rgb2keyword,
-  rgb2xyz: rgb2xyz,
-  rgb2lab: rgb2lab,
-  rgb2lch: rgb2lch,
-
-  hsl2rgb: hsl2rgb,
-  hsl2hsv: hsl2hsv,
-  hsl2hwb: hsl2hwb,
-  hsl2cmyk: hsl2cmyk,
-  hsl2keyword: hsl2keyword,
-
-  hsv2rgb: hsv2rgb,
-  hsv2hsl: hsv2hsl,
-  hsv2hwb: hsv2hwb,
-  hsv2cmyk: hsv2cmyk,
-  hsv2keyword: hsv2keyword,
-
-  hwb2rgb: hwb2rgb,
-  hwb2hsl: hwb2hsl,
-  hwb2hsv: hwb2hsv,
-  hwb2cmyk: hwb2cmyk,
-  hwb2keyword: hwb2keyword,
-
-  cmyk2rgb: cmyk2rgb,
-  cmyk2hsl: cmyk2hsl,
-  cmyk2hsv: cmyk2hsv,
-  cmyk2hwb: cmyk2hwb,
-  cmyk2keyword: cmyk2keyword,
-
-  keyword2rgb: keyword2rgb,
-  keyword2hsl: keyword2hsl,
-  keyword2hsv: keyword2hsv,
-  keyword2hwb: keyword2hwb,
-  keyword2cmyk: keyword2cmyk,
-  keyword2lab: keyword2lab,
-  keyword2xyz: keyword2xyz,
-
-  xyz2rgb: xyz2rgb,
-  xyz2lab: xyz2lab,
-  xyz2lch: xyz2lch,
-
-  lab2xyz: lab2xyz,
-  lab2rgb: lab2rgb,
-  lab2lch: lab2lch,
-
-  lch2lab: lch2lab,
-  lch2xyz: lch2xyz,
-  lch2rgb: lch2rgb
-}
-
-
-function rgb2hsl(rgb) {
-  var r = rgb[0]/255,
-      g = rgb[1]/255,
-      b = rgb[2]/255,
-      min = Math.min(r, g, b),
-      max = Math.max(r, g, b),
-      delta = max - min,
-      h, s, l;
-
-  if (max == min)
-    h = 0;
-  else if (r == max)
-    h = (g - b) / delta;
-  else if (g == max)
-    h = 2 + (b - r) / delta;
-  else if (b == max)
-    h = 4 + (r - g)/ delta;
-
-  h = Math.min(h * 60, 360);
-
-  if (h < 0)
-    h += 360;
-
-  l = (min + max) / 2;
-
-  if (max == min)
-    s = 0;
-  else if (l <= 0.5)
-    s = delta / (max + min);
-  else
-    s = delta / (2 - max - min);
-
-  return [h, s * 100, l * 100];
-}
-
-function rgb2hsv(rgb) {
-  var r = rgb[0],
-      g = rgb[1],
-      b = rgb[2],
-      min = Math.min(r, g, b),
-      max = Math.max(r, g, b),
-      delta = max - min,
-      h, s, v;
-
-  if (max == 0)
-    s = 0;
-  else
-    s = (delta/max * 1000)/10;
-
-  if (max == min)
-    h = 0;
-  else if (r == max)
-    h = (g - b) / delta;
-  else if (g == max)
-    h = 2 + (b - r) / delta;
-  else if (b == max)
-    h = 4 + (r - g) / delta;
-
-  h = Math.min(h * 60, 360);
-
-  if (h < 0)
-    h += 360;
-
-  v = ((max / 255) * 1000) / 10;
-
-  return [h, s, v];
-}
-
-function rgb2hwb(rgb) {
-  var r = rgb[0],
-      g = rgb[1],
-      b = rgb[2],
-      h = rgb2hsl(rgb)[0],
-      w = 1/255 * Math.min(r, Math.min(g, b)),
-      b = 1 - 1/255 * Math.max(r, Math.max(g, b));
-
-  return [h, w * 100, b * 100];
-}
-
-function rgb2cmyk(rgb) {
-  var r = rgb[0] / 255,
-      g = rgb[1] / 255,
-      b = rgb[2] / 255,
-      c, m, y, k;
-
-  k = Math.min(1 - r, 1 - g, 1 - b);
-  c = (1 - r - k) / (1 - k) || 0;
-  m = (1 - g - k) / (1 - k) || 0;
-  y = (1 - b - k) / (1 - k) || 0;
-  return [c * 100, m * 100, y * 100, k * 100];
-}
-
-function rgb2keyword(rgb) {
-  return reverseKeywords[JSON.stringify(rgb)];
-}
-
-function rgb2xyz(rgb) {
-  var r = rgb[0] / 255,
-      g = rgb[1] / 255,
-      b = rgb[2] / 255;
-
-  // assume sRGB
-  r = r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : (r / 12.92);
-  g = g > 0.04045 ? Math.pow(((g + 0.055) / 1.055), 2.4) : (g / 12.92);
-  b = b > 0.04045 ? Math.pow(((b + 0.055) / 1.055), 2.4) : (b / 12.92);
-
-  var x = (r * 0.4124) + (g * 0.3576) + (b * 0.1805);
-  var y = (r * 0.2126) + (g * 0.7152) + (b * 0.0722);
-  var z = (r * 0.0193) + (g * 0.1192) + (b * 0.9505);
-
-  return [x * 100, y *100, z * 100];
-}
-
-function rgb2lab(rgb) {
-  var xyz = rgb2xyz(rgb),
-        x = xyz[0],
-        y = xyz[1],
-        z = xyz[2],
-        l, a, b;
-
-  x /= 95.047;
-  y /= 100;
-  z /= 108.883;
-
-  x = x > 0.008856 ? Math.pow(x, 1/3) : (7.787 * x) + (16 / 116);
-  y = y > 0.008856 ? Math.pow(y, 1/3) : (7.787 * y) + (16 / 116);
-  z = z > 0.008856 ? Math.pow(z, 1/3) : (7.787 * z) + (16 / 116);
-
-  l = (116 * y) - 16;
-  a = 500 * (x - y);
-  b = 200 * (y - z);
-
-  return [l, a, b];
-}
-
-function rgb2lch(args) {
-  return lab2lch(rgb2lab(args));
-}
-
-function hsl2rgb(hsl) {
-  var h = hsl[0] / 360,
-      s = hsl[1] / 100,
-      l = hsl[2] / 100,
-      t1, t2, t3, rgb, val;
-
-  if (s == 0) {
-    val = l * 255;
-    return [val, val, val];
-  }
-
-  if (l < 0.5)
-    t2 = l * (1 + s);
-  else
-    t2 = l + s - l * s;
-  t1 = 2 * l - t2;
-
-  rgb = [0, 0, 0];
-  for (var i = 0; i < 3; i++) {
-    t3 = h + 1 / 3 * - (i - 1);
-    t3 < 0 && t3++;
-    t3 > 1 && t3--;
-
-    if (6 * t3 < 1)
-      val = t1 + (t2 - t1) * 6 * t3;
-    else if (2 * t3 < 1)
-      val = t2;
-    else if (3 * t3 < 2)
-      val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
-    else
-      val = t1;
-
-    rgb[i] = val * 255;
-  }
-
-  return rgb;
-}
-
-function hsl2hsv(hsl) {
-  var h = hsl[0],
-      s = hsl[1] / 100,
-      l = hsl[2] / 100,
-      sv, v;
-
-  if(l === 0) {
-      // no need to do calc on black
-      // also avoids divide by 0 error
-      return [0, 0, 0];
-  }
-
-  l *= 2;
-  s *= (l <= 1) ? l : 2 - l;
-  v = (l + s) / 2;
-  sv = (2 * s) / (l + s);
-  return [h, sv * 100, v * 100];
-}
-
-function hsl2hwb(args) {
-  return rgb2hwb(hsl2rgb(args));
-}
-
-function hsl2cmyk(args) {
-  return rgb2cmyk(hsl2rgb(args));
-}
-
-function hsl2keyword(args) {
-  return rgb2keyword(hsl2rgb(args));
-}
-
-
-function hsv2rgb(hsv) {
-  var h = hsv[0] / 60,
-      s = hsv[1] / 100,
-      v = hsv[2] / 100,
-      hi = Math.floor(h) % 6;
-
-  var f = h - Math.floor(h),
-      p = 255 * v * (1 - s),
-      q = 255 * v * (1 - (s * f)),
-      t = 255 * v * (1 - (s * (1 - f))),
-      v = 255 * v;
-
-  switch(hi) {
-    case 0:
-      return [v, t, p];
-    case 1:
-      return [q, v, p];
-    case 2:
-      return [p, v, t];
-    case 3:
-      return [p, q, v];
-    case 4:
-      return [t, p, v];
-    case 5:
-      return [v, p, q];
-  }
-}
-
-function hsv2hsl(hsv) {
-  var h = hsv[0],
-      s = hsv[1] / 100,
-      v = hsv[2] / 100,
-      sl, l;
-
-  l = (2 - s) * v;
-  sl = s * v;
-  sl /= (l <= 1) ? l : 2 - l;
-  sl = sl || 0;
-  l /= 2;
-  return [h, sl * 100, l * 100];
-}
-
-function hsv2hwb(args) {
-  return rgb2hwb(hsv2rgb(args))
-}
-
-function hsv2cmyk(args) {
-  return rgb2cmyk(hsv2rgb(args));
-}
-
-function hsv2keyword(args) {
-  return rgb2keyword(hsv2rgb(args));
-}
-
-// http://dev.w3.org/csswg/css-color/#hwb-to-rgb
-function hwb2rgb(hwb) {
-  var h = hwb[0] / 360,
-      wh = hwb[1] / 100,
-      bl = hwb[2] / 100,
-      ratio = wh + bl,
-      i, v, f, n;
-
-  // wh + bl cant be > 1
-  if (ratio > 1) {
-    wh /= ratio;
-    bl /= ratio;
-  }
-
-  i = Math.floor(6 * h);
-  v = 1 - bl;
-  f = 6 * h - i;
-  if ((i & 0x01) != 0) {
-    f = 1 - f;
-  }
-  n = wh + f * (v - wh);  // linear interpolation
-
-  switch (i) {
-    default:
-    case 6:
-    case 0: r = v; g = n; b = wh; break;
-    case 1: r = n; g = v; b = wh; break;
-    case 2: r = wh; g = v; b = n; break;
-    case 3: r = wh; g = n; b = v; break;
-    case 4: r = n; g = wh; b = v; break;
-    case 5: r = v; g = wh; b = n; break;
-  }
-
-  return [r * 255, g * 255, b * 255];
-}
-
-function hwb2hsl(args) {
-  return rgb2hsl(hwb2rgb(args));
-}
-
-function hwb2hsv(args) {
-  return rgb2hsv(hwb2rgb(args));
-}
-
-function hwb2cmyk(args) {
-  return rgb2cmyk(hwb2rgb(args));
-}
-
-function hwb2keyword(args) {
-  return rgb2keyword(hwb2rgb(args));
-}
-
-function cmyk2rgb(cmyk) {
-  var c = cmyk[0] / 100,
-      m = cmyk[1] / 100,
-      y = cmyk[2] / 100,
-      k = cmyk[3] / 100,
-      r, g, b;
-
-  r = 1 - Math.min(1, c * (1 - k) + k);
-  g = 1 - Math.min(1, m * (1 - k) + k);
-  b = 1 - Math.min(1, y * (1 - k) + k);
-  return [r * 255, g * 255, b * 255];
-}
-
-function cmyk2hsl(args) {
-  return rgb2hsl(cmyk2rgb(args));
-}
-
-function cmyk2hsv(args) {
-  return rgb2hsv(cmyk2rgb(args));
-}
-
-function cmyk2hwb(args) {
-  return rgb2hwb(cmyk2rgb(args));
-}
-
-function cmyk2keyword(args) {
-  return rgb2keyword(cmyk2rgb(args));
-}
-
-
-function xyz2rgb(xyz) {
-  var x = xyz[0] / 100,
-      y = xyz[1] / 100,
-      z = xyz[2] / 100,
-      r, g, b;
-
-  r = (x * 3.2406) + (y * -1.5372) + (z * -0.4986);
-  g = (x * -0.9689) + (y * 1.8758) + (z * 0.0415);
-  b = (x * 0.0557) + (y * -0.2040) + (z * 1.0570);
-
-  // assume sRGB
-  r = r > 0.0031308 ? ((1.055 * Math.pow(r, 1.0 / 2.4)) - 0.055)
-    : r = (r * 12.92);
-
-  g = g > 0.0031308 ? ((1.055 * Math.pow(g, 1.0 / 2.4)) - 0.055)
-    : g = (g * 12.92);
-
-  b = b > 0.0031308 ? ((1.055 * Math.pow(b, 1.0 / 2.4)) - 0.055)
-    : b = (b * 12.92);
-
-  r = Math.min(Math.max(0, r), 1);
-  g = Math.min(Math.max(0, g), 1);
-  b = Math.min(Math.max(0, b), 1);
-
-  return [r * 255, g * 255, b * 255];
-}
-
-function xyz2lab(xyz) {
-  var x = xyz[0],
-      y = xyz[1],
-      z = xyz[2],
-      l, a, b;
-
-  x /= 95.047;
-  y /= 100;
-  z /= 108.883;
-
-  x = x > 0.008856 ? Math.pow(x, 1/3) : (7.787 * x) + (16 / 116);
-  y = y > 0.008856 ? Math.pow(y, 1/3) : (7.787 * y) + (16 / 116);
-  z = z > 0.008856 ? Math.pow(z, 1/3) : (7.787 * z) + (16 / 116);
-
-  l = (116 * y) - 16;
-  a = 500 * (x - y);
-  b = 200 * (y - z);
-
-  return [l, a, b];
-}
-
-function xyz2lch(args) {
-  return lab2lch(xyz2lab(args));
-}
-
-function lab2xyz(lab) {
-  var l = lab[0],
-      a = lab[1],
-      b = lab[2],
-      x, y, z, y2;
-
-  if (l <= 8) {
-    y = (l * 100) / 903.3;
-    y2 = (7.787 * (y / 100)) + (16 / 116);
-  } else {
-    y = 100 * Math.pow((l + 16) / 116, 3);
-    y2 = Math.pow(y / 100, 1/3);
-  }
-
-  x = x / 95.047 <= 0.008856 ? x = (95.047 * ((a / 500) + y2 - (16 / 116))) / 7.787 : 95.047 * Math.pow((a / 500) + y2, 3);
-
-  z = z / 108.883 <= 0.008859 ? z = (108.883 * (y2 - (b / 200) - (16 / 116))) / 7.787 : 108.883 * Math.pow(y2 - (b / 200), 3);
-
-  return [x, y, z];
-}
-
-function lab2lch(lab) {
-  var l = lab[0],
-      a = lab[1],
-      b = lab[2],
-      hr, h, c;
-
-  hr = Math.atan2(b, a);
-  h = hr * 360 / 2 / Math.PI;
-  if (h < 0) {
-    h += 360;
-  }
-  c = Math.sqrt(a * a + b * b);
-  return [l, c, h];
-}
-
-function lab2rgb(args) {
-  return xyz2rgb(lab2xyz(args));
-}
-
-function lch2lab(lch) {
-  var l = lch[0],
-      c = lch[1],
-      h = lch[2],
-      a, b, hr;
-
-  hr = h / 360 * 2 * Math.PI;
-  a = c * Math.cos(hr);
-  b = c * Math.sin(hr);
-  return [l, a, b];
-}
-
-function lch2xyz(args) {
-  return lab2xyz(lch2lab(args));
-}
-
-function lch2rgb(args) {
-  return lab2rgb(lch2lab(args));
-}
-
-function keyword2rgb(keyword) {
-  return cssKeywords[keyword];
-}
-
-function keyword2hsl(args) {
-  return rgb2hsl(keyword2rgb(args));
-}
-
-function keyword2hsv(args) {
-  return rgb2hsv(keyword2rgb(args));
-}
-
-function keyword2hwb(args) {
-  return rgb2hwb(keyword2rgb(args));
-}
-
-function keyword2cmyk(args) {
-  return rgb2cmyk(keyword2rgb(args));
-}
-
-function keyword2lab(args) {
-  return rgb2lab(keyword2rgb(args));
-}
-
-function keyword2xyz(args) {
-  return rgb2xyz(keyword2rgb(args));
-}
-
-var cssKeywords = {
-  aliceblue:  [240,248,255],
-  antiquewhite: [250,235,215],
-  aqua: [0,255,255],
-  aquamarine: [127,255,212],
-  azure:  [240,255,255],
-  beige:  [245,245,220],
-  bisque: [255,228,196],
-  black:  [0,0,0],
-  blanchedalmond: [255,235,205],
-  blue: [0,0,255],
-  blueviolet: [138,43,226],
-  brown:  [165,42,42],
-  burlywood:  [222,184,135],
-  cadetblue:  [95,158,160],
-  chartreuse: [127,255,0],
-  chocolate:  [210,105,30],
-  coral:  [255,127,80],
-  cornflowerblue: [100,149,237],
-  cornsilk: [255,248,220],
-  crimson:  [220,20,60],
-  cyan: [0,255,255],
-  darkblue: [0,0,139],
-  darkcyan: [0,139,139],
-  darkgoldenrod:  [184,134,11],
-  darkgray: [169,169,169],
-  darkgreen:  [0,100,0],
-  darkgrey: [169,169,169],
-  darkkhaki:  [189,183,107],
-  darkmagenta:  [139,0,139],
-  darkolivegreen: [85,107,47],
-  darkorange: [255,140,0],
-  darkorchid: [153,50,204],
-  darkred:  [139,0,0],
-  darksalmon: [233,150,122],
-  darkseagreen: [143,188,143],
-  darkslateblue:  [72,61,139],
-  darkslategray:  [47,79,79],
-  darkslategrey:  [47,79,79],
-  darkturquoise:  [0,206,209],
-  darkviolet: [148,0,211],
-  deeppink: [255,20,147],
-  deepskyblue:  [0,191,255],
-  dimgray:  [105,105,105],
-  dimgrey:  [105,105,105],
-  dodgerblue: [30,144,255],
-  firebrick:  [178,34,34],
-  floralwhite:  [255,250,240],
-  forestgreen:  [34,139,34],
-  fuchsia:  [255,0,255],
-  gainsboro:  [220,220,220],
-  ghostwhite: [248,248,255],
-  gold: [255,215,0],
-  goldenrod:  [218,165,32],
-  gray: [128,128,128],
-  green:  [0,128,0],
-  greenyellow:  [173,255,47],
-  grey: [128,128,128],
-  honeydew: [240,255,240],
-  hotpink:  [255,105,180],
-  indianred:  [205,92,92],
-  indigo: [75,0,130],
-  ivory:  [255,255,240],
-  khaki:  [240,230,140],
-  lavender: [230,230,250],
-  lavenderblush:  [255,240,245],
-  lawngreen:  [124,252,0],
-  lemonchiffon: [255,250,205],
-  lightblue:  [173,216,230],
-  lightcoral: [240,128,128],
-  lightcyan:  [224,255,255],
-  lightgoldenrodyellow: [250,250,210],
-  lightgray:  [211,211,211],
-  lightgreen: [144,238,144],
-  lightgrey:  [211,211,211],
-  lightpink:  [255,182,193],
-  lightsalmon:  [255,160,122],
-  lightseagreen:  [32,178,170],
-  lightskyblue: [135,206,250],
-  lightslategray: [119,136,153],
-  lightslategrey: [119,136,153],
-  lightsteelblue: [176,196,222],
-  lightyellow:  [255,255,224],
-  lime: [0,255,0],
-  limegreen:  [50,205,50],
-  linen:  [250,240,230],
-  magenta:  [255,0,255],
-  maroon: [128,0,0],
-  mediumaquamarine: [102,205,170],
-  mediumblue: [0,0,205],
-  mediumorchid: [186,85,211],
-  mediumpurple: [147,112,219],
-  mediumseagreen: [60,179,113],
-  mediumslateblue:  [123,104,238],
-  mediumspringgreen:  [0,250,154],
-  mediumturquoise:  [72,209,204],
-  mediumvioletred:  [199,21,133],
-  midnightblue: [25,25,112],
-  mintcream:  [245,255,250],
-  mistyrose:  [255,228,225],
-  moccasin: [255,228,181],
-  navajowhite:  [255,222,173],
-  navy: [0,0,128],
-  oldlace:  [253,245,230],
-  olive:  [128,128,0],
-  olivedrab:  [107,142,35],
-  orange: [255,165,0],
-  orangered:  [255,69,0],
-  orchid: [218,112,214],
-  palegoldenrod:  [238,232,170],
-  palegreen:  [152,251,152],
-  paleturquoise:  [175,238,238],
-  palevioletred:  [219,112,147],
-  papayawhip: [255,239,213],
-  peachpuff:  [255,218,185],
-  peru: [205,133,63],
-  pink: [255,192,203],
-  plum: [221,160,221],
-  powderblue: [176,224,230],
-  purple: [128,0,128],
-  rebeccapurple: [102, 51, 153],
-  red:  [255,0,0],
-  rosybrown:  [188,143,143],
-  royalblue:  [65,105,225],
-  saddlebrown:  [139,69,19],
-  salmon: [250,128,114],
-  sandybrown: [244,164,96],
-  seagreen: [46,139,87],
-  seashell: [255,245,238],
-  sienna: [160,82,45],
-  silver: [192,192,192],
-  skyblue:  [135,206,235],
-  slateblue:  [106,90,205],
-  slategray:  [112,128,144],
-  slategrey:  [112,128,144],
-  snow: [255,250,250],
-  springgreen:  [0,255,127],
-  steelblue:  [70,130,180],
-  tan:  [210,180,140],
-  teal: [0,128,128],
-  thistle:  [216,191,216],
-  tomato: [255,99,71],
-  turquoise:  [64,224,208],
-  violet: [238,130,238],
-  wheat:  [245,222,179],
-  white:  [255,255,255],
-  whitesmoke: [245,245,245],
-  yellow: [255,255,0],
-  yellowgreen:  [154,205,50]
-};
-
-var reverseKeywords = {};
-for (var key in cssKeywords) {
-  reverseKeywords[JSON.stringify(cssKeywords[key])] = key;
-}
-
-
-/***/ }),
-/* 233 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 
 
@@ -49625,6 +48841,49 @@ BitBrushModeComponent.propTypes = {
 exports.default = BitBrushModeComponent;
 
 /***/ }),
+/* 232 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(13);
+            var content = __webpack_require__(233);
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+
+
+module.exports = content.locals || {};
+
+/***/ }),
+/* 233 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(14);
+exports = ___CSS_LOADER_API_IMPORT___(false);
+// Module
+exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.button_button_lmpwR {\n    background: none;\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n\n.button_button_lmpwR:active {\n    background-color: hsla(215, 100%, 65%, 0.20); \n}\n\n.button_highlighted_2c0Ir.button_button_lmpwR {\n    background-color: hsla(215, 100%, 65%, 0.20); \n}\n\n.button_mod-disabled_CFsZ2 {\n    cursor: auto;\n    opacity: .5;\n}\n\n.button_mod-disabled_CFsZ2:active {\n    background: none;\n}\n", ""]);
+// Exports
+exports.locals = {
+	"button": "button_button_lmpwR",
+	"highlighted": "button_highlighted_2c0Ir",
+	"mod-disabled": "button_mod-disabled_CFsZ2",
+	"modDisabled": "button_mod-disabled_CFsZ2"
+};
+module.exports = exports;
+
+
+/***/ }),
 /* 234 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -49656,49 +48915,6 @@ module.exports = content.locals || {};
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(14);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n.button_button_lmpwR {\n    background: none;\n    cursor: pointer;\n    -webkit-user-select: none;\n       -moz-user-select: none;\n        -ms-user-select: none;\n            user-select: none;\n}\n\n.button_button_lmpwR:active {\n    background-color: hsla(215, 100%, 65%, 0.20); \n}\n\n.button_highlighted_2c0Ir.button_button_lmpwR {\n    background-color: hsla(215, 100%, 65%, 0.20); \n}\n\n.button_mod-disabled_CFsZ2 {\n    cursor: auto;\n    opacity: .5;\n}\n\n.button_mod-disabled_CFsZ2:active {\n    background: none;\n}\n", ""]);
-// Exports
-exports.locals = {
-	"button": "button_button_lmpwR",
-	"highlighted": "button_highlighted_2c0Ir",
-	"mod-disabled": "button_mod-disabled_CFsZ2",
-	"modDisabled": "button_mod-disabled_CFsZ2"
-};
-module.exports = exports;
-
-
-/***/ }),
-/* 236 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var api = __webpack_require__(13);
-            var content = __webpack_require__(237);
-
-            content = content.__esModule ? content.default : content;
-
-            if (typeof content === 'string') {
-              content = [[module.i, content, '']];
-            }
-
-var options = {};
-
-options.insert = "head";
-options.singleton = false;
-
-var update = api(content, options);
-
-
-
-module.exports = content.locals || {};
-
-/***/ }),
-/* 237 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Imports
-var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(14);
-exports = ___CSS_LOADER_API_IMPORT___(false);
-// Module
 exports.push([module.i, "/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* DO NOT EDIT\n@todo This file is copied from GUI and should be pulled out into a shared library.\nSee https://github.com/LLK/scratch-paint/issues/13 */\n\n/* ACTUALLY, THIS IS EDITED ;)\nTHIS WAS CHANGED ON 10/25/2017 BY @mewtaylor TO ADD A VARIABLE FOR THE SMALLEST\nGRID UNITS.\n\nALSO EDITED ON 11/13/2017 TO ADD IN CONTANTS FOR LAYOUT FROM `layout-contents.js`*/\n\n/* layout contants from `layout-constants.js`, minus 1px */\n\n.tool-select-base_mod-tool-select_1RQKn {\n    display: inline-block;\n    margin: .25rem;\n    border: none;\n    border-radius: .25rem;\n    outline: none;\n    background: none;\n    padding: .25rem;\n    font-size: 0.85rem;\n    -webkit-transition: 0.2s;\n    -o-transition: 0.2s;\n    transition: 0.2s;\n}\n\n.tool-select-base_mod-tool-select_1RQKn.tool-select-base_is-selected_3Le38 {\n    background-color: #4C97FF;\n}\n\n.tool-select-base_mod-tool-select_1RQKn:focus {\n    outline: none;\n}\n\nimg.tool-select-base_tool-select-icon_2TT3t {\n    width: 2rem;\n    height: 2rem;\n    -webkit-box-flex: 1;\n    -webkit-flex-grow: 1;\n        -ms-flex-positive: 1;\n            flex-grow: 1;\n    vertical-align: middle;\n}\n\n.tool-select-base_mod-tool-select_1RQKn.tool-select-base_is-selected_3Le38 .tool-select-base_tool-select-icon_2TT3t {\n    /* Make the tool icons white while selected by making them black and inverting */\n    -webkit-filter: brightness(0) invert(1);\n            filter: brightness(0) invert(1);\n}\n\n@media only screen and (max-width: 1256px) {\n    .tool-select-base_mod-tool-select_1RQKn {\n        margin: 0;\n    }\n}\n", ""]);
 // Exports
 exports.locals = {
@@ -49713,7 +48929,7 @@ module.exports = exports;
 
 
 /***/ }),
-/* 238 */
+/* 236 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49753,11 +48969,11 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _bitLineMode = __webpack_require__(239);
+var _bitLineMode = __webpack_require__(237);
 
 var _bitLineMode2 = _interopRequireDefault(_bitLineMode);
 
-var _lineTool = __webpack_require__(240);
+var _lineTool = __webpack_require__(238);
 
 var _lineTool2 = _interopRequireDefault(_lineTool);
 
@@ -49891,7 +49107,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitLineMode);
 
 /***/ }),
-/* 239 */
+/* 237 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -49940,7 +49156,7 @@ BitLineComponent.propTypes = {
 exports.default = BitLineComponent;
 
 /***/ }),
-/* 240 */
+/* 238 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -50119,7 +49335,7 @@ var LineTool = function (_paper$Tool) {
 exports.default = LineTool;
 
 /***/ }),
-/* 241 */
+/* 239 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -50169,11 +49385,11 @@ var _cursor = __webpack_require__(27);
 
 var _selection = __webpack_require__(3);
 
-var _ovalTool = __webpack_require__(242);
+var _ovalTool = __webpack_require__(240);
 
 var _ovalTool2 = _interopRequireDefault(_ovalTool);
 
-var _bitOvalMode = __webpack_require__(245);
+var _bitOvalMode = __webpack_require__(243);
 
 var _bitOvalMode2 = _interopRequireDefault(_bitOvalMode);
 
@@ -50323,7 +49539,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitOvalMode);
 
 /***/ }),
-/* 242 */
+/* 240 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -50597,7 +49813,7 @@ var OvalTool = function (_paper$Tool) {
 exports.default = OvalTool;
 
 /***/ }),
-/* 243 */
+/* 241 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -50891,7 +50107,7 @@ var ScaleTool = function () {
 exports.default = ScaleTool;
 
 /***/ }),
-/* 244 */
+/* 242 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51003,7 +50219,7 @@ var RotateTool = function () {
 exports.default = RotateTool;
 
 /***/ }),
-/* 245 */
+/* 243 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51052,7 +50268,7 @@ BitOvalComponent.propTypes = {
 exports.default = BitOvalComponent;
 
 /***/ }),
-/* 246 */
+/* 244 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51102,11 +50318,11 @@ var _cursor = __webpack_require__(27);
 
 var _selection = __webpack_require__(3);
 
-var _rectTool = __webpack_require__(247);
+var _rectTool = __webpack_require__(245);
 
 var _rectTool2 = _interopRequireDefault(_rectTool);
 
-var _bitRectMode = __webpack_require__(248);
+var _bitRectMode = __webpack_require__(246);
 
 var _bitRectMode2 = _interopRequireDefault(_bitRectMode);
 
@@ -51256,7 +50472,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitRectMode);
 
 /***/ }),
-/* 247 */
+/* 245 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51526,7 +50742,7 @@ var RectTool = function (_paper$Tool) {
 exports.default = RectTool;
 
 /***/ }),
-/* 248 */
+/* 246 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51575,7 +50791,7 @@ BitRectComponent.propTypes = {
 exports.default = BitRectComponent;
 
 /***/ }),
-/* 249 */
+/* 247 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51609,7 +50825,7 @@ var _gradientTypes = __webpack_require__(18);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
-var _bitFillMode = __webpack_require__(250);
+var _bitFillMode = __webpack_require__(248);
 
 var _bitFillMode2 = _interopRequireDefault(_bitFillMode);
 
@@ -51619,11 +50835,11 @@ var _modes3 = __webpack_require__(10);
 
 var _selectedItems = __webpack_require__(7);
 
-var _fillModeGradientType = __webpack_require__(48);
+var _fillModeGradientType = __webpack_require__(47);
 
 var _selection = __webpack_require__(3);
 
-var _fillTool = __webpack_require__(252);
+var _fillTool = __webpack_require__(250);
 
 var _fillTool2 = _interopRequireDefault(_fillTool);
 
@@ -51704,13 +50920,13 @@ var BitFillMode = function (_React$Component) {
             var color2 = this.props.color2;
             if (gradientType !== this.props.styleGradientType) {
                 if (this.props.styleGradientType === _gradientTypes2.default.SOLID) {
-                    color2 = (0, _stylePath.getRotatedColor)(color);
+                    color2 = (0, _stylePath.generateSecondaryColor)(color);
                     this.props.onChangeFillColor(color2, 1);
                 }
                 this.props.changeGradientType(gradientType);
             }
             if (this.props.color2 === _stylePath.MIXED) {
-                color2 = (0, _stylePath.getRotatedColor)();
+                color2 = (0, _stylePath.generateSecondaryColor)();
                 this.props.onChangeFillColor(color2, 1);
             }
             this.tool = new _fillTool2.default(this.props.onUpdateImage);
@@ -51785,7 +51001,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitFillMode);
 
 /***/ }),
-/* 250 */
+/* 248 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51811,7 +51027,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _fill = __webpack_require__(251);
+var _fill = __webpack_require__(249);
 
 var _fill2 = _interopRequireDefault(_fill);
 
@@ -51834,13 +51050,13 @@ BitFillComponent.propTypes = {
 exports.default = BitFillComponent;
 
 /***/ }),
-/* 251 */
+/* 249 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='fill' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpath d='M10.7000634,5.80137446 L9.29979614,5.80137446 L9.29979614,8.59994895 L7.89980891,8.59994895 L7.89980891,4.39998724 L6.49982167,4.39998724 L6.49982167,5.80137446 L5.09983443,5.80137446 L5.09983443,3 L9.29979614,3 L9.29979614,4.39998724 L10.7011834,4.39998724 L10.7011834,5.80123446 L12.1000506,5.80123446 L12.1000506,7.2012217 L10.7000634,7.2012217 L10.7000634,5.80137446 Z M5.10011443,8.60120894 L5.10011443,7.2012217 L6.50010167,7.2012217 L6.50010167,8.60120894 L5.10011443,8.60120894 Z M16.3000123,16.9997324 L16.3000123,10.0011962 L17.6999996,10.0011962 L17.6999996,16.9997324 L16.3000123,16.9997324 Z M12.1003306,7.20080171 L13.5003179,7.20080171 L13.5003179,8.60078894 L16.3002923,8.60078894 L16.3002923,10.0007762 L14.9003051,10.0007762 L14.9003051,11.3573638 L13.5003179,11.3573638 L13.5003179,12.758751 L12.1003306,12.758751 L12.1003306,14.1587383 L10.7003434,14.1587383 L10.7003434,15.5587255 L9.29895615,15.5587255 L9.29895615,16.9587128 L7.89896891,16.9587128 L7.89896891,15.5587255 L6.49898168,15.5587255 L6.49898168,14.1587383 L5.10039442,14.1587383 L5.10039442,12.758751 L3.70040719,12.758751 L3.70040719,11.3573638 L6.49898168,11.3573638 L6.49898168,11.3713637 L9.29895615,11.3713637 L9.29895615,10.0007762 L12.1003306,10.0007762 L12.1003306,7.20080171 Z M3.69998719,8.60064895 L5.09997443,8.60064895 L5.09997443,10.0006362 L3.69998719,10.0006362 L3.69998719,11.3572238 L2.29999995,11.3572238 L2.29999995,9.95723658 L3.69998719,9.95723658 L3.69998719,8.60064895 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 252 */
+/* 250 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -51998,7 +51214,7 @@ var FillTool = function (_paper$Tool) {
 exports.default = FillTool;
 
 /***/ }),
-/* 253 */
+/* 251 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52034,7 +51250,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _bitEraserMode = __webpack_require__(254);
+var _bitEraserMode = __webpack_require__(252);
 
 var _bitEraserMode2 = _interopRequireDefault(_bitEraserMode);
 
@@ -52152,7 +51368,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitEraserMode);
 
 /***/ }),
-/* 254 */
+/* 252 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52201,7 +51417,7 @@ BitEraserComponent.propTypes = {
 exports.default = BitEraserComponent;
 
 /***/ }),
-/* 255 */
+/* 253 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52245,11 +51461,11 @@ var _cursor = __webpack_require__(27);
 
 var _selection = __webpack_require__(3);
 
-var _selectTool = __webpack_require__(256);
+var _selectTool = __webpack_require__(254);
 
 var _selectTool2 = _interopRequireDefault(_selectTool);
 
-var _bitSelectMode = __webpack_require__(257);
+var _bitSelectMode = __webpack_require__(255);
 
 var _bitSelectMode2 = _interopRequireDefault(_bitSelectMode);
 
@@ -52372,7 +51588,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BitSelectMode);
 
 /***/ }),
-/* 256 */
+/* 254 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52580,7 +51796,7 @@ var SelectTool = function (_paper$Tool) {
 exports.default = SelectTool;
 
 /***/ }),
-/* 257 */
+/* 255 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -52606,7 +51822,7 @@ var _messages = __webpack_require__(16);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _marquee = __webpack_require__(258);
+var _marquee = __webpack_require__(256);
 
 var _marquee2 = _interopRequireDefault(_marquee);
 
@@ -52629,16 +51845,16 @@ BitSelectComponent.propTypes = {
 exports.default = BitSelectComponent;
 
 /***/ }),
-/* 258 */
+/* 256 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Emarquee%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='marquee' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpath d='M4.5,4.18186116 L4.5,3 L5.68186116,3 L5.68186116,4.18186116 L4.5,4.18186116 Z M11.591167,4.18186116 L11.591167,3 L12.7730281,3 L12.7730281,4.18186116 L11.591167,4.18186116 Z M4.5,13.6367504 L4.5,12.4537074 L5.68186116,12.4537074 L5.68186116,13.6367504 L4.5,13.6367504 Z M9.22697189,6.54570166 L10.4100149,6.54570166 L10.4100149,7.72756282 L11.5918761,7.72756282 L11.5918761,8.90942398 L12.7737372,8.90942398 L12.7737372,10.0912851 L13.9555984,10.0912851 L13.9555984,11.2731463 L15.1362777,11.2731463 L15.1362777,12.4538256 L16.3181388,12.4538256 L16.3181388,13.6368686 L17.5,13.6368686 L17.5,14.8187298 L12.7737372,14.8187298 L12.7737372,16.0005909 L11.5918761,16.0005909 L11.5918761,17.1824521 L10.4100149,17.1824521 L10.4100149,18.3643132 L9.22697189,18.3643132 L9.22697189,6.54570166 Z M13.9548893,8.90930579 L13.9548893,7.72744463 L15.1367504,7.72744463 L15.1367504,8.90930579 L13.9548893,8.90930579 Z M6.86372232,4.18186116 L6.86372232,3 L8.04558348,3 L8.04558348,4.18186116 L6.86372232,4.18186116 Z M4.5,11.2730281 L4.5,10.091167 L5.68186116,10.091167 L5.68186116,11.2730281 L4.5,11.2730281 Z M13.9548893,4.18186116 L13.9548893,3 L15.1367504,3 L15.1367504,4.18186116 L13.9548893,4.18186116 Z M9.22744463,4.18186116 L9.22744463,3 L10.4104877,3 L10.4104877,4.18186116 L9.22744463,4.18186116 Z M4.5,8.90930579 L4.5,7.72744463 L5.68186116,7.72744463 L5.68186116,8.90930579 L4.5,8.90930579 Z M4.5,6.54558348 L4.5,5.36372232 L5.68186116,5.36372232 L5.68186116,6.54558348 L4.5,6.54558348 Z M13.9548893,6.54558348 L13.9548893,5.36372232 L15.1367504,5.36372232 L15.1367504,6.54558348 L13.9548893,6.54558348 Z M6.86372232,13.6367504 L6.86372232,12.4537074 L8.04558348,12.4537074 L8.04558348,13.6367504 L6.86372232,13.6367504 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 259 */
+/* 257 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var properties = __webpack_require__(260);
+var properties = __webpack_require__(258);
 var PropTypes = __webpack_require__(1);
 
 module.exports = function(props, propName, componentName) {
@@ -52672,7 +51888,7 @@ module.exports.supportingArrays = PropTypes.oneOfType([
 
 
 /***/ }),
-/* 260 */
+/* 258 */
 /***/ (function(module, exports) {
 
 // GENERATED DO NOT EDIT
@@ -54266,11 +53482,11 @@ module.exports = [
 
 
 /***/ }),
-/* 261 */
+/* 259 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var api = __webpack_require__(13);
-            var content = __webpack_require__(262);
+            var content = __webpack_require__(260);
 
             content = content.__esModule ? content.default : content;
 
@@ -54290,7 +53506,7 @@ var update = api(content, options);
 module.exports = content.locals || {};
 
 /***/ }),
-/* 262 */
+/* 260 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Imports
@@ -54307,7 +53523,7 @@ module.exports = exports;
 
 
 /***/ }),
-/* 263 */
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54357,7 +53573,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _selection = __webpack_require__(3);
 
-var _brushMode = __webpack_require__(266);
+var _brushMode = __webpack_require__(264);
 
 var _brushMode2 = _interopRequireDefault(_brushMode);
 
@@ -54500,7 +53716,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BrushMode);
 
 /***/ }),
-/* 264 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54803,7 +54019,7 @@ var BroadBrushHelper = function () {
 exports.default = BroadBrushHelper;
 
 /***/ }),
-/* 265 */
+/* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54929,7 +54145,7 @@ var SegmentBrushHelper = function () {
 exports.default = SegmentBrushHelper;
 
 /***/ }),
-/* 266 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -54978,7 +54194,7 @@ BrushModeComponent.propTypes = {
 exports.default = BrushModeComponent;
 
 /***/ }),
-/* 267 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55018,7 +54234,7 @@ var _eraserMode = __webpack_require__(60);
 
 var _selectedItems = __webpack_require__(7);
 
-var _eraserMode2 = __webpack_require__(268);
+var _eraserMode2 = __webpack_require__(266);
 
 var _eraserMode3 = _interopRequireDefault(_eraserMode2);
 
@@ -55133,7 +54349,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(EraserMode);
 
 /***/ }),
-/* 268 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55182,7 +54398,7 @@ EraserModeComponent.propTypes = {
 exports.default = EraserModeComponent;
 
 /***/ }),
-/* 269 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -55196,11 +54412,11 @@ var _reactRedux = __webpack_require__(6);
 
 var _reactIntl = __webpack_require__(23);
 
-var _colorIndex = __webpack_require__(49);
+var _colorIndex = __webpack_require__(48);
 
 var _fillStyle = __webpack_require__(17);
 
-var _fillModeGradientType = __webpack_require__(48);
+var _fillModeGradientType = __webpack_require__(47);
 
 var _modals = __webpack_require__(61);
 
@@ -55274,6 +54490,807 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(FillColorIndicator);
+
+/***/ }),
+/* 268 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var conversions = __webpack_require__(269);
+
+var convert = function() {
+   return new Converter();
+}
+
+for (var func in conversions) {
+  // export Raw versions
+  convert[func + "Raw"] =  (function(func) {
+    // accept array or plain args
+    return function(arg) {
+      if (typeof arg == "number")
+        arg = Array.prototype.slice.call(arguments);
+      return conversions[func](arg);
+    }
+  })(func);
+
+  var pair = /(\w+)2(\w+)/.exec(func),
+      from = pair[1],
+      to = pair[2];
+
+  // export rgb2hsl and ["rgb"]["hsl"]
+  convert[from] = convert[from] || {};
+
+  convert[from][to] = convert[func] = (function(func) { 
+    return function(arg) {
+      if (typeof arg == "number")
+        arg = Array.prototype.slice.call(arguments);
+      
+      var val = conversions[func](arg);
+      if (typeof val == "string" || val === undefined)
+        return val; // keyword
+
+      for (var i = 0; i < val.length; i++)
+        val[i] = Math.round(val[i]);
+      return val;
+    }
+  })(func);
+}
+
+
+/* Converter does lazy conversion and caching */
+var Converter = function() {
+   this.convs = {};
+};
+
+/* Either get the values for a space or
+  set the values for a space, depending on args */
+Converter.prototype.routeSpace = function(space, args) {
+   var values = args[0];
+   if (values === undefined) {
+      // color.rgb()
+      return this.getValues(space);
+   }
+   // color.rgb(10, 10, 10)
+   if (typeof values == "number") {
+      values = Array.prototype.slice.call(args);        
+   }
+
+   return this.setValues(space, values);
+};
+  
+/* Set the values for a space, invalidating cache */
+Converter.prototype.setValues = function(space, values) {
+   this.space = space;
+   this.convs = {};
+   this.convs[space] = values;
+   return this;
+};
+
+/* Get the values for a space. If there's already
+  a conversion for the space, fetch it, otherwise
+  compute it */
+Converter.prototype.getValues = function(space) {
+   var vals = this.convs[space];
+   if (!vals) {
+      var fspace = this.space,
+          from = this.convs[fspace];
+      vals = convert[fspace][space](from);
+
+      this.convs[space] = vals;
+   }
+  return vals;
+};
+
+["rgb", "hsl", "hsv", "cmyk", "keyword"].forEach(function(space) {
+   Converter.prototype[space] = function(vals) {
+      return this.routeSpace(space, arguments);
+   }
+});
+
+module.exports = convert;
+
+/***/ }),
+/* 269 */
+/***/ (function(module, exports) {
+
+/* MIT license */
+
+module.exports = {
+  rgb2hsl: rgb2hsl,
+  rgb2hsv: rgb2hsv,
+  rgb2hwb: rgb2hwb,
+  rgb2cmyk: rgb2cmyk,
+  rgb2keyword: rgb2keyword,
+  rgb2xyz: rgb2xyz,
+  rgb2lab: rgb2lab,
+  rgb2lch: rgb2lch,
+
+  hsl2rgb: hsl2rgb,
+  hsl2hsv: hsl2hsv,
+  hsl2hwb: hsl2hwb,
+  hsl2cmyk: hsl2cmyk,
+  hsl2keyword: hsl2keyword,
+
+  hsv2rgb: hsv2rgb,
+  hsv2hsl: hsv2hsl,
+  hsv2hwb: hsv2hwb,
+  hsv2cmyk: hsv2cmyk,
+  hsv2keyword: hsv2keyword,
+
+  hwb2rgb: hwb2rgb,
+  hwb2hsl: hwb2hsl,
+  hwb2hsv: hwb2hsv,
+  hwb2cmyk: hwb2cmyk,
+  hwb2keyword: hwb2keyword,
+
+  cmyk2rgb: cmyk2rgb,
+  cmyk2hsl: cmyk2hsl,
+  cmyk2hsv: cmyk2hsv,
+  cmyk2hwb: cmyk2hwb,
+  cmyk2keyword: cmyk2keyword,
+
+  keyword2rgb: keyword2rgb,
+  keyword2hsl: keyword2hsl,
+  keyword2hsv: keyword2hsv,
+  keyword2hwb: keyword2hwb,
+  keyword2cmyk: keyword2cmyk,
+  keyword2lab: keyword2lab,
+  keyword2xyz: keyword2xyz,
+
+  xyz2rgb: xyz2rgb,
+  xyz2lab: xyz2lab,
+  xyz2lch: xyz2lch,
+
+  lab2xyz: lab2xyz,
+  lab2rgb: lab2rgb,
+  lab2lch: lab2lch,
+
+  lch2lab: lch2lab,
+  lch2xyz: lch2xyz,
+  lch2rgb: lch2rgb
+}
+
+
+function rgb2hsl(rgb) {
+  var r = rgb[0]/255,
+      g = rgb[1]/255,
+      b = rgb[2]/255,
+      min = Math.min(r, g, b),
+      max = Math.max(r, g, b),
+      delta = max - min,
+      h, s, l;
+
+  if (max == min)
+    h = 0;
+  else if (r == max)
+    h = (g - b) / delta;
+  else if (g == max)
+    h = 2 + (b - r) / delta;
+  else if (b == max)
+    h = 4 + (r - g)/ delta;
+
+  h = Math.min(h * 60, 360);
+
+  if (h < 0)
+    h += 360;
+
+  l = (min + max) / 2;
+
+  if (max == min)
+    s = 0;
+  else if (l <= 0.5)
+    s = delta / (max + min);
+  else
+    s = delta / (2 - max - min);
+
+  return [h, s * 100, l * 100];
+}
+
+function rgb2hsv(rgb) {
+  var r = rgb[0],
+      g = rgb[1],
+      b = rgb[2],
+      min = Math.min(r, g, b),
+      max = Math.max(r, g, b),
+      delta = max - min,
+      h, s, v;
+
+  if (max == 0)
+    s = 0;
+  else
+    s = (delta/max * 1000)/10;
+
+  if (max == min)
+    h = 0;
+  else if (r == max)
+    h = (g - b) / delta;
+  else if (g == max)
+    h = 2 + (b - r) / delta;
+  else if (b == max)
+    h = 4 + (r - g) / delta;
+
+  h = Math.min(h * 60, 360);
+
+  if (h < 0)
+    h += 360;
+
+  v = ((max / 255) * 1000) / 10;
+
+  return [h, s, v];
+}
+
+function rgb2hwb(rgb) {
+  var r = rgb[0],
+      g = rgb[1],
+      b = rgb[2],
+      h = rgb2hsl(rgb)[0],
+      w = 1/255 * Math.min(r, Math.min(g, b)),
+      b = 1 - 1/255 * Math.max(r, Math.max(g, b));
+
+  return [h, w * 100, b * 100];
+}
+
+function rgb2cmyk(rgb) {
+  var r = rgb[0] / 255,
+      g = rgb[1] / 255,
+      b = rgb[2] / 255,
+      c, m, y, k;
+
+  k = Math.min(1 - r, 1 - g, 1 - b);
+  c = (1 - r - k) / (1 - k) || 0;
+  m = (1 - g - k) / (1 - k) || 0;
+  y = (1 - b - k) / (1 - k) || 0;
+  return [c * 100, m * 100, y * 100, k * 100];
+}
+
+function rgb2keyword(rgb) {
+  return reverseKeywords[JSON.stringify(rgb)];
+}
+
+function rgb2xyz(rgb) {
+  var r = rgb[0] / 255,
+      g = rgb[1] / 255,
+      b = rgb[2] / 255;
+
+  // assume sRGB
+  r = r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : (r / 12.92);
+  g = g > 0.04045 ? Math.pow(((g + 0.055) / 1.055), 2.4) : (g / 12.92);
+  b = b > 0.04045 ? Math.pow(((b + 0.055) / 1.055), 2.4) : (b / 12.92);
+
+  var x = (r * 0.4124) + (g * 0.3576) + (b * 0.1805);
+  var y = (r * 0.2126) + (g * 0.7152) + (b * 0.0722);
+  var z = (r * 0.0193) + (g * 0.1192) + (b * 0.9505);
+
+  return [x * 100, y *100, z * 100];
+}
+
+function rgb2lab(rgb) {
+  var xyz = rgb2xyz(rgb),
+        x = xyz[0],
+        y = xyz[1],
+        z = xyz[2],
+        l, a, b;
+
+  x /= 95.047;
+  y /= 100;
+  z /= 108.883;
+
+  x = x > 0.008856 ? Math.pow(x, 1/3) : (7.787 * x) + (16 / 116);
+  y = y > 0.008856 ? Math.pow(y, 1/3) : (7.787 * y) + (16 / 116);
+  z = z > 0.008856 ? Math.pow(z, 1/3) : (7.787 * z) + (16 / 116);
+
+  l = (116 * y) - 16;
+  a = 500 * (x - y);
+  b = 200 * (y - z);
+
+  return [l, a, b];
+}
+
+function rgb2lch(args) {
+  return lab2lch(rgb2lab(args));
+}
+
+function hsl2rgb(hsl) {
+  var h = hsl[0] / 360,
+      s = hsl[1] / 100,
+      l = hsl[2] / 100,
+      t1, t2, t3, rgb, val;
+
+  if (s == 0) {
+    val = l * 255;
+    return [val, val, val];
+  }
+
+  if (l < 0.5)
+    t2 = l * (1 + s);
+  else
+    t2 = l + s - l * s;
+  t1 = 2 * l - t2;
+
+  rgb = [0, 0, 0];
+  for (var i = 0; i < 3; i++) {
+    t3 = h + 1 / 3 * - (i - 1);
+    t3 < 0 && t3++;
+    t3 > 1 && t3--;
+
+    if (6 * t3 < 1)
+      val = t1 + (t2 - t1) * 6 * t3;
+    else if (2 * t3 < 1)
+      val = t2;
+    else if (3 * t3 < 2)
+      val = t1 + (t2 - t1) * (2 / 3 - t3) * 6;
+    else
+      val = t1;
+
+    rgb[i] = val * 255;
+  }
+
+  return rgb;
+}
+
+function hsl2hsv(hsl) {
+  var h = hsl[0],
+      s = hsl[1] / 100,
+      l = hsl[2] / 100,
+      sv, v;
+
+  if(l === 0) {
+      // no need to do calc on black
+      // also avoids divide by 0 error
+      return [0, 0, 0];
+  }
+
+  l *= 2;
+  s *= (l <= 1) ? l : 2 - l;
+  v = (l + s) / 2;
+  sv = (2 * s) / (l + s);
+  return [h, sv * 100, v * 100];
+}
+
+function hsl2hwb(args) {
+  return rgb2hwb(hsl2rgb(args));
+}
+
+function hsl2cmyk(args) {
+  return rgb2cmyk(hsl2rgb(args));
+}
+
+function hsl2keyword(args) {
+  return rgb2keyword(hsl2rgb(args));
+}
+
+
+function hsv2rgb(hsv) {
+  var h = hsv[0] / 60,
+      s = hsv[1] / 100,
+      v = hsv[2] / 100,
+      hi = Math.floor(h) % 6;
+
+  var f = h - Math.floor(h),
+      p = 255 * v * (1 - s),
+      q = 255 * v * (1 - (s * f)),
+      t = 255 * v * (1 - (s * (1 - f))),
+      v = 255 * v;
+
+  switch(hi) {
+    case 0:
+      return [v, t, p];
+    case 1:
+      return [q, v, p];
+    case 2:
+      return [p, v, t];
+    case 3:
+      return [p, q, v];
+    case 4:
+      return [t, p, v];
+    case 5:
+      return [v, p, q];
+  }
+}
+
+function hsv2hsl(hsv) {
+  var h = hsv[0],
+      s = hsv[1] / 100,
+      v = hsv[2] / 100,
+      sl, l;
+
+  l = (2 - s) * v;
+  sl = s * v;
+  sl /= (l <= 1) ? l : 2 - l;
+  sl = sl || 0;
+  l /= 2;
+  return [h, sl * 100, l * 100];
+}
+
+function hsv2hwb(args) {
+  return rgb2hwb(hsv2rgb(args))
+}
+
+function hsv2cmyk(args) {
+  return rgb2cmyk(hsv2rgb(args));
+}
+
+function hsv2keyword(args) {
+  return rgb2keyword(hsv2rgb(args));
+}
+
+// http://dev.w3.org/csswg/css-color/#hwb-to-rgb
+function hwb2rgb(hwb) {
+  var h = hwb[0] / 360,
+      wh = hwb[1] / 100,
+      bl = hwb[2] / 100,
+      ratio = wh + bl,
+      i, v, f, n;
+
+  // wh + bl cant be > 1
+  if (ratio > 1) {
+    wh /= ratio;
+    bl /= ratio;
+  }
+
+  i = Math.floor(6 * h);
+  v = 1 - bl;
+  f = 6 * h - i;
+  if ((i & 0x01) != 0) {
+    f = 1 - f;
+  }
+  n = wh + f * (v - wh);  // linear interpolation
+
+  switch (i) {
+    default:
+    case 6:
+    case 0: r = v; g = n; b = wh; break;
+    case 1: r = n; g = v; b = wh; break;
+    case 2: r = wh; g = v; b = n; break;
+    case 3: r = wh; g = n; b = v; break;
+    case 4: r = n; g = wh; b = v; break;
+    case 5: r = v; g = wh; b = n; break;
+  }
+
+  return [r * 255, g * 255, b * 255];
+}
+
+function hwb2hsl(args) {
+  return rgb2hsl(hwb2rgb(args));
+}
+
+function hwb2hsv(args) {
+  return rgb2hsv(hwb2rgb(args));
+}
+
+function hwb2cmyk(args) {
+  return rgb2cmyk(hwb2rgb(args));
+}
+
+function hwb2keyword(args) {
+  return rgb2keyword(hwb2rgb(args));
+}
+
+function cmyk2rgb(cmyk) {
+  var c = cmyk[0] / 100,
+      m = cmyk[1] / 100,
+      y = cmyk[2] / 100,
+      k = cmyk[3] / 100,
+      r, g, b;
+
+  r = 1 - Math.min(1, c * (1 - k) + k);
+  g = 1 - Math.min(1, m * (1 - k) + k);
+  b = 1 - Math.min(1, y * (1 - k) + k);
+  return [r * 255, g * 255, b * 255];
+}
+
+function cmyk2hsl(args) {
+  return rgb2hsl(cmyk2rgb(args));
+}
+
+function cmyk2hsv(args) {
+  return rgb2hsv(cmyk2rgb(args));
+}
+
+function cmyk2hwb(args) {
+  return rgb2hwb(cmyk2rgb(args));
+}
+
+function cmyk2keyword(args) {
+  return rgb2keyword(cmyk2rgb(args));
+}
+
+
+function xyz2rgb(xyz) {
+  var x = xyz[0] / 100,
+      y = xyz[1] / 100,
+      z = xyz[2] / 100,
+      r, g, b;
+
+  r = (x * 3.2406) + (y * -1.5372) + (z * -0.4986);
+  g = (x * -0.9689) + (y * 1.8758) + (z * 0.0415);
+  b = (x * 0.0557) + (y * -0.2040) + (z * 1.0570);
+
+  // assume sRGB
+  r = r > 0.0031308 ? ((1.055 * Math.pow(r, 1.0 / 2.4)) - 0.055)
+    : r = (r * 12.92);
+
+  g = g > 0.0031308 ? ((1.055 * Math.pow(g, 1.0 / 2.4)) - 0.055)
+    : g = (g * 12.92);
+
+  b = b > 0.0031308 ? ((1.055 * Math.pow(b, 1.0 / 2.4)) - 0.055)
+    : b = (b * 12.92);
+
+  r = Math.min(Math.max(0, r), 1);
+  g = Math.min(Math.max(0, g), 1);
+  b = Math.min(Math.max(0, b), 1);
+
+  return [r * 255, g * 255, b * 255];
+}
+
+function xyz2lab(xyz) {
+  var x = xyz[0],
+      y = xyz[1],
+      z = xyz[2],
+      l, a, b;
+
+  x /= 95.047;
+  y /= 100;
+  z /= 108.883;
+
+  x = x > 0.008856 ? Math.pow(x, 1/3) : (7.787 * x) + (16 / 116);
+  y = y > 0.008856 ? Math.pow(y, 1/3) : (7.787 * y) + (16 / 116);
+  z = z > 0.008856 ? Math.pow(z, 1/3) : (7.787 * z) + (16 / 116);
+
+  l = (116 * y) - 16;
+  a = 500 * (x - y);
+  b = 200 * (y - z);
+
+  return [l, a, b];
+}
+
+function xyz2lch(args) {
+  return lab2lch(xyz2lab(args));
+}
+
+function lab2xyz(lab) {
+  var l = lab[0],
+      a = lab[1],
+      b = lab[2],
+      x, y, z, y2;
+
+  if (l <= 8) {
+    y = (l * 100) / 903.3;
+    y2 = (7.787 * (y / 100)) + (16 / 116);
+  } else {
+    y = 100 * Math.pow((l + 16) / 116, 3);
+    y2 = Math.pow(y / 100, 1/3);
+  }
+
+  x = x / 95.047 <= 0.008856 ? x = (95.047 * ((a / 500) + y2 - (16 / 116))) / 7.787 : 95.047 * Math.pow((a / 500) + y2, 3);
+
+  z = z / 108.883 <= 0.008859 ? z = (108.883 * (y2 - (b / 200) - (16 / 116))) / 7.787 : 108.883 * Math.pow(y2 - (b / 200), 3);
+
+  return [x, y, z];
+}
+
+function lab2lch(lab) {
+  var l = lab[0],
+      a = lab[1],
+      b = lab[2],
+      hr, h, c;
+
+  hr = Math.atan2(b, a);
+  h = hr * 360 / 2 / Math.PI;
+  if (h < 0) {
+    h += 360;
+  }
+  c = Math.sqrt(a * a + b * b);
+  return [l, c, h];
+}
+
+function lab2rgb(args) {
+  return xyz2rgb(lab2xyz(args));
+}
+
+function lch2lab(lch) {
+  var l = lch[0],
+      c = lch[1],
+      h = lch[2],
+      a, b, hr;
+
+  hr = h / 360 * 2 * Math.PI;
+  a = c * Math.cos(hr);
+  b = c * Math.sin(hr);
+  return [l, a, b];
+}
+
+function lch2xyz(args) {
+  return lab2xyz(lch2lab(args));
+}
+
+function lch2rgb(args) {
+  return lab2rgb(lch2lab(args));
+}
+
+function keyword2rgb(keyword) {
+  return cssKeywords[keyword];
+}
+
+function keyword2hsl(args) {
+  return rgb2hsl(keyword2rgb(args));
+}
+
+function keyword2hsv(args) {
+  return rgb2hsv(keyword2rgb(args));
+}
+
+function keyword2hwb(args) {
+  return rgb2hwb(keyword2rgb(args));
+}
+
+function keyword2cmyk(args) {
+  return rgb2cmyk(keyword2rgb(args));
+}
+
+function keyword2lab(args) {
+  return rgb2lab(keyword2rgb(args));
+}
+
+function keyword2xyz(args) {
+  return rgb2xyz(keyword2rgb(args));
+}
+
+var cssKeywords = {
+  aliceblue:  [240,248,255],
+  antiquewhite: [250,235,215],
+  aqua: [0,255,255],
+  aquamarine: [127,255,212],
+  azure:  [240,255,255],
+  beige:  [245,245,220],
+  bisque: [255,228,196],
+  black:  [0,0,0],
+  blanchedalmond: [255,235,205],
+  blue: [0,0,255],
+  blueviolet: [138,43,226],
+  brown:  [165,42,42],
+  burlywood:  [222,184,135],
+  cadetblue:  [95,158,160],
+  chartreuse: [127,255,0],
+  chocolate:  [210,105,30],
+  coral:  [255,127,80],
+  cornflowerblue: [100,149,237],
+  cornsilk: [255,248,220],
+  crimson:  [220,20,60],
+  cyan: [0,255,255],
+  darkblue: [0,0,139],
+  darkcyan: [0,139,139],
+  darkgoldenrod:  [184,134,11],
+  darkgray: [169,169,169],
+  darkgreen:  [0,100,0],
+  darkgrey: [169,169,169],
+  darkkhaki:  [189,183,107],
+  darkmagenta:  [139,0,139],
+  darkolivegreen: [85,107,47],
+  darkorange: [255,140,0],
+  darkorchid: [153,50,204],
+  darkred:  [139,0,0],
+  darksalmon: [233,150,122],
+  darkseagreen: [143,188,143],
+  darkslateblue:  [72,61,139],
+  darkslategray:  [47,79,79],
+  darkslategrey:  [47,79,79],
+  darkturquoise:  [0,206,209],
+  darkviolet: [148,0,211],
+  deeppink: [255,20,147],
+  deepskyblue:  [0,191,255],
+  dimgray:  [105,105,105],
+  dimgrey:  [105,105,105],
+  dodgerblue: [30,144,255],
+  firebrick:  [178,34,34],
+  floralwhite:  [255,250,240],
+  forestgreen:  [34,139,34],
+  fuchsia:  [255,0,255],
+  gainsboro:  [220,220,220],
+  ghostwhite: [248,248,255],
+  gold: [255,215,0],
+  goldenrod:  [218,165,32],
+  gray: [128,128,128],
+  green:  [0,128,0],
+  greenyellow:  [173,255,47],
+  grey: [128,128,128],
+  honeydew: [240,255,240],
+  hotpink:  [255,105,180],
+  indianred:  [205,92,92],
+  indigo: [75,0,130],
+  ivory:  [255,255,240],
+  khaki:  [240,230,140],
+  lavender: [230,230,250],
+  lavenderblush:  [255,240,245],
+  lawngreen:  [124,252,0],
+  lemonchiffon: [255,250,205],
+  lightblue:  [173,216,230],
+  lightcoral: [240,128,128],
+  lightcyan:  [224,255,255],
+  lightgoldenrodyellow: [250,250,210],
+  lightgray:  [211,211,211],
+  lightgreen: [144,238,144],
+  lightgrey:  [211,211,211],
+  lightpink:  [255,182,193],
+  lightsalmon:  [255,160,122],
+  lightseagreen:  [32,178,170],
+  lightskyblue: [135,206,250],
+  lightslategray: [119,136,153],
+  lightslategrey: [119,136,153],
+  lightsteelblue: [176,196,222],
+  lightyellow:  [255,255,224],
+  lime: [0,255,0],
+  limegreen:  [50,205,50],
+  linen:  [250,240,230],
+  magenta:  [255,0,255],
+  maroon: [128,0,0],
+  mediumaquamarine: [102,205,170],
+  mediumblue: [0,0,205],
+  mediumorchid: [186,85,211],
+  mediumpurple: [147,112,219],
+  mediumseagreen: [60,179,113],
+  mediumslateblue:  [123,104,238],
+  mediumspringgreen:  [0,250,154],
+  mediumturquoise:  [72,209,204],
+  mediumvioletred:  [199,21,133],
+  midnightblue: [25,25,112],
+  mintcream:  [245,255,250],
+  mistyrose:  [255,228,225],
+  moccasin: [255,228,181],
+  navajowhite:  [255,222,173],
+  navy: [0,0,128],
+  oldlace:  [253,245,230],
+  olive:  [128,128,0],
+  olivedrab:  [107,142,35],
+  orange: [255,165,0],
+  orangered:  [255,69,0],
+  orchid: [218,112,214],
+  palegoldenrod:  [238,232,170],
+  palegreen:  [152,251,152],
+  paleturquoise:  [175,238,238],
+  palevioletred:  [219,112,147],
+  papayawhip: [255,239,213],
+  peachpuff:  [255,218,185],
+  peru: [205,133,63],
+  pink: [255,192,203],
+  plum: [221,160,221],
+  powderblue: [176,224,230],
+  purple: [128,0,128],
+  rebeccapurple: [102, 51, 153],
+  red:  [255,0,0],
+  rosybrown:  [188,143,143],
+  royalblue:  [65,105,225],
+  saddlebrown:  [139,69,19],
+  salmon: [250,128,114],
+  sandybrown: [244,164,96],
+  seagreen: [46,139,87],
+  seashell: [255,245,238],
+  sienna: [160,82,45],
+  silver: [192,192,192],
+  skyblue:  [135,206,235],
+  slateblue:  [106,90,205],
+  slategray:  [112,128,144],
+  slategrey:  [112,128,144],
+  snow: [255,250,250],
+  springgreen:  [0,255,127],
+  steelblue:  [70,130,180],
+  tan:  [210,180,140],
+  teal: [0,128,128],
+  thistle:  [216,191,216],
+  tomato: [255,99,71],
+  turquoise:  [64,224,208],
+  violet: [238,130,238],
+  wheat:  [245,222,179],
+  white:  [255,255,255],
+  whitesmoke: [245,245,245],
+  yellow: [255,255,0],
+  yellowgreen:  [154,205,50]
+};
+
+var reverseKeywords = {};
+for (var key in cssKeywords) {
+  reverseKeywords[JSON.stringify(cssKeywords[key])] = key;
+}
+
 
 /***/ }),
 /* 270 */
@@ -57845,7 +57862,7 @@ var _paper = __webpack_require__(2);
 
 var _paper2 = _interopRequireDefault(_paper);
 
-var _parseColor = __webpack_require__(43);
+var _parseColor = __webpack_require__(49);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -57857,11 +57874,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _colorIndex = __webpack_require__(49);
+var _colorIndex = __webpack_require__(48);
 
 var _selectedItems = __webpack_require__(7);
 
-var _eyeDropper = __webpack_require__(45);
+var _eyeDropper = __webpack_require__(44);
 
 var _gradientTypes = __webpack_require__(18);
 
@@ -58119,7 +58136,7 @@ var _classnames = __webpack_require__(19);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _parseColor = __webpack_require__(43);
+var _parseColor = __webpack_require__(49);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -58979,7 +58996,7 @@ var _selection = __webpack_require__(3);
 
 var _hover = __webpack_require__(41);
 
-var _fillModeGradientType = __webpack_require__(48);
+var _fillModeGradientType = __webpack_require__(47);
 
 var _fillMode = __webpack_require__(309);
 
@@ -59063,13 +59080,13 @@ var FillMode = function (_React$Component) {
             var fillColor2 = this.props.fillColor2;
             if (gradientType !== this.props.fillStyleGradientType) {
                 if (this.props.fillStyleGradientType === _gradientTypes2.default.SOLID) {
-                    fillColor2 = (0, _stylePath.getRotatedColor)(fillColor);
+                    fillColor2 = (0, _stylePath.generateSecondaryColor)(fillColor);
                     this.props.onChangeFillColor(fillColor2, 1);
                 }
                 this.props.changeGradientType(gradientType);
             }
             if (this.props.fillColor2 === _stylePath.MIXED) {
-                fillColor2 = (0, _stylePath.getRotatedColor)(fillColor);
+                fillColor2 = (0, _stylePath.generateSecondaryColor)(fillColor);
                 this.props.onChangeFillColor(fillColor2, 1);
             }
             this.tool = new _fillTool2.default(this.props.setHoveredItem, this.props.clearHoveredItem, this.props.onUpdateImage);
@@ -60263,11 +60280,11 @@ var _fixedTools2 = _interopRequireDefault(_fixedTools);
 
 var _modes = __webpack_require__(10);
 
-var _format = __webpack_require__(47);
+var _format = __webpack_require__(46);
 
 var _selectedItems = __webpack_require__(7);
 
-var _eyeDropper = __webpack_require__(45);
+var _eyeDropper = __webpack_require__(44);
 
 var _textEditTarget = __webpack_require__(51);
 
@@ -60460,7 +60477,7 @@ var _bufferedInputHoc = __webpack_require__(321);
 
 var _bufferedInputHoc2 = _interopRequireDefault(_bufferedInputHoc);
 
-var _button = __webpack_require__(44);
+var _button = __webpack_require__(43);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -63129,7 +63146,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _button = __webpack_require__(44);
+var _button = __webpack_require__(43);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -66095,7 +66112,7 @@ var _reactRedux = __webpack_require__(6);
 
 var _reactIntl = __webpack_require__(23);
 
-var _colorIndex = __webpack_require__(49);
+var _colorIndex = __webpack_require__(48);
 
 var _strokeStyle = __webpack_require__(34);
 
@@ -66204,7 +66221,7 @@ var _lodash = __webpack_require__(5);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _parseColor = __webpack_require__(43);
+var _parseColor = __webpack_require__(49);
 
 var _parseColor2 = _interopRequireDefault(_parseColor);
 
@@ -68231,7 +68248,7 @@ var _font = __webpack_require__(69);
 
 var _font2 = _interopRequireDefault(_font);
 
-var _format = __webpack_require__(47);
+var _format = __webpack_require__(46);
 
 var _format2 = _interopRequireDefault(_format);
 
@@ -68305,7 +68322,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(36);
 
-var _eyeDropper = __webpack_require__(45);
+var _eyeDropper = __webpack_require__(44);
 
 var _eyeDropper2 = _interopRequireDefault(_eyeDropper);
 
@@ -68343,11 +68360,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(36);
 
-var _fillModeGradientType = __webpack_require__(48);
+var _fillModeGradientType = __webpack_require__(47);
 
 var _fillModeGradientType2 = _interopRequireDefault(_fillModeGradientType);
 
-var _colorIndex = __webpack_require__(49);
+var _colorIndex = __webpack_require__(48);
 
 var _colorIndex2 = _interopRequireDefault(_colorIndex);
 
