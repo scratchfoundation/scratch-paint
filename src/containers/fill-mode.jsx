@@ -5,7 +5,7 @@ import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
 import GradientTypes from '../lib/gradient-types';
 import FillTool from '../helper/tools/fill-tool';
-import {getRotatedColor, MIXED} from '../helper/style-path';
+import {generateSecondaryColor, MIXED} from '../helper/style-path';
 
 import {changeFillColor, changeFillColor2, DEFAULT_COLOR} from '../reducers/fill-style';
 import {changeMode} from '../reducers/modes';
@@ -73,13 +73,13 @@ class FillMode extends React.Component {
         let fillColor2 = this.props.fillColor2;
         if (gradientType !== this.props.fillStyleGradientType) {
             if (this.props.fillStyleGradientType === GradientTypes.SOLID) {
-                fillColor2 = getRotatedColor(fillColor);
+                fillColor2 = generateSecondaryColor(fillColor);
                 this.props.onChangeFillColor(fillColor2, 1);
             }
             this.props.changeGradientType(gradientType);
         }
         if (this.props.fillColor2 === MIXED) {
-            fillColor2 = getRotatedColor(fillColor);
+            fillColor2 = generateSecondaryColor(fillColor);
             this.props.onChangeFillColor(fillColor2, 1);
         }
         this.tool = new FillTool(
