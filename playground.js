@@ -59645,8 +59645,6 @@ var LineMode = function (_React$Component) {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
-            this.props.clearGradient();
-
             // Force the default line color if stroke is MIXED or transparent
             var strokeColor = this.props.colorState.strokeColor.primary;
             if (strokeColor === _stylePath.MIXED || strokeColor === null) {
@@ -59869,7 +59867,6 @@ var LineMode = function (_React$Component) {
 }(_react2.default.Component);
 
 LineMode.propTypes = {
-    clearGradient: _propTypes2.default.func.isRequired,
     clearSelectedItems: _propTypes2.default.func.isRequired,
     colorState: _propTypes2.default.shape({
         fillColor: _colorStyleProptype2.default,
@@ -59891,9 +59888,6 @@ var mapStateToProps = function mapStateToProps(state) {
 };
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
-        clearGradient: function clearGradient() {
-            dispatch((0, _strokeStyle.clearStrokeGradient)());
-        },
         clearSelectedItems: function clearSelectedItems() {
             dispatch((0, _selectedItems.clearSelectedItems)());
         },
