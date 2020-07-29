@@ -9,7 +9,7 @@ import {clearSelection} from '../helper/selection';
 import {endPointHit, touching} from '../helper/snapping';
 import {drawHitPoint, removeHitPoint} from '../helper/guides';
 import {styleShape} from '../helper/style-path';
-import {changeStrokeColor, clearStrokeGradient} from '../reducers/stroke-style';
+import {changeStrokeColor} from '../reducers/stroke-style';
 import {changeStrokeWidth} from '../reducers/stroke-width';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
@@ -59,8 +59,6 @@ class LineMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        this.props.clearGradient();
-
         // Force the default line color if stroke is MIXED or transparent
         const strokeColor = this.props.colorState.strokeColor.primary;
         if (strokeColor === MIXED || strokeColor === null) {
@@ -275,7 +273,6 @@ class LineMode extends React.Component {
 }
 
 LineMode.propTypes = {
-    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: ColorStyleProptype,
@@ -294,9 +291,6 @@ const mapStateToProps = state => ({
     isLineModeActive: state.scratchPaint.mode === Modes.LINE
 });
 const mapDispatchToProps = dispatch => ({
-    clearGradient: () => {
-        dispatch(clearStrokeGradient());
-    },
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
