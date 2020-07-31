@@ -2,13 +2,11 @@ import log from '../log/log';
 import {CHANGE_SELECTED_ITEMS} from '../reducers/selected-items';
 import {getColorsFromSelection, MIXED} from '../helper/style-path';
 import GradientTypes from './gradient-types';
+import paper from '@scratch/paper';
 
-// Matches hex colors
-const hexRegex = /^#([0-9a-f]{3}){1,2}$/i;
-
-const isValidHexColor = color => {
-    if (!hexRegex.test(color) && color !== null && color !== MIXED) {
-        log.warn(`Invalid hex color code: ${color}`);
+const isValidColor = color => {
+    if (!(color instanceof paper.Color) && color !== null && color !== MIXED) {
+        log.warn(`Invalid color: ${color}`);
         return false;
     }
     return true;
@@ -44,10 +42,10 @@ const makeColorStyleReducer = ({
     }
     switch (action.type) {
     case changePrimaryColorAction:
-        if (!isValidHexColor(action.color)) return state;
+        if (!isValidColor(action.color)) return state;
         return {...state, primary: action.color};
     case changeSecondaryColorAction:
-        if (!isValidHexColor(action.color)) return state;
+        if (!isValidColor(action.color)) return state;
         return {...state, secondary: action.color};
     case CHANGE_SELECTED_ITEMS: {
         // Don't change state if no selection

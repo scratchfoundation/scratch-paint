@@ -1,7 +1,7 @@
 import bindAll from 'lodash.bindall';
 import {connect} from 'react-redux';
 import paper from '@scratch/paper';
-import parseColor from 'parse-color';
+import ColorProptype from '../lib/color-proptype';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -14,23 +14,6 @@ import ColorPickerComponent from '../components/color-picker/color-picker.jsx';
 import {MIXED} from '../helper/style-path';
 import Modes from '../lib/modes';
 
-const colorStringToHsv = hexString => {
-    const hsv = parseColor(hexString).hsv;
-    // Hue comes out in [0, 360], limit to [0, 100]
-    hsv[0] = hsv[0] / 3.6;
-    // Black is parsed as {0, 0, 0}, but turn saturation up to 100
-    // to make it easier to see slider values.
-    if (hsv[1] === 0 && hsv[2] === 0) {
-        hsv[1] = 100;
-    }
-    return hsv;
-};
-
-const hsvToHex = (h, s, v) =>
-    // Scale hue back up to [0, 360] from [0, 100]
-    parseColor(`hsv(${3.6 * h}, ${s}, ${v})`).hex
-;
-
 // Important! This component ignores new color props except when isEyeDropping
 // This is to make the HSV <=> RGB conversion stable. The sliders manage their
 // own changes until unmounted or color changes with props.isEyeDropping = true.
@@ -38,7 +21,6 @@ class ColorPicker extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'getHsv',
             'handleChangeGradientTypeHorizontal',
             'handleChangeGradientTypeRadial',
             'handleChangeGradientTypeSolid',
@@ -75,7 +57,11 @@ class ColorPicker extends React.Component {
         const isTransparent = color === null;
         const isMixed = color === MIXED;
         return isTransparent || isMixed ?
-            [50, 100, 100] : colorStringToHsv(color);
+            [50, 100, 100] : [
+                color.hue * (100 / 360),
+                color.saturation * 100,
+                color.brightness * 100
+            ];
     }
     handleHueChange (hue) {
         this.setState({hue: hue}, () => {
@@ -93,11 +79,11 @@ class ColorPicker extends React.Component {
         });
     }
     handleColorChange () {
-        this.props.onChangeColor(hsvToHex(
-            this.state.hue,
-            this.state.saturation,
-            this.state.brightness
-        ));
+        this.props.onChangeColor(new paper.Color({
+            hue: this.state.hue * (360 / 100),
+            saturation: this.state.saturation / 100,
+            brightness: this.state.brightness / 100
+        }));
     }
     handleTransparent () {
         this.props.onChangeColor(null);
@@ -152,8 +138,8 @@ class ColorPicker extends React.Component {
 }
 
 ColorPicker.propTypes = {
-    color: PropTypes.string,
-    color2: PropTypes.string,
+    color: ColorProptype,
+    color2: ColorProptype,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isEyeDropping: PropTypes.bool.isRequired,

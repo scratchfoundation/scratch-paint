@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
 
 import classNames from 'classnames';
-import parseColor from 'parse-color';
 
 import Slider from '../forms/slider.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
@@ -20,11 +19,23 @@ import fillSolidIcon from './icons/fill-solid-enabled.svg';
 import fillVertGradientIcon from './icons/fill-vert-gradient-enabled.svg';
 import swapIcon from './icons/swap.svg';
 import Modes from '../../lib/modes';
+import ColorProptype from '../../lib/color-proptype';
 
-const hsvToHex = (h, s, v) =>
-    // Scale hue back up to [0, 360] from [0, 100]
-    parseColor(`hsv(${3.6 * h}, ${s}, ${v})`).hex
-;
+/**
+ * Converts the color picker's internal color representation (HSV 0-100) into a CSS color string.
+ * @param {number} h Hue, from 0 to 100.
+ * @param {number} s Saturation, from 0 to 100.
+ * @param {number} v Value, from 0 to 100.
+ * @returns {string} A valid CSS color string representing the input HSV color.
+ */
+const hsvToCssString = (h, s, v) => {
+    const scaledValue = v * 0.01;
+    const hslLightness = scaledValue - ((scaledValue * (s * 0.01)) / 2);
+    const m = Math.min(hslLightness, 1 - hslLightness);
+    const hslSaturation = (m === 0) ? 0 : (scaledValue - hslLightness) / m;
+
+    return `hsl(${h * 3.6}, ${hslSaturation * 100}%, ${hslLightness * 100}%)`;
+};
 
 const messages = defineMessages({
     swap: {
@@ -41,13 +52,13 @@ class ColorPickerComponent extends React.Component {
         for (let n = 100; n >= 0; n -= 10) {
             switch (channel) {
             case 'hue':
-                stops.push(hsvToHex(n, this.props.saturation, this.props.brightness));
+                stops.push(hsvToCssString(n, this.props.saturation, this.props.brightness));
                 break;
             case 'saturation':
-                stops.push(hsvToHex(this.props.hue, n, this.props.brightness));
+                stops.push(hsvToCssString(this.props.hue, n, this.props.brightness));
                 break;
             case 'brightness':
-                stops.push(hsvToHex(this.props.hue, this.props.saturation, n));
+                stops.push(hsvToCssString(this.props.hue, this.props.saturation, n));
                 break;
             default:
                 throw new Error(`Unknown channel for color sliders: ${channel}`);
@@ -122,7 +133,7 @@ class ColorPickerComponent extends React.Component {
                                         })}
                                         style={{
                                             backgroundColor: this.props.color === null || this.props.color === MIXED ?
-                                                'white' : this.props.color
+                                                'white' : this.props.color.toCSS()
                                         }}
                                         onClick={this.props.onSelectColor}
                                     >
@@ -155,7 +166,7 @@ class ColorPickerComponent extends React.Component {
                                         })}
                                         style={{
                                             backgroundColor: this.props.color2 === null || this.props.color2 === MIXED ?
-                                                'white' : this.props.color2
+                                                'white' : this.props.color2.toCSS()
                                         }}
                                         onClick={this.props.onSelectColor2}
                                     >
@@ -290,8 +301,8 @@ class ColorPickerComponent extends React.Component {
 
 ColorPickerComponent.propTypes = {
     brightness: PropTypes.number.isRequired,
-    color: PropTypes.string,
-    color2: PropTypes.string,
+    color: ColorProptype,
+    color2: ColorProptype,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     hue: PropTypes.number.isRequired,

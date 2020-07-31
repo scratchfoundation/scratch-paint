@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
+import ColorProptype from '../lib/color-proptype';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
 import GradientTypes from '../lib/gradient-types';
@@ -112,8 +113,8 @@ FillMode.propTypes = {
     changeGradientType: PropTypes.func.isRequired,
     clearHoveredItem: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    fillColor: PropTypes.string,
-    fillColor2: PropTypes.string,
+    fillColor: ColorProptype,
+    fillColor2: ColorProptype,
     fillStyleGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)),
     handleMouseDown: PropTypes.func.isRequired,

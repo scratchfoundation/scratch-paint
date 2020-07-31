@@ -8,6 +8,7 @@ import InputGroup from './input-group/input-group.jsx';
 import Label from './forms/label.jsx';
 
 import GradientTypes from '../lib/gradient-types';
+import ColorProptype from '../lib/color-proptype';
 
 const ColorIndicatorComponent = props => (
     <InputGroup
@@ -46,8 +47,8 @@ const ColorIndicatorComponent = props => (
 ColorIndicatorComponent.propTypes = {
     className: PropTypes.string,
     disabled: PropTypes.bool.isRequired,
-    color: PropTypes.string,
-    color2: PropTypes.string,
+    color: ColorProptype,
+    color2: ColorProptype,
     colorModalVisible: PropTypes.bool.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     label: PropTypes.string.isRequired,
