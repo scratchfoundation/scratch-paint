@@ -17,15 +17,21 @@ class SliderComponent extends React.Component {
             'handleMouseUp',
             'handleMouseMove',
             'handleClickBackground',
-            'setBackground'
+            'setBackground',
+            'setHandle'
         ]);
+
+        // Distance from the left edge of the slider handle to the mouse down/click event
+        this.handleClickOffset = 0;
     }
 
-    handleMouseDown () {
+    handleMouseDown (event) {
         document.addEventListener('mousemove', this.handleMouseMove);
         document.addEventListener('mouseup', this.handleMouseUp);
         document.addEventListener('touchmove', this.handleMouseMove, {passive: false});
         document.addEventListener('touchend', this.handleMouseUp);
+
+        this.handleClickOffset = getEventXY(event).x - this.handle.getBoundingClientRect().left;
     }
 
     handleMouseUp () {
@@ -41,18 +47,24 @@ class SliderComponent extends React.Component {
     }
 
     handleClickBackground (event) {
+        // Move slider handle's center to the cursor
+        this.handleClickOffset = HANDLE_WIDTH / 2;
         this.props.onChange(this.scaleMouseToSliderPosition(event));
     }
 
     scaleMouseToSliderPosition (event){
         const {x} = getEventXY(event);
         const backgroundBBox = this.background.getBoundingClientRect();
-        const scaledX = x - backgroundBBox.left;
-        return Math.max(0, Math.min(100, 100 * scaledX / backgroundBBox.width));
+        const scaledX = x - backgroundBBox.left - this.handleClickOffset;
+        return Math.max(0, Math.min(100, 100 * scaledX / (backgroundBBox.width - HANDLE_WIDTH)));
     }
 
     setBackground (ref) {
         this.background = ref;
+    }
+
+    setHandle (ref) {
+        this.handle = ref;
     }
 
     render () {
@@ -76,6 +88,7 @@ class SliderComponent extends React.Component {
             >
                 <div
                     className={styles.handle}
+                    ref={this.setHandle}
                     style={{
                         left: `${handleOffset}px`
                     }}
