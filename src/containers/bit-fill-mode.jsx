@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
+import ColorProptype from '../lib/color-proptype';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
 import GradientTypes from '../lib/gradient-types';
@@ -102,8 +103,8 @@ class BitFillMode extends React.Component {
 BitFillMode.propTypes = {
     changeGradientType: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    color: PropTypes.string,
-    color2: PropTypes.string,
+    color: ColorProptype,
+    color2: ColorProptype,
     styleGradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     fillModeGradientType: PropTypes.oneOf(Object.keys(GradientTypes)),
     handleMouseDown: PropTypes.func.isRequired,

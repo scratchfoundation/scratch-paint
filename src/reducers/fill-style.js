@@ -1,10 +1,11 @@
 import makeColorStyleReducer from '../lib/make-color-style-reducer';
+import paper from '@scratch/paper';
 
 const CHANGE_FILL_COLOR = 'scratch-paint/fill-style/CHANGE_FILL_COLOR';
 const CHANGE_FILL_COLOR_2 = 'scratch-paint/fill-style/CHANGE_FILL_COLOR_2';
 const CHANGE_FILL_GRADIENT_TYPE = 'scratch-paint/fill-style/CHANGE_FILL_GRADIENT_TYPE';
 const CLEAR_FILL_GRADIENT = 'scratch-paint/fill-style/CLEAR_FILL_GRADIENT';
-const DEFAULT_COLOR = '#9966FF';
+const DEFAULT_COLOR = new paper.Color({hue: 259, saturation: 0.6, brightness: 1});
 
 const reducer = makeColorStyleReducer({
     changePrimaryColorAction: CHANGE_FILL_COLOR,
