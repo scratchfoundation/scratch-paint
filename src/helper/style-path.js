@@ -468,7 +468,6 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                     // If the item's stroke width is 0, pretend the stroke color is null
                     if (!item.strokeWidth) {
                         strokeColorString = null;
-                        strokeGradientType = GradientTypes.SOLID;
                     }
 
                     // Stroke color is fill color in bitmap
