@@ -280,6 +280,7 @@ class LineMode extends React.Component {
 
 LineMode.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
+    clearStrokeGradient: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: ColorStyleProptype,
         strokeColor: ColorStyleProptype,

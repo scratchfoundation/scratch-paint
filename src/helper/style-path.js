@@ -305,7 +305,7 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
                 itemColor.gradient.stops &&
                 itemColor.gradient.stops.length === 2 &&
                 itemColor.gradient.stops[0].color.alpha === 0 &&
-                itemColor.gradient.stops[1].color.alpha === 0)
+                itemColor.gradient.stops[1].color.alpha === 0);
             const hasGradientNow = itemColor1 || itemColor2;
             if (noStrokeOriginally && hasGradientNow) {
                 // Make outline visible
@@ -463,7 +463,7 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
 
                     let strokeColorString = primary;
                     const strokeColor2String = secondary;
-                    let strokeGradientType = gradientType;
+                    const strokeGradientType = gradientType;
 
                     // If the item's stroke width is 0, pretend the stroke color is null
                     if (!item.strokeWidth) {
