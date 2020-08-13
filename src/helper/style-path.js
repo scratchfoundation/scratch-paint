@@ -260,7 +260,6 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
 
         const itemColorProp = applyToStroke ? 'strokeColor' : 'fillColor';
         const itemColor = item[itemColorProp];
-        let itemStrokeWidth = item.strokeWidth;
 
         const hasGradient = itemColor && itemColor.gradient;
 
@@ -309,7 +308,7 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
             const hasGradientNow = itemColor1 || itemColor2;
             if (noStrokeOriginally && hasGradientNow) {
                 // Make outline visible
-                itemStrokeWidth = item.strokeWidth = 1;
+                item.strokeWidth = 1;
             }
         }
 
@@ -350,7 +349,7 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
                 gradientType,
                 item.bounds,
                 null, // radialCenter
-                itemStrokeWidth
+                item.strokeWidth
             );
         }
     }
