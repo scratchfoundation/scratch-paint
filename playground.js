@@ -21291,6 +21291,15 @@ var applyGradientTypeToSelection = function applyGradientTypeToSelection(gradien
                 continue;
             }
 
+            if (!hasGradient && applyToStroke) {
+                var noStrokeOriginally = item.strokeWidth === 0 || !itemColor || itemColor.gradient && itemColor.gradient.stops && itemColor.gradient.stops.length === 2 && itemColor.gradient.stops[0].color.alpha === 0 && itemColor.gradient.stops[1].color.alpha === 0;
+                var hasGradientNow = itemColor1 || itemColor2;
+                if (noStrokeOriginally && hasGradientNow) {
+                    // Make outline visible
+                    item.strokeWidth = 1;
+                }
+            }
+
             if (itemColor1 === null) {
                 itemColor1 = getColorStringForTransparent(itemColor2);
             }
@@ -21469,6 +21478,7 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
                         itemFillGradientType = gradientType;
                     } else {
                         itemFillColorString = item.fillColor.alpha === 0 ? null : item.fillColor.toCSS();
+                        itemFillColor2String = null;
                     }
                 }
                 if (item.strokeColor) {
@@ -21485,7 +21495,6 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
                         // If the item's stroke width is 0, pretend the stroke color is null
                         if (!item.strokeWidth) {
                             strokeColorString = null;
-                            strokeGradientType = _gradientTypes2.default.SOLID;
                         }
 
                         // Stroke color is fill color in bitmap
@@ -21510,6 +21519,7 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
                     }
                 } else {
                     itemStrokeColorString = null;
+                    itemStrokeColor2String = null;
                 }
                 // check every style against the first of the items
                 if (firstChild) {
@@ -21520,7 +21530,7 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
                     selectionStrokeColor2String = itemStrokeColor2String;
                     selectionFillGradientType = itemFillGradientType;
                     selectionStrokeGradientType = itemStrokeGradientType;
-                    selectionStrokeWidth = itemStrokeColorString ? item.strokeWidth : 0;
+                    selectionStrokeWidth = itemStrokeColorString || itemStrokeColor2String ? item.strokeWidth : 0;
                     if (item.strokeWidth && item.data && item.data.zoomLevel) {
                         selectionThickness = item.strokeWidth / item.data.zoomLevel;
                     }
@@ -21547,7 +21557,7 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
                 if (itemStrokeColor2String !== selectionStrokeColor2String) {
                     selectionStrokeColor2String = MIXED;
                 }
-                var itemStrokeWidth = itemStrokeColorString ? item.strokeWidth : 0;
+                var itemStrokeWidth = itemStrokeColorString || itemStrokeColor2String ? item.strokeWidth : 0;
                 if (selectionStrokeWidth !== itemStrokeWidth) {
                     selectionStrokeWidth = null;
                 }
@@ -21601,7 +21611,6 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
             thickness: selectionThickness
         };
     }
-
     return {
         fillColor: selectionFillColorString ? selectionFillColorString : null,
         fillColor2: selectionFillColor2String ? selectionFillColor2String : null,
@@ -59646,9 +59655,13 @@ var LineMode = function (_React$Component) {
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
             // Force the default line color if stroke is MIXED or transparent
-            var strokeColor = this.props.colorState.strokeColor.primary;
-            if (strokeColor === _stylePath.MIXED || strokeColor === null) {
+            var strokeColor1 = this.props.colorState.strokeColor.primary;
+            var strokeColor2 = this.props.colorState.strokeColor.secondary;
+            if (strokeColor1 === _stylePath.MIXED || strokeColor1 === null && (strokeColor2 === null || strokeColor2 === _stylePath.MIXED)) {
                 this.props.onChangeStrokeColor(LineMode.DEFAULT_COLOR);
+            }
+            if (strokeColor2 === _stylePath.MIXED) {
+                this.props.clearStrokeGradient();
             }
             // Force a minimum stroke width
             if (!this.props.colorState.strokeWidth) {
@@ -59868,6 +59881,7 @@ var LineMode = function (_React$Component) {
 
 LineMode.propTypes = {
     clearSelectedItems: _propTypes2.default.func.isRequired,
+    clearStrokeGradient: _propTypes2.default.func.isRequired,
     colorState: _propTypes2.default.shape({
         fillColor: _colorStyleProptype2.default,
         strokeColor: _colorStyleProptype2.default,
@@ -59890,6 +59904,9 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         clearSelectedItems: function clearSelectedItems() {
             dispatch((0, _selectedItems.clearSelectedItems)());
+        },
+        clearStrokeGradient: function clearStrokeGradient() {
+            dispatch((0, _strokeStyle.clearStrokeGradient)());
         },
         handleMouseDown: function handleMouseDown() {
             dispatch((0, _modes3.changeMode)(_modes2.default.LINE));
