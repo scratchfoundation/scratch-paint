@@ -309,6 +309,9 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
             if (noStrokeOriginally && hasGradientNow) {
                 // Make outline visible
                 item.strokeWidth = 1;
+                // Make the gradient black to white
+                itemColor1 = 'black';
+                itemColor2 = 'white';
             }
         }
 
