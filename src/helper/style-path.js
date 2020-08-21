@@ -465,11 +465,23 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
 
                     let strokeColorString = primary;
                     const strokeColor2String = secondary;
-                    const strokeGradientType = gradientType;
+                    let strokeGradientType = gradientType;
+
+                    if (strokeGradientType !== GradientTypes.SOLID &&
+                        item.strokeColor.gradient.stops.length === 2 &&
+                        item.strokeColor.gradient.stops[0].color.alpha === 0 &&
+                        item.strokeColor.gradient.stops[1].color.alpha === 0) {
+                        // Clear the gradient if both colors are transparent
+                        item.strokeColor = null;
+                        strokeGradientType = GradientTypes.SOLID;
+                    }
 
                     // If the item's stroke width is 0, pretend the stroke color is null
                     if (!item.strokeWidth) {
                         strokeColorString = null;
+                        // Hide the second color. This way if you choose a second color, remove
+                        // the gradient, and re-add it, your second color selection is preserved.
+                        strokeGradientType = GradientTypes.SOLID;
                     }
 
                     // Stroke color is fill color in bitmap
