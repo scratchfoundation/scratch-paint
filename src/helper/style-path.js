@@ -298,17 +298,20 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
             continue;
         }
 
-        if (!hasGradient && applyToStroke) {
-            const noStrokeOriginally = item.strokeWidth === 0 || !itemColor ||
+        if (!hasGradient) {
+            const noColorOriginally = !itemColor ||
                 (itemColor.gradient &&
                 itemColor.gradient.stops &&
                 itemColor.gradient.stops.length === 2 &&
                 itemColor.gradient.stops[0].color.alpha === 0 &&
                 itemColor.gradient.stops[1].color.alpha === 0);
+            const addingStroke = applyToStroke && item.strokeWidth === 0;
             const hasGradientNow = itemColor1 || itemColor2;
-            if (noStrokeOriginally && hasGradientNow) {
-                // Make outline visible
-                item.strokeWidth = 1;
+            if ((noColorOriginally || addingStroke) && hasGradientNow) {
+                if (applyToStroke) {
+                    // Make outline visible
+                    item.strokeWidth = 1;
+                }
                 // Make the gradient black to white
                 itemColor1 = 'black';
                 itemColor2 = 'white';
