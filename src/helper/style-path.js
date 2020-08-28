@@ -306,9 +306,7 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
             const noColorOriginally = !itemColor ||
                 (itemColor.gradient &&
                 itemColor.gradient.stops &&
-                itemColor.gradient.stops.length === 2 &&
-                itemColor.gradient.stops[0].color.alpha === 0 &&
-                itemColor.gradient.stops[1].color.alpha === 0);
+                itemColor.gradient.stops[0].color.alpha === 0);
             const addingStroke = applyToStroke && item.strokeWidth === 0;
             const hasGradientNow = itemColor1 || itemColor2;
             if ((noColorOriginally || addingStroke) && hasGradientNow) {
