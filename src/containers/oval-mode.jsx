@@ -4,11 +4,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
-import ColorStyleProptype from '../lib/color-style-proptype';
 import {MIXED} from '../helper/style-path';
+import ColorStyleProptype from '../lib/color-style-proptype';
+import GradientTypes from '../lib/gradient-types';
 
-import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-style';
-import {changeStrokeColor} from '../reducers/stroke-style';
+import {changeFillColor, clearFillGradient, DEFAULT_COLOR} from '../reducers/fill-style';
+import {changeStrokeColor, clearStrokeGradient} from '../reducers/stroke-style';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {setCursor} from '../reducers/cursor';
@@ -22,7 +23,8 @@ class OvalMode extends React.Component {
         super(props);
         bindAll(this, [
             'activateTool',
-            'deactivateTool'
+            'deactivateTool',
+            'validateColorState'
         ]);
     }
     componentDidMount () {
@@ -54,23 +56,8 @@ class OvalMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
-        // If exactly one of fill or stroke color is set, set the other one to transparent.
-        // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
-        const {strokeWidth} = this.props.colorState;
-        const fillColor = this.props.colorState.fillColor.primary;
-        const strokeColor = this.props.colorState.strokeColor.primary;
-        const fillColorPresent = fillColor !== MIXED && fillColor !== null;
-        const strokeColorPresent =
-            strokeColor !== MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
-        if (!fillColorPresent && !strokeColorPresent) {
-            this.props.onChangeFillColor(DEFAULT_COLOR);
-            this.props.onChangeStrokeColor(null);
-        } else if (!fillColorPresent && strokeColorPresent) {
-            this.props.onChangeFillColor(null);
-        } else if (fillColorPresent && !strokeColorPresent) {
-            this.props.onChangeStrokeColor(null);
-        }
+        this.validateColorState();
+
         this.tool = new OvalTool(
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
@@ -85,6 +72,51 @@ class OvalMode extends React.Component {
         this.tool.remove();
         this.tool = null;
     }
+    validateColorState () {
+        // Make sure that at least one of fill/stroke is set, and that MIXED is not one of the colors.
+        // If fill and stroke color are both missing, set fill to default and stroke to transparent.
+        // If exactly one of fill or stroke color is set, set the other one to transparent.
+        const {strokeWidth} = this.props.colorState;
+        const fillColor1 = this.props.colorState.fillColor.primary;
+        let fillColor2 = this.props.colorState.fillColor.secondary;
+        let fillGradient = this.props.colorState.fillColor.gradientType;
+        const strokeColor1 = this.props.colorState.strokeColor.primary;
+        let strokeColor2 = this.props.colorState.strokeColor.secondary;
+        let strokeGradient = this.props.colorState.strokeColor.gradientType;
+        if (strokeColor1 === MIXED ||
+            (strokeColor1 === null &&
+                (strokeColor2 === null || strokeColor2 === MIXED))) {
+            this.props.onChangeStrokeColor(DEFAULT_COLOR);
+        }
+        if (fillColor2 === MIXED) {
+            this.props.clearFillGradient();
+            fillColor2 = null;
+            fillGradient = GradientTypes.SOLID;
+        }
+        if (strokeColor2 === MIXED) {
+            this.props.clearStrokeGradient();
+            strokeColor2 = null;
+            strokeGradient = GradientTypes.SOLID;
+        }
+
+        const fillColorMissing = fillColor1 === MIXED ||
+            (fillGradient === GradientTypes.SOLID && fillColor1 === null) ||
+            (fillGradient !== GradientTypes.SOLID && fillColor1 === null && fillColor2 === null);
+         const strokeColorMissing = strokeColor1 === MIXED ||
+            strokeWidth === null ||
+            strokeWidth === 0 ||
+            (strokeGradient === GradientTypes.SOLID && strokeColor1 === null) ||
+            (strokeGradient !== GradientTypes.SOLID && strokeColor1 === null && strokeColor2 === null);
+
+        if (fillColorMissing && strokeColorMissing) {
+            this.props.onChangeFillColor(DEFAULT_COLOR);
+            this.props.onChangeStrokeColor(null);
+        } else if (fillColorMissing && !strokeColorMissing) {
+            this.props.onChangeFillColor(null);
+        } else if (!fillColorMissing && strokeColorMissing) {
+            this.props.onChangeStrokeColor(null);
+        }
+    }
     render () {
         return (
             <OvalModeComponent
@@ -96,6 +128,8 @@ class OvalMode extends React.Component {
 }
 
 OvalMode.propTypes = {
+    clearFillGradient: PropTypes.func.isRequired,
+    clearStrokeGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
         fillColor: ColorStyleProptype,
@@ -120,6 +154,12 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
+    },
+    clearFillGradient: () => {
+        dispatch(clearFillGradient());
+    },
+    clearStrokeGradient: () => {
+        dispatch(clearStrokeGradient());
     },
     setCursor: cursorString => {
         dispatch(setCursor(cursorString));
