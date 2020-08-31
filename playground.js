@@ -20944,11 +20944,11 @@ var _item = __webpack_require__(29);
 
 var _group = __webpack_require__(26);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _compoundPath = __webpack_require__(56);
 
@@ -21291,12 +21291,22 @@ var applyGradientTypeToSelection = function applyGradientTypeToSelection(gradien
                 continue;
             }
 
-            if (!hasGradient && applyToStroke) {
-                var noStrokeOriginally = item.strokeWidth === 0 || !itemColor || itemColor.gradient && itemColor.gradient.stops && itemColor.gradient.stops.length === 2 && itemColor.gradient.stops[0].color.alpha === 0 && itemColor.gradient.stops[1].color.alpha === 0;
+            // If this is a stroke, we don't display it as having a gradient in the color picker
+            // if there's no stroke width. Then treat it as if it doesn't have a gradient.
+            var hasDisplayGradient = hasGradient;
+            if (applyToStroke) hasDisplayGradient = hasGradient && item.strokeWidth > 0;
+            if (!hasDisplayGradient) {
+                var noColorOriginally = !itemColor || itemColor.gradient && itemColor.gradient.stops && itemColor.gradient.stops[0].color.alpha === 0;
+                var addingStroke = applyToStroke && item.strokeWidth === 0;
                 var hasGradientNow = itemColor1 || itemColor2;
-                if (noStrokeOriginally && hasGradientNow) {
-                    // Make outline visible
-                    item.strokeWidth = 1;
+                if ((noColorOriginally || addingStroke) && hasGradientNow) {
+                    if (applyToStroke) {
+                        // Make outline visible
+                        item.strokeWidth = 1;
+                    }
+                    // Make the gradient black to white
+                    itemColor1 = 'black';
+                    itemColor2 = 'white';
                 }
             }
 
@@ -21312,19 +21322,19 @@ var applyGradientTypeToSelection = function applyGradientTypeToSelection(gradien
             switch (gradientType) {
                 case _gradientTypes2.default.RADIAL:
                     {
-                        var hasRadialGradient = hasGradient && itemColor.gradient.radial;
+                        var hasRadialGradient = hasDisplayGradient && itemColor.gradient.radial;
                         gradientTypeDiffers = !hasRadialGradient;
                         break;
                     }
                 case _gradientTypes2.default.HORIZONTAL:
                     {
-                        var hasHorizontalGradient = hasGradient && !itemColor.gradient.radial && Math.abs(itemColor.origin.y - itemColor.destination.y) < 1e-8;
+                        var hasHorizontalGradient = hasDisplayGradient && !itemColor.gradient.radial && Math.abs(itemColor.origin.y - itemColor.destination.y) < 1e-8;
                         gradientTypeDiffers = !hasHorizontalGradient;
                         break;
                     }
                 case _gradientTypes2.default.VERTICAL:
                     {
-                        var hasVerticalGradient = hasGradient && !itemColor.gradient.radial && Math.abs(itemColor.origin.x - itemColor.destination.x) < 1e-8;
+                        var hasVerticalGradient = hasDisplayGradient && !itemColor.gradient.radial && Math.abs(itemColor.origin.x - itemColor.destination.x) < 1e-8;
                         gradientTypeDiffers = !hasVerticalGradient;
                         break;
                     }
@@ -21495,6 +21505,9 @@ var getColorsFromSelection = function getColorsFromSelection(selectedItems, bitm
                         // If the item's stroke width is 0, pretend the stroke color is null
                         if (!item.strokeWidth) {
                             strokeColorString = null;
+                            // Hide the second color. This way if you choose a second color, remove
+                            // the gradient, and re-add it, your second color selection is preserved.
+                            strokeGradientType = _gradientTypes2.default.SOLID;
                         }
 
                         // Stroke color is fill color in bitmap
@@ -22529,6 +22542,31 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _keymirror = __webpack_require__(39);
+
+var _keymirror2 = _interopRequireDefault(_keymirror);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var GradientTypes = (0, _keymirror2.default)({
+    SOLID: null,
+    HORIZONTAL: null,
+    VERTICAL: null,
+    RADIAL: null
+});
+exports.default = GradientTypes;
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _classnames = __webpack_require__(19);
 
 var _classnames2 = _interopRequireDefault(_classnames);
@@ -22590,7 +22628,7 @@ ToolSelectComponent.propTypes = {
 exports.default = (0, _reactIntl.injectIntl)(ToolSelectComponent);
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22648,7 +22686,7 @@ var messages = (0, _reactIntl.defineMessages)({
 exports.default = messages;
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22717,31 +22755,6 @@ exports.changeFillGradientType = changeFillGradientType;
 exports.clearFillGradient = clearFillGradient;
 exports.DEFAULT_COLOR = DEFAULT_COLOR;
 exports.CHANGE_FILL_GRADIENT_TYPE = CHANGE_FILL_GRADIENT_TYPE;
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _keymirror = __webpack_require__(39);
-
-var _keymirror2 = _interopRequireDefault(_keymirror);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var GradientTypes = (0, _keymirror2.default)({
-    SOLID: null,
-    HORIZONTAL: null,
-    VERTICAL: null,
-    RADIAL: null
-});
-exports.default = GradientTypes;
 
 /***/ }),
 /* 19 */
@@ -26874,7 +26887,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _propTypes = __webpack_require__(1);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -29040,7 +29053,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.changeGradientType = exports.default = undefined;
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -29048,7 +29061,7 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29099,9 +29112,9 @@ var _log = __webpack_require__(8);
 
 var _log2 = _interopRequireDefault(_log);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -32410,7 +32423,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _stylePath = __webpack_require__(9);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -34001,7 +34014,7 @@ var _format = __webpack_require__(11);
 
 var _format2 = _interopRequireDefault(_format);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -48655,7 +48668,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _modes3 = __webpack_require__(10);
 
@@ -48819,11 +48832,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -48970,7 +48983,7 @@ var _modes2 = _interopRequireDefault(_modes);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _modes3 = __webpack_require__(10);
 
@@ -49134,11 +49147,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -49384,7 +49397,7 @@ var _colorStyleProptype2 = _interopRequireDefault(_colorStyleProptype);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _modes3 = __webpack_require__(10);
 
@@ -50246,11 +50259,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -50317,7 +50330,7 @@ var _colorStyleProptype2 = _interopRequireDefault(_colorStyleProptype);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _modes3 = __webpack_require__(10);
 
@@ -50769,11 +50782,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -50830,7 +50843,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -50838,7 +50851,7 @@ var _bitFillMode = __webpack_require__(248);
 
 var _bitFillMode2 = _interopRequireDefault(_bitFillMode);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _modes3 = __webpack_require__(10);
 
@@ -51028,11 +51041,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -51087,7 +51100,7 @@ var _stylePath = __webpack_require__(9);
 
 var _layer = __webpack_require__(12);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -51395,11 +51408,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -51460,7 +51473,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _modes3 = __webpack_require__(10);
 
@@ -51823,11 +51836,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -53574,7 +53587,7 @@ var _blob2 = _interopRequireDefault(_blob);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _modes3 = __webpack_require__(10);
 
@@ -54172,11 +54185,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -54376,11 +54389,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -54423,7 +54436,7 @@ var _reactIntl = __webpack_require__(23);
 
 var _colorIndex = __webpack_require__(48);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _fillModeGradientType = __webpack_require__(47);
 
@@ -55340,7 +55353,7 @@ var _label = __webpack_require__(66);
 
 var _label2 = _interopRequireDefault(_label);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -57722,7 +57735,7 @@ var _colorButton = __webpack_require__(286);
 
 var _colorButton2 = _interopRequireDefault(_colorButton);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -57889,7 +57902,7 @@ var _selectedItems = __webpack_require__(7);
 
 var _eyeDropper = __webpack_require__(44);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -58161,7 +58174,7 @@ var _colorPicker = __webpack_require__(295);
 
 var _colorPicker2 = _interopRequireDefault(_colorPicker);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -58985,7 +58998,7 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -58995,7 +59008,7 @@ var _fillTool2 = _interopRequireDefault(_fillTool);
 
 var _stylePath = __webpack_require__(9);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _modes3 = __webpack_require__(10);
 
@@ -59203,7 +59216,7 @@ var _math = __webpack_require__(20);
 
 var _stylePath = __webpack_require__(9);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -59493,11 +59506,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -60016,11 +60029,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -63510,13 +63523,17 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
+var _stylePath = __webpack_require__(9);
+
 var _colorStyleProptype = __webpack_require__(31);
 
 var _colorStyleProptype2 = _interopRequireDefault(_colorStyleProptype);
 
-var _stylePath = __webpack_require__(9);
+var _gradientTypes = __webpack_require__(15);
 
-var _fillStyle = __webpack_require__(17);
+var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
+
+var _fillStyle = __webpack_require__(18);
 
 var _strokeStyle = __webpack_require__(34);
 
@@ -63552,7 +63569,7 @@ var OvalMode = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (OvalMode.__proto__ || Object.getPrototypeOf(OvalMode)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['activateTool', 'deactivateTool']);
+        (0, _lodash2.default)(_this, ['activateTool', 'deactivateTool', 'validateColorState']);
         return _this;
     }
 
@@ -63595,23 +63612,8 @@ var OvalMode = function (_React$Component) {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
-            // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
-            // If exactly one of fill or stroke color is set, set the other one to transparent.
-            // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
-            var strokeWidth = this.props.colorState.strokeWidth;
+            this.validateColorState();
 
-            var fillColor = this.props.colorState.fillColor.primary;
-            var strokeColor = this.props.colorState.strokeColor.primary;
-            var fillColorPresent = fillColor !== _stylePath.MIXED && fillColor !== null;
-            var strokeColorPresent = strokeColor !== _stylePath.MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
-            if (!fillColorPresent && !strokeColorPresent) {
-                this.props.onChangeFillColor(_fillStyle.DEFAULT_COLOR);
-                this.props.onChangeStrokeColor(null);
-            } else if (!fillColorPresent && strokeColorPresent) {
-                this.props.onChangeFillColor(null);
-            } else if (fillColorPresent && !strokeColorPresent) {
-                this.props.onChangeStrokeColor(null);
-            }
             this.tool = new _ovalTool2.default(this.props.setSelectedItems, this.props.clearSelectedItems, this.props.setCursor, this.props.onUpdateImage);
             this.tool.setColorState(this.props.colorState);
             this.tool.activate();
@@ -63622,6 +63624,48 @@ var OvalMode = function (_React$Component) {
             this.tool.deactivateTool();
             this.tool.remove();
             this.tool = null;
+        }
+    }, {
+        key: 'validateColorState',
+        value: function validateColorState() {
+            // Make sure that at least one of fill/stroke is set, and that MIXED is not one of the colors.
+            // If fill and stroke color are both missing, set fill to default and stroke to transparent.
+            // If exactly one of fill or stroke color is set, set the other one to transparent.
+            var strokeWidth = this.props.colorState.strokeWidth;
+
+            var fillColor1 = this.props.colorState.fillColor.primary;
+            var fillColor2 = this.props.colorState.fillColor.secondary;
+            var fillGradient = this.props.colorState.fillColor.gradientType;
+            var strokeColor1 = this.props.colorState.strokeColor.primary;
+            var strokeColor2 = this.props.colorState.strokeColor.secondary;
+            var strokeGradient = this.props.colorState.strokeColor.gradientType;
+
+            if (fillColor2 === _stylePath.MIXED) {
+                this.props.clearFillGradient();
+                fillColor2 = null;
+                fillGradient = _gradientTypes2.default.SOLID;
+            }
+            if (strokeColor2 === _stylePath.MIXED) {
+                this.props.clearStrokeGradient();
+                strokeColor2 = null;
+                strokeGradient = _gradientTypes2.default.SOLID;
+            }
+
+            var fillColorMissing = fillColor1 === _stylePath.MIXED || fillGradient === _gradientTypes2.default.SOLID && fillColor1 === null || fillGradient !== _gradientTypes2.default.SOLID && fillColor1 === null && fillColor2 === null;
+            var strokeColorMissing = strokeColor1 === _stylePath.MIXED || strokeWidth === null || strokeWidth === 0 || strokeGradient === _gradientTypes2.default.SOLID && strokeColor1 === null || strokeGradient !== _gradientTypes2.default.SOLID && strokeColor1 === null && strokeColor2 === null;
+
+            if (fillColorMissing && strokeColorMissing) {
+                this.props.onChangeFillColor(_fillStyle.DEFAULT_COLOR);
+                this.props.clearFillGradient();
+                this.props.onChangeStrokeColor(null);
+                this.props.clearStrokeGradient();
+            } else if (fillColorMissing && !strokeColorMissing) {
+                this.props.onChangeFillColor(null);
+                this.props.clearFillGradient();
+            } else if (!fillColorMissing && strokeColorMissing) {
+                this.props.onChangeStrokeColor(null);
+                this.props.clearStrokeGradient();
+            }
         }
     }, {
         key: 'render',
@@ -63637,6 +63681,8 @@ var OvalMode = function (_React$Component) {
 }(_react2.default.Component);
 
 OvalMode.propTypes = {
+    clearFillGradient: _propTypes2.default.func.isRequired,
+    clearStrokeGradient: _propTypes2.default.func.isRequired,
     clearSelectedItems: _propTypes2.default.func.isRequired,
     colorState: _propTypes2.default.shape({
         fillColor: _colorStyleProptype2.default,
@@ -63664,6 +63710,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         clearSelectedItems: function clearSelectedItems() {
             dispatch((0, _selectedItems.clearSelectedItems)());
+        },
+        clearFillGradient: function clearFillGradient() {
+            dispatch((0, _fillStyle.clearFillGradient)());
+        },
+        clearStrokeGradient: function clearStrokeGradient() {
+            dispatch((0, _strokeStyle.clearStrokeGradient)());
         },
         setCursor: function setCursor(cursorString) {
             dispatch((0, _cursor.setCursor)(cursorString));
@@ -63916,11 +63968,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -63987,13 +64039,17 @@ var _modes = __webpack_require__(4);
 
 var _modes2 = _interopRequireDefault(_modes);
 
+var _stylePath = __webpack_require__(9);
+
 var _colorStyleProptype = __webpack_require__(31);
 
 var _colorStyleProptype2 = _interopRequireDefault(_colorStyleProptype);
 
-var _stylePath = __webpack_require__(9);
+var _gradientTypes = __webpack_require__(15);
 
-var _fillStyle = __webpack_require__(17);
+var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
+
+var _fillStyle = __webpack_require__(18);
 
 var _strokeStyle = __webpack_require__(34);
 
@@ -64029,7 +64085,7 @@ var RectMode = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (RectMode.__proto__ || Object.getPrototypeOf(RectMode)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['activateTool', 'deactivateTool']);
+        (0, _lodash2.default)(_this, ['activateTool', 'deactivateTool', 'validateColorState']);
         return _this;
     }
 
@@ -64072,26 +64128,54 @@ var RectMode = function (_React$Component) {
         key: 'activateTool',
         value: function activateTool() {
             (0, _selection.clearSelection)(this.props.clearSelectedItems);
-            // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
-            // If exactly one of fill or stroke color is set, set the other one to transparent.
-            // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
-            var strokeWidth = this.props.colorState.strokeWidth;
+            this.validateColorState();
 
-            var fillColor = this.props.colorState.fillColor.primary;
-            var strokeColor = this.props.colorState.strokeColor.primary;
-            var fillColorPresent = fillColor !== _stylePath.MIXED && fillColor !== null;
-            var strokeColorPresent = strokeColor !== _stylePath.MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
-            if (!fillColorPresent && !strokeColorPresent) {
-                this.props.onChangeFillColor(_fillStyle.DEFAULT_COLOR);
-                this.props.onChangeStrokeColor(null);
-            } else if (!fillColorPresent && strokeColorPresent) {
-                this.props.onChangeFillColor(null);
-            } else if (fillColorPresent && !strokeColorPresent) {
-                this.props.onChangeStrokeColor(null);
-            }
             this.tool = new _rectTool2.default(this.props.setSelectedItems, this.props.clearSelectedItems, this.props.setCursor, this.props.onUpdateImage);
             this.tool.setColorState(this.props.colorState);
             this.tool.activate();
+        }
+    }, {
+        key: 'validateColorState',
+        value: function validateColorState() {
+            // TODO move to shared class
+            // Make sure that at least one of fill/stroke is set, and that MIXED is not one of the colors.
+            // If fill and stroke color are both missing, set fill to default and stroke to transparent.
+            // If exactly one of fill or stroke color is set, set the other one to transparent.
+            var strokeWidth = this.props.colorState.strokeWidth;
+
+            var fillColor1 = this.props.colorState.fillColor.primary;
+            var fillColor2 = this.props.colorState.fillColor.secondary;
+            var fillGradient = this.props.colorState.fillColor.gradientType;
+            var strokeColor1 = this.props.colorState.strokeColor.primary;
+            var strokeColor2 = this.props.colorState.strokeColor.secondary;
+            var strokeGradient = this.props.colorState.strokeColor.gradientType;
+
+            if (fillColor2 === _stylePath.MIXED) {
+                this.props.clearFillGradient();
+                fillColor2 = null;
+                fillGradient = _gradientTypes2.default.SOLID;
+            }
+            if (strokeColor2 === _stylePath.MIXED) {
+                this.props.clearStrokeGradient();
+                strokeColor2 = null;
+                strokeGradient = _gradientTypes2.default.SOLID;
+            }
+
+            var fillColorMissing = fillColor1 === _stylePath.MIXED || fillGradient === _gradientTypes2.default.SOLID && fillColor1 === null || fillGradient !== _gradientTypes2.default.SOLID && fillColor1 === null && fillColor2 === null;
+            var strokeColorMissing = strokeColor1 === _stylePath.MIXED || strokeWidth === null || strokeWidth === 0 || strokeGradient === _gradientTypes2.default.SOLID && strokeColor1 === null || strokeGradient !== _gradientTypes2.default.SOLID && strokeColor1 === null && strokeColor2 === null;
+
+            if (fillColorMissing && strokeColorMissing) {
+                this.props.onChangeFillColor(_fillStyle.DEFAULT_COLOR);
+                this.props.clearFillGradient();
+                this.props.onChangeStrokeColor(null);
+                this.props.clearStrokeGradient();
+            } else if (fillColorMissing && !strokeColorMissing) {
+                this.props.onChangeFillColor(null);
+                this.props.clearFillGradient();
+            } else if (!fillColorMissing && strokeColorMissing) {
+                this.props.onChangeStrokeColor(null);
+                this.props.clearStrokeGradient();
+            }
         }
     }, {
         key: 'deactivateTool',
@@ -64114,6 +64198,8 @@ var RectMode = function (_React$Component) {
 }(_react2.default.Component);
 
 RectMode.propTypes = {
+    clearFillGradient: _propTypes2.default.func.isRequired,
+    clearStrokeGradient: _propTypes2.default.func.isRequired,
     clearSelectedItems: _propTypes2.default.func.isRequired,
     colorState: _propTypes2.default.shape({
         fillColor: _colorStyleProptype2.default,
@@ -64141,6 +64227,12 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
         clearSelectedItems: function clearSelectedItems() {
             dispatch((0, _selectedItems.clearSelectedItems)());
+        },
+        clearFillGradient: function clearFillGradient() {
+            dispatch((0, _fillStyle.clearFillGradient)());
+        },
+        clearStrokeGradient: function clearStrokeGradient() {
+            dispatch((0, _strokeStyle.clearStrokeGradient)());
         },
         setSelectedItems: function setSelectedItems() {
             dispatch((0, _selectedItems.setSelectedItems)((0, _selection.getSelectedLeafItems)(), false /* bitmapMode */));
@@ -64388,11 +64480,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -65589,11 +65681,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -66072,11 +66164,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -66248,7 +66340,7 @@ var _selection = __webpack_require__(3);
 
 var _stylePath = __webpack_require__(9);
 
-var _gradientTypes = __webpack_require__(18);
+var _gradientTypes = __webpack_require__(15);
 
 var _gradientTypes2 = _interopRequireDefault(_gradientTypes);
 
@@ -66470,7 +66562,7 @@ var _stylePath = __webpack_require__(9);
 
 var _font = __webpack_require__(69);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _strokeStyle = __webpack_require__(34);
 
@@ -67267,11 +67359,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
@@ -67322,11 +67414,11 @@ var _propTypes = __webpack_require__(1);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _toolSelectBase = __webpack_require__(15);
+var _toolSelectBase = __webpack_require__(16);
 
 var _toolSelectBase2 = _interopRequireDefault(_toolSelectBase);
 
-var _messages = __webpack_require__(16);
+var _messages = __webpack_require__(17);
 
 var _messages2 = _interopRequireDefault(_messages);
 
@@ -68337,7 +68429,7 @@ var _eyeDropper = __webpack_require__(44);
 
 var _eyeDropper2 = _interopRequireDefault(_eyeDropper);
 
-var _fillStyle = __webpack_require__(17);
+var _fillStyle = __webpack_require__(18);
 
 var _fillStyle2 = _interopRequireDefault(_fillStyle);
 
