@@ -83,11 +83,7 @@ class OvalMode extends React.Component {
         const strokeColor1 = this.props.colorState.strokeColor.primary;
         let strokeColor2 = this.props.colorState.strokeColor.secondary;
         let strokeGradient = this.props.colorState.strokeColor.gradientType;
-        if (strokeColor1 === MIXED ||
-            (strokeColor1 === null &&
-                (strokeColor2 === null || strokeColor2 === MIXED))) {
-            this.props.onChangeStrokeColor(DEFAULT_COLOR);
-        }
+
         if (fillColor2 === MIXED) {
             this.props.clearFillGradient();
             fillColor2 = null;
@@ -110,11 +106,15 @@ class OvalMode extends React.Component {
 
         if (fillColorMissing && strokeColorMissing) {
             this.props.onChangeFillColor(DEFAULT_COLOR);
+            this.props.clearFillGradient();
             this.props.onChangeStrokeColor(null);
+            this.props.clearStrokeGradient();
         } else if (fillColorMissing && !strokeColorMissing) {
             this.props.onChangeFillColor(null);
+            this.props.clearFillGradient();
         } else if (!fillColorMissing && strokeColorMissing) {
             this.props.onChangeStrokeColor(null);
+            this.props.clearStrokeGradient();
         }
     }
     render () {
