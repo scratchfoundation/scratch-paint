@@ -47,6 +47,9 @@ class SliderComponent extends React.Component {
     }
 
     handleClickBackground (event) {
+        // Because the slider handle is a child of the "background" element this handler is registered to, it calls this
+        // when clicked as well. We only want to change the slider value if the user clicked on the background itself.
+        if (event.target !== this.background) return;
         // Move slider handle's center to the cursor
         this.handleClickOffset = HANDLE_WIDTH / 2;
         this.props.onChange(this.scaleMouseToSliderPosition(event));
