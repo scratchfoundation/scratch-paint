@@ -115,3 +115,4 @@ SliderComponent.defaultProps = {
 };
 
 export default SliderComponent;
+export {CONTAINER_WIDTH, HANDLE_WIDTH};
