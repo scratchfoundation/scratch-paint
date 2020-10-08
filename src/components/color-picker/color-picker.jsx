@@ -5,7 +5,7 @@ import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-int
 import classNames from 'classnames';
 import parseColor from 'parse-color';
 
-import Slider from '../forms/slider.jsx';
+import Slider, {CONTAINER_WIDTH, HANDLE_WIDTH} from '../forms/slider.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import styles from './color-picker.css';
 import GradientTypes from '../../lib/gradient-types';
@@ -53,6 +53,16 @@ class ColorPickerComponent extends React.Component {
                 throw new Error(`Unknown channel for color sliders: ${channel}`);
             }
         }
+
+        // The sliders are a rounded capsule shape, and the slider handles are circles. As a consequence, when the
+        // slider handle is fully to one side, its center is actually moved away from the start/end of the slider by
+        // the slider handle's radius, meaning that the effective range of the slider excludes the rounded caps.
+        // To compensate for this, position the first stop to where the rounded cap ends, and position the last stop
+        // to where the rounded cap begins.
+        const halfHandleWidth = HANDLE_WIDTH / 2;
+        stops[0] += ` 0 ${halfHandleWidth}px`;
+        stops[stops.length - 1] += ` ${CONTAINER_WIDTH - halfHandleWidth}px 100%`;
+
         return `linear-gradient(to left, ${stops.join(',')})`;
     }
     render () {
