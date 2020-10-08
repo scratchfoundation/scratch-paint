@@ -22354,7 +22354,7 @@ function applyToTag(style, options, obj) {
     style.removeAttribute('media');
   }
 
-  if (sourceMap && btoa) {
+  if (sourceMap && typeof btoa !== 'undefined') {
     css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
   } // For old IE
 
@@ -58270,6 +58270,16 @@ var ColorPickerComponent = function (_React$Component) {
                         throw new Error('Unknown channel for color sliders: ' + channel);
                 }
             }
+
+            // The sliders are a rounded capsule shape, and the slider handles are circles. As a consequence, when the
+            // slider handle is fully to one side, its center is actually moved away from the start/end of the slider by
+            // the slider handle's radius, meaning that the effective range of the slider excludes the rounded caps.
+            // To compensate for this, position the first stop to where the rounded cap ends, and position the last stop
+            // to where the rounded cap begins.
+            var halfHandleWidth = _slider.HANDLE_WIDTH / 2;
+            stops[0] += ' 0 ' + halfHandleWidth + 'px';
+            stops[stops.length - 1] += ' ' + (_slider.CONTAINER_WIDTH - halfHandleWidth) + 'px 100%';
+
             return 'linear-gradient(to left, ' + stops.join(',') + ')';
         }
     }, {
@@ -58550,6 +58560,7 @@ exports.default = (0, _reactIntl.injectIntl)(ColorPickerComponent);
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.HANDLE_WIDTH = exports.CONTAINER_WIDTH = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -58596,17 +58607,22 @@ var SliderComponent = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (SliderComponent.__proto__ || Object.getPrototypeOf(SliderComponent)).call(this, props));
 
-        (0, _lodash2.default)(_this, ['handleMouseDown', 'handleMouseUp', 'handleMouseMove', 'handleClickBackground', 'setBackground']);
+        (0, _lodash2.default)(_this, ['handleMouseDown', 'handleMouseUp', 'handleMouseMove', 'handleClickBackground', 'setBackground', 'setHandle']);
+
+        // Distance from the left edge of the slider handle to the mouse down/click event
+        _this.handleClickOffset = 0;
         return _this;
     }
 
     _createClass(SliderComponent, [{
         key: 'handleMouseDown',
-        value: function handleMouseDown() {
+        value: function handleMouseDown(event) {
             document.addEventListener('mousemove', this.handleMouseMove);
             document.addEventListener('mouseup', this.handleMouseUp);
             document.addEventListener('touchmove', this.handleMouseMove, { passive: false });
             document.addEventListener('touchend', this.handleMouseUp);
+
+            this.handleClickOffset = (0, _touchUtils.getEventXY)(event).x - this.handle.getBoundingClientRect().left;
         }
     }, {
         key: 'handleMouseUp',
@@ -58625,6 +58641,11 @@ var SliderComponent = function (_React$Component) {
     }, {
         key: 'handleClickBackground',
         value: function handleClickBackground(event) {
+            // Because the slider handle is a child of the "background" element this handler is registered to, it calls this
+            // when clicked as well. We only want to change the slider value if the user clicked on the background itself.
+            if (event.target !== this.background) return;
+            // Move slider handle's center to the cursor
+            this.handleClickOffset = HANDLE_WIDTH / 2;
             this.props.onChange(this.scaleMouseToSliderPosition(event));
         }
     }, {
@@ -58634,13 +58655,18 @@ var SliderComponent = function (_React$Component) {
                 x = _getEventXY.x;
 
             var backgroundBBox = this.background.getBoundingClientRect();
-            var scaledX = x - backgroundBBox.left;
-            return Math.max(0, Math.min(100, 100 * scaledX / backgroundBBox.width));
+            var scaledX = x - backgroundBBox.left - this.handleClickOffset;
+            return Math.max(0, Math.min(100, 100 * scaledX / (backgroundBBox.width - HANDLE_WIDTH)));
         }
     }, {
         key: 'setBackground',
         value: function setBackground(ref) {
             this.background = ref;
+        }
+    }, {
+        key: 'setHandle',
+        value: function setHandle(ref) {
+            this.handle = ref;
         }
     }, {
         key: 'render',
@@ -58663,6 +58689,7 @@ var SliderComponent = function (_React$Component) {
                 },
                 _react2.default.createElement('div', {
                     className: _slider2.default.handle,
+                    ref: this.setHandle,
                     style: {
                         left: handleOffset + 'px'
                     },
@@ -58688,6 +58715,8 @@ SliderComponent.defaultProps = {
 };
 
 exports.default = SliderComponent;
+exports.CONTAINER_WIDTH = CONTAINER_WIDTH;
+exports.HANDLE_WIDTH = HANDLE_WIDTH;
 
 /***/ }),
 /* 291 */
