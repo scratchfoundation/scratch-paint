@@ -47279,7 +47279,7 @@ module.exports = function (svgString) {
         'onselect', 'onshow', 'onstalled', 'onsubmit', 'onsuspend', 'ontimeupdate', 'ontoggle', 'onvolumechange',
         'onwaiting', 'onactivate', 'onfocusin', 'onfocusout'
     ];
-    const eventsRegex = new RegExp(`(${eventNames.join('|')})\\s*=\\s*['"].*['"]`, 'i');
+    const eventsRegex = new RegExp(`(${eventNames.join('|')})\\s*=\\s*['"].*['"]`, 'ig');
     svgString = svgString.replace(eventsRegex, '');
 
     return svgString;
