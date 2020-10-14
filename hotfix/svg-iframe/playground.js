@@ -47290,6 +47290,7 @@ const measureSvgBBox = svgTag => new Promise((resolve, reject) => {
     // elements, similar to how Scratch 2.0 did measurement.
     const iframeElement = document.createElement('iframe');
     iframeElement.setAttribute('sandbox', 'allow-same-origin');
+    iframeElement.setAttribute('style', 'position: absolute; top: -100000px');
     
     try {
         const clonedTag = svgTag.cloneNode(/* deep */ true);
