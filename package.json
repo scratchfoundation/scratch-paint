@@ -44,7 +44,8 @@
     "react-responsive": "^4",
     "react-style-proptype": "^3",
     "react-tooltip": "^3",
-    "redux": "^3"
+    "redux": "^3",
+    "scratch-render-fonts": "^0.2.0"
   },
   "devDependencies": {
     "autoprefixer": "9.7.4",
