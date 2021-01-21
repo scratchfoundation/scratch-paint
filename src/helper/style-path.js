@@ -14,6 +14,9 @@ const MIXED = 'scratch-paint/style-path/mixed';
 const _colorsEqual = (color1, color2) => {
     if (color1 === color2) return true;
     if (!color1 || !color2) return false;
+    if (color1 === MIXED || color2 === MIXED) {
+        return false; // Don't warn if one of the colors is mixed
+    }
 
     if (!(color1 instanceof paper.Color && color2 instanceof paper.Color)) {
         log.warn('_colorsEqual passed non-Colors');
