@@ -316,6 +316,28 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
             continue;
         }
 
+        // If this is a stroke, we don't display it as having a gradient in the color picker
+        // if there's no stroke width. Then treat it as if it doesn't have a gradient.
+        let hasDisplayGradient = hasGradient;
+        if (applyToStroke) hasDisplayGradient = hasGradient && item.strokeWidth > 0;
+        if (!hasDisplayGradient) {
+            const noColorOriginally = !itemColor ||
+                (itemColor.gradient &&
+                itemColor.gradient.stops &&
+                itemColor.gradient.stops[0].color.alpha === 0);
+            const addingStroke = applyToStroke && item.strokeWidth === 0;
+            const hasGradientNow = itemColor1 || itemColor2;
+            if ((noColorOriginally || addingStroke) && hasGradientNow) {
+                if (applyToStroke) {
+                    // Make outline visible
+                    item.strokeWidth = 1;
+                }
+                // Make the gradient black to white
+                itemColor1 = 'black';
+                itemColor2 = 'white';
+            }
+        }
+
         if (itemColor1 === null) {
             itemColor1 = getColorForTransparent(itemColor2);
         }
@@ -327,18 +349,18 @@ const applyGradientTypeToSelection = function (gradientType, applyToStroke, text
         // If the item's gradient type differs from the gradient type we want to apply, then we change it
         switch (gradientType) {
         case GradientTypes.RADIAL: {
-            const hasRadialGradient = hasGradient && itemColor.gradient.radial;
+            const hasRadialGradient = hasDisplayGradient && itemColor.gradient.radial;
             gradientTypeDiffers = !hasRadialGradient;
             break;
         }
         case GradientTypes.HORIZONTAL: {
-            const hasHorizontalGradient = hasGradient && !itemColor.gradient.radial &&
+            const hasHorizontalGradient = hasDisplayGradient && !itemColor.gradient.radial &&
                 Math.abs(itemColor.origin.y - itemColor.destination.y) < 1e-8;
             gradientTypeDiffers = !hasHorizontalGradient;
             break;
         }
         case GradientTypes.VERTICAL: {
-            const hasVerticalGradient = hasGradient && !itemColor.gradient.radial &&
+            const hasVerticalGradient = hasDisplayGradient && !itemColor.gradient.radial &&
                 Math.abs(itemColor.origin.x - itemColor.destination.x) < 1e-8;
             gradientTypeDiffers = !hasVerticalGradient;
             break;
@@ -458,6 +480,7 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                     itemFillColor = item.fillColor.alpha === 0 ?
                         null :
                         item.fillColor;
+                    itemFillColor2String = null;
                 }
             }
             if (item.strokeColor) {
@@ -471,6 +494,8 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                     // If the item's stroke width is 0, pretend the stroke color is null
                     if (!item.strokeWidth) {
                         strokeColorString = null;
+                        // Hide the second color. This way if you choose a second color, remove
+                        // the gradient, and re-add it, your second color selection is preserved.
                         strokeGradientType = GradientTypes.SOLID;
                     }
 
@@ -497,7 +522,8 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                     }
                 }
             } else {
-                itemStrokeColor = null;
+                itemStrokeColorString = null;
+                itemStrokeColor2String = null;
             }
             // check every style against the first of the items
             if (firstChild) {
@@ -508,7 +534,7 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                 selectionStrokeColor2 = itemStrokeColor2;
                 selectionFillGradientType = itemFillGradientType;
                 selectionStrokeGradientType = itemStrokeGradientType;
-                selectionStrokeWidth = itemStrokeColor ? item.strokeWidth : 0;
+                selectionStrokeWidth = itemStrokeColorString || itemStrokeColor2String ? item.strokeWidth : 0;
                 if (item.strokeWidth && item.data && item.data.zoomLevel) {
                     selectionThickness = item.strokeWidth / item.data.zoomLevel;
                 }
@@ -536,7 +562,7 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
             if (itemStrokeColor2 !== selectionStrokeColor2) {
                 selectionStrokeColor2 = MIXED;
             }
-            const itemStrokeWidth = itemStrokeColor ? item.strokeWidth : 0;
+            const itemStrokeWidth = itemStrokeColorString || itemStrokeColor2String ? item.strokeWidth : 0;
             if (selectionStrokeWidth !== itemStrokeWidth) {
                 selectionStrokeWidth = null;
             }
@@ -575,7 +601,6 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
             thickness: selectionThickness
         };
     }
-
     return {
         fillColor: selectionFillColor ? selectionFillColor : null,
         fillColor2: selectionFillColor2 ? selectionFillColor2 : null,
