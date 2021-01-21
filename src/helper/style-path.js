@@ -480,20 +480,20 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                     itemFillColor = item.fillColor.alpha === 0 ?
                         null :
                         item.fillColor;
-                    itemFillColor2String = null;
+                    itemFillColor2 = null;
                 }
             }
             if (item.strokeColor) {
                 if (item.strokeColor.type === 'gradient') {
                     const {primary, secondary, gradientType} = _colorStateFromGradient(item.strokeColor.gradient);
 
-                    let strokeColorString = primary;
-                    const strokeColor2String = secondary;
+                    let strokeColor = primary;
+                    const strokecolor2 = secondary;
                     let strokeGradientType = gradientType;
 
                     // If the item's stroke width is 0, pretend the stroke color is null
                     if (!item.strokeWidth) {
-                        strokeColorString = null;
+                        strokeColor = null;
                         // Hide the second color. This way if you choose a second color, remove
                         // the gradient, and re-add it, your second color selection is preserved.
                         strokeGradientType = GradientTypes.SOLID;
@@ -501,29 +501,29 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
 
                     // Stroke color is fill color in bitmap
                     if (bitmapMode) {
-                        itemFillColor = strokeColorString;
-                        itemFillColor2 = strokeColor2String;
+                        itemFillColor = strokeColor;
+                        itemFillColor2 = strokecolor2;
                         itemFillGradientType = strokeGradientType;
                     } else {
-                        itemStrokeColor = strokeColorString;
-                        itemStrokeColor2 = strokeColor2String;
+                        itemStrokeColor = strokeColor;
+                        itemStrokeColor2 = strokecolor2;
                         itemStrokeGradientType = strokeGradientType;
                     }
                 } else {
-                    const strokeColorString = item.strokeColor.alpha === 0 || !item.strokeWidth ?
+                    const strokeColor = item.strokeColor.alpha === 0 || !item.strokeWidth ?
                         null :
                         item.strokeColor;
 
                     // Stroke color is fill color in bitmap
                     if (bitmapMode) {
-                        itemFillColor = strokeColorString;
+                        itemFillColor = strokeColor;
                     } else {
-                        itemStrokeColor = strokeColorString;
+                        itemStrokeColor = strokeColor;
                     }
                 }
             } else {
-                itemStrokeColorString = null;
-                itemStrokeColor2String = null;
+                itemStrokeColor = null;
+                itemStrokeColor2 = null;
             }
             // check every style against the first of the items
             if (firstChild) {
@@ -534,7 +534,7 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
                 selectionStrokeColor2 = itemStrokeColor2;
                 selectionFillGradientType = itemFillGradientType;
                 selectionStrokeGradientType = itemStrokeGradientType;
-                selectionStrokeWidth = itemStrokeColorString || itemStrokeColor2String ? item.strokeWidth : 0;
+                selectionStrokeWidth = itemStrokeColor || itemStrokeColor2 ? item.strokeWidth : 0;
                 if (item.strokeWidth && item.data && item.data.zoomLevel) {
                     selectionThickness = item.strokeWidth / item.data.zoomLevel;
                 }
@@ -562,7 +562,7 @@ const getColorsFromSelection = function (selectedItems, bitmapMode) {
             if (itemStrokeColor2 !== selectionStrokeColor2) {
                 selectionStrokeColor2 = MIXED;
             }
-            const itemStrokeWidth = itemStrokeColorString || itemStrokeColor2String ? item.strokeWidth : 0;
+            const itemStrokeWidth = itemStrokeColor || itemStrokeColor2 ? item.strokeWidth : 0;
             if (selectionStrokeWidth !== itemStrokeWidth) {
                 selectionStrokeWidth = null;
             }
