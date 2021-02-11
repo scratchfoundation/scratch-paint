@@ -4,8 +4,7 @@ import bindAll from 'lodash.bindall';
 import {injectIntl, intlShape} from 'react-intl';
 
 import {getSelectedLeafItems} from '../helper/selection';
-import Formats from '../lib/format';
-import {isBitmap} from '../lib/format';
+import Formats, {isBitmap} from '../lib/format';
 import GradientTypes from '../lib/gradient-types';
 import ColorProptype from '../lib/color-proptype';
 import {getAllColors} from '../lib/colors';

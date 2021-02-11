@@ -10,9 +10,8 @@ import {applyColorToSelection, applyStrokeWidthToSelection, getColorsFromSelecti
     from '../helper/style-path';
 import GradientTypes from '../lib/gradient-types';
 import Modes from '../lib/modes';
-import Formats from '../lib/format';
-import {isBitmap} from '../lib/format';
 import paper from '@scratch/paper';
+import Formats, {isBitmap} from '../lib/format';
 
 class StrokeWidthIndicator extends React.Component {
     constructor (props) {
