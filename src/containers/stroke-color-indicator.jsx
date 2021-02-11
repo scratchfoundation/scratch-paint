@@ -1,105 +1,74 @@
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import React from 'react';
-import bindAll from 'lodash.bindall';
-import {changeStrokeColor} from '../reducers/stroke-color';
+import {defineMessages} from 'react-intl';
+
+import {changeColorIndex} from '../reducers/color-index';
+import {changeStrokeColor, changeStrokeColor2} from '../reducers/stroke-style';
 import {changeStrokeWidth} from '../reducers/stroke-width';
+import {changeStrokeGradientType} from '../reducers/stroke-style';
 import {openStrokeColor, closeStrokeColor} from '../reducers/modals';
-import Modes from '../lib/modes';
 import {getAllColors} from '../lib/colors';
 import Formats from '../lib/format';
+import {getSelectedLeafItems} from '../helper/selection';
+import {setSelectedItems} from '../reducers/selected-items';
+import Modes, {GradientToolsModes} from '../lib/modes';
 import {isBitmap} from '../lib/format';
 
-import StrokeColorIndicatorComponent from '../components/stroke-color-indicator.jsx';
-import {applyStrokeColorToSelection, applyStrokeWidthToSelection} from '../helper/style-path';
+import makeColorIndicator from './color-indicator.jsx';
 
-class StrokeColorIndicator extends React.Component {
-    constructor (props) {
-        super(props);
-        bindAll(this, [
-            'handleChangeStrokeColor',
-            'handleCloseStrokeColor'
-        ]);
+const messages = defineMessages({
+    label: {
+        id: 'paint.paintEditor.stroke',
+        description: 'Label for the color picker for the outline color',
+        defaultMessage: 'Outline'
+    }
+});
 
-        // Flag to track whether an svg-update-worthy change has been made
-        this._hasChanged = false;
-    }
-    componentWillReceiveProps (newProps) {
-        const {strokeColorModalVisible, onUpdateImage} = this.props;
-        if (strokeColorModalVisible && !newProps.strokeColorModalVisible) {
-            // Submit the new SVG, which also stores a single undo/redo action.
-            if (this._hasChanged) onUpdateImage();
-            this._hasChanged = false;
-        }
-    }
-    handleChangeStrokeColor (newColor) {
-        if (this.props.strokeColor === null && newColor !== null) {
-            this._hasChanged = applyStrokeWidthToSelection(1, this.props.textEditTarget) || this._hasChanged;
-            this.props.onChangeStrokeWidth(1);
-        } else if (this.props.strokeColor !== null && newColor === null) {
-            this._hasChanged = applyStrokeWidthToSelection(0, this.props.textEditTarget) || this._hasChanged;
-            this.props.onChangeStrokeWidth(0);
-        }
-        // Apply color and update redux, but do not update svg until picker closes.
-        this._hasChanged =
-            applyStrokeColorToSelection(newColor, isBitmap(this.props.format), this.props.textEditTarget) ||
-            this._hasChanged;
-        this.props.onChangeStrokeColor(newColor);
-    }
-    handleCloseStrokeColor () {
-        if (!this.props.isEyeDropping) {
-            this.props.onCloseStrokeColor();
-        }
-    }
-    render () {
-        return (
-            <StrokeColorIndicatorComponent
-                {...this.props}
-                colors={getAllColors()}
-                onChangeStrokeColor={this.handleChangeStrokeColor}
-                onCloseStrokeColor={this.handleCloseStrokeColor}
-            />
-        );
-    }
-}
+const StrokeColorIndicator = makeColorIndicator(messages.label, true);
 
 const mapStateToProps = state => ({
+    colorIndex: state.scratchPaint.fillMode.colorIndex,
     disabled: state.scratchPaint.mode === Modes.BRUSH ||
         state.scratchPaint.mode === Modes.TEXT ||
         state.scratchPaint.mode === Modes.FILL,
+    color: state.scratchPaint.color.strokeColor.primary,
+    color2: state.scratchPaint.color.strokeColor.secondary,
+    fillBitmapShapes: state.scratchPaint.fillBitmapShapes,
+    colorModalVisible: state.scratchPaint.modals.strokeColor,
     format: state.scratchPaint.format,
+    gradientType: state.scratchPaint.color.strokeColor.gradientType,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
-    strokeColor: state.scratchPaint.color.strokeColor,
-    strokeColorModalVisible: state.scratchPaint.modals.strokeColor,
+    mode: state.scratchPaint.mode,
+    shouldShowGradientTools: state.scratchPaint.mode in GradientToolsModes,
     textEditTarget: state.scratchPaint.textEditTarget
 });
 
 const mapDispatchToProps = dispatch => ({
-    onChangeStrokeColor: strokeColor => {
-        dispatch(changeStrokeColor(strokeColor));
+    onChangeColorIndex: index => {
+        dispatch(changeColorIndex(index));
+    },
+    onChangeColor: (strokeColor, index) => {
+        if (index === 0) {
+            dispatch(changeStrokeColor(strokeColor));
+        } else if (index === 1) {
+            dispatch(changeStrokeColor2(strokeColor));
+        }
     },
     onChangeStrokeWidth: strokeWidth => {
         dispatch(changeStrokeWidth(strokeWidth));
     },
-    onOpenStrokeColor: () => {
+    onOpenColor: () => {
         dispatch(openStrokeColor());
     },
-    onCloseStrokeColor: () => {
+    onCloseColor: () => {
         dispatch(closeStrokeColor());
+    },
+    onChangeGradientType: gradientType => {
+        dispatch(changeStrokeGradientType(gradientType));
+    },
+    setSelectedItems: format => {
+        dispatch(setSelectedItems(getSelectedLeafItems(), isBitmap(format)));
     }
 });
-
-StrokeColorIndicator.propTypes = {
-    format: PropTypes.oneOf(Object.keys(Formats)),
-    isEyeDropping: PropTypes.bool.isRequired,
-    onChangeStrokeColor: PropTypes.func.isRequired,
-    onChangeStrokeWidth: PropTypes.func.isRequired,
-    onCloseStrokeColor: PropTypes.func.isRequired,
-    onUpdateImage: PropTypes.func.isRequired,
-    strokeColor: PropTypes.string,
-    strokeColorModalVisible: PropTypes.bool.isRequired,
-    textEditTarget: PropTypes.number
-};
 
 export default connect(
     mapStateToProps,

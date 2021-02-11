@@ -111,6 +111,8 @@ class OvalTool extends paper.Tool {
         } else {
             this.oval.position = downPoint.subtract(this.oval.size.multiply(0.5));
         }
+
+        styleShape(this.oval, this.colorState);
     }
     handleMouseMove (event) {
         this.boundingBoxTool.onMouseMove(event, this.getHitOptions());

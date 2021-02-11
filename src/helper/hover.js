@@ -35,12 +35,17 @@ const getHoveredItem = function (event, hitOptions, subselect) {
         return null;
     }
 
+    let hoverGuide;
     if (isBoundsItem(item)) {
-        return hoverBounds(item);
+        hoverGuide = hoverBounds(item);
     } else if (!subselect && isGroupChild(item)) {
-        return hoverBounds(getRootItem(item));
+        hoverGuide = hoverBounds(getRootItem(item));
+    } else {
+        hoverGuide = hoverItem(item);
     }
-    return hoverItem(item);
+    hoverGuide.data.hitResult = hitResult;
+
+    return hoverGuide;
 };
 
 export {

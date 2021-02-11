@@ -1,15 +1,15 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
+import ColorProptype from '../lib/color-proptype';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
 import {MIXED} from '../helper/style-path';
 
-import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
+import {changeFillColor, clearFillGradient, DEFAULT_COLOR} from '../reducers/fill-style';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {clearSelection} from '../helper/selection';
-import {clearGradient} from '../reducers/selection-gradient-type';
 
 import BitBrushModeComponent from '../components/bit-brush-mode/bit-brush-mode.jsx';
 import BitBrushTool from '../helper/bit-tools/brush-tool';
@@ -85,7 +85,7 @@ BitBrushMode.propTypes = {
     bitBrushSize: PropTypes.number.isRequired,
     clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    color: PropTypes.string,
+    color: ColorProptype,
     handleMouseDown: PropTypes.func.isRequired,
     isBitBrushModeActive: PropTypes.bool.isRequired,
     onChangeFillColor: PropTypes.func.isRequired,
@@ -94,7 +94,7 @@ BitBrushMode.propTypes = {
 
 const mapStateToProps = state => ({
     bitBrushSize: state.scratchPaint.bitBrushSize,
-    color: state.scratchPaint.color.fillColor,
+    color: state.scratchPaint.color.fillColor.primary,
     isBitBrushModeActive: state.scratchPaint.mode === Modes.BIT_BRUSH
 });
 const mapDispatchToProps = dispatch => ({
@@ -102,7 +102,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearSelectedItems());
     },
     clearGradient: () => {
-        dispatch(clearGradient());
+        dispatch(clearFillGradient());
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.BIT_BRUSH));

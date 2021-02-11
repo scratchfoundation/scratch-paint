@@ -3,6 +3,8 @@ import {getItems} from '../selection';
 import {getActionBounds} from '../view';
 import {BitmapModes} from '../../lib/modes';
 
+const MIN_SCALE_FACTOR = 0.0001;
+
 /**
  * Tool to handle scaling items by pulling on the handles around the edges of the bounding
  * box when in the bounding box tool.
@@ -114,13 +116,15 @@ class ScaleTool {
             sy = size.y / this.origSize.y;
         }
 
+        const signx = sx > 0 ? 1 : -1;
+        const signy = sy > 0 ? 1 : -1;
         if (this.isCorner && !event.modifiers.shift) {
-            const signx = sx > 0 ? 1 : -1;
-            const signy = sy > 0 ? 1 : -1;
             sx = sy = Math.max(Math.abs(sx), Math.abs(sy));
             sx *= signx;
             sy *= signy;
         }
+        sx = signx * Math.max(Math.abs(sx), MIN_SCALE_FACTOR);
+        sy = signy * Math.max(Math.abs(sy), MIN_SCALE_FACTOR);
         this.itemGroup.scale(sx / this.lastSx, sy / this.lastSy, this.pivot);
         if (this.selectionAnchor) {
             this.selectionAnchor.scale(this.lastSx / sx, this.lastSy / sy);

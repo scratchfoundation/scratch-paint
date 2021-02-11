@@ -4,12 +4,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
+import ColorStyleProptype from '../lib/color-style-proptype';
 import {MIXED} from '../helper/style-path';
 
-import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
+import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-style';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
-import {clearGradient} from '../reducers/selection-gradient-type';
 import {setCursor} from '../reducers/cursor';
 
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
@@ -62,9 +62,8 @@ class BitOvalMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        this.props.clearGradient();
         // Force the default brush color if fill is MIXED or transparent
-        const fillColorPresent = this.props.color !== MIXED && this.props.color !== null;
+        const fillColorPresent = this.props.color.primary !== MIXED && this.props.color.primary !== null;
         if (!fillColorPresent) {
             this.props.onChangeFillColor(DEFAULT_COLOR);
         }
@@ -95,9 +94,8 @@ class BitOvalMode extends React.Component {
 }
 
 BitOvalMode.propTypes = {
-    clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    color: PropTypes.string,
+    color: ColorStyleProptype,
     filled: PropTypes.bool,
     handleMouseDown: PropTypes.func.isRequired,
     isOvalModeActive: PropTypes.bool.isRequired,
@@ -121,9 +119,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
-    },
-    clearGradient: () => {
-        dispatch(clearGradient());
     },
     setCursor: cursorString => {
         dispatch(setCursor(cursorString));

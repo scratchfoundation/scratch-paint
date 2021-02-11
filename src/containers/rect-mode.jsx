@@ -5,12 +5,13 @@ import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
 import {MIXED} from '../helper/style-path';
+import ColorStyleProptype from '../lib/color-style-proptype';
+import GradientTypes from '../lib/gradient-types';
 
-import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
-import {changeStrokeColor} from '../reducers/stroke-color';
+import {changeFillColor, clearFillGradient, DEFAULT_COLOR} from '../reducers/fill-style';
+import {changeStrokeColor, clearStrokeGradient} from '../reducers/stroke-style';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
-import {clearGradient} from '../reducers/selection-gradient-type';
 import {setCursor} from '../reducers/cursor';
 
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
@@ -22,7 +23,8 @@ class RectMode extends React.Component {
         super(props);
         bindAll(this, [
             'activateTool',
-            'deactivateTool'
+            'deactivateTool',
+            'validateColorState'
         ]);
     }
     componentDidMount () {
@@ -54,22 +56,8 @@ class RectMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-        this.props.clearGradient();
-        // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
-        // If exactly one of fill or stroke color is set, set the other one to transparent.
-        // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
-        const {fillColor, strokeColor, strokeWidth} = this.props.colorState;
-        const fillColorPresent = fillColor !== MIXED && fillColor !== null;
-        const strokeColorPresent =
-            strokeColor !== MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
-        if (!fillColorPresent && !strokeColorPresent) {
-            this.props.onChangeFillColor(DEFAULT_COLOR);
-            this.props.onChangeStrokeColor(null);
-        } else if (!fillColorPresent && strokeColorPresent) {
-            this.props.onChangeFillColor(null);
-        } else if (fillColorPresent && !strokeColorPresent) {
-            this.props.onChangeStrokeColor(null);
-        }
+        this.validateColorState();
+
         this.tool = new RectTool(
             this.props.setSelectedItems,
             this.props.clearSelectedItems,
@@ -78,6 +66,51 @@ class RectMode extends React.Component {
         );
         this.tool.setColorState(this.props.colorState);
         this.tool.activate();
+    }
+    validateColorState () { // TODO move to shared class
+        // Make sure that at least one of fill/stroke is set, and that MIXED is not one of the colors.
+        // If fill and stroke color are both missing, set fill to default and stroke to transparent.
+        // If exactly one of fill or stroke color is set, set the other one to transparent.
+        const {strokeWidth} = this.props.colorState;
+        const fillColor1 = this.props.colorState.fillColor.primary;
+        let fillColor2 = this.props.colorState.fillColor.secondary;
+        let fillGradient = this.props.colorState.fillColor.gradientType;
+        const strokeColor1 = this.props.colorState.strokeColor.primary;
+        let strokeColor2 = this.props.colorState.strokeColor.secondary;
+        let strokeGradient = this.props.colorState.strokeColor.gradientType;
+
+        if (fillColor2 === MIXED) {
+            this.props.clearFillGradient();
+            fillColor2 = null;
+            fillGradient = GradientTypes.SOLID;
+        }
+        if (strokeColor2 === MIXED) {
+            this.props.clearStrokeGradient();
+            strokeColor2 = null;
+            strokeGradient = GradientTypes.SOLID;
+        }
+
+        const fillColorMissing = fillColor1 === MIXED ||
+            (fillGradient === GradientTypes.SOLID && fillColor1 === null) ||
+            (fillGradient !== GradientTypes.SOLID && fillColor1 === null && fillColor2 === null);
+        const strokeColorMissing = strokeColor1 === MIXED ||
+            strokeWidth === null ||
+            strokeWidth === 0 ||
+            (strokeGradient === GradientTypes.SOLID && strokeColor1 === null) ||
+            (strokeGradient !== GradientTypes.SOLID && strokeColor1 === null && strokeColor2 === null);
+
+        if (fillColorMissing && strokeColorMissing) {
+            this.props.onChangeFillColor(DEFAULT_COLOR);
+            this.props.clearFillGradient();
+            this.props.onChangeStrokeColor(null);
+            this.props.clearStrokeGradient();
+        } else if (fillColorMissing && !strokeColorMissing) {
+            this.props.onChangeFillColor(null);
+            this.props.clearFillGradient();
+        } else if (!fillColorMissing && strokeColorMissing) {
+            this.props.onChangeStrokeColor(null);
+            this.props.clearStrokeGradient();
+        }
     }
     deactivateTool () {
         this.tool.deactivateTool();
@@ -95,11 +128,12 @@ class RectMode extends React.Component {
 }
 
 RectMode.propTypes = {
-    clearGradient: PropTypes.func.isRequired,
+    clearFillGradient: PropTypes.func.isRequired,
+    clearStrokeGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
-        fillColor: PropTypes.string,
-        strokeColor: PropTypes.string,
+        fillColor: ColorStyleProptype,
+        strokeColor: ColorStyleProptype,
         strokeWidth: PropTypes.number
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
@@ -121,8 +155,11 @@ const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
-    clearGradient: () => {
-        dispatch(clearGradient());
+    clearFillGradient: () => {
+        dispatch(clearFillGradient());
+    },
+    clearStrokeGradient: () => {
+        dispatch(clearStrokeGradient());
     },
     setSelectedItems: () => {
         dispatch(setSelectedItems(getSelectedLeafItems(), false /* bitmapMode */));

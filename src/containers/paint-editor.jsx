@@ -129,7 +129,7 @@ class PaintEditor extends React.Component {
         if (this.props.format === Formats.VECTOR && isBitmap(prevProps.format)) {
             convertToVector(this.props.clearSelectedItems, this.props.onUpdateImage);
         } else if (isVector(prevProps.format) && this.props.format === Formats.BITMAP) {
-            convertToBitmap(this.props.clearSelectedItems, this.props.onUpdateImage);
+            convertToBitmap(this.props.clearSelectedItems, this.props.onUpdateImage, this.props.fontInlineFn);
         }
     }
     componentWillUnmount () {
@@ -254,14 +254,14 @@ class PaintEditor extends React.Component {
     }
     onMouseUp () {
         if (this.props.isEyeDropping) {
-            const colorString = this.eyeDropper.colorString;
+            const color = this.eyeDropper.color;
             const callback = this.props.changeColorToEyeDropper;
 
             this.eyeDropper.remove();
             if (!this.eyeDropper.hideLoupe) {
                 // If not hide loupe, that means the click is inside the canvas,
                 // so apply the new color
-                callback(colorString);
+                callback(color);
             }
             if (this.props.previousTool) this.props.previousTool.activate();
             this.props.onDeactivateEyeDropper();
@@ -344,6 +344,7 @@ PaintEditor.propTypes = {
     changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
+    fontInlineFn: PropTypes.func,
     handleSwitchToBitmap: PropTypes.func.isRequired,
     handleSwitchToVector: PropTypes.func.isRequired,
     image: PropTypes.oneOfType([

@@ -4,7 +4,7 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/LLK/scratch-paint.svg)](https://greenkeeper.io/)
 - Try it out at [https://llk.github.io/scratch-paint/](https://llk.github.io/scratch-paint/)
 
-- Or, to try it out as part of Scratch 3.0, visit [https://beta.scratch.mit.edu/](https://beta.scratch.mit.edu/)
+- Or, to try it out as part of Scratch 3.0, visit [https://scratch.mit.edu/create](https://scratch.mit.edu/create) and click on the "Costumes" tab.
 
 ### Installation
 It will be easiest if you develop on Mac or Linux. If you are using Windows, I recommend using Ubuntu on Windows, which will allow you to use Linux commands on Windows. You will need administrator permissions.

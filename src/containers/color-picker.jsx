@@ -1,7 +1,7 @@
 import bindAll from 'lodash.bindall';
 import {connect} from 'react-redux';
 import paper from '@scratch/paper';
-import parseColor from 'parse-color';
+import ColorProptype from '../lib/color-proptype';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -13,24 +13,8 @@ import GradientTypes from '../lib/gradient-types';
 import ColorPickerComponent from '../components/color-picker/color-picker.jsx';
 import {MIXED} from '../helper/style-path';
 import Modes from '../lib/modes';
+import {getHsv} from '../lib/colors';
 
-const colorStringToHsv = hexString => {
-    const hsv = parseColor(hexString).hsv;
-    if (!hsv) return hsv; // transparent
-    // Hue comes out in [0, 360], limit to [0, 100]
-    hsv[0] = hsv[0] / 3.6;
-    // Black is parsed as {0, 0, 0}, but turn saturation up to 100
-    // to make it easier to see slider values.
-    if (hsv[1] === 0 && hsv[2] === 0) {
-        hsv[1] = 100;
-    }
-    return hsv;
-};
-
-const hsvToHex = (h, s, v) =>
-    // Scale hue back up to [0, 360] from [0, 100]
-    parseColor(`hsv(${3.6 * h}, ${s}, ${v})`).hex
-;
 
 // Important! This component ignores new color props except when isEyeDropping
 // This is to make the HSV <=> RGB conversion stable. The sliders manage their
@@ -39,8 +23,6 @@ class ColorPicker extends React.Component {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'colorsMatch',
-            'getHsv',
             'handleChangeGradientTypeHorizontal',
             'handleChangeGradientTypeRadial',
             'handleChangeGradientTypeSolid',
@@ -54,7 +36,7 @@ class ColorPicker extends React.Component {
         ]);
 
         const color = props.colorIndex === 0 ? props.color : props.color2;
-        const hsv = this.getHsv(color);
+        const hsv = getHsv(color);
         this.state = {
             hue: hsv[0],
             saturation: hsv[1],
@@ -62,34 +44,17 @@ class ColorPicker extends React.Component {
         };
     }
     componentWillReceiveProps (newProps) {
-        // TODO colorsmatch does not support gradients
         const color = newProps.colorIndex === 0 ? this.props.color : this.props.color2;
         const newColor = newProps.colorIndex === 0 ? newProps.color : newProps.color2;
         const colorSetByEyedropper = this.props.isEyeDropping && color !== newColor;
         if (colorSetByEyedropper || this.props.colorIndex !== newProps.colorIndex) {
-            const hsv = this.getHsv(newColor);
+            const hsv = getHsv(newColor);
             this.setState({
                 hue: hsv[0],
                 saturation: hsv[1],
                 brightness: hsv[2]
             });
         }
-    }
-    colorsMatch (colorString1, colorString2) {
-        // transparent or mixed
-        if (!colorString1 || colorString1 === MIXED) return colorString1 === colorString2;
-
-        const [hue1, saturation1, brightness1] = colorStringToHsv(colorString1);
-        const [hue2, saturation2, brightness2] = colorStringToHsv(colorString2);
-        return Math.abs(hue1 - hue2) < .5 &&
-            Math.abs(saturation1 - saturation2) < .5 &&
-            Math.abs(brightness1 - brightness2) < .5;
-    }
-    getHsv (color) {
-        const isTransparent = color === null;
-        const isMixed = color === MIXED;
-        return isTransparent || isMixed ?
-            [50, 100, 100] : colorStringToHsv(color);
     }
     handleHueChange (hue) {
         this.setState({hue: hue}, () => {
@@ -107,17 +72,20 @@ class ColorPicker extends React.Component {
         });
     }
     handleColorChange () {
-        this.props.onChangeColor(hsvToHex(
-            this.state.hue,
-            this.state.saturation,
-            this.state.brightness
-        ));
+        this.props.onChangeColor(new paper.Color({
+            hue: this.state.hue * (360 / 100),
+            saturation: this.state.saturation / 100,
+            brightness: this.state.brightness / 100
+        }));
     }
     handleSwatch (color) {
-        const hsv = colorStringToHsv(color);
-        this.setState({hue: hsv[0], saturation: hsv[1], brightness: hsv[2]}, () => {
-            this.handleColorChange();
+        const hsv = getHsv(color);
+        this.setState({
+            hue: hsv[0],
+            saturation: hsv[1],
+            brightness: hsv[2]
         });
+        this.props.onChangeColor(color);
     }
     handleTransparent () {
         this.props.onChangeColor(null);
@@ -144,17 +112,17 @@ class ColorPicker extends React.Component {
         return (
             <ColorPickerComponent
                 brightness={this.state.brightness}
+                hue={this.state.hue}
+                saturation={this.state.saturation}
                 color={this.props.color}
                 color2={this.props.color2}
                 colors={this.props.colors}
                 colorsMatch={this.colorsMatch}
                 colorIndex={this.props.colorIndex}
                 gradientType={this.props.gradientType}
-                hue={this.state.hue}
                 isEyeDropping={this.props.isEyeDropping}
                 mode={this.props.mode}
                 rtl={this.props.rtl}
-                saturation={this.state.saturation}
                 shouldShowGradientTools={this.props.shouldShowGradientTools}
                 onActivateEyeDropper={this.handleActivateEyeDropper}
                 onBrightnessChange={this.handleBrightnessChange}
@@ -175,8 +143,8 @@ class ColorPicker extends React.Component {
 }
 
 ColorPicker.propTypes = {
-    color: PropTypes.string,
-    color2: PropTypes.string,
+    color: ColorProptype,
+    color2: ColorProptype,
     colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,

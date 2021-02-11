@@ -5,15 +5,15 @@ import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Fonts from '../lib/fonts';
 import Modes from '../lib/modes';
+import ColorStyleProptype from '../lib/color-style-proptype';
 import {MIXED} from '../helper/style-path';
 
 import {changeFont} from '../reducers/font';
-import {changeFillColor, DEFAULT_COLOR} from '../reducers/fill-color';
-import {changeStrokeColor} from '../reducers/stroke-color';
+import {changeFillColor, clearFillGradient, DEFAULT_COLOR} from '../reducers/fill-style';
+import {changeStrokeColor} from '../reducers/stroke-style';
 import {changeMode} from '../reducers/modes';
 import {setTextEditTarget} from '../reducers/text-edit-target';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
-import {clearGradient} from '../reducers/selection-gradient-type';
 import {setCursor} from '../reducers/cursor';
 
 import {clearSelection, getSelectedLeafItems} from '../helper/selection';
@@ -82,7 +82,9 @@ class TextMode extends React.Component {
         // If fill and stroke color are both mixed/transparent/absent, set fill to default and stroke to transparent.
         // If exactly one of fill or stroke color is set, set the other one to transparent.
         // This way the tool won't draw an invisible state, or be unclear about what will be drawn.
-        const {fillColor, strokeColor, strokeWidth} = nextProps.colorState;
+        const {strokeWidth} = nextProps.colorState;
+        const fillColor = nextProps.colorState.fillColor.primary;
+        const strokeColor = nextProps.colorState.strokeColor.primary;
         const fillColorPresent = fillColor !== MIXED && fillColor !== null;
         const strokeColorPresent = nextProps.isBitmap ? false :
             strokeColor !== MIXED && strokeColor !== null && strokeWidth !== null && strokeWidth !== 0;
@@ -143,8 +145,8 @@ TextMode.propTypes = {
     clearGradient: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
-        fillColor: PropTypes.string,
-        strokeColor: PropTypes.string,
+        fillColor: ColorStyleProptype,
+        strokeColor: ColorStyleProptype,
         strokeWidth: PropTypes.number
     }).isRequired,
     font: PropTypes.string,
@@ -184,7 +186,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
         dispatch(clearSelectedItems());
     },
     clearGradient: () => {
-        dispatch(clearGradient());
+        dispatch(clearFillGradient());
     },
     handleChangeModeBitText: () => {
         dispatch(changeMode(Modes.BIT_TEXT));

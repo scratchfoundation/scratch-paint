@@ -4,11 +4,12 @@ import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
 import Modes from '../lib/modes';
+import ColorStyleProptype from '../lib/color-style-proptype';
 import {clearSelection} from '../helper/selection';
 import {endPointHit, touching} from '../helper/snapping';
 import {drawHitPoint, removeHitPoint} from '../helper/guides';
-import {stylePath} from '../helper/style-path';
-import {changeStrokeColor} from '../reducers/stroke-color';
+import {styleShape} from '../helper/style-path';
+import {changeStrokeColor, clearStrokeGradient} from '../reducers/stroke-style';
 import {changeStrokeWidth} from '../reducers/stroke-width';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
@@ -22,7 +23,7 @@ class LineMode extends React.Component {
         return 6;
     }
     static get DEFAULT_COLOR () {
-        return '#000000';
+        return new paper.Color({hue: 0, saturation: 0, brightness: 0});
     }
     constructor (props) {
         super(props);
@@ -58,11 +59,16 @@ class LineMode extends React.Component {
     }
     activateTool () {
         clearSelection(this.props.clearSelectedItems);
-
         // Force the default line color if stroke is MIXED or transparent
-        const {strokeColor} = this.props.colorState;
-        if (strokeColor === MIXED || strokeColor === null) {
+        const strokeColor1 = this.props.colorState.strokeColor.primary;
+        const strokeColor2 = this.props.colorState.strokeColor.secondary;
+        if (strokeColor1 === MIXED ||
+            (strokeColor1 === null &&
+                (strokeColor2 === null || strokeColor2 === MIXED))) {
             this.props.onChangeStrokeColor(LineMode.DEFAULT_COLOR);
+        }
+        if (strokeColor2 === MIXED) {
+            this.props.clearStrokeGradient();
         }
         // Force a minimum stroke width
         if (!this.props.colorState.strokeWidth) {
@@ -101,7 +107,11 @@ class LineMode extends React.Component {
         this.hitResult = endPointHit(event.point, LineMode.SNAP_TOLERANCE);
         if (this.hitResult) {
             this.path = this.hitResult.path;
-            stylePath(this.path, this.props.colorState.strokeColor, this.props.colorState.strokeWidth);
+            styleShape(this.path, {
+                fillColor: null,
+                strokeColor: this.props.colorState.strokeColor,
+                strokeWidth: this.props.colorState.strokeWidth
+            });
             if (this.hitResult.isFirst) {
                 this.path.reverse();
             }
@@ -114,7 +124,11 @@ class LineMode extends React.Component {
         if (!this.path) {
             this.path = new paper.Path();
             this.path.strokeCap = 'round';
-            stylePath(this.path, this.props.colorState.strokeColor, this.props.colorState.strokeWidth);
+            styleShape(this.path, {
+                fillColor: null,
+                strokeColor: this.props.colorState.strokeColor,
+                strokeWidth: this.props.colorState.strokeWidth
+            });
 
             this.path.add(event.point);
             this.path.add(event.point); // Add second point, which is what will move when dragged
@@ -186,6 +200,12 @@ class LineMode extends React.Component {
         } else {
             this.path.lastSegment.point = endPoint;
         }
+
+        styleShape(this.path, {
+            fillColor: null,
+            strokeColor: this.props.colorState.strokeColor,
+            strokeWidth: this.props.colorState.strokeWidth
+        });
     }
     onMouseUp (event) {
         if (event.event.button > 0 || !this.active) return; // only first mouse button
@@ -225,6 +245,12 @@ class LineMode extends React.Component {
             this.hitResult = null;
         }
 
+        styleShape(this.path, {
+            fillColor: null,
+            strokeColor: this.props.colorState.strokeColor,
+            strokeWidth: this.props.colorState.strokeWidth
+        });
+
         if (this.path) {
             this.props.onUpdateImage();
             this.path = null;
@@ -254,9 +280,10 @@ class LineMode extends React.Component {
 
 LineMode.propTypes = {
     clearSelectedItems: PropTypes.func.isRequired,
+    clearStrokeGradient: PropTypes.func.isRequired,
     colorState: PropTypes.shape({
-        fillColor: PropTypes.string,
-        strokeColor: PropTypes.string,
+        fillColor: ColorStyleProptype,
+        strokeColor: ColorStyleProptype,
         strokeWidth: PropTypes.number
     }).isRequired,
     handleMouseDown: PropTypes.func.isRequired,
@@ -273,6 +300,9 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
+    },
+    clearStrokeGradient: () => {
+        dispatch(clearStrokeGradient());
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.LINE));

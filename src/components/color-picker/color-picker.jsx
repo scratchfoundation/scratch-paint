@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import {defineMessages, FormattedMessage, injectIntl, intlShape} from 'react-intl';
 
 import classNames from 'classnames';
-import parseColor from 'parse-color';
 
-import Slider from '../forms/slider.jsx';
+import Slider, {CONTAINER_WIDTH, HANDLE_WIDTH} from '../forms/slider.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import styles from './color-picker.css';
 import GradientTypes from '../../lib/gradient-types';
-import {MIXED} from '../../helper/style-path';
+import {MIXED, colorsEqual} from '../../helper/style-path';
 
 import eyeDropperIcon from './icons/eye-dropper.svg';
 import noFillIcon from '../color-button/no-fill.svg';
@@ -20,12 +19,33 @@ import fillSolidIcon from './icons/fill-solid-enabled.svg';
 import fillVertGradientIcon from './icons/fill-vert-gradient-enabled.svg';
 import swapIcon from './icons/swap.svg';
 import Modes from '../../lib/modes';
-import {getColorName, getColorRGB} from '../../lib/colors';
+import {getColorName, getColorObj, getHsv} from '../../lib/colors';
+import ColorProptype from '../../lib/color-proptype';
 
-const hsvToHex = (h, s, v) =>
-    // Scale hue back up to [0, 360] from [0, 100]
-    parseColor(`hsv(${3.6 * h}, ${s}, ${v})`).hex
-;
+/**
+ * Converts the color picker's internal color representation (HSV 0-100) into a CSS color string.
+ * @param {number} h Hue, from 0 to 100.
+ * @param {number} s Saturation, from 0 to 100.
+ * @param {number} v Value, from 0 to 100.
+ * @returns {string} A valid CSS color string representing the input HSV color.
+ */
+const hsvToCssString = (h, s, v) => {
+    const scaledValue = v * 0.01;
+    const hslLightness = scaledValue - ((scaledValue * (s * 0.01)) / 2);
+    const m = Math.min(hslLightness, 1 - hslLightness);
+    const hslSaturation = (m === 0) ? 0 : (scaledValue - hslLightness) / m;
+
+    return `hsl(${h * 3.6}, ${hslSaturation * 100}%, ${hslLightness * 100}%)`;
+};
+/**
+ * Converts a paper.Color object into a CSS color string.
+ * @param {paper.Color) colorObj a paper color in hsb format
+ * @returns {string} A valid CSS color string representing the input HSV color.
+ */
+const colorObjToCssString = (colorObj) => {
+    const hsv = getHsv(colorObj);
+    return hsvToCssString(hsv[0], hsv[1], hsv[2]);
+};
 
 const messages = defineMessages({
     swap: {
@@ -42,18 +62,28 @@ class ColorPickerComponent extends React.Component {
         for (let n = 100; n >= 0; n -= 10) {
             switch (channel) {
             case 'hue':
-                stops.push(hsvToHex(n, this.props.saturation, this.props.brightness));
+                stops.push(hsvToCssString(n, this.props.saturation, this.props.brightness));
                 break;
             case 'saturation':
-                stops.push(hsvToHex(this.props.hue, n, this.props.brightness));
+                stops.push(hsvToCssString(this.props.hue, n, this.props.brightness));
                 break;
             case 'brightness':
-                stops.push(hsvToHex(this.props.hue, this.props.saturation, n));
+                stops.push(hsvToCssString(this.props.hue, this.props.saturation, n));
                 break;
             default:
                 throw new Error(`Unknown channel for color sliders: ${channel}`);
             }
         }
+
+        // The sliders are a rounded capsule shape, and the slider handles are circles. As a consequence, when the
+        // slider handle is fully to one side, its center is actually moved away from the start/end of the slider by
+        // the slider handle's radius, meaning that the effective range of the slider excludes the rounded caps.
+        // To compensate for this, position the first stop to where the rounded cap ends, and position the last stop
+        // to where the rounded cap begins.
+        const halfHandleWidth = HANDLE_WIDTH / 2;
+        stops[0] += ` 0 ${halfHandleWidth}px`;
+        stops[stops.length - 1] += ` ${CONTAINER_WIDTH - halfHandleWidth}px 100%`;
+
         return `linear-gradient(to left, ${stops.join(',')})`;
     }
     render () {
@@ -125,7 +155,7 @@ class ColorPickerComponent extends React.Component {
                                         })}
                                         style={{
                                             backgroundColor: this.props.color === null || this.props.color === MIXED ?
-                                                'white' : this.props.color
+                                                'white' : this.props.color.toCSS()
                                         }}
                                         onClick={this.props.onSelectColor}
                                     >
@@ -158,7 +188,7 @@ class ColorPickerComponent extends React.Component {
                                         })}
                                         style={{
                                             backgroundColor: this.props.color2 === null || this.props.color2 === MIXED ?
-                                                'white' : this.props.color2
+                                                'white' : this.props.color2.toCSS()
                                         }}
                                         onClick={this.props.onSelectColor2}
                                     >
@@ -185,6 +215,7 @@ class ColorPickerComponent extends React.Component {
                     <div className={classNames(styles.swatches, styles.colorSwatches)}>
                         {this.props.colors.map(color => {
                             const activeColor = this.props.colorIndex ? this.props.color2 : this.props.color;
+                            const colorObj = getColorObj(color);
                             return (<div
                                 key={color}
                                 role="img"
@@ -192,12 +223,12 @@ class ColorPickerComponent extends React.Component {
                                 title={getColorName(color)}
                                 className={classNames({
                                     [styles.swatch]: true,
-                                    [styles.activeSwatch]: this.props.colorsMatch(activeColor, getColorRGB(color))
+                                    [styles.activeSwatch]: colorsEqual(activeColor, colorObj)
                                 })}
                                 style={{
-                                    backgroundColor: parseColor(getColorRGB(color)).hex
+                                    backgroundColor: colorObjToCssString(colorObj)
                                 }}
-                                onClick={swatchClickFactory(getColorRGB(color))}
+                                onClick={swatchClickFactory(colorObj)}
                             />
                             );
                         })}
@@ -313,10 +344,9 @@ class ColorPickerComponent extends React.Component {
 
 ColorPickerComponent.propTypes = {
     brightness: PropTypes.number.isRequired,
-    color: PropTypes.string,
-    color2: PropTypes.string,
+    color: ColorProptype,
+    color2: ColorProptype,
     colors: PropTypes.arrayOf(PropTypes.string).isRequired,
-    colorsMatch: PropTypes.func.isRequired,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     hue: PropTypes.number.isRequired,
@@ -340,5 +370,12 @@ ColorPickerComponent.propTypes = {
     saturation: PropTypes.number.isRequired,
     shouldShowGradientTools: PropTypes.bool.isRequired
 };
+
+const mapStateToProps = state => ({
+    colorIndex: state.scratchPaint.fillMode.colorIndex,
+    isEyeDropping: state.scratchPaint.color.eyeDropper.active,
+    mode: state.scratchPaint.mode,
+    rtl: state.scratchPaint.layout.rtl
+});
 
 export default injectIntl(ColorPickerComponent);
