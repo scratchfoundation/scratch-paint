@@ -47,7 +47,7 @@
     "redux": "^3"
   },
   "devDependencies": {
-    "autoprefixer": "9.7.4",
+    "autoprefixer": "10.2.4",
     "babel-cli": "6.26.0",
     "babel-core": "^6.23.1",
     "babel-eslint": "^8.2.1",
