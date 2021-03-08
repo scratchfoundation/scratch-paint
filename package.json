@@ -32,7 +32,7 @@
     "minilog": "3.1.0",
     "parse-color": "1.0.0",
     "prop-types": "^15.5.10",
-    "scratch-svg-renderer": "0.2.0-prerelease.20201019174008"
+    "scratch-render-fonts": "latest"
   },
   "peerDependencies": {
     "react": "^16",
@@ -62,7 +62,7 @@
     "enzyme-adapter-react-16": "^1.5.0",
     "eslint": "^7.13.0",
     "eslint-config-import": "^0.13.0",
-    "eslint-config-scratch": "^5.0.0",
+    "eslint-config-scratch": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-react": "7.20.3",
     "gh-pages": "github:rschamp/gh-pages#publish-branch-to-subfolder",
@@ -91,7 +91,7 @@
     "redux-throttle": "0.1.1",
     "regenerator-runtime": "^0.13.3",
     "rimraf": "^2.6.1",
-    "scratch-l10n": "3.1.20181129221712",
+    "scratch-l10n": "3.11.20210308031514",
     "style-loader": "^1.0.0",
     "svg-url-loader": "^3.0.0",
     "tap": "^14.4.3",

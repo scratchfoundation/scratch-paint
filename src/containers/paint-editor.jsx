@@ -23,10 +23,8 @@ import {convertToBitmap, convertToVector} from '../helper/bitmap';
 import {resetZoom, zoomOnSelection, OUTERMOST_ZOOM_LEVEL} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
 
-import Modes from '../lib/modes';
-import {BitmapModes, VectorModes} from '../lib/modes';
-import Formats from '../lib/format';
-import {isBitmap, isVector} from '../lib/format';
+import Modes, {BitmapModes, VectorModes} from '../lib/modes';
+import Formats, {isBitmap, isVector} from '../lib/format';
 import bindAll from 'lodash.bindall';
 
 /**
@@ -129,7 +127,7 @@ class PaintEditor extends React.Component {
         if (this.props.format === Formats.VECTOR && isBitmap(prevProps.format)) {
             convertToVector(this.props.clearSelectedItems, this.props.onUpdateImage);
         } else if (isVector(prevProps.format) && this.props.format === Formats.BITMAP) {
-            convertToBitmap(this.props.clearSelectedItems, this.props.onUpdateImage);
+            convertToBitmap(this.props.clearSelectedItems, this.props.onUpdateImage, this.props.fontInlineFn);
         }
     }
     componentWillUnmount () {
@@ -344,6 +342,7 @@ PaintEditor.propTypes = {
     changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
     format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
+    fontInlineFn: PropTypes.func,
     handleSwitchToBitmap: PropTypes.func.isRequired,
     handleSwitchToVector: PropTypes.func.isRequired,
     image: PropTypes.oneOfType([
