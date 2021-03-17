@@ -154,6 +154,7 @@ class FillTool extends paper.Tool {
     }
     handleMouseUp (event) {
         if (event.event.button > 0) return; // only first mouse button
+        this.handleMouseMove(event); // if it's a touch event we need to simulate hover first; if not this is harmless
         if (this.fillItem) {
             // If the hole we're filling in is the same color as the parent, and parent has no outline, remove the hole
             if (this.addedFillItem &&
