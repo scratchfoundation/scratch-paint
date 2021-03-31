@@ -94,7 +94,7 @@
     "scratch-l10n": "3.11.20210308031514",
     "style-loader": "^1.0.0",
     "svg-url-loader": "^3.0.0",
-    "tap": "^14.4.3",
+    "tap": "^15.0.0",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^2.1.0",
     "webpack": "^4.8.0",
