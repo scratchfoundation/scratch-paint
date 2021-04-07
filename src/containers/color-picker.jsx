@@ -7,14 +7,12 @@ import React from 'react';
 
 import {changeColorIndex} from '../reducers/color-index';
 import {clearSelectedItems} from '../reducers/selected-items';
-import {activateEyeDropper} from '../reducers/eye-dropper';
 import GradientTypes from '../lib/gradient-types';
 
 import ColorPickerComponent from '../components/color-picker/color-picker.jsx';
-import {MIXED} from '../helper/style-path';
+import {MIXED, colorMatch} from '../helper/style-path';
 import Modes from '../lib/modes';
 import {getHsv} from '../lib/colors';
-
 
 // Important! This component ignores new color props except when isEyeDropping
 // This is to make the HSV <=> RGB conversion stable. The sliders manage their
@@ -29,10 +27,7 @@ class ColorPicker extends React.Component {
             'handleChangeGradientTypeVertical',
             'handleHueChange',
             'handleSaturationChange',
-            'handleBrightnessChange',
-            'handleSwatch',
-            'handleTransparent',
-            'handleActivateEyeDropper'
+            'handleBrightnessChange'
         ]);
 
         const color = props.colorIndex === 0 ? props.color : props.color2;
@@ -78,24 +73,6 @@ class ColorPicker extends React.Component {
             brightness: this.state.brightness / 100
         }));
     }
-    handleSwatch (color) {
-        const hsv = getHsv(color);
-        this.setState({
-            hue: hsv[0],
-            saturation: hsv[1],
-            brightness: hsv[2]
-        });
-        this.props.onChangeColor(color);
-    }
-    handleTransparent () {
-        this.props.onChangeColor(null);
-    }
-    handleActivateEyeDropper () {
-        this.props.onActivateEyeDropper(
-            paper.tool, // get the currently active tool from paper
-            this.props.onChangeColor
-        );
-    }
     handleChangeGradientTypeHorizontal () {
         this.props.onChangeGradientType(GradientTypes.HORIZONTAL);
     }
@@ -116,16 +93,15 @@ class ColorPicker extends React.Component {
                 saturation={this.state.saturation}
                 color={this.props.color}
                 color2={this.props.color2}
-                colors={this.props.colors}
-                colorsMatch={this.colorsMatch}
                 colorIndex={this.props.colorIndex}
                 gradientType={this.props.gradientType}
                 isEyeDropping={this.props.isEyeDropping}
+                isStrokeColor={this.props.isStrokeColor}
                 mode={this.props.mode}
                 rtl={this.props.rtl}
                 shouldShowGradientTools={this.props.shouldShowGradientTools}
-                onActivateEyeDropper={this.handleActivateEyeDropper}
                 onBrightnessChange={this.handleBrightnessChange}
+                onChangeColor={this.props.onChangeColor}
                 onChangeGradientTypeHorizontal={this.handleChangeGradientTypeHorizontal}
                 onChangeGradientTypeRadial={this.handleChangeGradientTypeRadial}
                 onChangeGradientTypeSolid={this.handleChangeGradientTypeSolid}
@@ -135,8 +111,6 @@ class ColorPicker extends React.Component {
                 onSelectColor={this.props.onSelectColor}
                 onSelectColor2={this.props.onSelectColor2}
                 onSwap={this.props.onSwap}
-                onSwatch={this.handleSwatch}
-                onTransparent={this.handleTransparent}
             />
         );
     }
@@ -148,9 +122,8 @@ ColorPicker.propTypes = {
     colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
-    isEyeDropping: PropTypes.bool.isRequired,
+    isStrokeColor: PropTypes.bool.isRequired,
     mode: PropTypes.oneOf(Object.keys(Modes)),
-    onActivateEyeDropper: PropTypes.func.isRequired,
     onChangeColor: PropTypes.func.isRequired,
     onChangeGradientType: PropTypes.func,
     onSelectColor: PropTypes.func.isRequired,
@@ -160,9 +133,14 @@ ColorPicker.propTypes = {
     shouldShowGradientTools: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
+    color: ownProps.isStrokeColor ?
+        state.scratchPaint.color.strokeColor :
+        state.scratchPaint.color.fillColor,
+    color2: ownProps.isStrokeColor ?
+        state.scratchPaint.color.strokeColor2 :
+        state.scratchPaint.color.fillColor2,
     colorIndex: state.scratchPaint.fillMode.colorIndex,
-    isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     mode: state.scratchPaint.mode,
     rtl: state.scratchPaint.layout.rtl
 });
@@ -170,9 +148,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
-    },
-    onActivateEyeDropper: (currentTool, callback) => {
-        dispatch(activateEyeDropper(currentTool, callback));
     },
     onSelectColor: () => {
         dispatch(changeColorIndex(0));

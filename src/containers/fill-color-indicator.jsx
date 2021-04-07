@@ -9,7 +9,7 @@ import {getSelectedLeafItems} from '../helper/selection';
 import {setSelectedItems} from '../reducers/selected-items';
 import Modes, {GradientToolsModes} from '../lib/modes';
 import {isBitmap} from '../lib/format';
-import {getAllColors} from '../lib/colors';
+import {getRow1Colors, getRow2Colors} from '../lib/colors';
 import GradientTypes from '../lib/gradient-types';
 
 import makeColorIndicator from './color-indicator.jsx';
@@ -34,7 +34,6 @@ const mapStateToProps = state => ({
     format: state.scratchPaint.format,
     gradientType: state.scratchPaint.color.fillColor.gradientType,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
-    mode: state.scratchPaint.mode,
     shouldShowGradientTools: state.scratchPaint.mode in GradientToolsModes,
     textEditTarget: state.scratchPaint.textEditTarget
 });

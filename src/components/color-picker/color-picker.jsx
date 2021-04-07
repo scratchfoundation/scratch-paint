@@ -7,10 +7,10 @@ import classNames from 'classnames';
 import Slider, {CONTAINER_WIDTH, HANDLE_WIDTH} from '../forms/slider.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import styles from './color-picker.css';
+import swatchStyles from '../swatches/swatches.css';
 import GradientTypes from '../../lib/gradient-types';
-import {MIXED, colorsEqual} from '../../helper/style-path';
+import Swatches from '../../containers/swatches.jsx';
 
-import eyeDropperIcon from './icons/eye-dropper.svg';
 import noFillIcon from '../color-button/no-fill.svg';
 import mixedFillIcon from '../color-button/mixed-fill.svg';
 import fillHorzGradientIcon from './icons/fill-horz-gradient-enabled.svg';
@@ -87,8 +87,6 @@ class ColorPickerComponent extends React.Component {
         return `linear-gradient(to left, ${stops.join(',')})`;
     }
     render () {
-        const swatchClickFactory = color =>
-            () => this.props.onSwatch(color);
         return (
             <div
                 className={styles.colorPickerContainer}
@@ -149,9 +147,8 @@ class ColorPickerComponent extends React.Component {
                                     <div
                                         className={classNames({
                                             [styles.clickable]: true,
-                                            [styles.swatch]: true,
                                             [styles.largeSwatch]: true,
-                                            [styles.activeSwatch]: this.props.colorIndex === 0
+                                            [swatchStyles.activeSwatch]: this.props.colorIndex === 0
                                         })}
                                         style={{
                                             backgroundColor: this.props.color === null || this.props.color === MIXED ?
@@ -182,9 +179,8 @@ class ColorPickerComponent extends React.Component {
                                     <div
                                         className={classNames({
                                             [styles.clickable]: true,
-                                            [styles.swatch]: true,
                                             [styles.largeSwatch]: true,
-                                            [styles.activeSwatch]: this.props.colorIndex === 1
+                                            [swatchStyles.activeSwatch]: this.props.colorIndex === 1
                                         })}
                                         style={{
                                             backgroundColor: this.props.color2 === null || this.props.color2 === MIXED ?
@@ -211,68 +207,11 @@ class ColorPickerComponent extends React.Component {
                         )}
                     </div>
                 ) : null}
-                {this.props.colors ?
-                    <div className={classNames(styles.swatches, styles.colorSwatches)}>
-                        {this.props.colors.map(color => {
-                            const activeColor = this.props.colorIndex ? this.props.color2 : this.props.color;
-                            const colorObj = getColorObj(color);
-                            return (<div
-                                key={color}
-                                role="img"
-                                alt={getColorName(color)}
-                                title={getColorName(color)}
-                                className={classNames({
-                                    [styles.swatch]: true,
-                                    [styles.activeSwatch]: colorsEqual(activeColor, colorObj)
-                                })}
-                                style={{
-                                    backgroundColor: colorObjToCssString(colorObj)
-                                }}
-                                onClick={swatchClickFactory(colorObj)}
-                            />
-                            );
-                        })}
-                        <div className={styles.swatches}>
-                            {this.props.mode === Modes.BIT_LINE ||
-                                this.props.mode === Modes.BIT_RECT ||
-                                this.props.mode === Modes.BIT_OVAL ||
-                                this.props.mode === Modes.BIT_TEXT ? null :
-                                (<div
-                                    className={classNames({
-                                        [styles.clickable]: true,
-                                        [styles.swatch]: true,
-                                        [styles.activeSwatch]:
-                                            (this.props.colorIndex === 0 && this.props.color === null) ||
-                                            (this.props.colorIndex === 1 && this.props.color2 === null)
-                                    })}
-                                    onClick={this.props.onTransparent}
-                                >
-                                    <img
-                                        className={styles.swatchIcon}
-                                        draggable={false}
-                                        src={noFillIcon}
-                                    />
-                                </div>)
-                            }
-                        </div>
-                        <div className={styles.swatches}>
-                            <div
-                                className={classNames({
-                                    [styles.clickable]: true,
-                                    [styles.swatch]: true,
-                                    [styles.activeSwatch]: this.props.isEyeDropping
-                                })}
-                                onClick={this.props.onActivateEyeDropper}
-                            >
-                                <img
-                                    className={styles.swatchIcon}
-                                    draggable={false}
-                                    src={eyeDropperIcon}
-                                />
-                            </div>
-                        </div>
-                    </div> :
-                    null}
+                <Swatches
+                    isStrokeColor={this.props.isStrokeColor}
+                    containerStyle={styles.colorSwatchesContainer}
+                    onChangeColor={this.props.onChangeColor}
+                />
                 <div className={styles.row}>
                     <div className={styles.rowHeader}>
                         <span className={styles.labelName}>
@@ -330,7 +269,6 @@ class ColorPickerComponent extends React.Component {
                     </div>
                     <div className={styles.rowSlider}>
                         <Slider
-                            lastSlider
                             background={this._makeBackground('brightness')}
                             value={this.props.brightness}
                             onChange={this.props.onBrightnessChange}
@@ -351,10 +289,9 @@ ColorPickerComponent.propTypes = {
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     hue: PropTypes.number.isRequired,
     intl: intlShape.isRequired,
-    isEyeDropping: PropTypes.bool.isRequired,
-    mode: PropTypes.oneOf(Object.keys(Modes)),
-    onActivateEyeDropper: PropTypes.func.isRequired,
+    isStrokeColor: PropTypes.bool.isRequired,
     onBrightnessChange: PropTypes.func.isRequired,
+    onChangeColor: PropTypes.func.isRequired,
     onChangeGradientTypeHorizontal: PropTypes.func.isRequired,
     onChangeGradientTypeRadial: PropTypes.func.isRequired,
     onChangeGradientTypeSolid: PropTypes.func.isRequired,
@@ -364,8 +301,6 @@ ColorPickerComponent.propTypes = {
     onSelectColor: PropTypes.func.isRequired,
     onSelectColor2: PropTypes.func.isRequired,
     onSwap: PropTypes.func,
-    onSwatch: PropTypes.func.isRequired,
-    onTransparent: PropTypes.func.isRequired,
     rtl: PropTypes.bool.isRequired,
     saturation: PropTypes.number.isRequired,
     shouldShowGradientTools: PropTypes.bool.isRequired
