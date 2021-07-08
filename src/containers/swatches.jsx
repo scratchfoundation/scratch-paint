@@ -23,6 +23,8 @@ class Swatches extends React.Component {
         ]);
     }
     colorMatchesActiveColor (color) {
+        // Eyedropper is the "active color" when eyedropping
+        if (this.props.isEyeDropping) return false;
         let activeColor;
         if (this.props.isStrokeColor) {
             if (this.props.colorIndex === 1) {
