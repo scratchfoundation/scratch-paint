@@ -20,7 +20,6 @@ const ColorIndicatorComponent = props => (
                 <ColorPicker
                     color={props.color}
                     color2={props.color2}
-                    colors={props.colors}
                     gradientType={props.gradientType}
                     isStrokeColor={false}
                     shouldShowGradientTools={props.shouldShowGradientTools}
@@ -51,7 +50,6 @@ ColorIndicatorComponent.propTypes = {
     disabled: PropTypes.bool.isRequired,
     color: ColorProptype,
     color2: ColorProptype,
-    colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     colorModalVisible: PropTypes.bool.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     label: PropTypes.string.isRequired,

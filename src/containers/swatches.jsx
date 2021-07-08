@@ -8,8 +8,9 @@ import {clearSelectedItems} from '../reducers/selected-items';
 import {activateEyeDropper} from '../reducers/eye-dropper';
 
 import SwatchesComponent from '../components/swatches/swatches.jsx';
-import {MIXED} from '../helper/style-path';
+import {MIXED, colorsEqual} from '../helper/style-path';
 import {colorStringToHsv, getRow1Colors, getRow2Colors} from '../lib/colors';
+import ColorProptype from '../lib/color-proptype';
 
 class Swatches extends React.Component {
     constructor (props) {
@@ -21,7 +22,7 @@ class Swatches extends React.Component {
             'handleActivateEyeDropper'
         ]);
     }
-    colorMatchesActiveColor (colorString2) {
+    colorMatchesActiveColor (color) {
         let activeColor;
         if (this.props.isStrokeColor) {
             if (this.props.colorIndex === 1) {
@@ -36,14 +37,7 @@ class Swatches extends React.Component {
                 activeColor = this.props.fillColor;
             }
         }
-        // transparent or mixed
-        if (!activeColor || activeColor === MIXED) return activeColor === colorString2;
-
-        const [hue1, saturation1, brightness1] = colorStringToHsv(activeColor);
-        const [hue2, saturation2, brightness2] = colorStringToHsv(colorString2);
-        return Math.abs(hue1 - hue2) < .5 &&
-            Math.abs(saturation1 - saturation2) < .5 &&
-            Math.abs(brightness1 - brightness2) < .5;
+        return colorsEqual(activeColor, color);
     }
     /**
      * @param{string} color - a hex color
@@ -84,13 +78,13 @@ class Swatches extends React.Component {
 Swatches.propTypes = {
     colorIndex: PropTypes.number.isRequired,
     containerStyle: PropTypes.string,
-    fillColor: PropTypes.string,
-    fillColor2: PropTypes.string,
+    fillColor: ColorProptype,
+    fillColor2: ColorProptype,
     isEyeDropping: PropTypes.bool.isRequired,
     isStrokeColor: PropTypes.bool.isRequired,
     small: PropTypes.bool,
-    strokeColor: PropTypes.string,
-    strokeColor2: PropTypes.string,
+    strokeColor: ColorProptype,
+    strokeColor2: ColorProptype,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onChangeColor: PropTypes.func.isRequired
 };
@@ -98,10 +92,11 @@ Swatches.propTypes = {
 const mapStateToProps = state => ({
     colorIndex: state.scratchPaint.fillMode.colorIndex,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
-    fillColor: state.scratchPaint.color.fillColor,
-    fillColor2: state.scratchPaint.color.fillColor2,
-    strokeColor: state.scratchPaint.color.strokeColor,
-    strokeColor2: state.scratchPaint.color.strokeColor2
+    colorIndex: state.scratchPaint.fillMode.colorIndex,
+    fillColor: state.scratchPaint.color.fillColor.primary,
+    fillColor2: state.scratchPaint.color.fillColor.secondary,
+    strokeColor: state.scratchPaint.color.strokeColor.primary,
+    strokeColor2: state.scratchPaint.color.strokeColor.secondary
 });
 
 const mapDispatchToProps = dispatch => ({

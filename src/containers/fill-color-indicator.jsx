@@ -9,7 +9,6 @@ import {getSelectedLeafItems} from '../helper/selection';
 import {setSelectedItems} from '../reducers/selected-items';
 import Modes, {GradientToolsModes} from '../lib/modes';
 import {isBitmap} from '../lib/format';
-import {getRow1Colors, getRow2Colors} from '../lib/colors';
 import GradientTypes from '../lib/gradient-types';
 
 import makeColorIndicator from './color-indicator.jsx';

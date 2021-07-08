@@ -10,6 +10,7 @@ import styles from './color-picker.css';
 import swatchStyles from '../swatches/swatches.css';
 import GradientTypes from '../../lib/gradient-types';
 import Swatches from '../../containers/swatches.jsx';
+import {MIXED} from '../../helper/style-path';
 
 import noFillIcon from '../color-button/no-fill.svg';
 import mixedFillIcon from '../color-button/mixed-fill.svg';
@@ -284,7 +285,6 @@ ColorPickerComponent.propTypes = {
     brightness: PropTypes.number.isRequired,
     color: ColorProptype,
     color2: ColorProptype,
-    colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     hue: PropTypes.number.isRequired,

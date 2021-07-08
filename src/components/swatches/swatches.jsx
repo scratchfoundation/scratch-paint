@@ -6,21 +6,21 @@ import styles from './swatches.css';
 
 import eyeDropperIcon from '../color-picker/icons/eye-dropper.svg';
 import noFillIcon from '../color-button/no-fill.svg';
-import {getColorName, getColorHex} from '../../lib/colors';
+import {getColorName, getColorObj} from '../../lib/colors';
 import ColorProptype from '../../lib/color-proptype';
 
 const SwatchesComponent = props => {
     const swatchClickFactory = color =>
         () => props.onSwatch(color);
 
-    const colorToSwatchMap = color => {
-        const colorHex = getColorHex(color);
-        const colorsMatch = props.colorMatchesActiveColor(colorHex);
+    const colorToSwatchMap = colorKey => {
+        const color = getColorObj(colorKey);
+        const colorsMatch = props.colorMatchesActiveColor(color);
         return (<div
-            key={color}
+            key={colorKey}
             role="img"
-            alt={getColorName(color)}
-            title={getColorName(color)}
+            alt={getColorName(colorKey)}
+            title={getColorName(colorKey)}
             className={classNames({
                 [styles.swatch]: true,
                 [styles.smallSwatch]: props.small,
@@ -28,9 +28,9 @@ const SwatchesComponent = props => {
                 [styles.smallActiveSwatch]: colorsMatch && props.small
             })}
             style={{
-                backgroundColor: colorHex
+                backgroundColor: color.toCSS()
             }}
-            onClick={swatchClickFactory(colorHex)}
+            onClick={swatchClickFactory(color)}
         />
         );
     };
@@ -100,8 +100,8 @@ SwatchesComponent.propTypes = {
     containerStyle: PropTypes.string,
     isEyeDropping: PropTypes.bool.isRequired,
     small: PropTypes.bool,
-    row1Colors: PropTypes.arrayOf(ColorProptype),
-    row2Colors: PropTypes.arrayOf(ColorProptype)
+    row1Colors: PropTypes.arrayOf(PropTypes.string),
+    row2Colors: PropTypes.arrayOf(PropTypes.string)
 };
 
 SwatchesComponent.defaultProps = {

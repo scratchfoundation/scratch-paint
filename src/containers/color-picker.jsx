@@ -10,7 +10,7 @@ import {clearSelectedItems} from '../reducers/selected-items';
 import GradientTypes from '../lib/gradient-types';
 
 import ColorPickerComponent from '../components/color-picker/color-picker.jsx';
-import {MIXED, colorMatch} from '../helper/style-path';
+import {MIXED, colorsEqual} from '../helper/style-path';
 import Modes from '../lib/modes';
 import {getHsv} from '../lib/colors';
 
@@ -41,8 +41,7 @@ class ColorPicker extends React.Component {
     componentWillReceiveProps (newProps) {
         const color = newProps.colorIndex === 0 ? this.props.color : this.props.color2;
         const newColor = newProps.colorIndex === 0 ? newProps.color : newProps.color2;
-        const colorSetByEyedropper = this.props.isEyeDropping && color !== newColor;
-        if (colorSetByEyedropper || this.props.colorIndex !== newProps.colorIndex) {
+        if (!colorsEqual(color, newColor)) {
             const hsv = getHsv(newColor);
             this.setState({
                 hue: hsv[0],
@@ -119,7 +118,6 @@ class ColorPicker extends React.Component {
 ColorPicker.propTypes = {
     color: ColorProptype,
     color2: ColorProptype,
-    colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     colorIndex: PropTypes.number.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     isStrokeColor: PropTypes.bool.isRequired,
@@ -135,11 +133,11 @@ ColorPicker.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
     color: ownProps.isStrokeColor ?
-        state.scratchPaint.color.strokeColor :
-        state.scratchPaint.color.fillColor,
+        state.scratchPaint.color.strokeColor.primary :
+        state.scratchPaint.color.fillColor.primary,
     color2: ownProps.isStrokeColor ?
-        state.scratchPaint.color.strokeColor2 :
-        state.scratchPaint.color.fillColor2,
+        state.scratchPaint.color.strokeColor.secondary :
+        state.scratchPaint.color.fillColor.secondary,
     colorIndex: state.scratchPaint.fillMode.colorIndex,
     mode: state.scratchPaint.mode,
     rtl: state.scratchPaint.layout.rtl

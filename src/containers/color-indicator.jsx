@@ -7,7 +7,6 @@ import {getSelectedLeafItems} from '../helper/selection';
 import Formats, {isBitmap} from '../lib/format';
 import GradientTypes from '../lib/gradient-types';
 import ColorProptype from '../lib/color-proptype';
-import {getAllColors} from '../lib/colors';
 
 import ColorIndicatorComponent from '../components/color-indicator.jsx';
 import {applyColorToSelection,
@@ -130,7 +129,6 @@ const makeColorIndicator = (label, isStroke) => {
             return (
                 <ColorIndicatorComponent
                     {...this.props}
-                    colors={getAllColors()}
                     label={this.props.intl.formatMessage(label)}
                     outline={isStroke}
                     onChangeColor={this.handleChangeColor}

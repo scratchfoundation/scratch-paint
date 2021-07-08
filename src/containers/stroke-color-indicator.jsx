@@ -5,7 +5,6 @@ import {changeColorIndex} from '../reducers/color-index';
 import {changeStrokeColor, changeStrokeColor2, changeStrokeGradientType} from '../reducers/stroke-style';
 import {changeStrokeWidth} from '../reducers/stroke-width';
 import {openStrokeColor, closeStrokeColor} from '../reducers/modals';
-import {getAllColors} from '../lib/colors';
 import Formats from '../lib/format';
 import {getSelectedLeafItems} from '../helper/selection';
 import {setSelectedItems} from '../reducers/selected-items';
