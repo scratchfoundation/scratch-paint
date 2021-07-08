@@ -22,11 +22,11 @@ const ROW_1_COLORS = {
 const ROW_2_COLORS = {
     BLACK: makeColor(0,1,0),
     WHITE: makeColor(0,0,1),
-    UMBER: makeColor(25,0.43,0.3),
-    CHOCOLATE: makeColor(26,0.55,0.46),
-    BROWN: makeColor(29,0.49,0.71),
-    TAN: makeColor(32,0.38,0.93),
-    PEACH: makeColor(29,0.21,0.97),
+    UMBER: makeColor(25,0.68,0.30), // #4D2F19
+    CHOCOLATE: makeColor(25,0.62,0.51), // #825331
+    BROWN: makeColor(30,0.54,0.71), // #B68554
+    TAN: makeColor(32,0.43,0.89), // #E4B681
+    PEACH: makeColor(32,0.29,0.99), // #FDDBB4
 };
 
 const _getColors = function (colorEnum) {
