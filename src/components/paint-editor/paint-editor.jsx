@@ -261,12 +261,12 @@ const PaintEditorComponent = props => (
                             </Button> : null
                     }
                     <div className={styles.row}>
-{/*                        <Swatches
+                        <Swatches
                             small
                             isStrokeColor={props.isStrokeColor}
                             containerStyle={styles.colorSwatchesContainer}
                             onChangeColor={props.onChangeColor}
-                        />*/}
+                        />
                         {/* Zoom controls */}
                         <InputGroup className={styles.zoomControls}>
                             <ButtonGroup>

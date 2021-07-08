@@ -10,7 +10,8 @@ import SelectionHOC from '../hocs/selection-hoc.jsx';
 import UndoHOC from '../hocs/undo-hoc.jsx';
 import UpdateImageHOC from '../hocs/update-image-hoc.jsx';
 
-import {changeFillColor, clearFillGradient, changeStrokeColor, clearStrokeGradient} from '../reducers/fill-style';
+import {changeFillColor, clearFillGradient} from '../reducers/fill-style';
+import {changeStrokeColor, clearStrokeGradient} from '../reducers/stroke-style';
 import {changeMode} from '../reducers/modes';
 import {changeFormat} from '../reducers/format';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
@@ -23,7 +24,7 @@ import {getSelectedLeafItems} from '../helper/selection';
 import {convertToBitmap, convertToVector} from '../helper/bitmap';
 import {resetZoom, zoomOnSelection, OUTERMOST_ZOOM_LEVEL} from '../helper/view';
 import EyeDropperTool from '../helper/tools/eye-dropper';
-import {applyFillColorToSelection, applyStrokeColorToSelection} from '../helper/style-path';
+import {applyColorToSelection} from '../helper/style-path';
 
 import Modes, {BitmapModes, VectorModes} from '../lib/modes';
 import Formats, {isBitmap, isVector} from '../lib/format';
@@ -239,17 +240,19 @@ class PaintEditor extends React.Component {
         const isStroke = this.props.mode === Modes.LINE;
         let hasChanged = false;
         if (isStroke) {
-            hasChanged = applyStrokeColorToSelection(
+            hasChanged = applyColorToSelection(
                 newColor,
-                isBitmap(this.props.format),
+                this.props.strokeColorIndex,
+                true /* isSolidGradient */,
+                true /* applyToStroke */,
                 this.props.textEditTarget);
             this.props.onChangeStrokeColor(newColor);
         } else {
-            hasChanged = applyFillColorToSelection(
+            hasChanged = applyColorToSelection(
                 newColor,
-                this.props.colorIndex,
+                this.props.fillColorIndex,
                 true /* isSolidGradient */,
-                isBitmap(this.props.format),
+                false /* applyToStroke */,
                 this.props.textEditTarget);
             this.props.onChangeFillColor(newColor);
         }
