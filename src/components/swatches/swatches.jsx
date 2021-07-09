@@ -48,7 +48,8 @@ const SwatchesComponent = props => {
                         [styles.swatch]: true,
                         [styles.smallSwatch]: props.small,
                         [styles.activeSwatch]: isTransparent(),
-                        [styles.smallActiveSwatch]: isTransparent() && props.small
+                        [styles.smallActiveSwatch]: isTransparent() && props.small,
+                        [styles.disabled]: !props.isTransparentSwatchEnabled()
                     })}
                     onClick={props.onTransparent}
                 >
@@ -99,6 +100,7 @@ SwatchesComponent.propTypes = {
     colorMatchesActiveColor: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
     containerStyle: PropTypes.string,
     isEyeDropping: PropTypes.bool.isRequired,
+    isTransparentSwatchEnabled: PropTypes.func.isRequired,
     small: PropTypes.bool,
     row1Colors: PropTypes.arrayOf(PropTypes.string),
     row2Colors: PropTypes.arrayOf(PropTypes.string)

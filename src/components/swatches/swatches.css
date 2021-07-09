@@ -50,3 +50,8 @@
     height: 18px;
     padding: 2px;
 }
+
+.disabled {
+  visibility: hidden;
+  cursor: not-allowed;
+}

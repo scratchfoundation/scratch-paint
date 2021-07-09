@@ -10,6 +10,7 @@ import {activateEyeDropper} from '../reducers/eye-dropper';
 import SwatchesComponent from '../components/swatches/swatches.jsx';
 import {MIXED, colorsEqual} from '../helper/style-path';
 import {colorStringToHsv, getRow1Colors, getRow2Colors} from '../lib/colors';
+import Modes from '../lib/modes';
 import ColorProptype from '../lib/color-proptype';
 
 class Swatches extends React.Component {
@@ -19,7 +20,8 @@ class Swatches extends React.Component {
             'colorMatchesActiveColor',
             'handleSwatch',
             'handleTransparent',
-            'handleActivateEyeDropper'
+            'handleActivateEyeDropper',
+            'transparentSwatchEnabled'
         ]);
     }
     colorMatchesActiveColor (color) {
@@ -40,6 +42,20 @@ class Swatches extends React.Component {
             }
         }
         return colorsEqual(activeColor, color);
+    }
+    // Transparent swatch is disabled in shape, line, and brush tools to help
+    // prevent confusion (the drawing won't be visible)
+    transparentSwatchEnabled () {
+        switch (this.props.mode) {
+            case Modes.SELECT:
+            case Modes.FILL:
+            case Modes.RESHAPE:
+            case Modes.BIT_SELECT:
+            case Modes.BIT_FILL:
+                return true;
+            default:
+                return false;
+        }
     }
     /**
      * @param{string} color - a hex color
@@ -67,6 +83,7 @@ class Swatches extends React.Component {
                 colorMatchesActiveColor={this.colorMatchesActiveColor}
                 colorIndex={this.props.colorIndex}
                 isEyeDropping={this.props.isEyeDropping}
+                isTransparentSwatchEnabled={this.transparentSwatchEnabled}
                 isStrokeColor={this.props.isStrokeColor}
                 small={this.props.small}
                 onActivateEyeDropper={this.handleActivateEyeDropper}
@@ -84,6 +101,7 @@ Swatches.propTypes = {
     fillColor2: ColorProptype,
     isEyeDropping: PropTypes.bool.isRequired,
     isStrokeColor: PropTypes.bool.isRequired,
+    mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
     small: PropTypes.bool,
     strokeColor: ColorProptype,
     strokeColor2: ColorProptype,
@@ -97,6 +115,7 @@ const mapStateToProps = state => ({
     colorIndex: state.scratchPaint.fillMode.colorIndex,
     fillColor: state.scratchPaint.color.fillColor.primary,
     fillColor2: state.scratchPaint.color.fillColor.secondary,
+    mode: state.scratchPaint.mode,
     strokeColor: state.scratchPaint.color.strokeColor.primary,
     strokeColor2: state.scratchPaint.color.strokeColor.secondary
 });
