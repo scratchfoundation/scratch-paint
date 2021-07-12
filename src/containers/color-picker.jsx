@@ -10,13 +10,10 @@ import {clearSelectedItems} from '../reducers/selected-items';
 import GradientTypes from '../lib/gradient-types';
 
 import ColorPickerComponent from '../components/color-picker/color-picker.jsx';
-import {MIXED, colorsEqual} from '../helper/style-path';
+import {colorsEqual} from '../helper/style-path';
 import Modes from '../lib/modes';
 import {getHsv} from '../lib/colors';
 
-// Important! This component ignores new color props except when isEyeDropping
-// This is to make the HSV <=> RGB conversion stable. The sliders manage their
-// own changes until unmounted or color changes with props.isEyeDropping = true.
 class ColorPicker extends React.Component {
     constructor (props) {
         super(props);
@@ -94,7 +91,6 @@ class ColorPicker extends React.Component {
                 color2={this.props.color2}
                 colorIndex={this.props.colorIndex}
                 gradientType={this.props.gradientType}
-                isEyeDropping={this.props.isEyeDropping}
                 isStrokeColor={this.props.isStrokeColor}
                 mode={this.props.mode}
                 rtl={this.props.rtl}

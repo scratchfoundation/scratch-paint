@@ -19,8 +19,6 @@ import fillRadialIcon from './icons/fill-radial-enabled.svg';
 import fillSolidIcon from './icons/fill-solid-enabled.svg';
 import fillVertGradientIcon from './icons/fill-vert-gradient-enabled.svg';
 import swapIcon from './icons/swap.svg';
-import Modes from '../../lib/modes';
-import {getColorName, getColorObj, getHsv} from '../../lib/colors';
 import ColorProptype from '../../lib/color-proptype';
 
 /**
@@ -38,15 +36,6 @@ const hsvToCssString = (h, s, v) => {
 
     return `hsl(${h * 3.6}, ${hslSaturation * 100}%, ${hslLightness * 100}%)`;
 };
-/**
- * Converts a paper.Color object into a CSS color string.
- * @param {paper.Color) colorObj a paper color in hsb format
- * @returns {string} A valid CSS color string representing the input HSV color.
- */
-const colorObjToCssString = (colorObj) => {
-    const hsv = getHsv(colorObj);
-    return hsvToCssString(hsv[0], hsv[1], hsv[2]);
-};
 
 const messages = defineMessages({
     swap: {
@@ -55,6 +44,7 @@ const messages = defineMessages({
         id: 'paint.colorPicker.swap'
     }
 });
+
 class ColorPickerComponent extends React.Component {
     _makeBackground (channel) {
         const stops = [];
@@ -305,12 +295,5 @@ ColorPickerComponent.propTypes = {
     saturation: PropTypes.number.isRequired,
     shouldShowGradientTools: PropTypes.bool.isRequired
 };
-
-const mapStateToProps = state => ({
-    colorIndex: state.scratchPaint.fillMode.colorIndex,
-    isEyeDropping: state.scratchPaint.color.eyeDropper.active,
-    mode: state.scratchPaint.mode,
-    rtl: state.scratchPaint.layout.rtl
-});
 
 export default injectIntl(ColorPickerComponent);

@@ -8,8 +8,8 @@ import {clearSelectedItems} from '../reducers/selected-items';
 import {activateEyeDropper} from '../reducers/eye-dropper';
 
 import SwatchesComponent from '../components/swatches/swatches.jsx';
-import {MIXED, colorsEqual} from '../helper/style-path';
-import {colorStringToHsv, getRow1Colors, getRow2Colors} from '../lib/colors';
+import {colorsEqual} from '../helper/style-path';
+import {getRow1Colors, getRow2Colors} from '../lib/colors';
 import Modes from '../lib/modes';
 import ColorProptype from '../lib/color-proptype';
 
@@ -29,13 +29,13 @@ class Swatches extends React.Component {
         if (this.props.isEyeDropping) return false;
         let activeColor;
         if (this.props.isStrokeColor) {
-            if (this.props.colorIndex === 1) {
+            if (this.props.strokeColorIndex === 1) {
                 activeColor = this.props.strokeColor2;
             } else {
                 activeColor = this.props.strokeColor;
             }
         } else if (!this.props.isStrokeColor) {
-            if (this.props.colorIndex === 1) {
+            if (this.props.fillColorIndex === 1) {
                 activeColor = this.props.fillColor2;
             } else {
                 activeColor = this.props.fillColor;
@@ -47,14 +47,14 @@ class Swatches extends React.Component {
     // prevent confusion (the drawing won't be visible)
     transparentSwatchEnabled () {
         switch (this.props.mode) {
-            case Modes.SELECT:
-            case Modes.FILL:
-            case Modes.RESHAPE:
-            case Modes.BIT_SELECT:
-            case Modes.BIT_FILL:
-                return true;
-            default:
-                return false;
+        case Modes.SELECT:
+        case Modes.FILL:
+        case Modes.RESHAPE:
+        case Modes.BIT_SELECT:
+        case Modes.BIT_FILL:
+            return true;
+        default:
+            return false;
         }
     }
     /**
@@ -81,7 +81,7 @@ class Swatches extends React.Component {
                 row1Colors={getRow1Colors()}
                 row2Colors={getRow2Colors()}
                 colorMatchesActiveColor={this.colorMatchesActiveColor}
-                colorIndex={this.props.colorIndex}
+                colorIndex={this.props.isStrokeColor ? this.props.strokeColorIndex : this.props.fillColorIndex}
                 isEyeDropping={this.props.isEyeDropping}
                 isTransparentSwatchEnabled={this.transparentSwatchEnabled}
                 isStrokeColor={this.props.isStrokeColor}
@@ -95,29 +95,30 @@ class Swatches extends React.Component {
 }
 
 Swatches.propTypes = {
-    colorIndex: PropTypes.number.isRequired,
     containerStyle: PropTypes.string,
     fillColor: ColorProptype,
     fillColor2: ColorProptype,
+    fillColorIndex: PropTypes.number.isRequired,
     isEyeDropping: PropTypes.bool.isRequired,
     isStrokeColor: PropTypes.bool.isRequired,
     mode: PropTypes.oneOf(Object.keys(Modes)).isRequired,
     small: PropTypes.bool,
     strokeColor: ColorProptype,
     strokeColor2: ColorProptype,
+    strokeColorIndex: PropTypes.number.isRequired,
     onActivateEyeDropper: PropTypes.func.isRequired,
     onChangeColor: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-    colorIndex: state.scratchPaint.fillMode.colorIndex,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
-    colorIndex: state.scratchPaint.fillMode.colorIndex,
+    fillColorIndex: state.scratchPaint.fillMode.colorIndex,
     fillColor: state.scratchPaint.color.fillColor.primary,
     fillColor2: state.scratchPaint.color.fillColor.secondary,
     mode: state.scratchPaint.mode,
     strokeColor: state.scratchPaint.color.strokeColor.primary,
-    strokeColor2: state.scratchPaint.color.strokeColor.secondary
+    strokeColor2: state.scratchPaint.color.strokeColor.secondary,
+    strokeColorIndex: state.scratchPaint.strokeMode.colorIndex
 });
 
 const mapDispatchToProps = dispatch => ({

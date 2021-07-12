@@ -9,6 +9,10 @@ import log from '../log/log';
 
 const MIXED = 'scratch-paint/style-path/mixed';
 
+const _isBlack = hsbColor => hsbColor.brightness === 0;
+
+const _isWhite = hsbColor => hsbColor.brightness === 100 && hsbColor.saturation === 100;
+
 // Check if two colors, possibly null, are (approximately) equal.
 const colorsEqual = (color1, color2) => {
     if (color1 === color2) return true;
@@ -40,14 +44,6 @@ const colorsEqual = (color1, color2) => {
         Math.abs(hsb1.alpha - hsb2.alpha) < EPSILON
     );
 };
-
-const _isBlack = (hsbColor) => {
-    return hsbColor.brightness === 0;
-}
-
-const _isWhite = (hsbColor) => {
-    return hsbColor.brightness === 100 && hsbColor.saturation === 100;
-}
 
 // Selected items and currently active text edit items respond to color changes.
 const _getColorStateListeners = function (textEditTargetId) {

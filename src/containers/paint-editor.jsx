@@ -369,7 +369,7 @@ PaintEditor.propTypes = {
     changeColorToEyeDropper: PropTypes.func,
     changeMode: PropTypes.func.isRequired,
     clearSelectedItems: PropTypes.func.isRequired,
-    colorIndex: PropTypes.number.isRequired,
+    fillColorIndex: PropTypes.number.isRequired,
     format: PropTypes.oneOf(Object.keys(Formats)), // Internal, up-to-date data format
     fontInlineFn: PropTypes.func,
     handleSwitchToBitmap: PropTypes.func.isRequired,
@@ -403,6 +403,7 @@ PaintEditor.propTypes = {
     setSelectedItems: PropTypes.func.isRequired,
     shouldShowRedo: PropTypes.func.isRequired,
     shouldShowUndo: PropTypes.func.isRequired,
+    strokeColorIndex: PropTypes.number.isRequired,
     textEditTarget: PropTypes.number,
     updateViewBounds: PropTypes.func.isRequired,
     viewBounds: PropTypes.instanceOf(paper.Matrix).isRequired,
@@ -411,11 +412,12 @@ PaintEditor.propTypes = {
 
 const mapStateToProps = state => ({
     changeColorToEyeDropper: state.scratchPaint.color.eyeDropper.callback,
-    colorIndex: state.scratchPaint.fillMode.colorIndex,
+    fillColorIndex: state.scratchPaint.fillMode.colorIndex,
     format: state.scratchPaint.format,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     mode: state.scratchPaint.mode,
     previousTool: state.scratchPaint.color.eyeDropper.previousTool,
+    strokeColorIndex: state.scratchPaint.strokeMode.colorIndex,
     textEditTarget: state.scratchPaint.textEditTarget,
     viewBounds: state.scratchPaint.viewBounds
 });
