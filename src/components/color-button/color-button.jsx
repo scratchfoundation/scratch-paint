@@ -13,10 +13,9 @@ import ColorProptype from '../../lib/color-proptype';
 
 const colorToBackground = (color, color2, gradientType) => {
     if (color === MIXED || (gradientType !== GradientTypes.SOLID && color2 === MIXED)) return 'white';
-    if (color === MIXED || color2 === MIXED) return 'white';
 
     color = (color === null) ? 'white' : color.toCSS();
-    color2 = (color2 === null) ? 'white' : color2.toCSS();
+    color2 = (color2 === null || color2 === MIXED) ? 'white' : color2.toCSS();
 
     switch (gradientType) {
     case GradientTypes.SOLID: return color;
