@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import paper from '@scratch/paper';
 import fillColorReducer, {changeFillColor} from '../../src/reducers/fill-style';
 import strokeColorReducer, {changeStrokeColor} from '../../src/reducers/stroke-style';
 import {setSelectedItems} from '../../src/reducers/selected-items';
@@ -18,37 +19,53 @@ for (const [colorReducer, changeColor, colorProp] of [
 
     test('changeColor', () => {
         let defaultState;
-
-        // 3 value hex code
-        let newColor = '#fff';
+        let oldColor = new paper.Color("#010");
+        let newColor = new paper.Color("#fff");
         expect(colorReducer(defaultState /* state */, changeColor(newColor) /* action */).primary)
             .toEqual(newColor);
         expect(colorReducer({
-            primary: '#010',
-            secondary: null,
-            gradientType: GradientTypes.SOLID
-        } /* state */, changeColor(newColor) /* action */).primary)
-            .toEqual(newColor);
-
-        // 6 value hex code
-        newColor = '#facade';
-        expect(colorReducer(defaultState /* state */, changeColor(newColor) /* action */).primary)
-            .toEqual(newColor);
-        expect(colorReducer({
-            primary: '#010',
+            primary: oldColor,
             secondary: null,
             gradientType: GradientTypes.SOLID
         } /* state */, changeColor(newColor) /* action */).primary)
             .toEqual(newColor);
     });
 
+    test('changeColorToTransparent', () => {
+        let defaultState;
+        let oldColor = new paper.Color("#010");
+        let newColor = null;
+        expect(colorReducer(defaultState /* state */, changeColor(newColor) /* action */).primary)
+            .toEqual(newColor);
+        expect(colorReducer({
+            primary: oldColor,
+            secondary: null,
+            gradientType: GradientTypes.SOLID
+        } /* state */, changeColor(newColor) /* action */).primary)
+            .toEqual(newColor);
+    });
+    
+    test('changeColorToMixed', () => {
+        let defaultState;
+        let oldColor = new paper.Color("#010");
+        let newColor = MIXED;
+        expect(colorReducer(defaultState /* state */, changeColor(newColor) /* action */).primary)
+            .toEqual(newColor);
+        expect(colorReducer({
+            primary: oldColor,
+            secondary: null,
+            gradientType: GradientTypes.SOLID
+        } /* state */, changeColor(newColor) /* action */).primary)
+            .toEqual(newColor);
+    });
+    
     test('changeColorViaSelectedItems', () => {
         let defaultState;
 
-        const color1 = 6;
+        const color1 = new paper.Color("rgba(6, 0, 0, 0.5)");
         const color2 = null; // transparent
         let selectedItems = [mockPaperRootItem({[colorProp]: color1, strokeWidth: 1})];
-
+debugger;
         expect(colorReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */).primary)
             .toEqual(color1);
         selectedItems = [mockPaperRootItem({[colorProp]: color2, strokeWidth: 1})];
@@ -63,21 +80,11 @@ for (const [colorReducer, changeColor, colorProp] of [
     });
 
     test('invalidChangeColor', () => {
-        const origState = {primary: '#fff', secondary: null, gradientType: GradientTypes.SOLID};
+        const origState = {primary: paper.Color.WHITE, secondary: null, gradientType: GradientTypes.SOLID};
 
         expect(colorReducer(origState /* state */, changeColor() /* action */))
             .toBe(origState);
         expect(colorReducer(origState /* state */, changeColor('#') /* action */))
-            .toBe(origState);
-        expect(colorReducer(origState /* state */, changeColor('#1') /* action */))
-            .toBe(origState);
-        expect(colorReducer(origState /* state */, changeColor('#12') /* action */))
-            .toBe(origState);
-        expect(colorReducer(origState /* state */, changeColor('#1234') /* action */))
-            .toBe(origState);
-        expect(colorReducer(origState /* state */, changeColor('#12345') /* action */))
-            .toBe(origState);
-        expect(colorReducer(origState /* state */, changeColor('#1234567') /* action */))
             .toBe(origState);
         expect(colorReducer(origState /* state */, changeColor('invalid argument') /* action */))
             .toBe(origState);
