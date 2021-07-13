@@ -412,12 +412,12 @@ PaintEditor.propTypes = {
 
 const mapStateToProps = state => ({
     changeColorToEyeDropper: state.scratchPaint.color.eyeDropper.callback,
-    fillColorIndex: state.scratchPaint.fillMode.colorIndex,
+    fillColorIndex: state.scratchPaint.color.fillColor.activeIndex,
     format: state.scratchPaint.format,
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
     mode: state.scratchPaint.mode,
     previousTool: state.scratchPaint.color.eyeDropper.previousTool,
-    strokeColorIndex: state.scratchPaint.strokeMode.colorIndex,
+    strokeColorIndex: state.scratchPaint.color.strokeColor.activeIndex,
     textEditTarget: state.scratchPaint.textEditTarget,
     viewBounds: state.scratchPaint.viewBounds
 });

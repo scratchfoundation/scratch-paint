@@ -7,20 +7,19 @@ import {MIXED} from '../../src/helper/style-path';
 import GradientTypes from '../../src/lib/gradient-types';
 import {mockPaperRootItem} from '../__mocks__/paperMocks';
 
+
+let defaultState;
 for (const [colorReducer, changeColor, colorProp] of [
     [fillColorReducer, changeFillColor, 'fillColor'],
     [strokeColorReducer, changeStrokeColor, 'strokeColor']
 ]) {
     test('initialState', () => {
-        let defaultState;
-
         expect(colorReducer(defaultState /* state */, {type: 'anything'} /* action */)).toBeDefined();
     });
 
     test('changeColor', () => {
-        let defaultState;
-        let oldColor = new paper.Color("#010");
-        let newColor = new paper.Color("#fff");
+        const oldColor = new paper.Color('#010');
+        const newColor = new paper.Color('#fff');
         expect(colorReducer(defaultState /* state */, changeColor(newColor) /* action */).primary)
             .toEqual(newColor);
         expect(colorReducer({
@@ -32,9 +31,8 @@ for (const [colorReducer, changeColor, colorProp] of [
     });
 
     test('changeColorToTransparent', () => {
-        let defaultState;
-        let oldColor = new paper.Color("#010");
-        let newColor = null;
+        const oldColor = new paper.Color('#010');
+        const newColor = null;
         expect(colorReducer(defaultState /* state */, changeColor(newColor) /* action */).primary)
             .toEqual(newColor);
         expect(colorReducer({
@@ -46,9 +44,8 @@ for (const [colorReducer, changeColor, colorProp] of [
     });
     
     test('changeColorToMixed', () => {
-        let defaultState;
-        let oldColor = new paper.Color("#010");
-        let newColor = MIXED;
+        const oldColor = new paper.Color('#010');
+        const newColor = MIXED;
         expect(colorReducer(defaultState /* state */, changeColor(newColor) /* action */).primary)
             .toEqual(newColor);
         expect(colorReducer({
@@ -60,12 +57,9 @@ for (const [colorReducer, changeColor, colorProp] of [
     });
     
     test('changeColorViaSelectedItems', () => {
-        let defaultState;
-
-        const color1 = new paper.Color("rgba(6, 0, 0, 0.5)");
+        const color1 = new paper.Color('rgba(6, 0, 0, 0.5)');
         const color2 = null; // transparent
         let selectedItems = [mockPaperRootItem({[colorProp]: color1, strokeWidth: 1})];
-debugger;
         expect(colorReducer(defaultState /* state */, setSelectedItems(selectedItems) /* action */).primary)
             .toEqual(color1);
         selectedItems = [mockPaperRootItem({[colorProp]: color2, strokeWidth: 1})];

@@ -112,13 +112,13 @@ Swatches.propTypes = {
 
 const mapStateToProps = state => ({
     isEyeDropping: state.scratchPaint.color.eyeDropper.active,
-    fillColorIndex: state.scratchPaint.fillMode.colorIndex,
+    fillColorIndex: state.scratchPaint.color.fillColor.activeIndex,
     fillColor: state.scratchPaint.color.fillColor.primary,
     fillColor2: state.scratchPaint.color.fillColor.secondary,
     mode: state.scratchPaint.mode,
     strokeColor: state.scratchPaint.color.strokeColor.primary,
     strokeColor2: state.scratchPaint.color.strokeColor.secondary,
-    strokeColorIndex: state.scratchPaint.strokeMode.colorIndex
+    strokeColorIndex: state.scratchPaint.color.strokeColor.activeIndex
 });
 
 const mapDispatchToProps = dispatch => ({

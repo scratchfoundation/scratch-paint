@@ -21,6 +21,8 @@ const makeColorStyleReducer = ({
     changeGradientTypeAction,
     // Action name for clearing the gradient
     clearGradientAction,
+    // Action for changing which of the primary and secondary colors is currently 'active' to change.
+    changeIndexAction,
     // Initial color when not set
     defaultColor,
     // The name of the property read from getColorsFromSelection to get the primary color.
@@ -37,7 +39,8 @@ const makeColorStyleReducer = ({
         state = {
             primary: defaultColor,
             secondary: null,
-            gradientType: GradientTypes.SOLID
+            gradientType: GradientTypes.SOLID,
+            activeIndex: 0
         };
     }
     switch (action.type) {
@@ -77,17 +80,28 @@ const makeColorStyleReducer = ({
         }
         return newState;
     }
+    case changeIndexAction:
+        if (action.index !== 1 && action.index !== 0) {
+            log.warn(`Invalid color index: ${action.index}`);
+            return state;
+        }
+        return {...state, activeIndex: action.index};
     case changeGradientTypeAction:
         if (action.gradientType in GradientTypes) {
-            return {...state, gradientType: action.gradientType};
+            const newState = {...state, gradientType: action.gradientType};
+            if (action.gradientType === GradientTypes.SOLID) newState.activeIndex = 0;
+            return newState;
         }
         log.warn(`Gradient type does not exist: ${action.gradientType}`);
         return state;
     case clearGradientAction:
-        return {...state, secondary: null, gradientType: GradientTypes.SOLID};
+        return {...state, secondary: null, gradientType: GradientTypes.SOLID, activeIndex: 0};
     default:
         return state;
     }
 };
 
-export default makeColorStyleReducer;
+export {
+    makeColorStyleReducer as default,
+    isValidColor
+};

@@ -5,7 +5,8 @@ import ColorProptype from '../lib/color-proptype';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {changeColorIndex} from '../reducers/color-index';
+import {changeStrokeColorIndex} from '../reducers/stroke-style';
+import {changeFillColorIndex} from '../reducers/fill-style';
 import {clearSelectedItems} from '../reducers/selected-items';
 import GradientTypes from '../lib/gradient-types';
 
@@ -134,20 +135,30 @@ const mapStateToProps = (state, ownProps) => ({
     color2: ownProps.isStrokeColor ?
         state.scratchPaint.color.strokeColor.secondary :
         state.scratchPaint.color.fillColor.secondary,
-    colorIndex: state.scratchPaint.fillMode.colorIndex,
+    colorIndex: ownProps.isStrokeColor ?
+        state.scratchPaint.color.strokeColor.activeIndex :
+        state.scratchPaint.color.fillColor.activeIndex,
     mode: state.scratchPaint.mode,
     rtl: state.scratchPaint.layout.rtl
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
     clearSelectedItems: () => {
         dispatch(clearSelectedItems());
     },
     onSelectColor: () => {
-        dispatch(changeColorIndex(0));
+        if (ownProps.isStrokeColor) {
+            dispatch(changeStrokeColorIndex(0));
+        } else {
+            dispatch(changeFillColorIndex(0));
+        }
     },
     onSelectColor2: () => {
-        dispatch(changeColorIndex(1));
+        if (ownProps.isStrokeColor) {
+            dispatch(changeStrokeColorIndex(1));
+        } else {
+            dispatch(changeFillColorIndex(1));
+        }
     }
 });
 

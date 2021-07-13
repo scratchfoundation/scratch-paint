@@ -21,7 +21,7 @@ const ColorIndicatorComponent = props => (
                     color={props.color}
                     color2={props.color2}
                     gradientType={props.gradientType}
-                    isStrokeColor={false}
+                    isStrokeColor={props.outline}
                     shouldShowGradientTools={props.shouldShowGradientTools}
                     onChangeColor={props.onChangeColor}
                     onChangeGradientType={props.onChangeGradientType}

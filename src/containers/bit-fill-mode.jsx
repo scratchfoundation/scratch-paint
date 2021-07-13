@@ -8,10 +8,9 @@ import GradientTypes from '../lib/gradient-types';
 
 import FillModeComponent from '../components/bit-fill-mode/bit-fill-mode.jsx';
 
-import {changeFillColor, changeFillColor2, DEFAULT_COLOR} from '../reducers/fill-style';
+import {changeFillColor, changeFillColor2, changeFillGradientType, DEFAULT_COLOR} from '../reducers/fill-style';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
-import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 import {clearSelection} from '../helper/selection';
 import FillTool from '../helper/bit-tools/fill-tool';
 import {generateSecondaryColor, MIXED} from '../helper/style-path';
@@ -125,7 +124,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearSelectedItems());
     },
     changeGradientType: gradientType => {
-        dispatch(changeGradientType(gradientType));
+        dispatch(changeFillGradientType(gradientType));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.BIT_FILL));

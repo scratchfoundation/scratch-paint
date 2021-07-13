@@ -8,12 +8,11 @@ import GradientTypes from '../lib/gradient-types';
 import FillTool from '../helper/tools/fill-tool';
 import {generateSecondaryColor, MIXED} from '../helper/style-path';
 
-import {changeFillColor, changeFillColor2, DEFAULT_COLOR} from '../reducers/fill-style';
+import {changeFillColor, changeFillColor2, changeFillGradientType, DEFAULT_COLOR} from '../reducers/fill-style';
 import {changeMode} from '../reducers/modes';
 import {clearSelectedItems} from '../reducers/selected-items';
 import {clearSelection} from '../helper/selection';
 import {clearHoveredItem, setHoveredItem} from '../reducers/hover';
-import {changeGradientType} from '../reducers/fill-mode-gradient-type';
 
 import FillModeComponent from '../components/fill-mode/fill-mode.jsx';
 
@@ -144,7 +143,7 @@ const mapDispatchToProps = dispatch => ({
         dispatch(clearSelectedItems());
     },
     changeGradientType: gradientType => {
-        dispatch(changeGradientType(gradientType));
+        dispatch(changeFillGradientType(gradientType));
     },
     handleMouseDown: () => {
         dispatch(changeMode(Modes.FILL));
