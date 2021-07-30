@@ -26,6 +26,10 @@ const colorToBackground = (color, color2, gradientType) => {
     }
 };
 
+/*
+ * The square of color on the color indicator that shows the currently selected color. It may be
+ * a solid color, a gradient, or an icon with a white background to indicate transparent.
+ */
 const ColorButtonComponent = props => (
     <div
         className={styles.colorButton}

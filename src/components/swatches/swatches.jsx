@@ -9,6 +9,10 @@ import noFillIcon from '../color-button/no-fill.svg';
 import {getColorName, getColorObj} from '../../lib/colors';
 import ColorProptype from '../../lib/color-proptype';
 
+/*
+ * The transparent icon, eyedropper icon, and the preset colors which can be clicked to set
+ * the selected color.
+ */
 const SwatchesComponent = props => {
     const swatchClickFactory = color =>
         () => props.onSwatch(color);

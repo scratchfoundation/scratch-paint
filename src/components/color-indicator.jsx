@@ -10,6 +10,10 @@ import Label from './forms/label.jsx';
 import GradientTypes from '../lib/gradient-types';
 import ColorProptype from '../lib/color-proptype';
 
+/*
+ * The indicator of the currently selected color, including the preview of the color and
+ * the dropdown (ColorPicker) which appears when you click on the color to select a new one.
+ */
 const ColorIndicatorComponent = props => (
     <InputGroup
         className={props.className}
