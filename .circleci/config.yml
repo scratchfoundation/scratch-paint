@@ -1,0 +1,49 @@
+version: 2.1
+aliases:
+  - &defaults
+      docker:
+        - image: cimg/node:12-browsers
+      working_directory: ~/repo
+      environment:
+        NODE_ENV: production
+        RELEASE_TIMESTAMP: "$(date +'%Y%m%d%H%M%S')"
+  - &setup
+    name: "setup"
+    command: |
+      npm --production=false ci
+      mkdir ./test/results
+  - &lint
+    name: "run lint tests"
+    command: npm run lint
+  - &unit
+    name: "run unit tests"
+    command: npm run unit
+  - &build
+    name: "run npm build"
+    command: |
+      NODE_ENV=production npm run build
+
+jobs:
+  build-test:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          <<: *setup
+      - run:
+          <<: *lint
+      - run:
+          <<: *unit
+      - run:
+          <<: *build
+
+workflows:
+  build-test-no-deploy:
+    jobs:
+      - build-test:
+        filters:
+          branches:
+            ignore:
+              - master
+              - develop
+              - /^hotfix\/.*/
