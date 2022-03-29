@@ -3,6 +3,9 @@ aliases:
   - &defaults
       docker:
         - image: cimg/node:12.22.11-browsers
+          auth:
+            username: $DOCKERHUB_USERNAME
+            password: $DOCKERHUB_PASSWORD
       working_directory: ~/repo
       environment:
         NODE_ENV: production
@@ -41,9 +44,11 @@ workflows:
   build-test-no-deploy:
     jobs:
       - build-test:
-        filters:
-          branches:
-            ignore:
-              - master
-              - develop
-              - /^hotfix\/.*/
+          context:
+            - dockerhub-credentials
+          filters:
+            branches:
+                ignore:
+                  - master
+                  - develop
+                  # - /^hotfix\/.*/
