@@ -17,7 +17,7 @@ aliases:
       mkdir ./test/results
   - &lint
     name: "run lint tests"
-    command: npm run lint
+    command: npm run lint -- --format junit -o ./test/results/lint-results.xml
   - &unit
     name: "run unit tests"
     command: JEST_JUNIT_OUTPUT_NAME=unit-jest-results.xml npm run unit -- --reporters=jest-junit
