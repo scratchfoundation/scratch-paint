@@ -39,6 +39,8 @@ jobs:
           <<: *unit
       - run:
           <<: *build
+      - store_test_results:
+          path: test/results
 
 workflows:
   build-test-no-deploy:
