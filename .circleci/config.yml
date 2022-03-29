@@ -20,7 +20,7 @@ aliases:
     command: npm run lint
   - &unit
     name: "run unit tests"
-    command: npm run unit
+    command: JEST_JUNIT_OUTPUT_NAME=unit-jest-results.xml npm run unit -- --reporters=jest-junit
   - &build
     name: "run npm build"
     command: |
