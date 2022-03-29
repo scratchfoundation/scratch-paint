@@ -2,7 +2,7 @@ version: 2.1
 aliases:
   - &defaults
       docker:
-        - image: cimg/node:12-browsers
+        - image: cimg/node:12.22.11-browsers
       working_directory: ~/repo
       environment:
         NODE_ENV: production
