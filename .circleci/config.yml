@@ -57,6 +57,24 @@ jobs:
           <<: *build
       - store_test_results:
           path: test/results
+  build-test-deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          <<: *setup
+      - run:
+          <<: *lint
+      - run:
+          <<: *unit
+      - run:
+          <<: *build
+      - store_test_results:
+          path: test/results
+      - run:
+          <<: *tag-setup
+      - run:
+          <<: *deploy-gh-pages
 
 workflows:
   build-test-no-deploy:
@@ -67,6 +85,17 @@ workflows:
           filters:
             branches:
                 ignore:
+                  - master
+                  - develop
+                  - /^hotfix\/.*/
+  build-test-deploy:
+    jobs:
+      - build-test-deploy:
+          context:
+            - dockerhub-credentials
+          filters:
+            branches:
+                only:
                   - master
                   - develop
                   - /^hotfix\/.*/
