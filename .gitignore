@@ -16,3 +16,6 @@ dist/*
 # generated translation files
 /translations
 /locale
+
+# tests
+/test/results/*
