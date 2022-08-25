@@ -29,17 +29,6 @@ aliases:
       name: "run npm build"
       command: |
         NODE_ENV=production npm run build
-  - &tag-setup
-    run:
-      name: "setup tags"
-      command: |
-        RELEASE_TIMESTAMP="$(date +'%Y%m%d%H%M%S')"
-        VPKG=$($(npm bin)/json -f package.json version)
-        echo export RELEASE_VERSION=${VPKG}-prerelease.${RELEASE_TIMESTAMP} >> $BASH_ENV
-        echo export NPM_TAG=latest >> $BASH_ENV
-        if [[ "$CIRCLE_BRANCH" == hotfix/* ]]; then # double brackets are important for matching the wildcard
-          echo export NPM_TAG=hotfix >> $BASH_ENV
-        fi
   - &deploy-gh-pages
     run:
       name: "deploy to gh pages"
@@ -47,22 +36,6 @@ aliases:
         git config --global user.email $(git log --pretty=format:"%ae" -n1)
         git config --global user.name $(git log --pretty=format:"%an" -n1)
         npm run deploy -- -e $CIRCLE_BRANCH
-  - &deploy-npm
-    run:
-      name: "deploy to npm"
-      command: |
-        echo "npm tag: $NPM_TAG"
-        echo "release version: $RELEASE_VERSION"
-        npm version --no-git-tag-version $RELEASE_VERSION
-        npm set //registry.npmjs.org/:_authToken=$NPM_TOKEN
-        npm publish --tag $NPM_TAG
-  - &tag-commit
-    run:
-      name: "tag commit in github"
-      command: |
-        echo $RELEASE_VERSION
-        git tag $RELEASE_VERSION
-        git push $CIRCLE_REPOSITORY_URL $RELEASE_VERSION
 
 jobs:
   build-test:
@@ -85,10 +58,8 @@ jobs:
       - *build
       - store_test_results:
           path: test/results
-      - *tag-setup
       - *deploy-gh-pages
-      - *deploy-npm
-      - *tag-commit
+      - run: npx semantic-release
   push-translations:
     <<: *defaults
     steps:

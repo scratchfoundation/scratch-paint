@@ -22,7 +22,7 @@
   "homepage": "https://github.com/LLK/scratch-paint#readme",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/LLK/scratch-paint.git"
+    "url": "https://github.com/LLK/scratch-paint.git"
   },
   "dependencies": {
     "@scratch/paper": "0.11.20200728195508",
@@ -97,6 +97,7 @@
     "rimraf": "2.7.1",
     "scratch-l10n": "3.14.20220826031556",
     "scratch-render-fonts": "1.0.0-prerelease.20210401210003",
+    "scratch-semantic-release-config": "1.0.2",
     "style-loader": "1.3.0",
     "svg-url-loader": "3.0.3",
     "tap": "14.11.0",
