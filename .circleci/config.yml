@@ -59,10 +59,7 @@ jobs:
       - store_test_results:
           path: test/results
       - *deploy-gh-pages
-      - run:
-          command: npx semantic-release
-          environment:
-            HUSKY: 0 # disable Husky hooks so commitlint doesn't block semantic-release
+      - run: npx semantic-release
   push-translations:
     <<: *defaults
     steps:
