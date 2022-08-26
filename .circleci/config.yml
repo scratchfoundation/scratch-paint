@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-    browser-tools: circleci/browser-tools@1.2.4
+    browser-tools: circleci/browser-tools@1.4.0
     node: circleci/node@5.0.2
     commitlint: conventional-changelog/commitlint@1.0.0
 aliases:
