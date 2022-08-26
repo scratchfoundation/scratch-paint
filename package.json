@@ -11,6 +11,7 @@
     "i18n:push": "tx-push-src scratch-editor paint-editor ./translations/en.json",
     "i18n:src": "rimraf ./translations/messages && babel src > tmp.js && rimraf tmp.js && ./scripts/build-i18n-source.js ./translations/messages/ ./translations/",
     "lint": "eslint . --ext .js,.jsx",
+    "prepare": "husky install",
     "start": "webpack-dev-server",
     "test": "npm run lint && npm run unit && NODE_ENV=production npm run build",
     "unit": "jest --reporters=default",
@@ -21,7 +22,7 @@
   "homepage": "https://github.com/LLK/scratch-paint#readme",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/LLK/scratch-paint.git"
+    "url": "https://github.com/LLK/scratch-paint.git"
   },
   "dependencies": {
     "@scratch/paper": "0.11.20200728195508",
@@ -47,6 +48,8 @@
     "scratch-render-fonts": "^1.0.0-prerelease.20210401210003"
   },
   "devDependencies": {
+    "@commitlint/cli": "17.0.3",
+    "@commitlint/config-conventional": "17.0.3",
     "autoprefixer": "9.7.4",
     "babel-cli": "6.26.0",
     "babel-core": "6.26.3",
@@ -66,6 +69,7 @@
     "eslint-plugin-react": "7.20.3",
     "gh-pages": "3.2.3",
     "html-webpack-plugin": "3.2.0",
+    "husky": "8.0.1",
     "jest": "22.4.4",
     "jest-canvas-mock": "2.3.1",
     "jest-junit": "13.0.0",
@@ -93,6 +97,7 @@
     "rimraf": "2.7.1",
     "scratch-l10n": "3.14.20220826031556",
     "scratch-render-fonts": "1.0.0-prerelease.20210401210003",
+    "scratch-semantic-release-config": "1.0.2",
     "style-loader": "1.3.0",
     "svg-url-loader": "3.0.3",
     "tap": "14.11.0",
@@ -101,6 +106,11 @@
     "webpack": "4.46.0",
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "3.11.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   },
   "jest": {
     "setupFiles": [
