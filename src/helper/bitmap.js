@@ -208,7 +208,7 @@ const getBrushMark = function (size, color, isEraser) {
     canvas.height = roundedUpRadius * 2;
     const context = canvas.getContext('2d');
     context.imageSmoothingEnabled = false;
-    context.fillStyle = isEraser ? 'white' : color;
+    context.fillStyle = isEraser ? 'white' : color.toCSS(true);
     // Small squares for pixel artists
     if (size <= 5) {
         let offset = 0;
