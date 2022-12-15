@@ -29,31 +29,28 @@ class BitRectMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
+    componentDidUpdate (prevProps) {
         if (this.tool) {
-            if (nextProps.color !== this.props.color) {
-                this.tool.setColor(nextProps.color);
+            if (this.props.color !== prevProps.color) {
+                this.tool.setColor(this.props.color);
             }
-            if (nextProps.selectedItems !== this.props.selectedItems) {
-                this.tool.onSelectionChanged(nextProps.selectedItems);
+            if (this.props.selectedItems !== prevProps.selectedItems) {
+                this.tool.onSelectionChanged(this.props.selectedItems);
             }
-            if (nextProps.filled !== this.props.filled) {
-                this.tool.setFilled(nextProps.filled);
+            if (this.props.filled !== prevProps.filled) {
+                this.tool.setFilled(this.props.filled);
             }
-            if (nextProps.thickness !== this.props.thickness ||
-                    nextProps.zoom !== this.props.zoom) {
-                this.tool.setThickness(nextProps.thickness);
+            if (this.props.thickness !== prevProps.thickness ||
+                    this.props.zoom !== prevProps.zoom) {
+                this.tool.setThickness(this.props.thickness);
             }
         }
 
-        if (nextProps.isRectModeActive && !this.props.isRectModeActive) {
+        if (this.props.isRectModeActive && !prevProps.isRectModeActive) {
             this.activateTool();
-        } else if (!nextProps.isRectModeActive && this.props.isRectModeActive) {
+        } else if (!this.props.isRectModeActive && prevProps.isRectModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isRectModeActive !== this.props.isRectModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import bindAll from 'lodash.bindall';
+import {clearRemovedItem} from '../reducers/hover';
 
 const SelectionHOC = function (WrappedComponent) {
     class SelectionComponent extends React.Component {
@@ -13,23 +14,19 @@ const SelectionHOC = function (WrappedComponent) {
                 'removeItemById'
             ]);
         }
-        componentDidUpdate (prevProps) {
-            // Hovered item has changed
-            if ((this.props.hoveredItemId && this.props.hoveredItemId !== prevProps.hoveredItemId) ||
-                    (!this.props.hoveredItemId && prevProps.hoveredItemId)) {
-                // Remove the old hover item if any
-                this.removeItemById(prevProps.hoveredItemId);
+        componentDidUpdate () {
+            for (const itemId of this.props.removedItemIds) {
+                this.removeItemById(itemId);
             }
         }
         removeItemById (itemId) {
-            if (itemId) {
-                const match = paper.project.getItem({
-                    match: item => (item.id === itemId)
-                });
-                if (match) {
-                    match.remove();
-                }
+            const match = paper.project.getItem({
+                match: item => (item.id === itemId)
+            });
+            if (match) {
+                match.remove();
             }
+            this.props.clearRemovedItem(itemId);
         }
         render () {
             const {
@@ -42,14 +39,23 @@ const SelectionHOC = function (WrappedComponent) {
         }
     }
     SelectionComponent.propTypes = {
-        hoveredItemId: PropTypes.number
+        clearRemovedItem: PropTypes.func.isRequired,
+        hoveredItemId: PropTypes.number,
+        removedItemIds: PropTypes.arrayOf(PropTypes.number)
     };
 
     const mapStateToProps = state => ({
-        hoveredItemId: state.scratchPaint.hoveredItemId
+        hoveredItemId: state.scratchPaint.hover.hoveredItemId,
+        removedItemIds: state.scratchPaint.hover.removedItemIds
+    });
+    const mapDispatchToProps = dispatch => ({
+        clearRemovedItem: itemId => {
+            dispatch(clearRemovedItem(itemId));
+        }
     });
     return connect(
-        mapStateToProps
+        mapStateToProps,
+        mapDispatchToProps
     )(SelectionComponent);
 };
 

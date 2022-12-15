@@ -104,7 +104,6 @@ module.exports = [
             'react-redux': 'react-redux',
             'react-responsive': 'react-responsive',
             'react-style-proptype': 'react-style-proptype',
-            'react-tooltip': 'react-tooltip',
             'redux': 'redux'
         },
         entry: {

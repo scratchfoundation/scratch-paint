@@ -1,20 +1,45 @@
 import log from '../log/log';
 
 const CHANGE_HOVERED = 'scratch-paint/hover/CHANGE_HOVERED';
-const initialState = null;
+const CLEAR_REMOVED = 'scratch-paint/hover/CLEAR_REMOVED';
+const initialState = {
+    hoveredItemId: null,
+    removedItemIds: []
+};
 
 const reducer = function (state, action) {
     if (typeof state === 'undefined') state = initialState;
     switch (action.type) {
-    case CHANGE_HOVERED:
+    case CHANGE_HOVERED: {
         if (typeof action.hoveredItemId === 'undefined') {
             log.warn(`Hovered item should not be set to undefined. Use null.`);
             return state;
-        } else if (typeof action.hoveredItemId === 'undefined' || isNaN(action.hoveredItemId)) {
+        } else if (isNaN(action.hoveredItemId)) {
             log.warn(`Hovered item should be an item ID number. Got: ${action.hoveredItemId}`);
             return state;
         }
-        return action.hoveredItemId;
+        const removedItemIds = [...state.removedItemIds];
+        if (state.hoveredItemId) {
+            removedItemIds.push(state.hoveredItemId);
+        }
+        return {
+            hoveredItemId: action.hoveredItemId,
+            removedItemIds
+        };
+    }
+    case CLEAR_REMOVED: {
+        if (typeof action.itemId === 'undefined') {
+            log.warn(`Cleared item should not be set to undefined. Use null.`);
+            return state;
+        } else if (isNaN(action.itemId)) {
+            log.warn(`Cleared item should be an item ID number. Got: ${action.hoveredItemId}`);
+            return state;
+        }
+        return {
+            ...state,
+            removedItemIds: state.removedItemIds.filter(removedItemId => removedItemId !== action.itemId)
+        };
+    }
     default:
         return state;
     }
@@ -40,8 +65,16 @@ const clearHoveredItem = function () {
     };
 };
 
+const clearRemovedItem = function (itemId) {
+    return {
+        type: CLEAR_REMOVED,
+        itemId
+    };
+};
+
 export {
     reducer as default,
     setHoveredItem,
-    clearHoveredItem
+    clearHoveredItem,
+    clearRemovedItem
 };

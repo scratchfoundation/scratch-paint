@@ -32,22 +32,19 @@ class OvalMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.colorState !== this.props.colorState) {
-            this.tool.setColorState(nextProps.colorState);
+    componentDidUpdate (prevProps) {
+        if (this.tool && this.props.colorState !== prevProps.colorState) {
+            this.tool.setColorState(this.props.colorState);
         }
-        if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
-            this.tool.onSelectionChanged(nextProps.selectedItems);
+        if (this.tool && this.props.selectedItems !== prevProps.selectedItems) {
+            this.tool.onSelectionChanged(this.props.selectedItems);
         }
 
-        if (nextProps.isOvalModeActive && !this.props.isOvalModeActive) {
+        if (this.props.isOvalModeActive && !prevProps.isOvalModeActive) {
             this.activateTool();
-        } else if (!nextProps.isOvalModeActive && this.props.isOvalModeActive) {
+        } else if (!this.props.isOvalModeActive && prevProps.isOvalModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isOvalModeActive !== this.props.isOvalModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {

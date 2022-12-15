@@ -29,24 +29,21 @@ class BrushMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
-        if (nextProps.isBrushModeActive && !this.props.isBrushModeActive) {
+    componentDidUpdate (prevProps) {
+        if (this.props.isBrushModeActive && !prevProps.isBrushModeActive) {
             this.activateTool();
-        } else if (!nextProps.isBrushModeActive && this.props.isBrushModeActive) {
+        } else if (!this.props.isBrushModeActive && prevProps.isBrushModeActive) {
             this.deactivateTool();
-        } else if (nextProps.isBrushModeActive && this.props.isBrushModeActive) {
-            const {fillColor, strokeColor, strokeWidth} = nextProps.colorState;
+        } else if (this.props.isBrushModeActive && prevProps.isBrushModeActive) {
+            const {fillColor, strokeColor, strokeWidth} = this.props.colorState;
             this.blob.setOptions({
                 isEraser: false,
                 fillColor: fillColor.primary,
                 strokeColor: strokeColor.primary,
                 strokeWidth,
-                ...nextProps.brushModeState
+                ...this.props.brushModeState
             });
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isBrushModeActive !== this.props.isBrushModeActive;
     }
     componentWillUnmount () {
         if (this.blob.tool) {

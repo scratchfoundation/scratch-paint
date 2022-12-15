@@ -27,22 +27,19 @@ class SelectMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.hoveredItemId !== this.props.hoveredItemId) {
-            this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
+    componentDidUpdate (prevProps) {
+        if (this.tool && this.props.hoveredItemId !== prevProps.hoveredItemId) {
+            this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
         }
-        if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
-            this.tool.onSelectionChanged(nextProps.selectedItems);
+        if (this.tool && this.props.selectedItems !== prevProps.selectedItems) {
+            this.tool.onSelectionChanged(this.props.selectedItems);
         }
 
-        if (nextProps.isSelectModeActive && !this.props.isSelectModeActive) {
+        if (this.props.isSelectModeActive && !prevProps.isSelectModeActive) {
             this.activateTool();
-        } else if (!nextProps.isSelectModeActive && this.props.isSelectModeActive) {
+        } else if (!this.props.isSelectModeActive && prevProps.isSelectModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isSelectModeActive !== this.props.isSelectModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -92,7 +89,7 @@ SelectMode.propTypes = {
 
 const mapStateToProps = state => ({
     isSelectModeActive: state.scratchPaint.mode === Modes.SELECT,
-    hoveredItemId: state.scratchPaint.hoveredItemId,
+    hoveredItemId: state.scratchPaint.hover.hoveredItemId,
     selectedItems: state.scratchPaint.selectedItems
 });
 const mapDispatchToProps = dispatch => ({

@@ -11,7 +11,7 @@ import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
 import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
 import Dropdown from '../dropdown/dropdown.jsx';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import {defineMessages, injectIntl} from 'react-intl';
 import Formats, {isVector} from '../../lib/format';
 import Input from '../forms/input.jsx';
 import InputGroup from '../input-group/input-group.jsx';
@@ -19,6 +19,7 @@ import Label from '../forms/label.jsx';
 import LabeledIconButton from '../labeled-icon-button/labeled-icon-button.jsx';
 import layout from '../../lib/layout-constants';
 import {hideLabel} from '../../lib/hide-label';
+import intlShape from '../../lib/intl-shape';
 import styles from './fixed-tools.css';
 
 import groupIcon from './icons/group.svg';

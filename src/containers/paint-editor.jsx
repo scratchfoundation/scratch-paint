@@ -103,17 +103,16 @@ class PaintEditor extends React.Component {
         document.addEventListener('mouseup', this.onMouseUp);
         document.addEventListener('touchend', this.onMouseUp);
     }
-    componentWillReceiveProps (newProps) {
-        if (!isBitmap(this.props.format) && isBitmap(newProps.format)) {
+    componentDidUpdate (prevProps) {
+        if (!isBitmap(prevProps.format) && isBitmap(this.props.format)) {
             this.switchModeForFormat(Formats.BITMAP);
-        } else if (!isVector(this.props.format) && isVector(newProps.format)) {
+        } else if (!isVector(prevProps.format) && isVector(this.props.format)) {
             this.switchModeForFormat(Formats.VECTOR);
         }
-        if (newProps.rtl !== this.props.rtl) {
-            this.props.setLayout(newProps.rtl ? 'rtl' : 'ltr');
+        if (this.props.rtl !== prevProps.rtl) {
+            prevProps.setLayout(this.props.rtl ? 'rtl' : 'ltr');
         }
-    }
-    componentDidUpdate (prevProps) {
+
         if (this.props.isEyeDropping && !prevProps.isEyeDropping) {
             this.startEyeDroppingLoop();
         } else if (!this.props.isEyeDropping && prevProps.isEyeDropping) {

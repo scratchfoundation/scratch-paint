@@ -25,19 +25,16 @@ class RoundedRectMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.hoveredItemId !== this.props.hoveredItemId) {
-            this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
+    componentDidUpdate (prevProps) {
+        if (this.tool && this.props.hoveredItemId !== prevProps.hoveredItemId) {
+            this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
         }
 
-        if (nextProps.isRoundedRectModeActive && !this.props.isRoundedRectModeActive) {
+        if (this.props.isRoundedRectModeActive && !prevProps.isRoundedRectModeActive) {
             this.activateTool();
-        } else if (!nextProps.isRoundedRectModeActive && this.props.isRoundedRectModeActive) {
+        } else if (!this.props.isRoundedRectModeActive && prevProps.isRoundedRectModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isRoundedRectModeActive !== this.props.isRoundedRectModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -82,7 +79,7 @@ RoundedRectMode.propTypes = {
 
 const mapStateToProps = state => ({
     isRoundedRectModeActive: state.scratchPaint.mode === Modes.ROUNDED_RECT,
-    hoveredItemId: state.scratchPaint.hoveredItemId
+    hoveredItemId: state.scratchPaint.hover.hoveredItemId
 });
 const mapDispatchToProps = dispatch => ({
     setHoveredItem: hoveredItemId => {

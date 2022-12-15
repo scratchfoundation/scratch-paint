@@ -1,6 +1,6 @@
 import paper from '@scratch/paper';
 import classNames from 'classnames';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import {defineMessages, injectIntl} from 'react-intl';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -35,6 +35,7 @@ import StrokeWidthIndicatorComponent from '../../containers/stroke-width-indicat
 import TextMode from '../../containers/text-mode.jsx';
 
 import Formats, {isBitmap, isVector} from '../../lib/format';
+import intlShape from '../../lib/intl-shape.js';
 import styles from './paint-editor.css';
 
 import bitmapIcon from './icons/bitmap.svg';
