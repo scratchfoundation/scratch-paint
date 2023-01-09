@@ -6,7 +6,7 @@ orbs:
 aliases:
   - &defaults
       docker:
-        - image: cimg/node:lts-browsers
+        - image: cimg/node:16.18.1-browsers
           auth:
             username: $DOCKERHUB_USERNAME
             password: $DOCKERHUB_PASSWORD
@@ -76,6 +76,12 @@ workflows:
     jobs:
       - commitlint/lint:
           target-branch: develop
+          filters:
+            branches:
+                ignore:
+                  - master
+                  - develop
+                  - /^hotfix\/.*/
   build-test-no-deploy:
     jobs:
       - build-test:
