@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {injectIntl} from 'react-intl';
 
 import Button from '../button/button.jsx';
-import intlShape from '../../lib/intl-shape.js';
+import intlShape from '../../lib/intl-shape';
 
 import styles from './tool-select-base.css';
 
