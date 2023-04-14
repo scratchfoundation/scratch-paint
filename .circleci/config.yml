@@ -100,6 +100,7 @@ workflows:
       - build-test-deploy:
           context:
             - dockerhub-credentials
+            - scratch-npm-creds
           filters:
             branches:
                 only:
