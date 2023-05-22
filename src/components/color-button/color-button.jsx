@@ -9,11 +9,14 @@ import mixedFillIcon from './mixed-fill.svg';
 import styles from './color-button.css';
 import GradientTypes from '../../lib/gradient-types';
 import log from '../../log/log';
+import ColorProptype from '../../lib/color-proptype';
 
 const colorToBackground = (color, color2, gradientType) => {
     if (color === MIXED || (gradientType !== GradientTypes.SOLID && color2 === MIXED)) return 'white';
-    if (color === null) color = 'white';
-    if (color2 === null) color2 = 'white';
+
+    color = (color === null) ? 'white' : color.toCSS();
+    color2 = (color2 === null || color2 === MIXED) ? 'white' : color2.toCSS();
+
     switch (gradientType) {
     case GradientTypes.SOLID: return color;
     case GradientTypes.HORIZONTAL: return `linear-gradient(to right, ${color}, ${color2})`;
@@ -23,6 +26,10 @@ const colorToBackground = (color, color2, gradientType) => {
     }
 };
 
+/*
+ * The square of color on the color indicator that shows the currently selected color. It may be
+ * a solid color, a gradient, or an icon with a white background to indicate transparent.
+ */
 const ColorButtonComponent = props => (
     <div
         className={styles.colorButton}
@@ -55,8 +62,8 @@ const ColorButtonComponent = props => (
 );
 
 ColorButtonComponent.propTypes = {
-    color: PropTypes.string,
-    color2: PropTypes.string,
+    color: ColorProptype,
+    color2: ColorProptype,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     onClick: PropTypes.func.isRequired,
     outline: PropTypes.bool.isRequired

@@ -8,7 +8,12 @@ import InputGroup from './input-group/input-group.jsx';
 import Label from './forms/label.jsx';
 
 import GradientTypes from '../lib/gradient-types';
+import ColorProptype from '../lib/color-proptype';
 
+/*
+ * The indicator of the currently selected color, including the preview of the color and
+ * the dropdown (ColorPicker) which appears when you click on the color to select a new one.
+ */
 const ColorIndicatorComponent = props => (
     <InputGroup
         className={props.className}
@@ -20,6 +25,7 @@ const ColorIndicatorComponent = props => (
                     color={props.color}
                     color2={props.color2}
                     gradientType={props.gradientType}
+                    isStrokeColor={props.outline}
                     shouldShowGradientTools={props.shouldShowGradientTools}
                     onChangeColor={props.onChangeColor}
                     onChangeGradientType={props.onChangeGradientType}
@@ -46,8 +52,8 @@ const ColorIndicatorComponent = props => (
 ColorIndicatorComponent.propTypes = {
     className: PropTypes.string,
     disabled: PropTypes.bool.isRequired,
-    color: PropTypes.string,
-    color2: PropTypes.string,
+    color: ColorProptype,
+    color2: ColorProptype,
     colorModalVisible: PropTypes.bool.isRequired,
     gradientType: PropTypes.oneOf(Object.keys(GradientTypes)).isRequired,
     label: PropTypes.string.isRequired,
