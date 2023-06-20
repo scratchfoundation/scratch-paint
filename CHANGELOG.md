@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/LLK/scratch-paint/compare/v1.1.73...v2.0.0) (2023-06-20)
+
+
+### Bug Fixes
+
+* use looks secondary rather than tertiary color ([442afca](https://github.com/LLK/scratch-paint/commit/442afcab38cd59434eb53e364876181857d576e6))
+
+
+* feat!: bump major version ([a401a89](https://github.com/LLK/scratch-paint/commit/a401a897e80ef99173251e4928c3e26435de56ed))
+
+
+### Features
+
+* use purple theme ([a0f6a55](https://github.com/LLK/scratch-paint/commit/a0f6a55a34c98e5a192cc7b5ec96f7ce3e716e14))
+
+
+### BREAKING CHANGES
+
+* purple accent color to match color contrast feature
+
 # [2.0.0-beta.1](https://github.com/LLK/scratch-paint/compare/v1.2.0-beta.1...v2.0.0-beta.1) (2023-06-15)
 
 
