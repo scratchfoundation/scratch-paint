@@ -213,7 +213,7 @@ class PaperCanvas extends React.Component {
         const parser = new DOMParser();
         const svgDom = parser.parseFromString(svg, 'text/xml');
         const viewBox = svgDom.documentElement.attributes.viewBox ?
-            svgDom.documentElement.attributes.viewBox.value.match(/\S+/g) : null;
+            svgDom.documentElement.attributes.viewBox.value.match(/-?\d+(\.\d+)?/g) : null;
         if (viewBox) {
             for (let i = 0; i < viewBox.length; i++) {
                 viewBox[i] = parseFloat(viewBox[i]);
