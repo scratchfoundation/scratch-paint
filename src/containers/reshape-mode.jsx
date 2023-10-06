@@ -25,19 +25,16 @@ class ReshapeMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.hoveredItemId !== this.props.hoveredItemId) {
-            this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
+    componentDidUpdate (prevProps) {
+        if (this.tool && this.props.hoveredItemId !== prevProps.hoveredItemId) {
+            this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
         }
 
-        if (nextProps.isReshapeModeActive && !this.props.isReshapeModeActive) {
+        if (this.props.isReshapeModeActive && !prevProps.isReshapeModeActive) {
             this.activateTool();
-        } else if (!nextProps.isReshapeModeActive && this.props.isReshapeModeActive) {
+        } else if (!this.props.isReshapeModeActive && prevProps.isReshapeModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isReshapeModeActive !== this.props.isReshapeModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -86,7 +83,7 @@ ReshapeMode.propTypes = {
 
 const mapStateToProps = state => ({
     isReshapeModeActive: state.scratchPaint.mode === Modes.RESHAPE,
-    hoveredItemId: state.scratchPaint.hoveredItemId
+    hoveredItemId: state.scratchPaint.hover.hoveredItemId
 });
 const mapDispatchToProps = dispatch => ({
     setHoveredItem: hoveredItemId => {

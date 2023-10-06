@@ -1,6 +1,6 @@
 import bindAll from 'lodash.bindall';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {createRoot} from 'react-dom/client';
 import PaintEditor from '..';
 import {Provider} from 'react-redux';
 import {createStore} from 'redux';
@@ -40,7 +40,7 @@ class Playground extends React.Component {
         // Append ?dir=rtl to URL to get RTL layout
         const match = location.search.match(/dir=([^&]+)/);
         const rtl = match && match[1] == 'rtl';
-        this.id = 0;
+        this.id = '0';
         this.state = {
             name: 'meow',
             rotationCenterX: 20,
@@ -182,10 +182,12 @@ class Playground extends React.Component {
     }
 
 }
-ReactDOM.render((
+
+const root = createRoot(appTarget);
+root.render((
     <Provider store={store}>
         <IntlProvider>
             <Playground />
         </IntlProvider>
     </Provider>
-), appTarget);
+));

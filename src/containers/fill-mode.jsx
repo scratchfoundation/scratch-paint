@@ -29,30 +29,27 @@ class FillMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
+    componentDidUpdate (prevProps) {
         if (this.tool) {
-            if (nextProps.fillColor !== this.props.fillColor) {
-                this.tool.setFillColor(nextProps.fillColor);
+            if (this.props.fillColor !== prevProps.fillColor) {
+                this.tool.setFillColor(this.props.fillColor);
             }
-            if (nextProps.fillColor2 !== this.props.fillColor2) {
-                this.tool.setFillColor2(nextProps.fillColor2);
+            if (this.props.fillColor2 !== prevProps.fillColor2) {
+                this.tool.setFillColor2(this.props.fillColor2);
             }
-            if (nextProps.hoveredItemId !== this.props.hoveredItemId) {
-                this.tool.setPrevHoveredItemId(nextProps.hoveredItemId);
+            if (this.props.hoveredItemId !== prevProps.hoveredItemId) {
+                this.tool.setPrevHoveredItemId(this.props.hoveredItemId);
             }
-            if (nextProps.fillModeGradientType !== this.props.fillModeGradientType) {
-                this.tool.setGradientType(nextProps.fillModeGradientType);
+            if (this.props.fillModeGradientType !== prevProps.fillModeGradientType) {
+                this.tool.setGradientType(this.props.fillModeGradientType);
             }
         }
 
-        if (nextProps.isFillModeActive && !this.props.isFillModeActive) {
+        if (this.props.isFillModeActive && !prevProps.isFillModeActive) {
             this.activateTool();
-        } else if (!nextProps.isFillModeActive && this.props.isFillModeActive) {
+        } else if (!this.props.isFillModeActive && prevProps.isFillModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isFillModeActive !== this.props.isFillModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {
@@ -129,7 +126,7 @@ const mapStateToProps = state => ({
     fillColor: state.scratchPaint.color.fillColor.primary,
     fillColor2: state.scratchPaint.color.fillColor.secondary,
     fillStyleGradientType: state.scratchPaint.color.fillColor.gradientType, // Selected item(s)' gradient type
-    hoveredItemId: state.scratchPaint.hoveredItemId,
+    hoveredItemId: state.scratchPaint.hover.hoveredItemId,
     isFillModeActive: state.scratchPaint.mode === Modes.FILL
 });
 const mapDispatchToProps = dispatch => ({

@@ -26,22 +26,19 @@ class BitLineMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.color !== this.props.color) {
-            this.tool.setColor(nextProps.color);
+    componentDidUpdate (prevProps) {
+        if (this.tool && this.props.color !== prevProps.color) {
+            this.tool.setColor(this.props.color);
         }
-        if (this.tool && nextProps.bitBrushSize !== this.props.bitBrushSize) {
-            this.tool.setLineSize(nextProps.bitBrushSize);
+        if (this.tool && this.props.bitBrushSize !== prevProps.bitBrushSize) {
+            this.tool.setLineSize(this.props.bitBrushSize);
         }
 
-        if (nextProps.isBitLineModeActive && !this.props.isBitLineModeActive) {
+        if (this.props.isBitLineModeActive && !prevProps.isBitLineModeActive) {
             this.activateTool();
-        } else if (!nextProps.isBitLineModeActive && this.props.isBitLineModeActive) {
+        } else if (!this.props.isBitLineModeActive && prevProps.isBitLineModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isBitLineModeActive !== this.props.isBitLineModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {

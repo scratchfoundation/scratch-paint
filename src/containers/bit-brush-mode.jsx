@@ -26,22 +26,19 @@ class BitBrushMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.color !== this.props.color) {
-            this.tool.setColor(nextProps.color);
+    componentDidUpdate (prevProps) {
+        if (this.tool && this.props.color !== prevProps.color) {
+            this.tool.setColor(this.props.color);
         }
-        if (this.tool && nextProps.bitBrushSize !== this.props.bitBrushSize) {
-            this.tool.setBrushSize(nextProps.bitBrushSize);
+        if (this.tool && this.props.bitBrushSize !== prevProps.bitBrushSize) {
+            this.tool.setBrushSize(this.props.bitBrushSize);
         }
 
-        if (nextProps.isBitBrushModeActive && !this.props.isBitBrushModeActive) {
+        if (this.props.isBitBrushModeActive && !prevProps.isBitBrushModeActive) {
             this.activateTool();
-        } else if (!nextProps.isBitBrushModeActive && this.props.isBitBrushModeActive) {
+        } else if (!this.props.isBitBrushModeActive && prevProps.isBitBrushModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isBitBrushModeActive !== this.props.isBitBrushModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {

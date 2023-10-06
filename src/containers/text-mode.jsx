@@ -34,36 +34,33 @@ class TextMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
+    componentDidUpdate (prevProps) {
         if (this.tool) {
-            if (nextProps.colorState !== this.props.colorState) {
-                this.tool.setColorState(nextProps.colorState);
+            if (this.props.colorState !== prevProps.colorState) {
+                this.tool.setColorState(this.props.colorState);
             }
-            if (nextProps.selectedItems !== this.props.selectedItems) {
-                this.tool.onSelectionChanged(nextProps.selectedItems);
+            if (this.props.selectedItems !== prevProps.selectedItems) {
+                this.tool.onSelectionChanged(this.props.selectedItems);
             }
-            if (!nextProps.textEditTarget && this.props.textEditTarget) {
+            if (!this.props.textEditTarget && prevProps.textEditTarget) {
                 this.tool.onTextEditCancelled();
             }
-            if (!nextProps.viewBounds.equals(this.props.viewBounds)) {
-                this.tool.onViewBoundsChanged(nextProps.viewBounds);
+            if (!this.props.viewBounds.equals(prevProps.viewBounds)) {
+                this.tool.onViewBoundsChanged(this.props.viewBounds);
             }
-            if (nextProps.font !== this.props.font) {
-                this.tool.setFont(nextProps.font);
+            if (this.props.font !== prevProps.font) {
+                this.tool.setFont(this.props.font);
             }
-            if (nextProps.rtl !== this.props.rtl) {
-                this.tool.setRtl(nextProps.rtl);
+            if (this.props.rtl !== prevProps.rtl) {
+                this.tool.setRtl(this.props.rtl);
             }
         }
 
-        if (nextProps.isTextModeActive && !this.props.isTextModeActive) {
-            this.activateTool(nextProps);
-        } else if (!nextProps.isTextModeActive && this.props.isTextModeActive) {
+        if (this.props.isTextModeActive && !prevProps.isTextModeActive) {
+            this.activateTool(this.props);
+        } else if (!this.props.isTextModeActive && prevProps.isTextModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isTextModeActive !== this.props.isTextModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {

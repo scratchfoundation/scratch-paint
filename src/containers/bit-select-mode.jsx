@@ -27,19 +27,16 @@ class BitSelectMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.selectedItems !== this.props.selectedItems) {
-            this.tool.onSelectionChanged(nextProps.selectedItems);
+    componentDidUpdate (prevProps) {
+        if (this.tool && this.props.selectedItems !== prevProps.selectedItems) {
+            this.tool.onSelectionChanged(this.props.selectedItems);
         }
 
-        if (nextProps.isSelectModeActive && !this.props.isSelectModeActive) {
+        if (this.props.isSelectModeActive && !prevProps.isSelectModeActive) {
             this.activateTool();
-        } else if (!nextProps.isSelectModeActive && this.props.isSelectModeActive) {
+        } else if (!this.props.isSelectModeActive && prevProps.isSelectModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isSelectModeActive !== this.props.isSelectModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {

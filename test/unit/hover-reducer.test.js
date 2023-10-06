@@ -1,34 +1,69 @@
 /* eslint-env jest */
-import reducer, {clearHoveredItem, setHoveredItem} from '../../src/reducers/hover';
+import reducer, {clearHoveredItem, clearRemovedItem, setHoveredItem} from '../../src/reducers/hover';
+
+const defaultState = {hoveredItemId: null, removedItemIds: []};
 
 test('initialState', () => {
-    let defaultState;
-    expect(reducer(defaultState /* state */, {type: 'anything'} /* action */)).toBeNull();
+    // eslint-disable-next-line no-undefined
+    expect(reducer(undefined /* state */, {type: 'anything'} /* action */)).toEqual(defaultState);
 });
 
 test('setHoveredItem', () => {
-    let defaultState;
     const item1 = 1;
     const item2 = 2;
-    expect(reducer(defaultState /* state */, setHoveredItem(item1) /* action */)).toBe(item1);
-    expect(reducer(item1 /* state */, setHoveredItem(item2) /* action */)).toBe(item2);
+
+    // eslint-disable-next-line no-undefined
+    let updatedState = reducer(undefined /* state */, setHoveredItem(item1) /* action */);
+    expect(updatedState.hoveredItemId).toBe(item1);
+
+    updatedState = reducer(updatedState /* state */, setHoveredItem(item2) /* action */);
+    expect(updatedState.hoveredItemId).toBe(item2);
+    expect(updatedState.removedItemIds).toEqual([item1]);
 });
 
 test('clearHoveredItem', () => {
-    let defaultState;
     const item = 1;
-    expect(reducer(defaultState /* state */, clearHoveredItem() /* action */)).toBeNull();
-    expect(reducer(item /* state */, clearHoveredItem() /* action */)).toBeNull();
+
+    // eslint-disable-next-line no-undefined
+    expect(reducer(undefined /* state */, clearHoveredItem() /* action */).hoveredItemId).toBeNull();
+    expect(
+        reducer({hoveredItemId: item, removedItemIds: []} /* state */, clearHoveredItem() /* action */).hoveredItemId
+    ).toBeNull();
 });
 
 test('invalidSetHoveredItem', () => {
-    let defaultState;
-    const item = 1;
     const nonItem = {random: 'object'};
-    let undef;
-    expect(reducer(defaultState /* state */, setHoveredItem(nonItem) /* action */)).toBeNull();
-    expect(reducer(item /* state */, setHoveredItem(nonItem) /* action */))
-        .toBe(item);
-    expect(reducer(item /* state */, setHoveredItem(undef) /* action */))
-        .toBe(item);
+    const nonDefaultState = {hoveredItemId: 1, removedItemIds: [2]};
+
+    // eslint-disable-next-line no-undefined
+    expect(reducer(undefined /* state */, setHoveredItem(nonItem) /* action */)).toEqual(defaultState);
+    expect(reducer(nonDefaultState /* state */, setHoveredItem(nonItem) /* action */))
+        .toBe(nonDefaultState);
+    // eslint-disable-next-line no-undefined
+    expect(reducer(nonDefaultState /* state */, setHoveredItem(undefined) /* action */))
+        .toBe(nonDefaultState);
+});
+
+test('clearRemovedItem', () => {
+    const initialState = {
+        hoveredItemId: null,
+        removedItemIds: [1, 2, 3]
+    };
+
+    const updatedState = reducer(initialState /* state */, clearRemovedItem(2) /* action */);
+
+    expect(updatedState.removedItemIds).toEqual([1, 3]);
+});
+
+test('invalidClearRemovedItem', () => {
+    const nonItem = {random: 'object'};
+    const nonDefaultState = {hoveredItemId: 1, removedItemIds: [2]};
+
+    // eslint-disable-next-line no-undefined
+    expect(reducer(undefined /* state */, clearRemovedItem(nonItem) /* action */)).toEqual(defaultState);
+    expect(reducer(nonDefaultState /* state */, clearRemovedItem(nonItem) /* action */))
+        .toBe(nonDefaultState);
+    // eslint-disable-next-line no-undefined
+    expect(reducer(nonDefaultState /* state */, clearRemovedItem(undefined) /* action */))
+        .toBe(nonDefaultState);
 });

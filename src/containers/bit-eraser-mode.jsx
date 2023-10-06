@@ -24,19 +24,16 @@ class BitEraserMode extends React.Component {
             this.activateTool(this.props);
         }
     }
-    componentWillReceiveProps (nextProps) {
-        if (this.tool && nextProps.bitEraserSize !== this.props.bitEraserSize) {
-            this.tool.setBrushSize(nextProps.bitEraserSize);
+    componentDidUpdate (prevProps) {
+        if (this.tool && this.props.bitEraserSize !== prevProps.bitEraserSize) {
+            this.tool.setBrushSize(this.props.bitEraserSize);
         }
-        
-        if (nextProps.isBitEraserModeActive && !this.props.isBitEraserModeActive) {
+
+        if (this.props.isBitEraserModeActive && !prevProps.isBitEraserModeActive) {
             this.activateTool();
-        } else if (!nextProps.isBitEraserModeActive && this.props.isBitEraserModeActive) {
+        } else if (!this.props.isBitEraserModeActive && prevProps.isBitEraserModeActive) {
             this.deactivateTool();
         }
-    }
-    shouldComponentUpdate (nextProps) {
-        return nextProps.isBitEraserModeActive !== this.props.isBitEraserModeActive;
     }
     componentWillUnmount () {
         if (this.tool) {
