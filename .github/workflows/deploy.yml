@@ -3,7 +3,7 @@ name: Scratch Paint CI-CD
 on:
   pull_request: # Runs whenever a pull request is created or updated
   push: # Runs whenever a commit is pushed to the repository...
-    # branches: [master, develop, beta, hotfix/*] # ...on any of these branches
+    branches: [master, develop, beta, hotfix/*] # ...on any of these branches
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
@@ -58,7 +58,7 @@ jobs:
         - name: Semantic Release
           if: ${{ env.TRIGGER_DEPLOY == 'true'}}
           env:
-            NPM_TOKEN: q${{ secrets.NPM_TOKEN }}
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           run: npx --no -- semantic-release
 
