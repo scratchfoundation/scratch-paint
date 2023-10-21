@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.30](https://github.com/LLK/scratch-paint/compare/v2.1.29...v2.1.30) (2023-10-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.16.20231021032150 ([#2261](https://github.com/LLK/scratch-paint/issues/2261)) ([b07b546](https://github.com/LLK/scratch-paint/commit/b07b54617fa9f85d1417ceaf49fbfc6fe75f7d4f))
+
 ## [2.1.29](https://github.com/LLK/scratch-paint/compare/v2.1.28...v2.1.29) (2023-10-20)
 
 
