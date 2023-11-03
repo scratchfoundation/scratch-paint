@@ -6,6 +6,12 @@
 
 - Or, to try it out as part of Scratch 3.0, visit [https://scratch.mit.edu/create](https://scratch.mit.edu/create) and click on the "Costumes" tab.
 
+### Prerequisites
+
+This package depends on Paper.js, so it depends indirectly on several native packages. Depending on your system
+configuration, you may or may not need to install them. If you see errors about `pixman`, `cairo`, etc., check here:
+<https://github.com/scratchfoundation/paper.js/#installing-native-dependencies>
+
 ### Installation
 It will be easiest if you develop on Mac or Linux. If you are using Windows, I recommend using Ubuntu on Windows, which will allow you to use Linux commands on Windows. You will need administrator permissions.
 
