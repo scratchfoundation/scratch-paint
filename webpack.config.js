@@ -3,7 +3,7 @@ const path = require('path');
 
 // Plugins
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 // PostCss
 const autoprefixer = require('autoprefixer');
@@ -64,7 +64,7 @@ const base = {
     },
     optimization: {
         minimizer: [
-            new UglifyJsPlugin({
+            new TerserPlugin({
                 include: /\.min\.js$/
             })
         ]
