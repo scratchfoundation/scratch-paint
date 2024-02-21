@@ -62,7 +62,7 @@
     "canvas": "2.11.2",
     "css-loader": "3.4.0",
     "enzyme": "3.11.0",
-    "enzyme-adapter-react-16": "1.15.6",
+    "enzyme-adapter-react-16": "1.15.8",
     "eslint": "8.55.0",
     "eslint-config-scratch": "9.0.3",
     "eslint-plugin-import": "2.29.0",
