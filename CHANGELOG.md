@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.10](https://github.com/LLK/scratch-paint/compare/v2.2.9...v2.2.10) (2024-02-22)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2336](https://github.com/LLK/scratch-paint/issues/2336)) ([f8e2880](https://github.com/LLK/scratch-paint/commit/f8e28802b5dd15e21a662f82090c4353f2c26a29))
+
 ## [2.2.9](https://github.com/LLK/scratch-paint/compare/v2.2.8...v2.2.9) (2024-02-22)
 
 
