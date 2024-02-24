@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.20](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.19...v2.2.20) (2024-02-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-semantic-release-config to v1.0.14 ([#2348](https://github.com/scratchfoundation/scratch-paint/issues/2348)) ([1eef970](https://github.com/scratchfoundation/scratch-paint/commit/1eef9704fec916d73f960351849bd9fb20ea08f8))
+
 ## [2.2.19](https://github.com/LLK/scratch-paint/compare/v2.2.18...v2.2.19) (2024-02-23)
 
 
