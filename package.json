@@ -57,7 +57,7 @@
     "babel-eslint": "10.1.0",
     "babel-jest": "29.7.0",
     "babel-loader": "8.3.0",
-    "babel-plugin-react-intl": "3.0.1",
+    "babel-plugin-react-intl": "3.5.1",
     "babel-plugin-transform-object-rest-spread": "6.26.0",
     "canvas": "2.11.2",
     "css-loader": "3.4.0",
