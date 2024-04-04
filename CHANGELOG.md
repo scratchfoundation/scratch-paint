@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.115](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.114...v2.2.115) (2024-04-04)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2460](https://github.com/scratchfoundation/scratch-paint/issues/2460)) ([84a59b3](https://github.com/scratchfoundation/scratch-paint/commit/84a59b3c2dbf3fbb32d39d629eefcca2ea988b24))
+
 ## [2.2.114](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.113...v2.2.114) (2024-04-04)
 
 
