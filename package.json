@@ -88,7 +88,7 @@
     "react-responsive": "5.0.0",
     "react-style-proptype": "3.2.2",
     "react-test-renderer": "16.14.0",
-    "react-tooltip": "3.8.4",
+    "react-tooltip": "3.11.6",
     "redux": "3.7.2",
     "redux-mock-store": "1.5.4",
     "redux-throttle": "0.1.1",
