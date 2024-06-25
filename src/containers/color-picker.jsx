@@ -68,7 +68,7 @@ class ColorPicker extends React.Component {
             hue: hsv[0],
             saturation: hsv[1],
             brightness: hsv[2],
-            alpha: alpha * 100 || 100
+            alpha: alpha * 100
         };
     }
     componentWillReceiveProps (newProps) {
@@ -83,7 +83,7 @@ class ColorPicker extends React.Component {
                 hue: hsv[0],
                 saturation: hsv[1],
                 brightness: hsv[2],
-                alpha: alpha * 100 || 100
+                alpha: alpha * 100
             });
         }
     }
@@ -97,9 +97,11 @@ class ColorPicker extends React.Component {
         // TODO: need to find a way to get the alpha from all kinds of color strings (rgb, rgba, hex, hex with alpha, etc.)
         // parse-color returns a range of 0-255 for hex inputs, but 0-1 for any other input
         // (for hex codes without an alpha value, parse-color returns an alpha of 1)
+        
+        if (!color) return 0; // transparent swatch
 
         const result = parseColor(color)
-        if (!result?.rgba) return 1
+        if (!result?.rgba) return 1; // no alpha value
 
         let alpha = result.rgba[3]
 
@@ -109,7 +111,7 @@ class ColorPicker extends React.Component {
             alpha = alpha / 255
         }
         
-        return alpha || 1
+        return alpha
     }
     handleHueChange (hue) {
         this.setState({hue: hue}, () => {
