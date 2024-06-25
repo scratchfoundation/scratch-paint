@@ -21,10 +21,18 @@ import fillVertGradientIcon from './icons/fill-vert-gradient-enabled.svg';
 import swapIcon from './icons/swap.svg';
 import Modes from '../../lib/modes';
 
-const hsvToHex = (h, s, v) =>
+const hsvToHex = (h, s, v, alpha = 100) => {
+    // Scale alpha from [0, 100] to [0, 1]
+    const alphaNormalized = alpha / 100;
     // Scale hue back up to [0, 360] from [0, 100]
-    parseColor(`hsv(${3.6 * h}, ${s}, ${v})`).hex
-;
+    const color = parseColor(`hsv(${3.6 * h}, ${s}, ${v})`);
+    // Get the hex value without the alpha channel
+    const hex = color.hex;
+    // Calculate the alpha value in hex (0-255)
+    const alphaHex = Math.round(alphaNormalized * 255).toString(16).padStart(2, '0');
+    // Return the hex value with the alpha channel
+    return `${hex}${alphaHex}`;
+};
 
 const messages = defineMessages({
     swap: {
@@ -48,6 +56,9 @@ class ColorPickerComponent extends React.Component {
                 break;
             case 'brightness':
                 stops.push(hsvToHex(this.props.hue, this.props.saturation, n));
+                break;
+            case 'alpha':
+                stops.push(hsvToHex(this.props.hue, this.props.saturation, this.props.brightness, n));
                 break;
             default:
                 throw new Error(`Unknown channel for color sliders: ${channel}`);
@@ -267,7 +278,7 @@ class ColorPickerComponent extends React.Component {
                     <div className={styles.rowSlider}>
                         <Slider
                             lastSlider
-                            background={this._makeBackground('brightness')}
+                            background={this._makeBackground('alpha')}
                             value={this.props.alpha}
                             onChange={this.props.onAlphaChange}
                         />
