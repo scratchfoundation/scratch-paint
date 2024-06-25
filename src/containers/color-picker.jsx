@@ -118,11 +118,12 @@ class ColorPicker extends React.Component {
         ));
     }
     handleTransparent () {
+        // TODO: UX - should this reset all sliders, or just the alpha?
         this.props.onChangeColor(hsvToHex(
             this.state.hue,
             this.state.saturation,
             this.state.brightness,
-            0.5
+            0
         ));
     }
     handleActivateEyeDropper () {
