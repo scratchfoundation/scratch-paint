@@ -95,12 +95,15 @@ class ColorPicker extends React.Component {
     }
     getAlpha(color) {
         // TODO: need to find a way to get the alpha from all kinds of color strings (rgb, rgba, hex, hex with alpha, etc.)
-        // parse-color doesn't work great (incorrectly parsing alpha from hex color codes, rgba from 0-1, but hex 0-255)
+        // parse-color returns a range of 0-255 for hex inputs, but 0-1 for any other input
+        // (for hex codes without an alpha value, parse-color returns an alpha of 1)
 
         const result = parseColor(color)
+        if (!result?.rgba) return 1
+
         let alpha = result.rgba[3]
 
-        if (color.startsWith('#')) {
+        if (color.startsWith('#') && alpha !== 1) {
             // We used a hex color, divide parse-color alpha value by 255
 
             alpha = alpha / 255
