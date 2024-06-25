@@ -62,11 +62,13 @@ class ColorPicker extends React.Component {
 
         const color = props.colorIndex === 0 ? props.color : props.color2;
         const hsv = this.getHsv(color);
+        const alpha = this.getAlpha(color);
+
         this.state = {
             hue: hsv[0],
             saturation: hsv[1],
             brightness: hsv[2],
-            alpha: color?.length === 9 ? (parseInt(color.slice(7, 9), 16) / 255) * 100 : 100
+            alpha: alpha * 100 || 100
         };
     }
     componentWillReceiveProps (newProps) {
@@ -88,6 +90,10 @@ class ColorPicker extends React.Component {
         const isMixed = color === MIXED;
         return isTransparent || isMixed ?
             [50, 100, 100] : colorStringToHsv(color);
+    }
+    getAlpha(color) {
+        const result = parseColor(color)
+        return result.rgba[3] || 1
     }
     handleHueChange (hue) {
         this.setState({hue: hue}, () => {
