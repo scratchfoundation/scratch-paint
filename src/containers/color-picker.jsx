@@ -66,7 +66,7 @@ class ColorPicker extends React.Component {
             hue: hsv[0],
             saturation: hsv[1],
             brightness: hsv[2],
-            alpha: color.length === 9 ? (parseInt(color.slice(7, 9), 16) / 255) * 100 : 100
+            alpha: color?.length === 9 ? (parseInt(color.slice(7, 9), 16) / 255) * 100 : 100
         };
     }
     componentWillReceiveProps (newProps) {
