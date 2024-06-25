@@ -245,10 +245,31 @@ class ColorPickerComponent extends React.Component {
                     </div>
                     <div className={styles.rowSlider}>
                         <Slider
-                            lastSlider
                             background={this._makeBackground('brightness')}
                             value={this.props.brightness}
                             onChange={this.props.onBrightnessChange}
+                        />
+                    </div>
+                </div>
+                <div className={styles.row}>
+                    <div className={styles.rowHeader}>
+                        <span className={styles.labelName}>
+                            <FormattedMessage
+                                defaultMessage="Opacity"
+                                description="Label for the opacity component in the color picker"
+                                id="paint.paintEditor.alpha"
+                            />
+                        </span>
+                        <span className={styles.labelReadout}>
+                            {Math.round(this.props.alpha)}
+                        </span>
+                    </div>
+                    <div className={styles.rowSlider}>
+                        <Slider
+                            lastSlider
+                            background={this._makeBackground('brightness')}
+                            value={this.props.alpha}
+                            onChange={this.props.onAlphaChange}
                         />
                     </div>
                 </div>
@@ -300,6 +321,7 @@ class ColorPickerComponent extends React.Component {
 
 ColorPickerComponent.propTypes = {
     brightness: PropTypes.number.isRequired,
+    alpha: PropTypes.number.isRequired,
     color: PropTypes.string,
     color2: PropTypes.string,
     colorIndex: PropTypes.number.isRequired,
@@ -310,6 +332,7 @@ ColorPickerComponent.propTypes = {
     mode: PropTypes.oneOf(Object.keys(Modes)),
     onActivateEyeDropper: PropTypes.func.isRequired,
     onBrightnessChange: PropTypes.func.isRequired,
+    onAlphaChange: PropTypes.func.isRequired,
     onChangeGradientTypeHorizontal: PropTypes.func.isRequired,
     onChangeGradientTypeRadial: PropTypes.func.isRequired,
     onChangeGradientTypeSolid: PropTypes.func.isRequired,

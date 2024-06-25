@@ -26,10 +26,19 @@ const colorStringToHsv = hexString => {
     return hsv;
 };
 
-const hsvToHex = (h, s, v) =>
+const hsvToHex = (h, s, v, alpha = 100) => {
+    // Scale alpha from [0, 100] to [0, 1]
+    const alphaNormalized = alpha / 100;
     // Scale hue back up to [0, 360] from [0, 100]
-    parseColor(`hsv(${3.6 * h}, ${s}, ${v})`).hex
-;
+    const color = parseColor(`hsv(${3.6 * h}, ${s}, ${v})`);
+    // Get the hex value without the alpha channel
+    const hex = color.hex;
+    // Calculate the alpha value in hex (0-255)
+    const alphaHex = Math.round(alphaNormalized * 255).toString(16).padStart(2, '0');
+    // Return the hex value with the alpha channel
+    return `${hex}${alphaHex}`;
+};
+
 
 // Important! This component ignores new color props except when isEyeDropping
 // This is to make the HSV <=> RGB conversion stable. The sliders manage their
@@ -46,6 +55,7 @@ class ColorPicker extends React.Component {
             'handleHueChange',
             'handleSaturationChange',
             'handleBrightnessChange',
+            'handleAlphaChange',
             'handleTransparent',
             'handleActivateEyeDropper'
         ]);
@@ -55,7 +65,8 @@ class ColorPicker extends React.Component {
         this.state = {
             hue: hsv[0],
             saturation: hsv[1],
-            brightness: hsv[2]
+            brightness: hsv[2],
+            alpha: color.length === 9 ? (parseInt(color.slice(7, 9), 16) / 255) * 100 : 100
         };
     }
     componentWillReceiveProps (newProps) {
@@ -67,7 +78,8 @@ class ColorPicker extends React.Component {
             this.setState({
                 hue: hsv[0],
                 saturation: hsv[1],
-                brightness: hsv[2]
+                brightness: hsv[2],
+                alpha: 100
             });
         }
     }
@@ -92,15 +104,26 @@ class ColorPicker extends React.Component {
             this.handleColorChange();
         });
     }
+    handleAlphaChange (alpha) {
+        this.setState({alpha: alpha}, () => {
+            this.handleColorChange();
+        });
+    }
     handleColorChange () {
         this.props.onChangeColor(hsvToHex(
             this.state.hue,
             this.state.saturation,
-            this.state.brightness
+            this.state.brightness,
+            this.state.alpha
         ));
     }
     handleTransparent () {
-        this.props.onChangeColor(null);
+        this.props.onChangeColor(hsvToHex(
+            this.state.hue,
+            this.state.saturation,
+            this.state.brightness,
+            0.5
+        ));
     }
     handleActivateEyeDropper () {
         this.props.onActivateEyeDropper(
@@ -124,6 +147,7 @@ class ColorPicker extends React.Component {
         return (
             <ColorPickerComponent
                 brightness={this.state.brightness}
+                alpha={this.state.alpha}
                 color={this.props.color}
                 color2={this.props.color2}
                 colorIndex={this.props.colorIndex}
@@ -136,6 +160,7 @@ class ColorPicker extends React.Component {
                 shouldShowGradientTools={this.props.shouldShowGradientTools}
                 onActivateEyeDropper={this.handleActivateEyeDropper}
                 onBrightnessChange={this.handleBrightnessChange}
+                onAlphaChange={this.handleAlphaChange}
                 onChangeGradientTypeHorizontal={this.handleChangeGradientTypeHorizontal}
                 onChangeGradientTypeRadial={this.handleChangeGradientTypeRadial}
                 onChangeGradientTypeSolid={this.handleChangeGradientTypeSolid}
