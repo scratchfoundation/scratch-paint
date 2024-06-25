@@ -19,6 +19,7 @@ import fillRadialIcon from './icons/fill-radial-enabled.svg';
 import fillSolidIcon from './icons/fill-solid-enabled.svg';
 import fillVertGradientIcon from './icons/fill-vert-gradient-enabled.svg';
 import swapIcon from './icons/swap.svg';
+import checkerboard from './checkerboard.png'
 import Modes from '../../lib/modes';
 
 const hsvToHex = (h, s, v, alpha = 100) => {
@@ -74,7 +75,7 @@ class ColorPickerComponent extends React.Component {
         stops[0] += ` 0 ${halfHandleWidth}px`;
         stops[stops.length - 1] += ` ${CONTAINER_WIDTH - halfHandleWidth}px 100%`;
 
-        return `linear-gradient(to left, ${stops.join(',')})`;
+        return `linear-gradient(to left, ${stops.join(',')}), url("${checkerboard}")`;
     }
     render () {
         return (
