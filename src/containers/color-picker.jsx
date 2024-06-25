@@ -77,11 +77,13 @@ class ColorPicker extends React.Component {
         const colorSetByEyedropper = this.props.isEyeDropping && color !== newColor;
         if (colorSetByEyedropper || this.props.colorIndex !== newProps.colorIndex) {
             const hsv = this.getHsv(newColor);
+            const alpha = this.getAlpha(newColor);
+
             this.setState({
                 hue: hsv[0],
                 saturation: hsv[1],
                 brightness: hsv[2],
-                alpha: 100
+                alpha: alpha * 100 || 100
             });
         }
     }
@@ -92,8 +94,19 @@ class ColorPicker extends React.Component {
             [50, 100, 100] : colorStringToHsv(color);
     }
     getAlpha(color) {
+        // TODO: need to find a way to get the alpha from all kinds of color strings (rgb, rgba, hex, hex with alpha, etc.)
+        // parse-color doesn't work great (incorrectly parsing alpha from hex color codes, rgba from 0-1, but hex 0-255)
+
         const result = parseColor(color)
-        return result.rgba[3] || 1
+        let alpha = result.rgba[3]
+
+        if (color.startsWith('#')) {
+            // We used a hex color, divide parse-color alpha value by 255
+
+            alpha = alpha / 255
+        }
+        
+        return alpha || 1
     }
     handleHueChange (hue) {
         this.setState({hue: hue}, () => {
