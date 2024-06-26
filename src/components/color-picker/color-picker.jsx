@@ -50,13 +50,13 @@ class ColorPickerComponent extends React.Component {
         for (let n = 100; n >= 0; n -= 10) {
             switch (channel) {
             case 'hue':
-                stops.push(hsvToHex(n, this.props.saturation, this.props.brightness));
+                stops.push(hsvToHex(n, this.props.saturation, this.props.brightness, this.props.alpha));
                 break;
             case 'saturation':
-                stops.push(hsvToHex(this.props.hue, n, this.props.brightness));
+                stops.push(hsvToHex(this.props.hue, n, this.props.brightness, this.props.alpha));
                 break;
             case 'brightness':
-                stops.push(hsvToHex(this.props.hue, this.props.saturation, n));
+                stops.push(hsvToHex(this.props.hue, this.props.saturation, n, this.props.alpha));
                 break;
             case 'alpha':
                 stops.push(hsvToHex(this.props.hue, this.props.saturation, this.props.brightness, n));
