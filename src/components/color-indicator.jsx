@@ -17,6 +17,7 @@ const ColorIndicatorComponent = props => (
         <Popover
             body={
                 <ColorPicker
+                    allowAlpha={props.allowAlpha}
                     color={props.color}
                     color2={props.color2}
                     gradientType={props.gradientType}
@@ -44,6 +45,7 @@ const ColorIndicatorComponent = props => (
 );
 
 ColorIndicatorComponent.propTypes = {
+    allowAlpha: PropTypes.bool,
     className: PropTypes.string,
     disabled: PropTypes.bool.isRequired,
     color: PropTypes.string,

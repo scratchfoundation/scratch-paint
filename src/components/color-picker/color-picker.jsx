@@ -257,34 +257,37 @@ class ColorPickerComponent extends React.Component {
                     </div>
                     <div className={styles.rowSlider}>
                         <Slider
+                            lastSlider={!this.props.allowAlpha}
                             background={this._makeBackground('brightness')}
                             value={this.props.brightness}
                             onChange={this.props.onBrightnessChange}
                         />
                     </div>
                 </div>
-                <div className={styles.row}>
-                    <div className={styles.rowHeader}>
-                        <span className={styles.labelName}>
-                            <FormattedMessage
-                                defaultMessage="Opacity"
-                                description="Label for the opacity component in the color picker"
-                                id="paint.paintEditor.alpha"
+                {this.props.allowAlpha && (
+                    <div className={styles.row}>
+                        <div className={styles.rowHeader}>
+                            <span className={styles.labelName}>
+                                <FormattedMessage
+                                    defaultMessage="Opacity"
+                                    description="Label for the opacity component in the color picker"
+                                    id="paint.paintEditor.alpha"
+                                />
+                            </span>
+                            <span className={styles.labelReadout}>
+                                {Math.round(this.props.alpha)}
+                            </span>
+                        </div>
+                        <div className={styles.rowSlider}>
+                            <Slider
+                                lastSlider
+                                background={this._makeBackground('alpha')}
+                                value={this.props.alpha}
+                                onChange={this.props.onAlphaChange}
                             />
-                        </span>
-                        <span className={styles.labelReadout}>
-                            {Math.round(this.props.alpha)}
-                        </span>
+                        </div>
                     </div>
-                    <div className={styles.rowSlider}>
-                        <Slider
-                            lastSlider
-                            background={this._makeBackground('alpha')}
-                            value={this.props.alpha}
-                            onChange={this.props.onAlphaChange}
-                        />
-                    </div>
-                </div>
+                )}
                 <div className={styles.swatchRow}>
                     <div className={styles.swatches}>
                         {this.props.mode === Modes.BIT_LINE ||
@@ -332,6 +335,7 @@ class ColorPickerComponent extends React.Component {
 }
 
 ColorPickerComponent.propTypes = {
+    allowAlpha: PropTypes.bool,
     brightness: PropTypes.number.isRequired,
     alpha: PropTypes.number.isRequired,
     color: PropTypes.string,

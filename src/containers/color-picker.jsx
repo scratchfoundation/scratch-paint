@@ -168,6 +168,7 @@ class ColorPicker extends React.Component {
     render () {
         return (
             <ColorPickerComponent
+                allowAlpha={this.props.allowAlpha}
                 brightness={this.state.brightness}
                 alpha={this.state.alpha}
                 color={this.props.color}
@@ -199,6 +200,7 @@ class ColorPicker extends React.Component {
 }
 
 ColorPicker.propTypes = {
+    allowAlpha: PropTypes.bool,
     color: PropTypes.string,
     color2: PropTypes.string,
     colorIndex: PropTypes.number.isRequired,

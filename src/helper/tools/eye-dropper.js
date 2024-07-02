@@ -79,8 +79,6 @@ class EyeDropperTool extends paper.Tool {
             const b = colorInfo.color[2];
             const a = colorInfo.color[3] / 255; // Normalize alpha to range [0, 1]
 
-            console.log({ r, g, b, a })
-
             // from https://github.com/LLK/scratch-gui/blob/77e54a80a31b6cd4684d4b2a70f1aeec671f229e/src/containers/stage.jsx#L218-L222
             // formats the color info from the canvas into hex for parsing by the color picker
             const componentToString = c => {
