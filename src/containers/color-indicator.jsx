@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import bindAll from 'lodash.bindall';
 import parseColor from 'parse-color';
-import {injectIntl, intlShape} from 'react-intl';
+import {injectIntl} from 'react-intl';
+import intlShape from '../lib/intl-shape.js';
 
 import {getSelectedLeafItems} from '../helper/selection';
 import Formats, {isBitmap} from '../lib/format';
