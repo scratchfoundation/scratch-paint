@@ -17,7 +17,12 @@ const base = {
         rules: [{
             test: /\.jsx?$/,
             loader: 'babel-loader',
-            include: path.resolve(__dirname, 'src'),
+            include: [
+                path.resolve(__dirname, 'src'),
+                path.join(__dirname, 'node_modules/react-intl'),
+                path.join(__dirname, 'node_modules/intl-messageformat'),
+                path.join(__dirname, 'node_modules/intl-messageformat-parser')
+            ],
             options: {
                 plugins: ['transform-object-rest-spread'],
                 presets: [
