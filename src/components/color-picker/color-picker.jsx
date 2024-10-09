@@ -19,12 +19,21 @@ import fillRadialIcon from './icons/fill-radial-enabled.svg';
 import fillSolidIcon from './icons/fill-solid-enabled.svg';
 import fillVertGradientIcon from './icons/fill-vert-gradient-enabled.svg';
 import swapIcon from './icons/swap.svg';
+import checkerboard from './checkerboard.png'
 import Modes from '../../lib/modes';
 
-const hsvToHex = (h, s, v) =>
+const hsvToHex = (h, s, v, alpha = 100) => {
+    // Scale alpha from [0, 100] to [0, 1]
+    const alphaNormalized = alpha / 100;
     // Scale hue back up to [0, 360] from [0, 100]
-    parseColor(`hsv(${3.6 * h}, ${s}, ${v})`).hex
-;
+    const color = parseColor(`hsv(${3.6 * h}, ${s}, ${v})`);
+    // Get the hex value without the alpha channel
+    const hex = color.hex;
+    // Calculate the alpha value in hex (0-255)
+    const alphaHex = Math.round(alphaNormalized * 255).toString(16).padStart(2, '0');
+    // Return the hex value with the alpha channel
+    return `${hex}${alphaHex}`;
+};
 
 const messages = defineMessages({
     swap: {
@@ -41,13 +50,16 @@ class ColorPickerComponent extends React.Component {
         for (let n = 100; n >= 0; n -= 10) {
             switch (channel) {
             case 'hue':
-                stops.push(hsvToHex(n, this.props.saturation, this.props.brightness));
+                stops.push(hsvToHex(n, this.props.saturation, this.props.brightness, this.props.alpha));
                 break;
             case 'saturation':
-                stops.push(hsvToHex(this.props.hue, n, this.props.brightness));
+                stops.push(hsvToHex(this.props.hue, n, this.props.brightness, this.props.alpha));
                 break;
             case 'brightness':
-                stops.push(hsvToHex(this.props.hue, this.props.saturation, n));
+                stops.push(hsvToHex(this.props.hue, this.props.saturation, n, this.props.alpha));
+                break;
+            case 'alpha':
+                stops.push(hsvToHex(this.props.hue, this.props.saturation, this.props.brightness, n));
                 break;
             default:
                 throw new Error(`Unknown channel for color sliders: ${channel}`);
@@ -63,7 +75,7 @@ class ColorPickerComponent extends React.Component {
         stops[0] += ` 0 ${halfHandleWidth}px`;
         stops[stops.length - 1] += ` ${CONTAINER_WIDTH - halfHandleWidth}px 100%`;
 
-        return `linear-gradient(to left, ${stops.join(',')})`;
+        return `linear-gradient(to left, ${stops.join(',')}), url("${checkerboard}")`;
     }
     render () {
         return (
@@ -245,13 +257,37 @@ class ColorPickerComponent extends React.Component {
                     </div>
                     <div className={styles.rowSlider}>
                         <Slider
-                            lastSlider
+                            lastSlider={!this.props.allowAlpha}
                             background={this._makeBackground('brightness')}
                             value={this.props.brightness}
                             onChange={this.props.onBrightnessChange}
                         />
                     </div>
                 </div>
+                {this.props.allowAlpha && (
+                    <div className={styles.row}>
+                        <div className={styles.rowHeader}>
+                            <span className={styles.labelName}>
+                                <FormattedMessage
+                                    defaultMessage="Opacity"
+                                    description="Label for the opacity component in the color picker"
+                                    id="paint.paintEditor.alpha"
+                                />
+                            </span>
+                            <span className={styles.labelReadout}>
+                                {Math.round(this.props.alpha)}
+                            </span>
+                        </div>
+                        <div className={styles.rowSlider}>
+                            <Slider
+                                lastSlider
+                                background={this._makeBackground('alpha')}
+                                value={this.props.alpha}
+                                onChange={this.props.onAlphaChange}
+                            />
+                        </div>
+                    </div>
+                )}
                 <div className={styles.swatchRow}>
                     <div className={styles.swatches}>
                         {this.props.mode === Modes.BIT_LINE ||
@@ -299,7 +335,9 @@ class ColorPickerComponent extends React.Component {
 }
 
 ColorPickerComponent.propTypes = {
+    allowAlpha: PropTypes.bool,
     brightness: PropTypes.number.isRequired,
+    alpha: PropTypes.number.isRequired,
     color: PropTypes.string,
     color2: PropTypes.string,
     colorIndex: PropTypes.number.isRequired,
@@ -310,6 +348,7 @@ ColorPickerComponent.propTypes = {
     mode: PropTypes.oneOf(Object.keys(Modes)),
     onActivateEyeDropper: PropTypes.func.isRequired,
     onBrightnessChange: PropTypes.func.isRequired,
+    onAlphaChange: PropTypes.func.isRequired,
     onChangeGradientTypeHorizontal: PropTypes.func.isRequired,
     onChangeGradientTypeRadial: PropTypes.func.isRequired,
     onChangeGradientTypeSolid: PropTypes.func.isRequired,
