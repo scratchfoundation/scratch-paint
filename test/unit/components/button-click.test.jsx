@@ -16,7 +16,6 @@ describe('Button', () => {
         
         const buttonElement = getByText('Button');
         fireEvent.click(buttonElement);
-        
         expect(onClick).toHaveBeenCalled();
     });
 });
