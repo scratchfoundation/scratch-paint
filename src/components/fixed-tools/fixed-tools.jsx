@@ -11,7 +11,7 @@ import BufferedInputHOC from '../forms/buffered-input-hoc.jsx';
 import Button from '../button/button.jsx';
 import ButtonGroup from '../button-group/button-group.jsx';
 import Dropdown from '../dropdown/dropdown.jsx';
-import {defineMessages, injectIntl, intlShape} from 'react-intl';
+import {defineMessages, useIntl} from 'react-intl';
 import Formats, {isVector} from '../../lib/format';
 import Input from '../forms/input.jsx';
 import InputGroup from '../input-group/input-group.jsx';
@@ -87,13 +87,14 @@ const messages = defineMessages({
 const FixedToolsComponent = props => {
     const redoDisabled = !props.canRedo();
     const undoDisabled = !props.canUndo();
+    const intl = useIntl();
 
     return (
         <div className={styles.row}>
             {/* Name field */}
             <InputGroup>
                 <MediaQuery minWidth={layout.fullSizeEditorMinWidth}>
-                    <Label text={props.intl.formatMessage(messages.costume)}>
+                    <Label text={intl.formatMessage(messages.costume)}>
                         <BufferedInput
                             className={styles.costumeInput}
                             type="text"
@@ -128,7 +129,7 @@ const FixedToolsComponent = props => {
                         onClick={props.onUndo}
                     >
                         <img
-                            alt={props.intl.formatMessage(messages.undo)}
+                            alt={intl.formatMessage(messages.undo)}
                             className={classNames(
                                 styles.buttonGroupButtonIcon,
                                 styles.undoIcon
@@ -150,7 +151,7 @@ const FixedToolsComponent = props => {
                         onClick={props.onRedo}
                     >
                         <img
-                            alt={props.intl.formatMessage(messages.redo)}
+                            alt={intl.formatMessage(messages.redo)}
                             className={styles.buttonGroupButtonIcon}
                             draggable={false}
                             src={redoIcon}
@@ -164,16 +165,16 @@ const FixedToolsComponent = props => {
                 <InputGroup className={styles.modDashedBorder}>
                     <LabeledIconButton
                         disabled={!shouldShowGroup()}
-                        hideLabel={hideLabel(props.intl.locale)}
+                        hideLabel={hideLabel(intl.locale)}
                         imgSrc={groupIcon}
-                        title={props.intl.formatMessage(messages.group)}
+                        title={intl.formatMessage(messages.group)}
                         onClick={props.onGroup}
                     />
                     <LabeledIconButton
                         disabled={!shouldShowUngroup()}
-                        hideLabel={hideLabel(props.intl.locale)}
+                        hideLabel={hideLabel(intl.locale)}
                         imgSrc={ungroupIcon}
-                        title={props.intl.formatMessage(messages.ungroup)}
+                        title={intl.formatMessage(messages.ungroup)}
                         onClick={props.onUngroup}
                     />
                 </InputGroup> : null
@@ -184,16 +185,16 @@ const FixedToolsComponent = props => {
                 <InputGroup className={styles.modDashedBorder}>
                     <LabeledIconButton
                         disabled={!shouldShowBringForward()}
-                        hideLabel={hideLabel(props.intl.locale)}
+                        hideLabel={hideLabel(intl.locale)}
                         imgSrc={sendForwardIcon}
-                        title={props.intl.formatMessage(messages.forward)}
+                        title={intl.formatMessage(messages.forward)}
                         onClick={props.onSendForward}
                     />
                     <LabeledIconButton
                         disabled={!shouldShowSendBackward()}
-                        hideLabel={hideLabel(props.intl.locale)}
+                        hideLabel={hideLabel(intl.locale)}
                         imgSrc={sendBackwardIcon}
-                        title={props.intl.formatMessage(messages.backward)}
+                        title={intl.formatMessage(messages.backward)}
                         onClick={props.onSendBackward}
                     />
                 </InputGroup> : null
@@ -204,16 +205,16 @@ const FixedToolsComponent = props => {
                     <InputGroup className={styles.row}>
                         <LabeledIconButton
                             disabled={!shouldShowBringForward()}
-                            hideLabel={hideLabel(props.intl.locale)}
+                            hideLabel={hideLabel(intl.locale)}
                             imgSrc={sendFrontIcon}
-                            title={props.intl.formatMessage(messages.front)}
+                            title={intl.formatMessage(messages.front)}
                             onClick={props.onSendToFront}
                         />
                         <LabeledIconButton
                             disabled={!shouldShowSendBackward()}
-                            hideLabel={hideLabel(props.intl.locale)}
+                            hideLabel={hideLabel(intl.locale)}
                             imgSrc={sendBackIcon}
-                            title={props.intl.formatMessage(messages.back)}
+                            title={intl.formatMessage(messages.back)}
                             onClick={props.onSendToBack}
                         />
                     </InputGroup>
@@ -252,7 +253,7 @@ const FixedToolsComponent = props => {
                                             draggable={false}
                                             src={sendFrontIcon}
                                         />
-                                        <span>{props.intl.formatMessage(messages.front)}</span>
+                                        <span>{intl.formatMessage(messages.front)}</span>
                                     </Button>
                                     <Button
                                         className={classNames(styles.modMenuItem, {
@@ -266,7 +267,7 @@ const FixedToolsComponent = props => {
                                             draggable={false}
                                             src={sendBackIcon}
                                         />
-                                        <span>{props.intl.formatMessage(messages.back)}</span>
+                                        <span>{intl.formatMessage(messages.back)}</span>
                                     </Button>
 
                                     {/* To be rotation point */}
@@ -285,7 +286,7 @@ const FixedToolsComponent = props => {
                             }
                             tipSize={.01}
                         >
-                            {props.intl.formatMessage(messages.more)}
+                            {intl.formatMessage(messages.more)}
                         </Dropdown>
                     </InputGroup>
                 </MediaQuery> : null
@@ -298,7 +299,6 @@ FixedToolsComponent.propTypes = {
     canRedo: PropTypes.func.isRequired,
     canUndo: PropTypes.func.isRequired,
     format: PropTypes.oneOf(Object.keys(Formats)),
-    intl: intlShape,
     name: PropTypes.string,
     onGroup: PropTypes.func.isRequired,
     onRedo: PropTypes.func.isRequired,
@@ -321,4 +321,4 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps
-)(injectIntl(FixedToolsComponent));
+)(FixedToolsComponent);
