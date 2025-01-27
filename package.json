@@ -24,9 +24,6 @@
   },
   "dependencies": {
     "@scratch/paper": "^0.11.20221201200345",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^15.0.7",
-    "@testing-library/user-event": "^14.5.2",
     "classnames": "^2.2.5",
     "keymirror": "^0.1.1",
     "lodash.bindall": "^4.4.0",
@@ -106,7 +103,8 @@
     "url-loader": "2.3.0",
     "webpack": "4.47.0",
     "webpack-cli": "3.3.12",
-    "webpack-dev-server": "3.11.3"
+    "webpack-dev-server": "3.11.3",
+    "@testing-library/react": "8.0.0"
   },
   "config": {
     "commitizen": {
