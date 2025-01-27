@@ -182,10 +182,12 @@ class Playground extends React.Component {
     }
 
 }
-ReactDOM.render((
+
+const root = ReactDOM.createRoot(appTarget);
+root.render(
     <Provider store={store}>
         <IntlProvider>
             <Playground />
         </IntlProvider>
     </Provider>
-), appTarget);
+);
