@@ -30,6 +30,16 @@ const makeColorIndicator = (label, isStroke) => {
             // Flag to track whether an svg-update-worthy change has been made
             this._hasChanged = false;
         }
+        componentDidMount () {
+            if (!this.props.allowAlpha) {
+                this.removeAlpha();
+            }
+        }
+        componentDidUpdate (prevProps) {
+            if (!this.props.allowAlpha && prevProps.allowAlpha) {
+                this.removeAlpha();
+            }
+        }
         componentWillReceiveProps (newProps) {
             const {colorModalVisible, onUpdateImage} = this.props;
             if (colorModalVisible && !newProps.colorModalVisible) {
@@ -37,6 +47,14 @@ const makeColorIndicator = (label, isStroke) => {
                 if (this._hasChanged) onUpdateImage();
                 this._hasChanged = false;
             }
+        }
+        removeAlpha() {
+            const parsedColor1 = parseColor(this.props.color)
+            if (parsedColor1?.hex)
+                this.props.onChangeColor(parsedColor1.hex.substr(0, 7), 0)
+            const parsedColor2 = parseColor(this.props.color2)
+            if (parsedColor2?.hex)
+                this.props.onChangeColor(parsedColor2.hex.substr(0, 7), 1)
         }
         handleChangeColor (newColor) {
             // Stroke-selector-specific logic: if we change the stroke color from "none" to something visible, ensure

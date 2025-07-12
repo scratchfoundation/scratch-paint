@@ -4,7 +4,7 @@ import {getColorsFromSelection, MIXED} from '../helper/style-path';
 import GradientTypes from './gradient-types';
 
 // Matches hex colors
-const hexRegex = /^#([0-9a-f]{3}){1,2}$/i;
+const hexRegex = /^#([0-9a-f]{3}){1,2}([0-9a-f]{2})?$/i;
 
 const isValidHexColor = color => {
     if (!hexRegex.test(color) && color !== null && color !== MIXED) {

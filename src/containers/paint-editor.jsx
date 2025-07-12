@@ -12,6 +12,7 @@ import UpdateImageHOC from '../hocs/update-image-hoc.jsx';
 
 import {changeMode} from '../reducers/modes';
 import {changeFormat} from '../reducers/format';
+import {changeFillColor} from '../reducers/fill-style';
 import {clearSelectedItems, setSelectedItems} from '../reducers/selected-items';
 import {deactivateEyeDropper} from '../reducers/eye-dropper';
 import {setTextEditTarget} from '../reducers/text-edit-target';
