@@ -3,6 +3,3160 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.336](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.335...v3.0.336) (2025-07-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.217 ([#3332](https://github.com/scratchfoundation/scratch-paint/issues/3332)) ([60bb319](https://github.com/scratchfoundation/scratch-paint/commit/60bb319f04dc78d1af80174effee64b21e7aea55))
+
+## [3.0.335](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.334...v3.0.335) (2025-07-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.216 ([#3331](https://github.com/scratchfoundation/scratch-paint/issues/3331)) ([74c6845](https://github.com/scratchfoundation/scratch-paint/commit/74c6845c8e93f9e9550102f6f7debe8f35a9435b))
+
+## [3.0.334](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.333...v3.0.334) (2025-07-19)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3330](https://github.com/scratchfoundation/scratch-paint/issues/3330)) ([f241318](https://github.com/scratchfoundation/scratch-paint/commit/f241318deae85ace03f1de00a8487fcbbb8f62d7))
+
+## [3.0.333](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.332...v3.0.333) (2025-07-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.215 ([#3329](https://github.com/scratchfoundation/scratch-paint/issues/3329)) ([c8ba243](https://github.com/scratchfoundation/scratch-paint/commit/c8ba24330fc69af964435547f97bbf5ef1e7aa85))
+
+## [3.0.332](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.331...v3.0.332) (2025-07-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.309 ([#3327](https://github.com/scratchfoundation/scratch-paint/issues/3327)) ([e4c1f74](https://github.com/scratchfoundation/scratch-paint/commit/e4c1f740094722a00f5f426f331da07fb2edb4fe))
+
+## [3.0.331](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.330...v3.0.331) (2025-07-16)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3325](https://github.com/scratchfoundation/scratch-paint/issues/3325)) ([3a14fa4](https://github.com/scratchfoundation/scratch-paint/commit/3a14fa487c20c0f92d0908237de13244e7eb7e8e))
+
+## [3.0.330](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.329...v3.0.330) (2025-07-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.308 ([#3326](https://github.com/scratchfoundation/scratch-paint/issues/3326)) ([20eb60f](https://github.com/scratchfoundation/scratch-paint/commit/20eb60fda7a1b3628c90f7612d9b42682d8fee50))
+
+## [3.0.329](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.328...v3.0.329) (2025-07-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.214 ([#3324](https://github.com/scratchfoundation/scratch-paint/issues/3324)) ([42dd95e](https://github.com/scratchfoundation/scratch-paint/commit/42dd95e09960e6bc7bf388aaa6f6c0a73be302a0))
+
+## [3.0.328](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.327...v3.0.328) (2025-07-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.307 ([#3323](https://github.com/scratchfoundation/scratch-paint/issues/3323)) ([c5f5dac](https://github.com/scratchfoundation/scratch-paint/commit/c5f5dacf4ff0c8e7eee817c0299db171596898ec))
+
+## [3.0.327](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.326...v3.0.327) (2025-07-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.213 ([#3322](https://github.com/scratchfoundation/scratch-paint/issues/3322)) ([330134d](https://github.com/scratchfoundation/scratch-paint/commit/330134d3e1e81038cc5d4c0b1fb37d6493249a87))
+
+## [3.0.326](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.325...v3.0.326) (2025-07-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.306 ([#3321](https://github.com/scratchfoundation/scratch-paint/issues/3321)) ([6233f9f](https://github.com/scratchfoundation/scratch-paint/commit/6233f9fec8a116adb7aa00d43a556b4191c4e814))
+
+## [3.0.325](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.324...v3.0.325) (2025-07-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.304 ([#3320](https://github.com/scratchfoundation/scratch-paint/issues/3320)) ([b46c594](https://github.com/scratchfoundation/scratch-paint/commit/b46c594262977d8700921a3068ee03ce866fa4ff))
+
+## [3.0.324](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.323...v3.0.324) (2025-07-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.303 ([#3319](https://github.com/scratchfoundation/scratch-paint/issues/3319)) ([98ef82a](https://github.com/scratchfoundation/scratch-paint/commit/98ef82ad4dbf2a4b96c34461d74c9c38b68363f7))
+
+## [3.0.323](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.322...v3.0.323) (2025-07-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.301 ([#3317](https://github.com/scratchfoundation/scratch-paint/issues/3317)) ([1924708](https://github.com/scratchfoundation/scratch-paint/commit/1924708b3c914ae87181a4aae64d0484bac3a58b))
+
+## [3.0.322](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.321...v3.0.322) (2025-07-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.212 ([#3318](https://github.com/scratchfoundation/scratch-paint/issues/3318)) ([757046e](https://github.com/scratchfoundation/scratch-paint/commit/757046edb24d202fa7523f353d4b06d4e21fd17d))
+
+## [3.0.321](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.320...v3.0.321) (2025-07-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.299 ([#3316](https://github.com/scratchfoundation/scratch-paint/issues/3316)) ([d1af7be](https://github.com/scratchfoundation/scratch-paint/commit/d1af7be1c0117ad197d70db8b0b958d4a51e136f))
+
+## [3.0.320](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.319...v3.0.320) (2025-07-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.211 ([#3315](https://github.com/scratchfoundation/scratch-paint/issues/3315)) ([aeb8f2e](https://github.com/scratchfoundation/scratch-paint/commit/aeb8f2e53faf7dc7df025ab5079ac4cbbf0a7899))
+
+## [3.0.319](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.318...v3.0.319) (2025-07-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.297 ([#3314](https://github.com/scratchfoundation/scratch-paint/issues/3314)) ([98029ce](https://github.com/scratchfoundation/scratch-paint/commit/98029ce171160c020c764d7296a5c059cc6299a8))
+
+## [3.0.318](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.317...v3.0.318) (2025-07-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.296 ([#3313](https://github.com/scratchfoundation/scratch-paint/issues/3313)) ([6c73dad](https://github.com/scratchfoundation/scratch-paint/commit/6c73dad3307643fbab3187c24e96c9a87b3d6c5f))
+
+## [3.0.317](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.316...v3.0.317) (2025-07-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.295 ([#3311](https://github.com/scratchfoundation/scratch-paint/issues/3311)) ([1e2aef0](https://github.com/scratchfoundation/scratch-paint/commit/1e2aef0a4abd2e793dbc37d5d1b8d7cd028d4262))
+
+## [3.0.316](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.315...v3.0.316) (2025-07-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.210 ([#3310](https://github.com/scratchfoundation/scratch-paint/issues/3310)) ([468e407](https://github.com/scratchfoundation/scratch-paint/commit/468e407368cd2efa4f13597a960c22a1709dd56a))
+
+## [3.0.315](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.314...v3.0.315) (2025-07-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.294 ([#3309](https://github.com/scratchfoundation/scratch-paint/issues/3309)) ([d5697b0](https://github.com/scratchfoundation/scratch-paint/commit/d5697b0c3c752f1374775d1218d67c34dd9063ab))
+
+## [3.0.314](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.313...v3.0.314) (2025-07-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.209 ([#3308](https://github.com/scratchfoundation/scratch-paint/issues/3308)) ([8f49799](https://github.com/scratchfoundation/scratch-paint/commit/8f497996414d2bf40bc7451dd1bb02010b6361a8))
+
+## [3.0.313](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.312...v3.0.313) (2025-07-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.293 ([#3307](https://github.com/scratchfoundation/scratch-paint/issues/3307)) ([c2b2041](https://github.com/scratchfoundation/scratch-paint/commit/c2b20417fafcaf93e2bfdb036d949faba0a4dcc6))
+
+## [3.0.312](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.311...v3.0.312) (2025-07-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.291 ([#3306](https://github.com/scratchfoundation/scratch-paint/issues/3306)) ([46d6f56](https://github.com/scratchfoundation/scratch-paint/commit/46d6f56e6f7b537135d8dbc3b3d94b53b67b906c))
+
+## [3.0.311](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.310...v3.0.311) (2025-06-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.290 ([#3305](https://github.com/scratchfoundation/scratch-paint/issues/3305)) ([a3b3522](https://github.com/scratchfoundation/scratch-paint/commit/a3b3522af96a2aeb98c16b7b70ee651c8ed04443))
+
+## [3.0.310](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.309...v3.0.310) (2025-06-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.208 ([#3303](https://github.com/scratchfoundation/scratch-paint/issues/3303)) ([bc48949](https://github.com/scratchfoundation/scratch-paint/commit/bc48949ac9d7ddd07c9aaf3249052cac77b9a87f))
+
+## [3.0.309](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.308...v3.0.309) (2025-06-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.288 ([#3302](https://github.com/scratchfoundation/scratch-paint/issues/3302)) ([cc3145c](https://github.com/scratchfoundation/scratch-paint/commit/cc3145c382037a8ae05bd2a5ec0dd6055503a98f))
+
+## [3.0.308](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.307...v3.0.308) (2025-06-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.286 ([#3301](https://github.com/scratchfoundation/scratch-paint/issues/3301)) ([1d17f25](https://github.com/scratchfoundation/scratch-paint/commit/1d17f2512e0d446782fc9b4c6da9d98722c461d0))
+
+## [3.0.307](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.306...v3.0.307) (2025-06-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.284 ([#3300](https://github.com/scratchfoundation/scratch-paint/issues/3300)) ([e126ea0](https://github.com/scratchfoundation/scratch-paint/commit/e126ea06df799ff7d5a5ad66dad0e2414cfaa00d))
+
+## [3.0.306](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.305...v3.0.306) (2025-06-27)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3298](https://github.com/scratchfoundation/scratch-paint/issues/3298)) ([30cf15f](https://github.com/scratchfoundation/scratch-paint/commit/30cf15f133d64835733154b767bd71e5b11fcfa9))
+
+## [3.0.305](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.304...v3.0.305) (2025-06-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.207 ([#3299](https://github.com/scratchfoundation/scratch-paint/issues/3299)) ([838222e](https://github.com/scratchfoundation/scratch-paint/commit/838222ed922d7f249f9dc6eea59977dbb2794a1d))
+
+## [3.0.304](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.303...v3.0.304) (2025-06-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.282 ([#3297](https://github.com/scratchfoundation/scratch-paint/issues/3297)) ([328f49a](https://github.com/scratchfoundation/scratch-paint/commit/328f49a9a7d0e9d1d0f2281761a21b1ca5037dd8))
+
+## [3.0.303](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.302...v3.0.303) (2025-06-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.280 ([#3296](https://github.com/scratchfoundation/scratch-paint/issues/3296)) ([ab1b184](https://github.com/scratchfoundation/scratch-paint/commit/ab1b1840d30f91a011cbc70d53b68fe8612306e9))
+
+## [3.0.302](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.301...v3.0.302) (2025-06-24)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3293](https://github.com/scratchfoundation/scratch-paint/issues/3293)) ([6f75021](https://github.com/scratchfoundation/scratch-paint/commit/6f75021ed21f357874077420c595bcce3d67ac1e))
+
+## [3.0.301](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.300...v3.0.301) (2025-06-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.206 ([#3294](https://github.com/scratchfoundation/scratch-paint/issues/3294)) ([b8d0ded](https://github.com/scratchfoundation/scratch-paint/commit/b8d0ded25f21cfed91732e311f2e81aaf920b450))
+
+## [3.0.300](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.299...v3.0.300) (2025-06-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.205 ([#3292](https://github.com/scratchfoundation/scratch-paint/issues/3292)) ([513c007](https://github.com/scratchfoundation/scratch-paint/commit/513c00738c773d47b73b16595bd4e3d29115f63f))
+
+## [3.0.299](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.298...v3.0.299) (2025-06-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.278 ([#3291](https://github.com/scratchfoundation/scratch-paint/issues/3291)) ([cc5b449](https://github.com/scratchfoundation/scratch-paint/commit/cc5b449343bb859acfa6371ee23c02fffcf0db55))
+
+## [3.0.298](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.297...v3.0.298) (2025-06-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.276 ([#3290](https://github.com/scratchfoundation/scratch-paint/issues/3290)) ([fc3ea5e](https://github.com/scratchfoundation/scratch-paint/commit/fc3ea5eaa71e20a9c7b690a7c47251244fce1b01))
+
+## [3.0.297](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.296...v3.0.297) (2025-06-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.204 ([#3289](https://github.com/scratchfoundation/scratch-paint/issues/3289)) ([fc2b640](https://github.com/scratchfoundation/scratch-paint/commit/fc2b64081e42e350f8a48104063e2e492e379e34))
+
+## [3.0.296](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.295...v3.0.296) (2025-06-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.275 ([#3288](https://github.com/scratchfoundation/scratch-paint/issues/3288)) ([99fdf68](https://github.com/scratchfoundation/scratch-paint/commit/99fdf68d677431202b45f905e8f6a45bf6fc93c6))
+
+## [3.0.295](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.294...v3.0.295) (2025-06-18)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3287](https://github.com/scratchfoundation/scratch-paint/issues/3287)) ([0ee07be](https://github.com/scratchfoundation/scratch-paint/commit/0ee07bec7e8a9d4bc0b77e5f2417fca4f6d1ac90))
+
+## [3.0.294](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.293...v3.0.294) (2025-06-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.274 ([#3286](https://github.com/scratchfoundation/scratch-paint/issues/3286)) ([9efc724](https://github.com/scratchfoundation/scratch-paint/commit/9efc724a25a61d5a331ee4e91718d6ca77f6eba8))
+
+## [3.0.293](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.292...v3.0.293) (2025-06-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.203 ([#3285](https://github.com/scratchfoundation/scratch-paint/issues/3285)) ([06d744d](https://github.com/scratchfoundation/scratch-paint/commit/06d744d9e1c96de0645e2e988a5690bb92b7703a))
+
+## [3.0.292](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.291...v3.0.292) (2025-06-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.273 ([#3284](https://github.com/scratchfoundation/scratch-paint/issues/3284)) ([d61709b](https://github.com/scratchfoundation/scratch-paint/commit/d61709bb481303241967f4419b5f31ba73c19a1a))
+
+## [3.0.291](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.290...v3.0.291) (2025-06-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.272 ([#3283](https://github.com/scratchfoundation/scratch-paint/issues/3283)) ([0560b91](https://github.com/scratchfoundation/scratch-paint/commit/0560b912d3fb76e42fbf97c178e1372b01f6ebcc))
+
+## [3.0.290](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.289...v3.0.290) (2025-06-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.202 ([#3282](https://github.com/scratchfoundation/scratch-paint/issues/3282)) ([f4420a6](https://github.com/scratchfoundation/scratch-paint/commit/f4420a6250268b57c0773cce623a1e59eb375b65))
+
+## [3.0.289](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.288...v3.0.289) (2025-06-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.270 ([#3281](https://github.com/scratchfoundation/scratch-paint/issues/3281)) ([601227c](https://github.com/scratchfoundation/scratch-paint/commit/601227cf4ea47904a2d2ec883fc6c796290a9b5a))
+
+## [3.0.288](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.287...v3.0.288) (2025-06-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.269 ([#3280](https://github.com/scratchfoundation/scratch-paint/issues/3280)) ([82c9954](https://github.com/scratchfoundation/scratch-paint/commit/82c9954c5a5db1bd7c48432bca1720af9b2c812d))
+
+## [3.0.287](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.286...v3.0.287) (2025-06-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.268 ([#3279](https://github.com/scratchfoundation/scratch-paint/issues/3279)) ([fcdc455](https://github.com/scratchfoundation/scratch-paint/commit/fcdc45573e8a518f2c1d44d2da334ba974fadcb1))
+
+## [3.0.286](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.285...v3.0.286) (2025-06-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.267 ([#3278](https://github.com/scratchfoundation/scratch-paint/issues/3278)) ([b77deff](https://github.com/scratchfoundation/scratch-paint/commit/b77deff9061ae5ffb5021a3b52649fae873ffee0))
+
+## [3.0.285](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.284...v3.0.285) (2025-06-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.201 ([#3277](https://github.com/scratchfoundation/scratch-paint/issues/3277)) ([b6d438f](https://github.com/scratchfoundation/scratch-paint/commit/b6d438f1e6f3a0b1bed11c1c226cef64f0b88dd2))
+
+## [3.0.284](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.283...v3.0.284) (2025-06-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.266 ([#3276](https://github.com/scratchfoundation/scratch-paint/issues/3276)) ([8faccee](https://github.com/scratchfoundation/scratch-paint/commit/8faccee7a122a9644bec45ba65d22711dd10b98b))
+
+## [3.0.283](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.282...v3.0.283) (2025-06-10)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3275](https://github.com/scratchfoundation/scratch-paint/issues/3275)) ([9601ebc](https://github.com/scratchfoundation/scratch-paint/commit/9601ebc0062ada795c0365c5265240ba013e8205))
+
+## [3.0.282](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.281...v3.0.282) (2025-06-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.200 ([#3274](https://github.com/scratchfoundation/scratch-paint/issues/3274)) ([eee0583](https://github.com/scratchfoundation/scratch-paint/commit/eee0583f9565fa564434d011ea032dbc0898db70))
+
+## [3.0.281](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.280...v3.0.281) (2025-06-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.264 ([#3273](https://github.com/scratchfoundation/scratch-paint/issues/3273)) ([61a7d55](https://github.com/scratchfoundation/scratch-paint/commit/61a7d55d3f2e145c74511bae9600de048f69d7e3))
+
+## [3.0.280](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.279...v3.0.280) (2025-06-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.263 ([#3271](https://github.com/scratchfoundation/scratch-paint/issues/3271)) ([0e2c9ea](https://github.com/scratchfoundation/scratch-paint/commit/0e2c9eac13f9f77fb69179753ae8d3c0b20b529b))
+
+## [3.0.279](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.278...v3.0.279) (2025-06-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.261 ([#3270](https://github.com/scratchfoundation/scratch-paint/issues/3270)) ([16d2464](https://github.com/scratchfoundation/scratch-paint/commit/16d24647f8c32deb4cc07e98a800d53075434a69))
+
+## [3.0.278](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.277...v3.0.278) (2025-06-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.260 ([#3269](https://github.com/scratchfoundation/scratch-paint/issues/3269)) ([0f2ebbf](https://github.com/scratchfoundation/scratch-paint/commit/0f2ebbf6f535159f34b5f2b8f161ce197d2e661a))
+
+## [3.0.277](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.276...v3.0.277) (2025-06-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.199 ([#3268](https://github.com/scratchfoundation/scratch-paint/issues/3268)) ([8d0723f](https://github.com/scratchfoundation/scratch-paint/commit/8d0723f1013b1ce97892304ae39e64d9d44ece55))
+
+## [3.0.276](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.275...v3.0.276) (2025-06-03)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3266](https://github.com/scratchfoundation/scratch-paint/issues/3266)) ([e8fb5bb](https://github.com/scratchfoundation/scratch-paint/commit/e8fb5bb4de268a9de11b875d0b59664fad5bb9d9))
+
+## [3.0.275](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.274...v3.0.275) (2025-06-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.259 ([#3265](https://github.com/scratchfoundation/scratch-paint/issues/3265)) ([5683491](https://github.com/scratchfoundation/scratch-paint/commit/5683491131826757414c231d2620234e5c0e1529))
+
+## [3.0.274](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.273...v3.0.274) (2025-05-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.258 ([#3264](https://github.com/scratchfoundation/scratch-paint/issues/3264)) ([dbe53de](https://github.com/scratchfoundation/scratch-paint/commit/dbe53de51ef4f9011834f7140517eb90cf6f6520))
+
+## [3.0.273](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.272...v3.0.273) (2025-05-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.198 ([#3263](https://github.com/scratchfoundation/scratch-paint/issues/3263)) ([48d735c](https://github.com/scratchfoundation/scratch-paint/commit/48d735c59709dd2be8a666a64018018fd91386c1))
+
+## [3.0.272](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.271...v3.0.272) (2025-05-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.257 ([#3262](https://github.com/scratchfoundation/scratch-paint/issues/3262)) ([4ed8983](https://github.com/scratchfoundation/scratch-paint/commit/4ed8983f31fae5898ce85a63ab85217628ab7fea))
+
+## [3.0.271](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.270...v3.0.271) (2025-05-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.256 ([#3260](https://github.com/scratchfoundation/scratch-paint/issues/3260)) ([e98b1a0](https://github.com/scratchfoundation/scratch-paint/commit/e98b1a07045d0140dfb6eb5d70b2dc3a8540bdea))
+
+## [3.0.270](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.269...v3.0.270) (2025-05-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.255 ([#3259](https://github.com/scratchfoundation/scratch-paint/issues/3259)) ([0997e3c](https://github.com/scratchfoundation/scratch-paint/commit/0997e3c9168704f9eb7ae6b086f0421f6eff4053))
+
+## [3.0.269](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.268...v3.0.269) (2025-05-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.254 ([#3258](https://github.com/scratchfoundation/scratch-paint/issues/3258)) ([72f9fdd](https://github.com/scratchfoundation/scratch-paint/commit/72f9fdd639d8d5edd62807a4d47783772310d662))
+
+## [3.0.268](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.267...v3.0.268) (2025-05-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.197 ([#3257](https://github.com/scratchfoundation/scratch-paint/issues/3257)) ([758fc26](https://github.com/scratchfoundation/scratch-paint/commit/758fc26ee174dff19fdad73b0bdc223082cfd76c))
+
+## [3.0.267](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.266...v3.0.267) (2025-05-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.253 ([#3256](https://github.com/scratchfoundation/scratch-paint/issues/3256)) ([6205acc](https://github.com/scratchfoundation/scratch-paint/commit/6205accf45df42d87b1cf8c68584f3f50d747b3f))
+
+## [3.0.266](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.265...v3.0.266) (2025-05-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.252 ([#3255](https://github.com/scratchfoundation/scratch-paint/issues/3255)) ([0263065](https://github.com/scratchfoundation/scratch-paint/commit/0263065915a5cccf75457f69d845aec94da654ed))
+
+## [3.0.265](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.264...v3.0.265) (2025-05-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.251 ([#3254](https://github.com/scratchfoundation/scratch-paint/issues/3254)) ([d4bc624](https://github.com/scratchfoundation/scratch-paint/commit/d4bc624630565767764bd21e2d7c987811bcd731))
+
+## [3.0.264](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.263...v3.0.264) (2025-05-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.196 ([#3253](https://github.com/scratchfoundation/scratch-paint/issues/3253)) ([5587640](https://github.com/scratchfoundation/scratch-paint/commit/55876406dd775384d7fcb987381c0960b649bf55))
+
+## [3.0.263](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.262...v3.0.263) (2025-05-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.250 ([#3252](https://github.com/scratchfoundation/scratch-paint/issues/3252)) ([7a4565b](https://github.com/scratchfoundation/scratch-paint/commit/7a4565ba7f74dfba9e142ad9a2350764afead231))
+
+## [3.0.262](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.261...v3.0.262) (2025-05-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.249 ([#3251](https://github.com/scratchfoundation/scratch-paint/issues/3251)) ([5b02758](https://github.com/scratchfoundation/scratch-paint/commit/5b02758bfa7828e441ceb366aef0fcb760692455))
+
+## [3.0.261](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.260...v3.0.261) (2025-05-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.248 ([#3250](https://github.com/scratchfoundation/scratch-paint/issues/3250)) ([5eabc61](https://github.com/scratchfoundation/scratch-paint/commit/5eabc6131396e6b41372ec89365fc4d06ae41729))
+
+## [3.0.260](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.259...v3.0.260) (2025-05-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.247 ([#3249](https://github.com/scratchfoundation/scratch-paint/issues/3249)) ([5e7be8a](https://github.com/scratchfoundation/scratch-paint/commit/5e7be8ad1ca0cb86ecd39de33ea0a74d05d82850))
+
+## [3.0.259](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.258...v3.0.259) (2025-05-21)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3248](https://github.com/scratchfoundation/scratch-paint/issues/3248)) ([9cf7506](https://github.com/scratchfoundation/scratch-paint/commit/9cf7506d8f4d607635a3703f1472c31b8cb40778))
+
+## [3.0.258](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.257...v3.0.258) (2025-05-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.245 ([#3247](https://github.com/scratchfoundation/scratch-paint/issues/3247)) ([f93e155](https://github.com/scratchfoundation/scratch-paint/commit/f93e15514843e966123dc78451423632fb229bad))
+
+## [3.0.257](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.256...v3.0.257) (2025-05-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.244 ([#3246](https://github.com/scratchfoundation/scratch-paint/issues/3246)) ([cc99202](https://github.com/scratchfoundation/scratch-paint/commit/cc9920277a8a2c60390deabfc4f6a56d4154467b))
+
+## [3.0.256](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.255...v3.0.256) (2025-05-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.195 ([#3245](https://github.com/scratchfoundation/scratch-paint/issues/3245)) ([8df8855](https://github.com/scratchfoundation/scratch-paint/commit/8df885594179ed9f2900356a562c40522c7f32f7))
+
+## [3.0.255](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.254...v3.0.255) (2025-05-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.243 ([#3244](https://github.com/scratchfoundation/scratch-paint/issues/3244)) ([0687ca8](https://github.com/scratchfoundation/scratch-paint/commit/0687ca8a82f6c4b91ab8b62ea3a56b6e31bde9fc))
+
+## [3.0.254](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.253...v3.0.254) (2025-05-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.194 ([#3243](https://github.com/scratchfoundation/scratch-paint/issues/3243)) ([c449f46](https://github.com/scratchfoundation/scratch-paint/commit/c449f46bb136659b6873698f16ddd3b7f3fcd63d))
+
+## [3.0.253](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.252...v3.0.253) (2025-05-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.242 ([#3242](https://github.com/scratchfoundation/scratch-paint/issues/3242)) ([1230d6e](https://github.com/scratchfoundation/scratch-paint/commit/1230d6ecf892ac20e7f67ac0f76e9f5ada46ae42))
+
+## [3.0.252](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.251...v3.0.252) (2025-05-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.241 ([#3241](https://github.com/scratchfoundation/scratch-paint/issues/3241)) ([015160d](https://github.com/scratchfoundation/scratch-paint/commit/015160da77d68244ec14015186847a547d63d4f9))
+
+## [3.0.251](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.250...v3.0.251) (2025-05-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.240 ([#3240](https://github.com/scratchfoundation/scratch-paint/issues/3240)) ([2c4ed4d](https://github.com/scratchfoundation/scratch-paint/commit/2c4ed4d94b78bbf8a347293f8b3308a7cf169317))
+
+## [3.0.250](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.249...v3.0.250) (2025-05-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.193 ([#3239](https://github.com/scratchfoundation/scratch-paint/issues/3239)) ([398e16a](https://github.com/scratchfoundation/scratch-paint/commit/398e16a47c4945f7853147b07b06bcd8eca43377))
+
+## [3.0.249](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.248...v3.0.249) (2025-05-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.239 ([#3238](https://github.com/scratchfoundation/scratch-paint/issues/3238)) ([63d6cee](https://github.com/scratchfoundation/scratch-paint/commit/63d6ceee7656f0761c3ee3dcbc7f3ed3369daf56))
+
+## [3.0.248](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.247...v3.0.248) (2025-05-13)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3237](https://github.com/scratchfoundation/scratch-paint/issues/3237)) ([a65ca9d](https://github.com/scratchfoundation/scratch-paint/commit/a65ca9d7a5d068a28eca730e62a8b602f4442519))
+
+## [3.0.247](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.246...v3.0.247) (2025-05-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.237 ([#3236](https://github.com/scratchfoundation/scratch-paint/issues/3236)) ([1e6fb27](https://github.com/scratchfoundation/scratch-paint/commit/1e6fb27cf59095490e3544d54e07a7fd0e4c14ca))
+
+## [3.0.246](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.245...v3.0.246) (2025-05-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.192 ([#3235](https://github.com/scratchfoundation/scratch-paint/issues/3235)) ([aa59ad5](https://github.com/scratchfoundation/scratch-paint/commit/aa59ad579b18ca53d5bf4352dfb6b74dc4e24ce0))
+
+## [3.0.245](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.244...v3.0.245) (2025-05-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.236 ([#3234](https://github.com/scratchfoundation/scratch-paint/issues/3234)) ([951d856](https://github.com/scratchfoundation/scratch-paint/commit/951d8569d77ff82b85c0eb93fb884bb8e2d00559))
+
+## [3.0.244](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.243...v3.0.244) (2025-05-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.234 ([#3232](https://github.com/scratchfoundation/scratch-paint/issues/3232)) ([26c234a](https://github.com/scratchfoundation/scratch-paint/commit/26c234acedd2b77a36ba22004f3d6869e7964c76))
+
+## [3.0.243](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.242...v3.0.243) (2025-05-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.233 ([#3231](https://github.com/scratchfoundation/scratch-paint/issues/3231)) ([639fec7](https://github.com/scratchfoundation/scratch-paint/commit/639fec7639383cc53df98277e0ae2cf8cd93aa8a))
+
+## [3.0.242](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.241...v3.0.242) (2025-05-08)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3228](https://github.com/scratchfoundation/scratch-paint/issues/3228)) ([2233339](https://github.com/scratchfoundation/scratch-paint/commit/22333393dae743e553dab9c084d06bdfda57ce7d))
+
+## [3.0.241](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.240...v3.0.241) (2025-05-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.191 ([#3230](https://github.com/scratchfoundation/scratch-paint/issues/3230)) ([3fffe9b](https://github.com/scratchfoundation/scratch-paint/commit/3fffe9b1af52513a0831f0aab94f07682db37d56))
+
+## [3.0.240](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.239...v3.0.240) (2025-05-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.232 ([#3229](https://github.com/scratchfoundation/scratch-paint/issues/3229)) ([985ca2f](https://github.com/scratchfoundation/scratch-paint/commit/985ca2fb878a983e1f50d27639355b2e2de095cc))
+
+## [3.0.239](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.238...v3.0.239) (2025-05-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.231 ([#3226](https://github.com/scratchfoundation/scratch-paint/issues/3226)) ([743f8f8](https://github.com/scratchfoundation/scratch-paint/commit/743f8f8ac17f4fa6ad7a98589a65013354845443))
+
+## [3.0.238](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.237...v3.0.238) (2025-05-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.190 ([#3225](https://github.com/scratchfoundation/scratch-paint/issues/3225)) ([71d80f3](https://github.com/scratchfoundation/scratch-paint/commit/71d80f3de25a78e1e90c1b48c6349f2d20e58996))
+
+## [3.0.237](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.236...v3.0.237) (2025-05-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.230 ([#3224](https://github.com/scratchfoundation/scratch-paint/issues/3224)) ([84bb929](https://github.com/scratchfoundation/scratch-paint/commit/84bb92920fa5a59ee49a586ae78424a0abf1c081))
+
+## [3.0.236](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.235...v3.0.236) (2025-05-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.229 ([#3222](https://github.com/scratchfoundation/scratch-paint/issues/3222)) ([4b3ee4b](https://github.com/scratchfoundation/scratch-paint/commit/4b3ee4bdd11094812e270c55f7288ad366a840e0))
+
+## [3.0.235](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.234...v3.0.235) (2025-05-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.228 ([#3221](https://github.com/scratchfoundation/scratch-paint/issues/3221)) ([bf50904](https://github.com/scratchfoundation/scratch-paint/commit/bf50904d6cdab8d17c118ce857db034ec7557efa))
+
+## [3.0.234](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.233...v3.0.234) (2025-05-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.189 ([#3220](https://github.com/scratchfoundation/scratch-paint/issues/3220)) ([983b1bf](https://github.com/scratchfoundation/scratch-paint/commit/983b1bf645b93905fe8a593e4206374002d9b177))
+
+## [3.0.233](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.232...v3.0.233) (2025-05-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.226 ([#3219](https://github.com/scratchfoundation/scratch-paint/issues/3219)) ([79efcc3](https://github.com/scratchfoundation/scratch-paint/commit/79efcc344e6383c27381b2f8c5cb083936ae5d47))
+
+## [3.0.232](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.231...v3.0.232) (2025-04-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.224 ([#3218](https://github.com/scratchfoundation/scratch-paint/issues/3218)) ([6cadc3b](https://github.com/scratchfoundation/scratch-paint/commit/6cadc3b8c8a3eec599e0eae11d2869c8e0ecd5bd))
+
+## [3.0.231](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.230...v3.0.231) (2025-04-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.222 ([#3217](https://github.com/scratchfoundation/scratch-paint/issues/3217)) ([8cd2dc9](https://github.com/scratchfoundation/scratch-paint/commit/8cd2dc9a42ee0d4f408566451aefb2ba22e64f15))
+
+## [3.0.230](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.229...v3.0.230) (2025-04-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.188 ([#3216](https://github.com/scratchfoundation/scratch-paint/issues/3216)) ([f34bb02](https://github.com/scratchfoundation/scratch-paint/commit/f34bb0227be4fa890403221595ffb3b8360458cb))
+
+## [3.0.229](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.228...v3.0.229) (2025-04-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.220 ([#3215](https://github.com/scratchfoundation/scratch-paint/issues/3215)) ([d9e2f2e](https://github.com/scratchfoundation/scratch-paint/commit/d9e2f2e6fe6f4488567c6b8d3a1bf5457e77feac))
+
+## [3.0.228](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.227...v3.0.228) (2025-04-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.218 ([#3214](https://github.com/scratchfoundation/scratch-paint/issues/3214)) ([e33c272](https://github.com/scratchfoundation/scratch-paint/commit/e33c2720df2fd987ecfc57267432d925a1b30ce3))
+
+## [3.0.227](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.226...v3.0.227) (2025-04-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.187 ([#3213](https://github.com/scratchfoundation/scratch-paint/issues/3213)) ([9872c92](https://github.com/scratchfoundation/scratch-paint/commit/9872c927f2c2b3dbe5d1c8abe68bbe5ac1716ee0))
+
+## [3.0.226](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.225...v3.0.226) (2025-04-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.216 ([#3212](https://github.com/scratchfoundation/scratch-paint/issues/3212)) ([71c3959](https://github.com/scratchfoundation/scratch-paint/commit/71c3959d20e09b94500730f877572994e017018c))
+
+## [3.0.225](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.224...v3.0.225) (2025-04-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.215 ([#3211](https://github.com/scratchfoundation/scratch-paint/issues/3211)) ([d6ca84b](https://github.com/scratchfoundation/scratch-paint/commit/d6ca84bdca0f335122f45a9aed34727dd6359836))
+
+## [3.0.224](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.223...v3.0.224) (2025-04-23)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3208](https://github.com/scratchfoundation/scratch-paint/issues/3208)) ([c105aab](https://github.com/scratchfoundation/scratch-paint/commit/c105aab049e70a99078f37836f2b1d8c8b222ab3))
+
+## [3.0.223](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.222...v3.0.223) (2025-04-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.186 ([#3210](https://github.com/scratchfoundation/scratch-paint/issues/3210)) ([e3d3e7d](https://github.com/scratchfoundation/scratch-paint/commit/e3d3e7d4a3de1c633c63e1f69e73ed5861ae8872))
+
+## [3.0.222](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.221...v3.0.222) (2025-04-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.214 ([#3209](https://github.com/scratchfoundation/scratch-paint/issues/3209)) ([bbd1861](https://github.com/scratchfoundation/scratch-paint/commit/bbd18614c7d749f69c5772dab385c3e4491e5d65))
+
+## [3.0.221](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.220...v3.0.221) (2025-04-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.185 ([#3207](https://github.com/scratchfoundation/scratch-paint/issues/3207)) ([6a8d47a](https://github.com/scratchfoundation/scratch-paint/commit/6a8d47a88fad169a9bc81696485238b2c2b03a12))
+
+## [3.0.220](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.219...v3.0.220) (2025-04-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.213 ([#3206](https://github.com/scratchfoundation/scratch-paint/issues/3206)) ([b28e51e](https://github.com/scratchfoundation/scratch-paint/commit/b28e51e0a9705cad47959f3f977b75285e4ff13e))
+
+## [3.0.219](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.218...v3.0.219) (2025-04-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.211 ([#3205](https://github.com/scratchfoundation/scratch-paint/issues/3205)) ([43ffb51](https://github.com/scratchfoundation/scratch-paint/commit/43ffb51b5eceb639097453673b1b754357dafc7b))
+
+## [3.0.218](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.217...v3.0.218) (2025-04-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.209 ([#3204](https://github.com/scratchfoundation/scratch-paint/issues/3204)) ([f6a7c9c](https://github.com/scratchfoundation/scratch-paint/commit/f6a7c9ce18973bc5ece938fcf5cd2ba8e025e2ca))
+
+## [3.0.217](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.216...v3.0.217) (2025-04-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.207 ([#3203](https://github.com/scratchfoundation/scratch-paint/issues/3203)) ([5650c7a](https://github.com/scratchfoundation/scratch-paint/commit/5650c7a90befca8786b3555a536300059de8cc8b))
+
+## [3.0.216](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.215...v3.0.216) (2025-04-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.184 ([#3202](https://github.com/scratchfoundation/scratch-paint/issues/3202)) ([81f2585](https://github.com/scratchfoundation/scratch-paint/commit/81f2585fee24169bb3541a1a2f9960668882f1b2))
+
+## [3.0.215](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.214...v3.0.215) (2025-04-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.206 ([#3201](https://github.com/scratchfoundation/scratch-paint/issues/3201)) ([6224e03](https://github.com/scratchfoundation/scratch-paint/commit/6224e03484d6d7f68ef3c6cef3b50a34d2a65557))
+
+## [3.0.214](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.213...v3.0.214) (2025-04-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.205 ([#3200](https://github.com/scratchfoundation/scratch-paint/issues/3200)) ([0ede257](https://github.com/scratchfoundation/scratch-paint/commit/0ede257bc5843a906418df42f648366a9ac0867d))
+
+## [3.0.213](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.212...v3.0.213) (2025-04-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.204 ([#3199](https://github.com/scratchfoundation/scratch-paint/issues/3199)) ([ea69eaf](https://github.com/scratchfoundation/scratch-paint/commit/ea69eaf5440d905097cc6cb0fda148d4d8481b38))
+
+## [3.0.212](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.211...v3.0.212) (2025-04-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.183 ([#3197](https://github.com/scratchfoundation/scratch-paint/issues/3197)) ([acc43fb](https://github.com/scratchfoundation/scratch-paint/commit/acc43fbf9023e8897a6352f6b6a8d417ae8ebfaa))
+
+## [3.0.211](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.210...v3.0.211) (2025-04-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.202 ([#3196](https://github.com/scratchfoundation/scratch-paint/issues/3196)) ([c3766d6](https://github.com/scratchfoundation/scratch-paint/commit/c3766d6041e58589e7bb3bab7bd05aebf1a23556))
+
+## [3.0.210](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.209...v3.0.210) (2025-04-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.201 ([#3195](https://github.com/scratchfoundation/scratch-paint/issues/3195)) ([75fcf6c](https://github.com/scratchfoundation/scratch-paint/commit/75fcf6cfaaacc07ed854a80df4328035d3dfeecb))
+
+## [3.0.209](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.208...v3.0.209) (2025-04-13)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3194](https://github.com/scratchfoundation/scratch-paint/issues/3194)) ([661f0f2](https://github.com/scratchfoundation/scratch-paint/commit/661f0f28563417ea0ad37cd3c338ff466db24243))
+
+## [3.0.208](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.207...v3.0.208) (2025-04-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.200 ([#3193](https://github.com/scratchfoundation/scratch-paint/issues/3193)) ([37c8be6](https://github.com/scratchfoundation/scratch-paint/commit/37c8be6ac4d8444a565fa4866d38db6ec623078d))
+
+## [3.0.207](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.206...v3.0.207) (2025-04-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.198 ([#3192](https://github.com/scratchfoundation/scratch-paint/issues/3192)) ([7d2e1df](https://github.com/scratchfoundation/scratch-paint/commit/7d2e1dfe905d08c4292db6e33f75fcdecd27b566))
+
+## [3.0.206](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.205...v3.0.206) (2025-04-09)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3190](https://github.com/scratchfoundation/scratch-paint/issues/3190)) ([33443e6](https://github.com/scratchfoundation/scratch-paint/commit/33443e66ce3c98ce67562f8cfb3b74523b4a1d95))
+
+## [3.0.205](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.204...v3.0.205) (2025-04-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.182 ([#3191](https://github.com/scratchfoundation/scratch-paint/issues/3191)) ([41a8c43](https://github.com/scratchfoundation/scratch-paint/commit/41a8c439972b7ac968e6f91b61ca8be38a2ba843))
+
+## [3.0.204](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.203...v3.0.204) (2025-04-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.197 ([#3189](https://github.com/scratchfoundation/scratch-paint/issues/3189)) ([7f5e4fa](https://github.com/scratchfoundation/scratch-paint/commit/7f5e4fa3efeb04e0e57241ab7e7cad8d99fb81d1))
+
+## [3.0.203](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.202...v3.0.203) (2025-04-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.195 ([#3187](https://github.com/scratchfoundation/scratch-paint/issues/3187)) ([df0970a](https://github.com/scratchfoundation/scratch-paint/commit/df0970a69e285f8873547762a393b45d70106960))
+
+## [3.0.202](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.201...v3.0.202) (2025-04-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.181 ([#3186](https://github.com/scratchfoundation/scratch-paint/issues/3186)) ([018f734](https://github.com/scratchfoundation/scratch-paint/commit/018f7344af608f658d824e1f3da71cbe5195d85c))
+
+## [3.0.201](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.200...v3.0.201) (2025-04-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.193 ([#3185](https://github.com/scratchfoundation/scratch-paint/issues/3185)) ([9ccb135](https://github.com/scratchfoundation/scratch-paint/commit/9ccb135f7bc78175f74e0cc3f542922af7020a63))
+
+## [3.0.200](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.199...v3.0.200) (2025-04-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.191 ([#3184](https://github.com/scratchfoundation/scratch-paint/issues/3184)) ([53b10f2](https://github.com/scratchfoundation/scratch-paint/commit/53b10f27abfa995bd558db1a5ff1dded2a19ea39))
+
+## [3.0.199](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.198...v3.0.199) (2025-04-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.189 ([#3183](https://github.com/scratchfoundation/scratch-paint/issues/3183)) ([1f37ae5](https://github.com/scratchfoundation/scratch-paint/commit/1f37ae5c522113521bbd9e24cc94ca01008f3e00))
+
+## [3.0.198](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.197...v3.0.198) (2025-04-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.187 ([#3182](https://github.com/scratchfoundation/scratch-paint/issues/3182)) ([18ea5cd](https://github.com/scratchfoundation/scratch-paint/commit/18ea5cd15e9c201f24763533c7dfe6f58ee576a4))
+
+## [3.0.197](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.196...v3.0.197) (2025-04-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.186 ([#3181](https://github.com/scratchfoundation/scratch-paint/issues/3181)) ([be8eac2](https://github.com/scratchfoundation/scratch-paint/commit/be8eac28c53b0df3d822a4805e5fba563025346c))
+
+## [3.0.196](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.195...v3.0.196) (2025-03-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.180 ([#3179](https://github.com/scratchfoundation/scratch-paint/issues/3179)) ([de317b2](https://github.com/scratchfoundation/scratch-paint/commit/de317b23d6947bc2a35b7b031bccec3f82606187))
+
+## [3.0.195](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.194...v3.0.195) (2025-03-31)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3178](https://github.com/scratchfoundation/scratch-paint/issues/3178)) ([7fded33](https://github.com/scratchfoundation/scratch-paint/commit/7fded33d809a12994a6b37b69558322371e214ce))
+
+## [3.0.194](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.193...v3.0.194) (2025-03-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.179 ([#3177](https://github.com/scratchfoundation/scratch-paint/issues/3177)) ([c65d557](https://github.com/scratchfoundation/scratch-paint/commit/c65d557a6fd05b5ffb53294dfb05383a0e9c8970))
+
+## [3.0.193](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.192...v3.0.193) (2025-03-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.184 ([#3176](https://github.com/scratchfoundation/scratch-paint/issues/3176)) ([0aa5be0](https://github.com/scratchfoundation/scratch-paint/commit/0aa5be04c49472c1b8afb1def33505753bfb9bc1))
+
+## [3.0.192](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.191...v3.0.192) (2025-03-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.182 ([#3174](https://github.com/scratchfoundation/scratch-paint/issues/3174)) ([f2399a8](https://github.com/scratchfoundation/scratch-paint/commit/f2399a8c81542f2125714a9cb1115d64f60f28e9))
+
+## [3.0.191](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.190...v3.0.191) (2025-03-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.180 ([#3173](https://github.com/scratchfoundation/scratch-paint/issues/3173)) ([ec337ca](https://github.com/scratchfoundation/scratch-paint/commit/ec337ca9fa0b8442009fe76c217c27552091f0b1))
+
+## [3.0.190](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.189...v3.0.190) (2025-03-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.178 ([#3172](https://github.com/scratchfoundation/scratch-paint/issues/3172)) ([2300c89](https://github.com/scratchfoundation/scratch-paint/commit/2300c898cef6dca8f6ae6cda6b8aeee03e06bb84))
+
+## [3.0.189](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.188...v3.0.189) (2025-03-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.179 ([#3171](https://github.com/scratchfoundation/scratch-paint/issues/3171)) ([ca6cb70](https://github.com/scratchfoundation/scratch-paint/commit/ca6cb7033fb77466972c4e28d56ac2bca80a0827))
+
+## [3.0.188](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.187...v3.0.188) (2025-03-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.178 ([#3170](https://github.com/scratchfoundation/scratch-paint/issues/3170)) ([f45b1ff](https://github.com/scratchfoundation/scratch-paint/commit/f45b1ff897d1aa4a8f30ace65d918533d446343d))
+
+## [3.0.187](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.186...v3.0.187) (2025-03-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.177 ([#3169](https://github.com/scratchfoundation/scratch-paint/issues/3169)) ([387d625](https://github.com/scratchfoundation/scratch-paint/commit/387d625e70ef15d4c139d0ee793e5a399c437471))
+
+## [3.0.186](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.185...v3.0.186) (2025-03-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.176 ([#3168](https://github.com/scratchfoundation/scratch-paint/issues/3168)) ([8603319](https://github.com/scratchfoundation/scratch-paint/commit/8603319fbad80cdb154a26f99d19ce81e107e5c3))
+
+## [3.0.185](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.184...v3.0.185) (2025-03-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.176 ([#3167](https://github.com/scratchfoundation/scratch-paint/issues/3167)) ([3c36d47](https://github.com/scratchfoundation/scratch-paint/commit/3c36d471e5cf42c091c36b281a67ffeed21f6d25))
+
+## [3.0.184](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.183...v3.0.184) (2025-03-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.174 ([#3166](https://github.com/scratchfoundation/scratch-paint/issues/3166)) ([f058f48](https://github.com/scratchfoundation/scratch-paint/commit/f058f484d8bbc233d2a6c92d9fd24bc6e9f64e48))
+
+## [3.0.183](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.182...v3.0.183) (2025-03-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.173 ([#3165](https://github.com/scratchfoundation/scratch-paint/issues/3165)) ([28b6068](https://github.com/scratchfoundation/scratch-paint/commit/28b606843c120bf0826f0ec8ce1600109f26e0e7))
+
+## [3.0.182](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.181...v3.0.182) (2025-03-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.172 ([#3164](https://github.com/scratchfoundation/scratch-paint/issues/3164)) ([eaedc2b](https://github.com/scratchfoundation/scratch-paint/commit/eaedc2be36bbc7d4e9b851fdcf76608dff2f2c00))
+
+## [3.0.181](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.180...v3.0.181) (2025-03-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.175 ([#3163](https://github.com/scratchfoundation/scratch-paint/issues/3163)) ([d0f349e](https://github.com/scratchfoundation/scratch-paint/commit/d0f349e61d9cf94a6c12063482932e3b93ab0e54))
+
+## [3.0.180](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.179...v3.0.180) (2025-03-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.170 ([#3162](https://github.com/scratchfoundation/scratch-paint/issues/3162)) ([2e6f377](https://github.com/scratchfoundation/scratch-paint/commit/2e6f377b91391378342abd0f0be95a91343b7e11))
+
+## [3.0.179](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.178...v3.0.179) (2025-03-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.168 ([#3161](https://github.com/scratchfoundation/scratch-paint/issues/3161)) ([5fe4692](https://github.com/scratchfoundation/scratch-paint/commit/5fe46920be997419048e3776dba8e6b837d8f0f3))
+
+## [3.0.178](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.177...v3.0.178) (2025-03-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.167 ([#3160](https://github.com/scratchfoundation/scratch-paint/issues/3160)) ([d0cfee6](https://github.com/scratchfoundation/scratch-paint/commit/d0cfee68698723f3f4b2cd752cff3e4125197fca))
+
+## [3.0.177](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.176...v3.0.177) (2025-03-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.174 ([#3159](https://github.com/scratchfoundation/scratch-paint/issues/3159)) ([13dc011](https://github.com/scratchfoundation/scratch-paint/commit/13dc011a3b7d27d132b9651b7f6c60c8c5017148))
+
+## [3.0.176](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.175...v3.0.176) (2025-03-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.165 ([#3158](https://github.com/scratchfoundation/scratch-paint/issues/3158)) ([7fcb4cd](https://github.com/scratchfoundation/scratch-paint/commit/7fcb4cd3128a76be72b1d5de775a3d80876286bb))
+
+## [3.0.175](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.174...v3.0.175) (2025-03-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.163 ([#3156](https://github.com/scratchfoundation/scratch-paint/issues/3156)) ([230c968](https://github.com/scratchfoundation/scratch-paint/commit/230c968753ceb104cbbaeb037372d0399c927073))
+
+## [3.0.174](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.173...v3.0.174) (2025-03-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.161 ([#3155](https://github.com/scratchfoundation/scratch-paint/issues/3155)) ([ccd22a7](https://github.com/scratchfoundation/scratch-paint/commit/ccd22a7075fde3e458935f8ca3503187d2bb4c0f))
+
+## [3.0.173](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.172...v3.0.173) (2025-03-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.173 ([#3154](https://github.com/scratchfoundation/scratch-paint/issues/3154)) ([85a3511](https://github.com/scratchfoundation/scratch-paint/commit/85a35116d9ff125976c1adc1d0031fa74ec38fe0))
+
+## [3.0.172](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.171...v3.0.172) (2025-03-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.159 ([#3153](https://github.com/scratchfoundation/scratch-paint/issues/3153)) ([2155730](https://github.com/scratchfoundation/scratch-paint/commit/21557305b85ba364ea43a838c546a17fcbe5d25a))
+
+## [3.0.171](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.170...v3.0.171) (2025-03-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.157 ([#3152](https://github.com/scratchfoundation/scratch-paint/issues/3152)) ([b5308f2](https://github.com/scratchfoundation/scratch-paint/commit/b5308f28e7f68a58cc33c375a9ebb4eeec6c7c45))
+
+## [3.0.170](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.169...v3.0.170) (2025-03-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.172 ([#3151](https://github.com/scratchfoundation/scratch-paint/issues/3151)) ([467a6c2](https://github.com/scratchfoundation/scratch-paint/commit/467a6c248dd69f8fdd895f13a1897f5d017a075d))
+
+## [3.0.169](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.168...v3.0.169) (2025-03-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.156 ([#3150](https://github.com/scratchfoundation/scratch-paint/issues/3150)) ([4306fec](https://github.com/scratchfoundation/scratch-paint/commit/4306fec16d9b8850de0d6cbc0fb32318882e8d17))
+
+## [3.0.168](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.167...v3.0.168) (2025-03-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.154 ([#3149](https://github.com/scratchfoundation/scratch-paint/issues/3149)) ([2a4e82e](https://github.com/scratchfoundation/scratch-paint/commit/2a4e82ef4951267a27bdc74fd54627cd7388fadf))
+
+## [3.0.167](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.166...v3.0.167) (2025-03-09)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3148](https://github.com/scratchfoundation/scratch-paint/issues/3148)) ([934a4c4](https://github.com/scratchfoundation/scratch-paint/commit/934a4c4882651a4f23cacf6300558081b0617cd8))
+
+## [3.0.166](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.165...v3.0.166) (2025-03-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.171 ([#3147](https://github.com/scratchfoundation/scratch-paint/issues/3147)) ([5ff22f3](https://github.com/scratchfoundation/scratch-paint/commit/5ff22f35ac3b8b289488867086e9f8eec9c38ad2))
+
+## [3.0.165](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.164...v3.0.165) (2025-03-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.153 ([#3146](https://github.com/scratchfoundation/scratch-paint/issues/3146)) ([ab7fe96](https://github.com/scratchfoundation/scratch-paint/commit/ab7fe963e31a009017d9692e523c2f591d11eb90))
+
+## [3.0.164](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.163...v3.0.164) (2025-03-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.152 ([#3145](https://github.com/scratchfoundation/scratch-paint/issues/3145)) ([530307a](https://github.com/scratchfoundation/scratch-paint/commit/530307a2852decd05b62a1f3798a64bd90ba1c2b))
+
+## [3.0.163](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.162...v3.0.163) (2025-03-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.170 ([#3144](https://github.com/scratchfoundation/scratch-paint/issues/3144)) ([cee2b1e](https://github.com/scratchfoundation/scratch-paint/commit/cee2b1e1c655195e641cc7bf48850214ba14616e))
+
+## [3.0.162](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.161...v3.0.162) (2025-03-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.151 ([#3143](https://github.com/scratchfoundation/scratch-paint/issues/3143)) ([85474e5](https://github.com/scratchfoundation/scratch-paint/commit/85474e59ed6ead2cc36d14efd65d4e5fbeef57ea))
+
+## [3.0.161](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.160...v3.0.161) (2025-03-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.150 ([#3142](https://github.com/scratchfoundation/scratch-paint/issues/3142)) ([9632509](https://github.com/scratchfoundation/scratch-paint/commit/9632509e179913782d1f0d8be30d872468f4dd88))
+
+## [3.0.160](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.159...v3.0.160) (2025-03-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.169 ([#3139](https://github.com/scratchfoundation/scratch-paint/issues/3139)) ([c4d4b11](https://github.com/scratchfoundation/scratch-paint/commit/c4d4b11a2a17164567e0a55f232c6f24522299d7))
+
+## [3.0.159](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.158...v3.0.159) (2025-03-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.148 ([#3138](https://github.com/scratchfoundation/scratch-paint/issues/3138)) ([6f7719e](https://github.com/scratchfoundation/scratch-paint/commit/6f7719e625af9ed6bf09fe72d98f5cd8e0cc8613))
+
+## [3.0.158](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.157...v3.0.158) (2025-03-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.147 ([#3137](https://github.com/scratchfoundation/scratch-paint/issues/3137)) ([64d7808](https://github.com/scratchfoundation/scratch-paint/commit/64d7808472cb10f6f6c326a17077b850f13fb406))
+
+## [3.0.157](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.156...v3.0.157) (2025-03-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.146 ([#3136](https://github.com/scratchfoundation/scratch-paint/issues/3136)) ([39bbb47](https://github.com/scratchfoundation/scratch-paint/commit/39bbb47765aaf327d1df5fe629f6b7729ce071dd))
+
+## [3.0.156](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.155...v3.0.156) (2025-03-01)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3134](https://github.com/scratchfoundation/scratch-paint/issues/3134)) ([dea3782](https://github.com/scratchfoundation/scratch-paint/commit/dea3782fd57d5076c17bcdfed7a1d48cb960e3d3))
+
+## [3.0.155](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.154...v3.0.155) (2025-02-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.168 ([#3135](https://github.com/scratchfoundation/scratch-paint/issues/3135)) ([7d97b9a](https://github.com/scratchfoundation/scratch-paint/commit/7d97b9a880e3bfe3ad5b41c5db0b0333fce44292))
+
+## [3.0.154](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.153...v3.0.154) (2025-02-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.144 ([#3133](https://github.com/scratchfoundation/scratch-paint/issues/3133)) ([99a7d5e](https://github.com/scratchfoundation/scratch-paint/commit/99a7d5e65ba1d025b3297b4e2f84c678b044e4d0))
+
+## [3.0.153](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.152...v3.0.153) (2025-02-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.142 ([#3132](https://github.com/scratchfoundation/scratch-paint/issues/3132)) ([ca06212](https://github.com/scratchfoundation/scratch-paint/commit/ca06212143ce86ba291a3b7b3c84b1cb4f1555f9))
+
+## [3.0.152](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.151...v3.0.152) (2025-02-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.140 ([#3131](https://github.com/scratchfoundation/scratch-paint/issues/3131)) ([7a9e585](https://github.com/scratchfoundation/scratch-paint/commit/7a9e5852a048a488c71fe6c8ebee6afa111836bf))
+
+## [3.0.151](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.150...v3.0.151) (2025-02-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.167 ([#3130](https://github.com/scratchfoundation/scratch-paint/issues/3130)) ([4b9065d](https://github.com/scratchfoundation/scratch-paint/commit/4b9065d5cefdaecb93c2cb8d9d38032f6dadcd5f))
+
+## [3.0.150](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.149...v3.0.150) (2025-02-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.139 ([#3129](https://github.com/scratchfoundation/scratch-paint/issues/3129)) ([0ad8d69](https://github.com/scratchfoundation/scratch-paint/commit/0ad8d698cf8871480447d183de1a802b0f9db37a))
+
+## [3.0.149](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.148...v3.0.149) (2025-02-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.138 ([#3128](https://github.com/scratchfoundation/scratch-paint/issues/3128)) ([4b2e057](https://github.com/scratchfoundation/scratch-paint/commit/4b2e0575405df52f173b19d120921c13a617f964))
+
+## [3.0.148](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.147...v3.0.148) (2025-02-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.137 ([#3127](https://github.com/scratchfoundation/scratch-paint/issues/3127)) ([4188369](https://github.com/scratchfoundation/scratch-paint/commit/4188369f0ed4dddfc889fee19c4aad47fdfa0da0))
+
+## [3.0.147](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.146...v3.0.147) (2025-02-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.166 ([#3126](https://github.com/scratchfoundation/scratch-paint/issues/3126)) ([5c72931](https://github.com/scratchfoundation/scratch-paint/commit/5c72931c867a1f8d6cecc974f493ace084227b92))
+
+## [3.0.146](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.145...v3.0.146) (2025-02-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.135 ([#3125](https://github.com/scratchfoundation/scratch-paint/issues/3125)) ([289e315](https://github.com/scratchfoundation/scratch-paint/commit/289e315da98eeda104b4531e52f5d994b0442b85))
+
+## [3.0.145](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.144...v3.0.145) (2025-02-20)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3124](https://github.com/scratchfoundation/scratch-paint/issues/3124)) ([8ac7a91](https://github.com/scratchfoundation/scratch-paint/commit/8ac7a911cf0a4eeb1a364743c25909101e39535f))
+
+## [3.0.144](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.143...v3.0.144) (2025-02-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.165 ([#3121](https://github.com/scratchfoundation/scratch-paint/issues/3121)) ([5e4f655](https://github.com/scratchfoundation/scratch-paint/commit/5e4f655b5d5866a85f2ab6d16b6d8c17a6709885))
+
+## [3.0.143](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.142...v3.0.143) (2025-02-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.134 ([#3120](https://github.com/scratchfoundation/scratch-paint/issues/3120)) ([74801ae](https://github.com/scratchfoundation/scratch-paint/commit/74801aef1a7c3a14a3d8e4457411abdf52f65bf8))
+
+## [3.0.142](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.141...v3.0.142) (2025-02-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.131 ([#3119](https://github.com/scratchfoundation/scratch-paint/issues/3119)) ([ed2160d](https://github.com/scratchfoundation/scratch-paint/commit/ed2160d8e85eb60bbbb05cbc5741c818c225cc9b))
+
+## [3.0.141](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.140...v3.0.141) (2025-02-18)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3118](https://github.com/scratchfoundation/scratch-paint/issues/3118)) ([32059df](https://github.com/scratchfoundation/scratch-paint/commit/32059df0549be093c40f9b3188662dbcde021e52))
+
+## [3.0.140](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.139...v3.0.140) (2025-02-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.164 ([#3116](https://github.com/scratchfoundation/scratch-paint/issues/3116)) ([8391508](https://github.com/scratchfoundation/scratch-paint/commit/83915089a547024d22b00d58bec40fea2ad2c79a))
+
+## [3.0.139](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.138...v3.0.139) (2025-02-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.130 ([#3115](https://github.com/scratchfoundation/scratch-paint/issues/3115)) ([d13b2d3](https://github.com/scratchfoundation/scratch-paint/commit/d13b2d3515c59ce34486d0aa8bc786bbb9261aa6))
+
+## [3.0.138](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.137...v3.0.138) (2025-02-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.129 ([#3114](https://github.com/scratchfoundation/scratch-paint/issues/3114)) ([1a99ad0](https://github.com/scratchfoundation/scratch-paint/commit/1a99ad02ecbb9608cad8773c75247b24eaf4b75b))
+
+## [3.0.137](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.136...v3.0.137) (2025-02-16)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3113](https://github.com/scratchfoundation/scratch-paint/issues/3113)) ([052bfa5](https://github.com/scratchfoundation/scratch-paint/commit/052bfa5afd11ee721924161c2e5ead4484899298))
+
+## [3.0.136](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.135...v3.0.136) (2025-02-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.163 ([#3111](https://github.com/scratchfoundation/scratch-paint/issues/3111)) ([16888d5](https://github.com/scratchfoundation/scratch-paint/commit/16888d5fba5b8f9b57f1558cf128e01aeb847e84))
+
+## [3.0.135](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.134...v3.0.135) (2025-02-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.128 ([#3112](https://github.com/scratchfoundation/scratch-paint/issues/3112)) ([b0995a3](https://github.com/scratchfoundation/scratch-paint/commit/b0995a30004978c6f7d2467abd8092338d895e40))
+
+## [3.0.134](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.133...v3.0.134) (2025-02-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.127 ([#3110](https://github.com/scratchfoundation/scratch-paint/issues/3110)) ([fb9e8f7](https://github.com/scratchfoundation/scratch-paint/commit/fb9e8f7c53d61c328cef8078c277c694fed79a44))
+
+## [3.0.133](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.132...v3.0.133) (2025-02-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.121 ([#3108](https://github.com/scratchfoundation/scratch-paint/issues/3108)) ([6d8d136](https://github.com/scratchfoundation/scratch-paint/commit/6d8d1367c26a33bae6e542c5a30193193137c5f8))
+
+## [3.0.132](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.131...v3.0.132) (2025-02-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.120 ([#3106](https://github.com/scratchfoundation/scratch-paint/issues/3106)) ([1a1a080](https://github.com/scratchfoundation/scratch-paint/commit/1a1a08062c1db1979015a3d9eaf3b29b3027c5c8))
+
+## [3.0.131](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.130...v3.0.131) (2025-02-10)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3105](https://github.com/scratchfoundation/scratch-paint/issues/3105)) ([da9872d](https://github.com/scratchfoundation/scratch-paint/commit/da9872d4eba255f4acccdd77557bc38737e95411))
+
+## [3.0.130](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.129...v3.0.130) (2025-02-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.119 ([#3103](https://github.com/scratchfoundation/scratch-paint/issues/3103)) ([c3ebbed](https://github.com/scratchfoundation/scratch-paint/commit/c3ebbed488bead2d6eef9e5066c51b4e73de62ce))
+
+## [3.0.129](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.128...v3.0.129) (2025-02-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.161 ([#3104](https://github.com/scratchfoundation/scratch-paint/issues/3104)) ([50c7f93](https://github.com/scratchfoundation/scratch-paint/commit/50c7f93f332618b48aaeffe72be367fd00a234fb))
+
+## [3.0.128](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.127...v3.0.128) (2025-02-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.116 ([#3102](https://github.com/scratchfoundation/scratch-paint/issues/3102)) ([63fa943](https://github.com/scratchfoundation/scratch-paint/commit/63fa943f8f41a62f8d12ee7860780fa31581cb59))
+
+## [3.0.127](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.126...v3.0.127) (2025-02-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.115 ([#3101](https://github.com/scratchfoundation/scratch-paint/issues/3101)) ([8b66e58](https://github.com/scratchfoundation/scratch-paint/commit/8b66e58fa3022b767144ab4c5a8912875f5653d8))
+
+## [3.0.126](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.125...v3.0.126) (2025-02-06)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3100](https://github.com/scratchfoundation/scratch-paint/issues/3100)) ([4dd4a8e](https://github.com/scratchfoundation/scratch-paint/commit/4dd4a8e275a0b45f74a95bc00fbace8f65c204ae))
+
+## [3.0.125](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.124...v3.0.125) (2025-02-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.160 ([#3099](https://github.com/scratchfoundation/scratch-paint/issues/3099)) ([a50a087](https://github.com/scratchfoundation/scratch-paint/commit/a50a087a19de81ec52f015eded9d1c6b26c7c8ae))
+
+## [3.0.124](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.123...v3.0.124) (2025-02-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.114 ([#3098](https://github.com/scratchfoundation/scratch-paint/issues/3098)) ([668680d](https://github.com/scratchfoundation/scratch-paint/commit/668680d95104dd18cb19ff4ce046cf9082c63c32))
+
+## [3.0.123](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.122...v3.0.123) (2025-02-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.112 ([#3097](https://github.com/scratchfoundation/scratch-paint/issues/3097)) ([d8f8da6](https://github.com/scratchfoundation/scratch-paint/commit/d8f8da6e9bf1357eef4813df0c3df2b2b964228c))
+
+## [3.0.122](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.121...v3.0.122) (2025-02-04)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3095](https://github.com/scratchfoundation/scratch-paint/issues/3095)) ([06b52ed](https://github.com/scratchfoundation/scratch-paint/commit/06b52ed29be30b4f47059e05c669be921f4dba0b))
+
+## [3.0.121](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.120...v3.0.121) (2025-02-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.110 ([#3096](https://github.com/scratchfoundation/scratch-paint/issues/3096)) ([6e7a91e](https://github.com/scratchfoundation/scratch-paint/commit/6e7a91e810df86e686f9db71731f24f667dfda04))
+
+## [3.0.120](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.119...v3.0.120) (2025-02-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.159 ([#3094](https://github.com/scratchfoundation/scratch-paint/issues/3094)) ([0ac26e9](https://github.com/scratchfoundation/scratch-paint/commit/0ac26e935d9eba1ed1aaf6a530921cdab458d4d9))
+
+## [3.0.119](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.118...v3.0.119) (2025-02-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.109 ([#3093](https://github.com/scratchfoundation/scratch-paint/issues/3093)) ([9c3eb5b](https://github.com/scratchfoundation/scratch-paint/commit/9c3eb5bbb63367450cd65fe9d7a512c9c525bf5b))
+
+## [3.0.118](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.117...v3.0.118) (2025-02-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.107 ([#3092](https://github.com/scratchfoundation/scratch-paint/issues/3092)) ([053aa3b](https://github.com/scratchfoundation/scratch-paint/commit/053aa3b110df5145b325d2019efc08a9b40ef1d7))
+
+## [3.0.117](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.116...v3.0.117) (2025-02-01)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3090](https://github.com/scratchfoundation/scratch-paint/issues/3090)) ([cb90f28](https://github.com/scratchfoundation/scratch-paint/commit/cb90f280711928307ee64f6193546fc74db322ca))
+* **deps:** update dependency scratch-l10n to v5.0.106 ([#3091](https://github.com/scratchfoundation/scratch-paint/issues/3091)) ([082d9d6](https://github.com/scratchfoundation/scratch-paint/commit/082d9d63403f38538d1c9b8ee4a68c06790f26a3))
+
+## [3.0.116](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.115...v3.0.116) (2025-01-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.105 ([#3089](https://github.com/scratchfoundation/scratch-paint/issues/3089)) ([9eb52f4](https://github.com/scratchfoundation/scratch-paint/commit/9eb52f4581bffbfcb251cef10c29c7eb6bd2c094))
+
+## [3.0.115](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.114...v3.0.115) (2025-01-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.158 ([#3088](https://github.com/scratchfoundation/scratch-paint/issues/3088)) ([11f1f74](https://github.com/scratchfoundation/scratch-paint/commit/11f1f745ea31913e8ce18a06bfc49e8d26f5521d))
+
+## [3.0.114](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.113...v3.0.114) (2025-01-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.103 ([#3087](https://github.com/scratchfoundation/scratch-paint/issues/3087)) ([ad23d8a](https://github.com/scratchfoundation/scratch-paint/commit/ad23d8a2f3b8fa864dbfb640750672609d032edd))
+
+## [3.0.113](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.112...v3.0.113) (2025-01-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.102 ([#3086](https://github.com/scratchfoundation/scratch-paint/issues/3086)) ([3d1e455](https://github.com/scratchfoundation/scratch-paint/commit/3d1e455079c15ec06245786d1c5ef8fce1a58cc0))
+
+## [3.0.112](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.111...v3.0.112) (2025-01-28)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3083](https://github.com/scratchfoundation/scratch-paint/issues/3083)) ([932a21b](https://github.com/scratchfoundation/scratch-paint/commit/932a21be64054bf5e889acf46984cb37abeb55e9))
+
+## [3.0.111](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.110...v3.0.111) (2025-01-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.100 ([#3082](https://github.com/scratchfoundation/scratch-paint/issues/3082)) ([4a9c111](https://github.com/scratchfoundation/scratch-paint/commit/4a9c1113799191ee898922dc5e5e3e75f02f6ac1))
+
+## [3.0.110](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.109...v3.0.110) (2025-01-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.157 ([#3081](https://github.com/scratchfoundation/scratch-paint/issues/3081)) ([2040ea2](https://github.com/scratchfoundation/scratch-paint/commit/2040ea27270fe9d54a842861ebf44cb44b09c3ea))
+
+## [3.0.109](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.108...v3.0.109) (2025-01-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.99 ([#3080](https://github.com/scratchfoundation/scratch-paint/issues/3080)) ([5b1010a](https://github.com/scratchfoundation/scratch-paint/commit/5b1010a367f397e4641da6c618a7b071eceb9872))
+
+## [3.0.108](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.107...v3.0.108) (2025-01-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.98 ([#3079](https://github.com/scratchfoundation/scratch-paint/issues/3079)) ([3ded8e8](https://github.com/scratchfoundation/scratch-paint/commit/3ded8e809d312e80d9e931e32f299b6de997c74c))
+
+## [3.0.107](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.106...v3.0.107) (2025-01-25)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3077](https://github.com/scratchfoundation/scratch-paint/issues/3077)) ([e94addc](https://github.com/scratchfoundation/scratch-paint/commit/e94addc59dbbc5c230be8733dc117d8e3b807aba))
+* **deps:** update dependency scratch-l10n to v5.0.97 ([#3078](https://github.com/scratchfoundation/scratch-paint/issues/3078)) ([db6ddb7](https://github.com/scratchfoundation/scratch-paint/commit/db6ddb74e52fecac4fd86cf0e833e16c64eb0935))
+
+## [3.0.106](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.105...v3.0.106) (2025-01-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.96 ([#3076](https://github.com/scratchfoundation/scratch-paint/issues/3076)) ([826e603](https://github.com/scratchfoundation/scratch-paint/commit/826e603b445892bdca5c9e79d5a5679c5bed7c07))
+
+## [3.0.105](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.104...v3.0.105) (2025-01-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.156 ([#3075](https://github.com/scratchfoundation/scratch-paint/issues/3075)) ([17eb6b6](https://github.com/scratchfoundation/scratch-paint/commit/17eb6b6766755ce8e5778314e3400634bf6ca1ce))
+
+## [3.0.104](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.103...v3.0.104) (2025-01-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.95 ([#3074](https://github.com/scratchfoundation/scratch-paint/issues/3074)) ([cd62562](https://github.com/scratchfoundation/scratch-paint/commit/cd6256254841921831c643b480aefce89786f183))
+
+## [3.0.103](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.102...v3.0.103) (2025-01-22)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3072](https://github.com/scratchfoundation/scratch-paint/issues/3072)) ([4f53650](https://github.com/scratchfoundation/scratch-paint/commit/4f53650852893bdae0132a6d937379fa7bd1c43e))
+* **deps:** update dependency scratch-l10n to v5.0.93 ([#3073](https://github.com/scratchfoundation/scratch-paint/issues/3073)) ([7818c2a](https://github.com/scratchfoundation/scratch-paint/commit/7818c2abf7fe0bcf0dbaa6edf979b896ca2f9a6f))
+
+## [3.0.102](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.101...v3.0.102) (2025-01-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.155 ([#3071](https://github.com/scratchfoundation/scratch-paint/issues/3071)) ([986fade](https://github.com/scratchfoundation/scratch-paint/commit/986fade743758a3188d4292c5c74de9316d90acd))
+
+## [3.0.101](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.100...v3.0.101) (2025-01-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.92 ([#3070](https://github.com/scratchfoundation/scratch-paint/issues/3070)) ([81c322d](https://github.com/scratchfoundation/scratch-paint/commit/81c322d790547d0106cafcdc32d65a36a56143c9))
+
+## [3.0.100](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.99...v3.0.100) (2025-01-20)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3069](https://github.com/scratchfoundation/scratch-paint/issues/3069)) ([93098e2](https://github.com/scratchfoundation/scratch-paint/commit/93098e2d56b11ed6b44e7eb030e04f7c07a0412e))
+
+## [3.0.99](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.98...v3.0.99) (2025-01-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.90 ([#3068](https://github.com/scratchfoundation/scratch-paint/issues/3068)) ([b02395c](https://github.com/scratchfoundation/scratch-paint/commit/b02395c1f0174a18bbd8365aa7e313088c241c3c))
+
+## [3.0.98](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.97...v3.0.98) (2025-01-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.88 ([#3067](https://github.com/scratchfoundation/scratch-paint/issues/3067)) ([8aab7f6](https://github.com/scratchfoundation/scratch-paint/commit/8aab7f6e3b62e5b56a7409a09acbed5bfaef1aac))
+
+## [3.0.97](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.96...v3.0.97) (2025-01-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.154 ([#3066](https://github.com/scratchfoundation/scratch-paint/issues/3066)) ([73c9811](https://github.com/scratchfoundation/scratch-paint/commit/73c981181c7768e0a3baad72cc67974cf5096199))
+
+## [3.0.96](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.95...v3.0.96) (2025-01-17)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3063](https://github.com/scratchfoundation/scratch-paint/issues/3063)) ([3d67c7b](https://github.com/scratchfoundation/scratch-paint/commit/3d67c7bd18e82d1ead32bb34ef7ef0b8e1dd1c83))
+
+## [3.0.95](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.94...v3.0.95) (2025-01-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.87 ([#3064](https://github.com/scratchfoundation/scratch-paint/issues/3064)) ([c4ffefd](https://github.com/scratchfoundation/scratch-paint/commit/c4ffefd23db3cc996085e5bc6cf4f58725d46d4e))
+
+## [3.0.94](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.93...v3.0.94) (2025-01-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.86 ([#3061](https://github.com/scratchfoundation/scratch-paint/issues/3061)) ([190ea64](https://github.com/scratchfoundation/scratch-paint/commit/190ea641b8dc26d27a24b7b743cc5858cde09956))
+
+## [3.0.93](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.92...v3.0.93) (2025-01-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.85 ([#3060](https://github.com/scratchfoundation/scratch-paint/issues/3060)) ([24ee63a](https://github.com/scratchfoundation/scratch-paint/commit/24ee63a0a6fcd52faed9cd039879f83dbfb6fb7d))
+
+## [3.0.92](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.91...v3.0.92) (2025-01-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.153 ([#3058](https://github.com/scratchfoundation/scratch-paint/issues/3058)) ([427a1a3](https://github.com/scratchfoundation/scratch-paint/commit/427a1a307bc84e3bd13f6d62dbf232b6e6184bc4))
+
+## [3.0.91](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.90...v3.0.91) (2025-01-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.84 ([#3057](https://github.com/scratchfoundation/scratch-paint/issues/3057)) ([bffdf5d](https://github.com/scratchfoundation/scratch-paint/commit/bffdf5d1f8df794b18c0c0ab4fc150896fcbc9cd))
+
+## [3.0.90](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.89...v3.0.90) (2025-01-14)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3055](https://github.com/scratchfoundation/scratch-paint/issues/3055)) ([b261197](https://github.com/scratchfoundation/scratch-paint/commit/b26119702dd36395b09f619315b021d1980d030c))
+* **deps:** update dependency scratch-l10n to v5.0.83 ([#3056](https://github.com/scratchfoundation/scratch-paint/issues/3056)) ([eca8e1a](https://github.com/scratchfoundation/scratch-paint/commit/eca8e1ac356441ac3c57a923eb5ae0c3d65b8002))
+
+## [3.0.89](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.88...v3.0.89) (2025-01-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.82 ([#3054](https://github.com/scratchfoundation/scratch-paint/issues/3054)) ([788b64b](https://github.com/scratchfoundation/scratch-paint/commit/788b64b7aff6207b2e1a641051f9543a30dbe655))
+
+## [3.0.88](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.87...v3.0.88) (2025-01-12)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3052](https://github.com/scratchfoundation/scratch-paint/issues/3052)) ([b5f2411](https://github.com/scratchfoundation/scratch-paint/commit/b5f2411f3fc0f963181dfd5dbb1aa99acb8cb325))
+
+## [3.0.87](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.86...v3.0.87) (2025-01-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.152 ([#3053](https://github.com/scratchfoundation/scratch-paint/issues/3053)) ([586a1fd](https://github.com/scratchfoundation/scratch-paint/commit/586a1fda44ccdb70814ed155e9f60f09a6c52346))
+
+## [3.0.86](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.85...v3.0.86) (2025-01-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.81 ([#3051](https://github.com/scratchfoundation/scratch-paint/issues/3051)) ([9f9863e](https://github.com/scratchfoundation/scratch-paint/commit/9f9863e7e2deec2067f84b329ce6521a50f57a16))
+
+## [3.0.85](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.84...v3.0.85) (2025-01-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.79 ([#3050](https://github.com/scratchfoundation/scratch-paint/issues/3050)) ([17a82c5](https://github.com/scratchfoundation/scratch-paint/commit/17a82c59cb5971df87fc0c3ed16c9c1384b08f77))
+
+## [3.0.84](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.83...v3.0.84) (2025-01-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.77 ([#3049](https://github.com/scratchfoundation/scratch-paint/issues/3049)) ([85c061a](https://github.com/scratchfoundation/scratch-paint/commit/85c061a9ad14cf5ff8fdf1d9da00d0be85fd09eb))
+
+## [3.0.83](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.82...v3.0.83) (2025-01-09)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3046](https://github.com/scratchfoundation/scratch-paint/issues/3046)) ([5e0bcac](https://github.com/scratchfoundation/scratch-paint/commit/5e0bcac823cefdb9c3e62283eb718a0e6fd1236e))
+
+## [3.0.82](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.81...v3.0.82) (2025-01-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.75 ([#3048](https://github.com/scratchfoundation/scratch-paint/issues/3048)) ([e4841fe](https://github.com/scratchfoundation/scratch-paint/commit/e4841fe76d217fe1bd666d20f4dbd05055763c81))
+
+## [3.0.81](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.80...v3.0.81) (2025-01-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.151 ([#3047](https://github.com/scratchfoundation/scratch-paint/issues/3047)) ([29d71fe](https://github.com/scratchfoundation/scratch-paint/commit/29d71fee414532a0c8221180001b92458684952f))
+
+## [3.0.80](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.79...v3.0.80) (2025-01-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.74 ([#3045](https://github.com/scratchfoundation/scratch-paint/issues/3045)) ([a353d5f](https://github.com/scratchfoundation/scratch-paint/commit/a353d5fe942be0c8fb77c36b09641a1119f84c10))
+
+## [3.0.79](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.78...v3.0.79) (2025-01-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.150 ([#3044](https://github.com/scratchfoundation/scratch-paint/issues/3044)) ([0529358](https://github.com/scratchfoundation/scratch-paint/commit/05293582753be1cd7c2007d2c902e6fb651731f9))
+
+## [3.0.78](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.77...v3.0.78) (2025-01-04)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3043](https://github.com/scratchfoundation/scratch-paint/issues/3043)) ([c5e5155](https://github.com/scratchfoundation/scratch-paint/commit/c5e515506e83556b92257cc1416b5fd1fe496f4a))
+
+## [3.0.77](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.76...v3.0.77) (2025-01-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.71 ([#3042](https://github.com/scratchfoundation/scratch-paint/issues/3042)) ([cded5ec](https://github.com/scratchfoundation/scratch-paint/commit/cded5ecf438e66710df7f7c6fd2b4e2b77cbece9))
+
+## [3.0.76](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.75...v3.0.76) (2025-01-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.70 ([#3041](https://github.com/scratchfoundation/scratch-paint/issues/3041)) ([d0d8f1e](https://github.com/scratchfoundation/scratch-paint/commit/d0d8f1ecfa9125e79e71c2745d0dd8f509c81e3b))
+
+## [3.0.75](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.74...v3.0.75) (2025-01-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.149 ([#3040](https://github.com/scratchfoundation/scratch-paint/issues/3040)) ([5b56245](https://github.com/scratchfoundation/scratch-paint/commit/5b562457e4a499f2156fc4c9ebd63897a6edcbf9))
+
+## [3.0.74](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.73...v3.0.74) (2025-01-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.68 ([#3039](https://github.com/scratchfoundation/scratch-paint/issues/3039)) ([ae0146b](https://github.com/scratchfoundation/scratch-paint/commit/ae0146b4234462b40ff9e7f7d0041d3189984208))
+
+## [3.0.73](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.72...v3.0.73) (2025-01-02)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3037](https://github.com/scratchfoundation/scratch-paint/issues/3037)) ([597321c](https://github.com/scratchfoundation/scratch-paint/commit/597321ce64726a794ae52fc3704164142a0d50d6))
+* **deps:** update dependency scratch-l10n to v5.0.67 ([#3038](https://github.com/scratchfoundation/scratch-paint/issues/3038)) ([066eff5](https://github.com/scratchfoundation/scratch-paint/commit/066eff54ef1fc4e83df9ff3daf452321dfd8b9f9))
+
+## [3.0.72](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.71...v3.0.72) (2025-01-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.66 ([#3036](https://github.com/scratchfoundation/scratch-paint/issues/3036)) ([7f278e2](https://github.com/scratchfoundation/scratch-paint/commit/7f278e26fc458870b7ef0767a212d2859abbe87d))
+
+## [3.0.71](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.70...v3.0.71) (2024-12-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.148 ([#3035](https://github.com/scratchfoundation/scratch-paint/issues/3035)) ([3ee40b0](https://github.com/scratchfoundation/scratch-paint/commit/3ee40b00c446f2fd780dd8bc2eab454646ab43fa))
+
+## [3.0.70](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.69...v3.0.70) (2024-12-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.65 ([#3034](https://github.com/scratchfoundation/scratch-paint/issues/3034)) ([e9cdb5d](https://github.com/scratchfoundation/scratch-paint/commit/e9cdb5de1f99fdd00624fc42ef58ca46b90e97f0))
+
+## [3.0.69](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.68...v3.0.69) (2024-12-31)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3033](https://github.com/scratchfoundation/scratch-paint/issues/3033)) ([a9e989e](https://github.com/scratchfoundation/scratch-paint/commit/a9e989e8780b8737952e96abf9c55889af680d96))
+
+## [3.0.68](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.67...v3.0.68) (2024-12-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.64 ([#3032](https://github.com/scratchfoundation/scratch-paint/issues/3032)) ([4465ddc](https://github.com/scratchfoundation/scratch-paint/commit/4465ddca89c33401982c2a1b8ccdc20d6dac16e7))
+
+## [3.0.67](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.66...v3.0.67) (2024-12-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.63 ([#3031](https://github.com/scratchfoundation/scratch-paint/issues/3031)) ([28ce834](https://github.com/scratchfoundation/scratch-paint/commit/28ce8348f439b1ecd4a27a7e02808b366e7c4625))
+
+## [3.0.66](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.65...v3.0.66) (2024-12-28)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3030](https://github.com/scratchfoundation/scratch-paint/issues/3030)) ([3398120](https://github.com/scratchfoundation/scratch-paint/commit/3398120f91ae4c90a84dc7498c979d86a64b091b))
+
+## [3.0.65](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.64...v3.0.65) (2024-12-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.62 ([#3029](https://github.com/scratchfoundation/scratch-paint/issues/3029)) ([e2be0b5](https://github.com/scratchfoundation/scratch-paint/commit/e2be0b57f0f310a7dacda5c04a2925875e6fb32b))
+
+## [3.0.64](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.63...v3.0.64) (2024-12-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.147 ([#3026](https://github.com/scratchfoundation/scratch-paint/issues/3026)) ([7c24585](https://github.com/scratchfoundation/scratch-paint/commit/7c24585016e77b7607df35a6ebaa19e6f64e82a4))
+
+## [3.0.63](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.62...v3.0.63) (2024-12-26)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3025](https://github.com/scratchfoundation/scratch-paint/issues/3025)) ([20be511](https://github.com/scratchfoundation/scratch-paint/commit/20be5117c4684eaa15d6929ded285a26bae13e5e))
+
+## [3.0.62](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.61...v3.0.62) (2024-12-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.61 ([#3024](https://github.com/scratchfoundation/scratch-paint/issues/3024)) ([afb1835](https://github.com/scratchfoundation/scratch-paint/commit/afb1835f81a638c6608c15b4f48b2119ae67fa92))
+
+## [3.0.61](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.60...v3.0.61) (2024-12-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.146 ([#3023](https://github.com/scratchfoundation/scratch-paint/issues/3023)) ([9f24c57](https://github.com/scratchfoundation/scratch-paint/commit/9f24c57e014af027a33461b7c9582758f93c5026))
+
+## [3.0.60](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.59...v3.0.60) (2024-12-24)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3022](https://github.com/scratchfoundation/scratch-paint/issues/3022)) ([e42cfe0](https://github.com/scratchfoundation/scratch-paint/commit/e42cfe0605c00577a3fa900b2feb5de2f96d843f))
+* **deps:** update dependency scratch-l10n to v5.0.60 ([#3021](https://github.com/scratchfoundation/scratch-paint/issues/3021)) ([639061f](https://github.com/scratchfoundation/scratch-paint/commit/639061f128af5e535ee9e225c8d8abf3c435c063))
+
+## [3.0.59](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.58...v3.0.59) (2024-12-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.145 ([#3020](https://github.com/scratchfoundation/scratch-paint/issues/3020)) ([d12547e](https://github.com/scratchfoundation/scratch-paint/commit/d12547eacb7c8f69ab47f994ea687f29bf585208))
+
+## [3.0.58](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.57...v3.0.58) (2024-12-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.58 ([#3019](https://github.com/scratchfoundation/scratch-paint/issues/3019)) ([2ddbb3d](https://github.com/scratchfoundation/scratch-paint/commit/2ddbb3dd47a5ab39ce054826423826a187d3ffec))
+
+## [3.0.57](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.56...v3.0.57) (2024-12-23)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3017](https://github.com/scratchfoundation/scratch-paint/issues/3017)) ([47f9872](https://github.com/scratchfoundation/scratch-paint/commit/47f9872eed6d4bdbefca5f53ae61938194e1adc3))
+
+## [3.0.56](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.55...v3.0.56) (2024-12-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.57 ([#3016](https://github.com/scratchfoundation/scratch-paint/issues/3016)) ([74195c0](https://github.com/scratchfoundation/scratch-paint/commit/74195c05501e0aebfac207e21b738e1f1c6fd297))
+
+## [3.0.55](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.54...v3.0.55) (2024-12-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.55 ([#3015](https://github.com/scratchfoundation/scratch-paint/issues/3015)) ([af09d1f](https://github.com/scratchfoundation/scratch-paint/commit/af09d1fa2462b5ad5db60e758c8c5f2941a3062f))
+
+## [3.0.54](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.53...v3.0.54) (2024-12-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.144 ([#3014](https://github.com/scratchfoundation/scratch-paint/issues/3014)) ([ed2f2c0](https://github.com/scratchfoundation/scratch-paint/commit/ed2f2c0cd94d5bcabacd60df79389c04e0a1395a))
+
+## [3.0.53](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.52...v3.0.53) (2024-12-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.54 ([#3013](https://github.com/scratchfoundation/scratch-paint/issues/3013)) ([614ef90](https://github.com/scratchfoundation/scratch-paint/commit/614ef90a1683fb1530e437a6e2946f80635b8f6b))
+
+## [3.0.52](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.51...v3.0.52) (2024-12-21)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3012](https://github.com/scratchfoundation/scratch-paint/issues/3012)) ([fd50b06](https://github.com/scratchfoundation/scratch-paint/commit/fd50b06dd700c4a1ac1a610c6519d3d81aa6517c))
+
+## [3.0.51](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.50...v3.0.51) (2024-12-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.51 ([#3011](https://github.com/scratchfoundation/scratch-paint/issues/3011)) ([2977454](https://github.com/scratchfoundation/scratch-paint/commit/29774543cf8ab54d36db41caa1a4c4b9c791fb8a))
+
+## [3.0.50](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.49...v3.0.50) (2024-12-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.143 ([#3010](https://github.com/scratchfoundation/scratch-paint/issues/3010)) ([078c844](https://github.com/scratchfoundation/scratch-paint/commit/078c844ac01af797adcafdedbc5ba75554de682a))
+
+## [3.0.49](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.48...v3.0.49) (2024-12-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.49 ([#3009](https://github.com/scratchfoundation/scratch-paint/issues/3009)) ([b373862](https://github.com/scratchfoundation/scratch-paint/commit/b3738629a66e9ff1b7d248f350ef41f0da1186c3))
+
+## [3.0.48](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.47...v3.0.48) (2024-12-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.47 ([#3008](https://github.com/scratchfoundation/scratch-paint/issues/3008)) ([ba4425a](https://github.com/scratchfoundation/scratch-paint/commit/ba4425a959a5dc094a76e6764792873b6f6ca233))
+
+## [3.0.47](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.46...v3.0.47) (2024-12-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.46 ([#3007](https://github.com/scratchfoundation/scratch-paint/issues/3007)) ([54c03bb](https://github.com/scratchfoundation/scratch-paint/commit/54c03bbad5efb808b61fc3e55149ed788cf052af))
+
+## [3.0.46](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.45...v3.0.46) (2024-12-18)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3006](https://github.com/scratchfoundation/scratch-paint/issues/3006)) ([49ba3da](https://github.com/scratchfoundation/scratch-paint/commit/49ba3da4b6d1729b1f416eb70eac355db5d86ac7))
+* **deps:** update dependency scratch-render-fonts to v1.0.142 ([#3005](https://github.com/scratchfoundation/scratch-paint/issues/3005)) ([3fa6c4b](https://github.com/scratchfoundation/scratch-paint/commit/3fa6c4b77865c983972459a2e8b24fedf7000306))
+
+## [3.0.45](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.44...v3.0.45) (2024-12-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.45 ([#3004](https://github.com/scratchfoundation/scratch-paint/issues/3004)) ([42cffe9](https://github.com/scratchfoundation/scratch-paint/commit/42cffe9e6a34ad1ded38c1495127943f4effc7cd))
+
+## [3.0.44](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.43...v3.0.44) (2024-12-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.44 ([#3003](https://github.com/scratchfoundation/scratch-paint/issues/3003)) ([37bd558](https://github.com/scratchfoundation/scratch-paint/commit/37bd55803984839c19ce26d72ac599e278c630d0))
+
+## [3.0.43](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.42...v3.0.43) (2024-12-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.42 ([#3002](https://github.com/scratchfoundation/scratch-paint/issues/3002)) ([22ff07f](https://github.com/scratchfoundation/scratch-paint/commit/22ff07feb7f3358b691521b83a5d0bdc8ce137e2))
+
+## [3.0.42](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.41...v3.0.42) (2024-12-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.141 ([#3000](https://github.com/scratchfoundation/scratch-paint/issues/3000)) ([0b0a700](https://github.com/scratchfoundation/scratch-paint/commit/0b0a7001a387f9e9ef7ced88317215d5c6834aeb))
+
+## [3.0.41](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.40...v3.0.41) (2024-12-16)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#3001](https://github.com/scratchfoundation/scratch-paint/issues/3001)) ([384637e](https://github.com/scratchfoundation/scratch-paint/commit/384637e2bba8e504f16fb8c5425500a14ed76061))
+* **deps:** update dependency scratch-l10n to v5.0.41 ([#2999](https://github.com/scratchfoundation/scratch-paint/issues/2999)) ([edad119](https://github.com/scratchfoundation/scratch-paint/commit/edad119d5b63404a135c94bd205b7d4774919c22))
+
+## [3.0.40](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.39...v3.0.40) (2024-12-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.40 ([#2996](https://github.com/scratchfoundation/scratch-paint/issues/2996)) ([b853181](https://github.com/scratchfoundation/scratch-paint/commit/b8531814d425a078bd7c5c5c4e0c73df1701ad72))
+
+## [3.0.39](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.38...v3.0.39) (2024-12-14)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2998](https://github.com/scratchfoundation/scratch-paint/issues/2998)) ([5c5075f](https://github.com/scratchfoundation/scratch-paint/commit/5c5075fa131b9249f87be723011ea6f53e8f7df8))
+* **deps:** update dependency scratch-render-fonts to v1.0.140 ([#2997](https://github.com/scratchfoundation/scratch-paint/issues/2997)) ([2d546ee](https://github.com/scratchfoundation/scratch-paint/commit/2d546eeb22924dd65145f4440509f5e0a05a61c0))
+
+## [3.0.38](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.37...v3.0.38) (2024-12-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.37 ([#2995](https://github.com/scratchfoundation/scratch-paint/issues/2995)) ([1bfbece](https://github.com/scratchfoundation/scratch-paint/commit/1bfbeced49f020da53243b680e8e25f449978f82))
+
+## [3.0.37](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.36...v3.0.37) (2024-12-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.36 ([#2994](https://github.com/scratchfoundation/scratch-paint/issues/2994)) ([93e3c87](https://github.com/scratchfoundation/scratch-paint/commit/93e3c872dd15f39607a25a3fde1fad308744ea05))
+
+## [3.0.36](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.35...v3.0.36) (2024-12-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.139 ([#2993](https://github.com/scratchfoundation/scratch-paint/issues/2993)) ([ae334ab](https://github.com/scratchfoundation/scratch-paint/commit/ae334abd2bf7cc2f134d69941daff11d3693b089))
+
+## [3.0.35](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.34...v3.0.35) (2024-12-12)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2992](https://github.com/scratchfoundation/scratch-paint/issues/2992)) ([41b2ed0](https://github.com/scratchfoundation/scratch-paint/commit/41b2ed07cbdd45e800fea1b70d5617745d261c00))
+* **deps:** update dependency scratch-l10n to v5.0.35 ([#2991](https://github.com/scratchfoundation/scratch-paint/issues/2991)) ([ecd2e5e](https://github.com/scratchfoundation/scratch-paint/commit/ecd2e5ea7899235a3e1caaf5d8be1db32aa8afcb))
+
+## [3.0.34](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.33...v3.0.34) (2024-12-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.33 ([#2989](https://github.com/scratchfoundation/scratch-paint/issues/2989)) ([d10f8a6](https://github.com/scratchfoundation/scratch-paint/commit/d10f8a6e187eddacbf996e4498bdb3c9daaeafd2))
+
+## [3.0.33](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.32...v3.0.33) (2024-12-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.138 ([#2988](https://github.com/scratchfoundation/scratch-paint/issues/2988)) ([03fafd7](https://github.com/scratchfoundation/scratch-paint/commit/03fafd7f22645ed3efb9b4effb422100c4970350))
+
+## [3.0.32](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.31...v3.0.32) (2024-12-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.32 ([#2987](https://github.com/scratchfoundation/scratch-paint/issues/2987)) ([3822d57](https://github.com/scratchfoundation/scratch-paint/commit/3822d57ad8073d610f8a47da062e7a58156b7422))
+
+## [3.0.31](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.30...v3.0.31) (2024-12-10)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2985](https://github.com/scratchfoundation/scratch-paint/issues/2985)) ([4f393ab](https://github.com/scratchfoundation/scratch-paint/commit/4f393ab92897cf9fb25c130805bfe6e749d25fb3))
+
+## [3.0.30](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.29...v3.0.30) (2024-12-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.30 ([#2986](https://github.com/scratchfoundation/scratch-paint/issues/2986)) ([670cb2f](https://github.com/scratchfoundation/scratch-paint/commit/670cb2fdcfd20d2436e926135a3c76a8711054eb))
+
+## [3.0.29](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.28...v3.0.29) (2024-12-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.137 ([#2983](https://github.com/scratchfoundation/scratch-paint/issues/2983)) ([f8cfd8d](https://github.com/scratchfoundation/scratch-paint/commit/f8cfd8de8726522d712a7686cd1d07c17bceb215))
+
+## [3.0.28](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.27...v3.0.28) (2024-12-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.29 ([#2982](https://github.com/scratchfoundation/scratch-paint/issues/2982)) ([212a944](https://github.com/scratchfoundation/scratch-paint/commit/212a944a93eef6da65ceff303d6a73280ed272c8))
+
+## [3.0.27](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.26...v3.0.27) (2024-12-08)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2980](https://github.com/scratchfoundation/scratch-paint/issues/2980)) ([676564c](https://github.com/scratchfoundation/scratch-paint/commit/676564c2a776238732c723dcdfe09262bc5c924c))
+
+## [3.0.26](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.25...v3.0.26) (2024-12-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.27 ([#2979](https://github.com/scratchfoundation/scratch-paint/issues/2979)) ([b35b6c3](https://github.com/scratchfoundation/scratch-paint/commit/b35b6c3770fd78d42fa619be8d6d29454c421c0a))
+
+## [3.0.25](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.24...v3.0.25) (2024-12-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.136 ([#2978](https://github.com/scratchfoundation/scratch-paint/issues/2978)) ([fc19eab](https://github.com/scratchfoundation/scratch-paint/commit/fc19eab272f99d73ffc074587931b11086411a07))
+
+## [3.0.24](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.23...v3.0.24) (2024-12-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.25 ([#2977](https://github.com/scratchfoundation/scratch-paint/issues/2977)) ([580dbc3](https://github.com/scratchfoundation/scratch-paint/commit/580dbc36ea9a534bccf330f480f519644172f979))
+
+## [3.0.23](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.22...v3.0.23) (2024-12-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.24 ([#2976](https://github.com/scratchfoundation/scratch-paint/issues/2976)) ([e74bbbc](https://github.com/scratchfoundation/scratch-paint/commit/e74bbbcf358e74e94415511b965f94a15a22b143))
+
+## [3.0.22](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.21...v3.0.22) (2024-12-06)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2974](https://github.com/scratchfoundation/scratch-paint/issues/2974)) ([f703f21](https://github.com/scratchfoundation/scratch-paint/commit/f703f2139339bac6013b4307791a340e926326a3))
+
+## [3.0.21](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.20...v3.0.21) (2024-12-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.23 ([#2975](https://github.com/scratchfoundation/scratch-paint/issues/2975)) ([9a5d85a](https://github.com/scratchfoundation/scratch-paint/commit/9a5d85a9c01aec8b381f1a82599eea9388daf6be))
+
+## [3.0.20](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.19...v3.0.20) (2024-12-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.22 ([#2973](https://github.com/scratchfoundation/scratch-paint/issues/2973)) ([7ef3908](https://github.com/scratchfoundation/scratch-paint/commit/7ef3908de3dd0c07a657fe5c8d9b996019223945))
+
+## [3.0.19](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.18...v3.0.19) (2024-12-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.135 ([#2972](https://github.com/scratchfoundation/scratch-paint/issues/2972)) ([4f9a4e0](https://github.com/scratchfoundation/scratch-paint/commit/4f9a4e0dae3f2d500d8692a1c49552765c72be14))
+
+## [3.0.18](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.17...v3.0.18) (2024-12-04)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2971](https://github.com/scratchfoundation/scratch-paint/issues/2971)) ([cee3ec9](https://github.com/scratchfoundation/scratch-paint/commit/cee3ec905cd7abaa09e9a831e57c58a5bfb0f7c2))
+
+## [3.0.17](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.16...v3.0.17) (2024-12-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.20 ([#2970](https://github.com/scratchfoundation/scratch-paint/issues/2970)) ([0e40cff](https://github.com/scratchfoundation/scratch-paint/commit/0e40cff28bdf61786a2726adb03fb137d40ed729))
+
+## [3.0.16](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.15...v3.0.16) (2024-12-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.17 ([#2969](https://github.com/scratchfoundation/scratch-paint/issues/2969)) ([594804c](https://github.com/scratchfoundation/scratch-paint/commit/594804cb22ac2ffb8dfbcdfe991e0368d91fe124))
+
+## [3.0.15](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.14...v3.0.15) (2024-12-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.134 ([#2968](https://github.com/scratchfoundation/scratch-paint/issues/2968)) ([cf2de83](https://github.com/scratchfoundation/scratch-paint/commit/cf2de8377fb2c65c15124adc56f11bd6f7505e5d))
+
+## [3.0.14](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.13...v3.0.14) (2024-12-02)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2967](https://github.com/scratchfoundation/scratch-paint/issues/2967)) ([cd931d6](https://github.com/scratchfoundation/scratch-paint/commit/cd931d60cd3611b981e18914fa9e26d3435880c6))
+
+## [3.0.13](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.12...v3.0.13) (2024-12-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.15 ([#2966](https://github.com/scratchfoundation/scratch-paint/issues/2966)) ([da84980](https://github.com/scratchfoundation/scratch-paint/commit/da8498076d8d6bcc9d1a05817ffc914357579452))
+
+## [3.0.12](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.11...v3.0.12) (2024-11-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.14 ([#2965](https://github.com/scratchfoundation/scratch-paint/issues/2965)) ([449acd3](https://github.com/scratchfoundation/scratch-paint/commit/449acd3b18d660129ef84e42318ea5b92112070e))
+
+## [3.0.11](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.10...v3.0.11) (2024-11-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.133 ([#2964](https://github.com/scratchfoundation/scratch-paint/issues/2964)) ([25f6ba0](https://github.com/scratchfoundation/scratch-paint/commit/25f6ba003ab33a135d3ad676c22da2cc75ce5699))
+
+## [3.0.10](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.9...v3.0.10) (2024-11-30)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2961](https://github.com/scratchfoundation/scratch-paint/issues/2961)) ([fe95f88](https://github.com/scratchfoundation/scratch-paint/commit/fe95f88b2dc1686c6708d40ef96263bd2facb48e))
+* **deps:** update dependency scratch-l10n to v5.0.13 ([#2963](https://github.com/scratchfoundation/scratch-paint/issues/2963)) ([384c2b4](https://github.com/scratchfoundation/scratch-paint/commit/384c2b4b52e4913f744136144c964e8101a5056e))
+
+## [3.0.9](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.8...v3.0.9) (2024-11-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.12 ([#2962](https://github.com/scratchfoundation/scratch-paint/issues/2962)) ([a9a8808](https://github.com/scratchfoundation/scratch-paint/commit/a9a88085668701090b160573fa377d9603607918))
+
+## [3.0.8](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.7...v3.0.8) (2024-11-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.11 ([#2960](https://github.com/scratchfoundation/scratch-paint/issues/2960)) ([b64a3ed](https://github.com/scratchfoundation/scratch-paint/commit/b64a3edd2268b4e377bf00eab0bea8ef9afb7618))
+
+## [3.0.7](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.6...v3.0.7) (2024-11-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.9 ([#2958](https://github.com/scratchfoundation/scratch-paint/issues/2958)) ([411aeff](https://github.com/scratchfoundation/scratch-paint/commit/411aeff307c4d0f6468fe5259a880cfc72f5171a))
+
+## [3.0.6](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.5...v3.0.6) (2024-11-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.132 ([#2959](https://github.com/scratchfoundation/scratch-paint/issues/2959)) ([bdfbf11](https://github.com/scratchfoundation/scratch-paint/commit/bdfbf11575332abcedebae07db9b099ea6e92161))
+
+## [3.0.5](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.4...v3.0.5) (2024-11-28)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2956](https://github.com/scratchfoundation/scratch-paint/issues/2956)) ([6055470](https://github.com/scratchfoundation/scratch-paint/commit/60554705fd85a932a3682bce677a5668900a0869))
+
+## [3.0.4](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.3...v3.0.4) (2024-11-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.6 ([#2957](https://github.com/scratchfoundation/scratch-paint/issues/2957)) ([06e25a9](https://github.com/scratchfoundation/scratch-paint/commit/06e25a9be09f4e18c70ea3829eecb75bc84cf97c))
+
+## [3.0.3](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.2...v3.0.3) (2024-11-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.4 ([#2955](https://github.com/scratchfoundation/scratch-paint/issues/2955)) ([808344d](https://github.com/scratchfoundation/scratch-paint/commit/808344df9a212ac35a57d338b8c84e53bae636fa))
+
+## [3.0.2](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.1...v3.0.2) (2024-11-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.3 ([#2954](https://github.com/scratchfoundation/scratch-paint/issues/2954)) ([1501e98](https://github.com/scratchfoundation/scratch-paint/commit/1501e9812415076dbbce2915090c3306f7267438))
+
+## [3.0.1](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.0...v3.0.1) (2024-11-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v5.0.2 ([#2953](https://github.com/scratchfoundation/scratch-paint/issues/2953)) ([1ed733a](https://github.com/scratchfoundation/scratch-paint/commit/1ed733ab8cde266966b2afdf21049b090b6010cc))
+
+# [3.0.0](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.518...v3.0.0) (2024-11-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.131 ([#2948](https://github.com/scratchfoundation/scratch-paint/issues/2948)) ([6c3cfba](https://github.com/scratchfoundation/scratch-paint/commit/6c3cfba4a1b594cc57a99e7da0725aa37048d2bf))
+
+
+* chore!: set license to AGPL-3.0-only ([67f9c59](https://github.com/scratchfoundation/scratch-paint/commit/67f9c595ec5df506a61d9616cabb1214778ca211))
+
+
+### BREAKING CHANGES
+
+* This project is now licensed under the AGPL version 3.0
+
+See https://www.scratchfoundation.org/open-source-license
+
+## [2.2.518](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.517...v2.2.518) (2024-11-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.46 ([#2947](https://github.com/scratchfoundation/scratch-paint/issues/2947)) ([f40be74](https://github.com/scratchfoundation/scratch-paint/commit/f40be74555000fc95ca3692c42dce11ff3c0a40d))
+
+## [2.2.517](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.516...v2.2.517) (2024-11-25)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2946](https://github.com/scratchfoundation/scratch-paint/issues/2946)) ([9bece30](https://github.com/scratchfoundation/scratch-paint/commit/9bece3019d484355d16dce776bcb499231776ad9))
+
+## [2.2.516](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.515...v2.2.516) (2024-11-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.45 ([#2945](https://github.com/scratchfoundation/scratch-paint/issues/2945)) ([748c71f](https://github.com/scratchfoundation/scratch-paint/commit/748c71fb86af982c6a4420f502bfc66b039d8d2e))
+
+## [2.2.515](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.514...v2.2.515) (2024-11-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.42 ([#2944](https://github.com/scratchfoundation/scratch-paint/issues/2944)) ([b4267a4](https://github.com/scratchfoundation/scratch-paint/commit/b4267a4eb27733cba64e558fa1ef4515c2f4b444))
+
+## [2.2.514](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.513...v2.2.514) (2024-11-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.130 ([#2942](https://github.com/scratchfoundation/scratch-paint/issues/2942)) ([272f959](https://github.com/scratchfoundation/scratch-paint/commit/272f95980b9627feb9f12a19e557486f3110c9e4))
+
+## [2.2.513](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.512...v2.2.513) (2024-11-23)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2943](https://github.com/scratchfoundation/scratch-paint/issues/2943)) ([4362b99](https://github.com/scratchfoundation/scratch-paint/commit/4362b9998084f4aaafe9f96753fd134dffea5522))
+* **deps:** update dependency scratch-l10n to v4.0.41 ([#2941](https://github.com/scratchfoundation/scratch-paint/issues/2941)) ([fca6633](https://github.com/scratchfoundation/scratch-paint/commit/fca663323db3fab0fd0c05695056f27087dc3537))
+
+## [2.2.512](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.511...v2.2.512) (2024-11-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.40 ([#2940](https://github.com/scratchfoundation/scratch-paint/issues/2940)) ([e0735a3](https://github.com/scratchfoundation/scratch-paint/commit/e0735a3f05e71a434dfc8b5db4fc6c7175b26d8b))
+
+## [2.2.511](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.510...v2.2.511) (2024-11-22)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2936](https://github.com/scratchfoundation/scratch-paint/issues/2936)) ([0cabca3](https://github.com/scratchfoundation/scratch-paint/commit/0cabca3c4ceae92127c2ddad4bb2e6d5f1fd9d2a))
+* **deps:** update dependency scratch-l10n to v4.0.39 ([#2939](https://github.com/scratchfoundation/scratch-paint/issues/2939)) ([001aaa5](https://github.com/scratchfoundation/scratch-paint/commit/001aaa5b469f99aa1edfc74d7eecac225da374f2))
+
+## [2.2.510](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.509...v2.2.510) (2024-11-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.38 ([#2938](https://github.com/scratchfoundation/scratch-paint/issues/2938)) ([21eaa72](https://github.com/scratchfoundation/scratch-paint/commit/21eaa72fbf220b3e0bea0879c04ab7cc0f1eeec5))
+
+## [2.2.509](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.508...v2.2.509) (2024-11-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.129 ([#2937](https://github.com/scratchfoundation/scratch-paint/issues/2937)) ([32f0338](https://github.com/scratchfoundation/scratch-paint/commit/32f033877078e444fa9d9040859e080deddc249f))
+
+## [2.2.508](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.507...v2.2.508) (2024-11-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.37 ([#2935](https://github.com/scratchfoundation/scratch-paint/issues/2935)) ([7cfea77](https://github.com/scratchfoundation/scratch-paint/commit/7cfea770df3483753510fa7d288095a5f41555f9))
+
+## [2.2.507](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.506...v2.2.507) (2024-11-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.36 ([#2934](https://github.com/scratchfoundation/scratch-paint/issues/2934)) ([9d1b52b](https://github.com/scratchfoundation/scratch-paint/commit/9d1b52ba8fa03ce33f01cbac25b55e52341ee7fa))
+
+## [2.2.506](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.505...v2.2.506) (2024-11-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.35 ([#2933](https://github.com/scratchfoundation/scratch-paint/issues/2933)) ([7d1b06d](https://github.com/scratchfoundation/scratch-paint/commit/7d1b06dec8776bd182c318da7d0bbe37a7307dd6))
+
+## [2.2.505](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.504...v2.2.505) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.34 ([#2931](https://github.com/scratchfoundation/scratch-paint/issues/2931)) ([ef97cf7](https://github.com/scratchfoundation/scratch-paint/commit/ef97cf70193640ed824efb3e2715ac8a54fba530))
+
+## [2.2.504](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.503...v2.2.504) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.128 ([#2932](https://github.com/scratchfoundation/scratch-paint/issues/2932)) ([c883818](https://github.com/scratchfoundation/scratch-paint/commit/c8838186b8f1e093275310312c11867bfda17ffa))
+
+## [2.2.503](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.502...v2.2.503) (2024-11-19)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2930](https://github.com/scratchfoundation/scratch-paint/issues/2930)) ([3ac9393](https://github.com/scratchfoundation/scratch-paint/commit/3ac93931b496159e68f5488e347ae85b7e343712))
+
+## [2.2.502](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.501...v2.2.502) (2024-11-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.31 ([#2929](https://github.com/scratchfoundation/scratch-paint/issues/2929)) ([20905fc](https://github.com/scratchfoundation/scratch-paint/commit/20905fc6c62c30059d8c9786abe55d78736ff9da))
+
+## [2.2.501](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.500...v2.2.501) (2024-11-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.127 ([#2926](https://github.com/scratchfoundation/scratch-paint/issues/2926)) ([8847f32](https://github.com/scratchfoundation/scratch-paint/commit/8847f32da6545439f0c4a7778798fe729ce06960))
+
+## [2.2.500](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.499...v2.2.500) (2024-11-17)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2925](https://github.com/scratchfoundation/scratch-paint/issues/2925)) ([4e8b1c7](https://github.com/scratchfoundation/scratch-paint/commit/4e8b1c743f9c1467f6b1447ce1021c02f8e231b0))
+
+## [2.2.499](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.498...v2.2.499) (2024-11-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.30 ([#2924](https://github.com/scratchfoundation/scratch-paint/issues/2924)) ([371f4cb](https://github.com/scratchfoundation/scratch-paint/commit/371f4cbfebd4401a48150e6de39286a632898531))
+
+## [2.2.498](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.497...v2.2.498) (2024-11-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.28 ([#2923](https://github.com/scratchfoundation/scratch-paint/issues/2923)) ([78a823f](https://github.com/scratchfoundation/scratch-paint/commit/78a823f4c362379d17b0fab021a4f6d097b9bcbc))
+
+## [2.2.497](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.496...v2.2.497) (2024-11-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.27 ([#2922](https://github.com/scratchfoundation/scratch-paint/issues/2922)) ([0ea864a](https://github.com/scratchfoundation/scratch-paint/commit/0ea864a7e15a2d5366e0c69a69ce3f5d4d52da0c))
+
+## [2.2.496](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.495...v2.2.496) (2024-11-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.126 ([#2921](https://github.com/scratchfoundation/scratch-paint/issues/2921)) ([322c34f](https://github.com/scratchfoundation/scratch-paint/commit/322c34f0863eda76ffd422983055d8571bf86db0))
+
+## [2.2.495](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.494...v2.2.495) (2024-11-15)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2919](https://github.com/scratchfoundation/scratch-paint/issues/2919)) ([775971c](https://github.com/scratchfoundation/scratch-paint/commit/775971c3e153706bfad1e41f4cf380bcbf6ba6ea))
+* **deps:** update dependency scratch-l10n to v4.0.25 ([#2920](https://github.com/scratchfoundation/scratch-paint/issues/2920)) ([5a24506](https://github.com/scratchfoundation/scratch-paint/commit/5a245061f1f4330b25158afdb3c7eabb365ddb14))
+
+## [2.2.494](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.493...v2.2.494) (2024-11-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.24 ([#2918](https://github.com/scratchfoundation/scratch-paint/issues/2918)) ([76f2749](https://github.com/scratchfoundation/scratch-paint/commit/76f274963b3e3f89162925a3e2a4a9cce7bbde59))
+
+## [2.2.493](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.492...v2.2.493) (2024-11-13)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2917](https://github.com/scratchfoundation/scratch-paint/issues/2917)) ([ac524a5](https://github.com/scratchfoundation/scratch-paint/commit/ac524a540734fbb3fe3f0e6187feee4d7f7245c7))
+
+## [2.2.492](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.491...v2.2.492) (2024-11-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.125 ([#2916](https://github.com/scratchfoundation/scratch-paint/issues/2916)) ([8b92f79](https://github.com/scratchfoundation/scratch-paint/commit/8b92f799f8a7c204b5d125d2e69e665c67c885e7))
+
+## [2.2.491](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.490...v2.2.491) (2024-11-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.22 ([#2915](https://github.com/scratchfoundation/scratch-paint/issues/2915)) ([33926ce](https://github.com/scratchfoundation/scratch-paint/commit/33926ce8f6a7ce1f5189d0a59a521c7968aaccee))
+
+## [2.2.490](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.489...v2.2.490) (2024-11-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.124 ([#2914](https://github.com/scratchfoundation/scratch-paint/issues/2914)) ([54e1d27](https://github.com/scratchfoundation/scratch-paint/commit/54e1d277b94c2d8ce39b420b978846b2a6c6713c))
+
+## [2.2.489](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.488...v2.2.489) (2024-11-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.20 ([#2913](https://github.com/scratchfoundation/scratch-paint/issues/2913)) ([0255671](https://github.com/scratchfoundation/scratch-paint/commit/0255671ea1741afb4d970cacf57f93e4e0b9ee52))
+
+## [2.2.488](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.487...v2.2.488) (2024-11-11)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2912](https://github.com/scratchfoundation/scratch-paint/issues/2912)) ([19809b5](https://github.com/scratchfoundation/scratch-paint/commit/19809b5e6dd467286e891ee940a74bb8f38a0ca5))
+
+## [2.2.487](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.486...v2.2.487) (2024-11-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.18 ([#2911](https://github.com/scratchfoundation/scratch-paint/issues/2911)) ([8c754b8](https://github.com/scratchfoundation/scratch-paint/commit/8c754b82fe2d9b28f27046e24de17a7a55c4ea34))
+
+## [2.2.486](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.485...v2.2.486) (2024-11-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.123 ([#2910](https://github.com/scratchfoundation/scratch-paint/issues/2910)) ([1e959e0](https://github.com/scratchfoundation/scratch-paint/commit/1e959e036304523fde478df8c4e16b4f3df367a9))
+
+## [2.2.485](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.484...v2.2.485) (2024-11-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.17 ([#2909](https://github.com/scratchfoundation/scratch-paint/issues/2909)) ([33569d3](https://github.com/scratchfoundation/scratch-paint/commit/33569d32a8c23e8d24cd8afb554024161e183952))
+
+## [2.2.484](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.483...v2.2.484) (2024-11-09)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2907](https://github.com/scratchfoundation/scratch-paint/issues/2907)) ([9791d5a](https://github.com/scratchfoundation/scratch-paint/commit/9791d5afc6e0876914aca7fbe9b31c9a6b602aa5))
+
+## [2.2.483](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.482...v2.2.483) (2024-11-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.16 ([#2908](https://github.com/scratchfoundation/scratch-paint/issues/2908)) ([469cea9](https://github.com/scratchfoundation/scratch-paint/commit/469cea92c75b2cf9cb2edda393d0cd4e75d3e496))
+
+## [2.2.482](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.481...v2.2.482) (2024-11-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.122 ([#2906](https://github.com/scratchfoundation/scratch-paint/issues/2906)) ([5ba7bb1](https://github.com/scratchfoundation/scratch-paint/commit/5ba7bb1f17db60ece20a94d99c00d5ee29ba7141))
+
+## [2.2.481](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.480...v2.2.481) (2024-11-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.14 ([#2905](https://github.com/scratchfoundation/scratch-paint/issues/2905)) ([5b55ab9](https://github.com/scratchfoundation/scratch-paint/commit/5b55ab9a6719a7a1d10f484d197db88cb4d7c464))
+
+## [2.2.480](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.479...v2.2.480) (2024-11-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.13 ([#2904](https://github.com/scratchfoundation/scratch-paint/issues/2904)) ([18d6382](https://github.com/scratchfoundation/scratch-paint/commit/18d63825e4b226556d8ddba01d9008beb013aeca))
+
+## [2.2.479](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.478...v2.2.479) (2024-11-06)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2903](https://github.com/scratchfoundation/scratch-paint/issues/2903)) ([4e4f20e](https://github.com/scratchfoundation/scratch-paint/commit/4e4f20e173df1774f0cf4fdb7bf428228ab8dc80))
+
+## [2.2.478](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.477...v2.2.478) (2024-11-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.121 ([#2902](https://github.com/scratchfoundation/scratch-paint/issues/2902)) ([87d0eca](https://github.com/scratchfoundation/scratch-paint/commit/87d0eca048d4cd5b2cc74256a006e22381716563))
+
+## [2.2.477](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.476...v2.2.477) (2024-11-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.11 ([#2901](https://github.com/scratchfoundation/scratch-paint/issues/2901)) ([ae751cf](https://github.com/scratchfoundation/scratch-paint/commit/ae751cf1daa56e4a3607f0bc01ebadb5209de72e))
+
+## [2.2.476](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.475...v2.2.476) (2024-11-04)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2898](https://github.com/scratchfoundation/scratch-paint/issues/2898)) ([32bcc14](https://github.com/scratchfoundation/scratch-paint/commit/32bcc1402851a29c2352dccfa9a2a2b7e8c1d23d))
+* **deps:** update dependency scratch-l10n to v4.0.10 ([#2900](https://github.com/scratchfoundation/scratch-paint/issues/2900)) ([4ed6954](https://github.com/scratchfoundation/scratch-paint/commit/4ed6954b3a0bc9c785bf8009b8076fac3ad120df))
+
+## [2.2.475](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.474...v2.2.475) (2024-11-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.9 ([#2899](https://github.com/scratchfoundation/scratch-paint/issues/2899)) ([d6d4c64](https://github.com/scratchfoundation/scratch-paint/commit/d6d4c64ac441f14d0b29983a185eeceb23909d2c))
+
+## [2.2.474](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.473...v2.2.474) (2024-11-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.120 ([#2897](https://github.com/scratchfoundation/scratch-paint/issues/2897)) ([0a50ae8](https://github.com/scratchfoundation/scratch-paint/commit/0a50ae87b4c8e0952e45f0f852c2fcf74ce90f4a))
+
+## [2.2.473](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.472...v2.2.473) (2024-11-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v4.0.7 ([#2896](https://github.com/scratchfoundation/scratch-paint/issues/2896)) ([fa62c45](https://github.com/scratchfoundation/scratch-paint/commit/fa62c45c88ad2f44a17323c2ae39285ae15558c3))
+
+## [2.2.472](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.471...v2.2.472) (2024-11-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.119 ([#2895](https://github.com/scratchfoundation/scratch-paint/issues/2895)) ([226951a](https://github.com/scratchfoundation/scratch-paint/commit/226951a2834171e0a97dbfe3caa0e920f45af19f))
+
+## [2.2.471](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.470...v2.2.471) (2024-11-01)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2894](https://github.com/scratchfoundation/scratch-paint/issues/2894)) ([8fb2370](https://github.com/scratchfoundation/scratch-paint/commit/8fb2370216bb341fe356175c6ea7ff6ac9ddb3fe))
+
+## [2.2.470](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.469...v2.2.470) (2024-10-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.118 ([#2892](https://github.com/scratchfoundation/scratch-paint/issues/2892)) ([73b8db8](https://github.com/scratchfoundation/scratch-paint/commit/73b8db8a90291b4afdabc241a9617ecedb64b5f9))
+
+## [2.2.469](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.468...v2.2.469) (2024-10-30)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.357 ([#2891](https://github.com/scratchfoundation/scratch-paint/issues/2891)) ([b223287](https://github.com/scratchfoundation/scratch-paint/commit/b223287219b03a4dccca3d3d9fecb2315d273177))
+
+## [2.2.468](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.467...v2.2.468) (2024-10-30)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2890](https://github.com/scratchfoundation/scratch-paint/issues/2890)) ([bb55e8d](https://github.com/scratchfoundation/scratch-paint/commit/bb55e8d17c43f86b8eb05aba6e252435e83a6390))
+
+## [2.2.467](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.466...v2.2.467) (2024-10-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.356 ([#2889](https://github.com/scratchfoundation/scratch-paint/issues/2889)) ([fda6692](https://github.com/scratchfoundation/scratch-paint/commit/fda6692592d916664b644cc3846ec58070fdd506))
+
+## [2.2.466](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.465...v2.2.466) (2024-10-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.117 ([#2887](https://github.com/scratchfoundation/scratch-paint/issues/2887)) ([0775753](https://github.com/scratchfoundation/scratch-paint/commit/0775753a4cf4688ac5cca8b2ba18b820b4c91999))
+
+## [2.2.465](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.464...v2.2.465) (2024-10-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.355 ([#2886](https://github.com/scratchfoundation/scratch-paint/issues/2886)) ([942bdc2](https://github.com/scratchfoundation/scratch-paint/commit/942bdc2376c7e41a3accfcf204870eb88283f3eb))
+
+## [2.2.464](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.463...v2.2.464) (2024-10-28)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2885](https://github.com/scratchfoundation/scratch-paint/issues/2885)) ([9eead7c](https://github.com/scratchfoundation/scratch-paint/commit/9eead7c5d65a0ece4d1d483eea4db409907896eb))
+
+## [2.2.463](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.462...v2.2.463) (2024-10-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.353 ([#2884](https://github.com/scratchfoundation/scratch-paint/issues/2884)) ([962eefa](https://github.com/scratchfoundation/scratch-paint/commit/962eefa53bec72a67a78ff01071160113f21ecd6))
+
+## [2.2.462](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.461...v2.2.462) (2024-10-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.352 ([#2883](https://github.com/scratchfoundation/scratch-paint/issues/2883)) ([ea0d486](https://github.com/scratchfoundation/scratch-paint/commit/ea0d4868b82af5b7288311504b1f949845d63e16))
+
+## [2.2.461](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.460...v2.2.461) (2024-10-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.116 ([#2880](https://github.com/scratchfoundation/scratch-paint/issues/2880)) ([92f9542](https://github.com/scratchfoundation/scratch-paint/commit/92f95425e3bfbe8586ad361460dd448a103c83e3))
+
+## [2.2.460](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.459...v2.2.460) (2024-10-25)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2878](https://github.com/scratchfoundation/scratch-paint/issues/2878)) ([440d14a](https://github.com/scratchfoundation/scratch-paint/commit/440d14a037f64f3100b541c3abc2d09a6056179e))
+
+## [2.2.459](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.458...v2.2.459) (2024-10-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.115 ([#2877](https://github.com/scratchfoundation/scratch-paint/issues/2877)) ([3cfa6c6](https://github.com/scratchfoundation/scratch-paint/commit/3cfa6c6ccda0d3e4aae0a7c52638fffd93c3366f))
+
+## [2.2.458](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.457...v2.2.458) (2024-10-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.350 ([#2876](https://github.com/scratchfoundation/scratch-paint/issues/2876)) ([76a7cad](https://github.com/scratchfoundation/scratch-paint/commit/76a7cad03019a2b711909016ff2fb7460a91bc01))
+
+## [2.2.457](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.456...v2.2.457) (2024-10-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.348 ([#2875](https://github.com/scratchfoundation/scratch-paint/issues/2875)) ([26fd1ff](https://github.com/scratchfoundation/scratch-paint/commit/26fd1ff48d14a731ce4307c7fe061ecbe81bb0e7))
+
+## [2.2.456](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.455...v2.2.456) (2024-10-23)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2874](https://github.com/scratchfoundation/scratch-paint/issues/2874)) ([710707b](https://github.com/scratchfoundation/scratch-paint/commit/710707b6d90d75b18b93f1011384718c6c5c3462))
+
+## [2.2.455](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.454...v2.2.455) (2024-10-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.347 ([#2873](https://github.com/scratchfoundation/scratch-paint/issues/2873)) ([b3ce60c](https://github.com/scratchfoundation/scratch-paint/commit/b3ce60c22b98207c5a32ca9dabce671738debc18))
+
+## [2.2.454](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.453...v2.2.454) (2024-10-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.114 ([#2872](https://github.com/scratchfoundation/scratch-paint/issues/2872)) ([07be0b1](https://github.com/scratchfoundation/scratch-paint/commit/07be0b18b18c2c5e4988df674537872bd5c1247c))
+
+## [2.2.453](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.452...v2.2.453) (2024-10-21)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2871](https://github.com/scratchfoundation/scratch-paint/issues/2871)) ([34b42af](https://github.com/scratchfoundation/scratch-paint/commit/34b42af5d6d35a702a5db15dab2bbf91e8fed6fe))
+
+## [2.2.452](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.451...v2.2.452) (2024-10-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.345 ([#2870](https://github.com/scratchfoundation/scratch-paint/issues/2870)) ([ab81545](https://github.com/scratchfoundation/scratch-paint/commit/ab81545adfffde1eeed43773d1bae2b83cea435d))
+
+## [2.2.451](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.450...v2.2.451) (2024-10-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.344 ([#2869](https://github.com/scratchfoundation/scratch-paint/issues/2869)) ([2e03c34](https://github.com/scratchfoundation/scratch-paint/commit/2e03c34d6e79eb1ded9b792a0769c70e7e15405d))
+
+## [2.2.450](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.449...v2.2.450) (2024-10-19)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2866](https://github.com/scratchfoundation/scratch-paint/issues/2866)) ([8032fb3](https://github.com/scratchfoundation/scratch-paint/commit/8032fb3931012e9f5a8007c5a21c547466b97a1d))
+* **deps:** lock file maintenance ([#2868](https://github.com/scratchfoundation/scratch-paint/issues/2868)) ([12863d4](https://github.com/scratchfoundation/scratch-paint/commit/12863d4a72c356a5bc6c52c181730ca462549091))
+
+## [2.2.449](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.448...v2.2.449) (2024-10-15)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.341 ([#2863](https://github.com/scratchfoundation/scratch-paint/issues/2863)) ([f5884a0](https://github.com/scratchfoundation/scratch-paint/commit/f5884a03e632da796759de0b53cc2dd78d8457a1))
+
+## [2.2.448](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.447...v2.2.448) (2024-10-15)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2865](https://github.com/scratchfoundation/scratch-paint/issues/2865)) ([009dff6](https://github.com/scratchfoundation/scratch-paint/commit/009dff60956b769b213385f3ed74630f81c38517))
+* **deps:** update dependency scratch-render-fonts to v1.0.113 ([#2864](https://github.com/scratchfoundation/scratch-paint/issues/2864)) ([a97cb5d](https://github.com/scratchfoundation/scratch-paint/commit/a97cb5d27d8a0e958ab6f982cde758365351eb48))
+
+## [2.2.447](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.446...v2.2.447) (2024-10-14)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2861](https://github.com/scratchfoundation/scratch-paint/issues/2861)) ([42d234c](https://github.com/scratchfoundation/scratch-paint/commit/42d234c5c83e8686c9a1b3265798b277e359dbd3))
+
+## [2.2.446](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.445...v2.2.446) (2024-10-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.112 ([#2860](https://github.com/scratchfoundation/scratch-paint/issues/2860)) ([e9fb53f](https://github.com/scratchfoundation/scratch-paint/commit/e9fb53f08d0a819d06d8d7b61c5f0df71f3c2c5b))
+
+## [2.2.445](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.444...v2.2.445) (2024-10-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.339 ([#2859](https://github.com/scratchfoundation/scratch-paint/issues/2859)) ([5eed5eb](https://github.com/scratchfoundation/scratch-paint/commit/5eed5ebd25f309510554e5110bf6f9a88eeb8425))
+
+## [2.2.444](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.443...v2.2.444) (2024-10-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.338 ([#2858](https://github.com/scratchfoundation/scratch-paint/issues/2858)) ([7961b03](https://github.com/scratchfoundation/scratch-paint/commit/7961b03df734c257a01015983013a53fa161dc9e))
+
+## [2.2.443](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.442...v2.2.443) (2024-10-11)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2857](https://github.com/scratchfoundation/scratch-paint/issues/2857)) ([699cb8c](https://github.com/scratchfoundation/scratch-paint/commit/699cb8c36e1936cfb825d924902ce48d795508da))
+
+## [2.2.442](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.441...v2.2.442) (2024-10-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.337 ([#2856](https://github.com/scratchfoundation/scratch-paint/issues/2856)) ([53f35dc](https://github.com/scratchfoundation/scratch-paint/commit/53f35dc93e00913b34ae725cd8ee9babe677b47b))
+
+## [2.2.441](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.440...v2.2.441) (2024-10-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.111 ([#2855](https://github.com/scratchfoundation/scratch-paint/issues/2855)) ([2c5de2d](https://github.com/scratchfoundation/scratch-paint/commit/2c5de2d6e8c8049d3b5619f60394111b5886cf42))
+
+## [2.2.440](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.439...v2.2.440) (2024-10-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.336 ([#2854](https://github.com/scratchfoundation/scratch-paint/issues/2854)) ([df70e71](https://github.com/scratchfoundation/scratch-paint/commit/df70e71ad5a73372a777de6974de8af9191c8332))
+
+## [2.2.439](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.438...v2.2.439) (2024-10-09)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2853](https://github.com/scratchfoundation/scratch-paint/issues/2853)) ([5e6c7f8](https://github.com/scratchfoundation/scratch-paint/commit/5e6c7f8ff58851733b82d3434c82a5af6383522e))
+* **deps:** update dependency scratch-l10n to v3.18.335 ([#2852](https://github.com/scratchfoundation/scratch-paint/issues/2852)) ([a386765](https://github.com/scratchfoundation/scratch-paint/commit/a386765a1cbdc9d57a5c8a8dd580eb09cc79751b))
+
+## [2.2.438](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.437...v2.2.438) (2024-10-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.110 ([#2851](https://github.com/scratchfoundation/scratch-paint/issues/2851)) ([5f796c8](https://github.com/scratchfoundation/scratch-paint/commit/5f796c8125728cbc3b549cfce9fa244c656bab08))
+
+## [2.2.437](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.436...v2.2.437) (2024-10-08)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.333 ([#2850](https://github.com/scratchfoundation/scratch-paint/issues/2850)) ([dbae3fb](https://github.com/scratchfoundation/scratch-paint/commit/dbae3fbbbb61356510ebf27ee4adacbf557dba67))
+
+## [2.2.436](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.435...v2.2.436) (2024-10-07)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2849](https://github.com/scratchfoundation/scratch-paint/issues/2849)) ([25d5b71](https://github.com/scratchfoundation/scratch-paint/commit/25d5b71e863fcb58da264b446b6c46f791a95944))
+* **deps:** update dependency scratch-l10n to v3.18.332 ([#2848](https://github.com/scratchfoundation/scratch-paint/issues/2848)) ([33b8f56](https://github.com/scratchfoundation/scratch-paint/commit/33b8f56e62c3f4acb5e93e8db9cadcf72a1b406a))
+
+## [2.2.435](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.434...v2.2.435) (2024-10-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.331 ([#2846](https://github.com/scratchfoundation/scratch-paint/issues/2846)) ([499c021](https://github.com/scratchfoundation/scratch-paint/commit/499c0219041769d692fd689f15347cc981572c2e))
+
+## [2.2.434](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.433...v2.2.434) (2024-10-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.109 ([#2844](https://github.com/scratchfoundation/scratch-paint/issues/2844)) ([e78f188](https://github.com/scratchfoundation/scratch-paint/commit/e78f188df695b47f5d22f51f17860368db816bab))
+
+## [2.2.433](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.432...v2.2.433) (2024-10-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.329 ([#2843](https://github.com/scratchfoundation/scratch-paint/issues/2843)) ([2c9033f](https://github.com/scratchfoundation/scratch-paint/commit/2c9033f237b1163a7b8d3b67ab7ef1733a56fc3e))
+
+## [2.2.432](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.431...v2.2.432) (2024-10-05)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2841](https://github.com/scratchfoundation/scratch-paint/issues/2841)) ([f1915bc](https://github.com/scratchfoundation/scratch-paint/commit/f1915bce552c3b13fe3be71d67417e49bc60a931))
+
+## [2.2.431](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.430...v2.2.431) (2024-10-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.328 ([#2840](https://github.com/scratchfoundation/scratch-paint/issues/2840)) ([06b9b50](https://github.com/scratchfoundation/scratch-paint/commit/06b9b509f612f8abbb644f5cf2c4a63737607cf9))
+
+## [2.2.430](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.429...v2.2.430) (2024-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.108 ([#2839](https://github.com/scratchfoundation/scratch-paint/issues/2839)) ([6f5a698](https://github.com/scratchfoundation/scratch-paint/commit/6f5a698d4a3fe67f6d00e19d31af04f077b421a0))
+
+## [2.2.429](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.428...v2.2.429) (2024-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.327 ([#2838](https://github.com/scratchfoundation/scratch-paint/issues/2838)) ([a012431](https://github.com/scratchfoundation/scratch-paint/commit/a01243122d2862d29d4be773c290bc7f02a08bbd))
+
+## [2.2.428](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.427...v2.2.428) (2024-10-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.326 ([#2837](https://github.com/scratchfoundation/scratch-paint/issues/2837)) ([60355bc](https://github.com/scratchfoundation/scratch-paint/commit/60355bcdac4bad7faa37aeb1d26f4eee1a47b99b))
+
+## [2.2.427](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.426...v2.2.427) (2024-10-02)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2834](https://github.com/scratchfoundation/scratch-paint/issues/2834)) ([da374e1](https://github.com/scratchfoundation/scratch-paint/commit/da374e141c956d34fbd4c74902ab2f169ad6542c))
+
+## [2.2.426](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.425...v2.2.426) (2024-10-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.107 ([#2836](https://github.com/scratchfoundation/scratch-paint/issues/2836)) ([3122400](https://github.com/scratchfoundation/scratch-paint/commit/3122400cc9f12104ab400c6d804ec562f76c1264))
+
+## [2.2.425](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.424...v2.2.425) (2024-10-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.325 ([#2835](https://github.com/scratchfoundation/scratch-paint/issues/2835)) ([4689ef5](https://github.com/scratchfoundation/scratch-paint/commit/4689ef56fdcbf4dd117c012722b9f0bf5b17703c))
+
+## [2.2.424](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.423...v2.2.424) (2024-09-29)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2832](https://github.com/scratchfoundation/scratch-paint/issues/2832)) ([a34f9d1](https://github.com/scratchfoundation/scratch-paint/commit/a34f9d10dca35ac7a7ffb9b9fa4adf20916fe031))
+* **deps:** update dependency scratch-render-fonts to v1.0.106 ([#2831](https://github.com/scratchfoundation/scratch-paint/issues/2831)) ([510065a](https://github.com/scratchfoundation/scratch-paint/commit/510065a0b191f37037eb71d97d8b79c026123187))
+
+## [2.2.423](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.422...v2.2.423) (2024-09-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.324 ([#2830](https://github.com/scratchfoundation/scratch-paint/issues/2830)) ([1d0dc24](https://github.com/scratchfoundation/scratch-paint/commit/1d0dc24ddbdb4fa5d5120d69a9a7ef8943dbac14))
+
+## [2.2.422](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.421...v2.2.422) (2024-09-27)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.321 ([#2829](https://github.com/scratchfoundation/scratch-paint/issues/2829)) ([d5f591c](https://github.com/scratchfoundation/scratch-paint/commit/d5f591cb8a4b8c1ab627f5f2b9eccf52ac7fdb8c))
+
+## [2.2.421](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.420...v2.2.421) (2024-09-27)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2828](https://github.com/scratchfoundation/scratch-paint/issues/2828)) ([6eb8a83](https://github.com/scratchfoundation/scratch-paint/commit/6eb8a83543c9779692bd8efa7e049590960b188f))
+
+## [2.2.420](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.419...v2.2.420) (2024-09-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.105 ([#2827](https://github.com/scratchfoundation/scratch-paint/issues/2827)) ([af69b21](https://github.com/scratchfoundation/scratch-paint/commit/af69b21e250dab2958d76851d044632abab1018e))
+
+## [2.2.419](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.418...v2.2.419) (2024-09-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.320 ([#2826](https://github.com/scratchfoundation/scratch-paint/issues/2826)) ([8246e89](https://github.com/scratchfoundation/scratch-paint/commit/8246e894af13430dc9acaf0df28b6f70bda704e0))
+
+## [2.2.418](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.417...v2.2.418) (2024-09-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.319 ([#2825](https://github.com/scratchfoundation/scratch-paint/issues/2825)) ([7590539](https://github.com/scratchfoundation/scratch-paint/commit/75905396080d69bc58a46811d2ff99411858f69d))
+
+## [2.2.417](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.416...v2.2.417) (2024-09-25)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2824](https://github.com/scratchfoundation/scratch-paint/issues/2824)) ([5cb2f2c](https://github.com/scratchfoundation/scratch-paint/commit/5cb2f2c16eb1c24328a3f670b55ad7f5574f2f45))
+* **deps:** update dependency scratch-l10n to v3.18.318 ([#2823](https://github.com/scratchfoundation/scratch-paint/issues/2823)) ([84c9beb](https://github.com/scratchfoundation/scratch-paint/commit/84c9beba22fc4c4b862f48a0022b7a899c7d3462))
+
+## [2.2.416](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.415...v2.2.416) (2024-09-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.317 ([#2822](https://github.com/scratchfoundation/scratch-paint/issues/2822)) ([d91532e](https://github.com/scratchfoundation/scratch-paint/commit/d91532eab9473d84e04d4009c8b0e0af99a7b57b))
+
+## [2.2.415](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.414...v2.2.415) (2024-09-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.316 ([#2821](https://github.com/scratchfoundation/scratch-paint/issues/2821)) ([cbdf47e](https://github.com/scratchfoundation/scratch-paint/commit/cbdf47e1d25777ff69119b6c16955efe56d955c4))
+
+## [2.2.414](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.413...v2.2.414) (2024-09-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.104 ([#2820](https://github.com/scratchfoundation/scratch-paint/issues/2820)) ([8dee369](https://github.com/scratchfoundation/scratch-paint/commit/8dee3697a29f5774340b32f5b6074effe9090894))
+
+## [2.2.413](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.412...v2.2.413) (2024-09-23)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2819](https://github.com/scratchfoundation/scratch-paint/issues/2819)) ([98f9bdb](https://github.com/scratchfoundation/scratch-paint/commit/98f9bdb80c52161ca0d7063722ca63c16cad4c4d))
+
+## [2.2.412](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.411...v2.2.412) (2024-09-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-l10n to v3.18.315 ([#2818](https://github.com/scratchfoundation/scratch-paint/issues/2818)) ([455c186](https://github.com/scratchfoundation/scratch-paint/commit/455c186e5541108fe97041f0966ddd3ca6260a3c))
+
+## [2.2.411](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.410...v2.2.411) (2024-09-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency scratch-render-fonts to v1.0.103 ([#2817](https://github.com/scratchfoundation/scratch-paint/issues/2817)) ([a4e246f](https://github.com/scratchfoundation/scratch-paint/commit/a4e246ff63d59760b60f293931c42b091277ada8))
+
+## [2.2.410](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.409...v2.2.410) (2024-09-21)
+
+
+### Bug Fixes
+
+* **deps:** lock file maintenance ([#2816](https://github.com/scratchfoundation/scratch-paint/issues/2816)) ([49eb6a3](https://github.com/scratchfoundation/scratch-paint/commit/49eb6a3e790cc6b4b6356e556e7d8deefcc70ca0))
+* **deps:** update dependency scratch-l10n to v3.18.314 ([#2815](https://github.com/scratchfoundation/scratch-paint/issues/2815)) ([013d53a](https://github.com/scratchfoundation/scratch-paint/commit/013d53a37041195008588afde97766cd79f78e33))
+
 ## [2.2.409](https://github.com/scratchfoundation/scratch-paint/compare/v2.2.408...v2.2.409) (2024-09-20)
 
 
