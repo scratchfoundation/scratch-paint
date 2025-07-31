@@ -1,17 +1,21 @@
 /* eslint-env jest */
-import React from 'react'; // eslint-disable-line no-unused-vars
-import {shallow} from 'enzyme';
-import Button from '../../../src/components/button/button.jsx'; // eslint-disable-line no-unused-vars, max-len
+/* eslint-disable no-unused-vars */
+
+import React from 'react';
+import {render, fireEvent} from '@testing-library/react';
+import Button from '../../../src/components/button/button.jsx';
 
 describe('Button', () => {
     test('triggers callback when clicked', () => {
         const onClick = jest.fn();
-        const componentShallowWrapper = shallow(
+        const {getByText} = render(
             <Button onClick={onClick}>
                 {'Button'}
             </Button>
         );
-        componentShallowWrapper.simulate('click');
+
+        const buttonElement = getByText('Button');
+        fireEvent.click(buttonElement);
         expect(onClick).toHaveBeenCalled();
     });
 });
