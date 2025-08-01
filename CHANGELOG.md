@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/scratchfoundation/scratch-paint/compare/v3.1.0...v4.0.0) (2025-08-01)
+
+
+### Features
+
+* trigger major release ([8411727](https://github.com/scratchfoundation/scratch-paint/commit/8411727e9a53a8ebd709efbcc19fce9f1d69ef79))
+
+
+### BREAKING CHANGES
+
+* Trigger major version release due to the React upgrade
+
 # [3.1.0](https://github.com/scratchfoundation/scratch-paint/compare/v3.0.339...v3.1.0) (2025-08-01)
 
 
