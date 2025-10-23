@@ -1,6 +1,6 @@
 // __mocks__/react-intl.js
 
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React from 'react';
 const Intl = require.requireActual('react-intl');
 
 // Here goes intl context injected into component, feel free to extend
@@ -15,7 +15,11 @@ const intl = {
 };
 
 Intl.injectIntl = Node => {
-    const renderWrapped = props => <Node {...props} intl={intl} />;
+    // eslint-disable-next-line react/jsx-filename-extension
+    const renderWrapped = props => (<Node
+        {...props}
+        intl={intl}
+    />);
     renderWrapped.displayName = Node.displayName ||
         Node.name ||
         'Component';
