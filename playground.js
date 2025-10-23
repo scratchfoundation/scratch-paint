@@ -19641,7 +19641,7 @@ bind.placeholder = {};
 
 module.exports = bindAll;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(38)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(37)))
 
 /***/ }),
 /* 5 */
@@ -28168,7 +28168,7 @@ function stubArray() {
 
 module.exports = omit;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(38)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(37)))
 
 /***/ }),
 /* 26 */
@@ -28479,89 +28479,12 @@ if (true) {
 
 /***/ }),
 /* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(60);
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-Object.defineProperty(exports, "IntlProvider", {
-  enumerable: true,
-  get: function get() {
-    return _IntlProvider.default;
-  }
-});
-Object.defineProperty(exports, "Provider", {
-  enumerable: true,
-  get: function get() {
-    return _Provider.default;
-  }
-});
-exports.initialState = exports.UPDATE = void 0;
-exports.intlReducer = intlReducer;
-exports.updateIntl = void 0;
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(72));
-var _IntlProvider = _interopRequireDefault(__webpack_require__(74));
-var _Provider = _interopRequireDefault(__webpack_require__(177));
-function ownKeys(e, r) {
-  var t = Object.keys(e);
-  if (Object.getOwnPropertySymbols) {
-    var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function (r) {
-      return Object.getOwnPropertyDescriptor(e, r).enumerable;
-    })), t.push.apply(t, o);
-  }
-  return t;
-}
-function _objectSpread(e) {
-  for (var r = 1; r < arguments.length; r++) {
-    var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys(Object(t), !0).forEach(function (r) {
-      (0, _defineProperty2.default)(e, r, t[r]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {
-      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-    });
-  }
-  return e;
-}
-var UPDATE = exports.UPDATE = '@@intl/UPDATE';
-var updateIntl = exports.updateIntl = function updateIntl(_ref) {
-  var locale = _ref.locale,
-    formats = _ref.formats,
-    messages = _ref.messages;
-  return {
-    type: UPDATE,
-    payload: {
-      locale: locale,
-      formats: formats,
-      messages: messages
-    }
-  };
-};
-var initialState = exports.initialState = {
-  locale: 'en',
-  messages: {}
-};
-function intlReducer() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-  var action = arguments.length > 1 ? arguments[1] : undefined;
-  if (action.type !== UPDATE) {
-    return state;
-  }
-  return _objectSpread(_objectSpread({}, state), action.payload);
-}
-
-/***/ }),
-/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Emixed-fill%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0.75'%3E %3Cg id='mixed-fill'%3E %3Cg id='mixed-fill-icon' transform='translate(2.000000, 2.500000)'%3E %3Ccircle id='blue' fill='%234C97FF' cx='4.5' cy='10.5' r='4.5'%3E%3C/circle%3E %3Ccircle id='red' fill='%23FF5500' cx='8' cy='4.5' r='4.5'%3E%3C/circle%3E %3Ccircle id='yellow' fill='%23FFBF00' cx='11.4099998' cy='10.5' r='4.5'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -30423,7 +30346,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_react__;
 //# sourceMappingURL=react-responsive.js.map
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports) {
 
 var g;
@@ -30449,7 +30372,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30473,6 +30396,83 @@ exports.isServer = isServer;
 exports.isClient = isClient;
 exports.window = WINDOW;
 exports.document = DOCUMENT;
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(60);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "IntlProvider", {
+  enumerable: true,
+  get: function get() {
+    return _IntlProvider.default;
+  }
+});
+Object.defineProperty(exports, "Provider", {
+  enumerable: true,
+  get: function get() {
+    return _Provider.default;
+  }
+});
+exports.initialState = exports.UPDATE = void 0;
+exports.intlReducer = intlReducer;
+exports.updateIntl = void 0;
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(72));
+var _IntlProvider = _interopRequireDefault(__webpack_require__(74));
+var _Provider = _interopRequireDefault(__webpack_require__(177));
+function ownKeys(e, r) {
+  var t = Object.keys(e);
+  if (Object.getOwnPropertySymbols) {
+    var o = Object.getOwnPropertySymbols(e);
+    r && (o = o.filter(function (r) {
+      return Object.getOwnPropertyDescriptor(e, r).enumerable;
+    })), t.push.apply(t, o);
+  }
+  return t;
+}
+function _objectSpread(e) {
+  for (var r = 1; r < arguments.length; r++) {
+    var t = null != arguments[r] ? arguments[r] : {};
+    r % 2 ? ownKeys(Object(t), !0).forEach(function (r) {
+      (0, _defineProperty2.default)(e, r, t[r]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {
+      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
+    });
+  }
+  return e;
+}
+var UPDATE = exports.UPDATE = '@@intl/UPDATE';
+var updateIntl = exports.updateIntl = function updateIntl(_ref) {
+  var locale = _ref.locale,
+    formats = _ref.formats,
+    messages = _ref.messages;
+  return {
+    type: UPDATE,
+    payload: {
+      locale: locale,
+      formats: formats,
+      messages: messages
+    }
+  };
+};
+var initialState = exports.initialState = {
+  locale: 'en',
+  messages: {}
+};
+function intlReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+  if (action.type !== UPDATE) {
+    return state;
+  }
+  return _objectSpread(_objectSpread({}, state), action.payload);
+}
 
 /***/ }),
 /* 40 */
@@ -31076,7 +31076,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.clientOnly = exports.noop = exports.equalRecords = exports.find = undefined;
 
-var _platform = __webpack_require__(39);
+var _platform = __webpack_require__(38);
 
 var find = function find(f, xs) {
   return xs.reduce(function (b, x) {
@@ -32363,7 +32363,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(38)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(37)))
 
 /***/ }),
 /* 120 */
@@ -32556,7 +32556,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(38), __webpack_require__(56)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(37), __webpack_require__(56)))
 
 /***/ }),
 /* 121 */
@@ -42070,7 +42070,7 @@ var _onResize = __webpack_require__(160);
 
 var _onResize2 = _interopRequireDefault(_onResize);
 
-var _platform = __webpack_require__(39);
+var _platform = __webpack_require__(38);
 
 var _platform2 = _interopRequireDefault(_platform);
 
@@ -43877,7 +43877,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.equalCoords = exports.doesFitWithin = exports.centerOfBoundsFromBounds = exports.centerOfBounds = exports.centerOfSize = exports.axes = exports.pickZone = exports.place = exports.calcRelPos = exports.validTypeValues = exports.types = exports.El = undefined;
 
-var _platform = __webpack_require__(39);
+var _platform = __webpack_require__(38);
 
 var _utils = __webpack_require__(59);
 
@@ -44151,7 +44151,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.removeEventListener = exports.addEventListener = exports.off = exports.on = undefined;
 
-var _platform = __webpack_require__(39);
+var _platform = __webpack_require__(38);
 
 var _utils = __webpack_require__(59);
 
@@ -45004,10 +45004,10 @@ var group_isGroup = function isGroup(item) {
 /**
  * Groups the given items. Other things are then deselected and the new group is selected.
  * @param {!Array<paper.Item>} items Root level items to group
- * @param {!function} clearSelectedItems Function to clear Redux state's selected items
- * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
- * @return {paper.Group} the group if one is created, otherwise false.
+ * @param {!Function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!Function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!Function} onUpdateImage Function to let listeners know that SVG has changed.
+ * @returns {paper.Group} the group if one is created, otherwise false.
  */
 var group_groupItems = function groupItems(items, clearSelectedItems, setSelectedItems, onUpdateImage) {
   if (items.length > 0) {
@@ -45026,10 +45026,10 @@ var group_groupItems = function groupItems(items, clearSelectedItems, setSelecte
 
 /**
  * Groups the selected items. Other things are then deselected and the new group is selected.
- * @param {!function} clearSelectedItems Function to clear Redux state's selected items
- * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
- * @return {paper.Group} the group if one is created, otherwise false.
+ * @param {!Function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!Function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!Function} onUpdateImage Function to let listeners know that SVG has changed.
+ * @returns {paper.Group} the group if one is created, otherwise false.
  */
 var group_groupSelection = function groupSelection(clearSelectedItems, setSelectedItems, onUpdateImage) {
   var items = selection_getSelectedRootItems();
@@ -45067,10 +45067,9 @@ var _ungroupLoop2 = function _ungroupLoop(group, recursive, setSelectedItems) {
  * onUpdateImage is called to notify listeners of a change on the SVG only if onUpdateImage is passed in.
  * The reason these arguments are optional on ungroupItems is because ungroupItems is used for parts of
  * SVG import, which shouldn't change the selection or undo state.
- *
  * @param {!Array<paper.Item>} items Items to ungroup if they are groups
- * @param {?function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {?function} onUpdateImage Function to let listeners know that SVG has changed.
+ * @param {?Function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {?Function} onUpdateImage Function to let listeners know that SVG has changed.
  */
 var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateImage) {
   if (items.length === 0) {
@@ -45103,10 +45102,9 @@ var ungroupItems = function ungroupItems(items, setSelectedItems, onUpdateImage)
 
 /**
  * Ungroups the selected items. Other items are deselected and the ungrouped items are selected.
- *
- * @param {!function} clearSelectedItems Function to clear Redux state's selected items
- * @param {!function} setSelectedItems Function to set Redux state with new list of selected items
- * @param {!function} onUpdateImage Function to let listeners know that SVG has changed.
+ * @param {!Function} clearSelectedItems Function to clear Redux state's selected items
+ * @param {!Function} setSelectedItems Function to set Redux state with new list of selected items
+ * @param {!Function} onUpdateImage Function to let listeners know that SVG has changed.
  */
 var group_ungroupSelection = function ungroupSelection(clearSelectedItems, setSelectedItems, onUpdateImage) {
   var items = selection_getSelectedRootItems();
@@ -45311,7 +45309,7 @@ var math_scaleWithStrokes = function scaleWithStrokes(root, factor, pivot) {
  * for shapes like circles ("square ovals"), which fill the same dimensions.)
  * @param {!paper.Point} startPos The point where the user started dragging
  * @param {!paper.Point} eventPoint The point where the user has currently dragged to
- * @return {object} Information about the size and position of how the square should be drawn
+ * @returns {object} Information about the size and position of how the square should be drawn
  */
 var math_getSquareDimensions = function getSquareDimensions(startPos, eventPoint) {
   // These variables are used for determining the relative quadrant that the shape will appear in.
@@ -45355,7 +45353,7 @@ function selection_toPrimitive(t, r) { if ("object" != selection_typeof(t) || !t
 /**
  * Wrapper for paper.project.getItems that excludes our helper items
  * @param {?object} options See paper.js docs for paper.Item.getItems
- * @return {Array<paper.Item>} items that match options
+ * @returns {Array<paper.Item>} items that match options
  */
 var selection_getItems = function getItems(options) {
   var newMatcher = function newMatcher(item) {
@@ -45370,7 +45368,7 @@ var selection_getItems = function getItems(options) {
 /**
  * @param {boolean} includeGuides True if guide layer items like the bounding box should
  *     be included in the returned items.
- * @return {Array<paper.item>} all top-level (direct descendants of a paper.Layer) items
+ * @returns {Array<paper.item>} all top-level (direct descendants of a paper.Layer) items
  */
 var selection_getAllRootItems = function getAllRootItems(includeGuides) {
   includeGuides = includeGuides || false;
@@ -45406,7 +45404,7 @@ var selection_getAllRootItems = function getAllRootItems(includeGuides) {
 };
 
 /**
- * @return {Array<paper.item>} all top-level (direct descendants of a paper.Layer) items
+ * @returns {Array<paper.item>} all top-level (direct descendants of a paper.Layer) items
  *     that aren't guide items or helper items.
  */
 var getAllSelectableRootItems = function getAllSelectableRootItems() {
@@ -45480,7 +45478,7 @@ var _setItemSelection = function setItemSelection(item, state, fullySelected) {
   }
 };
 
-/** @return {boolean} true if anything was selected */
+/** @returns {boolean} true if anything was selected */
 var selectAllItems = function selectAllItems() {
   var items = getAllSelectableRootItems();
   if (items.length === 0) return false;
@@ -45490,7 +45488,7 @@ var selectAllItems = function selectAllItems() {
   return true;
 };
 
-/** @return {boolean} true if anything was selected */
+/** @returns {boolean} true if anything was selected */
 var selectAllSegments = function selectAllSegments() {
   var items = getAllSelectableRootItems();
   if (items.length === 0) return false;
@@ -45500,7 +45498,7 @@ var selectAllSegments = function selectAllSegments() {
   return true;
 };
 
-/** @param {!function} dispatchClearSelect Function to update the Redux select state */
+/** @param {!Function} dispatchClearSelect Function to update the Redux select state */
 var selection_clearSelection = function clearSelection(dispatchClearSelect) {
   paper_full_default.a.project.deselectAll();
   dispatchClearSelect();
@@ -45510,7 +45508,7 @@ var selection_clearSelection = function clearSelection(dispatchClearSelect) {
  * This gets all selected non-grouped items and groups
  * (alternative to paper.project.selectedItems, which includes
  * group children in addition to the group)
- * @return {Array<paper.Item>} in increasing Z order.
+ * @returns {Array<paper.Item>} in increasing Z order.
  */
 var selection_getSelectedRootItems = function getSelectedRootItems() {
   var allItems = getAllSelectableRootItems();
@@ -45557,7 +45555,7 @@ var selection_getSelectedRootItems = function getSelectedRootItems() {
 /**
  * This gets all selected items that are as deeply nested as possible. Does not
  * return the parent groups.
- * @return {Array<paper.Item>} in increasing Z order.
+ * @returns {Array<paper.Item>} in increasing Z order.
  */
 var selection_getSelectedLeafItems = function getSelectedLeafItems() {
   var allItems = paper_full_default.a.project.selectedItems;
@@ -45574,7 +45572,7 @@ var selection_getSelectedLeafItems = function getSelectedLeafItems() {
 
 /**
  * This gets all selected path segments.
- * @return {Array<paper.Segment>} selected segments
+ * @returns {Array<paper.Segment>} selected segments
  */
 var getSelectedSegments = function getSelectedSegments() {
   var selected = selection_getSelectedLeafItems();
@@ -46002,7 +46000,7 @@ var forEachLinePoint = function forEachLinePoint(point1, point2, callback) {
  * @param {!number} a Coefficient in ax^2 + bx + c = 0
  * @param {!number} b Coefficient in ax^2 + bx + c = 0
  * @param {!number} c Coefficient in ax^2 + bx + c = 0
- * @return {Array<number>} Array of 2 solutions, with the larger solution first
+ * @returns {Array<number>} Array of 2 solutions, with the larger solution first
  */
 var solveQuadratic_ = function solveQuadratic_(a, b, c) {
   var soln1 = (-b + Math.sqrt(b * b - 4 * a * c)) / 2 / a;
@@ -46018,10 +46016,10 @@ var solveQuadratic_ = function solveQuadratic_(a, b, c) {
  * @param {!number} options.radiusY minor radius of ellipse
  * @param {!number} options.shearSlope slope of the sheared x axis
  * @param {?boolean} options.isFilled true if isFilled
- * @param {?function} options.drawFn The function called on each point in the outline, used only
+ * @param {?Function} options.drawFn The function called on each point in the outline, used only
  *     if isFilled is false.
  * @param {!CanvasRenderingContext2D} context for drawing
- * @return {boolean} true if anything was drawn, false if not
+ * @returns {boolean} true if anything was drawn, false if not
  */
 var drawShearedEllipse_ = function drawShearedEllipse_(options, context) {
   var centerX = ~~options.centerX;
@@ -46047,8 +46045,8 @@ var drawShearedEllipse_ = function drawShearedEllipse_(options, context) {
   /**
    * Vertical stepping portion of ellipse drawing algorithm
    * @param {!number} startY y to start drawing from
-   * @param {!function} conditionFn function which should become true when we should stop stepping
-   * @return {object} last point drawn to the canvas, or null if no points drawn
+   * @param {!Function} conditionFn function which should become true when we should stop stepping
+   * @returns {object} last point drawn to the canvas, or null if no points drawn
    */
   var drawEllipseStepVertical_ = function drawEllipseStepVertical_(startY, conditionFn) {
     // Points on the ellipse
@@ -46081,8 +46079,8 @@ var drawShearedEllipse_ = function drawShearedEllipse_(options, context) {
   /**
    * Horizontal stepping portion of ellipse drawing algorithm
    * @param {!number} startX x to start drawing from
-   * @param {!function} conditionFn function which should become false when we should stop stepping
-   * @return {object} last point drawn to the canvas, or null if no points drawn
+   * @param {!Function} conditionFn function which should become false when we should stop stepping
+   * @returns {object} last point drawn to the canvas, or null if no points drawn
    */
   var drawEllipseStepHorizontal_ = function drawEllipseStepHorizontal_(startX, conditionFn) {
     // Points on the ellipse
@@ -46159,7 +46157,7 @@ var drawShearedEllipse_ = function drawShearedEllipse_(options, context) {
  * @param {!number} size The diameter of the brush
  * @param {!string} color The css color of the brush
  * @param {?boolean} isEraser True if we want the brush mark for the eraser
- * @return {HTMLCanvasElement} a canvas with the brush mark printed on it
+ * @returns {HTMLCanvasElement} a canvas with the brush mark printed on it
  */
 var bitmap_getBrushMark = function getBrushMark(size, color, isEraser) {
   size = ~~size;
@@ -46214,7 +46212,6 @@ var bitmap_getBrushMark = function getBrushMark(size, color, isEraser) {
  * Draw an ellipse, given the original axis-aligned radii and
  * an affine transformation. Returns false if the ellipse could
  * not be drawn; for instance, the matrix is non-invertible.
- *
  * @param {!options} options Parameters for the ellipse
  * @param {!paper.Point} options.position Center of ellipse
  * @param {!number} options.radiusX x-aligned radius of ellipse
@@ -46223,7 +46220,7 @@ var bitmap_getBrushMark = function getBrushMark(size, color, isEraser) {
  * @param {?boolean} options.isFilled true if isFilled
  * @param {?number} options.thickness Thickness of outline, used only if isFilled is false.
  * @param {!CanvasRenderingContext2D} context for drawing
- * @return {boolean} true if anything was drawn, false if not
+ * @returns {boolean} true if anything was drawn, false if not
  */
 var bitmap_drawEllipse = function drawEllipse(options, context) {
   var positionX = options.position.x;
@@ -46458,7 +46455,6 @@ var colorPixel_ = function colorPixel_(x, y, imageData, newColor) {
 /**
  * Flood fill beginning at the given point.
  * Based on http://www.williammalone.com/articles/html5-canvas-javascript-paint-bucket-tool/
- *
  * @param {!int} x The x coordinate on the context at which to begin
  * @param {!int} y The y coordinate on the context at which to begin
  * @param {!ImageData} sourceImageData The image data to sample from. This is edited by the function.
@@ -46505,7 +46501,7 @@ var floodFillInternal_ = function floodFillInternal_(x, y, sourceImageData, dest
 /**
  * Given a fill style string, get the color
  * @param {string} fillStyleString the fill style
- * @return {Array<int>} Color, a length 4 array
+ * @returns {Array<int>} Color, a length 4 array
  */
 var fillStyleToColor_ = function fillStyleToColor_(fillStyleString) {
   var tmpCanvas = document.createElement('canvas');
@@ -46525,7 +46521,7 @@ var fillStyleToColor_ = function fillStyleToColor_(fillStyleString) {
  * @param {!HTMLCanvas2DContext} sourceContext The context from which to sample to determine where to flood fill
  * @param {!HTMLCanvas2DContext} destContext The context to which to draw. May match sourceContext. Should match
  *     the size of sourceContext.
- * @return {boolean} True if image changed, false otherwise
+ * @returns {boolean} True if image changed, false otherwise
  */
 var floodFill = function floodFill(x, y, color, sourceContext, destContext) {
   x = ~~x;
@@ -46557,7 +46553,7 @@ var floodFill = function floodFill(x, y, color, sourceContext, destContext) {
  * @param {!string} color A color string, which would go into context.fillStyle
  * @param {!HTMLCanvas2DContext} sourceContext The context from which to sample to determine where to flood fill
  * @param {!HTMLCanvas2DContext} destContext The context to which to draw. May match sourceContext. Should match
- * @return {boolean} True if image changed, false otherwise
+ * @returns {boolean} True if image changed, false otherwise
  */
 var floodFillAll = function floodFillAll(x, y, color, sourceContext, destContext) {
   x = ~~x;
@@ -46807,7 +46803,7 @@ var _paperColorToCanvasStyle = function _paperColorToCanvasStyle(color, context)
 /**
  * @param {paper.Shape.Ellipse} oval Vector oval to convert
  * @param {paper.Raster} bitmap raster to draw selection
- * @return {bool} true if the oval was drawn
+ * @returns {bool} true if the oval was drawn
  */
 var bitmap_commitOvalToBitmap = function commitOvalToBitmap(oval, bitmap) {
   var radiusX = Math.abs(oval.size.width / 2);
@@ -46894,16 +46890,15 @@ var getWorkspaceBounds = function getWorkspaceBounds() {
 };
 
 /**
-* The workspace bounds define the areas that the scroll bars can access.
-* They include at minimum the artboard, and extend to a bit beyond the
-* farthest item off tne edge in any given direction (so items can't be
-* "lost" off the edge)
-*
-* @param {boolean} clipEmpty Clip empty space from bounds, even if it
-* means discontinuously jumping the viewport. This should probably be
-* false unless the viewport is going to move discontinuously anyway
-* (such as in a zoom button click)
-*/
+ * The workspace bounds define the areas that the scroll bars can access.
+ * They include at minimum the artboard, and extend to a bit beyond the
+ * farthest item off the edge in any given direction (so items can't be
+ * "lost" off the edge)
+ * @param {boolean} clipEmpty Clip empty space from bounds, even if it
+ * means discontinuously jumping the viewport. This should probably be
+ * false unless the viewport is going to move discontinuously anyway
+ * (such as in a zoom button click)
+ */
 var view_setWorkspaceBounds = function setWorkspaceBounds(clipEmpty) {
   var items = selection_getAllRootItems();
   // Include the artboard and what's visible in the viewport
@@ -47118,7 +47113,7 @@ var _getPaintingLayer = function _getPaintingLayer() {
  * Creates a canvas with width and height matching the art board size.
  * @param {?number} width Width of the canvas. Defaults to ART_BOARD_WIDTH.
  * @param {?number} height Height of the canvas. Defaults to ART_BOARD_HEIGHT.
- * @return {HTMLCanvasElement} the canvas
+ * @returns {HTMLCanvasElement} the canvas
  */
 var layer_createCanvas = function createCanvas(width, height) {
   var canvas = document.createElement('canvas');
@@ -47186,7 +47181,7 @@ var _setGuideItem = function setGuideItem(item) {
 /**
  * Removes the guide layers, e.g. for purposes of exporting the image. Must call showGuideLayers to re-add them.
  * @param {boolean} includeRaster true if the raster layer should also be hidden
- * @return {object} an object of the removed layers, which should be passed to showGuideLayers to re-add them.
+ * @returns {object} an object of the removed layers, which should be passed to showGuideLayers to re-add them.
  */
 var hideGuideLayers = function hideGuideLayers(includeRaster) {
   var backgroundGuideLayer = getBackgroundGuideLayer();
@@ -47556,7 +47551,7 @@ var undo_undoSnapshot = function undoSnapshot(snapshot) {
 };
 /**
  * @param {Format} format Either VECTOR_SKIP_CONVERT or BITMAP_SKIP_CONVERT
- * @return {Action} undo action
+ * @returns {Action} undo action
  */
 var undo = function undo(format) {
   return {
@@ -47566,7 +47561,7 @@ var undo = function undo(format) {
 };
 /**
  * @param {Format} format Either VECTOR_SKIP_CONVERT or BITMAP_SKIP_CONVERT
- * @return {Action} undo action
+ * @returns {Action} undo action
  */
 var redo = function redo(format) {
   return {
@@ -47615,7 +47610,7 @@ var selected_items_reducer = function reducer(state, action) {
  * Set the selected item state to the given array of items
  * @param {Array<paper.Item>} selectedItems from paper.project.selectedItems
  * @param {?boolean} bitmapMode True if the items are being selected in bitmap mode
- * @return {object} Redux action to change the selected items.
+ * @returns {object} Redux action to change the selected items.
  */
 var selected_items_setSelectedItems = function setSelectedItems(selectedItems, bitmapMode) {
   return {
@@ -47661,7 +47656,7 @@ var hover_reducer = function reducer(state, action) {
 /**
  * Set the hovered item state to the given item ID
  * @param {number} hoveredItemId The paper.Item ID of the hover indicator item.
- * @return {object} Redux action to change the hovered item.
+ * @returns {object} Redux action to change the hovered item.
  */
 var hover_setHoveredItem = function setHoveredItem(hoveredItemId) {
   return {
@@ -47787,7 +47782,7 @@ var view_bounds_reducer = function reducer(state, action) {
 /**
  * Set the view bounds, which defines the zoom and scroll of the paper canvas.
  * @param {paper.Matrix} matrix The matrix applied to the view
- * @return {object} Redux action to set the view bounds
+ * @returns {object} Redux action to set the view bounds
  */
 var view_bounds_updateViewBounds = function updateViewBounds(matrix) {
   return {
@@ -48781,7 +48776,7 @@ var style_path_getColorStateListeners = function _getColorStateListeners(textEdi
  * in order to form a smooth gradient, otherwise it fades through black. This
  * function gets the transparent color for a given color string.
  * @param {?string} colorToMatch CSS string of other color of gradient, or null for transparent
- * @return {string} CSS string for matching color of transparent
+ * @returns {string} CSS string for matching color of transparent
  */
 var style_path_getColorStringForTransparent = function getColorStringForTransparent(colorToMatch) {
   var color = new paper_full_default.a.Color(colorToMatch);
@@ -48792,7 +48787,7 @@ var style_path_getColorStringForTransparent = function getColorStringForTranspar
 /**
  * Generate a color that contrasts well with the passed-in color.
  * @param {string} firstColor The "primary" color
- * @return {string} CSS string for generated color
+ * @returns {string} CSS string for generated color
  */
 var style_path_generateSecondaryColor = function generateSecondaryColor(firstColor) {
   if (firstColor === MIXED) return null;
@@ -48826,7 +48821,7 @@ var style_path_generateSecondaryColor = function generateSecondaryColor(firstCol
  * @param {?paper.Point} [radialCenter] Where the center of a radial gradient should be, if the gradient is radial.
  * Defaults to center of bounds.
  * @param {number} [minSize] The minimum width/height of the gradient object.
- * @return {paper.Color} Color object with gradient, may be null or color string if the gradient type is solid
+ * @returns {paper.Color} Color object with gradient, may be null or color string if the gradient type is solid
  */
 var style_path_createGradientObject = function createGradientObject(color1, color2, gradientType, bounds, radialCenter, minSize) {
   if (gradientType === gradient_types.SOLID) return color1;
@@ -48896,7 +48891,7 @@ var style_path_createGradientObject = function createGradientObject(color1, colo
  *     When changing the color in this case, the solid gradient should override the existing gradient on the item.
  * @param {?boolean} applyToStroke True if changing the selection's stroke, false if changing its fill.
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
- * @return {boolean} Whether the color application actually changed visibly.
+ * @returns {boolean} Whether the color application actually changed visibly.
  */
 var style_path_applyColorToSelection = function applyColorToSelection(colorString, colorIndex, isSolidGradient, applyToStroke, textEditTargetId) {
   var items = style_path_getColorStateListeners(textEditTargetId);
@@ -48956,7 +48951,7 @@ var style_path_applyColorToSelection = function applyColorToSelection(colorStrin
  * Called to swap gradient colors
  * @param {?boolean} applyToStroke True if changing the selection's stroke, false if changing its fill.
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
- * @return {boolean} Whether the color application actually changed visibly.
+ * @returns {boolean} Whether the color application actually changed visibly.
  */
 var style_path_swapColorsInSelection = function swapColorsInSelection(applyToStroke, textEditTargetId) {
   var items = style_path_getColorStateListeners(textEditTargetId);
@@ -48998,7 +48993,7 @@ var style_path_swapColorsInSelection = function swapColorsInSelection(applyToStr
  * @param {GradientType} gradientType gradient type
  * @param {?boolean} applyToStroke True if changing the selection's stroke, false if changing its fill.
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
- * @return {boolean} Whether the color application actually changed visibly.
+ * @returns {boolean} Whether the color application actually changed visibly.
  */
 var style_path_applyGradientTypeToSelection = function applyGradientTypeToSelection(gradientType, applyToStroke, textEditTargetId) {
   var items = style_path_getColorStateListeners(textEditTargetId);
@@ -49112,7 +49107,7 @@ var style_path_applyGradientTypeToSelection = function applyGradientTypeToSelect
  * Called when setting stroke width
  * @param {number} value New stroke width
  * @param {?string} textEditTargetId paper.Item.id of text editing target, if any
- * @return {boolean} Whether the color application actually changed visibly.
+ * @returns {boolean} Whether the color application actually changed visibly.
  */
 var style_path_applyStrokeWidthToSelection = function applyStrokeWidthToSelection(value, textEditTargetId) {
   var changed = false;
@@ -49164,7 +49159,7 @@ var style_path_colorStateFromGradient = function _colorStateFromGradient(gradien
  * Get state of colors and stroke width for selection
  * @param {!Array<paper.Item>} selectedItems Selected paper items
  * @param {?boolean} bitmapMode True if the item is being selected in bitmap mode
- * @return {?object} Object of strokeColor, strokeWidth, fillColor, thickness of the selection.
+ * @returns {?object} Object of strokeColor, strokeWidth, fillColor, thickness of the selection.
  *     Gives MIXED when there are mixed values for a color, and null for transparent.
  *     Gives null when there are mixed values for stroke width.
  *     Thickness is line thickness, used in the bitmap editor
@@ -49595,7 +49590,7 @@ function brush_tool_setPrototypeOf(t, e) { return brush_tool_setPrototypeOf = Ob
  */
 var brush_tool_BrushTool = /*#__PURE__*/function (_paper$Tool) {
   /**
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    * @param {boolean} isEraser True if brush should erase
    */
   function BrushTool(onUpdateImage, isEraser) {
@@ -49903,7 +49898,7 @@ function line_tool_setPrototypeOf(t, e) { return line_tool_setPrototypeOf = Obje
  */
 var line_tool_LineTool = /*#__PURE__*/function (_paper$Tool) {
   /**
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function LineTool(onUpdateImage) {
     var _this;
@@ -50256,7 +50251,7 @@ var cursor_reducer = function reducer(state, action) {
 /**
  * Set the mouse cursor state to the given string
  * @param {string} cursorString The CSS cursor string.
- * @return {object} Redux action to change the cursor.
+ * @returns {object} Redux action to change the cursor.
  */
 var cursor_setCursor = function setCursor(cursorString) {
   return {
@@ -50288,7 +50283,7 @@ var MIN_SCALE_FACTOR = 0.0001;
 var scale_tool_ScaleTool = /*#__PURE__*/function () {
   /**
    * @param {Mode} mode Paint editor mode
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function ScaleTool(mode, onUpdateImage) {
     scale_tool_classCallCheck(this, ScaleTool);
@@ -50532,7 +50527,7 @@ function rotate_tool_toPrimitive(t, r) { if ("object" != rotate_tool_typeof(t) |
  */
 var rotate_tool_RotateTool = /*#__PURE__*/function () {
   /**
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function RotateTool(onUpdateImage) {
     rotate_tool_classCallCheck(this, RotateTool);
@@ -50625,8 +50620,8 @@ var move_tool_MoveTool = /*#__PURE__*/function () {
    * @param {Modes} mode Paint editor mode
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
-   * @param {?function} switchToTextTool A callback to call to switch to the text tool
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
+   * @param {?Function} switchToTextTool A callback to call to switch to the text tool
    */
   function MoveTool(mode, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool) {
     move_tool_classCallCheck(this, MoveTool);
@@ -50646,7 +50641,7 @@ var move_tool_MoveTool = /*#__PURE__*/function () {
    * @param {!paper.HitResult} hitProperties.hitResult Data about the location of the mouse click
    * @param {?boolean} hitProperties.clone Whether to clone on mouse down (e.g. alt key held)
    * @param {?boolean} hitProperties.multiselect Whether to multiselect on mouse down (e.g. shift key held)
-   * @param {?boolean} hitProperties.doubleClicked True if this is the second click in a short amout of time
+   * @param {?boolean} hitProperties.doubleClicked True if this is the second click in a short amount of time
    * @param {?boolean} hitProperties.subselect True if we allow selection of subgroups, false if we should
    *     select the whole group.
    */
@@ -50878,7 +50873,7 @@ var BoundingBoxModes = keymirror_default()({
  * On mouse down, the type of function (move, scale, rotate) is determined based on what is clicked
  * (scale handle, rotate handle, the object itself). This determines the mode of the tool, which then
  * delegates actions to the MoveTool, RotateTool or ScaleTool accordingly.
- * @param {!function} onUpdateImage A callback to call when the image visibly changes
+ * @param {!Function} onUpdateImage A callback to call when the image visibly changes
  */
 var bounding_box_tool_BoundingBoxTool = /*#__PURE__*/function () {
   /**
@@ -50886,8 +50881,8 @@ var bounding_box_tool_BoundingBoxTool = /*#__PURE__*/function () {
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
    * @param {function} setCursor Callback to set the visible mouse cursor
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
-   * @param {?function} switchToTextTool A callback to call to switch to the text tool
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
+   * @param {?Function} switchToTextTool A callback to call to switch to the text tool
    */
   function BoundingBoxTool(mode, setSelectedItems, clearSelectedItems, setCursor, onUpdateImage, switchToTextTool) {
     bounding_box_tool_classCallCheck(this, BoundingBoxTool);
@@ -50922,10 +50917,10 @@ var bounding_box_tool_BoundingBoxTool = /*#__PURE__*/function () {
      * @param {!MouseEvent} event The mouse event
      * @param {boolean} clone Whether to clone on mouse down (e.g. alt key held)
      * @param {boolean} multiselect Whether to multiselect on mouse down (e.g. shift key held)
-     * @param {?boolean} doubleClicked True if this is the second click in a short amout of time
+     * @param {?boolean} doubleClicked True if this is the second click in a short amount of time
      * @param {paper.hitOptions} hitOptions The options with which to detect whether mouse down has hit
      *     anything editable
-     * @return {boolean} True if there was a hit, false otherwise
+     * @returns {boolean} True if there was a hit, false otherwise
      */
   }, {
     key: "onMouseDown",
@@ -51239,7 +51234,7 @@ var nudge_tool_NudgeTool = /*#__PURE__*/function () {
   /**
    * @param {Mode} mode Paint editor mode
    * @param {function} boundingBoxTool to control the bounding box
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function NudgeTool(mode, boundingBoxTool, onUpdateImage) {
     nudge_tool_classCallCheck(this, NudgeTool);
@@ -51353,7 +51348,7 @@ var oval_tool_OvalTool = /*#__PURE__*/function (_paper$Tool) {
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
    * @param {function} setCursor Callback to set the visible mouse cursor
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function OvalTool(setSelectedItems, clearSelectedItems, setCursor, onUpdateImage) {
     var _this;
@@ -51769,7 +51764,7 @@ var rect_tool_RectTool = /*#__PURE__*/function (_paper$Tool) {
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
    * @param {function} setCursor Callback to set the visible mouse cursor
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function RectTool(setSelectedItems, clearSelectedItems, setCursor, onUpdateImage) {
     var _this;
@@ -52226,7 +52221,7 @@ var TRANSPARENT = 'rgba(0,0,0,0)';
  */
 var fill_tool_FillTool = /*#__PURE__*/function (_paper$Tool) {
   /**
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function FillTool(onUpdateImage) {
     var _this;
@@ -52769,7 +52764,7 @@ var select_tool_SelectTool = /*#__PURE__*/function (_paper$Tool) {
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
    * @param {function} setCursor Callback to set the visible mouse cursor
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function SelectTool(setSelectedItems, clearSelectedItems, setCursor, onUpdateImage) {
     var _this;
@@ -52814,7 +52809,7 @@ var select_tool_SelectTool = /*#__PURE__*/function (_paper$Tool) {
     }
     /**
      * Returns the hit options to use when conducting hit tests.
-     * @return {object} See paper.Item.hitTest for definition of options
+     * @returns {object} See paper.Item.hitTest for definition of options
      */
   }, {
     key: "getHitOptions",
@@ -53098,7 +53093,6 @@ function broad_brush_helper_toPrimitive(t, r) { if ("object" != broad_brush_help
  * Broad brush draws strokes by drawing points equidistant from the mouse event, perpendicular to the
  * direction of motion. Shortcomings are that this path can cross itself, and 180 degree turns result
  * in a flat edge.
- *
  * @param {!Tool} tool paper.js mouse object
  */
 var broad_brush_helper_BroadBrushHelper = /*#__PURE__*/function () {
@@ -53256,7 +53250,7 @@ var broad_brush_helper_BroadBrushHelper = /*#__PURE__*/function () {
      * Like paper.Path.unite, but it removes the original 2 paths
      * @param {paper.Path} path1 to merge
      * @param {paper.Path} path2 to merge
-     * @return {paper.Path} merged path. Original paths 1 and 2 will be removed from the view.
+     * @returns {paper.Path} merged path. Original paths 1 and 2 will be removed from the view.
      */
   }, {
     key: "union",
@@ -53360,7 +53354,6 @@ function segment_brush_helper_toPrimitive(t, r) { if ("object" != segment_brush_
  * worse, especially as the number of segments to join increase, and that there are problems in paper.js
  * with union on shapes with curves, so that chunks of the union tend to disappear.
  * (https://github.com/paperjs/paper.js/issues/1321)
- *
  * @param {!Tool} tool paper.js mouse object
  */
 var segment_brush_helper_SegmentBrushHelper = /*#__PURE__*/function () {
@@ -54364,7 +54357,7 @@ var no_fill = __webpack_require__(32);
 var no_fill_default = /*#__PURE__*/__webpack_require__.n(no_fill);
 
 // EXTERNAL MODULE: ./src/components/color-button/mixed-fill.svg
-var mixed_fill = __webpack_require__(36);
+var mixed_fill = __webpack_require__(35);
 var mixed_fill_default = /*#__PURE__*/__webpack_require__.n(mixed_fill);
 
 // EXTERNAL MODULE: ./src/components/color-button/color-button.css
@@ -55483,7 +55476,7 @@ function hover_arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.le
  * @param {?object} hitOptions hit options to use
  * @param {?boolean} subselect Whether items within groups can be hovered. If false, the
  *    entire group should be hovered.
- * @return {paper.Item} the hovered item or null if there is none
+ * @returns {paper.Item} the hovered item or null if there is none
  */
 var hover_getHoveredItem = function getHoveredItem(event, hitOptions, subselect) {
   var oldMatch = hitOptions.match;
@@ -55552,7 +55545,7 @@ var tools_fill_tool_FillTool = /*#__PURE__*/function (_paper$Tool) {
   /**
    * @param {function} setHoveredItem Callback to set the hovered item
    * @param {function} clearHoveredItem Callback to clear the hovered item
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function FillTool(setHoveredItem, clearHoveredItem, onUpdateImage) {
     var _this;
@@ -56023,7 +56016,7 @@ var fill_mode_mapDispatchToProps = function mapDispatchToProps(dispatch) {
  * @param {paper.Point} point1 point 1
  * @param {paper.Point} point2 point 2
  * @param {number} tolerance Distance allowed between points that are "touching"
- * @return {boolean} true if points are within the tolerance distance.
+ * @returns {boolean} true if points are within the tolerance distance.
  */
 var snapping_touching = function touching(point1, point2, tolerance) {
   return point1.getDistance(point2, true) < Math.pow(tolerance / paper_full_default.a.view.zoom, 2);
@@ -56034,7 +56027,7 @@ var snapping_touching = function touching(point1, point2, tolerance) {
  * @param {!number} tolerance Distance within which it counts as a hit
  * @param {?paper.Path} excludePath Path to exclude from hit test, if any. For instance, you
  *     are drawing a line and don't want it to snap to its own start point.
- * @return {object} data about the end point of an unclosed path, if any such point is within the
+ * @returns {object} data about the end point of an unclosed path, if any such point is within the
  *     tolerance distance of the given point, or null if none exists.
  */
 var snapping_endPointHit = function endPointHit(point, tolerance, excludePath) {
@@ -56799,7 +56792,7 @@ loupe_LoupeComponent.propTypes = {
 };
 /* harmony default export */ var loupe_loupe = (loupe_LoupeComponent);
 // EXTERNAL MODULE: ./node_modules/react-responsive/dist/react-responsive.js
-var react_responsive = __webpack_require__(37);
+var react_responsive = __webpack_require__(36);
 var react_responsive_default = /*#__PURE__*/__webpack_require__.n(react_responsive);
 
 // CONCATENATED MODULE: ./src/helper/order.js
@@ -57386,7 +57379,7 @@ var text_edit_target_reducer = function reducer(state, action) {
  * Set the currently-being-edited text field to the given item ID
  * @param {?number} textEditTargetId The paper.Item ID of the active text field.
  *     Leave empty if there is no text editing target.
- * @return {object} Redux action to change the text edit target.
+ * @returns {object} Redux action to change the text edit target.
  */
 var text_edit_target_setTextEditTarget = function setTextEditTarget(textEditTargetId) {
   return {
@@ -57422,7 +57415,7 @@ var layout_reducer = function reducer(state, action) {
 /**
  * Change the layout to the new layout
  * @param {string} layout either 'ltr' or 'rtl'
- * @return {object} Redux action to change the selected items.
+ * @returns {object} Redux action to change the selected items.
  */
 var layout_setLayout = function setLayout(layout) {
   return {
@@ -58827,14 +58820,14 @@ var mode_tools_ModeTools = /*#__PURE__*/function (_React$Component) {
             // Point is end point
             // Direction is average of normal at the point and direction to prev point, using the
             // normal that points out from the convex side
-            // Lenth is curve length * HANDLE_RATIO
+            // Length is curve length * HANDLE_RATIO
             var convexity = prev.getCurve().getCurvatureAtTime(.5) < 0 ? -1 : 1;
             point.handleIn = prev.getCurve().getNormalAtTime(1).multiply(convexity).add(prev.point.subtract(point.point).normalize()).normalize().multiply(prev.getCurve().length * HANDLE_RATIO);
           } else if (next && !prev && point.handleOut.length === 0) {
             // Point is start point
             // Direction is average of normal at the point and direction to prev point, using the
             // normal that points out from the convex side
-            // Lenth is curve length * HANDLE_RATIO
+            // Length is curve length * HANDLE_RATIO
             var _convexity = point.getCurve().getCurvatureAtTime(.5) < 0 ? -1 : 1;
             point.handleOut = point.getCurve().getNormalAtTime(0).multiply(_convexity).add(next.point.subtract(point.point).normalize()).normalize().multiply(point.getCurve().length * HANDLE_RATIO);
           }
@@ -58992,7 +58985,6 @@ mode_tools_ModeTools.propTypes = {
   onUpdateImage: prop_types_default.a.func.isRequired,
   // Listen on selected items to update hasSelectedPoints
   selectedItems: prop_types_default.a.arrayOf(prop_types_default.a.instanceOf(paper_full_default.a.Item)),
-  // eslint-disable-line react/no-unused-prop-types
   setSelectedItems: prop_types_default.a.func.isRequired
 };
 var containers_mode_tools_mapStateToProps = function mapStateToProps(state) {
@@ -59043,7 +59035,7 @@ var tools_oval_tool_OvalTool = /*#__PURE__*/function (_paper$Tool) {
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
    * @param {function} setCursor Callback to set the visible mouse cursor
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function OvalTool(setSelectedItems, clearSelectedItems, setCursor, onUpdateImage) {
     var _this;
@@ -59432,7 +59424,7 @@ var tools_rect_tool_RectTool = /*#__PURE__*/function (_paper$Tool) {
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
    * @param {function} setCursor Callback to set the visible mouse cursor
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function RectTool(setSelectedItems, clearSelectedItems, setCursor, onUpdateImage) {
     var _this;
@@ -59806,7 +59798,7 @@ var point_tool_PointTool = /*#__PURE__*/function () {
   /**
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function PointTool(setSelectedItems, clearSelectedItems, onUpdateImage) {
     point_tool_classCallCheck(this, PointTool);
@@ -60009,7 +60001,7 @@ var handle_tool_HandleTool = /*#__PURE__*/function () {
   /**
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
    */
   function HandleTool(setSelectedItems, clearSelectedItems, onUpdateImage) {
     handle_tool_classCallCheck(this, HandleTool);
@@ -60182,8 +60174,8 @@ var reshape_tool_ReshapeTool = /*#__PURE__*/function (_paper$Tool) {
    * @param {function} clearHoveredItem Callback to clear the hovered item
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
-   * @param {!function} switchToTextTool A callback to call to switch to the text tool
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} switchToTextTool A callback to call to switch to the text tool
    */
   function ReshapeTool(setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, onUpdateImage, switchToTextTool) {
     var _this;
@@ -60221,7 +60213,7 @@ var reshape_tool_ReshapeTool = /*#__PURE__*/function (_paper$Tool) {
    * Returns the hit options for segments to use when conducting hit tests. Segments are only visible
    * when the shape is selected. Segments take precedence, since they are always over curves and need
    * to be grabbable. (Segments are the little circles)
-   * @return {object} See paper.Item.hitTest for definition of options
+   * @returns {object} See paper.Item.hitTest for definition of options
    */
   reshape_tool_inherits(ReshapeTool, _paper$Tool);
   return reshape_tool_createClass(ReshapeTool, [{
@@ -60243,7 +60235,7 @@ var reshape_tool_ReshapeTool = /*#__PURE__*/function (_paper$Tool) {
      * Returns the hit options for handles to use when conducting hit tests. Handles need to be done
      * separately because we want to ignore hidden handles, but we don't want hidden handles to negate
      * legitimate hits on other things (like if the handle is over part of the fill). (Handles are the diamonds)
-     * @return {object} See paper.Item.hitTest for definition of options
+     * @returns {object} See paper.Item.hitTest for definition of options
      */
   }, {
     key: "getHandleHitOptions",
@@ -60266,7 +60258,7 @@ var reshape_tool_ReshapeTool = /*#__PURE__*/function (_paper$Tool) {
     /**
      * Returns the hit options for curves of selected objects, which take precedence over
      * unselected things and fills.
-     * @return {object} See paper.Item.hitTest for definition of options
+     * @returns {object} See paper.Item.hitTest for definition of options
      */
   }, {
     key: "getSelectedStrokeHitOptions",
@@ -60292,7 +60284,7 @@ var reshape_tool_ReshapeTool = /*#__PURE__*/function (_paper$Tool) {
      * Returns the hit options for fills and unselected strokes/curves to use when conducting hit tests.
      * @param {boolean} preselectedOnly True if we should only return results that are already
      *     selected.
-     * @return {object} See paper.Item.hitTest for definition of options
+     * @returns {object} See paper.Item.hitTest for definition of options
      */
   }, {
     key: "getUnselectedAndFillHitOptions",
@@ -60324,7 +60316,7 @@ var reshape_tool_ReshapeTool = /*#__PURE__*/function (_paper$Tool) {
     /**
      * Given the point at which the mouse is, return the prioritized hit result, or null if nothing was hit.
      * @param {paper.Point} point Point to hit test on canvas
-     * @return {?paper.HitResult} hitResult
+     * @returns {?paper.HitResult} hitResult
      */
   }, {
     key: "getHitResult",
@@ -60748,8 +60740,8 @@ var selection_tools_select_tool_SelectTool = /*#__PURE__*/function (_paper$Tool)
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
    * @param {function} setCursor Callback to set the visible mouse cursor
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
-   * @param {!function} switchToTextTool A callback to call to switch to the text tool
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} switchToTextTool A callback to call to switch to the text tool
    */
   function SelectTool(setHoveredItem, clearHoveredItem, setSelectedItems, clearSelectedItems, setCursor, onUpdateImage, switchToTextTool) {
     var _this;
@@ -60804,7 +60796,7 @@ var selection_tools_select_tool_SelectTool = /*#__PURE__*/function (_paper$Tool)
      * Returns the hit options to use when conducting hit tests.
      * @param {boolean} preselectedOnly True if we should only return results that are already
      *     selected.
-     * @return {object} See paper.Item.hitTest for definition of options
+     * @returns {object} See paper.Item.hitTest for definition of options
      */
   }, {
     key: "getHitOptions",
@@ -61323,9 +61315,9 @@ var text_tool_TextTool = /*#__PURE__*/function (_paper$Tool) {
    * @param {function} setSelectedItems Callback to set the set of selected items in the Redux state
    * @param {function} clearSelectedItems Callback to clear the set of selected items in the Redux state
    * @param {function} setCursor Callback to set the visible mouse cursor
-   * @param {!function} onUpdateImage A callback to call when the image visibly changes
-   * @param {!function} setTextEditTarget Call to set text editing target whenever text editing is active
-   * @param {!function} changeFont Call to change the font in the dropdown
+   * @param {!Function} onUpdateImage A callback to call when the image visibly changes
+   * @param {!Function} setTextEditTarget Call to set text editing target whenever text editing is active
+   * @param {!Function} changeFont Call to change the font in the dropdown
    * @param {?boolean} isBitmap True if text should be rasterized once it's deselected
    */
   function TextTool(textAreaElement, setSelectedItems, clearSelectedItems, setCursor, onUpdateImage, setTextEditTarget, changeFont, isBitmap) {
@@ -61479,7 +61471,7 @@ var text_tool_TextTool = /*#__PURE__*/function (_paper$Tool) {
       calculated.translate(tx, this.textBox.internalBounds.y);
       calculated.append(viewMtx);
       calculated.append(textBoxMtx);
-      this.element.style.transform = "matrix(".concat(calculated.a, ", ").concat(calculated.b, ", ").concat(calculated.c, ", ").concat(calculated.d, ",\n             ").concat(calculated.tx, ", ").concat(calculated.ty, ")");
+      this.element.style.transform = "matrix(".concat(calculated.a, ", ").concat(calculated.b, ", ").concat(calculated.c, ", ").concat(calculated.d, ",\n            ").concat(calculated.tx, ", ").concat(calculated.ty, ")");
     }
   }, {
     key: "setColorState",
@@ -62166,10 +62158,7 @@ var paint_editor_PaintEditorComponent = function PaintEditorComponent(props) {
     onUpdateImage: props.onUpdateImage
   }))) : null) : null, /*#__PURE__*/react_default.a.createElement("div", {
     className: paint_editor_default.a.topAlignRow
-  }, props.canvas !== null && isVector(props.format) ?
-  /*#__PURE__*/
-  // eslint-disable-line no-negated-condition
-  react_default.a.createElement("div", {
+  }, props.canvas !== null && isVector(props.format) ? /*#__PURE__*/react_default.a.createElement("div", {
     className: paint_editor_default.a.modeSelector
   }, /*#__PURE__*/react_default.a.createElement(containers_select_mode, {
     onUpdateImage: props.onUpdateImage
@@ -62190,10 +62179,7 @@ var paint_editor_PaintEditorComponent = function PaintEditorComponent(props) {
     onUpdateImage: props.onUpdateImage
   }), /*#__PURE__*/react_default.a.createElement(containers_rect_mode, {
     onUpdateImage: props.onUpdateImage
-  })) : null, props.canvas !== null && format_isBitmap(props.format) ?
-  /*#__PURE__*/
-  // eslint-disable-line no-negated-condition
-  react_default.a.createElement("div", {
+  })) : null, props.canvas !== null && format_isBitmap(props.format) ? /*#__PURE__*/react_default.a.createElement("div", {
     className: paint_editor_default.a.modeSelector
   }, /*#__PURE__*/react_default.a.createElement(containers_bit_brush_mode, {
     onUpdateImage: props.onUpdateImage
@@ -64135,7 +64121,7 @@ function applyMiddleware() {
 
 
 // EXTERNAL MODULE: ./node_modules/react-intl-redux/lib/index.js
-var react_intl_redux_lib = __webpack_require__(35);
+var react_intl_redux_lib = __webpack_require__(39);
 
 // CONCATENATED MODULE: ./node_modules/scratch-l10n/locales/paint-editor-msgs.js
 // GENERATED FILE:
@@ -67745,7 +67731,6 @@ var react_intl_redux_lib = __webpack_require__(35);
 // CONCATENATED MODULE: ./src/playground/reducers/intl.js
 
 
-
 var intlInitialState = {
   intl: {
     defaultLocale: 'en',
@@ -67790,6 +67775,7 @@ function playground_isNativeReflectConstruct() { try { var t = !Boolean.prototyp
 function playground_getPrototypeOf(t) { return playground_getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, playground_getPrototypeOf(t); }
 function playground_inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && playground_setPrototypeOf(t, e); }
 function playground_setPrototypeOf(t, e) { return playground_setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, playground_setPrototypeOf(t, e); }
+/* eslint-disable no-console, no-alert */
 
 
 
@@ -67815,7 +67801,7 @@ var playground_Playground = /*#__PURE__*/function (_React$Component) {
     lodash_bindall_default()(_this, ['downloadImage', 'handleUpdateName', 'handleUpdateImage', 'onUploadImage']);
     // Append ?dir=rtl to URL to get RTL layout
     var match = location.search.match(/dir=([^&]+)/);
-    var rtl = match && match[1] == 'rtl';
+    var rtl = match && match[1] === 'rtl';
     _this.id = 0;
     _this.state = {
       name: 'meow',
@@ -67941,7 +67927,7 @@ var playground_Playground = /*#__PURE__*/function (_React$Component) {
       } else if (type === 'png' || type === 'jpg') {
         reader.readAsDataURL(file);
       } else {
-        alert("Couldn't read file type: " + file.type);
+        alert("Couldn't read file type: ".concat(file.type));
       }
       var that = this;
       reader.onload = function (readerEvent) {
@@ -67952,8 +67938,8 @@ var playground_Playground = /*#__PURE__*/function (_React$Component) {
           name: file.name.split('.').slice(0, -1).join('.'),
           imageId: ++that.id,
           imageFormat: type,
-          rotationCenterX: undefined,
-          rotationCenterY: undefined
+          rotationCenterX: void 0,
+          rotationCenterY: void 0
         });
       };
     }
