@@ -24,7 +24,7 @@ jobs:
         - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         - uses: wagoid/commitlint-github-action@b948419dd99f3fd78a6548d48f94e3df7f6bf3ed # v6
           if: github.event_name == 'pull_request'
-        - uses: actions/setup-node@1a4442cacd436585916779262731d5b162bc6ec7 # v3
+        - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
           with:
             cache: "npm"
             node-version-file: ".nvmrc"
