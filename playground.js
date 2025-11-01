@@ -19668,7 +19668,7 @@ __webpack_require__.d(__webpack_exports__, "shallowEqual", function() { return /
 var shim = __webpack_require__(61);
 
 // EXTERNAL MODULE: ./node_modules/use-sync-external-store/shim/with-selector.js
-var with_selector = __webpack_require__(75);
+var with_selector = __webpack_require__(74);
 
 // EXTERNAL MODULE: ./node_modules/react-dom/index.js
 var react_dom = __webpack_require__(34);
@@ -19865,7 +19865,7 @@ var hoist_non_react_statics_cjs = __webpack_require__(31);
 var hoist_non_react_statics_cjs_default = /*#__PURE__*/__webpack_require__.n(hoist_non_react_statics_cjs);
 
 // EXTERNAL MODULE: ./node_modules/react-redux/node_modules/react-is/index.js
-var react_is = __webpack_require__(76);
+var react_is = __webpack_require__(75);
 
 // CONCATENATED MODULE: ./node_modules/react-redux/es/utils/warning.js
 /**
@@ -21054,93 +21054,6 @@ module.exports = content.locals || {};
 
 /***/ }),
 /* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return memoize; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return strategies; });
-//
-// Main
-//
-function memoize(fn, options) {
-    var cache = options && options.cache ? options.cache : cacheDefault;
-    var serializer = options && options.serializer ? options.serializer : serializerDefault;
-    var strategy = options && options.strategy ? options.strategy : strategyDefault;
-    return strategy(fn, {
-        cache: cache,
-        serializer: serializer,
-    });
-}
-//
-// Strategy
-//
-function isPrimitive(value) {
-    return (value == null || typeof value === 'number' || typeof value === 'boolean'); // || typeof value === "string" 'unsafe' primitive for our needs
-}
-function monadic(fn, cache, serializer, arg) {
-    var cacheKey = isPrimitive(arg) ? arg : serializer(arg);
-    var computedValue = cache.get(cacheKey);
-    if (typeof computedValue === 'undefined') {
-        computedValue = fn.call(this, arg);
-        cache.set(cacheKey, computedValue);
-    }
-    return computedValue;
-}
-function variadic(fn, cache, serializer) {
-    var args = Array.prototype.slice.call(arguments, 3);
-    var cacheKey = serializer(args);
-    var computedValue = cache.get(cacheKey);
-    if (typeof computedValue === 'undefined') {
-        computedValue = fn.apply(this, args);
-        cache.set(cacheKey, computedValue);
-    }
-    return computedValue;
-}
-function assemble(fn, context, strategy, cache, serialize) {
-    return strategy.bind(context, fn, cache, serialize);
-}
-function strategyDefault(fn, options) {
-    var strategy = fn.length === 1 ? monadic : variadic;
-    return assemble(fn, this, strategy, options.cache.create(), options.serializer);
-}
-function strategyVariadic(fn, options) {
-    return assemble(fn, this, variadic, options.cache.create(), options.serializer);
-}
-function strategyMonadic(fn, options) {
-    return assemble(fn, this, monadic, options.cache.create(), options.serializer);
-}
-//
-// Serializer
-//
-var serializerDefault = function () {
-    return JSON.stringify(arguments);
-};
-//
-// Cache
-//
-function ObjectWithoutPrototypeCache() {
-    this.cache = Object.create(null);
-}
-ObjectWithoutPrototypeCache.prototype.get = function (key) {
-    return this.cache[key];
-};
-ObjectWithoutPrototypeCache.prototype.set = function (key, value) {
-    this.cache[key] = value;
-};
-var cacheDefault = {
-    create: function create() {
-        // @ts-ignore
-        return new ObjectWithoutPrototypeCache();
-    },
-};
-var strategies = {
-    variadic: strategyVariadic,
-    monadic: strategyMonadic,
-};
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var api = __webpack_require__(14);
@@ -21164,7 +21077,7 @@ var update = api(content, options);
 module.exports = content.locals || {};
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21271,6 +21184,93 @@ var MissingTranslationError = /** @class */ (function (_super) {
 
 
 /***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return memoize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return strategies; });
+//
+// Main
+//
+function memoize(fn, options) {
+    var cache = options && options.cache ? options.cache : cacheDefault;
+    var serializer = options && options.serializer ? options.serializer : serializerDefault;
+    var strategy = options && options.strategy ? options.strategy : strategyDefault;
+    return strategy(fn, {
+        cache: cache,
+        serializer: serializer,
+    });
+}
+//
+// Strategy
+//
+function isPrimitive(value) {
+    return (value == null || typeof value === 'number' || typeof value === 'boolean'); // || typeof value === "string" 'unsafe' primitive for our needs
+}
+function monadic(fn, cache, serializer, arg) {
+    var cacheKey = isPrimitive(arg) ? arg : serializer(arg);
+    var computedValue = cache.get(cacheKey);
+    if (typeof computedValue === 'undefined') {
+        computedValue = fn.call(this, arg);
+        cache.set(cacheKey, computedValue);
+    }
+    return computedValue;
+}
+function variadic(fn, cache, serializer) {
+    var args = Array.prototype.slice.call(arguments, 3);
+    var cacheKey = serializer(args);
+    var computedValue = cache.get(cacheKey);
+    if (typeof computedValue === 'undefined') {
+        computedValue = fn.apply(this, args);
+        cache.set(cacheKey, computedValue);
+    }
+    return computedValue;
+}
+function assemble(fn, context, strategy, cache, serialize) {
+    return strategy.bind(context, fn, cache, serialize);
+}
+function strategyDefault(fn, options) {
+    var strategy = fn.length === 1 ? monadic : variadic;
+    return assemble(fn, this, strategy, options.cache.create(), options.serializer);
+}
+function strategyVariadic(fn, options) {
+    return assemble(fn, this, variadic, options.cache.create(), options.serializer);
+}
+function strategyMonadic(fn, options) {
+    return assemble(fn, this, monadic, options.cache.create(), options.serializer);
+}
+//
+// Serializer
+//
+var serializerDefault = function () {
+    return JSON.stringify(arguments);
+};
+//
+// Cache
+//
+function ObjectWithoutPrototypeCache() {
+    this.cache = Object.create(null);
+}
+ObjectWithoutPrototypeCache.prototype.get = function (key) {
+    return this.cache[key];
+};
+ObjectWithoutPrototypeCache.prototype.set = function (key, value) {
+    this.cache[key] = value;
+};
+var cacheDefault = {
+    create: function create() {
+        // @ts-ignore
+        return new ObjectWithoutPrototypeCache();
+    },
+};
+var strategies = {
+    variadic: strategyVariadic,
+    monadic: strategyMonadic,
+};
+//# sourceMappingURL=index.js.map
+
+/***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -21306,8 +21306,8 @@ module.exports = content.locals || {};
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getNamedFormat; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
 /* harmony import */ var intl_messageformat__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(189);
-/* harmony import */ var _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9);
-/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(11);
+/* harmony import */ var _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(11);
+/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(10);
 
 
 
@@ -21845,31 +21845,310 @@ function toComment(sourceMap) {
 
 /***/ }),
 /* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(14);
+            var content = __webpack_require__(173);
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+
+
+module.exports = content.locals || {};
+
+/***/ }),
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
-__webpack_require__.d(__webpack_exports__, "m", function() { return /* binding */ parse; });
-__webpack_require__.d(__webpack_exports__, "a", function() { return /* reexport */ TYPE; });
-__webpack_require__.d(__webpack_exports__, "e", function() { return /* reexport */ isLiteralElement; });
-__webpack_require__.d(__webpack_exports__, "b", function() { return /* reexport */ isArgumentElement; });
-__webpack_require__.d(__webpack_exports__, "f", function() { return /* reexport */ isNumberElement; });
-__webpack_require__.d(__webpack_exports__, "c", function() { return /* reexport */ isDateElement; });
-__webpack_require__.d(__webpack_exports__, "l", function() { return /* reexport */ isTimeElement; });
-__webpack_require__.d(__webpack_exports__, "j", function() { return /* reexport */ isSelectElement; });
-__webpack_require__.d(__webpack_exports__, "h", function() { return /* reexport */ isPluralElement; });
-__webpack_require__.d(__webpack_exports__, "i", function() { return /* reexport */ isPoundElement; });
-__webpack_require__.d(__webpack_exports__, "k", function() { return /* reexport */ isTagElement; });
-__webpack_require__.d(__webpack_exports__, "g", function() { return /* reexport */ isNumberSkeleton; });
-__webpack_require__.d(__webpack_exports__, "d", function() { return /* reexport */ isDateTimeSkeleton; });
-
-// UNUSED EXPORTS: SKELETON_TYPE, createLiteralElement, createNumberElement, _Parser
+__webpack_require__.d(__webpack_exports__, "FormattedDateTimeRange", function() { return /* reexport */ dateTimeRange; });
+__webpack_require__.d(__webpack_exports__, "FormattedMessage", function() { return /* reexport */ components_message["a" /* default */]; });
+__webpack_require__.d(__webpack_exports__, "FormattedPlural", function() { return /* reexport */ plural; });
+__webpack_require__.d(__webpack_exports__, "FormattedRelativeTime", function() { return /* reexport */ relative; });
+__webpack_require__.d(__webpack_exports__, "IntlContext", function() { return /* reexport */ injectIntl["a" /* Context */]; });
+__webpack_require__.d(__webpack_exports__, "IntlProvider", function() { return /* reexport */ provider; });
+__webpack_require__.d(__webpack_exports__, "RawIntlProvider", function() { return /* reexport */ injectIntl["b" /* Provider */]; });
+__webpack_require__.d(__webpack_exports__, "createIntl", function() { return /* reexport */ createIntl_createIntl; });
+__webpack_require__.d(__webpack_exports__, "injectIntl", function() { return /* reexport */ injectIntl["c" /* default */]; });
+__webpack_require__.d(__webpack_exports__, "useIntl", function() { return /* reexport */ useIntl["a" /* default */]; });
+__webpack_require__.d(__webpack_exports__, "createIntlCache", function() { return /* reexport */ utils["c" /* createIntlCache */]; });
+__webpack_require__.d(__webpack_exports__, "UnsupportedFormatterError", function() { return /* reexport */ src_error["h" /* UnsupportedFormatterError */]; });
+__webpack_require__.d(__webpack_exports__, "InvalidConfigError", function() { return /* reexport */ src_error["d" /* InvalidConfigError */]; });
+__webpack_require__.d(__webpack_exports__, "MissingDataError", function() { return /* reexport */ src_error["f" /* MissingDataError */]; });
+__webpack_require__.d(__webpack_exports__, "MessageFormatError", function() { return /* reexport */ src_error["e" /* MessageFormatError */]; });
+__webpack_require__.d(__webpack_exports__, "MissingTranslationError", function() { return /* reexport */ src_error["g" /* MissingTranslationError */]; });
+__webpack_require__.d(__webpack_exports__, "ReactIntlErrorCode", function() { return /* reexport */ src_error["b" /* IntlErrorCode */]; });
+__webpack_require__.d(__webpack_exports__, "ReactIntlError", function() { return /* reexport */ src_error["a" /* IntlError */]; });
+__webpack_require__.d(__webpack_exports__, "defineMessages", function() { return /* binding */ defineMessages; });
+__webpack_require__.d(__webpack_exports__, "defineMessage", function() { return /* binding */ defineMessage; });
+__webpack_require__.d(__webpack_exports__, "FormattedDate", function() { return /* binding */ FormattedDate; });
+__webpack_require__.d(__webpack_exports__, "FormattedTime", function() { return /* binding */ FormattedTime; });
+__webpack_require__.d(__webpack_exports__, "FormattedNumber", function() { return /* binding */ FormattedNumber; });
+__webpack_require__.d(__webpack_exports__, "FormattedList", function() { return /* binding */ FormattedList; });
+__webpack_require__.d(__webpack_exports__, "FormattedDisplayName", function() { return /* binding */ FormattedDisplayName; });
+__webpack_require__.d(__webpack_exports__, "FormattedDateParts", function() { return /* binding */ FormattedDateParts; });
+__webpack_require__.d(__webpack_exports__, "FormattedTimeParts", function() { return /* binding */ FormattedTimeParts; });
+__webpack_require__.d(__webpack_exports__, "FormattedNumberParts", function() { return /* reexport */ createFormattedComponent_FormattedNumberParts; });
+__webpack_require__.d(__webpack_exports__, "FormattedListParts", function() { return /* reexport */ createFormattedComponent_FormattedListParts; });
 
 // EXTERNAL MODULE: ./node_modules/tslib/tslib.es6.js
 var tslib_es6 = __webpack_require__(3);
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-messageformat-parser/lib/error.js
+// EXTERNAL MODULE: ./node_modules/react/index.js
+var react = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./node_modules/react-intl/lib/src/components/useIntl.js
+var useIntl = __webpack_require__(19);
+
+// CONCATENATED MODULE: ./node_modules/react-intl/lib/src/components/createFormattedComponent.js
+
+
+
+var DisplayName;
+(function (DisplayName) {
+  DisplayName["formatDate"] = "FormattedDate";
+  DisplayName["formatTime"] = "FormattedTime";
+  DisplayName["formatNumber"] = "FormattedNumber";
+  DisplayName["formatList"] = "FormattedList";
+  // Note that this DisplayName is the locale display name, not to be confused with
+  // the name of the enum, which is for React component display name in dev tools.
+  DisplayName["formatDisplayName"] = "FormattedDisplayName";
+})(DisplayName || (DisplayName = {}));
+var DisplayNameParts;
+(function (DisplayNameParts) {
+  DisplayNameParts["formatDate"] = "FormattedDateParts";
+  DisplayNameParts["formatTime"] = "FormattedTimeParts";
+  DisplayNameParts["formatNumber"] = "FormattedNumberParts";
+  DisplayNameParts["formatList"] = "FormattedListParts";
+})(DisplayNameParts || (DisplayNameParts = {}));
+var createFormattedComponent_FormattedNumberParts = function FormattedNumberParts(props) {
+  var intl = Object(useIntl["a" /* default */])();
+  var value = props.value,
+    children = props.children,
+    formatProps = Object(tslib_es6["c" /* __rest */])(props, ["value", "children"]);
+  return children(intl.formatNumberToParts(value, formatProps));
+};
+createFormattedComponent_FormattedNumberParts.displayName = 'FormattedNumberParts';
+var createFormattedComponent_FormattedListParts = function FormattedListParts(props) {
+  var intl = Object(useIntl["a" /* default */])();
+  var value = props.value,
+    children = props.children,
+    formatProps = Object(tslib_es6["c" /* __rest */])(props, ["value", "children"]);
+  return children(intl.formatListToParts(value, formatProps));
+};
+createFormattedComponent_FormattedNumberParts.displayName = 'FormattedNumberParts';
+function createFormattedDateTimePartsComponent(name) {
+  var ComponentParts = function ComponentParts(props) {
+    var intl = Object(useIntl["a" /* default */])();
+    var value = props.value,
+      children = props.children,
+      formatProps = Object(tslib_es6["c" /* __rest */])(props, ["value", "children"]);
+    var date = typeof value === 'string' ? new Date(value || 0) : value;
+    var formattedParts = name === 'formatDate' ? intl.formatDateToParts(date, formatProps) : intl.formatTimeToParts(date, formatProps);
+    return children(formattedParts);
+  };
+  ComponentParts.displayName = DisplayNameParts[name];
+  return ComponentParts;
+}
+function createFormattedComponent(name) {
+  var Component = function Component(props) {
+    var intl = Object(useIntl["a" /* default */])();
+    var value = props.value,
+      children = props.children,
+      formatProps = Object(tslib_es6["c" /* __rest */])(props
+      // TODO: fix TS type definition for localeMatcher upstream
+      , ["value", "children"]);
+    // TODO: fix TS type definition for localeMatcher upstream
+    var formattedValue = intl[name](value, formatProps);
+    if (typeof children === 'function') {
+      return children(formattedValue);
+    }
+    var Text = intl.textComponent || react["Fragment"];
+    return /*#__PURE__*/react["createElement"](Text, null, formattedValue);
+  };
+  Component.displayName = DisplayName[name];
+  return Component;
+}
+// EXTERNAL MODULE: ./node_modules/react-intl/lib/src/components/injectIntl.js
+var injectIntl = __webpack_require__(24);
+
+// EXTERNAL MODULE: ./node_modules/@formatjs/intl/lib/src/utils.js
+var utils = __webpack_require__(13);
+
+// EXTERNAL MODULE: ./node_modules/react-intl/lib/src/utils.js
+var src_utils = __webpack_require__(20);
+
+// EXTERNAL MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/fast-memoize/lib/index.js
+var lib = __webpack_require__(11);
+
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/ecma402-abstract/lib/utils.js
+
+
+/**
+ * Cannot do Math.log(x) / Math.log(10) bc if IEEE floating point issue
+ * @param x number
+ */
+function getMagnitude(x) {
+    // Cannot count string length via Number.toString because it may use scientific notation
+    // for very small or very large numbers.
+    return Math.floor(Math.log(x) * Math.LOG10E);
+}
+function repeat(s, times) {
+    if (typeof s.repeat === 'function') {
+        return s.repeat(times);
+    }
+    var arr = new Array(times);
+    for (var i = 0; i < arr.length; i++) {
+        arr[i] = s;
+    }
+    return arr.join('');
+}
+function setInternalSlot(map, pl, field, value) {
+    if (!map.get(pl)) {
+        map.set(pl, Object.create(null));
+    }
+    var slots = map.get(pl);
+    slots[field] = value;
+}
+function setMultiInternalSlots(map, pl, props) {
+    for (var _i = 0, _a = Object.keys(props); _i < _a.length; _i++) {
+        var k = _a[_i];
+        setInternalSlot(map, pl, k, props[k]);
+    }
+}
+function getInternalSlot(map, pl, field) {
+    return getMultiInternalSlots(map, pl, field)[field];
+}
+function getMultiInternalSlots(map, pl) {
+    var fields = [];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        fields[_i - 2] = arguments[_i];
+    }
+    var slots = map.get(pl);
+    if (!slots) {
+        throw new TypeError("".concat(pl, " InternalSlot has not been initialized"));
+    }
+    return fields.reduce(function (all, f) {
+        all[f] = slots[f];
+        return all;
+    }, Object.create(null));
+}
+function isLiteralPart(patternPart) {
+    return patternPart.type === 'literal';
+}
+/*
+  17 ECMAScript Standard Built-in Objects:
+    Every built-in Function object, including constructors, that is not
+    identified as an anonymous function has a name property whose value
+    is a String.
+
+    Unless otherwise specified, the name property of a built-in Function
+    object, if it exists, has the attributes { [[Writable]]: false,
+    [[Enumerable]]: false, [[Configurable]]: true }.
+*/
+function defineProperty(target, name, _a) {
+    var value = _a.value;
+    Object.defineProperty(target, name, {
+        configurable: true,
+        enumerable: false,
+        writable: true,
+        value: value,
+    });
+}
+/**
+ * 7.3.5 CreateDataProperty
+ * @param target
+ * @param name
+ * @param value
+ */
+function createDataProperty(target, name, value) {
+    Object.defineProperty(target, name, {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: value,
+    });
+}
+var UNICODE_EXTENSION_SEQUENCE_REGEX = /-u(?:-[0-9a-z]{2,8})+/gi;
+function invariant(condition, message, Err) {
+    if (Err === void 0) { Err = Error; }
+    if (!condition) {
+        throw new Err(message);
+    }
+}
+var createMemoizedNumberFormat = Object(lib["a" /* memoize */])(function () {
+    var _a;
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return new ((_a = Intl.NumberFormat).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
+}, {
+    strategy: lib["b" /* strategies */].variadic,
+});
+var createMemoizedDateTimeFormat = Object(lib["a" /* memoize */])(function () {
+    var _a;
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return new ((_a = Intl.DateTimeFormat).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
+}, {
+    strategy: lib["b" /* strategies */].variadic,
+});
+var createMemoizedPluralRules = Object(lib["a" /* memoize */])(function () {
+    var _a;
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return new ((_a = Intl.PluralRules).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
+}, {
+    strategy: lib["b" /* strategies */].variadic,
+});
+var createMemoizedLocale = Object(lib["a" /* memoize */])(function () {
+    var _a;
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return new ((_a = Intl.Locale).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
+}, {
+    strategy: lib["b" /* strategies */].variadic,
+});
+var createMemoizedListFormat = Object(lib["a" /* memoize */])(function () {
+    var _a;
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return new ((_a = Intl.ListFormat).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
+}, {
+    strategy: lib["b" /* strategies */].variadic,
+});
+
+// EXTERNAL MODULE: ./node_modules/intl-messageformat/lib/src/core.js + 1 modules
+var core = __webpack_require__(189);
+
+// EXTERNAL MODULE: ./node_modules/@formatjs/intl/lib/src/error.js
+var src_error = __webpack_require__(10);
+
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-messageformat-parser/lib/error.js
 var ErrorKind;
 (function (ErrorKind) {
     /** Argument is unclosed (e.g. `{0`) */
@@ -21934,7 +22213,7 @@ var ErrorKind;
     ErrorKind[ErrorKind["UNCLOSED_TAG"] = 27] = "UNCLOSED_TAG";
 })(ErrorKind || (ErrorKind = {}));
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-messageformat-parser/lib/types.js
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-messageformat-parser/lib/types.js
 var TYPE;
 (function (TYPE) {
     /**
@@ -22030,12 +22309,12 @@ function createNumberElement(value, style) {
     };
 }
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-messageformat-parser/lib/regex.generated.js
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-messageformat-parser/lib/regex.generated.js
 // @generated from regex-gen.ts
 var SPACE_SEPARATOR_REGEX = /[ \xA0\u1680\u2000-\u200A\u202F\u205F\u3000]/;
 var WHITE_SPACE_REGEX = /[\t-\r \x85\u200E\u200F\u2028\u2029]/;
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-skeleton-parser/lib/date-time.js
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-skeleton-parser/lib/date-time.js
 /**
  * https://unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
  * Credit: https://github.com/caridy/intl-datetimeformat-pattern/blob/master/index.js
@@ -22158,11 +22437,11 @@ function parseDateTimeSkeleton(skeleton) {
     return result;
 }
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-skeleton-parser/lib/regex.generated.js
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-skeleton-parser/lib/regex.generated.js
 // @generated from regex-gen.ts
 var regex_generated_WHITE_SPACE_REGEX = /[\t-\r \x85\u200E\u200F\u2028\u2029]/i;
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-skeleton-parser/lib/number.js
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-skeleton-parser/lib/number.js
 
 
 function parseNumberSkeletonFromString(skeleton) {
@@ -22480,11 +22759,11 @@ function parseNumberSkeleton(tokens) {
     return result;
 }
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-skeleton-parser/lib/index.js
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-skeleton-parser/lib/index.js
 
 
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-messageformat-parser/lib/time-data.generated.js
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-messageformat-parser/lib/time-data.generated.js
 // @generated from time-data-gen.ts
 // prettier-ignore  
 var timeData = {
@@ -23903,7 +24182,7 @@ var timeData = {
     ]
 };
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-messageformat-parser/lib/date-time-pattern-generator.js
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-messageformat-parser/lib/date-time-pattern-generator.js
 
 /**
  * Returns the best matching date time pattern if a date time skeleton
@@ -23988,7 +24267,7 @@ function getDefaultHourSymbolFromLocale(locale) {
     return hourCycles[0];
 }
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-messageformat-parser/lib/parser.js
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-messageformat-parser/lib/parser.js
 var parser_a;
 
 
@@ -25266,7 +25545,7 @@ function _isPatternSyntax(c) {
         (c >= 0xfe45 && c <= 0xfe46));
 }
 
-// CONCATENATED MODULE: ./node_modules/@formatjs/icu-messageformat-parser/lib/index.js
+// CONCATENATED MODULE: ./node_modules/@formatjs/intl/node_modules/@formatjs/icu-messageformat-parser/lib/index.js
 
 
 
@@ -25313,169 +25592,6 @@ function parse(message, opts) {
 // only for testing
 var _Parser = parser_Parser;
 
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var api = __webpack_require__(14);
-            var content = __webpack_require__(173);
-
-            content = content.__esModule ? content.default : content;
-
-            if (typeof content === 'string') {
-              content = [[module.i, content, '']];
-            }
-
-var options = {};
-
-options.insert = "head";
-options.singleton = false;
-
-var update = api(content, options);
-
-
-
-module.exports = content.locals || {};
-
-/***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// EXPORTS
-__webpack_require__.d(__webpack_exports__, "FormattedDateTimeRange", function() { return /* reexport */ dateTimeRange; });
-__webpack_require__.d(__webpack_exports__, "FormattedMessage", function() { return /* reexport */ components_message["a" /* default */]; });
-__webpack_require__.d(__webpack_exports__, "FormattedPlural", function() { return /* reexport */ plural; });
-__webpack_require__.d(__webpack_exports__, "FormattedRelativeTime", function() { return /* reexport */ relative; });
-__webpack_require__.d(__webpack_exports__, "IntlContext", function() { return /* reexport */ injectIntl["a" /* Context */]; });
-__webpack_require__.d(__webpack_exports__, "IntlProvider", function() { return /* reexport */ provider; });
-__webpack_require__.d(__webpack_exports__, "RawIntlProvider", function() { return /* reexport */ injectIntl["b" /* Provider */]; });
-__webpack_require__.d(__webpack_exports__, "createIntl", function() { return /* reexport */ createIntl_createIntl; });
-__webpack_require__.d(__webpack_exports__, "injectIntl", function() { return /* reexport */ injectIntl["c" /* default */]; });
-__webpack_require__.d(__webpack_exports__, "useIntl", function() { return /* reexport */ useIntl["a" /* default */]; });
-__webpack_require__.d(__webpack_exports__, "createIntlCache", function() { return /* reexport */ utils["c" /* createIntlCache */]; });
-__webpack_require__.d(__webpack_exports__, "UnsupportedFormatterError", function() { return /* reexport */ error["h" /* UnsupportedFormatterError */]; });
-__webpack_require__.d(__webpack_exports__, "InvalidConfigError", function() { return /* reexport */ error["d" /* InvalidConfigError */]; });
-__webpack_require__.d(__webpack_exports__, "MissingDataError", function() { return /* reexport */ error["f" /* MissingDataError */]; });
-__webpack_require__.d(__webpack_exports__, "MessageFormatError", function() { return /* reexport */ error["e" /* MessageFormatError */]; });
-__webpack_require__.d(__webpack_exports__, "MissingTranslationError", function() { return /* reexport */ error["g" /* MissingTranslationError */]; });
-__webpack_require__.d(__webpack_exports__, "ReactIntlErrorCode", function() { return /* reexport */ error["b" /* IntlErrorCode */]; });
-__webpack_require__.d(__webpack_exports__, "ReactIntlError", function() { return /* reexport */ error["a" /* IntlError */]; });
-__webpack_require__.d(__webpack_exports__, "defineMessages", function() { return /* binding */ defineMessages; });
-__webpack_require__.d(__webpack_exports__, "defineMessage", function() { return /* binding */ defineMessage; });
-__webpack_require__.d(__webpack_exports__, "FormattedDate", function() { return /* binding */ FormattedDate; });
-__webpack_require__.d(__webpack_exports__, "FormattedTime", function() { return /* binding */ FormattedTime; });
-__webpack_require__.d(__webpack_exports__, "FormattedNumber", function() { return /* binding */ FormattedNumber; });
-__webpack_require__.d(__webpack_exports__, "FormattedList", function() { return /* binding */ FormattedList; });
-__webpack_require__.d(__webpack_exports__, "FormattedDisplayName", function() { return /* binding */ FormattedDisplayName; });
-__webpack_require__.d(__webpack_exports__, "FormattedDateParts", function() { return /* binding */ FormattedDateParts; });
-__webpack_require__.d(__webpack_exports__, "FormattedTimeParts", function() { return /* binding */ FormattedTimeParts; });
-__webpack_require__.d(__webpack_exports__, "FormattedNumberParts", function() { return /* reexport */ createFormattedComponent_FormattedNumberParts; });
-__webpack_require__.d(__webpack_exports__, "FormattedListParts", function() { return /* reexport */ createFormattedComponent_FormattedListParts; });
-
-// EXTERNAL MODULE: ./node_modules/tslib/tslib.es6.js
-var tslib_es6 = __webpack_require__(3);
-
-// EXTERNAL MODULE: ./node_modules/react/index.js
-var react = __webpack_require__(2);
-
-// EXTERNAL MODULE: ./node_modules/react-intl/lib/src/components/useIntl.js
-var useIntl = __webpack_require__(19);
-
-// CONCATENATED MODULE: ./node_modules/react-intl/lib/src/components/createFormattedComponent.js
-
-
-
-var DisplayName;
-(function (DisplayName) {
-  DisplayName["formatDate"] = "FormattedDate";
-  DisplayName["formatTime"] = "FormattedTime";
-  DisplayName["formatNumber"] = "FormattedNumber";
-  DisplayName["formatList"] = "FormattedList";
-  // Note that this DisplayName is the locale display name, not to be confused with
-  // the name of the enum, which is for React component display name in dev tools.
-  DisplayName["formatDisplayName"] = "FormattedDisplayName";
-})(DisplayName || (DisplayName = {}));
-var DisplayNameParts;
-(function (DisplayNameParts) {
-  DisplayNameParts["formatDate"] = "FormattedDateParts";
-  DisplayNameParts["formatTime"] = "FormattedTimeParts";
-  DisplayNameParts["formatNumber"] = "FormattedNumberParts";
-  DisplayNameParts["formatList"] = "FormattedListParts";
-})(DisplayNameParts || (DisplayNameParts = {}));
-var createFormattedComponent_FormattedNumberParts = function FormattedNumberParts(props) {
-  var intl = Object(useIntl["a" /* default */])();
-  var value = props.value,
-    children = props.children,
-    formatProps = Object(tslib_es6["c" /* __rest */])(props, ["value", "children"]);
-  return children(intl.formatNumberToParts(value, formatProps));
-};
-createFormattedComponent_FormattedNumberParts.displayName = 'FormattedNumberParts';
-var createFormattedComponent_FormattedListParts = function FormattedListParts(props) {
-  var intl = Object(useIntl["a" /* default */])();
-  var value = props.value,
-    children = props.children,
-    formatProps = Object(tslib_es6["c" /* __rest */])(props, ["value", "children"]);
-  return children(intl.formatListToParts(value, formatProps));
-};
-createFormattedComponent_FormattedNumberParts.displayName = 'FormattedNumberParts';
-function createFormattedDateTimePartsComponent(name) {
-  var ComponentParts = function ComponentParts(props) {
-    var intl = Object(useIntl["a" /* default */])();
-    var value = props.value,
-      children = props.children,
-      formatProps = Object(tslib_es6["c" /* __rest */])(props, ["value", "children"]);
-    var date = typeof value === 'string' ? new Date(value || 0) : value;
-    var formattedParts = name === 'formatDate' ? intl.formatDateToParts(date, formatProps) : intl.formatTimeToParts(date, formatProps);
-    return children(formattedParts);
-  };
-  ComponentParts.displayName = DisplayNameParts[name];
-  return ComponentParts;
-}
-function createFormattedComponent(name) {
-  var Component = function Component(props) {
-    var intl = Object(useIntl["a" /* default */])();
-    var value = props.value,
-      children = props.children,
-      formatProps = Object(tslib_es6["c" /* __rest */])(props
-      // TODO: fix TS type definition for localeMatcher upstream
-      , ["value", "children"]);
-    // TODO: fix TS type definition for localeMatcher upstream
-    var formattedValue = intl[name](value, formatProps);
-    if (typeof children === 'function') {
-      return children(formattedValue);
-    }
-    var Text = intl.textComponent || react["Fragment"];
-    return /*#__PURE__*/react["createElement"](Text, null, formattedValue);
-  };
-  Component.displayName = DisplayName[name];
-  return Component;
-}
-// EXTERNAL MODULE: ./node_modules/react-intl/lib/src/components/injectIntl.js
-var injectIntl = __webpack_require__(24);
-
-// EXTERNAL MODULE: ./node_modules/@formatjs/intl/lib/src/utils.js
-var utils = __webpack_require__(13);
-
-// EXTERNAL MODULE: ./node_modules/react-intl/lib/src/utils.js
-var src_utils = __webpack_require__(20);
-
-// EXTERNAL MODULE: ./node_modules/@formatjs/ecma402-abstract/lib/utils.js
-var lib_utils = __webpack_require__(188);
-
-// EXTERNAL MODULE: ./node_modules/intl-messageformat/lib/src/core.js
-var core = __webpack_require__(189);
-
-// EXTERNAL MODULE: ./node_modules/@formatjs/intl/lib/src/error.js
-var error = __webpack_require__(11);
-
-// EXTERNAL MODULE: ./node_modules/@formatjs/icu-messageformat-parser/lib/index.js + 10 modules
-var lib = __webpack_require__(16);
-
 // CONCATENATED MODULE: ./node_modules/@formatjs/intl/lib/src/message.js
 
 
@@ -25507,7 +25623,7 @@ var message_formatMessage = function (_a, state, messageDescriptor, values, opts
     if (messageDescriptor === void 0) { messageDescriptor = { id: '' }; }
     var msgId = messageDescriptor.id, defaultMessage = messageDescriptor.defaultMessage;
     // `id` is a required field of a Message Descriptor.
-    Object(lib_utils["a" /* invariant */])(!!msgId, "[@formatjs/intl] An `id` must be provided to format a message. You can either:\n1. Configure your build toolchain with [babel-plugin-formatjs](https://formatjs.io/docs/tooling/babel-plugin)\nor [@formatjs/ts-transformer](https://formatjs.io/docs/tooling/ts-transformer) OR\n2. Configure your `eslint` config to include [eslint-plugin-formatjs](https://formatjs.io/docs/tooling/linter#enforce-id)\nto autofix this issue");
+    invariant(!!msgId, "[@formatjs/intl] An `id` must be provided to format a message. You can either:\n1. Configure your build toolchain with [babel-plugin-formatjs](https://formatjs.io/docs/tooling/babel-plugin)\nor [@formatjs/ts-transformer](https://formatjs.io/docs/tooling/ts-transformer) OR\n2. Configure your `eslint` config to include [eslint-plugin-formatjs](https://formatjs.io/docs/tooling/linter#enforce-id)\nto autofix this issue");
     var id = String(msgId);
     var message = 
     // In case messages is Object.create(null)
@@ -25519,7 +25635,7 @@ var message_formatMessage = function (_a, state, messageDescriptor, values, opts
     // IMPORTANT: Hot path if `message` is AST with a single literal node
     if (Array.isArray(message) &&
         message.length === 1 &&
-        message[0].type === lib["a" /* TYPE */].literal) {
+        message[0].type === TYPE.literal) {
         return message[0].value;
     }
     // IMPORTANT: Hot path straight lookup for performance
@@ -25541,7 +25657,7 @@ var message_formatMessage = function (_a, state, messageDescriptor, values, opts
             // This prevents warnings from littering the console in development
             // when no `messages` are passed into the <IntlProvider> for the
             // default locale.
-            onError(new error["g" /* MissingTranslationError */](messageDescriptor, locale));
+            onError(new src_error["g" /* MissingTranslationError */](messageDescriptor, locale));
         }
         if (defaultMessage) {
             try {
@@ -25549,7 +25665,7 @@ var message_formatMessage = function (_a, state, messageDescriptor, values, opts
                 return formatter.format(values);
             }
             catch (e) {
-                onError(new error["e" /* MessageFormatError */]("Error formatting default message for: \"".concat(id, "\", rendering default message verbatim"), locale, messageDescriptor, e));
+                onError(new src_error["e" /* MessageFormatError */]("Error formatting default message for: \"".concat(id, "\", rendering default message verbatim"), locale, messageDescriptor, e));
                 return typeof defaultMessage === 'string' ? defaultMessage : id;
             }
         }
@@ -25561,7 +25677,7 @@ var message_formatMessage = function (_a, state, messageDescriptor, values, opts
         return formatter.format(values);
     }
     catch (e) {
-        onError(new error["e" /* MessageFormatError */]("Error formatting message: \"".concat(id, "\", using ").concat(defaultMessage ? 'default message' : 'id', " as fallback."), locale, messageDescriptor, e));
+        onError(new src_error["e" /* MessageFormatError */]("Error formatting message: \"".concat(id, "\", using ").concat(defaultMessage ? 'default message' : 'id', " as fallback."), locale, messageDescriptor, e));
     }
     if (defaultMessage) {
         try {
@@ -25569,7 +25685,7 @@ var message_formatMessage = function (_a, state, messageDescriptor, values, opts
             return formatter.format(values);
         }
         catch (e) {
-            onError(new error["e" /* MessageFormatError */]("Error formatting the default message for: \"".concat(id, "\", rendering message verbatim"), locale, messageDescriptor, e));
+            onError(new src_error["e" /* MessageFormatError */]("Error formatting the default message for: \"".concat(id, "\", rendering message verbatim"), locale, messageDescriptor, e));
         }
     }
     if (typeof message === 'string') {
@@ -25626,7 +25742,7 @@ function formatNumber(config, getNumberFormat, value, options) {
         return getFormatter(config, getNumberFormat, options).format(value);
     }
     catch (e) {
-        config.onError(new error["c" /* IntlFormatError */]('Error formatting number.', config.locale, e));
+        config.onError(new src_error["c" /* IntlFormatError */]('Error formatting number.', config.locale, e));
     }
     return String(value);
 }
@@ -25636,13 +25752,13 @@ function formatNumberToParts(config, getNumberFormat, value, options) {
         return getFormatter(config, getNumberFormat, options).formatToParts(value);
     }
     catch (e) {
-        config.onError(new error["c" /* IntlFormatError */]('Error formatting number.', config.locale, e));
+        config.onError(new src_error["c" /* IntlFormatError */]('Error formatting number.', config.locale, e));
     }
     return [];
 }
 
 // EXTERNAL MODULE: ./node_modules/intl-messageformat/lib/src/error.js
-var src_error = __webpack_require__(27);
+var lib_src_error = __webpack_require__(27);
 
 // CONCATENATED MODULE: ./node_modules/@formatjs/intl/lib/src/relativeTime.js
 
@@ -25664,13 +25780,13 @@ function relativeTime_formatRelativeTime(config, getRelativeTimeFormat, value, u
     }
     var RelativeTimeFormat = Intl.RelativeTimeFormat;
     if (!RelativeTimeFormat) {
-        config.onError(new src_error["b" /* FormatError */]("Intl.RelativeTimeFormat is not available in this environment.\nTry polyfilling it using \"@formatjs/intl-relativetimeformat\"\n", src_error["a" /* ErrorCode */].MISSING_INTL_API));
+        config.onError(new lib_src_error["b" /* FormatError */]("Intl.RelativeTimeFormat is not available in this environment.\nTry polyfilling it using \"@formatjs/intl-relativetimeformat\"\n", lib_src_error["a" /* ErrorCode */].MISSING_INTL_API));
     }
     try {
         return relativeTime_getFormatter(config, getRelativeTimeFormat, options).format(value, unit);
     }
     catch (e) {
-        config.onError(new error["c" /* IntlFormatError */]('Error formatting relative time.', config.locale, e));
+        config.onError(new src_error["c" /* IntlFormatError */]('Error formatting relative time.', config.locale, e));
     }
     return String(value);
 }
@@ -25728,7 +25844,7 @@ function formatDate(config, getDateTimeFormat) {
         return dateTime_getFormatter(config, 'date', getDateTimeFormat, options).format(date);
     }
     catch (e) {
-        config.onError(new error["c" /* IntlFormatError */]('Error formatting date.', config.locale, e));
+        config.onError(new src_error["c" /* IntlFormatError */]('Error formatting date.', config.locale, e));
     }
     return String(date);
 }
@@ -25743,7 +25859,7 @@ function formatTime(config, getDateTimeFormat) {
         return dateTime_getFormatter(config, 'time', getDateTimeFormat, options).format(date);
     }
     catch (e) {
-        config.onError(new error["c" /* IntlFormatError */]('Error formatting time.', config.locale, e));
+        config.onError(new src_error["c" /* IntlFormatError */]('Error formatting time.', config.locale, e));
     }
     return String(date);
 }
@@ -25759,7 +25875,7 @@ function formatDateTimeRange(config, getDateTimeFormat) {
         return getDateTimeFormat(locale, filteredOptions).formatRange(from, to);
     }
     catch (e) {
-        onError(new error["c" /* IntlFormatError */]('Error formatting date time range.', config.locale, e));
+        onError(new src_error["c" /* IntlFormatError */]('Error formatting date time range.', config.locale, e));
     }
     return String(from);
 }
@@ -25774,7 +25890,7 @@ function formatDateToParts(config, getDateTimeFormat) {
         return dateTime_getFormatter(config, 'date', getDateTimeFormat, options).formatToParts(date); // TODO: remove this when https://github.com/microsoft/TypeScript/pull/50402 is merged
     }
     catch (e) {
-        config.onError(new error["c" /* IntlFormatError */]('Error formatting date.', config.locale, e));
+        config.onError(new src_error["c" /* IntlFormatError */]('Error formatting date.', config.locale, e));
     }
     return [];
 }
@@ -25789,7 +25905,7 @@ function formatTimeToParts(config, getDateTimeFormat) {
         return dateTime_getFormatter(config, 'time', getDateTimeFormat, options).formatToParts(date); // TODO: remove this when https://github.com/microsoft/TypeScript/pull/50402 is merged
     }
     catch (e) {
-        config.onError(new error["c" /* IntlFormatError */]('Error formatting time.', config.locale, e));
+        config.onError(new src_error["c" /* IntlFormatError */]('Error formatting time.', config.locale, e));
     }
     return [];
 }
@@ -25803,14 +25919,14 @@ function plural_formatPlural(_a, getPluralRules, value, options) {
     var locale = _a.locale, onError = _a.onError;
     if (options === void 0) { options = {}; }
     if (!Intl.PluralRules) {
-        onError(new src_error["b" /* FormatError */]("Intl.PluralRules is not available in this environment.\nTry polyfilling it using \"@formatjs/intl-pluralrules\"\n", src_error["a" /* ErrorCode */].MISSING_INTL_API));
+        onError(new lib_src_error["b" /* FormatError */]("Intl.PluralRules is not available in this environment.\nTry polyfilling it using \"@formatjs/intl-pluralrules\"\n", lib_src_error["a" /* ErrorCode */].MISSING_INTL_API));
     }
     var filteredOptions = Object(utils["d" /* filterProps */])(options, PLURAL_FORMAT_OPTIONS);
     try {
         return getPluralRules(locale, filteredOptions).select(value);
     }
     catch (e) {
-        onError(new error["c" /* IntlFormatError */]('Error formatting plural.', locale, e));
+        onError(new src_error["c" /* IntlFormatError */]('Error formatting plural.', locale, e));
     }
     return 'other';
 }
@@ -25850,7 +25966,7 @@ function formatListToParts(_a, getListFormat, values, options) {
     if (options === void 0) { options = {}; }
     var ListFormat = Intl.ListFormat;
     if (!ListFormat) {
-        onError(new src_error["b" /* FormatError */]("Intl.ListFormat is not available in this environment.\nTry polyfilling it using \"@formatjs/intl-listformat\"\n", src_error["a" /* ErrorCode */].MISSING_INTL_API));
+        onError(new lib_src_error["b" /* FormatError */]("Intl.ListFormat is not available in this environment.\nTry polyfilling it using \"@formatjs/intl-listformat\"\n", lib_src_error["a" /* ErrorCode */].MISSING_INTL_API));
     }
     var filteredOptions = Object(utils["d" /* filterProps */])(options, LIST_FORMAT_OPTIONS);
     try {
@@ -25872,7 +25988,7 @@ function formatListToParts(_a, getListFormat, values, options) {
         });
     }
     catch (e) {
-        onError(new error["c" /* IntlFormatError */]('Error formatting list.', locale, e));
+        onError(new src_error["c" /* IntlFormatError */]('Error formatting list.', locale, e));
     }
     // @ts-ignore
     return values;
@@ -25892,14 +26008,14 @@ function formatDisplayName(_a, getDisplayNames, value, options) {
     var locale = _a.locale, onError = _a.onError;
     var DisplayNames = Intl.DisplayNames;
     if (!DisplayNames) {
-        onError(new src_error["b" /* FormatError */]("Intl.DisplayNames is not available in this environment.\nTry polyfilling it using \"@formatjs/intl-displaynames\"\n", src_error["a" /* ErrorCode */].MISSING_INTL_API));
+        onError(new lib_src_error["b" /* FormatError */]("Intl.DisplayNames is not available in this environment.\nTry polyfilling it using \"@formatjs/intl-displaynames\"\n", lib_src_error["a" /* ErrorCode */].MISSING_INTL_API));
     }
     var filteredOptions = Object(utils["d" /* filterProps */])(options, DISPLAY_NAMES_OPTONS);
     try {
         return getDisplayNames(locale, filteredOptions).of(value);
     }
     catch (e) {
-        onError(new error["c" /* IntlFormatError */]('Error formatting display name.', locale, e));
+        onError(new src_error["c" /* IntlFormatError */]('Error formatting display name.', locale, e));
     }
 }
 
@@ -25936,7 +26052,7 @@ function create_intl_createIntl(config, cache) {
     var locale = resolvedConfig.locale, defaultLocale = resolvedConfig.defaultLocale, onError = resolvedConfig.onError;
     if (!locale) {
         if (onError) {
-            onError(new error["d" /* InvalidConfigError */]("\"locale\" was not configured, using \"".concat(defaultLocale, "\" as fallback. See https://formatjs.io/docs/react-intl/api#intlshape for more details")));
+            onError(new src_error["d" /* InvalidConfigError */]("\"locale\" was not configured, using \"".concat(defaultLocale, "\" as fallback. See https://formatjs.io/docs/react-intl/api#intlshape for more details")));
         }
         // Since there's no registered locale data for `locale`, this will
         // fallback to the `defaultLocale` to make sure things can render.
@@ -25946,11 +26062,11 @@ function create_intl_createIntl(config, cache) {
         resolvedConfig.locale = resolvedConfig.defaultLocale || 'en';
     }
     else if (!Intl.NumberFormat.supportedLocalesOf(locale).length && onError) {
-        onError(new error["f" /* MissingDataError */]("Missing locale data for locale: \"".concat(locale, "\" in Intl.NumberFormat. Using default locale: \"").concat(defaultLocale, "\" as fallback. See https://formatjs.io/docs/react-intl#runtime-requirements for more details")));
+        onError(new src_error["f" /* MissingDataError */]("Missing locale data for locale: \"".concat(locale, "\" in Intl.NumberFormat. Using default locale: \"").concat(defaultLocale, "\" as fallback. See https://formatjs.io/docs/react-intl#runtime-requirements for more details")));
     }
     else if (!Intl.DateTimeFormat.supportedLocalesOf(locale).length &&
         onError) {
-        onError(new error["f" /* MissingDataError */]("Missing locale data for locale: \"".concat(locale, "\" in Intl.DateTimeFormat. Using default locale: \"").concat(defaultLocale, "\" as fallback. See https://formatjs.io/docs/react-intl#runtime-requirements for more details")));
+        onError(new src_error["f" /* MissingDataError */]("Missing locale data for locale: \"".concat(locale, "\" in Intl.DateTimeFormat. Using default locale: \"").concat(defaultLocale, "\" as fallback. See https://formatjs.io/docs/react-intl#runtime-requirements for more details")));
     }
     verifyConfigMessages(resolvedConfig);
     return Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, resolvedConfig), { formatters: formatters, formatNumber: formatNumber.bind(null, resolvedConfig, formatters.getNumberFormat), formatNumberToParts: formatNumberToParts.bind(null, resolvedConfig, formatters.getNumberFormat), formatRelativeTime: relativeTime_formatRelativeTime.bind(null, resolvedConfig, formatters.getRelativeTimeFormat), formatDate: formatDate.bind(null, resolvedConfig, formatters.getDateTimeFormat), formatDateToParts: formatDateToParts.bind(null, resolvedConfig, formatters.getDateTimeFormat), formatTime: formatTime.bind(null, resolvedConfig, formatters.getDateTimeFormat), formatDateTimeRange: formatDateTimeRange.bind(null, resolvedConfig, formatters.getDateTimeFormat), formatTimeToParts: formatTimeToParts.bind(null, resolvedConfig, formatters.getDateTimeFormat), formatPlural: plural_formatPlural.bind(null, resolvedConfig, formatters.getPluralRules), 
@@ -26090,6 +26206,9 @@ var provider_IntlProvider = /** @class */function (_super) {
   return IntlProvider;
 }(react["PureComponent"]);
 /* harmony default export */ var provider = (provider_IntlProvider);
+// EXTERNAL MODULE: ./node_modules/react-intl/node_modules/@formatjs/ecma402-abstract/lib/utils.js + 1 modules
+var lib_utils = __webpack_require__(188);
+
 // CONCATENATED MODULE: ./node_modules/react-intl/lib/src/components/relative.js
 
 /*
@@ -26259,7 +26378,7 @@ var plural_FormattedPlural = function FormattedPlural(props) {
 plural_FormattedPlural.displayName = 'FormattedPlural';
 /* harmony default export */ var plural = (plural_FormattedPlural);
 // EXTERNAL MODULE: ./node_modules/react-intl/lib/src/components/message.js
-var components_message = __webpack_require__(71);
+var components_message = __webpack_require__(70);
 
 // CONCATENATED MODULE: ./node_modules/react-intl/lib/src/components/dateTimeRange.js
 
@@ -26307,6 +26426,2044 @@ var FormattedDisplayName = createFormattedComponent('formatDisplayName');
 var FormattedDateParts = createFormattedDateTimePartsComponent('formatDate');
 var FormattedTimeParts = createFormattedDateTimePartsComponent('formatTime');
 
+
+/***/ }),
+/* 18 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "l", function() { return /* binding */ parse; });
+__webpack_require__.d(__webpack_exports__, "d", function() { return /* reexport */ isLiteralElement; });
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* reexport */ isArgumentElement; });
+__webpack_require__.d(__webpack_exports__, "e", function() { return /* reexport */ isNumberElement; });
+__webpack_require__.d(__webpack_exports__, "b", function() { return /* reexport */ isDateElement; });
+__webpack_require__.d(__webpack_exports__, "k", function() { return /* reexport */ isTimeElement; });
+__webpack_require__.d(__webpack_exports__, "i", function() { return /* reexport */ isSelectElement; });
+__webpack_require__.d(__webpack_exports__, "g", function() { return /* reexport */ isPluralElement; });
+__webpack_require__.d(__webpack_exports__, "h", function() { return /* reexport */ isPoundElement; });
+__webpack_require__.d(__webpack_exports__, "j", function() { return /* reexport */ isTagElement; });
+__webpack_require__.d(__webpack_exports__, "f", function() { return /* reexport */ isNumberSkeleton; });
+__webpack_require__.d(__webpack_exports__, "c", function() { return /* reexport */ isDateTimeSkeleton; });
+
+// UNUSED EXPORTS: TYPE, SKELETON_TYPE, createLiteralElement, createNumberElement, _Parser
+
+// EXTERNAL MODULE: ./node_modules/tslib/tslib.es6.js
+var tslib_es6 = __webpack_require__(3);
+
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-messageformat-parser/lib/error.js
+var ErrorKind;
+(function (ErrorKind) {
+  /** Argument is unclosed (e.g. `{0`) */
+  ErrorKind[ErrorKind["EXPECT_ARGUMENT_CLOSING_BRACE"] = 1] = "EXPECT_ARGUMENT_CLOSING_BRACE";
+  /** Argument is empty (e.g. `{}`). */
+  ErrorKind[ErrorKind["EMPTY_ARGUMENT"] = 2] = "EMPTY_ARGUMENT";
+  /** Argument is malformed (e.g. `{foo!}``) */
+  ErrorKind[ErrorKind["MALFORMED_ARGUMENT"] = 3] = "MALFORMED_ARGUMENT";
+  /** Expect an argument type (e.g. `{foo,}`) */
+  ErrorKind[ErrorKind["EXPECT_ARGUMENT_TYPE"] = 4] = "EXPECT_ARGUMENT_TYPE";
+  /** Unsupported argument type (e.g. `{foo,foo}`) */
+  ErrorKind[ErrorKind["INVALID_ARGUMENT_TYPE"] = 5] = "INVALID_ARGUMENT_TYPE";
+  /** Expect an argument style (e.g. `{foo, number, }`) */
+  ErrorKind[ErrorKind["EXPECT_ARGUMENT_STYLE"] = 6] = "EXPECT_ARGUMENT_STYLE";
+  /** The number skeleton is invalid. */
+  ErrorKind[ErrorKind["INVALID_NUMBER_SKELETON"] = 7] = "INVALID_NUMBER_SKELETON";
+  /** The date time skeleton is invalid. */
+  ErrorKind[ErrorKind["INVALID_DATE_TIME_SKELETON"] = 8] = "INVALID_DATE_TIME_SKELETON";
+  /** Exepct a number skeleton following the `::` (e.g. `{foo, number, ::}`) */
+  ErrorKind[ErrorKind["EXPECT_NUMBER_SKELETON"] = 9] = "EXPECT_NUMBER_SKELETON";
+  /** Exepct a date time skeleton following the `::` (e.g. `{foo, date, ::}`) */
+  ErrorKind[ErrorKind["EXPECT_DATE_TIME_SKELETON"] = 10] = "EXPECT_DATE_TIME_SKELETON";
+  /** Unmatched apostrophes in the argument style (e.g. `{foo, number, 'test`) */
+  ErrorKind[ErrorKind["UNCLOSED_QUOTE_IN_ARGUMENT_STYLE"] = 11] = "UNCLOSED_QUOTE_IN_ARGUMENT_STYLE";
+  /** Missing select argument options (e.g. `{foo, select}`) */
+  ErrorKind[ErrorKind["EXPECT_SELECT_ARGUMENT_OPTIONS"] = 12] = "EXPECT_SELECT_ARGUMENT_OPTIONS";
+  /** Expecting an offset value in `plural` or `selectordinal` argument (e.g `{foo, plural, offset}`) */
+  ErrorKind[ErrorKind["EXPECT_PLURAL_ARGUMENT_OFFSET_VALUE"] = 13] = "EXPECT_PLURAL_ARGUMENT_OFFSET_VALUE";
+  /** Offset value in `plural` or `selectordinal` is invalid (e.g. `{foo, plural, offset: x}`) */
+  ErrorKind[ErrorKind["INVALID_PLURAL_ARGUMENT_OFFSET_VALUE"] = 14] = "INVALID_PLURAL_ARGUMENT_OFFSET_VALUE";
+  /** Expecting a selector in `select` argument (e.g `{foo, select}`) */
+  ErrorKind[ErrorKind["EXPECT_SELECT_ARGUMENT_SELECTOR"] = 15] = "EXPECT_SELECT_ARGUMENT_SELECTOR";
+  /** Expecting a selector in `plural` or `selectordinal` argument (e.g `{foo, plural}`) */
+  ErrorKind[ErrorKind["EXPECT_PLURAL_ARGUMENT_SELECTOR"] = 16] = "EXPECT_PLURAL_ARGUMENT_SELECTOR";
+  /** Expecting a message fragment after the `select` selector (e.g. `{foo, select, apple}`) */
+  ErrorKind[ErrorKind["EXPECT_SELECT_ARGUMENT_SELECTOR_FRAGMENT"] = 17] = "EXPECT_SELECT_ARGUMENT_SELECTOR_FRAGMENT";
+  /**
+   * Expecting a message fragment after the `plural` or `selectordinal` selector
+   * (e.g. `{foo, plural, one}`)
+   */
+  ErrorKind[ErrorKind["EXPECT_PLURAL_ARGUMENT_SELECTOR_FRAGMENT"] = 18] = "EXPECT_PLURAL_ARGUMENT_SELECTOR_FRAGMENT";
+  /** Selector in `plural` or `selectordinal` is malformed (e.g. `{foo, plural, =x {#}}`) */
+  ErrorKind[ErrorKind["INVALID_PLURAL_ARGUMENT_SELECTOR"] = 19] = "INVALID_PLURAL_ARGUMENT_SELECTOR";
+  /**
+   * Duplicate selectors in `plural` or `selectordinal` argument.
+   * (e.g. {foo, plural, one {#} one {#}})
+   */
+  ErrorKind[ErrorKind["DUPLICATE_PLURAL_ARGUMENT_SELECTOR"] = 20] = "DUPLICATE_PLURAL_ARGUMENT_SELECTOR";
+  /** Duplicate selectors in `select` argument.
+   * (e.g. {foo, select, apple {apple} apple {apple}})
+   */
+  ErrorKind[ErrorKind["DUPLICATE_SELECT_ARGUMENT_SELECTOR"] = 21] = "DUPLICATE_SELECT_ARGUMENT_SELECTOR";
+  /** Plural or select argument option must have `other` clause. */
+  ErrorKind[ErrorKind["MISSING_OTHER_CLAUSE"] = 22] = "MISSING_OTHER_CLAUSE";
+  /** The tag is malformed. (e.g. `<bold!>foo</bold!>) */
+  ErrorKind[ErrorKind["INVALID_TAG"] = 23] = "INVALID_TAG";
+  /** The tag name is invalid. (e.g. `<123>foo</123>`) */
+  ErrorKind[ErrorKind["INVALID_TAG_NAME"] = 25] = "INVALID_TAG_NAME";
+  /** The closing tag does not match the opening tag. (e.g. `<bold>foo</italic>`) */
+  ErrorKind[ErrorKind["UNMATCHED_CLOSING_TAG"] = 26] = "UNMATCHED_CLOSING_TAG";
+  /** The opening tag has unmatched closing tag. (e.g. `<bold>foo`) */
+  ErrorKind[ErrorKind["UNCLOSED_TAG"] = 27] = "UNCLOSED_TAG";
+})(ErrorKind || (ErrorKind = {}));
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-messageformat-parser/lib/types.js
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+var TYPE;
+(function (TYPE) {
+  /**
+   * Raw text
+   */
+  TYPE[TYPE["literal"] = 0] = "literal";
+  /**
+   * Variable w/o any format, e.g `var` in `this is a {var}`
+   */
+  TYPE[TYPE["argument"] = 1] = "argument";
+  /**
+   * Variable w/ number format
+   */
+  TYPE[TYPE["number"] = 2] = "number";
+  /**
+   * Variable w/ date format
+   */
+  TYPE[TYPE["date"] = 3] = "date";
+  /**
+   * Variable w/ time format
+   */
+  TYPE[TYPE["time"] = 4] = "time";
+  /**
+   * Variable w/ select format
+   */
+  TYPE[TYPE["select"] = 5] = "select";
+  /**
+   * Variable w/ plural format
+   */
+  TYPE[TYPE["plural"] = 6] = "plural";
+  /**
+   * Only possible within plural argument.
+   * This is the `#` symbol that will be substituted with the count.
+   */
+  TYPE[TYPE["pound"] = 7] = "pound";
+  /**
+   * XML-like tag
+   */
+  TYPE[TYPE["tag"] = 8] = "tag";
+})(TYPE || (TYPE = {}));
+var SKELETON_TYPE;
+(function (SKELETON_TYPE) {
+  SKELETON_TYPE[SKELETON_TYPE["number"] = 0] = "number";
+  SKELETON_TYPE[SKELETON_TYPE["dateTime"] = 1] = "dateTime";
+})(SKELETON_TYPE || (SKELETON_TYPE = {}));
+/**
+ * Type Guards
+ */
+function isLiteralElement(el) {
+  return el.type === TYPE.literal;
+}
+function isArgumentElement(el) {
+  return el.type === TYPE.argument;
+}
+function isNumberElement(el) {
+  return el.type === TYPE.number;
+}
+function isDateElement(el) {
+  return el.type === TYPE.date;
+}
+function isTimeElement(el) {
+  return el.type === TYPE.time;
+}
+function isSelectElement(el) {
+  return el.type === TYPE.select;
+}
+function isPluralElement(el) {
+  return el.type === TYPE.plural;
+}
+function isPoundElement(el) {
+  return el.type === TYPE.pound;
+}
+function isTagElement(el) {
+  return el.type === TYPE.tag;
+}
+function isNumberSkeleton(el) {
+  return !!(el && _typeof(el) === 'object' && el.type === SKELETON_TYPE.number);
+}
+function isDateTimeSkeleton(el) {
+  return !!(el && _typeof(el) === 'object' && el.type === SKELETON_TYPE.dateTime);
+}
+function createLiteralElement(value) {
+  return {
+    type: TYPE.literal,
+    value: value
+  };
+}
+function createNumberElement(value, style) {
+  return {
+    type: TYPE.number,
+    value: value,
+    style: style
+  };
+}
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-messageformat-parser/lib/regex.generated.js
+// @generated from regex-gen.ts
+var SPACE_SEPARATOR_REGEX = /[ \xA0\u1680\u2000-\u200A\u202F\u205F\u3000]/;
+var WHITE_SPACE_REGEX = /[\t-\r \x85\u200E\u200F\u2028\u2029]/;
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-skeleton-parser/lib/date-time.js
+/**
+ * https://unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
+ * Credit: https://github.com/caridy/intl-datetimeformat-pattern/blob/master/index.js
+ * with some tweaks
+ */
+var DATE_TIME_REGEX = /(?:[Eec]{1,6}|G{1,5}|[Qq]{1,5}|(?:[yYur]+|U{1,5})|[ML]{1,5}|d{1,2}|D{1,3}|F{1}|[abB]{1,5}|[hkHK]{1,2}|w{1,2}|W{1}|m{1,2}|s{1,2}|[zZOvVxX]{1,4})(?=([^']*'[^']*')*[^']*$)/g;
+/**
+ * Parse Date time skeleton into Intl.DateTimeFormatOptions
+ * Ref: https://unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table
+ * @public
+ * @param skeleton skeleton string
+ */
+function parseDateTimeSkeleton(skeleton) {
+  var result = {};
+  skeleton.replace(DATE_TIME_REGEX, function (match) {
+    var len = match.length;
+    switch (match[0]) {
+      // Era
+      case 'G':
+        result.era = len === 4 ? 'long' : len === 5 ? 'narrow' : 'short';
+        break;
+      // Year
+      case 'y':
+        result.year = len === 2 ? '2-digit' : 'numeric';
+        break;
+      case 'Y':
+      case 'u':
+      case 'U':
+      case 'r':
+        throw new RangeError('`Y/u/U/r` (year) patterns are not supported, use `y` instead');
+      // Quarter
+      case 'q':
+      case 'Q':
+        throw new RangeError('`q/Q` (quarter) patterns are not supported');
+      // Month
+      case 'M':
+      case 'L':
+        result.month = ['numeric', '2-digit', 'short', 'long', 'narrow'][len - 1];
+        break;
+      // Week
+      case 'w':
+      case 'W':
+        throw new RangeError('`w/W` (week) patterns are not supported');
+      case 'd':
+        result.day = ['numeric', '2-digit'][len - 1];
+        break;
+      case 'D':
+      case 'F':
+      case 'g':
+        throw new RangeError('`D/F/g` (day) patterns are not supported, use `d` instead');
+      // Weekday
+      case 'E':
+        result.weekday = len === 4 ? 'long' : len === 5 ? 'narrow' : 'short';
+        break;
+      case 'e':
+        if (len < 4) {
+          throw new RangeError('`e..eee` (weekday) patterns are not supported');
+        }
+        result.weekday = ['short', 'long', 'narrow', 'short'][len - 4];
+        break;
+      case 'c':
+        if (len < 4) {
+          throw new RangeError('`c..ccc` (weekday) patterns are not supported');
+        }
+        result.weekday = ['short', 'long', 'narrow', 'short'][len - 4];
+        break;
+      // Period
+      case 'a':
+        // AM, PM
+        result.hour12 = true;
+        break;
+      case 'b': // am, pm, noon, midnight
+      case 'B':
+        // flexible day periods
+        throw new RangeError('`b/B` (period) patterns are not supported, use `a` instead');
+      // Hour
+      case 'h':
+        result.hourCycle = 'h12';
+        result.hour = ['numeric', '2-digit'][len - 1];
+        break;
+      case 'H':
+        result.hourCycle = 'h23';
+        result.hour = ['numeric', '2-digit'][len - 1];
+        break;
+      case 'K':
+        result.hourCycle = 'h11';
+        result.hour = ['numeric', '2-digit'][len - 1];
+        break;
+      case 'k':
+        result.hourCycle = 'h24';
+        result.hour = ['numeric', '2-digit'][len - 1];
+        break;
+      case 'j':
+      case 'J':
+      case 'C':
+        throw new RangeError('`j/J/C` (hour) patterns are not supported, use `h/H/K/k` instead');
+      // Minute
+      case 'm':
+        result.minute = ['numeric', '2-digit'][len - 1];
+        break;
+      // Second
+      case 's':
+        result.second = ['numeric', '2-digit'][len - 1];
+        break;
+      case 'S':
+      case 'A':
+        throw new RangeError('`S/A` (second) patterns are not supported, use `s` instead');
+      // Zone
+      case 'z':
+        // 1..3, 4: specific non-location format
+        result.timeZoneName = len < 4 ? 'short' : 'long';
+        break;
+      case 'Z': // 1..3, 4, 5: The ISO8601 varios formats
+      case 'O': // 1, 4: milliseconds in day short, long
+      case 'v': // 1, 4: generic non-location format
+      case 'V': // 1, 2, 3, 4: time zone ID or city
+      case 'X': // 1, 2, 3, 4: The ISO8601 varios formats
+      case 'x':
+        // 1, 2, 3, 4: The ISO8601 varios formats
+        throw new RangeError('`Z/O/v/V/X/x` (timeZone) patterns are not supported, use `z` instead');
+    }
+    return '';
+  });
+  return result;
+}
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-skeleton-parser/lib/regex.generated.js
+// @generated from regex-gen.ts
+var regex_generated_WHITE_SPACE_REGEX = /[\t-\r \x85\u200E\u200F\u2028\u2029]/i;
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-skeleton-parser/lib/number.js
+
+
+function parseNumberSkeletonFromString(skeleton) {
+  if (skeleton.length === 0) {
+    throw new Error('Number skeleton cannot be empty');
+  }
+  // Parse the skeleton
+  var stringTokens = skeleton.split(regex_generated_WHITE_SPACE_REGEX).filter(function (x) {
+    return x.length > 0;
+  });
+  var tokens = [];
+  for (var _i = 0, stringTokens_1 = stringTokens; _i < stringTokens_1.length; _i++) {
+    var stringToken = stringTokens_1[_i];
+    var stemAndOptions = stringToken.split('/');
+    if (stemAndOptions.length === 0) {
+      throw new Error('Invalid number skeleton');
+    }
+    var stem = stemAndOptions[0],
+      options = stemAndOptions.slice(1);
+    for (var _a = 0, options_1 = options; _a < options_1.length; _a++) {
+      var option = options_1[_a];
+      if (option.length === 0) {
+        throw new Error('Invalid number skeleton');
+      }
+    }
+    tokens.push({
+      stem: stem,
+      options: options
+    });
+  }
+  return tokens;
+}
+function icuUnitToEcma(unit) {
+  return unit.replace(/^(.*?)-/, '');
+}
+var FRACTION_PRECISION_REGEX = /^\.(?:(0+)(\*)?|(#+)|(0+)(#+))$/g;
+var SIGNIFICANT_PRECISION_REGEX = /^(@+)?(\+|#+)?[rs]?$/g;
+var INTEGER_WIDTH_REGEX = /(\*)(0+)|(#+)(0+)|(0+)/g;
+var CONCISE_INTEGER_WIDTH_REGEX = /^(0+)$/;
+function parseSignificantPrecision(str) {
+  var result = {};
+  if (str[str.length - 1] === 'r') {
+    result.roundingPriority = 'morePrecision';
+  } else if (str[str.length - 1] === 's') {
+    result.roundingPriority = 'lessPrecision';
+  }
+  str.replace(SIGNIFICANT_PRECISION_REGEX, function (_, g1, g2) {
+    // @@@ case
+    if (typeof g2 !== 'string') {
+      result.minimumSignificantDigits = g1.length;
+      result.maximumSignificantDigits = g1.length;
+    }
+    // @@@+ case
+    else if (g2 === '+') {
+      result.minimumSignificantDigits = g1.length;
+    }
+    // .### case
+    else if (g1[0] === '#') {
+      result.maximumSignificantDigits = g1.length;
+    }
+    // .@@## or .@@@ case
+    else {
+      result.minimumSignificantDigits = g1.length;
+      result.maximumSignificantDigits = g1.length + (typeof g2 === 'string' ? g2.length : 0);
+    }
+    return '';
+  });
+  return result;
+}
+function parseSign(str) {
+  switch (str) {
+    case 'sign-auto':
+      return {
+        signDisplay: 'auto'
+      };
+    case 'sign-accounting':
+    case '()':
+      return {
+        currencySign: 'accounting'
+      };
+    case 'sign-always':
+    case '+!':
+      return {
+        signDisplay: 'always'
+      };
+    case 'sign-accounting-always':
+    case '()!':
+      return {
+        signDisplay: 'always',
+        currencySign: 'accounting'
+      };
+    case 'sign-except-zero':
+    case '+?':
+      return {
+        signDisplay: 'exceptZero'
+      };
+    case 'sign-accounting-except-zero':
+    case '()?':
+      return {
+        signDisplay: 'exceptZero',
+        currencySign: 'accounting'
+      };
+    case 'sign-never':
+    case '+_':
+      return {
+        signDisplay: 'never'
+      };
+  }
+}
+function parseConciseScientificAndEngineeringStem(stem) {
+  // Engineering
+  var result;
+  if (stem[0] === 'E' && stem[1] === 'E') {
+    result = {
+      notation: 'engineering'
+    };
+    stem = stem.slice(2);
+  } else if (stem[0] === 'E') {
+    result = {
+      notation: 'scientific'
+    };
+    stem = stem.slice(1);
+  }
+  if (result) {
+    var signDisplay = stem.slice(0, 2);
+    if (signDisplay === '+!') {
+      result.signDisplay = 'always';
+      stem = stem.slice(2);
+    } else if (signDisplay === '+?') {
+      result.signDisplay = 'exceptZero';
+      stem = stem.slice(2);
+    }
+    if (!CONCISE_INTEGER_WIDTH_REGEX.test(stem)) {
+      throw new Error('Malformed concise eng/scientific notation');
+    }
+    result.minimumIntegerDigits = stem.length;
+  }
+  return result;
+}
+function parseNotationOptions(opt) {
+  var result = {};
+  var signOpts = parseSign(opt);
+  if (signOpts) {
+    return signOpts;
+  }
+  return result;
+}
+/**
+ * https://github.com/unicode-org/icu/blob/master/docs/userguide/format_parse/numbers/skeletons.md#skeleton-stems-and-options
+ */
+function parseNumberSkeleton(tokens) {
+  var result = {};
+  for (var _i = 0, tokens_1 = tokens; _i < tokens_1.length; _i++) {
+    var token = tokens_1[_i];
+    switch (token.stem) {
+      case 'percent':
+      case '%':
+        result.style = 'percent';
+        continue;
+      case '%x100':
+        result.style = 'percent';
+        result.scale = 100;
+        continue;
+      case 'currency':
+        result.style = 'currency';
+        result.currency = token.options[0];
+        continue;
+      case 'group-off':
+      case ',_':
+        result.useGrouping = false;
+        continue;
+      case 'precision-integer':
+      case '.':
+        result.maximumFractionDigits = 0;
+        continue;
+      case 'measure-unit':
+      case 'unit':
+        result.style = 'unit';
+        result.unit = icuUnitToEcma(token.options[0]);
+        continue;
+      case 'compact-short':
+      case 'K':
+        result.notation = 'compact';
+        result.compactDisplay = 'short';
+        continue;
+      case 'compact-long':
+      case 'KK':
+        result.notation = 'compact';
+        result.compactDisplay = 'long';
+        continue;
+      case 'scientific':
+        result = Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, result), {
+          notation: 'scientific'
+        }), token.options.reduce(function (all, opt) {
+          return Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, all), parseNotationOptions(opt));
+        }, {}));
+        continue;
+      case 'engineering':
+        result = Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, result), {
+          notation: 'engineering'
+        }), token.options.reduce(function (all, opt) {
+          return Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, all), parseNotationOptions(opt));
+        }, {}));
+        continue;
+      case 'notation-simple':
+        result.notation = 'standard';
+        continue;
+      // https://github.com/unicode-org/icu/blob/master/icu4c/source/i18n/unicode/unumberformatter.h
+      case 'unit-width-narrow':
+        result.currencyDisplay = 'narrowSymbol';
+        result.unitDisplay = 'narrow';
+        continue;
+      case 'unit-width-short':
+        result.currencyDisplay = 'code';
+        result.unitDisplay = 'short';
+        continue;
+      case 'unit-width-full-name':
+        result.currencyDisplay = 'name';
+        result.unitDisplay = 'long';
+        continue;
+      case 'unit-width-iso-code':
+        result.currencyDisplay = 'symbol';
+        continue;
+      case 'scale':
+        result.scale = parseFloat(token.options[0]);
+        continue;
+      case 'rounding-mode-floor':
+        result.roundingMode = 'floor';
+        continue;
+      case 'rounding-mode-ceiling':
+        result.roundingMode = 'ceil';
+        continue;
+      case 'rounding-mode-down':
+        result.roundingMode = 'trunc';
+        continue;
+      case 'rounding-mode-up':
+        result.roundingMode = 'expand';
+        continue;
+      case 'rounding-mode-half-even':
+        result.roundingMode = 'halfEven';
+        continue;
+      case 'rounding-mode-half-down':
+        result.roundingMode = 'halfTrunc';
+        continue;
+      case 'rounding-mode-half-up':
+        result.roundingMode = 'halfExpand';
+        continue;
+      // https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html#integer-width
+      case 'integer-width':
+        if (token.options.length > 1) {
+          throw new RangeError('integer-width stems only accept a single optional option');
+        }
+        token.options[0].replace(INTEGER_WIDTH_REGEX, function (_, g1, g2, g3, g4, g5) {
+          if (g1) {
+            result.minimumIntegerDigits = g2.length;
+          } else if (g3 && g4) {
+            throw new Error('We currently do not support maximum integer digits');
+          } else if (g5) {
+            throw new Error('We currently do not support exact integer digits');
+          }
+          return '';
+        });
+        continue;
+    }
+    // https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html#integer-width
+    if (CONCISE_INTEGER_WIDTH_REGEX.test(token.stem)) {
+      result.minimumIntegerDigits = token.stem.length;
+      continue;
+    }
+    if (FRACTION_PRECISION_REGEX.test(token.stem)) {
+      // Precision
+      // https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html#fraction-precision
+      // precision-integer case
+      if (token.options.length > 1) {
+        throw new RangeError('Fraction-precision stems only accept a single optional option');
+      }
+      token.stem.replace(FRACTION_PRECISION_REGEX, function (_, g1, g2, g3, g4, g5) {
+        // .000* case (before ICU67 it was .000+)
+        if (g2 === '*') {
+          result.minimumFractionDigits = g1.length;
+        }
+        // .### case
+        else if (g3 && g3[0] === '#') {
+          result.maximumFractionDigits = g3.length;
+        }
+        // .00## case
+        else if (g4 && g5) {
+          result.minimumFractionDigits = g4.length;
+          result.maximumFractionDigits = g4.length + g5.length;
+        } else {
+          result.minimumFractionDigits = g1.length;
+          result.maximumFractionDigits = g1.length;
+        }
+        return '';
+      });
+      var opt = token.options[0];
+      // https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html#trailing-zero-display
+      if (opt === 'w') {
+        result = Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, result), {
+          trailingZeroDisplay: 'stripIfInteger'
+        });
+      } else if (opt) {
+        result = Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, result), parseSignificantPrecision(opt));
+      }
+      continue;
+    }
+    // https://unicode-org.github.io/icu/userguide/format_parse/numbers/skeletons.html#significant-digits-precision
+    if (SIGNIFICANT_PRECISION_REGEX.test(token.stem)) {
+      result = Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, result), parseSignificantPrecision(token.stem));
+      continue;
+    }
+    var signOpts = parseSign(token.stem);
+    if (signOpts) {
+      result = Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, result), signOpts);
+    }
+    var conciseScientificAndEngineeringOpts = parseConciseScientificAndEngineeringStem(token.stem);
+    if (conciseScientificAndEngineeringOpts) {
+      result = Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, result), conciseScientificAndEngineeringOpts);
+    }
+  }
+  return result;
+}
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-skeleton-parser/lib/index.js
+
+
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-messageformat-parser/lib/time-data.generated.js
+// @generated from time-data-gen.ts
+// prettier-ignore  
+var timeData = {
+  "001": ["H", "h"],
+  "419": ["h", "H", "hB", "hb"],
+  "AC": ["H", "h", "hb", "hB"],
+  "AD": ["H", "hB"],
+  "AE": ["h", "hB", "hb", "H"],
+  "AF": ["H", "hb", "hB", "h"],
+  "AG": ["h", "hb", "H", "hB"],
+  "AI": ["H", "h", "hb", "hB"],
+  "AL": ["h", "H", "hB"],
+  "AM": ["H", "hB"],
+  "AO": ["H", "hB"],
+  "AR": ["h", "H", "hB", "hb"],
+  "AS": ["h", "H"],
+  "AT": ["H", "hB"],
+  "AU": ["h", "hb", "H", "hB"],
+  "AW": ["H", "hB"],
+  "AX": ["H"],
+  "AZ": ["H", "hB", "h"],
+  "BA": ["H", "hB", "h"],
+  "BB": ["h", "hb", "H", "hB"],
+  "BD": ["h", "hB", "H"],
+  "BE": ["H", "hB"],
+  "BF": ["H", "hB"],
+  "BG": ["H", "hB", "h"],
+  "BH": ["h", "hB", "hb", "H"],
+  "BI": ["H", "h"],
+  "BJ": ["H", "hB"],
+  "BL": ["H", "hB"],
+  "BM": ["h", "hb", "H", "hB"],
+  "BN": ["hb", "hB", "h", "H"],
+  "BO": ["h", "H", "hB", "hb"],
+  "BQ": ["H"],
+  "BR": ["H", "hB"],
+  "BS": ["h", "hb", "H", "hB"],
+  "BT": ["h", "H"],
+  "BW": ["H", "h", "hb", "hB"],
+  "BY": ["H", "h"],
+  "BZ": ["H", "h", "hb", "hB"],
+  "CA": ["h", "hb", "H", "hB"],
+  "CC": ["H", "h", "hb", "hB"],
+  "CD": ["hB", "H"],
+  "CF": ["H", "h", "hB"],
+  "CG": ["H", "hB"],
+  "CH": ["H", "hB", "h"],
+  "CI": ["H", "hB"],
+  "CK": ["H", "h", "hb", "hB"],
+  "CL": ["h", "H", "hB", "hb"],
+  "CM": ["H", "h", "hB"],
+  "CN": ["H", "hB", "hb", "h"],
+  "CO": ["h", "H", "hB", "hb"],
+  "CP": ["H"],
+  "CR": ["h", "H", "hB", "hb"],
+  "CU": ["h", "H", "hB", "hb"],
+  "CV": ["H", "hB"],
+  "CW": ["H", "hB"],
+  "CX": ["H", "h", "hb", "hB"],
+  "CY": ["h", "H", "hb", "hB"],
+  "CZ": ["H"],
+  "DE": ["H", "hB"],
+  "DG": ["H", "h", "hb", "hB"],
+  "DJ": ["h", "H"],
+  "DK": ["H"],
+  "DM": ["h", "hb", "H", "hB"],
+  "DO": ["h", "H", "hB", "hb"],
+  "DZ": ["h", "hB", "hb", "H"],
+  "EA": ["H", "h", "hB", "hb"],
+  "EC": ["h", "H", "hB", "hb"],
+  "EE": ["H", "hB"],
+  "EG": ["h", "hB", "hb", "H"],
+  "EH": ["h", "hB", "hb", "H"],
+  "ER": ["h", "H"],
+  "ES": ["H", "hB", "h", "hb"],
+  "ET": ["hB", "hb", "h", "H"],
+  "FI": ["H"],
+  "FJ": ["h", "hb", "H", "hB"],
+  "FK": ["H", "h", "hb", "hB"],
+  "FM": ["h", "hb", "H", "hB"],
+  "FO": ["H", "h"],
+  "FR": ["H", "hB"],
+  "GA": ["H", "hB"],
+  "GB": ["H", "h", "hb", "hB"],
+  "GD": ["h", "hb", "H", "hB"],
+  "GE": ["H", "hB", "h"],
+  "GF": ["H", "hB"],
+  "GG": ["H", "h", "hb", "hB"],
+  "GH": ["h", "H"],
+  "GI": ["H", "h", "hb", "hB"],
+  "GL": ["H", "h"],
+  "GM": ["h", "hb", "H", "hB"],
+  "GN": ["H", "hB"],
+  "GP": ["H", "hB"],
+  "GQ": ["H", "hB", "h", "hb"],
+  "GR": ["h", "H", "hb", "hB"],
+  "GT": ["h", "H", "hB", "hb"],
+  "GU": ["h", "hb", "H", "hB"],
+  "GW": ["H", "hB"],
+  "GY": ["h", "hb", "H", "hB"],
+  "HK": ["h", "hB", "hb", "H"],
+  "HN": ["h", "H", "hB", "hb"],
+  "HR": ["H", "hB"],
+  "HU": ["H", "h"],
+  "IC": ["H", "h", "hB", "hb"],
+  "ID": ["H"],
+  "IE": ["H", "h", "hb", "hB"],
+  "IL": ["H", "hB"],
+  "IM": ["H", "h", "hb", "hB"],
+  "IN": ["h", "H"],
+  "IO": ["H", "h", "hb", "hB"],
+  "IQ": ["h", "hB", "hb", "H"],
+  "IR": ["hB", "H"],
+  "IS": ["H"],
+  "IT": ["H", "hB"],
+  "JE": ["H", "h", "hb", "hB"],
+  "JM": ["h", "hb", "H", "hB"],
+  "JO": ["h", "hB", "hb", "H"],
+  "JP": ["H", "K", "h"],
+  "KE": ["hB", "hb", "H", "h"],
+  "KG": ["H", "h", "hB", "hb"],
+  "KH": ["hB", "h", "H", "hb"],
+  "KI": ["h", "hb", "H", "hB"],
+  "KM": ["H", "h", "hB", "hb"],
+  "KN": ["h", "hb", "H", "hB"],
+  "KP": ["h", "H", "hB", "hb"],
+  "KR": ["h", "H", "hB", "hb"],
+  "KW": ["h", "hB", "hb", "H"],
+  "KY": ["h", "hb", "H", "hB"],
+  "KZ": ["H", "hB"],
+  "LA": ["H", "hb", "hB", "h"],
+  "LB": ["h", "hB", "hb", "H"],
+  "LC": ["h", "hb", "H", "hB"],
+  "LI": ["H", "hB", "h"],
+  "LK": ["H", "h", "hB", "hb"],
+  "LR": ["h", "hb", "H", "hB"],
+  "LS": ["h", "H"],
+  "LT": ["H", "h", "hb", "hB"],
+  "LU": ["H", "h", "hB"],
+  "LV": ["H", "hB", "hb", "h"],
+  "LY": ["h", "hB", "hb", "H"],
+  "MA": ["H", "h", "hB", "hb"],
+  "MC": ["H", "hB"],
+  "MD": ["H", "hB"],
+  "ME": ["H", "hB", "h"],
+  "MF": ["H", "hB"],
+  "MG": ["H", "h"],
+  "MH": ["h", "hb", "H", "hB"],
+  "MK": ["H", "h", "hb", "hB"],
+  "ML": ["H"],
+  "MM": ["hB", "hb", "H", "h"],
+  "MN": ["H", "h", "hb", "hB"],
+  "MO": ["h", "hB", "hb", "H"],
+  "MP": ["h", "hb", "H", "hB"],
+  "MQ": ["H", "hB"],
+  "MR": ["h", "hB", "hb", "H"],
+  "MS": ["H", "h", "hb", "hB"],
+  "MT": ["H", "h"],
+  "MU": ["H", "h"],
+  "MV": ["H", "h"],
+  "MW": ["h", "hb", "H", "hB"],
+  "MX": ["h", "H", "hB", "hb"],
+  "MY": ["hb", "hB", "h", "H"],
+  "MZ": ["H", "hB"],
+  "NA": ["h", "H", "hB", "hb"],
+  "NC": ["H", "hB"],
+  "NE": ["H"],
+  "NF": ["H", "h", "hb", "hB"],
+  "NG": ["H", "h", "hb", "hB"],
+  "NI": ["h", "H", "hB", "hb"],
+  "NL": ["H", "hB"],
+  "NO": ["H", "h"],
+  "NP": ["H", "h", "hB"],
+  "NR": ["H", "h", "hb", "hB"],
+  "NU": ["H", "h", "hb", "hB"],
+  "NZ": ["h", "hb", "H", "hB"],
+  "OM": ["h", "hB", "hb", "H"],
+  "PA": ["h", "H", "hB", "hb"],
+  "PE": ["h", "H", "hB", "hb"],
+  "PF": ["H", "h", "hB"],
+  "PG": ["h", "H"],
+  "PH": ["h", "hB", "hb", "H"],
+  "PK": ["h", "hB", "H"],
+  "PL": ["H", "h"],
+  "PM": ["H", "hB"],
+  "PN": ["H", "h", "hb", "hB"],
+  "PR": ["h", "H", "hB", "hb"],
+  "PS": ["h", "hB", "hb", "H"],
+  "PT": ["H", "hB"],
+  "PW": ["h", "H"],
+  "PY": ["h", "H", "hB", "hb"],
+  "QA": ["h", "hB", "hb", "H"],
+  "RE": ["H", "hB"],
+  "RO": ["H", "hB"],
+  "RS": ["H", "hB", "h"],
+  "RU": ["H"],
+  "RW": ["H", "h"],
+  "SA": ["h", "hB", "hb", "H"],
+  "SB": ["h", "hb", "H", "hB"],
+  "SC": ["H", "h", "hB"],
+  "SD": ["h", "hB", "hb", "H"],
+  "SE": ["H"],
+  "SG": ["h", "hb", "H", "hB"],
+  "SH": ["H", "h", "hb", "hB"],
+  "SI": ["H", "hB"],
+  "SJ": ["H"],
+  "SK": ["H"],
+  "SL": ["h", "hb", "H", "hB"],
+  "SM": ["H", "h", "hB"],
+  "SN": ["H", "h", "hB"],
+  "SO": ["h", "H"],
+  "SR": ["H", "hB"],
+  "SS": ["h", "hb", "H", "hB"],
+  "ST": ["H", "hB"],
+  "SV": ["h", "H", "hB", "hb"],
+  "SX": ["H", "h", "hb", "hB"],
+  "SY": ["h", "hB", "hb", "H"],
+  "SZ": ["h", "hb", "H", "hB"],
+  "TA": ["H", "h", "hb", "hB"],
+  "TC": ["h", "hb", "H", "hB"],
+  "TD": ["h", "H", "hB"],
+  "TF": ["H", "h", "hB"],
+  "TG": ["H", "hB"],
+  "TH": ["H", "h"],
+  "TJ": ["H", "h"],
+  "TL": ["H", "hB", "hb", "h"],
+  "TM": ["H", "h"],
+  "TN": ["h", "hB", "hb", "H"],
+  "TO": ["h", "H"],
+  "TR": ["H", "hB"],
+  "TT": ["h", "hb", "H", "hB"],
+  "TW": ["hB", "hb", "h", "H"],
+  "TZ": ["hB", "hb", "H", "h"],
+  "UA": ["H", "hB", "h"],
+  "UG": ["hB", "hb", "H", "h"],
+  "UM": ["h", "hb", "H", "hB"],
+  "US": ["h", "hb", "H", "hB"],
+  "UY": ["h", "H", "hB", "hb"],
+  "UZ": ["H", "hB", "h"],
+  "VA": ["H", "h", "hB"],
+  "VC": ["h", "hb", "H", "hB"],
+  "VE": ["h", "H", "hB", "hb"],
+  "VG": ["h", "hb", "H", "hB"],
+  "VI": ["h", "hb", "H", "hB"],
+  "VN": ["H", "h"],
+  "VU": ["h", "H"],
+  "WF": ["H", "hB"],
+  "WS": ["h", "H"],
+  "XK": ["H", "hB", "h"],
+  "YE": ["h", "hB", "hb", "H"],
+  "YT": ["H", "hB"],
+  "ZA": ["H", "h", "hb", "hB"],
+  "ZM": ["h", "hb", "H", "hB"],
+  "ZW": ["H", "h"],
+  "af-ZA": ["H", "h", "hB", "hb"],
+  "ar-001": ["h", "hB", "hb", "H"],
+  "ca-ES": ["H", "h", "hB"],
+  "en-001": ["h", "hb", "H", "hB"],
+  "en-HK": ["h", "hb", "H", "hB"],
+  "en-IL": ["H", "h", "hb", "hB"],
+  "en-MY": ["h", "hb", "H", "hB"],
+  "es-BR": ["H", "h", "hB", "hb"],
+  "es-ES": ["H", "h", "hB", "hb"],
+  "es-GQ": ["H", "h", "hB", "hb"],
+  "fr-CA": ["H", "h", "hB"],
+  "gl-ES": ["H", "h", "hB"],
+  "gu-IN": ["hB", "hb", "h", "H"],
+  "hi-IN": ["hB", "h", "H"],
+  "it-CH": ["H", "h", "hB"],
+  "it-IT": ["H", "h", "hB"],
+  "kn-IN": ["hB", "h", "H"],
+  "ml-IN": ["hB", "h", "H"],
+  "mr-IN": ["hB", "hb", "h", "H"],
+  "pa-IN": ["hB", "hb", "h", "H"],
+  "ta-IN": ["hB", "h", "hb", "H"],
+  "te-IN": ["hB", "h", "H"],
+  "zu-ZA": ["H", "hB", "hb", "h"]
+};
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-messageformat-parser/lib/date-time-pattern-generator.js
+
+/**
+ * Returns the best matching date time pattern if a date time skeleton
+ * pattern is provided with a locale. Follows the Unicode specification:
+ * https://www.unicode.org/reports/tr35/tr35-dates.html#table-mapping-requested-time-skeletons-to-patterns
+ * @param skeleton date time skeleton pattern that possibly includes j, J or C
+ * @param locale
+ */
+function getBestPattern(skeleton, locale) {
+  var skeletonCopy = '';
+  for (var patternPos = 0; patternPos < skeleton.length; patternPos++) {
+    var patternChar = skeleton.charAt(patternPos);
+    if (patternChar === 'j') {
+      var extraLength = 0;
+      while (patternPos + 1 < skeleton.length && skeleton.charAt(patternPos + 1) === patternChar) {
+        extraLength++;
+        patternPos++;
+      }
+      var hourLen = 1 + (extraLength & 1);
+      var dayPeriodLen = extraLength < 2 ? 1 : 3 + (extraLength >> 1);
+      var dayPeriodChar = 'a';
+      var hourChar = getDefaultHourSymbolFromLocale(locale);
+      if (hourChar == 'H' || hourChar == 'k') {
+        dayPeriodLen = 0;
+      }
+      while (dayPeriodLen-- > 0) {
+        skeletonCopy += dayPeriodChar;
+      }
+      while (hourLen-- > 0) {
+        skeletonCopy = hourChar + skeletonCopy;
+      }
+    } else if (patternChar === 'J') {
+      skeletonCopy += 'H';
+    } else {
+      skeletonCopy += patternChar;
+    }
+  }
+  return skeletonCopy;
+}
+/**
+ * Maps the [hour cycle type](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/hourCycle)
+ * of the given `locale` to the corresponding time pattern.
+ * @param locale
+ */
+function getDefaultHourSymbolFromLocale(locale) {
+  var hourCycle = locale.hourCycle;
+  if (hourCycle === undefined &&
+  // @ts-ignore hourCycle(s) is not identified yet
+  locale.hourCycles &&
+  // @ts-ignore
+  locale.hourCycles.length) {
+    // @ts-ignore
+    hourCycle = locale.hourCycles[0];
+  }
+  if (hourCycle) {
+    switch (hourCycle) {
+      case 'h24':
+        return 'k';
+      case 'h23':
+        return 'H';
+      case 'h12':
+        return 'h';
+      case 'h11':
+        return 'K';
+      default:
+        throw new Error('Invalid hourCycle');
+    }
+  }
+  // TODO: Once hourCycle is fully supported remove the following with data generation
+  var languageTag = locale.language;
+  var regionTag;
+  if (languageTag !== 'root') {
+    regionTag = locale.maximize().region;
+  }
+  var hourCycles = timeData[regionTag || ''] || timeData[languageTag || ''] || timeData["".concat(languageTag, "-001")] || timeData['001'];
+  return hourCycles[0];
+}
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-messageformat-parser/lib/parser.js
+var parser_a;
+
+
+
+
+
+
+var SPACE_SEPARATOR_START_REGEX = new RegExp("^".concat(SPACE_SEPARATOR_REGEX.source, "*"));
+var SPACE_SEPARATOR_END_REGEX = new RegExp("".concat(SPACE_SEPARATOR_REGEX.source, "*$"));
+function createLocation(start, end) {
+  return {
+    start: start,
+    end: end
+  };
+}
+// #region Ponyfills
+// Consolidate these variables up top for easier toggling during debugging
+var hasNativeStartsWith = !!String.prototype.startsWith && '_a'.startsWith('a', 1);
+var hasNativeFromCodePoint = !!String.fromCodePoint;
+var hasNativeFromEntries = !!Object.fromEntries;
+var hasNativeCodePointAt = !!String.prototype.codePointAt;
+var hasTrimStart = !!String.prototype.trimStart;
+var hasTrimEnd = !!String.prototype.trimEnd;
+var hasNativeIsSafeInteger = !!Number.isSafeInteger;
+var isSafeInteger = hasNativeIsSafeInteger ? Number.isSafeInteger : function (n) {
+  return typeof n === 'number' && isFinite(n) && Math.floor(n) === n && Math.abs(n) <= 0x1fffffffffffff;
+};
+// IE11 does not support y and u.
+var REGEX_SUPPORTS_U_AND_Y = true;
+try {
+  var re = RE('([^\\p{White_Space}\\p{Pattern_Syntax}]*)', 'yu');
+  /**
+   * legacy Edge or Xbox One browser
+   * Unicode flag support: supported
+   * Pattern_Syntax support: not supported
+   * See https://github.com/formatjs/formatjs/issues/2822
+   */
+  REGEX_SUPPORTS_U_AND_Y = ((parser_a = re.exec('a')) === null || parser_a === void 0 ? void 0 : parser_a[0]) === 'a';
+} catch (_) {
+  REGEX_SUPPORTS_U_AND_Y = false;
+}
+var startsWith = hasNativeStartsWith ?
+// Native
+function startsWith(s, search, position) {
+  return s.startsWith(search, position);
+} :
+// For IE11
+function startsWith(s, search, position) {
+  return s.slice(position, position + search.length) === search;
+};
+var fromCodePoint = hasNativeFromCodePoint ? String.fromCodePoint :
+// IE11
+function fromCodePoint() {
+  var codePoints = [];
+  for (var _i = 0; _i < arguments.length; _i++) {
+    codePoints[_i] = arguments[_i];
+  }
+  var elements = '';
+  var length = codePoints.length;
+  var i = 0;
+  var code;
+  while (length > i) {
+    code = codePoints[i++];
+    if (code > 0x10ffff) throw RangeError(code + ' is not a valid code point');
+    elements += code < 0x10000 ? String.fromCharCode(code) : String.fromCharCode(((code -= 0x10000) >> 10) + 0xd800, code % 0x400 + 0xdc00);
+  }
+  return elements;
+};
+var fromEntries =
+// native
+hasNativeFromEntries ? Object.fromEntries :
+// Ponyfill
+function fromEntries(entries) {
+  var obj = {};
+  for (var _i = 0, entries_1 = entries; _i < entries_1.length; _i++) {
+    var _a = entries_1[_i],
+      k = _a[0],
+      v = _a[1];
+    obj[k] = v;
+  }
+  return obj;
+};
+var codePointAt = hasNativeCodePointAt ?
+// Native
+function codePointAt(s, index) {
+  return s.codePointAt(index);
+} :
+// IE 11
+function codePointAt(s, index) {
+  var size = s.length;
+  if (index < 0 || index >= size) {
+    return undefined;
+  }
+  var first = s.charCodeAt(index);
+  var second;
+  return first < 0xd800 || first > 0xdbff || index + 1 === size || (second = s.charCodeAt(index + 1)) < 0xdc00 || second > 0xdfff ? first : (first - 0xd800 << 10) + (second - 0xdc00) + 0x10000;
+};
+var trimStart = hasTrimStart ?
+// Native
+function trimStart(s) {
+  return s.trimStart();
+} :
+// Ponyfill
+function trimStart(s) {
+  return s.replace(SPACE_SEPARATOR_START_REGEX, '');
+};
+var trimEnd = hasTrimEnd ?
+// Native
+function trimEnd(s) {
+  return s.trimEnd();
+} :
+// Ponyfill
+function trimEnd(s) {
+  return s.replace(SPACE_SEPARATOR_END_REGEX, '');
+};
+// Prevent minifier to translate new RegExp to literal form that might cause syntax error on IE11.
+function RE(s, flag) {
+  return new RegExp(s, flag);
+}
+// #endregion
+var matchIdentifierAtIndex;
+if (REGEX_SUPPORTS_U_AND_Y) {
+  // Native
+  var IDENTIFIER_PREFIX_RE_1 = RE('([^\\p{White_Space}\\p{Pattern_Syntax}]*)', 'yu');
+  matchIdentifierAtIndex = function matchIdentifierAtIndex(s, index) {
+    var _a;
+    IDENTIFIER_PREFIX_RE_1.lastIndex = index;
+    var match = IDENTIFIER_PREFIX_RE_1.exec(s);
+    return (_a = match[1]) !== null && _a !== void 0 ? _a : '';
+  };
+} else {
+  // IE11
+  matchIdentifierAtIndex = function matchIdentifierAtIndex(s, index) {
+    var match = [];
+    while (true) {
+      var c = codePointAt(s, index);
+      if (c === undefined || _isWhiteSpace(c) || _isPatternSyntax(c)) {
+        break;
+      }
+      match.push(c);
+      index += c >= 0x10000 ? 2 : 1;
+    }
+    return fromCodePoint.apply(void 0, match);
+  };
+}
+var parser_Parser = /** @class */function () {
+  function Parser(message, options) {
+    if (options === void 0) {
+      options = {};
+    }
+    this.message = message;
+    this.position = {
+      offset: 0,
+      line: 1,
+      column: 1
+    };
+    this.ignoreTag = !!options.ignoreTag;
+    this.locale = options.locale;
+    this.requiresOtherClause = !!options.requiresOtherClause;
+    this.shouldParseSkeletons = !!options.shouldParseSkeletons;
+  }
+  Parser.prototype.parse = function () {
+    if (this.offset() !== 0) {
+      throw Error('parser can only be used once');
+    }
+    return this.parseMessage(0, '', false);
+  };
+  Parser.prototype.parseMessage = function (nestingLevel, parentArgType, expectingCloseTag) {
+    var elements = [];
+    while (!this.isEOF()) {
+      var char = this.char();
+      if (char === 123 /* `{` */) {
+        var result = this.parseArgument(nestingLevel, expectingCloseTag);
+        if (result.err) {
+          return result;
+        }
+        elements.push(result.val);
+      } else if (char === 125 /* `}` */ && nestingLevel > 0) {
+        break;
+      } else if (char === 35 /* `#` */ && (parentArgType === 'plural' || parentArgType === 'selectordinal')) {
+        var position = this.clonePosition();
+        this.bump();
+        elements.push({
+          type: TYPE.pound,
+          location: createLocation(position, this.clonePosition())
+        });
+      } else if (char === 60 /* `<` */ && !this.ignoreTag && this.peek() === 47 // char code for '/'
+      ) {
+        if (expectingCloseTag) {
+          break;
+        } else {
+          return this.error(ErrorKind.UNMATCHED_CLOSING_TAG, createLocation(this.clonePosition(), this.clonePosition()));
+        }
+      } else if (char === 60 /* `<` */ && !this.ignoreTag && _isAlpha(this.peek() || 0)) {
+        var result = this.parseTag(nestingLevel, parentArgType);
+        if (result.err) {
+          return result;
+        }
+        elements.push(result.val);
+      } else {
+        var result = this.parseLiteral(nestingLevel, parentArgType);
+        if (result.err) {
+          return result;
+        }
+        elements.push(result.val);
+      }
+    }
+    return {
+      val: elements,
+      err: null
+    };
+  };
+  /**
+   * A tag name must start with an ASCII lower/upper case letter. The grammar is based on the
+   * [custom element name][] except that a dash is NOT always mandatory and uppercase letters
+   * are accepted:
+   *
+   * ```
+   * tag ::= "<" tagName (whitespace)* "/>" | "<" tagName (whitespace)* ">" message "</" tagName (whitespace)* ">"
+   * tagName ::= [a-z] (PENChar)*
+   * PENChar ::=
+   *     "-" | "." | [0-9] | "_" | [a-z] | [A-Z] | #xB7 | [#xC0-#xD6] | [#xD8-#xF6] | [#xF8-#x37D] |
+   *     [#x37F-#x1FFF] | [#x200C-#x200D] | [#x203F-#x2040] | [#x2070-#x218F] | [#x2C00-#x2FEF] |
+   *     [#x3001-#xD7FF] | [#xF900-#xFDCF] | [#xFDF0-#xFFFD] | [#x10000-#xEFFFF]
+   * ```
+   *
+   * [custom element name]: https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name
+   * NOTE: We're a bit more lax here since HTML technically does not allow uppercase HTML element but we do
+   * since other tag-based engines like React allow it
+   */
+  Parser.prototype.parseTag = function (nestingLevel, parentArgType) {
+    var startPosition = this.clonePosition();
+    this.bump(); // `<`
+    var tagName = this.parseTagName();
+    this.bumpSpace();
+    if (this.bumpIf('/>')) {
+      // Self closing tag
+      return {
+        val: {
+          type: TYPE.literal,
+          value: "<".concat(tagName, "/>"),
+          location: createLocation(startPosition, this.clonePosition())
+        },
+        err: null
+      };
+    } else if (this.bumpIf('>')) {
+      var childrenResult = this.parseMessage(nestingLevel + 1, parentArgType, true);
+      if (childrenResult.err) {
+        return childrenResult;
+      }
+      var children = childrenResult.val;
+      // Expecting a close tag
+      var endTagStartPosition = this.clonePosition();
+      if (this.bumpIf('</')) {
+        if (this.isEOF() || !_isAlpha(this.char())) {
+          return this.error(ErrorKind.INVALID_TAG, createLocation(endTagStartPosition, this.clonePosition()));
+        }
+        var closingTagNameStartPosition = this.clonePosition();
+        var closingTagName = this.parseTagName();
+        if (tagName !== closingTagName) {
+          return this.error(ErrorKind.UNMATCHED_CLOSING_TAG, createLocation(closingTagNameStartPosition, this.clonePosition()));
+        }
+        this.bumpSpace();
+        if (!this.bumpIf('>')) {
+          return this.error(ErrorKind.INVALID_TAG, createLocation(endTagStartPosition, this.clonePosition()));
+        }
+        return {
+          val: {
+            type: TYPE.tag,
+            value: tagName,
+            children: children,
+            location: createLocation(startPosition, this.clonePosition())
+          },
+          err: null
+        };
+      } else {
+        return this.error(ErrorKind.UNCLOSED_TAG, createLocation(startPosition, this.clonePosition()));
+      }
+    } else {
+      return this.error(ErrorKind.INVALID_TAG, createLocation(startPosition, this.clonePosition()));
+    }
+  };
+  /**
+   * This method assumes that the caller has peeked ahead for the first tag character.
+   */
+  Parser.prototype.parseTagName = function () {
+    var startOffset = this.offset();
+    this.bump(); // the first tag name character
+    while (!this.isEOF() && _isPotentialElementNameChar(this.char())) {
+      this.bump();
+    }
+    return this.message.slice(startOffset, this.offset());
+  };
+  Parser.prototype.parseLiteral = function (nestingLevel, parentArgType) {
+    var start = this.clonePosition();
+    var value = '';
+    while (true) {
+      var parseQuoteResult = this.tryParseQuote(parentArgType);
+      if (parseQuoteResult) {
+        value += parseQuoteResult;
+        continue;
+      }
+      var parseUnquotedResult = this.tryParseUnquoted(nestingLevel, parentArgType);
+      if (parseUnquotedResult) {
+        value += parseUnquotedResult;
+        continue;
+      }
+      var parseLeftAngleResult = this.tryParseLeftAngleBracket();
+      if (parseLeftAngleResult) {
+        value += parseLeftAngleResult;
+        continue;
+      }
+      break;
+    }
+    var location = createLocation(start, this.clonePosition());
+    return {
+      val: {
+        type: TYPE.literal,
+        value: value,
+        location: location
+      },
+      err: null
+    };
+  };
+  Parser.prototype.tryParseLeftAngleBracket = function () {
+    if (!this.isEOF() && this.char() === 60 /* `<` */ && (this.ignoreTag ||
+    // If at the opening tag or closing tag position, bail.
+    !_isAlphaOrSlash(this.peek() || 0))) {
+      this.bump(); // `<`
+      return '<';
+    }
+    return null;
+  };
+  /**
+   * Starting with ICU 4.8, an ASCII apostrophe only starts quoted text if it immediately precedes
+   * a character that requires quoting (that is, "only where needed"), and works the same in
+   * nested messages as on the top level of the pattern. The new behavior is otherwise compatible.
+   */
+  Parser.prototype.tryParseQuote = function (parentArgType) {
+    if (this.isEOF() || this.char() !== 39 /* `'` */) {
+      return null;
+    }
+    // Parse escaped char following the apostrophe, or early return if there is no escaped char.
+    // Check if is valid escaped character
+    switch (this.peek()) {
+      case 39 /* `'` */:
+        // double quote, should return as a single quote.
+        this.bump();
+        this.bump();
+        return "'";
+      // '{', '<', '>', '}'
+      case 123:
+      case 60:
+      case 62:
+      case 125:
+        break;
+      case 35:
+        // '#'
+        if (parentArgType === 'plural' || parentArgType === 'selectordinal') {
+          break;
+        }
+        return null;
+      default:
+        return null;
+    }
+    this.bump(); // apostrophe
+    var codePoints = [this.char()]; // escaped char
+    this.bump();
+    // read chars until the optional closing apostrophe is found
+    while (!this.isEOF()) {
+      var ch = this.char();
+      if (ch === 39 /* `'` */) {
+        if (this.peek() === 39 /* `'` */) {
+          codePoints.push(39);
+          // Bump one more time because we need to skip 2 characters.
+          this.bump();
+        } else {
+          // Optional closing apostrophe.
+          this.bump();
+          break;
+        }
+      } else {
+        codePoints.push(ch);
+      }
+      this.bump();
+    }
+    return fromCodePoint.apply(void 0, codePoints);
+  };
+  Parser.prototype.tryParseUnquoted = function (nestingLevel, parentArgType) {
+    if (this.isEOF()) {
+      return null;
+    }
+    var ch = this.char();
+    if (ch === 60 /* `<` */ || ch === 123 /* `{` */ || ch === 35 /* `#` */ && (parentArgType === 'plural' || parentArgType === 'selectordinal') || ch === 125 /* `}` */ && nestingLevel > 0) {
+      return null;
+    } else {
+      this.bump();
+      return fromCodePoint(ch);
+    }
+  };
+  Parser.prototype.parseArgument = function (nestingLevel, expectingCloseTag) {
+    var openingBracePosition = this.clonePosition();
+    this.bump(); // `{`
+    this.bumpSpace();
+    if (this.isEOF()) {
+      return this.error(ErrorKind.EXPECT_ARGUMENT_CLOSING_BRACE, createLocation(openingBracePosition, this.clonePosition()));
+    }
+    if (this.char() === 125 /* `}` */) {
+      this.bump();
+      return this.error(ErrorKind.EMPTY_ARGUMENT, createLocation(openingBracePosition, this.clonePosition()));
+    }
+    // argument name
+    var value = this.parseIdentifierIfPossible().value;
+    if (!value) {
+      return this.error(ErrorKind.MALFORMED_ARGUMENT, createLocation(openingBracePosition, this.clonePosition()));
+    }
+    this.bumpSpace();
+    if (this.isEOF()) {
+      return this.error(ErrorKind.EXPECT_ARGUMENT_CLOSING_BRACE, createLocation(openingBracePosition, this.clonePosition()));
+    }
+    switch (this.char()) {
+      // Simple argument: `{name}`
+      case 125 /* `}` */:
+        {
+          this.bump(); // `}`
+          return {
+            val: {
+              type: TYPE.argument,
+              // value does not include the opening and closing braces.
+              value: value,
+              location: createLocation(openingBracePosition, this.clonePosition())
+            },
+            err: null
+          };
+        }
+      // Argument with options: `{name, format, ...}`
+      case 44 /* `,` */:
+        {
+          this.bump(); // `,`
+          this.bumpSpace();
+          if (this.isEOF()) {
+            return this.error(ErrorKind.EXPECT_ARGUMENT_CLOSING_BRACE, createLocation(openingBracePosition, this.clonePosition()));
+          }
+          return this.parseArgumentOptions(nestingLevel, expectingCloseTag, value, openingBracePosition);
+        }
+      default:
+        return this.error(ErrorKind.MALFORMED_ARGUMENT, createLocation(openingBracePosition, this.clonePosition()));
+    }
+  };
+  /**
+   * Advance the parser until the end of the identifier, if it is currently on
+   * an identifier character. Return an empty string otherwise.
+   */
+  Parser.prototype.parseIdentifierIfPossible = function () {
+    var startingPosition = this.clonePosition();
+    var startOffset = this.offset();
+    var value = matchIdentifierAtIndex(this.message, startOffset);
+    var endOffset = startOffset + value.length;
+    this.bumpTo(endOffset);
+    var endPosition = this.clonePosition();
+    var location = createLocation(startingPosition, endPosition);
+    return {
+      value: value,
+      location: location
+    };
+  };
+  Parser.prototype.parseArgumentOptions = function (nestingLevel, expectingCloseTag, value, openingBracePosition) {
+    var _a;
+    // Parse this range:
+    // {name, type, style}
+    //        ^---^
+    var typeStartPosition = this.clonePosition();
+    var argType = this.parseIdentifierIfPossible().value;
+    var typeEndPosition = this.clonePosition();
+    switch (argType) {
+      case '':
+        // Expecting a style string number, date, time, plural, selectordinal, or select.
+        return this.error(ErrorKind.EXPECT_ARGUMENT_TYPE, createLocation(typeStartPosition, typeEndPosition));
+      case 'number':
+      case 'date':
+      case 'time':
+        {
+          // Parse this range:
+          // {name, number, style}
+          //              ^-------^
+          this.bumpSpace();
+          var styleAndLocation = null;
+          if (this.bumpIf(',')) {
+            this.bumpSpace();
+            var styleStartPosition = this.clonePosition();
+            var result = this.parseSimpleArgStyleIfPossible();
+            if (result.err) {
+              return result;
+            }
+            var style = trimEnd(result.val);
+            if (style.length === 0) {
+              return this.error(ErrorKind.EXPECT_ARGUMENT_STYLE, createLocation(this.clonePosition(), this.clonePosition()));
+            }
+            var styleLocation = createLocation(styleStartPosition, this.clonePosition());
+            styleAndLocation = {
+              style: style,
+              styleLocation: styleLocation
+            };
+          }
+          var argCloseResult = this.tryParseArgumentClose(openingBracePosition);
+          if (argCloseResult.err) {
+            return argCloseResult;
+          }
+          var location_1 = createLocation(openingBracePosition, this.clonePosition());
+          // Extract style or skeleton
+          if (styleAndLocation && startsWith(styleAndLocation === null || styleAndLocation === void 0 ? void 0 : styleAndLocation.style, '::', 0)) {
+            // Skeleton starts with `::`.
+            var skeleton = trimStart(styleAndLocation.style.slice(2));
+            if (argType === 'number') {
+              var result = this.parseNumberSkeletonFromString(skeleton, styleAndLocation.styleLocation);
+              if (result.err) {
+                return result;
+              }
+              return {
+                val: {
+                  type: TYPE.number,
+                  value: value,
+                  location: location_1,
+                  style: result.val
+                },
+                err: null
+              };
+            } else {
+              if (skeleton.length === 0) {
+                return this.error(ErrorKind.EXPECT_DATE_TIME_SKELETON, location_1);
+              }
+              var dateTimePattern = skeleton;
+              // Get "best match" pattern only if locale is passed, if not, let it
+              // pass as-is where `parseDateTimeSkeleton()` will throw an error
+              // for unsupported patterns.
+              if (this.locale) {
+                dateTimePattern = getBestPattern(skeleton, this.locale);
+              }
+              var style = {
+                type: SKELETON_TYPE.dateTime,
+                pattern: dateTimePattern,
+                location: styleAndLocation.styleLocation,
+                parsedOptions: this.shouldParseSkeletons ? parseDateTimeSkeleton(dateTimePattern) : {}
+              };
+              var type = argType === 'date' ? TYPE.date : TYPE.time;
+              return {
+                val: {
+                  type: type,
+                  value: value,
+                  location: location_1,
+                  style: style
+                },
+                err: null
+              };
+            }
+          }
+          // Regular style or no style.
+          return {
+            val: {
+              type: argType === 'number' ? TYPE.number : argType === 'date' ? TYPE.date : TYPE.time,
+              value: value,
+              location: location_1,
+              style: (_a = styleAndLocation === null || styleAndLocation === void 0 ? void 0 : styleAndLocation.style) !== null && _a !== void 0 ? _a : null
+            },
+            err: null
+          };
+        }
+      case 'plural':
+      case 'selectordinal':
+      case 'select':
+        {
+          // Parse this range:
+          // {name, plural, options}
+          //              ^---------^
+          var typeEndPosition_1 = this.clonePosition();
+          this.bumpSpace();
+          if (!this.bumpIf(',')) {
+            return this.error(ErrorKind.EXPECT_SELECT_ARGUMENT_OPTIONS, createLocation(typeEndPosition_1, Object(tslib_es6["a" /* __assign */])({}, typeEndPosition_1)));
+          }
+          this.bumpSpace();
+          // Parse offset:
+          // {name, plural, offset:1, options}
+          //                ^-----^
+          //
+          // or the first option:
+          //
+          // {name, plural, one {...} other {...}}
+          //                ^--^
+          var identifierAndLocation = this.parseIdentifierIfPossible();
+          var pluralOffset = 0;
+          if (argType !== 'select' && identifierAndLocation.value === 'offset') {
+            if (!this.bumpIf(':')) {
+              return this.error(ErrorKind.EXPECT_PLURAL_ARGUMENT_OFFSET_VALUE, createLocation(this.clonePosition(), this.clonePosition()));
+            }
+            this.bumpSpace();
+            var result = this.tryParseDecimalInteger(ErrorKind.EXPECT_PLURAL_ARGUMENT_OFFSET_VALUE, ErrorKind.INVALID_PLURAL_ARGUMENT_OFFSET_VALUE);
+            if (result.err) {
+              return result;
+            }
+            // Parse another identifier for option parsing
+            this.bumpSpace();
+            identifierAndLocation = this.parseIdentifierIfPossible();
+            pluralOffset = result.val;
+          }
+          var optionsResult = this.tryParsePluralOrSelectOptions(nestingLevel, argType, expectingCloseTag, identifierAndLocation);
+          if (optionsResult.err) {
+            return optionsResult;
+          }
+          var argCloseResult = this.tryParseArgumentClose(openingBracePosition);
+          if (argCloseResult.err) {
+            return argCloseResult;
+          }
+          var location_2 = createLocation(openingBracePosition, this.clonePosition());
+          if (argType === 'select') {
+            return {
+              val: {
+                type: TYPE.select,
+                value: value,
+                options: fromEntries(optionsResult.val),
+                location: location_2
+              },
+              err: null
+            };
+          } else {
+            return {
+              val: {
+                type: TYPE.plural,
+                value: value,
+                options: fromEntries(optionsResult.val),
+                offset: pluralOffset,
+                pluralType: argType === 'plural' ? 'cardinal' : 'ordinal',
+                location: location_2
+              },
+              err: null
+            };
+          }
+        }
+      default:
+        return this.error(ErrorKind.INVALID_ARGUMENT_TYPE, createLocation(typeStartPosition, typeEndPosition));
+    }
+  };
+  Parser.prototype.tryParseArgumentClose = function (openingBracePosition) {
+    // Parse: {value, number, ::currency/GBP }
+    //
+    if (this.isEOF() || this.char() !== 125 /* `}` */) {
+      return this.error(ErrorKind.EXPECT_ARGUMENT_CLOSING_BRACE, createLocation(openingBracePosition, this.clonePosition()));
+    }
+    this.bump(); // `}`
+    return {
+      val: true,
+      err: null
+    };
+  };
+  /**
+   * See: https://github.com/unicode-org/icu/blob/af7ed1f6d2298013dc303628438ec4abe1f16479/icu4c/source/common/messagepattern.cpp#L659
+   */
+  Parser.prototype.parseSimpleArgStyleIfPossible = function () {
+    var nestedBraces = 0;
+    var startPosition = this.clonePosition();
+    while (!this.isEOF()) {
+      var ch = this.char();
+      switch (ch) {
+        case 39 /* `'` */:
+          {
+            // Treat apostrophe as quoting but include it in the style part.
+            // Find the end of the quoted literal text.
+            this.bump();
+            var apostrophePosition = this.clonePosition();
+            if (!this.bumpUntil("'")) {
+              return this.error(ErrorKind.UNCLOSED_QUOTE_IN_ARGUMENT_STYLE, createLocation(apostrophePosition, this.clonePosition()));
+            }
+            this.bump();
+            break;
+          }
+        case 123 /* `{` */:
+          {
+            nestedBraces += 1;
+            this.bump();
+            break;
+          }
+        case 125 /* `}` */:
+          {
+            if (nestedBraces > 0) {
+              nestedBraces -= 1;
+            } else {
+              return {
+                val: this.message.slice(startPosition.offset, this.offset()),
+                err: null
+              };
+            }
+            break;
+          }
+        default:
+          this.bump();
+          break;
+      }
+    }
+    return {
+      val: this.message.slice(startPosition.offset, this.offset()),
+      err: null
+    };
+  };
+  Parser.prototype.parseNumberSkeletonFromString = function (skeleton, location) {
+    var tokens = [];
+    try {
+      tokens = parseNumberSkeletonFromString(skeleton);
+    } catch (e) {
+      return this.error(ErrorKind.INVALID_NUMBER_SKELETON, location);
+    }
+    return {
+      val: {
+        type: SKELETON_TYPE.number,
+        tokens: tokens,
+        location: location,
+        parsedOptions: this.shouldParseSkeletons ? parseNumberSkeleton(tokens) : {}
+      },
+      err: null
+    };
+  };
+  /**
+   * @param nesting_level The current nesting level of messages.
+   *     This can be positive when parsing message fragment in select or plural argument options.
+   * @param parent_arg_type The parent argument's type.
+   * @param parsed_first_identifier If provided, this is the first identifier-like selector of
+   *     the argument. It is a by-product of a previous parsing attempt.
+   * @param expecting_close_tag If true, this message is directly or indirectly nested inside
+   *     between a pair of opening and closing tags. The nested message will not parse beyond
+   *     the closing tag boundary.
+   */
+  Parser.prototype.tryParsePluralOrSelectOptions = function (nestingLevel, parentArgType, expectCloseTag, parsedFirstIdentifier) {
+    var _a;
+    var hasOtherClause = false;
+    var options = [];
+    var parsedSelectors = new Set();
+    var selector = parsedFirstIdentifier.value,
+      selectorLocation = parsedFirstIdentifier.location;
+    // Parse:
+    // one {one apple}
+    // ^--^
+    while (true) {
+      if (selector.length === 0) {
+        var startPosition = this.clonePosition();
+        if (parentArgType !== 'select' && this.bumpIf('=')) {
+          // Try parse `={number}` selector
+          var result = this.tryParseDecimalInteger(ErrorKind.EXPECT_PLURAL_ARGUMENT_SELECTOR, ErrorKind.INVALID_PLURAL_ARGUMENT_SELECTOR);
+          if (result.err) {
+            return result;
+          }
+          selectorLocation = createLocation(startPosition, this.clonePosition());
+          selector = this.message.slice(startPosition.offset, this.offset());
+        } else {
+          break;
+        }
+      }
+      // Duplicate selector clauses
+      if (parsedSelectors.has(selector)) {
+        return this.error(parentArgType === 'select' ? ErrorKind.DUPLICATE_SELECT_ARGUMENT_SELECTOR : ErrorKind.DUPLICATE_PLURAL_ARGUMENT_SELECTOR, selectorLocation);
+      }
+      if (selector === 'other') {
+        hasOtherClause = true;
+      }
+      // Parse:
+      // one {one apple}
+      //     ^----------^
+      this.bumpSpace();
+      var openingBracePosition = this.clonePosition();
+      if (!this.bumpIf('{')) {
+        return this.error(parentArgType === 'select' ? ErrorKind.EXPECT_SELECT_ARGUMENT_SELECTOR_FRAGMENT : ErrorKind.EXPECT_PLURAL_ARGUMENT_SELECTOR_FRAGMENT, createLocation(this.clonePosition(), this.clonePosition()));
+      }
+      var fragmentResult = this.parseMessage(nestingLevel + 1, parentArgType, expectCloseTag);
+      if (fragmentResult.err) {
+        return fragmentResult;
+      }
+      var argCloseResult = this.tryParseArgumentClose(openingBracePosition);
+      if (argCloseResult.err) {
+        return argCloseResult;
+      }
+      options.push([selector, {
+        value: fragmentResult.val,
+        location: createLocation(openingBracePosition, this.clonePosition())
+      }]);
+      // Keep track of the existing selectors
+      parsedSelectors.add(selector);
+      // Prep next selector clause.
+      this.bumpSpace();
+      _a = this.parseIdentifierIfPossible(), selector = _a.value, selectorLocation = _a.location;
+    }
+    if (options.length === 0) {
+      return this.error(parentArgType === 'select' ? ErrorKind.EXPECT_SELECT_ARGUMENT_SELECTOR : ErrorKind.EXPECT_PLURAL_ARGUMENT_SELECTOR, createLocation(this.clonePosition(), this.clonePosition()));
+    }
+    if (this.requiresOtherClause && !hasOtherClause) {
+      return this.error(ErrorKind.MISSING_OTHER_CLAUSE, createLocation(this.clonePosition(), this.clonePosition()));
+    }
+    return {
+      val: options,
+      err: null
+    };
+  };
+  Parser.prototype.tryParseDecimalInteger = function (expectNumberError, invalidNumberError) {
+    var sign = 1;
+    var startingPosition = this.clonePosition();
+    if (this.bumpIf('+')) {} else if (this.bumpIf('-')) {
+      sign = -1;
+    }
+    var hasDigits = false;
+    var decimal = 0;
+    while (!this.isEOF()) {
+      var ch = this.char();
+      if (ch >= 48 /* `0` */ && ch <= 57 /* `9` */) {
+        hasDigits = true;
+        decimal = decimal * 10 + (ch - 48);
+        this.bump();
+      } else {
+        break;
+      }
+    }
+    var location = createLocation(startingPosition, this.clonePosition());
+    if (!hasDigits) {
+      return this.error(expectNumberError, location);
+    }
+    decimal *= sign;
+    if (!isSafeInteger(decimal)) {
+      return this.error(invalidNumberError, location);
+    }
+    return {
+      val: decimal,
+      err: null
+    };
+  };
+  Parser.prototype.offset = function () {
+    return this.position.offset;
+  };
+  Parser.prototype.isEOF = function () {
+    return this.offset() === this.message.length;
+  };
+  Parser.prototype.clonePosition = function () {
+    // This is much faster than `Object.assign` or spread.
+    return {
+      offset: this.position.offset,
+      line: this.position.line,
+      column: this.position.column
+    };
+  };
+  /**
+   * Return the code point at the current position of the parser.
+   * Throws if the index is out of bound.
+   */
+  Parser.prototype.char = function () {
+    var offset = this.position.offset;
+    if (offset >= this.message.length) {
+      throw Error('out of bound');
+    }
+    var code = codePointAt(this.message, offset);
+    if (code === undefined) {
+      throw Error("Offset ".concat(offset, " is at invalid UTF-16 code unit boundary"));
+    }
+    return code;
+  };
+  Parser.prototype.error = function (kind, location) {
+    return {
+      val: null,
+      err: {
+        kind: kind,
+        message: this.message,
+        location: location
+      }
+    };
+  };
+  /** Bump the parser to the next UTF-16 code unit. */
+  Parser.prototype.bump = function () {
+    if (this.isEOF()) {
+      return;
+    }
+    var code = this.char();
+    if (code === 10 /* '\n' */) {
+      this.position.line += 1;
+      this.position.column = 1;
+      this.position.offset += 1;
+    } else {
+      this.position.column += 1;
+      // 0 ~ 0x10000 -> unicode BMP, otherwise skip the surrogate pair.
+      this.position.offset += code < 0x10000 ? 1 : 2;
+    }
+  };
+  /**
+   * If the substring starting at the current position of the parser has
+   * the given prefix, then bump the parser to the character immediately
+   * following the prefix and return true. Otherwise, don't bump the parser
+   * and return false.
+   */
+  Parser.prototype.bumpIf = function (prefix) {
+    if (startsWith(this.message, prefix, this.offset())) {
+      for (var i = 0; i < prefix.length; i++) {
+        this.bump();
+      }
+      return true;
+    }
+    return false;
+  };
+  /**
+   * Bump the parser until the pattern character is found and return `true`.
+   * Otherwise bump to the end of the file and return `false`.
+   */
+  Parser.prototype.bumpUntil = function (pattern) {
+    var currentOffset = this.offset();
+    var index = this.message.indexOf(pattern, currentOffset);
+    if (index >= 0) {
+      this.bumpTo(index);
+      return true;
+    } else {
+      this.bumpTo(this.message.length);
+      return false;
+    }
+  };
+  /**
+   * Bump the parser to the target offset.
+   * If target offset is beyond the end of the input, bump the parser to the end of the input.
+   */
+  Parser.prototype.bumpTo = function (targetOffset) {
+    if (this.offset() > targetOffset) {
+      throw Error("targetOffset ".concat(targetOffset, " must be greater than or equal to the current offset ").concat(this.offset()));
+    }
+    targetOffset = Math.min(targetOffset, this.message.length);
+    while (true) {
+      var offset = this.offset();
+      if (offset === targetOffset) {
+        break;
+      }
+      if (offset > targetOffset) {
+        throw Error("targetOffset ".concat(targetOffset, " is at invalid UTF-16 code unit boundary"));
+      }
+      this.bump();
+      if (this.isEOF()) {
+        break;
+      }
+    }
+  };
+  /** advance the parser through all whitespace to the next non-whitespace code unit. */
+  Parser.prototype.bumpSpace = function () {
+    while (!this.isEOF() && _isWhiteSpace(this.char())) {
+      this.bump();
+    }
+  };
+  /**
+   * Peek at the *next* Unicode codepoint in the input without advancing the parser.
+   * If the input has been exhausted, then this returns null.
+   */
+  Parser.prototype.peek = function () {
+    if (this.isEOF()) {
+      return null;
+    }
+    var code = this.char();
+    var offset = this.offset();
+    var nextCode = this.message.charCodeAt(offset + (code >= 0x10000 ? 2 : 1));
+    return nextCode !== null && nextCode !== void 0 ? nextCode : null;
+  };
+  return Parser;
+}();
+
+/**
+ * This check if codepoint is alphabet (lower & uppercase)
+ * @param codepoint
+ * @returns
+ */
+function _isAlpha(codepoint) {
+  return codepoint >= 97 && codepoint <= 122 || codepoint >= 65 && codepoint <= 90;
+}
+function _isAlphaOrSlash(codepoint) {
+  return _isAlpha(codepoint) || codepoint === 47; /* '/' */
+}
+/** See `parseTag` function docs. */
+function _isPotentialElementNameChar(c) {
+  return c === 45 /* '-' */ || c === 46 /* '.' */ || c >= 48 && c <= 57 /* 0..9 */ || c === 95 /* '_' */ || c >= 97 && c <= 122 /** a..z */ || c >= 65 && c <= 90 /* A..Z */ || c == 0xb7 || c >= 0xc0 && c <= 0xd6 || c >= 0xd8 && c <= 0xf6 || c >= 0xf8 && c <= 0x37d || c >= 0x37f && c <= 0x1fff || c >= 0x200c && c <= 0x200d || c >= 0x203f && c <= 0x2040 || c >= 0x2070 && c <= 0x218f || c >= 0x2c00 && c <= 0x2fef || c >= 0x3001 && c <= 0xd7ff || c >= 0xf900 && c <= 0xfdcf || c >= 0xfdf0 && c <= 0xfffd || c >= 0x10000 && c <= 0xeffff;
+}
+/**
+ * Code point equivalent of regex `\p{White_Space}`.
+ * From: https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt
+ */
+function _isWhiteSpace(c) {
+  return c >= 0x0009 && c <= 0x000d || c === 0x0020 || c === 0x0085 || c >= 0x200e && c <= 0x200f || c === 0x2028 || c === 0x2029;
+}
+/**
+ * Code point equivalent of regex `\p{Pattern_Syntax}`.
+ * See https://www.unicode.org/Public/UCD/latest/ucd/PropList.txt
+ */
+function _isPatternSyntax(c) {
+  return c >= 0x0021 && c <= 0x0023 || c === 0x0024 || c >= 0x0025 && c <= 0x0027 || c === 0x0028 || c === 0x0029 || c === 0x002a || c === 0x002b || c === 0x002c || c === 0x002d || c >= 0x002e && c <= 0x002f || c >= 0x003a && c <= 0x003b || c >= 0x003c && c <= 0x003e || c >= 0x003f && c <= 0x0040 || c === 0x005b || c === 0x005c || c === 0x005d || c === 0x005e || c === 0x0060 || c === 0x007b || c === 0x007c || c === 0x007d || c === 0x007e || c === 0x00a1 || c >= 0x00a2 && c <= 0x00a5 || c === 0x00a6 || c === 0x00a7 || c === 0x00a9 || c === 0x00ab || c === 0x00ac || c === 0x00ae || c === 0x00b0 || c === 0x00b1 || c === 0x00b6 || c === 0x00bb || c === 0x00bf || c === 0x00d7 || c === 0x00f7 || c >= 0x2010 && c <= 0x2015 || c >= 0x2016 && c <= 0x2017 || c === 0x2018 || c === 0x2019 || c === 0x201a || c >= 0x201b && c <= 0x201c || c === 0x201d || c === 0x201e || c === 0x201f || c >= 0x2020 && c <= 0x2027 || c >= 0x2030 && c <= 0x2038 || c === 0x2039 || c === 0x203a || c >= 0x203b && c <= 0x203e || c >= 0x2041 && c <= 0x2043 || c === 0x2044 || c === 0x2045 || c === 0x2046 || c >= 0x2047 && c <= 0x2051 || c === 0x2052 || c === 0x2053 || c >= 0x2055 && c <= 0x205e || c >= 0x2190 && c <= 0x2194 || c >= 0x2195 && c <= 0x2199 || c >= 0x219a && c <= 0x219b || c >= 0x219c && c <= 0x219f || c === 0x21a0 || c >= 0x21a1 && c <= 0x21a2 || c === 0x21a3 || c >= 0x21a4 && c <= 0x21a5 || c === 0x21a6 || c >= 0x21a7 && c <= 0x21ad || c === 0x21ae || c >= 0x21af && c <= 0x21cd || c >= 0x21ce && c <= 0x21cf || c >= 0x21d0 && c <= 0x21d1 || c === 0x21d2 || c === 0x21d3 || c === 0x21d4 || c >= 0x21d5 && c <= 0x21f3 || c >= 0x21f4 && c <= 0x22ff || c >= 0x2300 && c <= 0x2307 || c === 0x2308 || c === 0x2309 || c === 0x230a || c === 0x230b || c >= 0x230c && c <= 0x231f || c >= 0x2320 && c <= 0x2321 || c >= 0x2322 && c <= 0x2328 || c === 0x2329 || c === 0x232a || c >= 0x232b && c <= 0x237b || c === 0x237c || c >= 0x237d && c <= 0x239a || c >= 0x239b && c <= 0x23b3 || c >= 0x23b4 && c <= 0x23db || c >= 0x23dc && c <= 0x23e1 || c >= 0x23e2 && c <= 0x2426 || c >= 0x2427 && c <= 0x243f || c >= 0x2440 && c <= 0x244a || c >= 0x244b && c <= 0x245f || c >= 0x2500 && c <= 0x25b6 || c === 0x25b7 || c >= 0x25b8 && c <= 0x25c0 || c === 0x25c1 || c >= 0x25c2 && c <= 0x25f7 || c >= 0x25f8 && c <= 0x25ff || c >= 0x2600 && c <= 0x266e || c === 0x266f || c >= 0x2670 && c <= 0x2767 || c === 0x2768 || c === 0x2769 || c === 0x276a || c === 0x276b || c === 0x276c || c === 0x276d || c === 0x276e || c === 0x276f || c === 0x2770 || c === 0x2771 || c === 0x2772 || c === 0x2773 || c === 0x2774 || c === 0x2775 || c >= 0x2794 && c <= 0x27bf || c >= 0x27c0 && c <= 0x27c4 || c === 0x27c5 || c === 0x27c6 || c >= 0x27c7 && c <= 0x27e5 || c === 0x27e6 || c === 0x27e7 || c === 0x27e8 || c === 0x27e9 || c === 0x27ea || c === 0x27eb || c === 0x27ec || c === 0x27ed || c === 0x27ee || c === 0x27ef || c >= 0x27f0 && c <= 0x27ff || c >= 0x2800 && c <= 0x28ff || c >= 0x2900 && c <= 0x2982 || c === 0x2983 || c === 0x2984 || c === 0x2985 || c === 0x2986 || c === 0x2987 || c === 0x2988 || c === 0x2989 || c === 0x298a || c === 0x298b || c === 0x298c || c === 0x298d || c === 0x298e || c === 0x298f || c === 0x2990 || c === 0x2991 || c === 0x2992 || c === 0x2993 || c === 0x2994 || c === 0x2995 || c === 0x2996 || c === 0x2997 || c === 0x2998 || c >= 0x2999 && c <= 0x29d7 || c === 0x29d8 || c === 0x29d9 || c === 0x29da || c === 0x29db || c >= 0x29dc && c <= 0x29fb || c === 0x29fc || c === 0x29fd || c >= 0x29fe && c <= 0x2aff || c >= 0x2b00 && c <= 0x2b2f || c >= 0x2b30 && c <= 0x2b44 || c >= 0x2b45 && c <= 0x2b46 || c >= 0x2b47 && c <= 0x2b4c || c >= 0x2b4d && c <= 0x2b73 || c >= 0x2b74 && c <= 0x2b75 || c >= 0x2b76 && c <= 0x2b95 || c === 0x2b96 || c >= 0x2b97 && c <= 0x2bff || c >= 0x2e00 && c <= 0x2e01 || c === 0x2e02 || c === 0x2e03 || c === 0x2e04 || c === 0x2e05 || c >= 0x2e06 && c <= 0x2e08 || c === 0x2e09 || c === 0x2e0a || c === 0x2e0b || c === 0x2e0c || c === 0x2e0d || c >= 0x2e0e && c <= 0x2e16 || c === 0x2e17 || c >= 0x2e18 && c <= 0x2e19 || c === 0x2e1a || c === 0x2e1b || c === 0x2e1c || c === 0x2e1d || c >= 0x2e1e && c <= 0x2e1f || c === 0x2e20 || c === 0x2e21 || c === 0x2e22 || c === 0x2e23 || c === 0x2e24 || c === 0x2e25 || c === 0x2e26 || c === 0x2e27 || c === 0x2e28 || c === 0x2e29 || c >= 0x2e2a && c <= 0x2e2e || c === 0x2e2f || c >= 0x2e30 && c <= 0x2e39 || c >= 0x2e3a && c <= 0x2e3b || c >= 0x2e3c && c <= 0x2e3f || c === 0x2e40 || c === 0x2e41 || c === 0x2e42 || c >= 0x2e43 && c <= 0x2e4f || c >= 0x2e50 && c <= 0x2e51 || c === 0x2e52 || c >= 0x2e53 && c <= 0x2e7f || c >= 0x3001 && c <= 0x3003 || c === 0x3008 || c === 0x3009 || c === 0x300a || c === 0x300b || c === 0x300c || c === 0x300d || c === 0x300e || c === 0x300f || c === 0x3010 || c === 0x3011 || c >= 0x3012 && c <= 0x3013 || c === 0x3014 || c === 0x3015 || c === 0x3016 || c === 0x3017 || c === 0x3018 || c === 0x3019 || c === 0x301a || c === 0x301b || c === 0x301c || c === 0x301d || c >= 0x301e && c <= 0x301f || c === 0x3020 || c === 0x3030 || c === 0xfd3e || c === 0xfd3f || c >= 0xfe45 && c <= 0xfe46;
+}
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-messageformat-parser/lib/index.js
+
+
+
+
+function pruneLocation(els) {
+  els.forEach(function (el) {
+    delete el.location;
+    if (isSelectElement(el) || isPluralElement(el)) {
+      for (var k in el.options) {
+        delete el.options[k].location;
+        pruneLocation(el.options[k].value);
+      }
+    } else if (isNumberElement(el) && isNumberSkeleton(el.style)) {
+      delete el.style.location;
+    } else if ((isDateElement(el) || isTimeElement(el)) && isDateTimeSkeleton(el.style)) {
+      delete el.style.location;
+    } else if (isTagElement(el)) {
+      pruneLocation(el.children);
+    }
+  });
+}
+function parse(message, opts) {
+  if (opts === void 0) {
+    opts = {};
+  }
+  opts = Object(tslib_es6["a" /* __assign */])({
+    shouldParseSkeletons: true,
+    requiresOtherClause: true
+  }, opts);
+  var result = new parser_Parser(message, opts).parse();
+  if (result.err) {
+    var error = SyntaxError(ErrorKind[result.err.kind]);
+    // @ts-expect-error Assign to error object
+    error.location = result.err.location;
+    // @ts-expect-error Assign to error object
+    error.originalMessage = result.err.message;
+    throw error;
+  }
+  if (!(opts === null || opts === void 0 ? void 0 : opts.captureLocation)) {
+    pruneLocation(result.val);
+  }
+  return result.val;
+}
+
+// only for testing
+var _Parser = parser_Parser;
 
 /***/ }),
 /* 19 */
@@ -30423,8 +32580,8 @@ Object.defineProperty(exports, "Provider", {
 exports.initialState = exports.UPDATE = void 0;
 exports.intlReducer = intlReducer;
 exports.updateIntl = void 0;
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(72));
-var _IntlProvider = _interopRequireDefault(__webpack_require__(74));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(71));
+var _IntlProvider = _interopRequireDefault(__webpack_require__(73));
 var _Provider = _interopRequireDefault(__webpack_require__(177));
 function ownKeys(e, r) {
   var t = Object.keys(e);
@@ -30513,7 +32670,7 @@ module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E 
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_style_proptype__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(80);
+/* harmony import */ var react_style_proptype__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(79);
 /* harmony import */ var react_style_proptype__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_style_proptype__WEBPACK_IMPORTED_MODULE_2__);
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var _excluded = ["alignContent", "alignItems", "alignSelf", "basis", "children", "className", "componentRef", "direction", "element", "grow", "height", "justifyContent", "width", "wrap", "shrink", "style"];
@@ -31188,7 +33345,7 @@ exports.backends = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PART_TYPE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return isFormatXMLElementFn; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return formatToParts; });
-/* harmony import */ var _formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(16);
+/* harmony import */ var _formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
 /* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(27);
 
 
@@ -31219,7 +33376,7 @@ function formatToParts(els, locales, formatters, formats, values, currentPluralV
 // For debugging
 originalMessage) {
   // Hot path for straight simple msg translations
-  if (els.length === 1 && Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isLiteralElement */ "e"])(els[0])) {
+  if (els.length === 1 && Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isLiteralElement */ "d"])(els[0])) {
     return [{
       type: PART_TYPE.literal,
       value: els[0].value
@@ -31229,7 +33386,7 @@ originalMessage) {
   for (var _i = 0, els_1 = els; _i < els_1.length; _i++) {
     var el = els_1[_i];
     // Exit early for string parts.
-    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isLiteralElement */ "e"])(el)) {
+    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isLiteralElement */ "d"])(el)) {
       result.push({
         type: PART_TYPE.literal,
         value: el.value
@@ -31238,7 +33395,7 @@ originalMessage) {
     }
     // TODO: should this part be literal type?
     // Replace `#` in plural rules with the actual numeric value.
-    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isPoundElement */ "i"])(el)) {
+    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isPoundElement */ "h"])(el)) {
       if (typeof currentPluralValue === 'number') {
         result.push({
           type: PART_TYPE.literal,
@@ -31253,7 +33410,7 @@ originalMessage) {
       throw new _error__WEBPACK_IMPORTED_MODULE_1__[/* MissingValueError */ "e"](varName, originalMessage);
     }
     var value = values[varName];
-    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isArgumentElement */ "b"])(el)) {
+    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isArgumentElement */ "a"])(el)) {
       if (!value || typeof value === 'string' || typeof value === 'number') {
         value = typeof value === 'string' || typeof value === 'number' ? String(value) : '';
       }
@@ -31266,24 +33423,24 @@ originalMessage) {
     // Recursively format plural and select parts' option — which can be a
     // nested pattern structure. The choosing of the option to use is
     // abstracted-by and delegated-to the part helper object.
-    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isDateElement */ "c"])(el)) {
-      var style = typeof el.style === 'string' ? formats.date[el.style] : Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isDateTimeSkeleton */ "d"])(el.style) ? el.style.parsedOptions : undefined;
+    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isDateElement */ "b"])(el)) {
+      var style = typeof el.style === 'string' ? formats.date[el.style] : Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isDateTimeSkeleton */ "c"])(el.style) ? el.style.parsedOptions : undefined;
       result.push({
         type: PART_TYPE.literal,
         value: formatters.getDateTimeFormat(locales, style).format(value)
       });
       continue;
     }
-    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isTimeElement */ "l"])(el)) {
-      var style = typeof el.style === 'string' ? formats.time[el.style] : Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isDateTimeSkeleton */ "d"])(el.style) ? el.style.parsedOptions : formats.time.medium;
+    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isTimeElement */ "k"])(el)) {
+      var style = typeof el.style === 'string' ? formats.time[el.style] : Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isDateTimeSkeleton */ "c"])(el.style) ? el.style.parsedOptions : formats.time.medium;
       result.push({
         type: PART_TYPE.literal,
         value: formatters.getDateTimeFormat(locales, style).format(value)
       });
       continue;
     }
-    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isNumberElement */ "f"])(el)) {
-      var style = typeof el.style === 'string' ? formats.number[el.style] : Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isNumberSkeleton */ "g"])(el.style) ? el.style.parsedOptions : undefined;
+    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isNumberElement */ "e"])(el)) {
+      var style = typeof el.style === 'string' ? formats.number[el.style] : Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isNumberSkeleton */ "f"])(el.style) ? el.style.parsedOptions : undefined;
       if (style && style.scale) {
         value = value * (style.scale || 1);
       }
@@ -31293,7 +33450,7 @@ originalMessage) {
       });
       continue;
     }
-    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isTagElement */ "k"])(el)) {
+    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isTagElement */ "j"])(el)) {
       var children = el.children,
         value_1 = el.value;
       var formatFn = values[value_1];
@@ -31314,7 +33471,7 @@ originalMessage) {
         };
       }));
     }
-    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isSelectElement */ "j"])(el)) {
+    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isSelectElement */ "i"])(el)) {
       var opt = el.options[value] || el.options.other;
       if (!opt) {
         throw new _error__WEBPACK_IMPORTED_MODULE_1__[/* InvalidValueError */ "c"](el.value, value, Object.keys(el.options), originalMessage);
@@ -31322,7 +33479,7 @@ originalMessage) {
       result.push.apply(result, formatToParts(opt.value, locales, formatters, formats, values));
       continue;
     }
-    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isPluralElement */ "h"])(el)) {
+    if (Object(_formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_0__[/* isPluralElement */ "g"])(el)) {
       var opt = el.options["=".concat(value)];
       if (!opt) {
         if (!Intl.PluralRules) {
@@ -31392,8 +33549,7 @@ module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ebitmap%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='bitmap' fill='%23FFFFFF'%3E %3Cpath d='M4,3 L16,3 L16,4 L4,4 L4,3 Z M2,5 L3,5 L3,13 L2,13 L2,5 Z M17,5 L18,5 L18,13 L17,13 L17,5 Z M2,13 L18,13 L18,15 L2,15 L2,13 Z M4,12 L16,12 L16,13 L4,13 L4,12 Z M5,11 L8,11 L8,12 L5,12 L5,11 Z M6,10 L7,10 L7,11 L6,11 L6,10 Z M9,11 L16,11 L16,12 L9,12 L9,11 Z M10,10 L15,10 L15,11 L10,11 L10,10 Z M11,9 L14,9 L14,10 L11,10 L11,9 Z M12,8 L13,8 L13,9 L12,9 L12,8 Z M16,12 L17,12 L17,13 L16,13 L16,12 Z M3,15 L17,15 L17,16 L3,16 L3,15 Z M3,4 L4,4 L4,5 L3,5 L3,4 Z M16,4 L17,4 L17,5 L16,5 L16,4 Z M4,16 L16,16 L16,17 L4,17 L4,16 Z' id='Combined-Shape'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 69 */,
-/* 70 */
+/* 69 */
 /***/ (function(module, exports) {
 
 var hex = {
@@ -31419,7 +33575,7 @@ module.exports = color;
 
 
 /***/ }),
-/* 71 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -31479,7 +33635,7 @@ MemoizedFormattedMessage.displayName = 'MemoizedFormattedMessage';
 /* harmony default export */ __webpack_exports__["a"] = (MemoizedFormattedMessage);
 
 /***/ }),
-/* 72 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var toPropertyKey = __webpack_require__(175);
@@ -31494,7 +33650,7 @@ function _defineProperty(e, r, t) {
 module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 73 */
+/* 72 */
 /***/ (function(module, exports) {
 
 function _typeof(o) {
@@ -31509,7 +33665,7 @@ function _typeof(o) {
 module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 74 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31520,9 +33676,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
-var _defineProperty2 = _interopRequireDefault(__webpack_require__(72));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(71));
 var _reactRedux = __webpack_require__(5);
-var _reactIntl = __webpack_require__(18);
+var _reactIntl = __webpack_require__(17);
 function ownKeys(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
@@ -31558,7 +33714,7 @@ var mapStateToProps = function mapStateToProps(state, _ref) {
 var _default = exports.default = (0, _reactRedux.connect)(mapStateToProps)(_reactIntl.IntlProvider);
 
 /***/ }),
-/* 75 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31570,7 +33726,7 @@ if (true) {
 
 
 /***/ }),
-/* 76 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31582,7 +33738,7 @@ if (true) {
 
 
 /***/ }),
-/* 77 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var api = __webpack_require__(14);
@@ -31606,19 +33762,19 @@ var update = api(content, options);
 module.exports = content.locals || {};
 
 /***/ }),
-/* 78 */
+/* 77 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='fill' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpath d='M10.7000634,5.80137446 L9.29979614,5.80137446 L9.29979614,8.59994895 L7.89980891,8.59994895 L7.89980891,4.39998724 L6.49982167,4.39998724 L6.49982167,5.80137446 L5.09983443,5.80137446 L5.09983443,3 L9.29979614,3 L9.29979614,4.39998724 L10.7011834,4.39998724 L10.7011834,5.80123446 L12.1000506,5.80123446 L12.1000506,7.2012217 L10.7000634,7.2012217 L10.7000634,5.80137446 Z M5.10011443,8.60120894 L5.10011443,7.2012217 L6.50010167,7.2012217 L6.50010167,8.60120894 L5.10011443,8.60120894 Z M16.3000123,16.9997324 L16.3000123,10.0011962 L17.6999996,10.0011962 L17.6999996,16.9997324 L16.3000123,16.9997324 Z M12.1003306,7.20080171 L13.5003179,7.20080171 L13.5003179,8.60078894 L16.3002923,8.60078894 L16.3002923,10.0007762 L14.9003051,10.0007762 L14.9003051,11.3573638 L13.5003179,11.3573638 L13.5003179,12.758751 L12.1003306,12.758751 L12.1003306,14.1587383 L10.7003434,14.1587383 L10.7003434,15.5587255 L9.29895615,15.5587255 L9.29895615,16.9587128 L7.89896891,16.9587128 L7.89896891,15.5587255 L6.49898168,15.5587255 L6.49898168,14.1587383 L5.10039442,14.1587383 L5.10039442,12.758751 L3.70040719,12.758751 L3.70040719,11.3573638 L6.49898168,11.3573638 L6.49898168,11.3713637 L9.29895615,11.3713637 L9.29895615,10.0007762 L12.1003306,10.0007762 L12.1003306,7.20080171 Z M3.69998719,8.60064895 L5.09997443,8.60064895 L5.09997443,10.0006362 L3.69998719,10.0006362 L3.69998719,11.3572238 L2.29999995,11.3572238 L2.29999995,9.95723658 L3.69998719,9.95723658 L3.69998719,8.60064895 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 79 */
+/* 78 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Emarquee%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='marquee' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpath d='M4.5,4.18186116 L4.5,3 L5.68186116,3 L5.68186116,4.18186116 L4.5,4.18186116 Z M11.591167,4.18186116 L11.591167,3 L12.7730281,3 L12.7730281,4.18186116 L11.591167,4.18186116 Z M4.5,13.6367504 L4.5,12.4537074 L5.68186116,12.4537074 L5.68186116,13.6367504 L4.5,13.6367504 Z M9.22697189,6.54570166 L10.4100149,6.54570166 L10.4100149,7.72756282 L11.5918761,7.72756282 L11.5918761,8.90942398 L12.7737372,8.90942398 L12.7737372,10.0912851 L13.9555984,10.0912851 L13.9555984,11.2731463 L15.1362777,11.2731463 L15.1362777,12.4538256 L16.3181388,12.4538256 L16.3181388,13.6368686 L17.5,13.6368686 L17.5,14.8187298 L12.7737372,14.8187298 L12.7737372,16.0005909 L11.5918761,16.0005909 L11.5918761,17.1824521 L10.4100149,17.1824521 L10.4100149,18.3643132 L9.22697189,18.3643132 L9.22697189,6.54570166 Z M13.9548893,8.90930579 L13.9548893,7.72744463 L15.1367504,7.72744463 L15.1367504,8.90930579 L13.9548893,8.90930579 Z M6.86372232,4.18186116 L6.86372232,3 L8.04558348,3 L8.04558348,4.18186116 L6.86372232,4.18186116 Z M4.5,11.2730281 L4.5,10.091167 L5.68186116,10.091167 L5.68186116,11.2730281 L4.5,11.2730281 Z M13.9548893,4.18186116 L13.9548893,3 L15.1367504,3 L15.1367504,4.18186116 L13.9548893,4.18186116 Z M9.22744463,4.18186116 L9.22744463,3 L10.4104877,3 L10.4104877,4.18186116 L9.22744463,4.18186116 Z M4.5,8.90930579 L4.5,7.72744463 L5.68186116,7.72744463 L5.68186116,8.90930579 L4.5,8.90930579 Z M4.5,6.54558348 L4.5,5.36372232 L5.68186116,5.36372232 L5.68186116,6.54558348 L4.5,6.54558348 Z M13.9548893,6.54558348 L13.9548893,5.36372232 L15.1367504,5.36372232 L15.1367504,6.54558348 L13.9548893,6.54558348 Z M6.86372232,13.6367504 L6.86372232,12.4537074 L8.04558348,12.4537074 L8.04558348,13.6367504 L6.86372232,13.6367504 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 80 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var properties = __webpack_require__(144);
@@ -31655,7 +33811,7 @@ module.exports.supportingArrays = PropTypes.oneOfType([
 
 
 /***/ }),
-/* 81 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var api = __webpack_require__(14);
@@ -31679,55 +33835,55 @@ var update = api(content, options);
 module.exports = content.locals || {};
 
 /***/ }),
-/* 82 */
+/* 81 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eeye-dropper%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='eye-dropper' fill='%23575E75'%3E %3Cpath d='M9.15334605,12.4824962 C9.03394044,12.6188737 8.88041895,12.7041096 8.60749186,12.7722983 C7.90811618,12.925723 7.24285639,13.5564688 7.03816107,14.2554033 C6.9699293,14.4770167 6.74817603,14.7156773 6.50936483,14.8350076 L4.73533871,15.6703196 C4.650049,15.704414 4.58181722,15.7214612 4.54770134,15.7214612 L4.27477424,15.4657534 C4.27477424,15.4487062 4.27477424,15.3805175 4.32594807,15.2611872 L5.1617873,13.4712329 C5.26413496,13.2496195 5.50294617,13.0280061 5.74175737,12.9598174 C6.44113305,12.738204 7.07227696,12.090411 7.25991433,11.2380518 C7.29403022,11.1016743 7.37931994,10.9652968 7.49872554,10.8289193 L11.4391105,6.90806697 L13.093731,8.56164384 L9.15334605,12.4824962 Z M16.6076673,5.28858447 C16.8635365,5.03287671 17,4.67488584 17,4.33394216 C17,3.99299848 16.8635365,3.65205479 16.6076673,3.39634703 C16.0788711,2.86788432 15.2430318,2.86788432 14.7142356,3.39634703 L13.2301945,4.87945205 L13.0596151,4.70898021 L12.5137609,4.16347032 C12.172602,3.82252664 11.6096899,3.82252664 11.268531,4.16347032 L10.6032712,4.81126332 C10.2791703,5.152207 10.2621124,5.64657534 10.5520974,5.98751903 L6.59465454,9.92541857 C6.30466951,10.2322679 6.09997418,10.5902588 5.98056858,11.1016743 C5.92939475,11.357382 5.63940971,11.6471842 5.36648262,11.7324201 C4.80357049,11.9028919 4.2577163,12.3802131 4.00184715,12.9427702 L3.16600792,14.7156773 C2.89308083,15.3123288 2.9613126,15.9260274 3.33658736,16.3181126 L3.67774623,16.6590563 C3.89949949,16.8806697 4.20654247,17 4.54770134,17 C4.7694546,17 5.02532375,16.9318113 5.26413496,16.8295282 L7.05521901,15.9942161 C7.61813114,15.7214612 8.09575356,15.1929985 8.26633299,14.6304414 C8.33456477,14.3576865 8.64160775,14.0678843 9.05099839,13.9826484 C9.4092152,13.8974125 9.76743201,13.6928463 10.057417,13.385997 L14.0148599,9.44809741 C14.3560188,9.73789954 14.8677571,9.70380518 15.1748001,9.37990868 L15.8400599,8.73211568 C16.1812187,8.39117199 16.1812187,7.82861492 15.8400599,7.48767123 L15.2600898,6.90806697 L15.1236262,6.7716895 L16.6076673,5.28858447 Z' id='eye-dropper-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 83 */
+/* 82 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill-horz-gradient-enabled%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E %3ClinearGradient x1='100%25' y1='50%25' x2='0%25' y2='50%25' id='linearGradient-1'%3E %3Cstop stop-color='%23FFFFFF' offset='0%25'%3E%3C/stop%3E %3Cstop stop-color='%23855CD6' offset='100%25'%3E%3C/stop%3E %3C/linearGradient%3E %3C/defs%3E %3Cg id='fill-horz-gradient-enabled' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-opacity='0.15'%3E %3Crect id='Horizontal' stroke='%23000000' fill='url(%23linearGradient-1)' x='0.5' y='0.5' width='19' height='19' rx='4'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 84 */
+/* 83 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill-radial-enabled%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E %3CradialGradient cx='50%25' cy='50%25' fx='50%25' fy='50%25' r='39.3896484%25' id='radialGradient-1'%3E %3Cstop stop-color='%23855CD6' offset='0%25'%3E%3C/stop%3E %3Cstop stop-color='%23FFFFFF' offset='100%25'%3E%3C/stop%3E %3C/radialGradient%3E %3C/defs%3E %3Cg id='fill-radial-enabled' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-opacity='0.15'%3E %3Crect id='Radial' stroke='%23000000' fill='url(%23radialGradient-1)' x='0.5' y='0.5' width='19' height='19' rx='4'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 85 */
+/* 84 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill-solid-enabled%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='fill-solid-enabled' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-opacity='0.15'%3E %3Crect id='Solid' stroke='%23000000' fill='%23855CD6' x='0.5' y='0.5' width='19' height='19' rx='4'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 86 */
+/* 85 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill-vert-gradient-enabled%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E %3ClinearGradient x1='50%25' y1='100%25' x2='50%25' y2='3.061617e-15%25' id='linearGradient-1'%3E %3Cstop stop-color='%23FFFFFF' offset='0%25'%3E%3C/stop%3E %3Cstop stop-color='%23855CD6' offset='100%25'%3E%3C/stop%3E %3C/linearGradient%3E %3C/defs%3E %3Cg id='fill-vert-gradient-enabled' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-opacity='0.15'%3E %3Crect id='Vertical' stroke='%23000000' fill='url(%23linearGradient-1)' x='0.5' y='0.5' width='19' height='19' rx='4'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 87 */
+/* 86 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eswap%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='swap' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='Swap-v2' transform='translate(2.000000, 2.000000)' fill='%23855CD6'%3E %3Cpath d='M3.69424597,2.00682151 L7.95663608,2.66498231 C8.44536222,2.73588913 8.7900887,3.24405473 8.7176525,3.79585529 C8.66179809,4.24129561 8.34150792,4.58764819 7.95663608,4.64128284 L3.69424597,5.30126176 L3.69424597,6.79666856 C3.69424597,7.22392764 3.23781067,7.42846657 2.97250219,7.13483958 L0.120436084,3.97403142 C-0.0401453614,3.78767373 -0.0401453614,3.48404706 0.120436084,3.30587093 L2.97250219,0.135972153 C3.23781067,-0.157654834 3.69424597,0.0559747078 3.69424597,0.474143173 L3.69424597,2.00682151 Z M12.305754,10.7340942 L12.305754,9.2014159 C12.305754,8.78324744 12.7621893,8.56961789 13.0274978,8.86324488 L15.8795639,12.0331437 C16.0401454,12.2113198 16.0401454,12.5149465 15.8795639,12.7013041 L13.0274978,15.8621123 C12.7621893,16.1557393 12.305754,15.9512004 12.305754,15.5239413 L12.305754,14.0285345 L8.04336392,13.3685556 C7.65849208,13.3149209 7.33820191,12.9685683 7.2823475,12.523128 C7.2099113,11.9713275 7.55463778,11.4631619 8.04336392,11.392255 L12.305754,10.7340942 Z' id='Swap-v1'%3E%3C/path%3E %3Cpath d='M11.2727273,1.45454545 L13.4545455,1.45454545 C14.0567273,1.45454545 14.5454545,1.94327273 14.5454545,2.54545455 L14.5454545,4.72727273 C14.5454545,5.33054545 14.0567273,5.81818182 13.4545455,5.81818182 L11.2727273,5.81818182 C10.6705455,5.81818182 10.1818182,5.33054545 10.1818182,4.72727273 L10.1818182,2.54545455 C10.1818182,1.94327273 10.6705455,1.45454545 11.2727273,1.45454545' id='Fill-6' fill-opacity='0.5'%3E%3C/path%3E %3Cpath d='M2.54545455,10.1818182 L4.72727273,10.1818182 C5.32945455,10.1818182 5.81818182,10.6705455 5.81818182,11.2727273 L5.81818182,13.4545455 C5.81818182,14.0578182 5.32945455,14.5454545 4.72727273,14.5454545 L2.54545455,14.5454545 C1.94327273,14.5454545 1.45454545,14.0578182 1.45454545,13.4545455 L1.45454545,11.2727273 C1.45454545,10.6705455 1.94327273,10.1818182 2.54545455,10.1818182' id='Fill-6-Copy' fill-opacity='0.5'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 88 */
+/* 87 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 48.1 (47250) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Efill%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='fill' fill='%23575E75'%3E %3Cpath d='M14.0450969,9.69349504 L14.0306818,9.67916207 C13.4396629,9.36383682 12.5170968,8.69018743 11.4215496,7.60088203 C11.0900024,7.27122381 10.7872854,6.95589857 10.5422288,6.65490628 C10.71521,6.4399118 10.8881911,6.22491731 11.0611722,6.00992282 C11.3783043,6.26791621 11.7242666,6.58324146 12.084644,6.9415656 C12.3152855,7.17089305 12.5026817,7.37155458 12.690078,7.5722161 C12.7189081,7.61521499 12.7621534,7.65821389 12.8198138,7.70121279 C13.6270591,8.6185226 14.1027573,9.36383682 14.3189837,9.7938258 C14.3189837,9.80815877 14.3333988,9.82249173 14.3333988,9.8368247 C14.2469082,9.7938258 14.1460025,9.7508269 14.0450969,9.69349504 M10.5998892,10.0661521 C9.7349835,10.53914 8.91332309,10.983462 7.61596455,10.6824697 C6.17445506,10.3528115 5.4825305,9.76515987 5.19422861,9.42116869 L8.3078891,5.40793826 C8.52411553,5.83792723 8.84124762,6.28224917 9.1727948,6.69790518 C8.82683252,7.21389195 8.55294572,7.64388093 8.42320986,7.84454245 C8.27905891,8.08820287 8.35113439,8.41786108 8.6106061,8.5755237 C8.69709667,8.63285557 8.79800233,8.6615215 8.8844929,8.6615215 C9.07188913,8.6615215 9.24487027,8.56119074 9.34577594,8.40352811 C9.50434198,8.13120176 9.69173821,7.84454245 9.89354954,7.55788313 C10.1962665,7.90187431 10.4701533,8.17420066 10.6575496,8.36052922 C11.0755873,8.77618523 11.4936251,9.14884234 11.8972477,9.47850055 C11.4215496,9.60749724 11.0035119,9.85115766 10.5998892,10.0661521 M10.2106816,5.33627343 C10.0953609,5.49393605 9.96562502,5.65159868 9.85030426,5.79492834 C9.50434198,5.33627343 9.28811556,4.96361632 9.1727948,4.70562293 C9.41785141,4.80595369 9.76381369,5.02094818 10.2106816,5.33627343 M13.5117384,4.07497244 C13.6703044,4.07497244 13.8432855,4.10363837 13.8721157,4.1753032 C14.0450969,4.49062845 13.6270591,5.49393605 13.0648704,6.3969129 L12.848644,6.18191841 C12.6180025,5.95259096 12.2287949,5.59426681 11.781927,5.20727674 C12.4450213,4.53362734 13.0504553,4.07497244 13.5117384,4.07497244 M16.5533234,12.1587652 C16.337097,11.5997795 15.9911347,11.0981257 15.587512,10.6681367 C15.5442667,10.6108049 15.4866064,10.567806 15.428946,10.5248071 C15.6740026,9.99448732 15.2703799,9.23484013 14.9244177,8.69018743 C14.6505309,8.24586549 14.2757384,7.74421169 13.8288705,7.24255788 C14.3910592,6.38257993 15.3568705,4.676957 14.8379271,3.67364939 C14.679361,3.37265711 14.3189837,3 13.5117384,3 L13.4973233,3 C12.6756629,3 11.7675119,3.65931643 10.9458515,4.51929438 C10.0232854,3.84564498 9.01422875,3.31532525 8.40879477,3.65931643 C8.35113439,3.68798236 8.27905891,3.71664829 8.23581363,3.77398015 C8.22139853,3.78831312 8.19256835,3.80264609 8.17815325,3.83131202 C8.16373816,3.84564498 8.14932306,3.85997795 8.13490797,3.88864388 L8.12049287,3.91730981 L4.12751158,9.04851158 C4.11309649,9.04851158 4.11309649,9.04851158 4.09868139,9.06284454 L3.20494551,10.2238148 L3.16170023,10.2668137 C3.11845494,10.3098126 3.08962475,10.3671444 3.07520966,10.4101433 L3.07520966,10.4244763 C2.62834171,11.3417861 4.28607763,13.1334068 5.06449275,13.92172 C5.75641731,14.6097023 7.28441737,16 8.23581363,16 C8.43762496,16 8.596191,15.9426681 8.74034195,15.8136714 L14.2613233,11.5567806 C14.2901535,11.5424476 14.3045686,11.5137817 14.3333988,11.4851158 C14.362229,11.5137817 14.3766441,11.5567806 14.3910592,11.5854465 C14.5640403,11.9294377 14.679361,12.2877619 14.6937761,12.6747519 C14.7370214,13.061742 14.7081912,13.463065 14.6505309,13.8500551 L14.6505309,13.8643881 C14.6361158,13.9790518 14.6361158,14.0793826 14.6505309,14.1940463 C14.7514365,14.8390298 15.3568705,15.2833517 15.9911347,15.1830209 C16.639814,15.0826902 17.0866819,14.4807056 16.9857762,13.8357222 C16.8992857,13.2767365 16.7839649,12.7034179 16.5533234,12.1587652' id='Fill-1'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 89 */
+/* 88 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eline%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='square'%3E %3Cg id='line' stroke='%23575E75' stroke-width='2'%3E %3Cpath d='M5,15 L15,5' id='Line'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 90 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var api = __webpack_require__(14);
@@ -31751,150 +33907,151 @@ var update = api(content, options);
 module.exports = content.locals || {};
 
 /***/ }),
-/* 91 */
+/* 90 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='8px' height='5px' viewBox='0 0 8 5' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Edropdown-caret%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='dropdown-caret' fill='%23855CD6'%3E %3Cpath d='M4,5 C3.72520708,5 3.45163006,4.89695045 3.24127973,4.68965311 L0.314613572,1.80666227 C-0.104871191,1.39326583 -0.104871191,0.724642023 0.314613572,0.310047331 C0.732882438,-0.10334911 7.26711756,-0.10334911 7.68538643,0.310047331 C8.10487119,0.723443772 8.10487119,1.39326583 7.68538643,1.80666227 L4.75993617,4.68965311 C4.54958583,4.89695045 4.27600882,5 4,5'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 92 */
+/* 91 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Egroup%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='group' stroke-width='0.75'%3E %3Cg id='group-icon' transform='translate(2.000000, 2.000000)'%3E %3Crect id='Rectangle-2' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-2' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='13' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-3' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='13' width='3' height='3'%3E%3C/rect%3E %3Cpath d='M1.5,3 L1.5,13' id='Line' stroke='%23855CD6' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M14.5,3 L14.5,13' id='Line-Copy' stroke='%23855CD6' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M13,1.5 L3,1.5' id='Line-Copy-2' stroke='%23855CD6' stroke-linecap='square'%3E%3C/path%3E %3Cpath d='M13,14.5 L3,14.5' id='Line-Copy-3' stroke='%23855CD6' stroke-linecap='square'%3E%3C/path%3E %3Cg id='Group' transform='translate(8.000000, 8.000000) rotate(180.000000) translate(-8.000000, -8.000000) translate(4.000000, 4.000000)' stroke='%23575E75'%3E %3Crect id='Rectangle-3-Copy' fill='%23FFFFFF' transform='translate(5.500000, 5.500000) rotate(180.000000) translate(-5.500000, -5.500000) ' x='3' y='3' width='5' height='5' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-3' fill='%23575E75' transform='translate(2.500000, 2.500000) rotate(180.000000) translate(-2.500000, -2.500000) ' x='0' y='0' width='5' height='5' rx='0.5'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 93 */
+/* 92 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eredo%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='redo' fill='%23855CD6'%3E %3Cpath d='M17.5581635,12.7700651 L13.8403972,16.4941315 C13.5610922,16.7671364 13.1830854,16.9211391 12.7903784,16.9211391 C12.3990715,16.9211391 12.0210647,16.7671364 11.7403597,16.4941315 L8.02399342,12.7700651 C7.5969858,12.3430574 7.47098355,11.7060461 7.70198767,11.1530362 C7.93299179,10.6000263 8.46500128,10.24302 9.06701202,10.24302 L10.4040359,10.24302 C10.3690352,9.92101423 10.2780336,9.55700774 10.1240309,9.17200087 C10.07573,9.05999887 10.0260291,8.94799688 9.97002813,8.83599488 C9.89302676,8.70999263 9.90072689,8.67499201 9.79502501,8.52098926 C9.62702201,8.26898476 9.47301926,8.07998139 9.29031601,7.86297752 C8.9200094,7.4639704 8.47200141,7.12096429 7.99599292,6.86895979 C7.5129843,6.6169553 7.00897531,6.46295255 6.56096732,6.37895105 C6.11995945,6.30194968 5.71395221,6.29494955 5.47594796,6.29494955 C5.35694584,6.28794943 5.2029431,6.31594993 5.12594172,6.32295005 C5.04194022,6.32995018 4.99293935,6.3369503 4.99293935,6.3369503 C4.49593048,6.38595117 4.04792249,6.02194468 3.99892162,5.52493582 C3.95692087,5.10492832 4.20192524,4.72692158 4.57293186,4.58691908 C4.57293186,4.58691908 4.62193273,4.56591871 4.6989341,4.53791821 C4.78993573,4.50991771 4.87393723,4.46091684 5.06994072,4.40491584 C5.46194772,4.28591371 5.95895658,4.15991147 6.60996819,4.09691034 C7.25397968,4.04090934 8.03099354,4.05490959 8.85070816,4.22291259 C9.66902276,4.39791571 10.5300381,4.72692158 11.3280524,5.20293007 C11.7060591,5.44793444 12.1120663,5.73493956 12.427072,6.01494456 C12.5670745,6.11994643 12.8050787,6.35795068 12.9450812,6.5049533 C13.1060841,6.67295629 13.2530867,6.84095929 13.4007893,7.01596241 C13.9670994,7.7159749 14.3871069,8.47198839 14.6601118,9.15800062 C14.8211147,9.55000762 14.9331167,9.92101423 15.0171182,10.24302 L16.5151449,10.24302 C17.1171556,10.24302 17.6491651,10.6000263 17.8801692,11.1530362 C18.1111734,11.7060461 17.9851711,12.3430574 17.5581635,12.7700651' id='Fill-1' transform='translate(10.994247, 10.494247) rotate(-45.000000) translate(-10.994247, -10.494247) '%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 94 */
+/* 93 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-backward%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-backward'%3E %3Cg id='send-forward' transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%23855CD6'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 95 */
+/* 94 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Esend-forward%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='send-forward'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Cpath d='M12.3476736,5.92549723 L10.2407376,5.92549723 L9.33601611,12.7635981 C9.23807603,13.5476661 8.54025295,14.1003698 7.78121732,13.9846876 C7.16909181,13.8947126 6.69163391,13.3805697 6.6169546,12.7635981 L5.7122331,5.92549723 L3.65426714,5.92549723 C3.0678509,5.92549723 2.78504892,5.19284356 3.190276,4.76867564 L7.53514286,0.192803597 C7.79223558,-0.0642678658 8.20970517,-0.0642678658 8.45333113,0.192803597 L12.812889,4.76867564 C13.2168918,5.19284356 12.9230716,5.92549723 12.3476736,5.92549723' id='Fill-1' fill='%23855CD6'%3E%3C/path%3E %3Cpath d='M12,8 L16,8' id='Stroke-6' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M0,8 L4,8' id='Stroke-10' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 96 */
+/* 95 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eundo%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='undo' fill='%23855CD6'%3E %3Cpath d='M15.5581635,12.7700651 L11.8403972,16.4941315 C11.5610922,16.7671364 11.1830854,16.9211391 10.7903784,16.9211391 C10.3990715,16.9211391 10.0210647,16.7671364 9.74035971,16.4941315 L6.02399342,12.7700651 C5.5969858,12.3430574 5.47098355,11.7060461 5.70198767,11.1530362 C5.93299179,10.6000263 6.46500128,10.24302 7.06701202,10.24302 L8.40403587,10.24302 C8.36903525,9.92101423 8.27803362,9.55700774 8.12403088,9.17200087 C8.07573002,9.05999887 8.02602913,8.94799688 7.97002813,8.83599488 C7.89302676,8.70999263 7.90072689,8.67499201 7.79502501,8.52098926 C7.62702201,8.26898476 7.47301926,8.07998139 7.29031601,7.86297752 C6.9200094,7.4639704 6.47200141,7.12096429 5.99599292,6.86895979 C5.5129843,6.6169553 5.00897531,6.46295255 4.56096732,6.37895105 C4.11995945,6.30194968 3.71395221,6.29494955 3.47594796,6.29494955 C3.35694584,6.28794943 3.2029431,6.31594993 3.12594172,6.32295005 C3.04194022,6.32995018 2.99293935,6.3369503 2.99293935,6.3369503 C2.49593048,6.38595117 2.04792249,6.02194468 1.99892162,5.52493582 C1.95692087,5.10492832 2.20192524,4.72692158 2.57293186,4.58691908 C2.57293186,4.58691908 2.62193273,4.56591871 2.6989341,4.53791821 C2.78993573,4.50991771 2.87393723,4.46091684 3.06994072,4.40491584 C3.46194772,4.28591371 3.95895658,4.15991147 4.60996819,4.09691034 C5.25397968,4.04090934 6.03099354,4.05490959 6.85070816,4.22291259 C7.66902276,4.39791571 8.53003812,4.72692158 9.32805235,5.20293007 C9.7060591,5.44793444 10.1120663,5.73493956 10.427072,6.01494456 C10.5670745,6.11994643 10.8050787,6.35795068 10.9450812,6.5049533 C11.1060841,6.67295629 11.2530867,6.84095929 11.4007893,7.01596241 C11.9670994,7.7159749 12.3871069,8.47198839 12.6601118,9.15800062 C12.8211147,9.55000762 12.9331167,9.92101423 13.0171182,10.24302 L14.5151449,10.24302 C15.1171556,10.24302 15.6491651,10.6000263 15.8801692,11.1530362 C16.1111734,11.7060461 15.9851711,12.3430574 15.5581635,12.7700651' id='Fill-1' transform='translate(8.994247, 10.494247) scale(-1, 1) rotate(-45.000000) translate(-8.994247, -10.494247) '%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 97 */
+/* 96 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eungroup%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='ungroup' stroke-width='0.75'%3E %3Cg id='ungroup-icon' transform='translate(10.000000, 10.000000) rotate(180.000000) translate(-10.000000, -10.000000) translate(2.000000, 2.000000)'%3E %3Crect id='Rectangle-3-Copy' stroke='%23575E75' fill='%23FFFFFF' x='6.5' y='6.5' width='8' height='8' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-3' stroke='%23575E75' fill='%23575E75' x='1.5' y='1.5' width='8' height='8' rx='0.5'%3E%3C/rect%3E %3Crect id='Rectangle-2' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-2' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='8' y='0' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='0' y='8' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-3' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='8' y='8' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-4' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='5' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-5' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='13' y='13' width='3' height='3'%3E%3C/rect%3E %3Crect id='Rectangle-2-Copy-6' stroke='%23855CD6' fill='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' x='5' y='13' width='3' height='3'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 98 */
+/* 97 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ecopy v2%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='copy-v2'%3E %3Cg id='copy' transform='translate(3.000000, 2.000000)'%3E %3Cpolyline id='Path-3' stroke-opacity='0.5' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round' stroke-dasharray='1,2' points='0.503173828 3 0.503173828 15.5 13 15.5'%3E%3C/polyline%3E %3Cpath d='M2,1.00684547 C2,0.450780073 2.45303631,0 2.99703014,0 L10,0 L10,2.34995317 C10,3.26124887 10.7336617,4 11.6500468,4 L14,4 L14,13.0046024 C14,13.5543453 13.544239,14 12.9975267,14 L3.00247329,14 C2.44882258,14 2,13.5500512 2,12.9931545 L2,1.00684547 Z' id='Rectangle-4' fill='%23855CD6'%3E%3C/path%3E %3Cpath d='M11,0 L14,3 L11.9989566,3 C11.4472481,3 11,2.55733967 11,2.00104344 L11,0 Z' id='Rectangle-5' fill='%23855CD6'%3E%3C/path%3E %3Cpath d='M9.8115942,9.1884058 L8.6884058,9.1884058 L8.6884058,10.3115942 C8.6884058,10.6859903 8.38647343,11 8,11 C7.61352657,11 7.3115942,10.6859903 7.3115942,10.3115942 L7.3115942,9.1884058 L6.1884058,9.1884058 C5.81400966,9.1884058 5.5,8.88647343 5.5,8.5 C5.5,8.11352657 5.81400966,7.8115942 6.1884058,7.8115942 L7.3115942,7.8115942 L7.3115942,6.6884058 C7.3115942,6.31280193 7.61352657,6 8,6 C8.38647343,6 8.6884058,6.31280193 8.6884058,6.6884058 L8.6884058,7.8115942 L9.8115942,7.8115942 C10.1859903,7.8115942 10.5,8.11352657 10.5,8.5 C10.5,8.88647343 10.1859903,9.1884058 9.8115942,9.1884058 Z' id='Fill-1' stroke='%23FFFFFF' stroke-width='0.25' fill='%23FFFFFF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 99 */
+/* 98 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Epaste v2%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='paste-v2'%3E %3Cg id='paste' transform='translate(3.000000, 2.000000)'%3E %3Cpolyline id='Path-3' stroke-opacity='0.5' stroke='%23575E75' stroke-linecap='round' stroke-linejoin='round' stroke-dasharray='1,2' transform='translate(6.748413, 6.750000) scale(1, -1) translate(-6.748413, -6.750000) ' points='0.5 0.5 0.5 13 12.9968262 13'%3E%3C/polyline%3E %3Cpath d='M2,3.00684547 C2,2.45078007 2.45303631,2 2.99703014,2 L10,2 L10,4.34995317 C10,5.26124887 10.7336617,6 11.6500468,6 L14,6 L14,15.0046024 C14,15.5543453 13.544239,16 12.9975267,16 L3.00247329,16 C2.44882258,16 2,15.5500512 2,14.9931545 L2,3.00684547 Z' id='Rectangle-4' fill='%23855CD6'%3E%3C/path%3E %3Cpath d='M11,2 L14,5 L11.9989566,5 C11.4472481,5 11,4.55733967 11,4.00104344 L11,2 Z' id='Rectangle-5' fill='%23855CD6'%3E%3C/path%3E %3Cpath d='M8.34791833,12.8771885 C8.26180668,12.9633001 8.14699113,13.0063559 8.03217559,13.0063559 C7.9030081,13.0063559 7.78819256,12.9633001 7.70208091,12.8771885 L5.86503222,11.0401398 C5.73586474,10.8966203 5.69280891,10.7100451 5.76456862,10.5378218 C5.83632834,10.3655985 5.99419971,10.2651349 6.18077497,10.2651349 L6.92707599,10.2651349 L7.28587456,7.66743321 C7.31457845,7.46650601 7.41504205,7.27993075 7.57291342,7.16511521 C7.73078479,7.03594773 7.94606393,6.97853995 8.13263919,7.00724384 C8.47708582,7.06321642 8.74977273,7.33733852 8.79282856,7.66743321 L9.16597907,10.2651349 L9.86922427,10.2651349 C10.0557995,10.2651349 10.2136709,10.3799504 10.2854306,10.5521737 C10.3571903,10.7100451 10.3141345,10.9109723 10.184967,11.0401398 L8.34791833,12.8771885 Z' id='Fill-1' fill='%23FFFFFF'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 100 */
+/* 99 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ecurved-point%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='curved-point'%3E %3Cpath d='M2,15 C2,10.5818452 5.58151214,7 10.000744,7 C14.4184879,7 18,10.5818452 18,15' id='Stroke-3' stroke='%23855CD6' stroke-width='0.75' fill-opacity='0.25' fill='%23855CD6' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Cpath d='M3,7 L17,7' id='Stroke-7' stroke='%23855CD6' stroke-width='0.75' stroke-linecap='round' stroke-linejoin='round'%3E%3C/path%3E %3Ccircle id='Oval-4' fill-opacity='0.25' fill='%23855CD6' cx='10' cy='7' r='3'%3E%3C/circle%3E %3Ccircle id='Oval-4' fill='%23855CD6' cx='10' cy='7' r='2'%3E%3C/circle%3E %3Ccircle id='Oval-5' fill='%23855CD6' cx='3' cy='7' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-5-Copy' fill='%23855CD6' cx='17' cy='7' r='1'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 101 */
+/* 100 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eflip-horizontal%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='flip-horizontal'%3E %3Cg transform='translate(2.000000, 3.000000)'%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='0.75' r='1'%3E%3C/circle%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='13.25' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy' fill='%23575E75' opacity='0.5' cx='8' cy='3.875' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-2' fill='%23575E75' opacity='0.5' cx='8' cy='7' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-3' fill='%23575E75' opacity='0.5' cx='8' cy='10.125' r='1'%3E%3C/circle%3E %3Cpath d='M16,3.08425423 L16,10.9157458 C16,11.4342626 15.2574491,11.6956996 14.8235798,11.3282353 L10.2019293,7.41103711 C9.93269025,7.18445835 9.93269025,6.81408922 10.2019293,6.58751046 L14.8235798,2.67176469 C15.2574491,2.30430042 16,2.56573745 16,3.08425423' id='Fill-11' fill='%23855CD6' opacity='0.5'%3E%3C/path%3E %3Cpath d='M0,10.9157458 L0,3.08425423 C0,2.56573745 0.742550911,2.30430042 1.17470525,2.67176469 L5.79807074,6.58896289 C6.06730975,6.81554165 6.06730975,7.18591078 5.79807074,7.41248954 L1.17470525,11.3282353 C0.742550911,11.6956996 0,11.4342626 0,10.9157458' id='Fill-14' fill='%23855CD6'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 102 */
+/* 101 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eflip-vertical%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='flip-vertical'%3E %3Cg id='flip-horizontal' transform='translate(10.000000, 10.000000) rotate(90.000000) translate(-10.000000, -10.000000) translate(2.000000, 3.000000)'%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='0.75' r='1'%3E%3C/circle%3E %3Ccircle id='Oval' fill='%23575E75' opacity='0.5' cx='8' cy='13.25' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy' fill='%23575E75' opacity='0.5' cx='8' cy='3.875' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-2' fill='%23575E75' opacity='0.5' cx='8' cy='7' r='1'%3E%3C/circle%3E %3Ccircle id='Oval-Copy-3' fill='%23575E75' opacity='0.5' cx='8' cy='10.125' r='1'%3E%3C/circle%3E %3Cpath d='M16,3.08425423 L16,10.9157458 C16,11.4342626 15.2574491,11.6956996 14.8235798,11.3282353 L10.2019293,7.41103711 C9.93269025,7.18445835 9.93269025,6.81408922 10.2019293,6.58751046 L14.8235798,2.67176469 C15.2574491,2.30430042 16,2.56573745 16,3.08425423' id='Fill-11' fill='%23855CD6' opacity='0.5'%3E%3C/path%3E %3Cpath d='M0,10.9157458 L0,3.08425423 C0,2.56573745 0.742550911,2.30430042 1.17470525,2.67176469 L5.79807074,6.58896289 C6.06730975,6.81554165 6.06730975,7.18591078 5.79807074,7.41248954 L1.17470525,11.3282353 C0.742550911,11.6956996 0,11.4342626 0,10.9157458' id='Fill-14' fill='%23855CD6'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 103 */
+/* 102 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Estraight-point%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='straight-point' fill='%23855CD6'%3E %3Cpolyline id='Path-2' stroke='%23855CD6' stroke-width='0.75' fill-opacity='0.25' stroke-linecap='round' stroke-linejoin='round' points='2 15 10 7 18 15'%3E%3C/polyline%3E %3Ccircle id='Oval-4' fill-opacity='0.25' cx='10' cy='7' r='3'%3E%3C/circle%3E %3Ccircle id='Oval-4' cx='10' cy='7' r='2'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eoval-outlined%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='oval-outlined' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='Group' transform='translate(4.000000, 4.000000)' fill='%23575E75'%3E %3Cpolygon id='Fill-1' points='0 9.33333333 1.33333333 9.33333333 1.33333333 2.66666667 0 2.66666667'%3E%3C/polygon%3E %3Cpolygon id='Fill-2' points='1.33333333 2.66666667 2.66666667 2.66666667 2.66666667 1.33333333 1.33333333 1.33333333'%3E%3C/polygon%3E %3Cpolygon id='Fill-3' points='1.33333333 10.6666667 2.66666667 10.6666667 2.66666667 9.33333333 1.33333333 9.33333333'%3E%3C/polygon%3E %3Cpolygon id='Fill-4' points='2.66666667 1.33333333 9.33333333 1.33333333 9.33333333 0 2.66666667 0'%3E%3C/polygon%3E %3Cpolygon id='Fill-5' points='9.33333333 2.66666667 10.6666667 2.66666667 10.6666667 1.33333333 9.33333333 1.33333333'%3E%3C/polygon%3E %3Cpolygon id='Fill-6' points='10.6666667 9.33333333 12 9.33333333 12 2.66666667 10.6666667 2.66666667'%3E%3C/polygon%3E %3Cpolygon id='Fill-7' points='9.33333333 10.6666667 10.6666667 10.6666667 10.6666667 9.33333333 9.33333333 9.33333333'%3E%3C/polygon%3E %3Cpolygon id='Fill-8' points='2.66666667 12 9.33333333 12 9.33333333 10.6666667 2.66666667 10.6666667'%3E%3C/polygon%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Erectange-outlined%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='rectange-outlined' stroke='none' stroke-width='1.33333333' fill='none' fill-rule='evenodd'%3E %3Crect id='rectangle-icon' stroke='%23575E75' x='4.5' y='4.5' width='11' height='11'%3E%3C/rect%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eoval%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='oval' stroke-width='1.5' stroke='%23575E75'%3E %3Ccircle id='oval-icon' cx='10' cy='10' r='5'%3E%3C/circle%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Erectangle%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' stroke-linecap='round' stroke-linejoin='round'%3E %3Cg id='rectangle' stroke='%23575E75' stroke-width='1.5'%3E %3Crect id='rectangle-icon' x='5' y='5' width='10' height='10'%3E%3C/rect%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 108 */
+/* 107 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Ereshape%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='reshape'%3E %3Cg id='reshape-icon' transform='translate(3.000000, 2.000000)'%3E %3Cpath d='M6.3718,4e-05 C6.3718,1.20298846 6.03840639,2.32811001 5.45898306,3.28804076 C5.31876362,3.52034235 4.30079812,3.15107034 3.82818604,3.61859131 C3.35557395,4.08611228 3.47873759,5.34529147 3.26181884,5.47482181 C2.30759304,6.04462589 1.19191205,6.37204 -0.0002,6.37204' id='Stroke-1' stroke='%23575E75' stroke-width='0.75'%3E%3C/path%3E %3Cpath d='M4,6.94999094 C2.85887984,6.71835578 2,5.70947896 2,4.5 C2,3.11928813 3.11928813,2 4.5,2 C5.88071187,2 7,3.11928813 7,4.5 C7,4.56854233 6.99724162,4.63644042 6.99182982,4.70358929 L6.68137747,4.42017327 C5.65792772,3.48493325 4,4.20484091 4,5.595932 L4,6.94999094 Z' id='Combined-Shape' fill='%23575E75'%3E%3C/path%3E %3Cpath d='M4,7.96455557 C2.30385293,7.72194074 1,6.26323595 1,4.5 C1,2.56700338 2.56700338,1 4.5,1 C6.43299662,1 8,2.56700338 8,4.5 C8,4.84508345 7.95005914,5.1785026 7.85701065,5.4934242 L6.68137747,4.42017327 C5.65792772,3.48493325 4,4.20484091 4,5.595932 L4,7.96455557 Z' id='Oval-2' fill-opacity='0.15' fill='%23575E75'%3E%3C/path%3E %3Cpath d='M7.87915329,13.1684522 L8.98467414,15.6316703 C9.20235954,16.1186581 9.76980913,16.3337238 10.2516521,16.1137141 C10.7334951,15.8924683 10.9462887,15.3189598 10.7286032,14.833208 L9.63583183,12.3973461 L12.3974628,12.3973461 C12.945512,12.3973461 13.207518,11.7313818 12.8048941,11.3644462 L6.00716065,5.15870674 C5.6225647,4.80725864 5,5.07769498 5,5.595932 L5,14.8026807 C5,15.3507015 5.68145595,15.608033 6.04802397,15.1994001 L7.87915329,13.1684522 Z' id='select-icon' fill='%23575E75'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 109 */
+/* 108 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Eselect%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='select' fill='%23575E75'%3E %3Cpath d='M9.08480709,12.7519131 L10.2692937,15.3910753 C10.5025281,15.912848 11.1105098,16.1432755 11.6267701,15.9075508 C12.1430304,15.6705018 12.3710236,15.0560284 12.1377892,14.53558 L10.9669627,11.925728 L13.925853,11.925728 C14.5130486,11.925728 14.7937693,11.2121948 14.3623865,10.8190495 L7.0791007,4.17004294 C6.6670336,3.7934914 6,4.08324462 6,4.63849857 L6,14.5028722 C6,15.0900373 6.73013138,15.3657496 7.12288282,14.9279287 L9.08480709,12.7519131 Z' id='select-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 110 */
+/* 109 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8' standalone='no'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Etext%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='Page-1' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cg id='text' fill='%23575E75'%3E %3Cpath d='M16,4.35294118 L16,6.85176471 C16,7.04941176 15.8447059,7.20470588 15.6470588,7.20470588 L14.8988235,7.20470588 C14.7576471,7.20470588 14.6164706,7.12 14.5741176,6.99294118 L14.2070588,6.11764706 L11.0588235,6.11764706 L11.0588235,14.2917647 L11.92,14.6164706 C12.0611765,14.6729412 12.16,14.8 12.16,14.9552941 L12.16,15.6470588 C12.16,15.8447059 11.9905882,16 11.8070588,16 L8.20705882,16 C8.02352941,16 7.85411765,15.8447059 7.85411765,15.6470588 L7.85411765,14.9552941 C7.85411765,14.8 7.95294118,14.6729412 8.08,14.6164706 L8.94117647,14.2917647 L8.94117647,6.11764706 L5.80705882,6.11764706 L5.44,6.99294118 C5.38352941,7.12 5.25647059,7.20470588 5.11529412,7.20470588 L4.35294118,7.20470588 C4.16941176,7.20470588 4,7.04941176 4,6.85176471 L4,4.35294118 C4,4.15529412 4.16941176,4 4.35294118,4 L15.6470588,4 C15.8447059,4 16,4.15529412 16,4.35294118' id='text-icon'%3E%3C/path%3E %3C/g%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 111 */
+/* 110 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0' encoding='UTF-8'?%3E %3Csvg width='20px' height='20px' viewBox='0 0 20 20' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E %3C!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch --%3E %3Ctitle%3Etext%3C/title%3E %3Cdesc%3ECreated with Sketch.%3C/desc%3E %3Cdefs%3E%3C/defs%3E %3Cg id='text' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E %3Cpolygon id='Page-1' fill='%23575E75' points='4 4 4 8 6 8 6 6 9 6 9 14 7 14 7 16 13 16 13 14 11 14 11 6 14 6 14 8 16 8 16 4'%3E%3C/polygon%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 112 */
+/* 111 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:none;stroke:%23575e75;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-in%3C/title%3E %3Cg class='cls-3'%3E %3Ccircle class='cls-4' cx='18' cy='18' r='7'/%3E %3Cline class='cls-4' x1='23' y1='23' x2='26' y2='26'/%3E %3Cline class='cls-4' x1='16' y1='18' x2='20' y2='18'/%3E %3Cline class='cls-4' x1='18' y1='16' x2='18' y2='20'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 113 */
+/* 112 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:none;stroke:%23575e75;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5px;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-out%3C/title%3E %3Cg class='cls-3'%3E %3Ccircle class='cls-4' cx='18' cy='18' r='7'/%3E %3Cline class='cls-4' x1='23' y1='23' x2='26' y2='26'/%3E %3Cline class='cls-4' x1='16' y1='18' x2='20' y2='18'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
-/* 114 */
+/* 113 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/svg+xml,%3C?xml version='1.0'?%3E %3Csvg xmlns='http://www.w3.org/2000/svg' id='Layer_1' data-name='Layer 1' viewBox='6 6 24 24'%3E %3Cdefs%3E %3Cstyle%3E .cls-4%7Bfill:%23575e75;%7D %3C/style%3E %3C/defs%3E %3Ctitle%3Ezoom-reset%3C/title%3E %3Cg class='cls-3'%3E %3Crect class='cls-4' x='13' y='14' width='10' height='2' rx='1' ry='1'/%3E %3Crect class='cls-4' x='13' y='20' width='10' height='2' rx='1' ry='1'/%3E %3C/g%3E %3C/svg%3E"
 
 /***/ }),
+/* 114 */,
 /* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -39045,7 +41202,7 @@ module.exports = logger;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Transform = __webpack_require__(23),
-    color = __webpack_require__(70);
+    color = __webpack_require__(69);
 
 var colors = { debug: ['cyan'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
     logger = new Transform();
@@ -39069,7 +41226,7 @@ module.exports = logger;
 /***/ (function(module, exports, __webpack_require__) {
 
 var Transform = __webpack_require__(23),
-    color = __webpack_require__(70),
+    color = __webpack_require__(69),
     colors = { debug: ['gray'], info: ['purple' ], warn: [ 'yellow', true ], error: [ 'red', true ] },
     logger = new Transform();
 
@@ -44672,7 +46829,7 @@ module.exports = exports;
 /* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _typeof = __webpack_require__(73)["default"];
+var _typeof = __webpack_require__(72)["default"];
 var toPrimitive = __webpack_require__(176);
 function toPropertyKey(t) {
   var i = toPrimitive(t, "string");
@@ -44684,7 +46841,7 @@ module.exports = toPropertyKey, module.exports.__esModule = true, module.exports
 /* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _typeof = __webpack_require__(73)["default"];
+var _typeof = __webpack_require__(72)["default"];
 function toPrimitive(t, r) {
   if ("object" != _typeof(t) || !t) return t;
   var e = t[Symbol.toPrimitive];
@@ -44712,7 +46869,7 @@ exports.default = void 0;
 var _reactRedux = __webpack_require__(5);
 var _react = _interopRequireDefault(__webpack_require__(2));
 var _propTypes = _interopRequireDefault(__webpack_require__(0));
-var _IntlProvider = _interopRequireDefault(__webpack_require__(74));
+var _IntlProvider = _interopRequireDefault(__webpack_require__(73));
 var Provider = function Provider(_ref) {
   var store = _ref.store,
     children = _ref.children;
@@ -44874,8 +47031,8 @@ var es = __webpack_require__(5);
 var classnames = __webpack_require__(6);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
 
-// EXTERNAL MODULE: ./node_modules/react-intl/lib/index.js + 14 modules
-var lib = __webpack_require__(18);
+// EXTERNAL MODULE: ./node_modules/react-intl/lib/index.js + 26 modules
+var lib = __webpack_require__(17);
 
 // EXTERNAL MODULE: ./node_modules/react-intl/lib/src/components/useIntl.js
 var useIntl = __webpack_require__(19);
@@ -47837,7 +49994,7 @@ var zoom_levels_setZoomLevelId = function setZoomLevelId(zoomLevelId) {
 };
 
 // EXTERNAL MODULE: ./src/containers/paper-canvas.css
-var paper_canvas = __webpack_require__(77);
+var paper_canvas = __webpack_require__(76);
 var paper_canvas_default = /*#__PURE__*/__webpack_require__.n(paper_canvas);
 
 // CONCATENATED MODULE: ./src/containers/paper-canvas.jsx
@@ -52143,7 +54300,7 @@ var bit_rect_mode_mapDispatchToProps = function mapDispatchToProps(dispatch) {
 };
 /* harmony default export */ var containers_bit_rect_mode = (Object(es["connect"])(bit_rect_mode_mapStateToProps, bit_rect_mode_mapDispatchToProps)(bit_rect_mode_BitRectMode));
 // EXTERNAL MODULE: ./src/components/bit-fill-mode/fill.svg
-var fill = __webpack_require__(78);
+var fill = __webpack_require__(77);
 var fill_default = /*#__PURE__*/__webpack_require__.n(fill);
 
 // CONCATENATED MODULE: ./src/components/bit-fill-mode/bit-fill-mode.jsx
@@ -52900,7 +55057,7 @@ var select_tool_SelectTool = /*#__PURE__*/function (_paper$Tool) {
 }(paper_full_default.a.Tool);
 /* harmony default export */ var select_tool = (select_tool_SelectTool);
 // EXTERNAL MODULE: ./src/components/bit-select-mode/marquee.svg
-var marquee = __webpack_require__(79);
+var marquee = __webpack_require__(78);
 var marquee_default = /*#__PURE__*/__webpack_require__.n(marquee);
 
 // CONCATENATED MODULE: ./src/components/bit-select-mode/bit-select-mode.jsx
@@ -53053,7 +55210,7 @@ var bit_select_mode_mapDispatchToProps = function mapDispatchToProps(dispatch) {
 var box = __webpack_require__(45);
 
 // EXTERNAL MODULE: ./src/components/button-group/button-group.css
-var button_group = __webpack_require__(81);
+var button_group = __webpack_require__(80);
 var button_group_default = /*#__PURE__*/__webpack_require__.n(button_group);
 
 // CONCATENATED MODULE: ./src/components/button-group/button-group.jsx
@@ -54428,7 +56585,7 @@ color_button_ColorButtonComponent.defaultProps = {
 };
 /* harmony default export */ var color_button_color_button = (color_button_ColorButtonComponent);
 // EXTERNAL MODULE: ./node_modules/react-intl/lib/src/components/message.js
-var message = __webpack_require__(71);
+var message = __webpack_require__(70);
 
 // EXTERNAL MODULE: ./src/components/forms/slider.css
 var slider = __webpack_require__(51);
@@ -54616,27 +56773,27 @@ var color_picker = __webpack_require__(7);
 var color_picker_default = /*#__PURE__*/__webpack_require__.n(color_picker);
 
 // EXTERNAL MODULE: ./src/components/color-picker/icons/eye-dropper.svg
-var eye_dropper = __webpack_require__(82);
+var eye_dropper = __webpack_require__(81);
 var eye_dropper_default = /*#__PURE__*/__webpack_require__.n(eye_dropper);
 
 // EXTERNAL MODULE: ./src/components/color-picker/icons/fill-horz-gradient-enabled.svg
-var fill_horz_gradient_enabled = __webpack_require__(83);
+var fill_horz_gradient_enabled = __webpack_require__(82);
 var fill_horz_gradient_enabled_default = /*#__PURE__*/__webpack_require__.n(fill_horz_gradient_enabled);
 
 // EXTERNAL MODULE: ./src/components/color-picker/icons/fill-radial-enabled.svg
-var fill_radial_enabled = __webpack_require__(84);
+var fill_radial_enabled = __webpack_require__(83);
 var fill_radial_enabled_default = /*#__PURE__*/__webpack_require__.n(fill_radial_enabled);
 
 // EXTERNAL MODULE: ./src/components/color-picker/icons/fill-solid-enabled.svg
-var fill_solid_enabled = __webpack_require__(85);
+var fill_solid_enabled = __webpack_require__(84);
 var fill_solid_enabled_default = /*#__PURE__*/__webpack_require__.n(fill_solid_enabled);
 
 // EXTERNAL MODULE: ./src/components/color-picker/icons/fill-vert-gradient-enabled.svg
-var fill_vert_gradient_enabled = __webpack_require__(86);
+var fill_vert_gradient_enabled = __webpack_require__(85);
 var fill_vert_gradient_enabled_default = /*#__PURE__*/__webpack_require__.n(fill_vert_gradient_enabled);
 
 // EXTERNAL MODULE: ./src/components/color-picker/icons/swap.svg
-var swap = __webpack_require__(87);
+var swap = __webpack_require__(86);
 var swap_default = /*#__PURE__*/__webpack_require__.n(swap);
 
 // CONCATENATED MODULE: ./src/components/color-picker/color-picker.jsx
@@ -55804,7 +57961,7 @@ var tools_fill_tool_FillTool = /*#__PURE__*/function (_paper$Tool) {
 }(paper_full_default.a.Tool);
 /* harmony default export */ var tools_fill_tool = (tools_fill_tool_FillTool);
 // EXTERNAL MODULE: ./src/components/fill-mode/fill.svg
-var fill_mode_fill = __webpack_require__(88);
+var fill_mode_fill = __webpack_require__(87);
 var fill_mode_fill_default = /*#__PURE__*/__webpack_require__.n(fill_mode_fill);
 
 // CONCATENATED MODULE: ./src/components/fill-mode/fill-mode.jsx
@@ -56172,7 +58329,7 @@ var stroke_style_clearStrokeGradient = function clearStrokeGradient() {
 };
 
 // EXTERNAL MODULE: ./src/components/line-mode/line.svg
-var line_mode_line = __webpack_require__(89);
+var line_mode_line = __webpack_require__(88);
 var line_mode_line_default = /*#__PURE__*/__webpack_require__.n(line_mode_line);
 
 // CONCATENATED MODULE: ./src/components/line-mode/line-mode.jsx
@@ -56653,7 +58810,7 @@ var eye_dropper_EyeDropperTool = /*#__PURE__*/function (_paper$Tool) {
 }(paper_full_default.a.Tool);
 
 // EXTERNAL MODULE: ./src/components/loupe/loupe.css
-var loupe = __webpack_require__(90);
+var loupe = __webpack_require__(89);
 var loupe_default = /*#__PURE__*/__webpack_require__.n(loupe);
 
 // CONCATENATED MODULE: ./src/components/loupe/loupe.jsx
@@ -56963,7 +59120,7 @@ var dropdown = __webpack_require__(33);
 var dropdown_default = /*#__PURE__*/__webpack_require__.n(dropdown);
 
 // EXTERNAL MODULE: ./src/components/dropdown/dropdown-caret.svg
-var dropdown_caret = __webpack_require__(91);
+var dropdown_caret = __webpack_require__(90);
 var dropdown_caret_default = /*#__PURE__*/__webpack_require__.n(dropdown_caret);
 
 // CONCATENATED MODULE: ./src/components/dropdown/dropdown.jsx
@@ -57109,11 +59266,11 @@ var fixed_tools = __webpack_require__(12);
 var fixed_tools_default = /*#__PURE__*/__webpack_require__.n(fixed_tools);
 
 // EXTERNAL MODULE: ./src/components/fixed-tools/icons/group.svg
-var icons_group = __webpack_require__(92);
+var icons_group = __webpack_require__(91);
 var group_default = /*#__PURE__*/__webpack_require__.n(icons_group);
 
 // EXTERNAL MODULE: ./src/components/fixed-tools/icons/redo.svg
-var icons_redo = __webpack_require__(93);
+var icons_redo = __webpack_require__(92);
 var redo_default = /*#__PURE__*/__webpack_require__.n(icons_redo);
 
 // EXTERNAL MODULE: ./src/components/fixed-tools/icons/send-back.svg
@@ -57121,11 +59278,11 @@ var send_back = __webpack_require__(65);
 var send_back_default = /*#__PURE__*/__webpack_require__.n(send_back);
 
 // EXTERNAL MODULE: ./src/components/fixed-tools/icons/send-backward.svg
-var send_backward = __webpack_require__(94);
+var send_backward = __webpack_require__(93);
 var send_backward_default = /*#__PURE__*/__webpack_require__.n(send_backward);
 
 // EXTERNAL MODULE: ./src/components/fixed-tools/icons/send-forward.svg
-var send_forward = __webpack_require__(95);
+var send_forward = __webpack_require__(94);
 var send_forward_default = /*#__PURE__*/__webpack_require__.n(send_forward);
 
 // EXTERNAL MODULE: ./src/components/fixed-tools/icons/send-front.svg
@@ -57133,11 +59290,11 @@ var send_front = __webpack_require__(66);
 var send_front_default = /*#__PURE__*/__webpack_require__.n(send_front);
 
 // EXTERNAL MODULE: ./src/components/fixed-tools/icons/undo.svg
-var icons_undo = __webpack_require__(96);
+var icons_undo = __webpack_require__(95);
 var undo_default = /*#__PURE__*/__webpack_require__.n(icons_undo);
 
 // EXTERNAL MODULE: ./src/components/fixed-tools/icons/ungroup.svg
-var ungroup = __webpack_require__(97);
+var ungroup = __webpack_require__(96);
 var ungroup_default = /*#__PURE__*/__webpack_require__.n(ungroup);
 
 // CONCATENATED MODULE: ./src/components/fixed-tools/fixed-tools.jsx
@@ -57882,7 +60039,7 @@ var Fonts = {
 };
 /* harmony default export */ var fonts = (Fonts);
 // EXTERNAL MODULE: ./src/components/font-dropdown/font-dropdown.css
-var font_dropdown = __webpack_require__(10);
+var font_dropdown = __webpack_require__(9);
 var font_dropdown_default = /*#__PURE__*/__webpack_require__.n(font_dropdown);
 
 // CONCATENATED MODULE: ./src/components/font-dropdown/font-dropdown.jsx
@@ -58323,15 +60480,15 @@ function live_input_hoc_setPrototypeOf(t, e) { return live_input_hoc_setPrototyp
   return LiveInput;
 });
 // EXTERNAL MODULE: ./src/components/mode-tools/mode-tools.css
-var mode_tools = __webpack_require__(17);
+var mode_tools = __webpack_require__(16);
 var mode_tools_default = /*#__PURE__*/__webpack_require__.n(mode_tools);
 
 // EXTERNAL MODULE: ./src/components/mode-tools/icons/copy.svg
-var copy = __webpack_require__(98);
+var copy = __webpack_require__(97);
 var copy_default = /*#__PURE__*/__webpack_require__.n(copy);
 
 // EXTERNAL MODULE: ./src/components/mode-tools/icons/paste.svg
-var paste = __webpack_require__(99);
+var paste = __webpack_require__(98);
 var paste_default = /*#__PURE__*/__webpack_require__.n(paste);
 
 // EXTERNAL MODULE: ./src/components/mode-tools/icons/delete.svg
@@ -58339,27 +60496,27 @@ var icons_delete = __webpack_require__(67);
 var delete_default = /*#__PURE__*/__webpack_require__.n(icons_delete);
 
 // EXTERNAL MODULE: ./src/components/mode-tools/icons/curved-point.svg
-var curved_point = __webpack_require__(100);
+var curved_point = __webpack_require__(99);
 var curved_point_default = /*#__PURE__*/__webpack_require__.n(curved_point);
 
 // EXTERNAL MODULE: ./src/components/mode-tools/icons/flip-horizontal.svg
-var flip_horizontal = __webpack_require__(101);
+var flip_horizontal = __webpack_require__(100);
 var flip_horizontal_default = /*#__PURE__*/__webpack_require__.n(flip_horizontal);
 
 // EXTERNAL MODULE: ./src/components/mode-tools/icons/flip-vertical.svg
-var flip_vertical = __webpack_require__(102);
+var flip_vertical = __webpack_require__(101);
 var flip_vertical_default = /*#__PURE__*/__webpack_require__.n(flip_vertical);
 
 // EXTERNAL MODULE: ./src/components/mode-tools/icons/straight-point.svg
-var straight_point = __webpack_require__(103);
+var straight_point = __webpack_require__(102);
 var straight_point_default = /*#__PURE__*/__webpack_require__.n(straight_point);
 
 // EXTERNAL MODULE: ./src/components/bit-oval-mode/oval-outlined.svg
-var oval_outlined = __webpack_require__(104);
+var oval_outlined = __webpack_require__(103);
 var oval_outlined_default = /*#__PURE__*/__webpack_require__.n(oval_outlined);
 
 // EXTERNAL MODULE: ./src/components/bit-rect-mode/rectangle-outlined.svg
-var rectangle_outlined = __webpack_require__(105);
+var rectangle_outlined = __webpack_require__(104);
 var rectangle_outlined_default = /*#__PURE__*/__webpack_require__.n(rectangle_outlined);
 
 // CONCATENATED MODULE: ./src/components/mode-tools/mode-tools.jsx
@@ -59180,7 +61337,7 @@ var tools_oval_tool_OvalTool = /*#__PURE__*/function (_paper$Tool) {
 }(paper_full_default.a.Tool);
 /* harmony default export */ var tools_oval_tool = (tools_oval_tool_OvalTool);
 // EXTERNAL MODULE: ./src/components/oval-mode/oval.svg
-var oval_mode_oval = __webpack_require__(106);
+var oval_mode_oval = __webpack_require__(105);
 var oval_mode_oval_default = /*#__PURE__*/__webpack_require__.n(oval_mode_oval);
 
 // CONCATENATED MODULE: ./src/components/oval-mode/oval-mode.jsx
@@ -59564,7 +61721,7 @@ var tools_rect_tool_RectTool = /*#__PURE__*/function (_paper$Tool) {
 }(paper_full_default.a.Tool);
 /* harmony default export */ var tools_rect_tool = (tools_rect_tool_RectTool);
 // EXTERNAL MODULE: ./src/components/rect-mode/rectangle.svg
-var rect_mode_rectangle = __webpack_require__(107);
+var rect_mode_rectangle = __webpack_require__(106);
 var rect_mode_rectangle_default = /*#__PURE__*/__webpack_require__.n(rect_mode_rectangle);
 
 // CONCATENATED MODULE: ./src/components/rect-mode/rect-mode.jsx
@@ -60552,7 +62709,7 @@ var reshape_tool_ReshapeTool = /*#__PURE__*/function (_paper$Tool) {
 }(paper_full_default.a.Tool);
 /* harmony default export */ var reshape_tool = (reshape_tool_ReshapeTool);
 // EXTERNAL MODULE: ./src/components/reshape-mode/reshape.svg
-var reshape = __webpack_require__(108);
+var reshape = __webpack_require__(107);
 var reshape_default = /*#__PURE__*/__webpack_require__.n(reshape);
 
 // CONCATENATED MODULE: ./src/components/reshape-mode/reshape-mode.jsx
@@ -60912,7 +63069,7 @@ var selection_tools_select_tool_SelectTool = /*#__PURE__*/function (_paper$Tool)
 }(paper_full_default.a.Tool);
 /* harmony default export */ var selection_tools_select_tool = (selection_tools_select_tool_SelectTool);
 // EXTERNAL MODULE: ./src/components/select-mode/select.svg
-var select_mode_select = __webpack_require__(109);
+var select_mode_select = __webpack_require__(108);
 var select_default = /*#__PURE__*/__webpack_require__.n(select_mode_select);
 
 // CONCATENATED MODULE: ./src/components/select-mode/select-mode.jsx
@@ -61770,7 +63927,7 @@ var text_tool_TextTool = /*#__PURE__*/function (_paper$Tool) {
 }(paper_full_default.a.Tool);
 /* harmony default export */ var text_tool = (text_tool_TextTool);
 // EXTERNAL MODULE: ./src/components/text-mode/text.svg
-var text_mode_text = __webpack_require__(110);
+var text_mode_text = __webpack_require__(109);
 var text_default = /*#__PURE__*/__webpack_require__.n(text_mode_text);
 
 // CONCATENATED MODULE: ./src/components/text-mode/text-mode.jsx
@@ -61793,7 +63950,7 @@ text_mode_TextModeComponent.propTypes = {
 };
 /* harmony default export */ var text_mode = (text_mode_TextModeComponent);
 // EXTERNAL MODULE: ./src/components/bit-text-mode/text.svg
-var bit_text_mode_text = __webpack_require__(111);
+var bit_text_mode_text = __webpack_require__(110);
 var bit_text_mode_text_default = /*#__PURE__*/__webpack_require__.n(bit_text_mode_text);
 
 // CONCATENATED MODULE: ./src/components/bit-text-mode/bit-text-mode.jsx
@@ -62049,15 +64206,15 @@ var icons_bitmap = __webpack_require__(68);
 var bitmap_default = /*#__PURE__*/__webpack_require__.n(icons_bitmap);
 
 // EXTERNAL MODULE: ./src/components/paint-editor/icons/zoom-in.svg
-var zoom_in = __webpack_require__(112);
+var zoom_in = __webpack_require__(111);
 var zoom_in_default = /*#__PURE__*/__webpack_require__.n(zoom_in);
 
 // EXTERNAL MODULE: ./src/components/paint-editor/icons/zoom-out.svg
-var zoom_out = __webpack_require__(113);
+var zoom_out = __webpack_require__(112);
 var zoom_out_default = /*#__PURE__*/__webpack_require__.n(zoom_out);
 
 // EXTERNAL MODULE: ./src/components/paint-editor/icons/zoom-reset.svg
-var zoom_reset = __webpack_require__(114);
+var zoom_reset = __webpack_require__(113);
 var zoom_reset_default = /*#__PURE__*/__webpack_require__.n(zoom_reset);
 
 // CONCATENATED MODULE: ./src/components/paint-editor/paint-editor.jsx
@@ -67976,24 +70133,95 @@ playground_root.render(/*#__PURE__*/react_default.a.createElement(es["Provider"]
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export getMagnitude */
-/* unused harmony export repeat */
-/* unused harmony export setInternalSlot */
-/* unused harmony export setMultiInternalSlots */
-/* unused harmony export getInternalSlot */
-/* unused harmony export getMultiInternalSlots */
-/* unused harmony export isLiteralPart */
-/* unused harmony export defineProperty */
-/* unused harmony export createDataProperty */
-/* unused harmony export UNICODE_EXTENSION_SEQUENCE_REGEX */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return invariant; });
-/* unused harmony export createMemoizedNumberFormat */
-/* unused harmony export createMemoizedDateTimeFormat */
-/* unused harmony export createMemoizedPluralRules */
-/* unused harmony export createMemoizedLocale */
-/* unused harmony export createMemoizedListFormat */
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
-/* harmony import */ var _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ invariant; });
+
+// UNUSED EXPORTS: getMagnitude, repeat, setInternalSlot, setMultiInternalSlots, getInternalSlot, getMultiInternalSlots, isLiteralPart, defineProperty, createDataProperty, UNICODE_EXTENSION_SEQUENCE_REGEX, createMemoizedNumberFormat, createMemoizedDateTimeFormat, createMemoizedPluralRules, createMemoizedLocale, createMemoizedListFormat
+
+// EXTERNAL MODULE: ./node_modules/tslib/tslib.es6.js
+var tslib_es6 = __webpack_require__(3);
+
+// CONCATENATED MODULE: ./node_modules/react-intl/node_modules/@formatjs/fast-memoize/lib/index.js
+//
+// Main
+//
+function memoize(fn, options) {
+  var cache = options && options.cache ? options.cache : cacheDefault;
+  var serializer = options && options.serializer ? options.serializer : serializerDefault;
+  var strategy = options && options.strategy ? options.strategy : strategyDefault;
+  return strategy(fn, {
+    cache: cache,
+    serializer: serializer
+  });
+}
+//
+// Strategy
+//
+function isPrimitive(value) {
+  return value == null || typeof value === 'number' || typeof value === 'boolean'; // || typeof value === "string" 'unsafe' primitive for our needs
+}
+function monadic(fn, cache, serializer, arg) {
+  var cacheKey = isPrimitive(arg) ? arg : serializer(arg);
+  var computedValue = cache.get(cacheKey);
+  if (typeof computedValue === 'undefined') {
+    computedValue = fn.call(this, arg);
+    cache.set(cacheKey, computedValue);
+  }
+  return computedValue;
+}
+function variadic(fn, cache, serializer) {
+  var args = Array.prototype.slice.call(arguments, 3);
+  var cacheKey = serializer(args);
+  var computedValue = cache.get(cacheKey);
+  if (typeof computedValue === 'undefined') {
+    computedValue = fn.apply(this, args);
+    cache.set(cacheKey, computedValue);
+  }
+  return computedValue;
+}
+function assemble(fn, context, strategy, cache, serialize) {
+  return strategy.bind(context, fn, cache, serialize);
+}
+function strategyDefault(fn, options) {
+  var strategy = fn.length === 1 ? monadic : variadic;
+  return assemble(fn, this, strategy, options.cache.create(), options.serializer);
+}
+function strategyVariadic(fn, options) {
+  return assemble(fn, this, variadic, options.cache.create(), options.serializer);
+}
+function strategyMonadic(fn, options) {
+  return assemble(fn, this, monadic, options.cache.create(), options.serializer);
+}
+//
+// Serializer
+//
+var serializerDefault = function serializerDefault() {
+  return JSON.stringify(arguments);
+};
+//
+// Cache
+//
+function ObjectWithoutPrototypeCache() {
+  this.cache = Object.create(null);
+}
+ObjectWithoutPrototypeCache.prototype.get = function (key) {
+  return this.cache[key];
+};
+ObjectWithoutPrototypeCache.prototype.set = function (key, value) {
+  this.cache[key] = value;
+};
+var cacheDefault = {
+  create: function create() {
+    // @ts-ignore
+    return new ObjectWithoutPrototypeCache();
+  }
+};
+var strategies = {
+  variadic: strategyVariadic,
+  monadic: strategyMonadic
+};
+// CONCATENATED MODULE: ./node_modules/react-intl/node_modules/@formatjs/ecma402-abstract/lib/utils.js
 
 
 /**
@@ -68001,52 +70229,52 @@ playground_root.render(/*#__PURE__*/react_default.a.createElement(es["Provider"]
  * @param x number
  */
 function getMagnitude(x) {
-    // Cannot count string length via Number.toString because it may use scientific notation
-    // for very small or very large numbers.
-    return Math.floor(Math.log(x) * Math.LOG10E);
+  // Cannot count string length via Number.toString because it may use scientific notation
+  // for very small or very large numbers.
+  return Math.floor(Math.log(x) * Math.LOG10E);
 }
 function repeat(s, times) {
-    if (typeof s.repeat === 'function') {
-        return s.repeat(times);
-    }
-    var arr = new Array(times);
-    for (var i = 0; i < arr.length; i++) {
-        arr[i] = s;
-    }
-    return arr.join('');
+  if (typeof s.repeat === 'function') {
+    return s.repeat(times);
+  }
+  var arr = new Array(times);
+  for (var i = 0; i < arr.length; i++) {
+    arr[i] = s;
+  }
+  return arr.join('');
 }
 function setInternalSlot(map, pl, field, value) {
-    if (!map.get(pl)) {
-        map.set(pl, Object.create(null));
-    }
-    var slots = map.get(pl);
-    slots[field] = value;
+  if (!map.get(pl)) {
+    map.set(pl, Object.create(null));
+  }
+  var slots = map.get(pl);
+  slots[field] = value;
 }
 function setMultiInternalSlots(map, pl, props) {
-    for (var _i = 0, _a = Object.keys(props); _i < _a.length; _i++) {
-        var k = _a[_i];
-        setInternalSlot(map, pl, k, props[k]);
-    }
+  for (var _i = 0, _a = Object.keys(props); _i < _a.length; _i++) {
+    var k = _a[_i];
+    setInternalSlot(map, pl, k, props[k]);
+  }
 }
 function getInternalSlot(map, pl, field) {
-    return getMultiInternalSlots(map, pl, field)[field];
+  return getMultiInternalSlots(map, pl, field)[field];
 }
 function getMultiInternalSlots(map, pl) {
-    var fields = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        fields[_i - 2] = arguments[_i];
-    }
-    var slots = map.get(pl);
-    if (!slots) {
-        throw new TypeError("".concat(pl, " InternalSlot has not been initialized"));
-    }
-    return fields.reduce(function (all, f) {
-        all[f] = slots[f];
-        return all;
-    }, Object.create(null));
+  var fields = [];
+  for (var _i = 2; _i < arguments.length; _i++) {
+    fields[_i - 2] = arguments[_i];
+  }
+  var slots = map.get(pl);
+  if (!slots) {
+    throw new TypeError("".concat(pl, " InternalSlot has not been initialized"));
+  }
+  return fields.reduce(function (all, f) {
+    all[f] = slots[f];
+    return all;
+  }, Object.create(null));
 }
 function isLiteralPart(patternPart) {
-    return patternPart.type === 'literal';
+  return patternPart.type === 'literal';
 }
 /*
   17 ECMAScript Standard Built-in Objects:
@@ -68059,13 +70287,13 @@ function isLiteralPart(patternPart) {
     [[Enumerable]]: false, [[Configurable]]: true }.
 */
 function defineProperty(target, name, _a) {
-    var value = _a.value;
-    Object.defineProperty(target, name, {
-        configurable: true,
-        enumerable: false,
-        writable: true,
-        value: value,
-    });
+  var value = _a.value;
+  Object.defineProperty(target, name, {
+    configurable: true,
+    enumerable: false,
+    writable: true,
+    value: value
+  });
 }
 /**
  * 7.3.5 CreateDataProperty
@@ -68074,82 +70302,171 @@ function defineProperty(target, name, _a) {
  * @param value
  */
 function createDataProperty(target, name, value) {
-    Object.defineProperty(target, name, {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: value,
-    });
+  Object.defineProperty(target, name, {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: value
+  });
 }
 var UNICODE_EXTENSION_SEQUENCE_REGEX = /-u(?:-[0-9a-z]{2,8})+/gi;
 function invariant(condition, message, Err) {
-    if (Err === void 0) { Err = Error; }
-    if (!condition) {
-        throw new Err(message);
-    }
+  if (Err === void 0) {
+    Err = Error;
+  }
+  if (!condition) {
+    throw new Err(message);
+  }
 }
-var createMemoizedNumberFormat = Object(_formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* memoize */ "a"])(function () {
-    var _a;
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    return new ((_a = Intl.NumberFormat).bind.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __spreadArray */ "d"])([void 0], args, false)))();
+var createMemoizedNumberFormat = memoize(function () {
+  var _a;
+  var args = [];
+  for (var _i = 0; _i < arguments.length; _i++) {
+    args[_i] = arguments[_i];
+  }
+  return new ((_a = Intl.NumberFormat).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
 }, {
-    strategy: _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* strategies */ "b"].variadic,
+  strategy: strategies.variadic
 });
-var createMemoizedDateTimeFormat = Object(_formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* memoize */ "a"])(function () {
-    var _a;
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    return new ((_a = Intl.DateTimeFormat).bind.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __spreadArray */ "d"])([void 0], args, false)))();
+var createMemoizedDateTimeFormat = memoize(function () {
+  var _a;
+  var args = [];
+  for (var _i = 0; _i < arguments.length; _i++) {
+    args[_i] = arguments[_i];
+  }
+  return new ((_a = Intl.DateTimeFormat).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
 }, {
-    strategy: _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* strategies */ "b"].variadic,
+  strategy: strategies.variadic
 });
-var createMemoizedPluralRules = Object(_formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* memoize */ "a"])(function () {
-    var _a;
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    return new ((_a = Intl.PluralRules).bind.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __spreadArray */ "d"])([void 0], args, false)))();
+var createMemoizedPluralRules = memoize(function () {
+  var _a;
+  var args = [];
+  for (var _i = 0; _i < arguments.length; _i++) {
+    args[_i] = arguments[_i];
+  }
+  return new ((_a = Intl.PluralRules).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
 }, {
-    strategy: _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* strategies */ "b"].variadic,
+  strategy: strategies.variadic
 });
-var createMemoizedLocale = Object(_formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* memoize */ "a"])(function () {
-    var _a;
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    return new ((_a = Intl.Locale).bind.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __spreadArray */ "d"])([void 0], args, false)))();
+var createMemoizedLocale = memoize(function () {
+  var _a;
+  var args = [];
+  for (var _i = 0; _i < arguments.length; _i++) {
+    args[_i] = arguments[_i];
+  }
+  return new ((_a = Intl.Locale).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
 }, {
-    strategy: _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* strategies */ "b"].variadic,
+  strategy: strategies.variadic
 });
-var createMemoizedListFormat = Object(_formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* memoize */ "a"])(function () {
-    var _a;
-    var args = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i] = arguments[_i];
-    }
-    return new ((_a = Intl.ListFormat).bind.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __spreadArray */ "d"])([void 0], args, false)))();
+var createMemoizedListFormat = memoize(function () {
+  var _a;
+  var args = [];
+  for (var _i = 0; _i < arguments.length; _i++) {
+    args[_i] = arguments[_i];
+  }
+  return new ((_a = Intl.ListFormat).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
 }, {
-    strategy: _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* strategies */ "b"].variadic,
+  strategy: strategies.variadic
 });
-
 
 /***/ }),
 /* 189 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return IntlMessageFormat; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3);
-/* harmony import */ var _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9);
-/* harmony import */ var _formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(16);
-/* harmony import */ var _formatters__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(63);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ core_IntlMessageFormat; });
+
+// EXTERNAL MODULE: ./node_modules/tslib/tslib.es6.js
+var tslib_es6 = __webpack_require__(3);
+
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/fast-memoize/lib/index.js
+//
+// Main
+//
+function memoize(fn, options) {
+  var cache = options && options.cache ? options.cache : cacheDefault;
+  var serializer = options && options.serializer ? options.serializer : serializerDefault;
+  var strategy = options && options.strategy ? options.strategy : strategyDefault;
+  return strategy(fn, {
+    cache: cache,
+    serializer: serializer
+  });
+}
+//
+// Strategy
+//
+function isPrimitive(value) {
+  return value == null || typeof value === 'number' || typeof value === 'boolean'; // || typeof value === "string" 'unsafe' primitive for our needs
+}
+function monadic(fn, cache, serializer, arg) {
+  var cacheKey = isPrimitive(arg) ? arg : serializer(arg);
+  var computedValue = cache.get(cacheKey);
+  if (typeof computedValue === 'undefined') {
+    computedValue = fn.call(this, arg);
+    cache.set(cacheKey, computedValue);
+  }
+  return computedValue;
+}
+function variadic(fn, cache, serializer) {
+  var args = Array.prototype.slice.call(arguments, 3);
+  var cacheKey = serializer(args);
+  var computedValue = cache.get(cacheKey);
+  if (typeof computedValue === 'undefined') {
+    computedValue = fn.apply(this, args);
+    cache.set(cacheKey, computedValue);
+  }
+  return computedValue;
+}
+function assemble(fn, context, strategy, cache, serialize) {
+  return strategy.bind(context, fn, cache, serialize);
+}
+function strategyDefault(fn, options) {
+  var strategy = fn.length === 1 ? monadic : variadic;
+  return assemble(fn, this, strategy, options.cache.create(), options.serializer);
+}
+function strategyVariadic(fn, options) {
+  return assemble(fn, this, variadic, options.cache.create(), options.serializer);
+}
+function strategyMonadic(fn, options) {
+  return assemble(fn, this, monadic, options.cache.create(), options.serializer);
+}
+//
+// Serializer
+//
+var serializerDefault = function serializerDefault() {
+  return JSON.stringify(arguments);
+};
+//
+// Cache
+//
+function ObjectWithoutPrototypeCache() {
+  this.cache = Object.create(null);
+}
+ObjectWithoutPrototypeCache.prototype.get = function (key) {
+  return this.cache[key];
+};
+ObjectWithoutPrototypeCache.prototype.set = function (key, value) {
+  this.cache[key] = value;
+};
+var cacheDefault = {
+  create: function create() {
+    // @ts-ignore
+    return new ObjectWithoutPrototypeCache();
+  }
+};
+var strategies = {
+  variadic: strategyVariadic,
+  monadic: strategyMonadic
+};
+// EXTERNAL MODULE: ./node_modules/intl-messageformat/node_modules/@formatjs/icu-messageformat-parser/lib/index.js + 10 modules
+var lib = __webpack_require__(18);
+
+// EXTERNAL MODULE: ./node_modules/intl-messageformat/lib/src/formatters.js
+var src_formatters = __webpack_require__(63);
+
+// CONCATENATED MODULE: ./node_modules/intl-messageformat/lib/src/core.js
 /*
 Copyright (c) 2014, Yahoo! Inc. All rights reserved.
 Copyrights licensed under the New BSD License.
@@ -68164,8 +70481,8 @@ function mergeConfig(c1, c2) {
   if (!c2) {
     return c1;
   }
-  return Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, c1 || {}), c2 || {}), Object.keys(c1).reduce(function (all, k) {
-    all[k] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, c1[k]), c2[k] || {});
+  return Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, c1 || {}), c2 || {}), Object.keys(c1).reduce(function (all, k) {
+    all[k] = Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, c1[k]), c2[k] || {});
     return all;
   }, {}));
 }
@@ -68176,7 +70493,7 @@ function mergeConfigs(defaultConfig, configs) {
   return Object.keys(defaultConfig).reduce(function (all, k) {
     all[k] = mergeConfig(defaultConfig[k], configs[k]);
     return all;
-  }, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, defaultConfig));
+  }, Object(tslib_es6["a" /* __assign */])({}, defaultConfig));
 }
 function createFastMemoizeCache(store) {
   return {
@@ -68201,42 +70518,42 @@ function createDefaultFormatters(cache) {
     };
   }
   return {
-    getNumberFormat: Object(_formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* memoize */ "a"])(function () {
+    getNumberFormat: memoize(function () {
       var _a;
       var args = [];
       for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
       }
-      return new ((_a = Intl.NumberFormat).bind.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __spreadArray */ "d"])([void 0], args, false)))();
+      return new ((_a = Intl.NumberFormat).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
     }, {
       cache: createFastMemoizeCache(cache.number),
-      strategy: _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* strategies */ "b"].variadic
+      strategy: strategies.variadic
     }),
-    getDateTimeFormat: Object(_formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* memoize */ "a"])(function () {
+    getDateTimeFormat: memoize(function () {
       var _a;
       var args = [];
       for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
       }
-      return new ((_a = Intl.DateTimeFormat).bind.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __spreadArray */ "d"])([void 0], args, false)))();
+      return new ((_a = Intl.DateTimeFormat).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
     }, {
       cache: createFastMemoizeCache(cache.dateTime),
-      strategy: _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* strategies */ "b"].variadic
+      strategy: strategies.variadic
     }),
-    getPluralRules: Object(_formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* memoize */ "a"])(function () {
+    getPluralRules: memoize(function () {
       var _a;
       var args = [];
       for (var _i = 0; _i < arguments.length; _i++) {
         args[_i] = arguments[_i];
       }
-      return new ((_a = Intl.PluralRules).bind.apply(_a, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __spreadArray */ "d"])([void 0], args, false)))();
+      return new ((_a = Intl.PluralRules).bind.apply(_a, Object(tslib_es6["d" /* __spreadArray */])([void 0], args, false)))();
     }, {
       cache: createFastMemoizeCache(cache.pluralRules),
-      strategy: _formatjs_fast_memoize__WEBPACK_IMPORTED_MODULE_1__[/* strategies */ "b"].variadic
+      strategy: strategies.variadic
     })
   };
 }
-var IntlMessageFormat = /** @class */function () {
+var core_IntlMessageFormat = /** @class */function () {
   function IntlMessageFormat(message, locales, overrideFormats, opts) {
     if (locales === void 0) {
       locales = IntlMessageFormat.defaultLocale;
@@ -68254,7 +70571,7 @@ var IntlMessageFormat = /** @class */function () {
         return parts[0].value;
       }
       var result = parts.reduce(function (all, part) {
-        if (!all.length || part.type !== _formatters__WEBPACK_IMPORTED_MODULE_3__[/* PART_TYPE */ "a"].literal || typeof all[all.length - 1] !== 'string') {
+        if (!all.length || part.type !== src_formatters["a" /* PART_TYPE */].literal || typeof all[all.length - 1] !== 'string') {
           all.push(part.value);
         } else {
           all[all.length - 1] += part.value;
@@ -68267,7 +70584,7 @@ var IntlMessageFormat = /** @class */function () {
       return result;
     };
     this.formatToParts = function (values) {
-      return Object(_formatters__WEBPACK_IMPORTED_MODULE_3__[/* formatToParts */ "b"])(_this.ast, _this.locales, _this.formatters, _this.formats, values, undefined, _this.message);
+      return Object(src_formatters["b" /* formatToParts */])(_this.ast, _this.locales, _this.formatters, _this.formats, values, undefined, _this.message);
     };
     this.resolvedOptions = function () {
       var _a;
@@ -68288,9 +70605,9 @@ var IntlMessageFormat = /** @class */function () {
       }
       var _a = opts || {},
         formatters = _a.formatters,
-        parseOpts = Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __rest */ "c"])(_a, ["formatters"]);
+        parseOpts = Object(tslib_es6["c" /* __rest */])(_a, ["formatters"]);
       // Parse string messages into an AST.
-      this.ast = IntlMessageFormat.__parse(message, Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__[/* __assign */ "a"])({}, parseOpts), {
+      this.ast = IntlMessageFormat.__parse(message, Object(tslib_es6["a" /* __assign */])(Object(tslib_es6["a" /* __assign */])({}, parseOpts), {
         locale: this.resolvedLocale
       }));
     } else {
@@ -68325,7 +70642,7 @@ var IntlMessageFormat = /** @class */function () {
     }
     return new Intl.Locale(typeof locales === 'string' ? locales : locales[0]);
   };
-  IntlMessageFormat.__parse = _formatjs_icu_messageformat_parser__WEBPACK_IMPORTED_MODULE_2__[/* parse */ "m"];
+  IntlMessageFormat.__parse = lib["l" /* parse */];
   // Default format options used as the prototype of the `formats` provided to the
   // constructor. These are used when constructing the internal Intl.NumberFormat
   // and Intl.DateTimeFormat instances.
