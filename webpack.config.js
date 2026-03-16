@@ -20,11 +20,7 @@ const playgroundConfig = baseConfig.clone()
             playground: './src/playground/playground.jsx'
         },
         output: {
-            path: path.resolve(__dirname, 'playground'),
-            library: {
-                name: 'scratch-paint',
-                type: 'umd2'
-            }
+            path: path.resolve(__dirname, 'playground')
         },
         devServer: {
             host: '0.0.0.0'

@@ -6,9 +6,9 @@
   "browser": "./src/index.js",
   "exports": {
     "webpack": "./src/index.js",
-    "browser": "./dist/web/scratch-paint.js",
+    "browser": "./src/index.js",
     "node": "./dist/web/scratch-paint.js",
-    "default": "./src/index.js"
+    "default": "./dist/web/scratch-paint.js"
   },
   "scripts": {
     "build": "npm run clean && webpack --progress --bail",
