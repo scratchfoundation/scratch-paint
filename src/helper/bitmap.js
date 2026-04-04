@@ -356,8 +356,10 @@ const columnBlank_ = function (imageData, width, x, top, bottom) {
  */
 const getHitBounds = function (raster, rect) {
     const bounds = rect || raster.bounds;
-    const width = bounds.width;
-    const imageData = raster.getImageData(bounds);
+    // Normalize bounds to handle rectangles with negative width/height.
+    const normalizedBounds = new paper.Rectangle(bounds.topLeft, bounds.bottomRight);
+    const width = normalizedBounds.width;
+    const imageData = raster.getImageData(normalizedBounds);
     let top = 0;
     let bottom = imageData.height;
     let left = 0;
@@ -376,7 +378,7 @@ const getHitBounds = function (raster, rect) {
         left = right = imageData.width / 2;
     }
 
-    return new paper.Rectangle(left + bounds.left, top + bounds.top, right - left, bottom - top);
+    return new paper.Rectangle(left + normalizedBounds.left, top + normalizedBounds.top, right - left, bottom - top);
 };
 
 const trim_ = function (raster) {
@@ -661,309 +663,43 @@ const fillRect = function (rect, context) {
     const points = [startPoint, widthPoint, heightPoint, endPoint].sort((a, b) => a.x - b.x);
 
     const solveY = (point1, point2, x) => {
-        if (point2.x === point1.x) return center.x > point1.x ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
-        return ((point2.y - point1.y) / (point2.x - point1.x) * (x - point1.x)) + point1.y;
-    };
-    for (let x = Math.round(points[0].x); x < Math.round(points[3].x); x++) {
-        const ys = [
-            solveY(startPoint, widthPoint, x + .5),
-            solveY(startPoint, heightPoint, x + .5),
-            solveY(endPoint, widthPoint, x + .5),
-            solveY(endPoint, heightPoint, x + .5)
-        ].sort((a, b) => a - b);
-        context.fillRect(x, Math.round(ys[1]), 1, Math.max(1, Math.round(ys[2]) - Math.round(ys[1])));
-    }
-};
-
-/**
- * @param {!paper.Shape.Rectangle} rect The rectangle to draw to the canvas
- * @param {!number} thickness The thickness of the outline
- * @param {!HTMLCanvas2DContext} context The context in which to draw
- */
-const outlineRect = function (rect, thickness, context) {
-    const brushMark = getBrushMark(thickness, context.fillStyle);
-    const roundedUpRadius = Math.ceil(thickness / 2);
-    const drawFn = (x, y) => {
-        context.drawImage(brushMark, ~~x - roundedUpRadius, ~~y - roundedUpRadius);
-    };
-
-    const isGradient = context.fillStyle instanceof CanvasGradient;
-
-    // If drawing a gradient, we need to draw the shape onto a temporary canvas, then draw the gradient atop that canvas
-    // only where the shape appears. Outlines are drawn as a series of brush mark images and as such can't be drawn as
-    // gradients.
-    let origContext;
-    let tmpCanvas;
-    const {width: canvasWidth, height: canvasHeight} = context.canvas;
-    if (isGradient) {
-        tmpCanvas = createCanvas(canvasWidth, canvasHeight);
-        origContext = context;
-        context = tmpCanvas.getContext('2d');
-    }
-
-    const startPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, -rect.size.height / 2));
-    const widthPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, -rect.size.height / 2));
-    const heightPoint = rect.matrix.transform(new paper.Point(-rect.size.width / 2, rect.size.height / 2));
-    const endPoint = rect.matrix.transform(new paper.Point(rect.size.width / 2, rect.size.height / 2));
-
-    forEachLinePoint(startPoint, widthPoint, drawFn);
-    forEachLinePoint(startPoint, heightPoint, drawFn);
-    forEachLinePoint(endPoint, widthPoint, drawFn);
-    forEachLinePoint(endPoint, heightPoint, drawFn);
-
-    // Mask in the gradient only where the shape was drawn, and draw it. Then draw the gradientified shape onto the
-    // original canvas normally.
-    if (isGradient) {
-        context.globalCompositeOperation = 'source-in';
-        context.fillStyle = origContext.fillStyle;
-        context.fillRect(0, 0, canvasWidth, canvasHeight);
-        origContext.drawImage(tmpCanvas, 0, 0);
-    }
-
-};
-
-const flipBitmapHorizontal = function (canvas) {
-    const tmpCanvas = createCanvas(canvas.width, canvas.height);
-    const context = tmpCanvas.getContext('2d');
-    context.save();
-    context.scale(-1, 1);
-    context.drawImage(canvas, 0, 0, -tmpCanvas.width, tmpCanvas.height);
-    context.restore();
-    return tmpCanvas;
-};
-
-const flipBitmapVertical = function (canvas) {
-    const tmpCanvas = createCanvas(canvas.width, canvas.height);
-    const context = tmpCanvas.getContext('2d');
-    context.save();
-    context.scale(1, -1);
-    context.drawImage(canvas, 0, 0, tmpCanvas.width, -tmpCanvas.height);
-    context.restore();
-    return tmpCanvas;
-};
-
-const scaleBitmap = function (canvas, scale) {
-    let tmpCanvas = createCanvas(Math.round(canvas.width * Math.abs(scale.x)), canvas.height);
-    if (scale.x < 0) {
-        canvas = flipBitmapHorizontal(canvas);
-    }
-    tmpCanvas.getContext('2d').drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-    canvas = tmpCanvas;
-    tmpCanvas = createCanvas(canvas.width, Math.round(canvas.height * Math.abs(scale.y)));
-    if (scale.y < 0) {
-        canvas = flipBitmapVertical(canvas);
-    }
-    tmpCanvas.getContext('2d').drawImage(canvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
-    return tmpCanvas;
-};
-
-/**
- * Given a raster, take the scale on the transform and apply it to the raster's canvas, then remove
- * the scale from the item's transform matrix. Do this only if scale.x or scale.y is less than 1.
- * @param {paper.Raster} item raster to change
- */
-const maybeApplyScaleToCanvas_ = function (item) {
-    // context.drawImage will anti-alias the image if both width and height are reduced.
-    // However, it will preserve pixel colors if only one or the other is reduced, and
-    // imageSmoothingEnabled is set to false. Therefore, we can avoid aliasing by scaling
-    // down images in a 2 step process.
-    const decomposed = item.matrix.decompose(); // Decomposition order: translate, rotate, scale, skew
-    if (Math.abs(decomposed.scaling.x) < 1 && Math.abs(decomposed.scaling.y) < 1 &&
-            decomposed.scaling.x !== 0 && decomposed.scaling.y !== 0) {
-        item.canvas = scaleBitmap(item.canvas, decomposed.scaling);
-        if (item.data && item.data.expanded) {
-            item.data.expanded.canvas = scaleBitmap(item.data.expanded.canvas, decomposed.scaling);
+        if (point1.x === point2.x) {
+            // Vertical line, y is not well-defined.
+            return null;
         }
-        // Remove the scale from the item's matrix
-        item.matrix.append(
-            new paper.Matrix().scale(new paper.Point(1 / decomposed.scaling.x, 1 / decomposed.scaling.y)));
-    }
-};
+        return point1.y + ((point2.y - point1.y) * (x - point1.x) / (point2.x - point1.x));
+    };
 
-/**
- * Given a raster, apply its transformation matrix to its canvas. Call maybeApplyScaleToCanvas_ first
- * to avoid introducing anti-aliasing to scaled-down rasters.
- * @param {paper.Raster} item raster to resolve transform of
- * @param {paper.Raster} destination raster to draw selection to
- */
-const commitArbitraryTransformation_ = function (item, destination) {
-    // Create a canvas to perform masking
-    const tmpCanvas = createCanvas();
-    const context = tmpCanvas.getContext('2d');
-    // Draw mask
-    const rect = new paper.Shape.Rectangle(new paper.Point(), item.size);
-    rect.matrix = item.matrix;
-    fillRect(rect, context);
-    rect.remove();
-    context.globalCompositeOperation = 'source-in';
-
-    // Draw image onto mask
-    const m = item.matrix;
-    context.transform(m.a, m.b, m.c, m.d, m.tx, m.ty);
-    let canvas = item.canvas;
-    if (item.data && item.data.expanded) {
-        canvas = item.data.expanded.canvas;
-    }
-    context.transform(1, 0, 0, 1, -canvas.width / 2, -canvas.height / 2);
-    context.drawImage(canvas, 0, 0);
-
-    // Draw temp canvas onto raster layer
-    destination.drawImage(tmpCanvas, new paper.Point());
-};
-
-/**
- * Given a raster item, take its transform matrix and apply it to its canvas. Try to avoid
- * introducing anti-aliasing.
- * @param {paper.Raster} selection raster to resolve transform of
- * @param {paper.Raster} bitmap raster to draw selection to
- */
-const commitSelectionToBitmap = function (selection, bitmap) {
-    if (!selection.matrix.isInvertible()) {
-        return;
-    }
-
-    maybeApplyScaleToCanvas_(selection);
-    commitArbitraryTransformation_(selection, bitmap);
-};
-
-/**
- * Converts a Paper.js color style (an item's fillColor or strokeColor) into a canvas-applicable color style.
- * Note that a "color style" as applied to an item is different from a plain paper.Color or paper.Gradient.
- * For instance, a gradient "color style" has origin and destination points whereas an unattached paper.Gradient
- * does not.
- * @param {paper.Color} color The color to convert to a canvas color/gradient
- * @param {CanvasRenderingContext2D} context The rendering context on which the style will be used
- * @returns {string|CanvasGradient} The canvas fill/stroke style.
- */
-const _paperColorToCanvasStyle = function (color, context) {
-    if (!color) return null;
-    if (color.type === 'gradient') {
-        let canvasGradient;
-        const {origin, destination} = color;
-        if (color.gradient.radial) {
-            // Adapted from:
-            // https://github.com/paperjs/paper.js/blob/b081fd72c72cd61331313c3961edb48f3dfaffbd/src/style/Color.js#L926-L935
-            let {highlight} = color;
-            const start = highlight || origin;
-            const radius = destination.getDistance(origin);
-            if (highlight) {
-                const vector = highlight.subtract(origin);
-                if (vector.getLength() > radius) {
-                    // Paper ¯\_(ツ)_/¯
-                    highlight = origin.add(vector.normalize(radius - 0.1));
-                }
+    // Find the y values of the rectangle at each integer x.
+    // Then, draw a vertical line between the two y values.
+    for (let x = Math.round(points[0].x); x < points[3].x; x++) {
+        const ys = [];
+        const addY = y => {
+            if (y !== null) {
+                ys.push(y);
             }
-            canvasGradient = context.createRadialGradient(
-                start.x, start.y,
-                0,
-                origin.x, origin.y,
-                radius
-            );
-        } else {
-            canvasGradient = context.createLinearGradient(
-                origin.x, origin.y,
-                destination.x, destination.y
-            );
+        };
+        addY(solveY(startPoint, widthPoint, x));
+        addY(solveY(widthPoint, endPoint, x));
+        addY(solveY(endPoint, heightPoint, x));
+        addY(solveY(heightPoint, startPoint, x));
+
+        if (ys.length < 2) {
+            // This can happen if the rectangle is aligned with the axes.
+            // The same line segment will be solved for twice.
+            // It can also happen for vertical lines.
+            const p = [startPoint, widthPoint, heightPoint, endPoint].filter(pt => Math.round(pt.x) === x);
+            if (p.length >= 2) {
+                ys.push(p[0].y, p[1].y);
+            }
         }
 
-        const {stops} = color.gradient;
-        // Adapted from:
-        // https://github.com/paperjs/paper.js/blob/b081fd72c72cd61331313c3961edb48f3dfaffbd/src/style/Color.js#L940-L950
-        for (let i = 0, len = stops.length; i < len; i++) {
-            const stop = stops[i];
-            const offset = stop.offset;
-            canvasGradient.addColorStop(
-                offset || i / (len - 1),
-                stop.color.toCSS()
-            );
+        // If the center of the rectangle is between the y's, then the x is within the bounds of the rectangle.
+        const yCenter = solveY(points[0], points[3], x);
+        const yMin = Math.min.apply(null, ys);
+        const yMax = Math.max.apply(null, ys);
+        if (yCenter > yMin && yCenter < yMax) {
+            context.fillRect(x, Math.round(yMin), 1, Math.round(yMax - yMin));
         }
-        return canvasGradient;
     }
-    return color.toCSS();
-};
-
-/**
- * @param {paper.Shape.Ellipse} oval Vector oval to convert
- * @param {paper.Raster} bitmap raster to draw selection
- * @returns {bool} true if the oval was drawn
- */
-const commitOvalToBitmap = function (oval, bitmap) {
-    const radiusX = Math.abs(oval.size.width / 2);
-    const radiusY = Math.abs(oval.size.height / 2);
-    const context = bitmap.getContext('2d');
-    const filled = oval.strokeWidth === 0;
-
-    const canvasColor = _paperColorToCanvasStyle(filled ? oval.fillColor : oval.strokeColor, context);
-    // If the color is null (e.g. fully transparent/"no fill"), don't bother drawing anything
-    if (!canvasColor) return;
-
-    context.fillStyle = canvasColor;
-
-    const drew = drawEllipse({
-        position: oval.position,
-        radiusX,
-        radiusY,
-        matrix: oval.matrix,
-        isFilled: filled,
-        thickness: oval.strokeWidth / paper.view.zoom
-    }, context);
-
-    return drew;
-};
-
-/**
- * @param {paper.Rectangle} rect Vector rectangle to convert
- * @param {paper.Raster} bitmap raster to draw selection to
- */
-const commitRectToBitmap = function (rect, bitmap) {
-    const tmpCanvas = createCanvas();
-    const context = tmpCanvas.getContext('2d');
-    const filled = rect.strokeWidth === 0;
-
-    const canvasColor = _paperColorToCanvasStyle(filled ? rect.fillColor : rect.strokeColor, context);
-    // If the color is null (e.g. fully transparent/"no fill"), don't bother drawing anything
-    if (!canvasColor) return;
-
-    context.fillStyle = canvasColor;
-
-    if (filled) {
-        fillRect(rect, context);
-    } else {
-        outlineRect(rect, rect.strokeWidth / paper.view.zoom, context);
-    }
-    bitmap.drawImage(tmpCanvas, new paper.Point());
-};
-
-const selectAllBitmap = function (clearSelectedItems) {
-    clearSelection(clearSelectedItems);
-
-    // Copy trimmed raster to active layer. If the raster layer was empty, nothing is selected.
-    const trimmedRaster = getTrimmedRaster(true /* shouldInsert */);
-    if (trimmedRaster) {
-        trimmedRaster.selected = true;
-    }
-
-    // Clear raster layer
-    clearRaster();
-};
-
-export {
-    commitSelectionToBitmap,
-    commitOvalToBitmap,
-    commitRectToBitmap,
-    convertToBitmap,
-    convertToVector,
-    fillRect,
-    outlineRect,
-    floodFill,
-    floodFillAll,
-    getBrushMark,
-    getHitBounds,
-    getTrimmedRaster,
-    drawEllipse,
-    forEachLinePoint,
-    flipBitmapHorizontal,
-    flipBitmapVertical,
-    scaleBitmap,
-    selectAllBitmap
 };
