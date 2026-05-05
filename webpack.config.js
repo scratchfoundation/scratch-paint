@@ -21,7 +21,12 @@ const base = {
                 path.resolve(__dirname, 'src'),
                 path.join(__dirname, 'node_modules/react-intl'),
                 path.join(__dirname, 'node_modules/intl-messageformat'),
-                path.join(__dirname, 'node_modules/intl-messageformat-parser')
+                path.join(__dirname, 'node_modules/intl-messageformat-parser'),
+                // scratch-svg-renderer's published bundle ships modern JS
+                // that webpack 4's default parser can't read; transpile it
+                // here. The library output externalizes the same package, so
+                // this is only on the path for the playground bundle.
+                path.join(__dirname, 'node_modules/@scratch/scratch-svg-renderer')
             ],
             options: {
                 plugins: ['transform-object-rest-spread'],
@@ -102,6 +107,7 @@ module.exports = [
     // For use as a library
     defaultsDeep({}, base, {
         externals: {
+            '@scratch/scratch-svg-renderer': '@scratch/scratch-svg-renderer',
             'minilog': 'minilog',
             'prop-types': 'prop-types',
             'react': 'react',
