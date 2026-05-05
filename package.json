@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@scratch/paper": "^0.11.20221201200345",
+    "@scratch/scratch-svg-renderer": "13.7.2",
     "classnames": "^2.2.5",
     "keymirror": "^0.1.1",
     "lodash.bindall": "^4.4.0",
@@ -106,7 +107,8 @@
     "testURL": "http://localhost",
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
+      "^css-tree/utils$": "<rootDir>/node_modules/css-tree/cjs/utils/index.cjs"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!intl-messageformat|intl-messageformat-parser).+\\.js$"

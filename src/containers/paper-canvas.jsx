@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import paper from '@scratch/paper';
+import {sanitizeSvg} from '@scratch/scratch-svg-renderer';
 import Formats from '../lib/format';
 import log from '../log/log';
 
@@ -206,6 +207,13 @@ class PaperCanvas extends React.Component {
             svg = svg.replace(
                 '<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
         }
+        // 3. Strip elements and attributes that fire on DOM-insertion. paper.js
+        // calls importSVG -> appendChild internally, so anything dangerous left
+        // in the SVG executes against the embedding origin. DOMPurify's SVG
+        // profile drops <script>, <foreignObject>, <a>, event-handler attrs,
+        // and similar. Run after the namespace fixups so DOMPurify sees a
+        // well-formed document.
+        svg = sanitizeSvg.sanitizeSvgText(svg);
 
         // Get the origin which the viewBox is defined relative to. During import, Paper will translate
         // the viewBox to start at (0, 0), and we need to translate it back for some costumes to render
