@@ -7,6 +7,7 @@ import {sanitizeSvg} from '@scratch/scratch-svg-renderer';
 import Formats from '../lib/format';
 import log from '../log/log';
 
+import {stripInvalidPaperData} from '../helper/strip-invalid-paper-data';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
@@ -214,6 +215,12 @@ class PaperCanvas extends React.Component {
         // and similar. Run after the namespace fixups so DOMPurify sees a
         // well-formed document.
         svg = sanitizeSvg.sanitizeSvgText(svg);
+
+        // 4. Drop data-paper-data attributes carrying values that aren't valid
+        // JSON. Paper.js calls JSON.parse on this attribute during importSVG
+        // and synchronously throws on malformed values; one bad attribute on
+        // an unrelated element is enough to abort the whole import.
+        svg = stripInvalidPaperData(svg);
 
         // Get the origin which the viewBox is defined relative to. During import, Paper will translate
         // the viewBox to start at (0, 0), and we need to translate it back for some costumes to render
