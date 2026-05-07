@@ -48359,6 +48359,34 @@ var format_isBitmap = function isBitmap(format) {
   return format === Formats.BITMAP || format === Formats.BITMAP_SKIP_CONVERT;
 };
 
+// CONCATENATED MODULE: ./src/helper/strip-invalid-paper-data.js
+/**
+ * Drop `data-paper-data` attributes whose value isn't valid JSON. Paper.js
+ * synchronously calls JSON.parse on this attribute during importSVG and
+ * throws on malformed values, taking down the whole import. The attribute
+ * is paper's own serialization metadata; if it can't parse, paper wouldn't
+ * have been able to use it.
+ *
+ * Operates on a parsed Document in place so callers that already have one
+ * (e.g. for viewBox extraction) don't pay for a second parse-and-serialize.
+ * @param {Document} svgDoc - parsed SVG document; mutated in place.
+ * @returns {boolean} true if any attribute was removed (caller should
+ *   re-serialize); false if the document was untouched.
+ */
+var stripInvalidPaperData = function stripInvalidPaperData(svgDoc) {
+  var modified = false;
+  var els = svgDoc.querySelectorAll('[data-paper-data]');
+  for (var i = 0; i < els.length; i++) {
+    try {
+      JSON.parse(els[i].getAttribute('data-paper-data'));
+    } catch (_unused) {
+      els[i].removeAttribute('data-paper-data');
+      modified = true;
+    }
+  }
+  return modified;
+};
+
 // CONCATENATED MODULE: ./src/lib/modes.js
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
@@ -51337,6 +51365,7 @@ function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf 
 
 
 
+
 var paper_canvas_PaperCanvas = /*#__PURE__*/function (_React$Component) {
   function PaperCanvas(props) {
     var _this;
@@ -51528,17 +51557,19 @@ var paper_canvas_PaperCanvas = /*#__PURE__*/function (_React$Component) {
       // well-formed document.
       svg = scratch_svg_renderer["sanitizeSvg"].sanitizeSvgText(svg);
 
-      // Get the origin which the viewBox is defined relative to. During import, Paper will translate
-      // the viewBox to start at (0, 0), and we need to translate it back for some costumes to render
-      // correctly.
-      var parser = new DOMParser();
-      var svgDom = parser.parseFromString(svg, 'text/xml');
+      // 4. Parse once: read viewBox (translated back for some costumes
+      // to render correctly — paper translates it to (0, 0) on import)
+      // and strip data-paper-data values that fail JSON.parse (paper.js
+      // synchronously throws on these and aborts the whole import).
+      var svgDom = new DOMParser().parseFromString(svg, 'text/xml');
+      var modified = stripInvalidPaperData(svgDom);
       var viewBox = svgDom.documentElement.attributes.viewBox ? svgDom.documentElement.attributes.viewBox.value.match(/\S+/g) : null;
       if (viewBox) {
         for (var i = 0; i < viewBox.length; i++) {
           viewBox[i] = parseFloat(viewBox[i]);
         }
       }
+      if (modified) svg = new XMLSerializer().serializeToString(svgDom);
       paper_full_default.a.project.importSVG(svg, {
         expandShapes: true,
         onLoad: function onLoad(item) {
