@@ -7,6 +7,7 @@ import {sanitizeSvg} from '@scratch/scratch-svg-renderer';
 import Formats from '../lib/format';
 import log from '../log/log';
 
+import {stripInvalidPaperData} from '../helper/strip-invalid-paper-data';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
 import {isGroup, ungroupItems} from '../helper/group';
@@ -215,11 +216,12 @@ class PaperCanvas extends React.Component {
         // well-formed document.
         svg = sanitizeSvg.sanitizeSvgText(svg);
 
-        // Get the origin which the viewBox is defined relative to. During import, Paper will translate
-        // the viewBox to start at (0, 0), and we need to translate it back for some costumes to render
-        // correctly.
-        const parser = new DOMParser();
-        const svgDom = parser.parseFromString(svg, 'text/xml');
+        // 4. Parse once: read viewBox (translated back for some costumes
+        // to render correctly — paper translates it to (0, 0) on import)
+        // and strip data-paper-data values that fail JSON.parse (paper.js
+        // synchronously throws on these and aborts the whole import).
+        const svgDom = new DOMParser().parseFromString(svg, 'text/xml');
+        const modified = stripInvalidPaperData(svgDom);
         const viewBox = svgDom.documentElement.attributes.viewBox ?
             svgDom.documentElement.attributes.viewBox.value.match(/\S+/g) : null;
         if (viewBox) {
@@ -227,6 +229,7 @@ class PaperCanvas extends React.Component {
                 viewBox[i] = parseFloat(viewBox[i]);
             }
         }
+        if (modified) svg = new XMLSerializer().serializeToString(svgDom);
 
         paper.project.importSVG(svg, {
             expandShapes: true,

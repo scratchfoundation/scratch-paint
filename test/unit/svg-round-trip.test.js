@@ -3,6 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import paper from '@scratch/paper';
 
+import {stripInvalidPaperData} from '../../src/helper/strip-invalid-paper-data';
+
 /**
  * Walk a paper item and produce a normalized structural snapshot mirroring
  * the fields the editor's selection and grouping tools care about:
@@ -114,11 +116,43 @@ describe('Paper.js JSON round-trip preserves editor-relevant scene-graph (Phase 
         // Guard against a trivially-passing test: the cat costume has
         // multiple groups and a bunch of paths.
         const beforeKinds = tallyItemKinds(before.layers);
-        expect(beforeKinds.Path || 0).toBeGreaterThan(0);
-        expect(beforeKinds.Group || 0).toBeGreaterThan(0);
+        expect(beforeKinds.Path).toBeGreaterThan(0);
+        expect(beforeKinds.Group).toBeGreaterThan(0);
 
         // Deep equality covers item count, hierarchy, kind, and any name /
         // dataId that paper does happen to carry through.
+        expect(after).toEqual(before);
+    });
+
+    test('invalid-paper-data fixture: bad data-paper-data is stripped, valid content survives round-trip', () => {
+        // The fixture has data-paper-data="not valid json" on the <svg>
+        // root and a valid data-paper-data on a <g> wrapping a <circle>.
+        // Without the strip, paper.project.importSVG synchronously throws
+        // on the bad attribute and the import never reaches the circle.
+        const svgPath = path.resolve(__dirname, '..', 'fixtures', 'invalid-paper-data.svg');
+        const raw = fs.readFileSync(svgPath, 'utf8');
+        const doc = new DOMParser().parseFromString(raw, 'text/xml');
+        expect(doc.documentElement.getAttribute('data-paper-data')).toBe('not valid json');
+
+        expect(stripInvalidPaperData(doc)).toBe(true);
+
+        // Bad attribute on the root is gone; valid sibling on <g> remains.
+        expect(doc.documentElement.hasAttribute('data-paper-data')).toBe(false);
+        const g = doc.querySelector('g');
+        expect(g).not.toBeNull();
+        expect(JSON.parse(g.getAttribute('data-paper-data'))).toEqual({isPaintingLayer: false});
+
+        // Circle still present in the markup paper will receive.
+        expect(doc.querySelector('circle')).not.toBeNull();
+
+        const stripped = new XMLSerializer().serializeToString(doc);
+        const {before, after} = roundTripSceneGraphs(stripped);
+
+        // <circle> with expandShapes: true becomes a Path. If paper had
+        // thrown on the bad attribute, no Path would be present here.
+        const beforeKinds = tallyItemKinds(before.layers);
+        expect(beforeKinds.Path).toBeGreaterThan(0);
+
         expect(after).toEqual(before);
     });
 });
