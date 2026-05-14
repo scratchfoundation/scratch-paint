@@ -1,6 +1,6 @@
 {
   "name": "scratch-paint",
-  "version": "4.1.50",
+  "version": "4.1.54",
   "description": "Graphical User Interface for the Scratch 3.0 paint editor, which is used to make and edit sprites for use in projects.",
   "main": "./dist/web/scratch-paint.js",
   "browser": "./src/index.js",
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@scratch/paper": "^0.11.20221201200345",
+    "@scratch/scratch-svg-renderer": "13.7.3",
     "classnames": "^2.2.5",
     "keymirror": "^0.1.1",
     "lodash.bindall": "^4.4.0",
@@ -49,13 +50,13 @@
     "react-style-proptype": "^3",
     "react-tooltip": "^4",
     "redux": "^4",
-    "scratch-render-fonts": "^1.0.0"
+    "scratch-render-fonts": "1.0.252"
   },
   "devDependencies": {
     "@babel/cli": "7.28.6",
     "@babel/core": "7.29.0",
     "@babel/node": "7.29.0",
-    "@babel/preset-env": "7.29.0",
+    "@babel/preset-env": "7.29.5",
     "@babel/preset-react": "7.28.5",
     "@commitlint/cli": "17.8.1",
     "@commitlint/config-conventional": "17.8.1",
@@ -64,7 +65,7 @@
     "babel-jest": "29.7.0",
     "babel-loader": "9.2.1",
     "babel-plugin-react-intl": "3.5.1",
-    "canvas": "^3.0.0",
+    "canvas": "3.2.3",
     "css-loader": "5.2.7",
     "eslint": "9.39.4",
     "eslint-config-scratch": "12.0.51",
@@ -85,12 +86,12 @@
     "redux-throttle": "0.1.1",
     "regenerator-runtime": "0.13.9",
     "rimraf": "2.7.1",
-    "scratch-l10n": "6.1.60",
+    "scratch-l10n": "6.1.75",
     "scratch-semantic-release-config": "4.0.1",
     "scratch-webpack-configuration": "3.1.2",
     "semantic-release": "25.0.3",
     "style-loader": "4.0.0",
-    "tap": "21.6.2",
+    "tap": "21.7.2",
     "webpack": "5.105.4",
     "webpack-cli": "5.1.4",
     "webpack-dev-server": "5.2.0"
@@ -108,7 +109,8 @@
     "testURL": "http://localhost",
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
+      "^css-tree/utils$": "<rootDir>/node_modules/css-tree/cjs/utils/index.cjs"
     },
     "transformIgnorePatterns": [
       "/node_modules/(?!intl-messageformat|intl-messageformat-parser).+\\.js$"

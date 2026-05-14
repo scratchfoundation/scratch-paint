@@ -45,6 +45,7 @@ const libraryConfig = baseConfig.clone()
         }
     })
     .addExternals([
+        '@scratch/scratch-svg-renderer',
         'minilog',
         'prop-types',
         'react',
