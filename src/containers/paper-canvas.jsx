@@ -7,6 +7,7 @@ import {sanitizeSvg} from '@scratch/scratch-svg-renderer';
 import Formats from '../lib/format';
 import log from '../log/log';
 
+import {getPaperSandbox} from '../helper/paper-sandbox';
 import {stripInvalidPaperData} from '../helper/strip-invalid-paper-data';
 import {performSnapshot} from '../helper/undo';
 import {undoSnapshot, clearUndoState} from '../reducers/undo';
@@ -39,6 +40,7 @@ class PaperCanvas extends React.Component {
             'onViewResize',
             'recalibrateSize'
         ]);
+        this._importGeneration = 0;
     }
     componentDidMount () {
         paper.setup(this.canvas);
@@ -196,10 +198,11 @@ class PaperCanvas extends React.Component {
         this.props.updateViewBounds(paper.view.matrix);
     }
     importSvg (svg, rotationCenterX, rotationCenterY) {
-        const paperCanvas = this;
+        this._importGeneration += 1;
+        const generation = this._importGeneration;
+
         // Pre-process SVG to prevent parsing errors (discussion from #213)
         // 1. Remove svg: namespace on elements.
-        // TODO: remove
         svg = svg.split(/<\s*svg:/).join('<');
         svg = svg.split(/<\/\s*svg:/).join('</');
         // 2. Add root svg namespace if it does not exist.
@@ -208,49 +211,56 @@ class PaperCanvas extends React.Component {
             svg = svg.replace(
                 '<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
         }
-        // 3. Strip elements and attributes that fire on DOM-insertion. paper.js
-        // calls importSVG -> appendChild internally, so anything dangerous left
-        // in the SVG executes against the embedding origin. DOMPurify's SVG
-        // profile drops <script>, <foreignObject>, <a>, event-handler attrs,
-        // and similar. Run after the namespace fixups so DOMPurify sees a
-        // well-formed document.
+        // 3. Strip elements and attributes that fire on DOM-insertion.
+        // DOMPurify's SVG profile drops <script>, <foreignObject>, <a>,
+        // event-handler attrs, and similar. This narrows the input the
+        // sandbox sees, providing defense in depth.
         svg = sanitizeSvg.sanitizeSvgText(svg);
 
-        // 4. Parse once: read viewBox (translated back for some costumes
-        // to render correctly — paper translates it to (0, 0) on import)
-        // and strip data-paper-data values that fail JSON.parse (paper.js
-        // synchronously throws on these and aborts the whole import).
+        // 4. Parse once and strip data-paper-data values that fail
+        // JSON.parse (paper.js synchronously throws on these and aborts
+        // the whole import).
         const svgDom = new DOMParser().parseFromString(svg, 'text/xml');
         const modified = stripInvalidPaperData(svgDom);
-        const viewBox = svgDom.documentElement.attributes.viewBox ?
-            svgDom.documentElement.attributes.viewBox.value.match(/\S+/g) : null;
-        if (viewBox) {
-            for (let i = 0; i < viewBox.length; i++) {
-                viewBox[i] = parseFloat(viewBox[i]);
-            }
-        }
         if (modified) svg = new XMLSerializer().serializeToString(svgDom);
 
-        paper.project.importSVG(svg, {
-            expandShapes: true,
-            onLoad: function (item) {
-                if (!item) {
-                    log.error('SVG import failed:');
-                    log.info(svg);
-                    this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
-                    performSnapshot(paperCanvas.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
-                    return;
-                }
-                item.remove();
+        // 5. Send the sanitized SVG to the sandboxed iframe where Paper.js
+        // runs importSVG (which does DOM-append) in an opaque-origin
+        // context. Receive the Paper.js JSON and viewBox back.
+        getPaperSandbox().then(sandbox => sandbox.send({svg})).then(result => {
+            // Discard the result if a newer import has already started.
+            if (generation !== this._importGeneration) return;
 
-                // Without the callback, rasters' load function has not been called yet, and they are
-                // positioned incorrectly
-                paperCanvas.queuedImport = paperCanvas.recalibrateSize(() => {
-                    paperCanvas.props.updateViewBounds(paper.view.matrix);
-                    paperCanvas.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
-                });
+            const {paperJSON, viewBox} = result;
+
+            // Import the JSON into the parent's active layer. Paper.js's
+            // activeLayer.importJSON() creates the item, adds it to the
+            // layer, and returns it. This reconstructs the scene graph
+            // without triggering DOM insertion of untrusted SVG content.
+            const item = paper.project.activeLayer.importJSON(paperJSON);
+            if (!item) {
+                log.info(svg);
+                throw new Error('importJSON returned null');
             }
-        });
+
+            // Remove from the layer — initializeSvg re-adds with
+            // positioning, matching the original importSVG onLoad flow.
+            item.remove();
+
+            // Continue with the existing post-import flow.
+            this.queuedImport = this.recalibrateSize(() => {
+                this.props.updateViewBounds(paper.view.matrix);
+                this.initializeSvg(item, rotationCenterX, rotationCenterY, viewBox);
+            });
+        })
+            .catch(err => {
+                // Discard errors from superseded imports — the newer import
+                // is responsible for its own error handling.
+                if (generation !== this._importGeneration) return;
+                log.error('SVG import failed:', err);
+                this.props.changeFormat(Formats.VECTOR_SKIP_CONVERT);
+                performSnapshot(this.props.undoSnapshot, Formats.VECTOR_SKIP_CONVERT);
+            });
     }
     initializeSvg (item, rotationCenterX, rotationCenterY, viewBox) {
         if (this.queuedImport) this.queuedImport = null;

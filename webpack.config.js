@@ -70,6 +70,10 @@ const base = {
         {
             test: /\.svg$/,
             loader: 'svg-url-loader?noquotes'
+        },
+        {
+            resourceQuery: /^\?(source|raw)$/,
+            type: 'asset/source'
         }]
     },
     optimization: {

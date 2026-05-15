@@ -1,16 +1,16 @@
 /* eslint-env jest */
 /**
  * Regression coverage for the SVG sanitization step that paper-canvas.jsx's
- * `importSvg` runs before `paper.project.importSVG`. Paper.js's import path
- * appends parsed SVG nodes into the document during processing, which fires
- * execution paths on `<foreignObject>`, event-handler attributes, and
- * similar features. `sanitizeSvg.sanitizeSvgText` uses DOMPurify's SVG
- * profile, which strips those shapes.
+ * `importSvg` runs before sending the SVG to the sandboxed iframe.
+ * Paper.js's import path appends parsed SVG nodes into the document during
+ * processing, which fires execution paths on `<foreignObject>`, event-handler
+ * attributes, and similar features. The sanitize step (DOMPurify's SVG
+ * profile) strips those shapes before the SVG reaches the iframe.
  *
  * Two layers of coverage: sanitizer-level assertions on hostile and
  * legitimate inputs, plus an integration assertion that `importSvg`
  * actually routes its input through the sanitizer before handing it to
- * paper.
+ * the sandbox.
  */
 
 import paper from '@scratch/paper';
@@ -19,6 +19,21 @@ import {sanitizeSvg} from '@scratch/scratch-svg-renderer';
 import PaperCanvasConnected from '../../src/containers/paper-canvas';
 
 const PaperCanvas = PaperCanvasConnected.WrappedComponent;
+
+// Mock the paper-sandbox module to capture what gets sent to the sandbox.
+// getPaperSandbox() now returns a Promise<Sandbox>. The send mock returns
+// a never-resolving promise so the .then() chain doesn't execute (we only
+// need to assert on the input sent to the sandbox, not the full import
+// pipeline which requires layers, undo, etc.)
+jest.mock('../../src/helper/paper-sandbox', () => {
+    const sendMock = jest.fn(() => new Promise(() => {}));
+    return {
+        getPaperSandbox: () => Promise.resolve({send: sendMock}),
+        __sendMock: sendMock
+    };
+});
+
+const {__sendMock: sandboxSendMock} = require('../../src/helper/paper-sandbox');
 
 const wrap = body =>
     `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100">${body}</svg>`;
@@ -80,37 +95,32 @@ describe('sanitizeSvgText strips dangerous SVG shapes', () => {
     });
 });
 
-describe('PaperCanvas.importSvg routes input through sanitizeSvgText', () => {
-    let importSpy;
+describe('PaperCanvas.importSvg routes sanitized input to the sandbox', () => {
     let sanitizeSpy;
 
     beforeEach(() => {
         const canvas = document.createElement('canvas');
         paper.setup(canvas);
-        // Mock paper.project.importSVG to a no-op so we don't have to
-        // satisfy the rest of importSvg's onLoad chain — the assertion is
-        // about what gets handed to paper, not what paper does with it.
-        importSpy = jest.spyOn(paper.project, 'importSVG').mockImplementation(() => {});
         sanitizeSpy = jest.spyOn(sanitizeSvg, 'sanitizeSvgText');
+        sandboxSendMock.mockClear();
     });
 
     afterEach(() => {
-        importSpy.mockRestore();
         sanitizeSpy.mockRestore();
         while (paper.projects.length > 0) {
             paper.projects[paper.projects.length - 1].remove();
         }
     });
 
-    test('paper.project.importSVG receives input that has been through sanitizeSvgText', () => {
-        // importSvg accesses this.props.changeFormat / undoSnapshot only on
-        // the SVG-import-failed branch, and this.recalibrateSize only when
-        // the (mocked-out) onLoad fires. A minimal fakeThis with jest.fn()
-        // stand-ins is enough to call through.
-        const fakeThis = {
-            props: {changeFormat: jest.fn(), undoSnapshot: jest.fn()},
-            recalibrateSize: jest.fn()
-        };
+    const makeFakeThis = () => ({
+        _importGeneration: 0,
+        props: {changeFormat: jest.fn(), undoSnapshot: jest.fn(), updateViewBounds: jest.fn()},
+        recalibrateSize: jest.fn(),
+        queuedImport: null
+    });
+
+    test('sandbox receives input that has been through sanitizeSvgText', async () => {
+        const fakeThis = makeFakeThis();
         const hostile =
             '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">' +
             '<foreignObject width="10" height="10">' +
@@ -121,12 +131,16 @@ describe('PaperCanvas.importSvg routes input through sanitizeSvgText', () => {
 
         PaperCanvas.prototype.importSvg.call(fakeThis, hostile, 0, 0);
 
+        // getPaperSandbox() returns a resolved Promise, so sandbox.send()
+        // is called in a microtask. Flush it before asserting.
+        await Promise.resolve();
+
         expect(sanitizeSpy).toHaveBeenCalledTimes(1);
-        expect(importSpy).toHaveBeenCalledTimes(1);
-        const svgPassedToPaper = importSpy.mock.calls[0][0];
-        expect(svgPassedToPaper).not.toMatch(/<foreignObject/i);
-        expect(svgPassedToPaper).not.toMatch(/onerror/i);
-        expect(svgPassedToPaper).not.toMatch(/onclick/i);
-        expect(svgPassedToPaper).not.toMatch(/<img/i);
+        expect(sandboxSendMock).toHaveBeenCalledTimes(1);
+        const svgSentToSandbox = sandboxSendMock.mock.calls[0][0].svg;
+        expect(svgSentToSandbox).not.toMatch(/<foreignObject/i);
+        expect(svgSentToSandbox).not.toMatch(/onerror/i);
+        expect(svgSentToSandbox).not.toMatch(/onclick/i);
+        expect(svgSentToSandbox).not.toMatch(/<img/i);
     });
 });
