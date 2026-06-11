@@ -1,10 +1,25 @@
 # scratch-paint
-#### Scratch-paint provides a paint editor React component that takes and outputs SVGs or PNGs. It can convert between vector and bitmap modes.
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/LLK/scratch-paint.svg)](https://greenkeeper.io/)
-- Try it out at [https://llk.github.io/scratch-paint/](https://llk.github.io/scratch-paint/)
+Scratch-paint provides a paint editor React component that takes and outputs SVGs or PNGs. It can convert between vector and bitmap modes.
 
-- Or, to try it out as part of Scratch 3.0, visit [https://scratch.mit.edu/create](https://scratch.mit.edu/create) and click on the "Costumes" tab.
+## **⚠️ NOTICE: Repository Migration to Mono-Repo ⚠️**
+
+The Scratch Team has migrated the `scratch-paint` module into a new mono-repo,
+[`scratch-editor`](https://github.com/scratchfoundation/scratch-editor). This independent `scratch-paint` repository
+**will be archived**. Any new issues or pull requests should be opened in the mono-repo.
+
+The new mono-repo version of `scratch-paint` is published to the NPM registry as
+[`@scratch/scratch-paint`](https://www.npmjs.com/package/@scratch/scratch-paint).
+
+**Contributors:**
+
+* I would like to thank all past contributors for their work on this repository.
+* If you are aware of valuable issues or pull requests, please consider re-opening them in the mono-repo. If you do
+  so, please link the new issue or pull request to the original one in this repository to help others find it and to
+  reduce the chance of duplicate work.
+* We apologize for the inconvenience and greatly appreciate your help with this transition!
+
+For more information, see the [`scratch-editor` repository on GitHub](https://github.com/scratchfoundation/scratch-editor).
 
 ### Prerequisites
 
