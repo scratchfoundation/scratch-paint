@@ -67,7 +67,7 @@
     "babel-plugin-react-intl": "3.5.1",
     "canvas": "3.2.3",
     "css-loader": "5.2.7",
-    "eslint": "9.39.4",
+    "eslint": "9.39.5",
     "eslint-config-scratch": "12.0.51",
     "gh-pages": "3.2.3",
     "globals": "16.5.0",
