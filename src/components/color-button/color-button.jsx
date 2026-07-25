@@ -10,8 +10,12 @@ import styles from './color-button.css';
 import GradientTypes from '../../lib/gradient-types';
 import log from '../../log/log';
 
+const isMixed = (color, color2, gradientType) => (
+    color === MIXED || (gradientType !== GradientTypes.SOLID && color2 === MIXED)
+);
+
 const colorToBackground = (color, color2, gradientType) => {
-    if (color === MIXED || (gradientType !== GradientTypes.SOLID && color2 === MIXED)) return 'white';
+    if (isMixed(color, color2, gradientType)) return 'white';
     if (color === null) color = 'white';
     if (color2 === null) color2 = 'white';
     switch (gradientType) {
@@ -30,7 +34,7 @@ const ColorButtonComponent = props => (
     >
         <div
             className={classNames(styles.colorButtonSwatch, {
-                [styles.outlineSwatch]: props.outline && !(props.color === MIXED)
+                [styles.outlineSwatch]: props.outline && !isMixed(props.color, props.color2, props.gradientType)
             })}
             style={{
                 background: colorToBackground(props.color, props.color2, props.gradientType)
@@ -42,7 +46,7 @@ const ColorButtonComponent = props => (
                     draggable={false}
                     src={noFillIcon}
                 />
-            ) : ((props.color === MIXED || (props.gradientType !== GradientTypes.SOLID && props.color2 === MIXED) ? (
+            ) : ((isMixed(props.color, props.color2, props.gradientType) ? (
                 <img
                     className={styles.swatchIcon}
                     draggable={false}
